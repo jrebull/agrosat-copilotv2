@@ -1,13 +1,14 @@
 # Plan MICAI 2027 — AgroSatCopilot v2
 
 **Autores del artículo:** Arthur Jafed Zizumbo Velasco (primero) y Javier A. Rebull-Saucedo (segundo).
-**Estado de partida:** 2 de septiembre de 2026, tres auditorías independientes del manuscrito heredado (contenido científico, reproducibilidad y formato LNCS). Resumen de hallazgos en la sección 2.
+**Encuadre aceptado (2 de septiembre de 2026):** se escribe un artículo **desde cero** sobre el punto de operación, con el resultado negativo del ensamble dentro como sección de protocolo. Justificación en [`docs/paper/que-paper-sale.md`](paper/que-paper-sale.md); enmienda en [`ADR-013`](decisions/ADR-013-angulo-micai.md).
+**Estado de partida:** 2 de septiembre de 2026, tres auditorías independientes del manuscrito heredado (contenido científico, reproducibilidad y formato LNCS). Resumen de hallazgos en la sección 2. El manuscrito heredado **no se repara**: se conserva como fuente de material, no como base.
 **Pendientes que dependen de Arthur:** [`pendientes-arthur.md`](pendientes-arthur.md).
 **Regla de oro heredada y vigente:** cifras reales o nada; cada número impreso se rederiva desde un artefacto versionado; no se concluye más de lo que mide el dato.
-**Fase 0 cerrada (2 de septiembre de 2026):** veredicto **reencuadre**, no confirmación. Evidencia en [`docs/paper/novedad.md`](paper/novedad.md) (43 trabajos con identificador verificado por API, 59 consultas registradas en tres fuentes y seis consultas manuales) y decisión en [`ADR-013`](decisions/ADR-013-angulo-micai.md), pendiente de firma. **Fase 1 arrancada:** `paper/ARTIFACTS.md` sella 33 artefactos con MD5 y declara 8 cifras sin artefacto; el gate `make paper-artifacts-check` está en verde y probado en negativo.
+**Fases 0, 1 y 2 cerradas (2 de septiembre de 2026).** La 0 dio veredicto de reencuadre ([`novedad.md`](paper/novedad.md), 43 trabajos verificados por API). La 1 dejó `paper/ARTIFACTS.md` con 49 artefactos sellados por MD5, 8 cifras declaradas sin artefacto y el gate `make paper-artifacts-check` probado en negativo. La 2 midió los cinco experimentos con intervalos pareados ([`fase2-hallazgos.md`](paper/fase2-hallazgos.md)) y encontró que la cifra campeona 0,7486 es **in-sample** para el meta-modelo: libre de fuga ninguna combinación mejora al mejor miembro individual (0,7367), pero la contribución central **sí se sostiene**.
 **Infraestructura lista (2 de septiembre de 2026):** entorno completo en macOS (Apéndice D del runbook), acceso al proyecto GCP `agrosat-copilot` con ADC, artefactos ligeros de DVC en disco, PASTIS-R crudo extraído en `data/PASTIS-R/` (2 433 parches, 68 GB), `make lint` y `make test-all` en verde, mypy en cero. La fase 0 puede empezar sin esperar nada de terceros.
 
-Las fechas de la convocatoria MICAI 2027 no están publicadas. Este plan se ordena por dependencias, no por calendario; cuando salga la convocatoria se fija el calendario hacia atrás desde la fecha de envío (MICAI 2026 recomendó 12 páginas y admitió 20; confirmar para 2027).
+Las fechas de la convocatoria MICAI 2027 no están publicadas. Este plan se ordena por dependencias, no por calendario; cuando salga la convocatoria se fija el calendario hacia atrás desde la fecha de envío MICAI 2027 sigue sin sede ni convocatoria: es la edición conmemorativa de los cuarenta años de la SMIA y todavía buscan institución anfitriona. Referencia verificada el 2 de septiembre de 2026 en la página de autores de MICAI 2026: doce páginas recomendadas, veinte de techo, doble ciego y envío en `.zip` con el proyecto LaTeX completo. **Se vuelve a verificar cuando salga la convocatoria de 2027.**
 
 ---
 
@@ -47,167 +48,176 @@ Las cifras que se rederivan hoy desde disco: 61 %. Las que contradicen el artefa
 
 ---
 
+
 ## 3. Fases
 
-### Fase 0 · Aporte real: ¿el paper contribuye algo? — CERRADA (2 de septiembre de 2026)
+Las fases 0, 1 y 2 están cerradas y su detalle vive en sus documentos. Lo que sigue es el
+plan del artículo nuevo, ordenado por dependencias.
 
-**Resultado: reencuadre.** El ángulo A no se abandona, pero dos de sus tres afirmaciones no sobreviven a la verificación: la de cardinalidad tiene un precedente muy cercano (Turkoglu et al. 2021, curvas de cobertura frente a confianza en cultivos) y la de contexto espacial es insostenible tal como estaba escrita (el artefacto propio da +0,0027 de F1-macro, positivo y bajo el umbral, no un cero; y hay trabajo previo que muestra que el contexto intraparcela sí aporta sobre estos embeddings). La contribución central pasa a ser el contraste entre dos mecanismos de recorte de cobertura a igual cobertura y bajo F1-macro. Detalle en [`docs/paper/novedad.md`](paper/novedad.md); decisión, afirmaciones prohibidas y reglas pre-registradas en [`ADR-013`](decisions/ADR-013-angulo-micai.md).
+### Fase 0 · ¿Aporta algo? — CERRADA
 
-Antes de reescribir una línea. Responsable: Javier. Salida: `docs/paper/novedad.md`.
+Veredicto: reencuadre. Búsqueda sistemática en tres fuentes, matriz de 43 trabajos con
+identificador resuelto por API, y las tres referencias ancla leídas y contrastadas.
+Detalle en [`docs/paper/novedad.md`](paper/novedad.md).
 
-1. Formular la tesis candidata en una frase. Candidata principal (ángulo A de la propuesta del equipo): *en mapeo de cultivos desbalanceado, un árbitro heterogéneo por clase mejora sobre el promedio homogéneo, cuántas clases prometer es un punto de operación medible, y el contexto espacial no aporta sobre embeddings de fundación anuales.*
-2. Búsqueda sistemática (arXiv, Semantic Scholar, Google Scholar; 2019 a 2026) en cuatro frentes: stacking heterogéneo y arbitraje por clase en series temporales de satélite; selección de número de clases y clasificación selectiva en cobertura del suelo; contexto espacial sobre embeddings de modelos de fundación EO; copilotos LLM anclados para observación de la Tierra. Registrar consulta, fecha y resultados.
-3. Matriz de trabajo relacionado: para cada paper, método, fortaleza, límite y qué hueco deja. Mínimo 25 entradas, con DOI o id arXiv verificado por API.
-4. Verificar las tres referencias ancla con título real y leerlas: comprobar que dicen lo que el manuscrito les atribuye.
-5. Veredicto explícito con tres salidas posibles: contribución confirmada (seguir con A), reencuadre (qué cambia), o abandono del ángulo. Criterio: existe al menos un experimento ejecutable en CPU que aísla el mecanismo y ningún trabajo previo lo reporta en este dominio con este protocolo.
-6. Decisión conjunta con Arthur registrada en `docs/decisions/ADR-013-angulo-micai.md`.
+### Fase 1 · Sellado de artefactos — CERRADA en lo que no depende de Arthur
 
-### Fase 1 · Sellado de artefactos — EN CURSO
+`paper/ARTIFACTS.md` con 49 artefactos sellados, 8 filas `SIN_ARTEFACTO` y el gate
+`make paper-artifacts-check` probado en negativo y contra un clon limpio. Sellado además
+el ground truth del fold 5 (16 640 etiquetas, 420 KB) para reproducir la evaluación sin
+los 68 GB de PASTIS-R. Sigue pendiente lo de Arthur: el `dvc push` de
+`alphaearth_italia_2018.parquet` y el informe de DE4.
 
-Hecho: `paper/ARTIFACTS.md` con 33 artefactos sellados por MD5 y 8 filas `SIN_ARTEFACTO`; `scripts/paper_artifacts_check.py` más `make paper-artifacts-check`, probado en negativo; los once parquets OOF coinciden con el `md5` de su propio `.dvc`. Corregido: `docs/pendientes-arthur.md` daba por perdidos artefactos que sí están (la curva k-shot de EuroCropsML lleva en git desde `bc019e5` y los crudos de WorldCereal están en DVC). **Hallazgo que cambia la fase 2**: seis artefactos sellados no tienen driver versionado, entre ellos `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv`, que sostienen la contribución central; su cálculo sí está en `ml/` pero el guion que los escribió no. La curva calidad-cobertura se vuelve a generar desde las posteriores OOF selladas y el CSV queda como comprobación cruzada. Sellado además el ground truth del fold 5 (16 640 etiquetas, 420 KB) para que todo se reproduzca sin los 68 GB de PASTIS-R; su eje de cobertura ya reproduce exacto contra el CSV. Pendiente: lo que depende de Arthur y los puntos 2 a 5 de abajo.
+### Fase 2 · Experimentos en CPU — CERRADA
 
-Responsable: Javier, con entregas de Arthur. Salida: `paper/ARTIFACTS.md` y DVC actualizado.
+Los cinco puntos hechos, cada uno con artefacto sellado, semilla, versiones, commit y
+prueba pareada con intervalo. Detalle en
+[`docs/paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
 
-1. `dvc add` y `dvc push` de todo lo que alimenta una cifra y hoy no está versionado: `worldcereal_fewshot_{results,india}.parquet`, `eurocropsml_alphaearth_vs_s2_delta.parquet`, `eurocropsml_per_class.parquet`, `sen4agrinet_per_class.parquet`, `pastis_to_breizhcrops.parquet`, `sen4agrinet_{es,fr}_alphaearth.parquet`, `us049_system_eval.json`, logs de la ablación de bandas. Los que no existan en ningún sitio se regeneran en CPU (WorldCereal, Bretaña) o se retiran del texto.
-2. Recibir de Arthur los artefactos de DE4 e Italia y el checkpoint few-shot de Sen4AgriNet (ver pendientes) y versionarlos.
-3. Una sola corrida sellada de Sen4AgriNet: parquet, JSON per-clase y checkpoint; regenerar texto y figura desde ella.
-4. Emitir CSV con los conteos por escena que hoy solo viven en títulos de PNG.
-5. Figuras: `make paper-figures` emite SVG y PDF versionados; retirar `*.png` del flujo; `aoi_italy` desde caché sellada, no GEE en vivo.
-6. `paper/ARTIFACTS.md`: **hecho**. Tabla elemento del paper, artefacto, MD5, bytes, commit y estado, más una sección de trazabilidad que dice qué artefacto tiene productor en el repositorio y cuáles solo tienen lectores. Gate `scripts/paper_artifacts_check.py` vía `make paper-artifacts-check`, probado en negativo.
-7. Fijar versiones de cómputo en el ledger (`xgboost`, `scikit-learn`, `polars`, `matplotlib`) y el SHA del commit que produjo cada artefacto: **hecho**.
+### Fase 3 · Robustez del resultado sobre PASTIS-R (CPU, sin terceros)
 
-### Fase 2 · Experimentos del ángulo A (CPU, datos en disco) — HECHA
+Cierra las objeciones baratas antes de tocar datos nuevos. Salida:
+`reports/paper_micai/fase3/`.
 
-Los cinco puntos están hechos, con un hallazgo que condiciona el resto: **la cifra campeona 0,7486 es in-sample para el meta-modelo**. `StackingEnsemble` reentrena su árbitro sobre todas las parcelas del fold 5 antes de predecirlas, y las cuatro cifras selladas (0,7486, 0,7470, 0,6477 y 0,6359) reproducen exactamente ese régimen. Libre de fuga, ninguna combinación mejora al mejor miembro individual (tsvit-pheno, 0,7367): el árbitro empata con el promedio y pierde contra el voto ponderado. La contribución central **sí se sostiene**: a igual cobertura, retirar clases domina al rechazo por confianza, con intervalo que excluye el cero por debajo de doce clases. Detalle en [`docs/paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
+1. **Segundo predictor.** Repetir la comparación de cobertura sobre `xgb-alphaearth`
+   (F1-macro 0,5913). Si el resultado se mantiene, la conclusión es una propiedad del
+   desbalance y no de un modelo concreto. Es la respuesta más barata a la objeción de
+   validez externa.
+2. **Tercer mecanismo.** Retirar clases **por soporte** en lugar de por F1, que es lo que
+   se hace en la práctica y lo primero que va a preguntar un revisor.
+3. **Multiplicidad.** Corregir los siete contrastes de K (Holm o Benjamini-Hochberg) y
+   declarar por escrito qué es confirmatorio y qué exploratorio, decidido **antes** de
+   mirar los resultados nuevos.
+4. **Curva completa de rechazo por confianza**, con más puntos que los siete igualados,
+   para dibujar la frontera y no solo sus intersecciones.
+5. **Figura de la frontera** en vectorial, legible en blanco y negro.
 
-### Fase 2 · Experimentos del ángulo A (CPU, datos en disco)
+### Fase 4 · Segundo conjunto de datos: BreizhCrops (CPU, sin terceros)
 
-Responsable: Javier. Insumos: `ml/eval/oof/oof_parcel_*_fold5.parquet` (8 miembros, 16 640 parcelas), `us043_farslip_grid.csv`, `us043_winner_cardinality_curve.csv`, `cardinalidad.json`, `ec_neighborhood_result.json`, geometrías de PASTIS-R.
+Es la respuesta real a «un solo dataset», y no necesita GPU. Salida:
+`reports/paper_micai/fase4/`.
 
-1. Homogéneo contra heterogéneo sobre las mismas OOF: media simple, voto ponderado y stacking; delta por clase; bootstrap pareado por parcela (B = 1000) y McNemar.
-2. **Contribución central tras el reencuadre.** Curva calidad contra cobertura por retirada de clases con intervalo bootstrap y, obligatoriamente, el comparador de clasificación selectiva: rechazo por umbral de confianza **a igual cobertura**, medido en F1-macro. Sin ese comparador la curva repite lo ya publicado (regla R2 de [`ADR-013`](decisions/ADR-013-angulo-micai.md)).
-3. Aporte de FarSLIP 5 contra 3 miembros en un solo universo, con intervalo; declarar por qué se elige ese universo.
-4. Nulo de vecindad espacial con intervalo bootstrap pareado (`ml/ensemble/ec_neighborhood.py`). Ojo: el artefacto actual da un delta **positivo** de +0,0027 a +0,0068, no un cero; si el intervalo excluye el cero se reporta como mejora pequeña y no accionable (regla R1 de [`ADR-013`](decisions/ADR-013-angulo-micai.md)).
-5. Tabla de individuales bajo un solo protocolo (fold-5, todos los miembros, mismo harness).
-6. Cada experimento produce CSV o JSON bajo `reports/paper_micai/` con semilla, versiones y SHA; entra al ledger de la fase 1.
+1. `dvc pull data/breizhcrops` (1,66 GB, seis archivos). El cargador ya existe:
+   [`ml/ingest/breizhcrops_loader.py`](../ml/ingest/breizhcrops_loader.py) y
+   [`ml/features/breizhcrops_features.py`](../ml/features/breizhcrops_features.py).
+2. Entrenar un clasificador por parcela en CPU sobre otra región de Francia y otro año
+   (2017), con su propio desbalance y su propia leyenda.
+3. Sellar su ground truth, sus posteriores y su soporte por clase como se hizo con el
+   fold 5 de PASTIS-R.
+4. Repetir **exactamente** el protocolo de la fase 2: bloques espaciales, los tres
+   mecanismos, intervalos pareados. Sin tocar una línea del método.
+5. Reportar si la conclusión se transporta o no. **Si no se transporta, se reporta igual**
+   y el artículo gana un matiz en lugar de perder una tesis.
 
-### Fase 2 bis · Qué artículo sale, escrito desde cero
+### Fase 5 · Reentrenamiento OOF de cinco folds (GPU, depende de la ventana H100)
 
-Tras la fase 2 la tesis del ensamble ya no se sostiene, así que antes de corregir cifras hay que decidir qué artículo se escribe. El análisis está en [`docs/paper/que-paper-sale.md`](paper/que-paper-sale.md): inventario de lo defendible, lo que falta, cuatro encuadres candidatos con su riesgo y su coste, y la recomendación de escribir **desde cero** un artículo sobre el punto de operación, con el resultado negativo del ensamble dentro como sección de protocolo. Incluye título de trabajo, contribuciones, esqueleto de doce páginas, los cinco experimentos de CPU que faltan y las cuatro objeciones previsibles con su respuesta. Requiere enmienda a ADR-013 firmada por ambos.
+No bloquea la escritura. Es lo que convierte un artículo correcto en uno sólido.
 
-### Fase 3 · Corrección de cifras y afirmaciones
+1. Entrenar el miembro elegido dejando cada fold fuera, para tener posteriores OOF sobre
+   los **2 433 parches** en lugar de 496. El universo pasa de 16 640 parcelas a unas 83 000.
+2. Con eso el meta-modelo por fin se entrena como es debido y el resultado negativo del
+   ensamble deja de estar limitado por los artefactos.
+3. **Beneficio lateral que vale por sí solo**: resuelve para siempre la duda sobre la
+   procedencia de `tsvit-pheno`, porque el entrenamiento sería nuestro y con folds conocidos.
+4. Si la ventana no se abre, el artículo se envía con el universo de 16 640 y la limitación
+   declarada. No es un bloqueante.
 
-Responsable: Javier. Barrido completo tras cada cambio (abstract, introducción, resultados, discusión, limitaciones, conclusión, pies y tablas).
+### Fase 6 · Escritura desde cero, doce páginas LNCS
 
-1. 0.7486 y 0.8495 para Stacking-5; 0.7470 solo como Stacking-3 si se conserva.
-2. Una tabla única de ensambles con las cuatro celdas del grid y su régimen; explicar por qué el mejor miembro individual produce el peor stacking.
-3. Blending +0.0215; delta FarSLIP −0.0896 F1; ganancia del ensamble +1.2 pp a nivel parcela.
-4. Retirar Bretaña, AlphaEarth vs S2, WorldCereal, tools y por-escena hasta que existan artefactos sellados; DE4 solo si Arthur entrega `report.json` y datos.
-5. Un solo reasoner en todo el texto y en la cita: Gemini 2.5 Pro (Vertex AI); repetir la medición de intercambio de backends con n mayor o igual a 30 consultas, o reducirla a una frase.
-6. Serving de Qwen descrito como fue (llama.cpp, GGUF Q4_K_M) o eliminado; sin "Qwen 3.6-VL" sin cita; sin Gemma.
-7. Eliminar toda mención de resultados pendientes, jerga interna (US-0xx, EPIC, H100, blockers, engram), rutas del repositorio y costos FinOps.
-8. Retirar las cuatro afirmaciones prohibidas por [`ADR-013`](decisions/ADR-013-angulo-micai.md): «el contexto espacial no aporta», «AlphaEarth ya codifica la fenología», la cardinalidad como novedad a secas y «adoptamos Be My Eyes al pie de la letra».
-9. Limitaciones con lo que debilita las conclusiones: un solo fold held-out para los densos, un par denso con 10 parches, artefactos regenerados.
+Redacta Javier, revisa Arthur. Título de trabajo, contribuciones y reparto de páginas en
+[`docs/paper/que-paper-sale.md`](paper/que-paper-sale.md), sección 5.
 
-### Fase 4 · Reescritura en 12 a 15 páginas LNCS
+- `paper/micai/` nuevo, no `paper/`. El manuscrito heredado se queda donde está como
+  material de consulta.
+- Ninguna cifra entra sin fila sellada en `paper/ARTIFACTS.md`.
+- Reglas de estilo: inglés americano consistente, abstract de 150 a 250 palabras sin
+  cifras ni siglas de métrica, em-dash para incisos y en-dash para rangos, Oxford comma,
+  siglas expandidas en su primer uso con el abstract como ámbito propio, `\paragraph` en
+  lugar de subsubsecciones.
+- Trabajo relacionado **por limitaciones**, no como lista: cada cita con su fortaleza y su
+  límite. La matriz de la fase 0 ya está redactada así.
 
-Responsable: Javier redacta, Arthur revisa. Plan de secciones:
+### Fase 7 · Bibliografía
 
-| Sección | Contenido | Páginas |
-|---|---|---|
-| 1 Introducción | Problema, desbalance, por qué prometer K clases es una decisión medible; contribuciones inline (i) (ii) (iii) con verbos honestos | 1.5 |
-| 2 Trabajo relacionado | Por limitaciones: SITS y PASTIS, stacking, clasificación selectiva, modelos de fundación EO, validación espacial | 1.5 |
-| 3 Materiales y método | Datos y protocolo libre de fuga (ranking en OOF, medida en held-out, un fold), miembros, árbitro y mecanismo de punto de operación | 3 |
-| 4 Resultados | 4.1 heterogéneo contra homogéneo por clase; 4.2 curva calidad contra cobertura frente a rechazo por confianza; 4.3 aporte FarSLIP; 4.4 nulo de vecindad | 4 |
-| 5 Discusión | Qué compra el arbitraje; por qué el contexto ya está en el embedding; confirmatorio contra exploratorio | 1.5 |
-| 6 Limitaciones y conclusión | Solo lo que debilita las conclusiones | 1 |
-| Referencias | Unas 30 entradas con DOI | 1.5 |
+Parte de `reports/paper_micai/fase0/related_work_verified.csv`: 43 entradas con título,
+autores y año resueltos por arXiv, Crossref u OpenAlex.
 
-Fuera del cuerpo: capa conversacional (un párrafo de contexto, sin cifras), multi-región y DE4 (segundo artículo), narrativa del bug de FarSLIP (un párrafo), apéndices largos.
+1. Completar el DOI de actas de las entradas que hoy solo tienen identificador arXiv.
+2. Reconstruir desde la fuente cualquier entrada heredada que se reutilice; las tres
+   anclas ya están verificadas y leídas.
+3. Gate `make paper-cite-check` más verificación por API de cada identificador.
+4. Sin campos `note`, siglas protegidas con llaves, más de seis autores se listan seis y
+   «et al.».
 
-Reglas de estilo: abstract de 150 a 250 palabras sin cifras ni siglas de métrica; inglés americano consistente; em-dash para incisos y en-dash para rangos; Oxford comma; siglas expandidas en su primer uso y el abstract como ámbito propio; separador de miles con espacio fino; `\paragraph` en lugar de subsubsecciones.
+### Fase 8 · Plantilla LNCS, doble ciego y paquete
 
-### Fase 5 · Bibliografía
+1. `\documentclass[runningheads]{llncs}`, `\AtBeginDocument{\pdfpagewidth=210mm
+   \pdfpageheight=297mm}` para el A4 real, `cmap` antes de `fontenc`, `xurl`, `hyperref`
+   con `hidelinks`, `\emergencystretch=1em`, `\keywords` dentro del abstract, apéndice
+   antes de las referencias, flotantes `[tbp]`.
+2. Autor de correspondencia con `\thanks{Corresponding author.}`, nunca `\Envelope`.
+3. Un `main.tex` con `\newif\ifanon` y dos salidas byte-idénticas en el cuerpo.
+4. Gate de identidad: `pdftotext` del PDF de envío con cero coincidencias de la lista de
+   tokens, **probado en negativo** antes de confiar en él.
+5. Empaquetado en `.zip` con el proyecto LaTeX completo, como pide MICAI, y verificación
+   de cero overfull mayores de 5 pt sobre el PDF ensamblado, no sobre el `.tex`.
 
-Responsable: Javier. Gate: `scripts/paper_cite_check.py` más verificación por API de cada id.
+### Fase 9 · Sitio live en Netlify — OPCIONAL
 
-0. Punto de partida: `reports/paper_micai/fase0/related_work_verified.csv` trae 43 entradas con título, autores y año resueltos por arXiv, Crossref u OpenAlex, y los tres anclajes ya leídos y contrastados.
-1. Reconstruir desde la fuente las seis entradas con datos falsos o dudosos: `huang2025bemyeyes`, `harvesting2026alphaearth`, `ruan2025agromind`, `reuss2025eurocropsml`, `li2025farslip`, `wen2025phenology`; corregir `garnot2021utae`.
-2. DOI en las 22 entradas actuales y en las nuevas; retirar los campos `note`; proteger siglas con llaves; más de seis autores se listan seis y "et al.".
-3. Añadir las referencias que un revisor de IA espera: TempCNN (Pelletier 2019), Rußwurm y Körner 2020, ReAct, Toolformer, RAG (Lewis 2020), LLM-as-judge (Zheng 2023), stacking (Wolpert 1992), validación espacial (Roberts 2017), clasificación selectiva (Geifman y El-Yaniv 2017), EuroCrops y HCAT (Schneider 2023), Prithvi, SatMAE, Optuna.
+Sin cambios respecto al plan anterior, y sin prioridad hasta que haya manuscrito. Depende
+de que Arthur cree el sitio y cargue los secretos.
 
-### Fase 6 · Plantilla LNCS, figuras y doble ciego
+### Fase 10 · Metadatos y entrega
 
-Responsable: Javier. Prototipo ya compilado en scratch: `llncs` 2.26, A4 real, cero errores, cero referencias indefinidas.
-
-1. Preámbulo: `\documentclass[runningheads]{llncs}`, `\AtBeginDocument{\pdfpagewidth=210mm \pdfpageheight=297mm}`, `cmap` antes de `fontenc`, `xurl`, `hyperref` con `hidelinks`, `\UrlFont` en negro, `\emergencystretch=1em`, `\keywords` dentro del abstract, apéndice antes de referencias, flotantes `[tbp]`, `splncs04`.
-2. Figuras vectoriales PDF desde SVG en el build; texto legible en blanco y negro; medir tamaño de glifo sobre el PDF ensamblado.
-3. Retirar `PRIMEarxiv.sty`, `fancyhdr`, `import`, `\And`, `\thanks` de cita sugerida.
-4. Un `main.tex` con `\newif\ifanon`; `\sysname` que en envío es "the copilot"; bloques `% >>> REVIEW:` y `% >>> CAMERA-READY:` para autores, `\institute`, `\orcidID`, `\email`, `credits` y URL de código. Generador de dos PDF (`make paper-submission`, `make paper-camera-ready`) con cuerpo byte-idéntico.
-5. Gate de identidad: `pdftotext` del PDF de envío con cero coincidencias de la lista de tokens (nombres, correos, instituciones, ORCID, Team 17, AgroSatCopilot, organizaciones de GitHub, US-0xx, H100, rutas).
-6. Empaquetador que excluya `main_es.tex`, `sections_es/`, `AGENTS.md`, `CLAUDE.md`, notebooks, HTML, tablas no usadas y comentarios `% src:` del paquete de envío, y que verifique cero overfull mayores de 5 pt.
-
-### Fase 7 · Sitio live del paper en Netlify
-
-Responsable: Javier construye, Arthur revisa. Objetivo: que cada iteración del manuscrito se vea en vivo, sin abrir LaTeX, con su estado de auditoría.
-
-**Qué muestra el sitio**
-
-- Portada: versión actual (commit corto, fecha, páginas, tamaño A4 verificado), botón al PDF de envío y al de camera-ready, y semáforo de gates (compila, cero referencias indefinidas, cero tokens de identidad, ledger de artefactos íntegro, páginas dentro del límite).
-- Lector: el PDF más reciente embebido (pdf.js) y una versión HTML del manuscrito (LaTeXML o pandoc) para lectura en móvil.
-- Iteraciones: línea de tiempo de cada push a `main` que tocó `paper/`, con mensaje de commit, delta de páginas, palabras y cifras cambiadas (diff del ledger), y enlace al PDF de esa iteración.
-- Ledger de cifras: cada número impreso con su artefacto, MD5 y estado (verificado, cambiado, sin fuente).
-- Galería de figuras y tablas con su generador y fecha.
-- Tablero de auditoría: los hallazgos de este plan como checklist con estado abierto, en curso, cerrado y commit que lo cierra.
-- Comentarios: un enlace por sección a un issue de GitHub para que Arthur comente sin tocar LaTeX.
-
-**Cómo se construye**
-
-- Carpeta `site/` con generador estático propio (`scripts/build_paper_site.py`, Python del repo, plantillas Jinja2 ya disponibles en el grupo `paper`) que lee `paper/ARTIFACTS.md`, el log de git, el `.log` de LaTeX y los PDF. Sin framework de frontend: HTML, CSS y pdf.js desde CDN.
-- Workflow `paper-live.yml` en GitHub Actions: en cada push a `main` que toque `paper/`, `scripts/` o `reports/`: compila con texlive en contenedor (`make paper-pdf-docker`), corre los gates, construye `site/` y despliega con `netlify deploy --prod --dir site` usando `NETLIFY_AUTH_TOKEN` y `NETLIFY_SITE_ID` como secretos del repositorio. Cada iteración se guarda en `site/iteraciones/<sha>/`.
-- Netlify: sitio creado por Arthur o Javier, dominio `agrosat-micai.netlify.app` o similar, con contraseña de Netlify o cabecera `noindex` porque el sitio muestra autores y por tanto no puede enlazarse desde el paper ni ser indexable durante la revisión.
-- Prueba en negativo: un push con una referencia rota debe poner el semáforo en rojo y no publicar el PDF.
-
-**Entregables**: `site/` generado, `scripts/build_paper_site.py`, `.github/workflows/paper-live.yml`, `docs/site-live.md` con la operación.
-
-### Fase 8 · Metadatos y entrega
-
-Responsables: ambos.
-
-1. Autor de correspondencia decidido antes del envío (firma la licencia Springer a mano y no se puede cambiar después).
-2. ORCID de Arthur; nombres idénticos carácter a carácter en paper, sistema del congreso, `LICENSE`, `pyproject.toml` y README; afiliación única "Tecnológico de Monterrey".
-3. `credits` con agradecimientos al sponsor y a los desarrolladores originales (Isaac Ávila y Aaron Bocanegra como autores del código, no del artículo) y "Disclosure of Interests"; solo en camera-ready.
-4. Repositorio citable: `LICENSE` en formato que GitHub reconozca, `CITATION.cff`, release con DOI de Zenodo, declaración de disponibilidad con licencias reales (MIT código, CC-BY-SA-4.0 derivados de datos), sin URL en la versión de envío.
-5. Seguimiento de la convocatoria MICAI 2027: fechas, límite de páginas, formato de envío; calendario hacia atrás desde la fecha de envío con una semana de holgura.
+1. Autor de correspondencia decidido antes del envío: firma la licencia **a mano** y
+   Springer no permite cambiarlo después del camera-ready.
+2. ORCID de Arthur; nombres idénticos carácter a carácter en artículo, sistema del
+   congreso, `LICENSE`, `pyproject.toml` y README.
+3. `credits` con agradecimientos a Isaac Ávila y Aaron Bocanegra como autores del código,
+   y «Disclosure of Interests»; solo en camera-ready.
+4. Repositorio citable: `LICENSE` que GitHub reconozca, `CITATION.cff`, release con DOI de
+   Zenodo, y declaración de disponibilidad sin URL en la versión de envío.
+5. Seguimiento de la convocatoria de MICAI 2027 y calendario hacia atrás con una semana de
+   holgura.
 
 ---
 
-## 4. Cronograma tentativo y esfuerzo
+## 4. Orden y esfuerzo
 
-| Fase | Esfuerzo | Depende de |
-|---|---|---|
-| 0 Aporte real | 3 días | nada |
-| 1 Sellado de artefactos | 1 día más entregas de Arthur | 0 |
-| 2 Experimentos CPU | 2 días | 1 |
-| 3 Corrección de cifras | 1 día | 2 |
-| 4 Reescritura | 3 a 5 días | 0, 2, 3 |
-| 5 Bibliografía | 1 día | 0 |
-| 6 LNCS y doble ciego | 2 días | 4 |
-| 7 Sitio live | 2 días | 6 (puede empezar en paralelo con el PDF actual) |
-| 8 Metadatos y entrega | 1 día más trámites | 6, convocatoria |
+| Fase | Esfuerzo | Depende de | Bloquea el envío |
+|---|---|---|---|
+| 3 Robustez en CPU | 1 día | nada | sí, dos de sus cinco puntos |
+| 4 BreizhCrops | 2 a 3 días | `dvc pull` | no, pero es la mejor defensa |
+| 5 Reentrenamiento OOF | 1 día de cómputo | ventana H100, Arthur | no |
+| 6 Escritura | 4 a 6 días | 3, y 4 si llega a tiempo | sí |
+| 7 Bibliografía | 1 día | nada | sí |
+| 8 LNCS y doble ciego | 2 días | 6 | sí |
+| 9 Sitio live | 2 días | Arthur | no |
+| 10 Metadatos y entrega | 1 día más trámites | 8, convocatoria | sí |
 
-Total orientativo: 16 a 18 días de trabajo, sin contar esperas de terceros.
+Las fases 3, 4 y 7 no dependen de nadie y pueden empezar hoy. La 5 entra cuando se abra la
+ventana; si no se abre, se declara la limitación y se envía igual.
 
 ---
 
 ## 5. Criterios de cierre por fase
 
-- Fase 0: **cumplido salvo la firma**. `novedad.md` con matriz de 43 trabajos verificados y veredicto de reencuadre; falta que Arthur y Javier firmen `ADR-013`.
-- Fase 1: `make paper-artifacts-check` en verde; un clon limpio con `dvc pull` regenera todas las tablas y figuras.
-- Fase 2: **cumplido**. Cada experimento con CSV o JSON sellado en `paper/ARTIFACTS.md`, con semilla, versiones, commit y prueba estadística pareada con su intervalo.
-- Fase 3: cero menciones de "pending", jerga interna o rutas en el texto; cada cifra con `% src:` verificable por script.
-- Fase 4: PDF de 12 a 15 páginas bajo `llncs`; abstract de 150 a 250 palabras; `make paper-pdf` con código de salida cero.
-- Fase 5: cada entrada del bib verificada por API; cero `note`; DOI en todas.
-- Fase 6: dos PDF generados desde un master; cero tokens de identidad en el de envío; cero overfull mayores de 5 pt.
-- Fase 7: cada push a `main` publica la iteración en Netlify en menos de 15 minutos; la prueba en negativo pone el semáforo en rojo.
-- Fase 8: licencia lista para firmar, nombres unificados, repositorio citable con DOI.
+- Fase 0: **cumplida salvo la firma** de `ADR-013`.
+- Fase 1: `make paper-artifacts-check` en verde y probado en negativo. **Cumplida** en lo
+  que no depende de Arthur.
+- Fase 2: cada experimento con artefacto sellado, semilla, versiones y prueba pareada con
+  su intervalo. **Cumplida.**
+- Fase 3: los cinco puntos con artefacto sellado; la decisión de confirmatorio frente a
+  exploratorio escrita **antes** de mirar los resultados.
+- Fase 4: el protocolo de la fase 2 corre sobre BreizhCrops sin modificarlo, y su
+  resultado se reporta se transporte o no.
+- Fase 5: posteriores OOF de los cinco folds sellados, con la procedencia del checkpoint
+  documentada por nosotros.
+- Fase 6: PDF de doce páginas bajo `llncs`, abstract de 150 a 250 palabras, cada cifra con
+  fila en el ledger.
+- Fase 7: cada entrada verificada por API, con DOI, sin `note`.
+- Fase 8: dos PDF desde un master, cero tokens de identidad en el de envío con el gate
+  probado en negativo, cero overfull mayores de 5 pt medidos sobre el PDF.
+- Fase 9: cada push publica la iteración en menos de quince minutos y la prueba en negativo
+  pone el semáforo en rojo.
+- Fase 10: licencia lista para firmar, nombres unificados, repositorio citable con DOI.

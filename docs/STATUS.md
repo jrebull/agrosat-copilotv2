@@ -71,6 +71,12 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   El nulo de vecindad es un nulo limpio y el aporte de FarSLIP no se distingue de cero fuera
   del régimen in-sample. Detalle y advertencias en
   [`paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
+- **Encuadre aceptado**: artículo nuevo desde cero sobre el punto de operación, con el
+  resultado negativo del ensamble dentro como sección de protocolo. El manuscrito heredado
+  no se repara. Enmienda en [`ADR-013`](decisions/ADR-013-angulo-micai.md), firmada por
+  Javier y pendiente de Arthur; justificación en [`paper/que-paper-sale.md`](paper/que-paper-sale.md).
+  Plan reformulado en diez fases: robustez en CPU, BreizhCrops como segundo conjunto de
+  datos, reentrenamiento OOF opcional en GPU, y escritura desde cero.
 - Pregunta abierta para Arthur: `tsvit-pheno` saca 0,7367 y `tsvit-pheno-fullm` 0,2552 sobre
   las mismas parcelas. Antes de publicar hay que comprobar con qué folds se entrenó cada
   checkpoint.

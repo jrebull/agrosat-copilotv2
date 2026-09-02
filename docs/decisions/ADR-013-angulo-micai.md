@@ -1,6 +1,6 @@
 # ADR-013 — Ángulo del artículo MICAI 2027: reencuadre del ángulo A
 
-**Estado**: Borrador para firma. Pendiente de aprobación de Arthur Zizumbo y Javier Rebull.
+**Estado**: Enmendado el 2 de septiembre de 2026 tras la fase 2. Encuadre aceptado por Javier Rebull; pendiente de la firma de Arthur Zizumbo.
 **Fecha del borrador**: 2 de septiembre de 2026
 **Decisores**: Arthur Jafed Zizumbo Velasco (primer autor) · Javier A. Rebull-Saucedo (segundo autor)
 **Fase del plan**: [Fase 0 de `docs/plan-micai-2027.md`](../plan-micai-2027.md)
@@ -131,3 +131,77 @@ FinOps y toda la narrativa de proceso interno.
 
 - [ ] Arthur Jafed Zizumbo Velasco — fecha:
 - [ ] Javier A. Rebull-Saucedo — fecha:
+
+---
+
+## Enmienda del 2 de septiembre de 2026, tras medir la fase 2
+
+La fase 2 midió las tres patas y el resultado obliga a mover la decisión otra vez. Esto no
+sustituye lo anterior: lo estrecha.
+
+### Qué cambió respecto al reencuadre original
+
+1. **La cifra campeona no era un held-out.** `StackingEnsemble` reentrena su meta-modelo
+   sobre todas las parcelas del fold 5 antes de predecirlas. Reproducido al sexto decimal:
+   0,748614 y 0,849459. Las cuatro cifras selladas del proyecto salen de ese régimen.
+2. **La pata del arbitraje se cae, y con ella la premisa del ensamble.** Libre de fuga
+   ninguna combinación mejora al mejor miembro individual (tsvit-pheno, 0,7367): el árbitro
+   empata con el promedio (+0,0005, el intervalo cruza el cero) y pierde contra el voto
+   ponderado (−0,0437) y contra el propio miembro (−0,0572). Se aplicó la regla R3.
+3. **La pata de la vecindad es un nulo limpio**, más limpio que el sellado: ningún alfa
+   mayor que cero mejora y el intervalo incluye el cero. Regla R1 satisfecha.
+4. **La contribución central se sostiene** (regla R2): a igual cobertura, retirar clases
+   domina al rechazo por confianza, con delta de +0,062 a +0,198 e intervalo que excluye el
+   cero por debajo de doce clases.
+5. **Apareció el mecanismo que une las piezas.** El árbitro entrenado deja la clase 10 en
+   F1 exactamente cero sobre 355 parcelas: ya retira clases por su cuenta, sin declararlo.
+
+### Decisión enmendada
+
+**Se escribe un artículo nuevo, desde cero, sobre el punto de operación.** El manuscrito
+heredado no se repara: treinta y seis páginas, citas con título y autores inventados,
+cifras del régimen equivocado y una tesis que la fase 2 desmontó. Se conserva como material
+de consulta, no como base.
+
+Tesis del artículo:
+
+> Un meta-modelo entrenado sobre miembros heterogéneos acaba retirando clases por su
+> cuenta, sin declararlo y sin que nadie elija el punto de operación. Conviene sacar esa
+> decisión del modelo y medirla: a igual cobertura, recortar la leyenda compra más calidad
+> macro que abstenerse por confianza, y la ventaja crece según se acorta la leyenda.
+
+Título de trabajo, contribuciones, esqueleto de doce páginas, experimentos que faltan y
+objeciones previsibles con su respuesta: [`docs/paper/que-paper-sale.md`](../paper/que-paper-sale.md).
+
+### Qué papel tiene ahora cada pata
+
+| Pata | Papel enmendado |
+|---|---|
+| Punto de operación | **Contribución central**, sin cambios |
+| Arbitraje heterogéneo | **Caso que revela el problema**, no contribución. Su resultado negativo entra en la sección de protocolo con su causa declarada |
+| Contexto espacial | **Control negativo**, ya medido y cerrado con intervalo |
+
+### Afirmaciones prohibidas, ampliadas
+
+A las cuatro anteriores se añaden tres:
+
+5. **«El ensamble mejora al mejor miembro».** Libre de fuga no lo hace. Cualquier cifra de
+   ganancia del ensamble pertenece al régimen in-sample y debe decirlo.
+6. **«0,7486 held-out».** Es in-sample para el meta-modelo. Si se imprime, se etiqueta.
+7. **«FarSLIP aporta señal complementaria».** +0,0006 con intervalo de [−0,0024, +0,0034].
+   El aporte que reportaba el manuscrito vive entero dentro del régimen in-sample.
+
+### Reglas nuevas para las fases 3 y 4
+
+- **R5 — Confirmatorio antes de mirar.** La decisión de qué contrastes son confirmatorios y
+  cuáles exploratorios, y la corrección por multiplicidad de los siete valores de K, se
+  escriben **antes** de correr los experimentos nuevos.
+- **R6 — El segundo conjunto de datos no se elige por su resultado.** BreizhCrops se fija
+  como réplica antes de mirar nada, y su resultado se reporta se transporte o no. Si la
+  conclusión no se transporta, el artículo gana un matiz; no se cambia de dataset.
+- **R7 — Ninguna cifra sin fila sellada.** Ya vigente, se reafirma para el manuscrito nuevo.
+
+### Firmas de la enmienda
+
+- [ ] Arthur Jafed Zizumbo Velasco — fecha:
+- [x] Javier A. Rebull-Saucedo — 2 de septiembre de 2026
