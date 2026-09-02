@@ -7,7 +7,9 @@ a row that claims a seal has no digest.
 
 Rows whose state is ``SIN_ARTEFACTO`` are expected to have no file: they document a
 number that cannot be printed until the artefact exists. The gate reports them and
-does not fail.
+does not fail. A sealed row whose file is absent but has a sibling ``.dvc`` pointer is
+reported apart, as a missing ``dvc pull`` rather than as a broken seal, so a fresh
+clone gets an actionable message instead of a wall of false alarms.
 
 Usage:
     poetry run python scripts/paper_artifacts_check.py
@@ -97,6 +99,7 @@ def main() -> int:
         return 2
 
     failures: list[str] = []
+    dvc_missing: list[str] = []
     pending = 0
     checked = 0
     for row in rows:
@@ -107,7 +110,10 @@ def main() -> int:
                 failures.append(f"{row['path']}: marcado {MISSING_STATE} pero el archivo existe")
             continue
         if not path.exists():
-            failures.append(f"{row['path']}: registrado con sello pero no esta en disco")
+            if path.with_suffix(path.suffix + ".dvc").exists():
+                dvc_missing.append(row["path"])
+            else:
+                failures.append(f"{row['path']}: registrado con sello pero no esta en disco")
             continue
         if not re.fullmatch(r"[0-9a-f]{32}", row["md5"]):
             failures.append(f"{row['path']}: el ledger no trae un MD5 valido")
@@ -121,8 +127,15 @@ def main() -> int:
     print(f"filas sin artefacto (pendientes): {pending}")
     for failure in failures:
         print(f"FALLO: {failure}")
+    if dvc_missing:
+        print(f"pendientes de `dvc pull` ({len(dvc_missing)}), no es un fallo del sello:")
+        for path_str in dvc_missing:
+            print(f"  - {path_str}")
     if failures:
         print(f"paper-artifacts-check: {len(failures)} fallo(s)")
+        return 1
+    if dvc_missing:
+        print("paper-artifacts-check: incompleto, ejecuta `dvc pull` y vuelve a correrlo")
         return 1
     print("paper-artifacts-check: OK")
     return 0

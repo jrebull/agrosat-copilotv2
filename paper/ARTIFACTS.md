@@ -4,7 +4,7 @@ Cada cifra impresa en el artículo debe re-derivarse desde un archivo de esta ta
 Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` recalcula
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
-**Sellado el**: 2026-09-02 · **HEAD del repositorio**: `d6ca043`
+**Sellado el**: 2026-09-02 · **HEAD del repositorio**: `9eaeb2f`
 **Fase**: 1 de [`docs/plan-micai-2027.md`](../docs/plan-micai-2027.md) ·
 **Ángulo vigente**: [`ADR-013`](../docs/decisions/ADR-013-angulo-micai.md) (reencuadre).
 
@@ -51,10 +51,10 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Embeddings WorldCereal de India (Karnataka) | `data/transfer/worldcereal_india_karnataka.parquet` | `f6fb984f62f939e50b6048e9a74aa0cb` | 201319 | `a50cb94` (.dvc) | SELLADO | Insumo crudo del barrido tropical; el resultado del barrido no existe. |
 | Deltas pareados multirregión | `data/transfer/multiregion_paired_delta.parquet` | `608a994e120e74ace9d5eaf4923d46d4` | 3657 | `a50cb94` (.dvc) | SELLADO | Fuera del cuerpo bajo el ángulo reencuadrado. |
 | Macro por clase multirregión | `data/transfer/multiregion_per_class_macro.parquet` | `51496ae0321af2b29ee8cc6edb3642a2` | 2549 | `a50cb94` (.dvc) | SELLADO | Fuera del cuerpo bajo el ángulo reencuadrado. |
-| Etiquetas por parcela del fold 5, universo compartido por los diez miembros | `reports/paper_micai/fase1/parcel_gt_fold5.parquet` | `dddb1ea9c1b0b15c0f24142e8dd0ec4d` | 68147 | sin seguimiento en git | SELLADO | 16 640 filas derivadas de PASTIS-R. Permite reproducir toda la evaluación sin los 68 GB del dataset. |
-| Centroides por parcela del fold 5 | `reports/paper_micai/fase1/parcel_centroids_fold5.parquet` | `5b1ce7b92059e62f640869a51bc8f1e6` | 358870 | sin seguimiento en git | SELLADO | Geometrías necesarias para los sub-folds espaciales del meta-modelo y para el nulo de vecindad. |
-| Soporte por clase del fold 5 | `reports/paper_micai/fase1/parcel_gt_fold5_support.csv` | `e9c3b084ad2f8dba43e241f5ff607e46` | 136 | sin seguimiento en git | SELLADO | El desbalance del que trata el artículo: de 6 128 parcelas en la clase mayoritaria a 103 en la menor. |
-| Procedencia del ground truth del fold 5 | `reports/paper_micai/fase1/parcel_gt_fold5_provenance.json` | `7ad456fbc109edc82d2490683918f65b` | 414 | sin seguimiento en git | SELLADO | MD5 del archivo de Zenodo de PASTIS-R, conteos, `code_version` y version de polars. |
+| Etiquetas por parcela del fold 5, universo compartido por los diez miembros | `reports/paper_micai/fase1/parcel_gt_fold5.parquet` | `dddb1ea9c1b0b15c0f24142e8dd0ec4d` | 68147 | `9eaeb2f` | SELLADO | 16 640 filas derivadas de PASTIS-R. Permite reproducir toda la evaluación sin los 68 GB del dataset. |
+| Centroides por parcela del fold 5 | `reports/paper_micai/fase1/parcel_centroids_fold5.parquet` | `5b1ce7b92059e62f640869a51bc8f1e6` | 358870 | `9eaeb2f` | SELLADO | Geometrías necesarias para los sub-folds espaciales del meta-modelo y para el nulo de vecindad. |
+| Soporte por clase del fold 5 | `reports/paper_micai/fase1/parcel_gt_fold5_support.csv` | `e9c3b084ad2f8dba43e241f5ff607e46` | 136 | `262a519` | SELLADO | El desbalance del que trata el artículo: de 6 128 parcelas en la clase mayoritaria a 103 en la menor. |
+| Procedencia del ground truth del fold 5 | `reports/paper_micai/fase1/parcel_gt_fold5_provenance.json` | `7ad456fbc109edc82d2490683918f65b` | 414 | `262a519` | SELLADO | MD5 del archivo de Zenodo de PASTIS-R, conteos, `code_version` y version de polars. |
 | Registro de la búsqueda sistemática de la fase 0 | `reports/paper_micai/fase0/search_log.csv` | `ac14cc4e5db38c7976c1c6b6c4af05e1` | 12831 | `4052b0b` | SELLADO | Consulta, fuente, fecha, código HTTP y registros. |
 | Registro de las consultas manuales de buscador | `reports/paper_micai/fase0/search_log_manual.csv` | `3de611cd854356095debdb34fb0cbbc5` | 2163 | `4052b0b` | SELLADO | Las seis consultas tipo Google Scholar. |
 | Candidatos devueltos por la búsqueda | `reports/paper_micai/fase0/search_candidates.csv` | `c56c4aad185e7a08a4dc7a383eaef35f` | 162047 | `4052b0b` | SELLADO | Sin filtrar, tal como los devolvió cada API. |
@@ -144,4 +144,9 @@ que nunca se ha visto fallar no sirve de control.
 Además, los once parquets OOF sellados aquí coinciden con el `md5` que registra su
 propio archivo `.dvc`, de modo que un clon limpio con `dvc pull` obtiene exactamente
 los mismos bytes que produjeron las cifras.
+
+Probado sobre un clon limpio del repositorio: **23 de los 37 artefactos sellados
+verifican solo con `git clone`**, entre ellos todo el sello del fold 5 y toda la
+evidencia de la fase 0. Los otros 14 son punteros de DVC y el gate los separa con un
+mensaje accionable (`ejecuta dvc pull`) en lugar de darlos por sello roto.
 
