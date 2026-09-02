@@ -132,6 +132,28 @@ def _spatial_splits(keys: list[str], seed: int) -> list[tuple[np.ndarray, np.nda
     return helper._subfolds_by_canonical_id(geoms, pl.DataFrame({KEY: keys}))
 
 
+def _projected_centroids(keys: list[str]) -> np.ndarray:
+    """Project the sealed WGS84 centroids to Lambert-93 metres for the k-NN.
+
+    Args:
+        keys: Ordered parcel ids defining the row order.
+
+    Returns:
+        ``(n_parcels, 2)`` array of EPSG:2154 coordinates in metres.
+    """
+    from pyproj import Transformer
+
+    geoms = pl.read_parquet(FASE1 / "parcel_centroids_fold5.parquet")
+    order = pl.DataFrame({KEY: keys}).with_row_index("_pos")
+    joined = order.join(geoms, on=KEY, how="left").sort("_pos")
+    wkt = joined["geometry"].to_list()
+    lon = np.array([float(p.split("(")[1].split()[0]) for p in wkt])
+    lat = np.array([float(p.split("(")[1].split()[1].rstrip(")")) for p in wkt])
+    transformer = Transformer.from_crs("EPSG:4326", "EPSG:2154", always_xy=True)
+    x, y = transformer.transform(lon, lat)
+    return np.column_stack([x, y])
+
+
 @app.callback()
 def main() -> None:
     """Agrupa los subcomandos de la fase 2 para que typer no colapse el primero."""
@@ -434,6 +456,196 @@ def cobertura(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     logger.info("cobertura_done", out=str(OUT_DIR))
+
+
+@app.command()
+def vecindad(
+    seed: Annotated[int, typer.Option(help="Semilla del bootstrap y de los bloques.")] = 42,
+    n_boot: Annotated[int, typer.Option(help="Remuestreos del bootstrap pareado.")] = 1000,
+) -> None:
+    """Nulo de vecindad con intervalo, sobre predictores libres de fuga (regla R1).
+
+    Mezcla la posterior de cada parcela con la media de sus k vecinos por centroide
+    y mide si eso aporta algo. El punto de operacion (k, alfa) se elige en los otros
+    bloques y se aplica al bloque medido, porque elegirlo mirando el resultado seria
+    escoger el maximo del ruido. Solo se usan posteriores de vecinos, nunca sus
+    etiquetas.
+    """
+    from ml.ensemble.ec_neighborhood import _knn_indices, _refine
+
+    keys, labels = _load_ground_truth()
+    splits = _spatial_splits(keys, seed)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    coords = _projected_centroids(keys)
+    k_values = (5, 10, 20)
+    alphas = (0.0, 0.1, 0.2, 0.3, 0.5)
+    neighbor_idx = _knn_indices(coords, max(k_values))
+
+    members = load_member_posteriors(OOF_DIR, ALL_MEMBERS, keys)
+    best_name = max(members, key=lambda name: score(labels, members[name])["f1_macro"])
+    arbiter = pl.read_parquet(OUT_DIR / "arbitro_agrupado_posteriores.parquet").sort(KEY)
+    bases = {
+        f"mejor individual ({best_name})": members[best_name],
+        "arbitro agrupado": arbiter.select([f"prob_{i:03d}" for i in range(18)]).to_numpy(),
+    }
+
+    sweep_rows: list[dict[str, object]] = []
+    verdicts: dict[str, dict[str, float]] = {}
+    for base_name, base in bases.items():
+        for k in k_values:
+            for alpha in alphas:
+                refined = _refine(base, neighbor_idx, k, alpha)
+                metrics = score(labels, refined)
+                sweep_rows.append(
+                    {
+                        "base": base_name,
+                        "k": k,
+                        "alfa": alpha,
+                        "f1_macro": round(metrics["f1_macro"], 6),
+                        "accuracy": round(metrics["accuracy"], 6),
+                    }
+                )
+
+        selected = np.zeros_like(base)
+        chosen: list[dict[str, float]] = []
+        for train_pos, test_pos in splits:
+            if train_pos.size == 0 or test_pos.size == 0:
+                continue
+            best_point, best_value = (k_values[0], 0.0), -1.0
+            for k in k_values:
+                for alpha in alphas:
+                    value = score(
+                        labels[train_pos], _refine(base, neighbor_idx, k, alpha)[train_pos]
+                    )["f1_macro"]
+                    if value > best_value:
+                        best_point, best_value = (k, alpha), value
+            selected[test_pos] = _refine(base, neighbor_idx, *best_point)[test_pos]
+            chosen.append({"k": float(best_point[0]), "alfa": float(best_point[1])})
+
+        tests = paired_bootstrap_delta(
+            labels,
+            selected.argmax(axis=1),
+            base.argmax(axis=1),
+            n_boot=n_boot,
+            random_state=seed,
+        )
+        verdicts[base_name] = {
+            **tests,
+            **mcnemar(labels, selected.argmax(axis=1), base.argmax(axis=1)),
+            "f1_base": score(labels, base)["f1_macro"],
+            "f1_refinado": score(labels, selected)["f1_macro"],
+            "alfa_cero_en_algun_bloque": float(any(c["alfa"] == 0.0 for c in chosen)),
+            "puntos_elegidos": float(len({(c["k"], c["alfa"]) for c in chosen})),
+        }
+
+    pl.DataFrame(sweep_rows).write_csv(OUT_DIR / "vecindad_barrido.csv")
+    payload = {
+        "veredictos": verdicts,
+        "ks": list(k_values),
+        "alfas": list(alphas),
+        "nota": (
+            "El punto de operacion se elige en los bloques que no se miden. Un delta cuyo "
+            "intervalo cruza el cero es un nulo acotado; si lo excluye, la regla R1 de ADR-013 "
+            "obliga a reportarlo como mejora pequena y no accionable, con su cifra."
+        ),
+        "procedencia": provenance(seed, {"n_boot": n_boot}),
+    }
+    (OUT_DIR / "vecindad_veredicto.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    logger.info("vecindad_done", out=str(OUT_DIR))
+
+
+@app.command()
+def farslip(
+    seed: Annotated[int, typer.Option(help="Semilla del meta-modelo y del bootstrap.")] = 42,
+    n_boot: Annotated[int, typer.Option(help="Remuestreos del bootstrap pareado.")] = 1000,
+) -> None:
+    """Aporte de las dos ramas FarSLIP: cinco miembros frente a tres, con intervalo.
+
+    Se mide en un solo universo, el del campeon sellado (tsvit-pheno como TSViT),
+    porque mezclar universos fue lo que hizo ilegible la rejilla heredada. Ambos
+    ensambles se estiman con el mismo agrupado espacial libre de fuga, de modo que
+    la unica diferencia entre las dos columnas son los dos miembros contrastivos.
+    """
+    keys, labels = _load_ground_truth()
+    splits = _spatial_splits(keys, seed)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    gt_frame = pl.DataFrame({KEY: keys, "label": labels})
+    geoms = pl.read_parquet(FASE1 / "parcel_centroids_fold5.parquet")
+
+    from ml.ensemble.stacking import StackingEnsemble
+
+    three = CHAMPION_MEMBERS[:3]
+    variants: dict[str, tuple[str, ...]] = {
+        "tres miembros": three,
+        "cinco miembros": CHAMPION_MEMBERS,
+    }
+    pooled: dict[str, np.ndarray] = {}
+    rows: list[dict[str, object]] = []
+    for name, members in variants.items():
+        stack = StackingEnsemble(
+            base_members=members,
+            meta="logreg",
+            n_spatial_folds=5,
+            oof_dir=OOF_DIR,
+            random_state=seed,
+        )
+        stack.fit(geoms, gt_labels=gt_frame)
+        meta_keys, meta_x, meta_y = stack.build_meta_features(gt_labels=gt_frame)
+        assert meta_keys[KEY].to_list() == keys, "el orden del meta-modelo no casa con el GT"
+        proba, _ = pooled_spatial_oof_posteriors(meta_x, meta_y, splits, random_state=seed)
+        pooled[name] = proba
+        rows.append(
+            {
+                "variante": name,
+                "miembros": ",".join(members),
+                "regimen": "held-out, agrupado espacial",
+                **score(labels, proba),
+            }
+        )
+        rows.append(
+            {
+                "variante": f"{name} (refit sobre todo)",
+                "miembros": ",".join(members),
+                "regimen": "in-sample",
+                **score(labels, stack.predict_proba()),
+            }
+        )
+    pl.DataFrame(rows).write_csv(OUT_DIR / "farslip_cinco_vs_tres.csv")
+
+    delta = {
+        **paired_bootstrap_delta(
+            labels,
+            pooled["cinco miembros"].argmax(axis=1),
+            pooled["tres miembros"].argmax(axis=1),
+            n_boot=n_boot,
+            random_state=seed,
+        ),
+        **mcnemar(
+            labels,
+            pooled["cinco miembros"].argmax(axis=1),
+            pooled["tres miembros"].argmax(axis=1),
+        ),
+    }
+    payload = {
+        "universo": "tsvit-pheno (el del campeon sellado)",
+        "miembros_tres": list(three),
+        "miembros_cinco": list(CHAMPION_MEMBERS),
+        "delta_cinco_menos_tres": delta,
+        "nota": (
+            "Se elige este universo porque es el del campeon sellado y porque el otro "
+            "(tsvit-pheno-fullm) parte de un TSViT que rinde 0,2552 sobre estas mismas "
+            "parcelas, de modo que su delta mediria sobre todo el hueco que dejan los "
+            "miembros debiles."
+        ),
+        "procedencia": provenance(seed, {"n_boot": n_boot}),
+    }
+    (OUT_DIR / "farslip_delta.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    logger.info("farslip_done", out=str(OUT_DIR))
 
 
 if __name__ == "__main__":

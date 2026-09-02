@@ -1,0 +1,60 @@
+{
+  "veredictos": {
+    "mejor individual (tsvit-pheno)": {
+      "delta_f1_macro": -0.0006627569059947103,
+      "ci_low": -0.0016239179014429673,
+      "ci_high": 0.0001830824768375343,
+      "share_below_zero": 0.924,
+      "n_boot": 1000.0,
+      "excludes_zero": 0.0,
+      "solo_a_acierta": 9.0,
+      "solo_b_acierta": 12.0,
+      "discordantes": 21.0,
+      "p_value": 0.6636238098144531,
+      "f1_base": 0.7366636524241267,
+      "f1_refinado": 0.736000895518132,
+      "alfa_cero_en_algun_bloque": 1.0,
+      "puntos_elegidos": 2.0
+    },
+    "arbitro agrupado": {
+      "delta_f1_macro": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0,
+      "share_below_zero": 0.0,
+      "n_boot": 1000.0,
+      "excludes_zero": 0.0,
+      "solo_a_acierta": 0.0,
+      "solo_b_acierta": 0.0,
+      "discordantes": 0.0,
+      "p_value": 1.0,
+      "f1_base": 0.6794481665719216,
+      "f1_refinado": 0.6794481665719216,
+      "alfa_cero_en_algun_bloque": 1.0,
+      "puntos_elegidos": 1.0
+    }
+  },
+  "ks": [
+    5,
+    10,
+    20
+  ],
+  "alfas": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.5
+  ],
+  "nota": "El punto de operacion se elige en los bloques que no se miden. Un delta cuyo intervalo cruza el cero es un nulo acotado; si lo excluye, la regla R1 de ADR-013 obliga a reportarlo como mejora pequena y no accionable, con su cifra.",
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "87cccdd",
+    "polars": "1.44.1",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.0",
+    "generado": "2026-09-02T22:28:28+00:00",
+    "universo": "fold 5 held-out de PASTIS-R, parcelas compartidas por los miembros",
+    "ground_truth": "reports/paper_micai/fase1/parcel_gt_fold5.parquet",
+    "n_boot": 1000
+  }
+}

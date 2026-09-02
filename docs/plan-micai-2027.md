@@ -76,9 +76,9 @@ Responsable: Javier, con entregas de Arthur. Salida: `paper/ARTIFACTS.md` y DVC 
 6. `paper/ARTIFACTS.md`: **hecho**. Tabla elemento del paper, artefacto, MD5, bytes, commit y estado, más una sección de trazabilidad que dice qué artefacto tiene productor en el repositorio y cuáles solo tienen lectores. Gate `scripts/paper_artifacts_check.py` vía `make paper-artifacts-check`, probado en negativo.
 7. Fijar versiones de cómputo en el ledger (`xgboost`, `scikit-learn`, `polars`, `matplotlib`) y el SHA del commit que produjo cada artefacto: **hecho**.
 
-### Fase 2 · Experimentos del ángulo A (CPU, datos en disco) — EN CURSO
+### Fase 2 · Experimentos del ángulo A (CPU, datos en disco) — HECHA
 
-Hechos los puntos 1, 2 y 5, con un hallazgo que condiciona el resto: **la cifra campeona 0,7486 es in-sample para el meta-modelo**. `StackingEnsemble` reentrena su árbitro sobre todas las parcelas del fold 5 antes de predecirlas, y las cuatro cifras selladas (0,7486, 0,7470, 0,6477 y 0,6359) reproducen exactamente ese régimen. Libre de fuga, ninguna combinación mejora al mejor miembro individual (tsvit-pheno, 0,7367): el árbitro empata con el promedio y pierde contra el voto ponderado. La contribución central **sí se sostiene**: a igual cobertura, retirar clases domina al rechazo por confianza, con intervalo que excluye el cero por debajo de doce clases. Detalle en [`docs/paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
+Los cinco puntos están hechos, con un hallazgo que condiciona el resto: **la cifra campeona 0,7486 es in-sample para el meta-modelo**. `StackingEnsemble` reentrena su árbitro sobre todas las parcelas del fold 5 antes de predecirlas, y las cuatro cifras selladas (0,7486, 0,7470, 0,6477 y 0,6359) reproducen exactamente ese régimen. Libre de fuga, ninguna combinación mejora al mejor miembro individual (tsvit-pheno, 0,7367): el árbitro empata con el promedio y pierde contra el voto ponderado. La contribución central **sí se sostiene**: a igual cobertura, retirar clases domina al rechazo por confianza, con intervalo que excluye el cero por debajo de doce clases. Detalle en [`docs/paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
 
 ### Fase 2 · Experimentos del ángulo A (CPU, datos en disco)
 
@@ -200,7 +200,7 @@ Total orientativo: 16 a 18 días de trabajo, sin contar esperas de terceros.
 
 - Fase 0: **cumplido salvo la firma**. `novedad.md` con matriz de 43 trabajos verificados y veredicto de reencuadre; falta que Arthur y Javier firmen `ADR-013`.
 - Fase 1: `make paper-artifacts-check` en verde; un clon limpio con `dvc pull` regenera todas las tablas y figuras.
-- Fase 2: cada experimento con CSV o JSON sellado, semilla, versiones y prueba estadística con n.
+- Fase 2: **cumplido**. Cada experimento con CSV o JSON sellado en `paper/ARTIFACTS.md`, con semilla, versiones, commit y prueba estadística pareada con su intervalo.
 - Fase 3: cero menciones de "pending", jerga interna o rutas en el texto; cada cifra con `% src:` verificable por script.
 - Fase 4: PDF de 12 a 15 páginas bajo `llncs`; abstract de 150 a 250 palabras; `make paper-pdf` con código de salida cero.
 - Fase 5: cada entrada del bib verificada por API; cero `note`; DOI en todas.

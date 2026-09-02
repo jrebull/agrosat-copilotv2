@@ -1,0 +1,39 @@
+{
+  "universo": "tsvit-pheno (el del campeon sellado)",
+  "miembros_tres": [
+    "tsvit-pheno",
+    "utae",
+    "xgb-alphaearth"
+  ],
+  "miembros_cinco": [
+    "tsvit-pheno",
+    "utae",
+    "xgb-alphaearth",
+    "farslip-ft18",
+    "farslip-zeroshot"
+  ],
+  "delta_cinco_menos_tres": {
+    "delta_f1_macro": 0.0005746329983089549,
+    "ci_low": -0.002388715792502674,
+    "ci_high": 0.003393301941376483,
+    "share_below_zero": 0.355,
+    "n_boot": 1000.0,
+    "excludes_zero": 0.0,
+    "solo_a_acierta": 81.0,
+    "solo_b_acierta": 64.0,
+    "discordantes": 145.0,
+    "p_value": 0.18374624131166645
+  },
+  "nota": "Se elige este universo porque es el del campeon sellado y porque el otro (tsvit-pheno-fullm) parte de un TSViT que rinde 0,2552 sobre estas mismas parcelas, de modo que su delta mediria sobre todo el hueco que dejan los miembros debiles.",
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "87cccdd",
+    "polars": "1.44.1",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.0",
+    "generado": "2026-09-02T22:29:44+00:00",
+    "universo": "fold 5 held-out de PASTIS-R, parcelas compartidas por los miembros",
+    "ground_truth": "reports/paper_micai/fase1/parcel_gt_fold5.parquet",
+    "n_boot": 1000
+  }
+}

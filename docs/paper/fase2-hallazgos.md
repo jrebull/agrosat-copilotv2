@@ -107,16 +107,55 @@ Tres advertencias que van al artículo con el resultado:
 2. **La leyenda no es estable entre regiones.** A K = 12 solo nueve de las catorce clases retenidas aparecen en las cinco leyendas; a K = 16, once de dieciocho. Qué clases retirar depende de la región, y eso es parte del resultado, no una nota al pie.
 3. **El F1-macro por bloque es más bajo que el agregado** (0,5612 frente a 0,7367 a K = 18) porque un bloque de dos a cuatro mil parcelas castiga más a las clases raras. Las dos cifras responden preguntas distintas: calidad media por región frente a calidad sobre el mapa completo. La comparación entre mecanismos se hace *dentro* de cada bloque, así que está pareada.
 
-## 5. Un error propio, corregido y documentado
+## 5. El nulo de vecindad es un nulo, y más limpio que el sellado
+
+Aplicando la **regla R1** de ADR-013. El punto de operación `(k, alfa)` se elige en los bloques que no se miden, porque escogerlo mirando el resultado sería quedarse con el máximo del ruido.
+
+| Base | F1-macro base | F1-macro refinado | Delta | IC 95 % | ¿Excluye el cero? | McNemar |
+|---|---|---|---|---|---|---|
+| Mejor individual (tsvit-pheno) | 0.7367 | 0.7360 | −0.0007 | [−0.0016, +0.0002] | no | p = 0.66 |
+| Árbitro agrupado | 0.6794 | 0.6794 | +0.0000 | [+0.0000, +0.0000] | no | p = 1 |
+
+El barrido completo es aún más claro: sobre el mejor individual, **ningún** punto con `alfa > 0` mejora al `alfa = 0`, y la degradación crece con `alfa` (0,7367 a `alfa = 0`, 0,6973 a `alfa = 0,5` con k = 5). Sobre el árbitro agrupado, los cinco bloques eligieron `alfa = 0` y el refinamiento queda en no-operación.
+
+Frente a esto, el artefacto sellado `ec_neighborhood_result.json` daba un delta **positivo** de +0,0027 a +0,0068. La diferencia se explica sola: aquel barrido se aplicó sobre la posterior in-sample del campeón, y suavizar hacia los vecinos recupera parte de lo que un modelo sobreajustado pierde. Sobre un predictor libre de fuga no hay nada que recuperar.
+
+Enunciado que el dato sostiene: **el refinamiento por vecindad entre parcelas no aporta sobre un predictor libre de fuga, y su intervalo incluye el cero.** No dice nada sobre el contexto intraparcela, que la literatura sí muestra útil sobre estos embeddings.
+
+## 6. Las dos ramas FarSLIP no aportan nada medible
+
+Medido en un solo universo, el del campeón sellado, con ambos ensambles estimados por el mismo agrupado espacial:
+
+| Variante | Régimen | F1-macro | Exactitud |
+|---|---|---|---|
+| Tres miembros | held-out | 0.6789 | 0.8456 |
+| Cinco miembros | held-out | 0.6794 | 0.8466 |
+| Tres miembros | in-sample | 0.7470 | 0.8490 |
+| Cinco miembros | in-sample | 0.7486 | 0.8495 |
+
+Delta de cinco frente a tres, libre de fuga: **+0.0006**, IC 95 % [−0.0024, +0.0034], McNemar p = 0.18. El intervalo incluye el cero.
+
+Las dos filas in-sample reproducen exactamente las cifras selladas y su delta de +0,0016. Es decir, el aporte de FarSLIP que el manuscrito reporta vive entero dentro del régimen in-sample; bajo un protocolo libre de fuga no se distingue de cero.
+
+## 7. Un error propio, corregido y documentado
 
 La primera implementación de la retirada de clases dejaba el argmax sobre las dieciocho columnas y promediaba el macro sobre la unión de las leyendas de todos los bloques. Con eso, retirar clases parecía **empeorar** el F1 de forma monótona y el rechazo por confianza dominaba en todos los puntos. Las dos cosas estaban mal: una leyenda que no se promete es una leyenda que el modelo no emite, y promediar sobre la unión de leyendas que discrepan puntúa un producto que nadie desplegaría. Corregido, el resultado se invierte y es el de la sección 4.
 
-## 6. Preguntas abiertas que no se resuelven en local
+## 8. Preguntas abiertas que no se resuelven en local
 
 - **La procedencia de `tsvit-pheno`.** Saca 0,7367 de F1-macro mientras `tsvit-pheno-fullm`, otra variante de la misma arquitectura, saca 0,2552 sobre las mismas parcelas. Una diferencia de 0,48 entre dos variantes obliga a comprobar con qué folds se entrenó cada checkpoint antes de publicar nada que dependa de ese miembro. El checkpoint y su registro de entrenamiento están en la VM H100. **Depende de Arthur.**
 - **Volcados OOF de los folds 1 a 4.** Sin ellos el meta-modelo no puede entrenarse como es debido y la sección 2 no puede cerrarse en positivo ni en negativo.
 
-## 7. Qué queda de la fase 2
+## 9. Estado de la fase 2
 
-- Aporte de FarSLIP, cinco frente a tres miembros, en un solo universo y con intervalo.
-- Nulo de vecindad con intervalo pareado, sobre el mejor predictor libre de fuga (regla R1 de ADR-013).
+Los cinco puntos del plan están hechos: individuales bajo un protocolo único, homogéneo
+frente a heterogéneo con pruebas pareadas, curva calidad-cobertura contra su comparador,
+aporte de FarSLIP con intervalo y nulo de vecindad con intervalo. Lo que queda depende de
+Arthur: la procedencia de `tsvit-pheno` y los volcados OOF de los folds 1 a 4.
+
+## 10. Qué le queda al artículo, en una frase
+
+De las tres patas del ángulo A, la que sobrevive es la del punto de operación: **a igual
+cobertura, retirar clases de la leyenda compra más calidad macro que rechazar parcelas por
+confianza**, y el mecanismo se entiende porque un árbitro entrenado ya hace esa retirada
+por su cuenta, en silencio y sin que nadie la elija.

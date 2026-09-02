@@ -1,0 +1,5 @@
+variante,miembros,regimen,f1_macro,accuracy
+tres miembros,"tsvit-pheno,utae,xgb-alphaearth","held-out, agrupado espacial",0.6788735335736127,0.8455528846153846
+tres miembros (refit sobre todo),"tsvit-pheno,utae,xgb-alphaearth",in-sample,0.7470445776972854,0.8490384615384615
+cinco miembros,"tsvit-pheno,utae,xgb-alphaearth,farslip-ft18,farslip-zeroshot","held-out, agrupado espacial",0.6794481665719216,0.8465745192307692
+cinco miembros (refit sobre todo),"tsvit-pheno,utae,xgb-alphaearth,farslip-ft18,farslip-zeroshot",in-sample,0.7486144982078715,0.8494591346153846

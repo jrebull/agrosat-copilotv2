@@ -1,0 +1,31 @@
+base,k,alfa,f1_macro,accuracy
+mejor individual (tsvit-pheno),5,0.0,0.736664,0.857873
+mejor individual (tsvit-pheno),5,0.1,0.736617,0.857752
+mejor individual (tsvit-pheno),5,0.2,0.734121,0.855469
+mejor individual (tsvit-pheno),5,0.3,0.730699,0.852224
+mejor individual (tsvit-pheno),5,0.5,0.697293,0.825841
+mejor individual (tsvit-pheno),10,0.0,0.736664,0.857873
+mejor individual (tsvit-pheno),10,0.1,0.736495,0.857692
+mejor individual (tsvit-pheno),10,0.2,0.735188,0.855529
+mejor individual (tsvit-pheno),10,0.3,0.731323,0.852885
+mejor individual (tsvit-pheno),10,0.5,0.702868,0.831671
+mejor individual (tsvit-pheno),20,0.0,0.736664,0.857873
+mejor individual (tsvit-pheno),20,0.1,0.735943,0.857151
+mejor individual (tsvit-pheno),20,0.2,0.734927,0.85607
+mejor individual (tsvit-pheno),20,0.3,0.731412,0.853486
+mejor individual (tsvit-pheno),20,0.5,0.704894,0.835817
+arbitro agrupado,5,0.0,0.679448,0.846575
+arbitro agrupado,5,0.1,0.675934,0.844591
+arbitro agrupado,5,0.2,0.675505,0.842969
+arbitro agrupado,5,0.3,0.671699,0.840445
+arbitro agrupado,5,0.5,0.644087,0.821034
+arbitro agrupado,10,0.0,0.679448,0.846575
+arbitro agrupado,10,0.1,0.676507,0.844712
+arbitro agrupado,10,0.2,0.675486,0.84363
+arbitro agrupado,10,0.3,0.67411,0.842248
+arbitro agrupado,10,0.5,0.65372,0.827584
+arbitro agrupado,20,0.0,0.679448,0.846575
+arbitro agrupado,20,0.1,0.676875,0.845132
+arbitro agrupado,20,0.2,0.675587,0.84363
+arbitro agrupado,20,0.3,0.673748,0.842127
+arbitro agrupado,20,0.5,0.65731,0.830288
