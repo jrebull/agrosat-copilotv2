@@ -20,10 +20,9 @@ from scripts import build_us073_transfer_figures as b
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DENSE_JSON = REPO_ROOT / b.DENSE_RESULT_JSON
 KSHOT_PARQUET = REPO_ROOT / b.KSHOT_PARQUET
-MEXICO_PARQUET = REPO_ROOT / b.MEXICO_NDVI_PARQUET
 
 requires_artefacts = pytest.mark.skipif(
-    not (DENSE_JSON.is_file() and KSHOT_PARQUET.is_file() and MEXICO_PARQUET.is_file()),
+    not (DENSE_JSON.is_file() and KSHOT_PARQUET.is_file()),
     reason="Real EPIC 12 artefacts absent (run `dvc pull` / the EPIC 12 pipeline).",
 )
 
@@ -39,8 +38,9 @@ def built(tmp_path_factory: pytest.TempPathFactory) -> Path:
         The temporary repo root where the artefacts were written.
     """
     root = tmp_path_factory.mktemp("us073")
-    # Mirror the three real inputs into the temp root so the builder reads them there.
-    for rel in (b.DENSE_RESULT_JSON, b.KSHOT_PARQUET, b.MEXICO_NDVI_PARQUET):
+    # Mirror the two real inputs into the temp root so the builder reads them there
+    # (the Mexico NDVI parquet is no longer consumed by ``build_all``).
+    for rel in (b.DENSE_RESULT_JSON, b.KSHOT_PARQUET):
         dst = root / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_bytes((REPO_ROOT / rel).read_bytes())
@@ -107,7 +107,7 @@ def test_script_is_idempotent(built: Path, tmp_path: Path) -> None:
     first_dense = (built / b.DENSE_TABLE).read_bytes()
     first_kshot = (built / b.KSHOT_TABLE).read_bytes()
     # Re-run into a fresh tree from the same inputs.
-    for rel in (b.DENSE_RESULT_JSON, b.KSHOT_PARQUET, b.MEXICO_NDVI_PARQUET):
+    for rel in (b.DENSE_RESULT_JSON, b.KSHOT_PARQUET):
         dst = tmp_path / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_bytes((REPO_ROOT / rel).read_bytes())

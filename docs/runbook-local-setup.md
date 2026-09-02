@@ -288,29 +288,42 @@ export POETRY_VIRTUALENVS_IN_PROJECT=true
 poetry env use /opt/homebrew/opt/python@3.12/bin/python3.12
 poetry install --with dev,test,ml,geo,dagster,paper    # FALLA en torch: el lock lo fija a +cu130
 poetry run pip install "torch==2.11.0" "torchvision==0.26.0"   # ruedas macOS arm64 de PyPI (MPS)
-poetry install --with dev,test,ml,geo,dagster,paper --dry-run  # lista lo que quedo sin instalar;
+poetry install --with dev,test,ml,geo,dagster,paper --dry-run  # lista lo que quedó sin instalar;
 #   instalar esa lista con `poetry run pip install pkg==ver` EXCEPTO torch y tree-sitter-python
-poetry install --only-root                              # instala el paquete raiz (ml, backend, dagster_project)
+poetry install --only-root                              # instala el paquete raíz (ml, backend, dagster_project)
 
 # 3) OpenMP: torch trae su propio libomp.dylib y xgboost/lightgbm usan el de Homebrew.
 #    Con dos runtimes cargados el proceso hace segfault (exit 139) o se cuelga.
-#    Solucion: que torch use el mismo libomp que el resto.
+#    Solución: que torch use el mismo libomp que el resto. (scikit-learn trae una
+#    tercera copia en `sklearn/.dylibs/`, que no ha dado problemas.)
 TL=.venv/lib/python3.12/site-packages/torch/lib/libomp.dylib
 mv "$TL" "$TL.orig" && ln -s /opt/homebrew/opt/libomp/lib/libomp.dylib "$TL"
 
 # 4) Frontend
 cd frontend && pnpm install && cd ..                    # pnpm 11 cambia solo a la 10.24.0 del packageManager
 
-# 5) Infra local
-cp .env.example .env.local   # o el minimo del paso 1 del runbook, con REDIS_URL en :63790
-docker compose --env-file .env.local up -d --build postgres redis
+# 5) Infra local. NO copiar .env.example tal cual: trae variables que Settings rechaza
+#    (extra="forbid") y publica Postgres/Redis en 5432/6379. Este mínimo funciona:
+cat > .env.local <<'EOF'
+DATABASE_URL=postgresql+asyncpg://agrosat:agrosat@localhost:55432/agrosat
+REDIS_URL=redis://localhost:63790/0
+GEE_PROJECT_ID=agrosat-copilot
+GEMINI_MODEL=gemini-2.5-pro
+GOOGLE_GENAI_USE_VERTEXAI=true
+GOOGLE_CLOUD_PROJECT=agrosat-copilot
+GOOGLE_CLOUD_LOCATION=us-central1
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001,http://localhost:3010
+EOF
+docker compose --env-file .env.local up -d --build postgres redis   # 55432 y 63790 (defaults del compose)
 DATABASE_URL='postgres://agrosat:agrosat@localhost:55432/agrosat?sslmode=disable' dbmate --no-dump-schema up
-#   `--no-dump-schema`: sin `pg_dump` local dbmate fallaria al volcar db/schema.sql tras migrar
+#   `--no-dump-schema`: sin `pg_dump` local dbmate fallaría al volcar db/schema.sql tras migrar.
+#   La imagen de Postgres es amd64 y corre emulada en arm64: funciona, pero es más lenta.
 
-# 6) Paper (BasicTeX es de root; instalar paquetes en modo usuario desde el repo historico 2025)
+# 6) Paper (BasicTeX es de root; instalar paquetes en modo usuario desde el repositorio histórico 2025;
+#    `units` aporta nicefrac.sty, que main.tex carga)
 tlmgr init-usertree
 tlmgr --usermode --repository https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final install units multirow import
-#   Las figuras PNG del paper estan gitignoradas; se regeneran desde reports/ (ver paper/AGENTS.md)
+#   Los PNG de las figuras del paper están gitignorados; se regeneran desde reports/ (ver paper/AGENTS.md)
 #   o se rasterizan desde los SVG versionados:
 cd paper && for s in $(git ls-files 'figures/*/*.svg' | grep -v '_es\.svg$'); do
   [ -f "${s%.svg}.png" ] || rsvg-convert --dpi-x 300 --dpi-y 300 --zoom 3 -o "${s%.svg}.png" "$s"; done; cd ..
@@ -319,11 +332,18 @@ make paper-pdf
 
 Limitaciones conocidas en Mac:
 
-- `tree-sitter-python==0.21.0` (grupo `dev`, dependencia de `codebleu`) no existe para Python 3.12
-  en ninguna plataforma; `ml/eval/agent_bench.py` lo importa solo para la metrica CodeBLEU.
-- `make secrets-scan` marcaba un falso positivo historico en `docs/us-planning/us-017.md`
-  (docstring "CLS token output" junto a una URI `gs://`); esta listado en `.gitleaksignore`.
+- `tree-sitter-python==0.21.0` (grupo `dev`, dependencia de `codebleu`) no publica rueda para
+  macOS arm64 ni sdist (sí para Linux, Windows y macOS x86_64). Solo lo usa la métrica CodeBLEU,
+  importada de forma diferida en `ml/eval/agent_metrics.py`, que devuelve 0.0 con aviso si falta.
+- `make secrets-scan` marcaba un falso positivo histórico en `docs/us-planning/us-017.md`
+  (docstring "CLS token output" junto a una URI `gs://`); está listado en `.gitleaksignore`.
 - Sin credenciales del equipo (GCS del DVC, GEE, Vertex) no se descargan datos ni pesos: los tests
   marcados `empirical`/`requires_gee` se saltan y `make notebooks-check` no aplica.
-- `mypy -p backend.app` desde la raiz reporta deuda preexistente en `ml/` (no bloqueante en CI);
-  `cd backend && mypy app/` (el `make lint`) queda limpio.
+- `mypy -p backend.app` desde la raíz reportaba errores en `ml/` mientras el paquete raíz no
+  estaba instalado; tras `poetry install --only-root` queda limpio, igual que `make lint`.
+- Quedan 14 tests de `tests/ml` que fallan por deuda del upstream, independiente del sistema
+  operativo y ya anotada en `docs/blockers/PENDIENTES.md` §3.5: regex en español contra mensajes
+  de error en inglés (`analysis`, `ingest`, `models`, `report`, `utils`), lambdas de prueba sin el
+  parámetro `region_prefix` en `tests/ml/transfer`, CodeBLEU sin `tree-sitter-python`
+  (`tests/ml/eval/test_agent_metrics.py`) y el benchmark LLM que pasó de Gemini 2.5-pro a
+  2.5-flash sin actualizar `tests/ml/eval/test_paper_bench.py`.

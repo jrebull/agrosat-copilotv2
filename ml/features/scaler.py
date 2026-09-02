@@ -90,13 +90,15 @@ def fit_scaler_on_train(
     # Match the column dtype explicitly: ``parcel_id`` may be stored as String while
     # the ids arrive as ints, and polars >= 1.3x refuses ``is_in`` across dtypes.
     train_id_series = pl.Series("parcel_id", sorted(train_set)).cast(df.schema["parcel_id"])
-    train_df = df.filter(pl.col("parcel_id").is_in(train_id_series)).select(numeric_cols)
+    train_df = df.filter(pl.col("parcel_id").is_in(train_id_series.to_list())).select(numeric_cols)
     if train_df.height == 0:
         raise ValueError(
             "After filtering by `train_ids` the frame is empty. IDs in another fold?"
         )
 
-    matrix = train_df.to_numpy()
+    # writable=True: polars >= 1.3x may otherwise hand back a read-only zero-copy
+    # array, and the NaN imputation below writes in place.
+    matrix = train_df.to_numpy(writable=True)
     # Convert +/-inf to NaN before any statistic. The spectral indices
     # with divisions (MCARI, GCVI, PSRI, etc.) can produce
     # inf when the denominator is zero or very close to it. StandardScaler does
@@ -141,10 +143,6 @@ def fit_scaler_on_train(
     # nanmean emits no warnings.
     col_means = np.nanmean(matrix, axis=0)
     inds = np.where(np.isnan(matrix))
-    # polars >= 1.3x may hand back a read-only zero-copy array; imputation
-    # below writes in place, so own the buffer first.
-    if not matrix.flags.writeable:
-        matrix = matrix.copy()
     matrix[inds] = np.take(col_means, inds[1])
 
     scaler = StandardScaler()

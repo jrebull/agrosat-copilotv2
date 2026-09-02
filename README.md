@@ -14,8 +14,8 @@ Un artículo científico derivado de AgroSatCopilot para la
 <br>
 
 [![Meta](https://img.shields.io/badge/Meta-MICAI%202027-1f6f43?style=flat-square)](#hoja-de-ruta)
-[![Formato](https://img.shields.io/badge/Formato-Springer%20LNAI-4b6584?style=flat-square)](#hoja-de-ruta)
-[![Fase](https://img.shields.io/badge/Fase-1%20de%206-b9770e?style=flat-square)](#hoja-de-ruta)
+[![Formato objetivo](https://img.shields.io/badge/Formato%20objetivo-Springer%20LNAI-4b6584?style=flat-square)](#hoja-de-ruta)
+[![Hitos](https://img.shields.io/badge/Hitos-1%20de%207-b9770e?style=flat-square)](#hoja-de-ruta)
 [![Licencia](https://img.shields.io/badge/C%C3%B3digo-MIT-2d3436?style=flat-square)](LICENSE)
 [![Origen](https://img.shields.io/badge/Fork%20de-ArthurZizumbo%2Fagrosat--copilot-6c5ce7?style=flat-square)](https://github.com/ArthurZizumbo/agrosat-copilot)
 
@@ -35,7 +35,7 @@ Mantenido por **Javier Rebull** · [jrebull](https://github.com/jrebull)
 
 El proyecto original entregó un sistema completo de percepción satelital, ensambles,
 copiloto conversacional y transferencia multi-región, y dejó un manuscrito de journal
-de unas 15 páginas en formato arXiv que nunca se sometió.
+de 24 páginas en formato arXiv que nunca se sometió.
 
 Este fork existe para una sola cosa: **convertir ese material en una contribución
 publicable en MICAI 2027**. No un paper de sistema que lo cuente todo, sino un ángulo
@@ -92,7 +92,7 @@ baselines densos 2D.
 
 El copiloto sigue el patrón **Be My Eyes**. Los modelos del equipo *perciben* cada
 parcela y emiten observaciones en texto. Un LLM congelado, Gemini 2.5 Pro en nube o
-Qwen3.5-35B-A3B on-prem, *razona* sobre esas observaciones, invoca herramientas
+Qwen3-30B-A3B (GPTQ-Int4) on-prem, *razona* sobre esas observaciones, invoca herramientas
 geoespaciales y responde. El LLM nunca clasifica píxeles.
 
 <details>
@@ -104,7 +104,7 @@ geoespaciales y responde. El LLM nunca clasifica píxeles.
 | Percepción | TSViT, U-TAE, AnySat, DeepLabv3+, SegFormer, U-Net (PyTorch) |
 | Embeddings | AlphaEarth Foundations `SATELLITE_EMBEDDING/V1/ANNUAL` v1.1, CC-BY-4.0 |
 | Visión-lenguaje | FarSLIP contrastivo-fenológico |
-| Agente | Google ADK con 9 tools geoespaciales, patrón perceiver-reasoner |
+| Agente | Google ADK con 9 tools geoespaciales más recuperación Spatial-RAG, patrón perceiver-reasoner |
 | Backend / Frontend | FastAPI + Polars · Nuxt 4 SSR + MapLibre |
 | Datos | PostgreSQL 15 + PostGIS + pgvector · DVC + MLflow + Dagster |
 | Infraestructura | Terraform GCP · Azure H100 NVL 96 GB |
@@ -123,7 +123,7 @@ puede construirse el paper.
 |:--|:--|:--|
 | Mejor individual · TSViT-pheno, PASTIS-R 18 clases | mIoU **0.6253** · F1-macro **0.7500** | `paper/sections/05_results.tex` |
 | Modelo final · Stacking-5 heterogéneo, held-out fold-5 | F1-macro **0.7470** · acc 0.8490 | `reports/ensemble/metrics/comparison_us040.csv` |
-| Ganancia del ensamble sobre el mejor individual | **+12.3 pp** F1-macro | `paper/sections/05_results.tex` |
+| Ganancia del ensamble sobre TSViT-pheno, ambos a nivel parcela | **+12.2 pp** F1-macro (0.7470 vs 0.6253) | `reports/ensemble/metrics/comparison_us040.csv` |
 | Modelo desplegado · Voting-3 v2, 12 clases | F1-macro **0.8992** · acc 0.9375 | `reports/agent_bench/perceiver_champion_eval_v2.json` |
 | Recableo del perceiver al campeón, 14 688 parcelas | acc 0.8539 → **0.9375** | `reports/agent_bench/perceiver_champion_eval_v2.json` |
 | Transferencia Francia → Cataluña | zero-shot 0.0 → few-shot mIoU **0.2468** | `reports/segmentation/sen4agrinet_transfer_result.json` |
@@ -136,9 +136,10 @@ puede construirse el paper.
 |:--|:--|:--|
 | Stacking-5 out-of-fold, libre de fuga | F1-macro 0.6477 · acc 0.7935 | `reports/ensemble/us043_farslip_summary.json` |
 | Aporte de FarSLIP, 5 vs 3 miembros | +0.0118 F1-macro | `reports/ensemble/us043_farslip_summary.json` |
-| Curva calidad-cobertura, 18 → 9 clases | F1-macro 0.7486 → 0.9121 con ~82 % de parcelas | `reports/ensemble/metrics/ec_neighborhood_result.json` |
+| Curva calidad-cobertura, 18 → 9 clases más frecuentes | F1-macro 0.7486 → 0.8912 reteniendo 81.9 % de parcelas | `reports/ensemble/metrics/us043_winner_cardinality_curve.csv` |
+| Campeón re-evaluado sobre las 9 clases de Francia | F1-macro 0.9121 | `reports/ensemble/metrics/ec_neighborhood_result.json` |
 | Vecindad espacial k-NN sobre el campeón | Δ +0.0002, no material | `reports/ensemble/metrics/ec_neighborhood_result.json` |
-| Transferencia Francia → Alemania DE4, Voting-3 | F1-macro 0.119 → 0.266 | `paper/sections/experiments_de4.tex` |
+| Misma receta Voting-3 de transferencia: Toscana vs Baja Sajonia (DE4) | F1-macro 0.119 → **0.266** | `paper/sections/experiments_de4.tex` |
 | Transferencia Italia, dataset completo | Pendiente: corrida bloqueada en la VM H100 | `docs/us-resolved/us-082.md` |
 | Benchmark LLM multi-modelo | Pendiente: tabla con placeholders honestos | `docs/blockers/PENDIENTES.md` |
 
@@ -169,7 +170,7 @@ puede construirse el paper.
 | [`docs/paper/papers-adicionales-propuesta.md`](docs/paper/papers-adicionales-propuesta.md) | Tres ángulos de paper propuestos por el equipo original, con evidencia disponible y lo que falta. Punto de partida para la fase 1. |
 | [`docs/blockers/PENDIENTES.md`](docs/blockers/PENDIENTES.md) | Índice único de lo que quedó abierto. Nada de esto se reclama sin cerrarlo. |
 | [`reports/`](reports/) | Métricas JSON y CSV y figuras de cada experimento. Fuente de verdad numérica. |
-| [`docs/final_doc/`](docs/final_doc/) · [`docs/presentation/`](docs/presentation/) | Entregable final del curso en LaTeX y presentación de defensa de 65 láminas, ambos en ES y EN. |
+| [`docs/final_doc/`](docs/final_doc/) · [`docs/presentation/`](docs/presentation/) | Entregable final del curso en LaTeX y presentación de defensa de 78 láminas, ambos en ES y EN. |
 | [`docs/README-upstream-agrosat-copilot.md`](docs/README-upstream-agrosat-copilot.md) | README original del proyecto, conservado íntegro. |
 
 <br>
@@ -187,6 +188,11 @@ LLM pendiente.
 ```bash
 git clone https://github.com/jrebull/agrosat-copilotv2.git
 cd agrosat-copilotv2/paper
+# Los PNG de las figuras están gitignorados; se rasterizan desde los SVG versionados
+# (brew install librsvg) o se regeneran desde reports/ (ver paper/AGENTS.md).
+for s in $(git ls-files 'figures/*/*.svg' | grep -v '_es\.svg$'); do
+  [ -f "${s%.svg}.png" ] || rsvg-convert --dpi-x 300 --dpi-y 300 --zoom 3 -o "${s%.svg}.png" "$s"
+done
 pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
 ```
 

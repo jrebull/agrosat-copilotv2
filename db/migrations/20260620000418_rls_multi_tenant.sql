@@ -123,7 +123,18 @@ REVOKE SELECT ON rag_documents FROM agrosat_app;
 REVOKE SELECT, INSERT, UPDATE, DELETE ON chat_sessions, aois, parcels, features_parcels FROM agrosat_app;
 
 -- Later migrations (chat_messages, list_chat_sessions) grant more privileges to the
--- role; DROP OWNED BY revokes every privilege it still holds in this database (the
--- role owns no objects) so the role can be dropped regardless of what came after.
+-- role. DROP OWNED BY revokes every privilege it still holds in this database so the
+-- role can be dropped regardless of what came after. On PostgreSQL 15 that statement
+-- needs membership in the role (superuser has it implicitly; a CREATEROLE migrator
+-- does not), so membership is granted on the fly when missing. REASSIGN OWNED first
+-- so a rollback can never drop objects silently (the role owns none today).
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'agrosat_app')
+       AND NOT pg_has_role(current_user, 'agrosat_app', 'MEMBER') THEN
+        EXECUTE format('GRANT agrosat_app TO %I', current_user);
+    END IF;
+END $$;
+REASSIGN OWNED BY agrosat_app TO CURRENT_USER;
 DROP OWNED BY agrosat_app;
 DROP ROLE IF EXISTS agrosat_app;
