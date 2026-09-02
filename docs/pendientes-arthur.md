@@ -23,11 +23,11 @@ es lo que bloquea de verdad hoy.
 4. **Autor de correspondencia.** Firma la licencia de Springer **a mano** y no se puede
    cambiar después del camera-ready. Decidirlo ahora cuesta un minuto; decidirlo tarde
    cuesta el envío.
-5. **Ventana H100 para el reentrenamiento OOF de cinco folds.** No bloquea el envío, pero
-   es la mejora grande: el universo pasa de 16 640 parcelas a unas 83 000, el meta-modelo
-   por fin se entrena como es debido, y de paso resuelve el punto 1 por construcción,
-   porque el entrenamiento sería nuestro con folds conocidos. Si no hay ventana, se declara
-   la limitación y se envía igual.
+5. ~~Ventana H100 para el reentrenamiento OOF.~~ **Retirado el 2 de septiembre de 2026: no
+   hace falta.** El run de MLflow de TSViT-pheno (`0eef8a60`) tardó 1 915,4 s, unos 32
+   minutos, en una RTX 4070. Cinco folds son 2,7 horas de GPU de consumo y el dataset denso
+   solo necesita 36 GB de PASTIS-R, no 68. Lo hacemos nosotros en una L4 spot. Lo único que
+   sí seguiría siendo suyo es el acceso a Azure, y para esto no se necesita Azure.
 6. **`dvc push` de `data/features/alphaearth_italia_2018.parquet`.** Es lo único que
    `dvc status --cloud` reporta como ausente en el remoto. Barato y cierra un hueco.
 

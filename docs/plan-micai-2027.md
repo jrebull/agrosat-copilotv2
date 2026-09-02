@@ -109,18 +109,25 @@ Es la respuesta real a «un solo dataset», y no necesita GPU. Salida:
 5. Reportar si la conclusión se transporta o no. **Si no se transporta, se reporta igual**
    y el artículo gana un matiz en lugar de perder una tesis.
 
-### Fase 5 · Reentrenamiento OOF de cinco folds (GPU, depende de la ventana H100)
+### Fase 5 · Reentrenamiento OOF de cinco folds (GPU de consumo, sin terceros)
 
-No bloquea la escritura. Es lo que convierte un artículo correcto en uno sólido.
+No bloquea la escritura y **no depende de Arthur ni de la H100**. El coste está medido, no estimado: el run de MLflow de TSViT-pheno (`0eef8a60`, batch 16, 30 épocas) tardó **1 915,4 s, unos 32 minutos, en una RTX 4070**. Cinco folds son unas 2,7 horas de GPU de consumo. La H100 se aprovisionó para ajuste fino de modelos de lenguaje, no para esto.
 
-1. Entrenar el miembro elegido dejando cada fold fuera, para tener posteriores OOF sobre
-   los **2 433 parches** en lugar de 496. El universo pasa de 16 640 parcelas a unas 83 000.
-2. Con eso el meta-modelo por fin se entrena como es debido y el resultado negativo del
-   ensamble deja de estar limitado por los artefactos.
-3. **Beneficio lateral que vale por sí solo**: resuelve para siempre la duda sobre la
-   procedencia de `tsvit-pheno`, porque el entrenamiento sería nuestro y con folds conocidos.
-4. Si la ventana no se abre, el artículo se envía con el universo de 16 640 y la limitación
-   declarada. No es un bloqueante.
+1. **Punto de entrada**: `ml.train.train_segmentation.build_and_train`, que ya recibe
+   `train_folds` y `val_folds` como tuplas. No hace falta código nuevo, solo rotar cinco
+   veces qué fold queda fuera. Ojo: la CLI `main` del mismo módulo solo admite `unet` y
+   `anysat`; el entrenador de TSViT es `build_and_train`.
+2. **Datos necesarios: unos 36 GB, no 68.** El dataset denso solo lee `DATA_S2` (36 GB),
+   `ANNOTATIONS` (286 MB), `metadata.geojson` y `NORM_S2_patch.json`. Los 32 GB de radar
+   S1A/S1D y `INSTANCE_ANNOTATIONS` no intervienen.
+3. **Dónde**: cualquier GPU CUDA. `make train-l4` ya apunta a una L4 spot en el proyecto
+   GCP, al que tenemos ADC. `_resolve_device` admite `cuda` o `cpu` y **no** admite MPS, así
+   que este Mac no sirve para el barrido completo.
+4. Con esto el universo pasa de 16 640 parcelas a unas 83 000, el meta-modelo por fin se
+   entrena como es debido, y de regalo queda resuelta la procedencia de `tsvit-pheno`,
+   porque el entrenamiento sería nuestro y con folds conocidos.
+5. Cada checkpoint y cada volcado OOF salen con `dvc add`, `dvc push` y su corrida en
+   MLflow. Lo hacemos nosotros, así que la disciplina es nuestra.
 
 ### Fase 6 · Escritura desde cero, doce páginas LNCS
 
@@ -188,15 +195,15 @@ de que Arthur cree el sitio y cargue los secretos.
 |---|---|---|---|
 | 3 Robustez en CPU | 1 día | nada | sí, dos de sus cinco puntos |
 | 4 BreizhCrops | 2 a 3 días | `dvc pull` | no, pero es la mejor defensa |
-| 5 Reentrenamiento OOF | 1 día de cómputo | ventana H100, Arthur | no |
+| 5 Reentrenamiento OOF | 2,7 h de GPU más el traslado de 36 GB | una GPU CUDA y su coste | no |
 | 6 Escritura | 4 a 6 días | 3, y 4 si llega a tiempo | sí |
 | 7 Bibliografía | 1 día | nada | sí |
 | 8 LNCS y doble ciego | 2 días | 6 | sí |
 | 9 Sitio live | 2 días | Arthur | no |
 | 10 Metadatos y entrega | 1 día más trámites | 8, convocatoria | sí |
 
-Las fases 3, 4 y 7 no dependen de nadie y pueden empezar hoy. La 5 entra cuando se abra la
-ventana; si no se abre, se declara la limitación y se envía igual.
+Las fases 3, 4, 5 y 7 no dependen de terceros. La 5 solo necesita alquilar una GPU unas
+horas; si se decide no gastarlo, se declara la limitación y se envía igual.
 
 ---
 
