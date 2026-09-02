@@ -743,8 +743,8 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     logger.info("ec_neighborhood_written", path=str(out_path))
-    print("=== EC NEIGHBORHOOD RESULT ===")
-    print(json.dumps(report, indent=2))
+    scalars = {k: v for k, v in report.items() if not isinstance(v, dict | list)}
+    logger.info("ec_neighborhood_result", **scalars)
 
 
 if __name__ == "__main__":

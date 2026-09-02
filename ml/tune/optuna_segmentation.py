@@ -596,7 +596,7 @@ def main(argv: list[str] | None = None) -> int:
         utae_num_classes=args.utae_num_classes,
         utae_ignore_index=args.utae_ignore_index,
     )
-    print(f"estudio Optuna persistido en {out}")
+    logger.info("optuna_study_persisted", path=str(out))
     return 0
 
 
