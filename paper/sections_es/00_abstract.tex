@@ -1,5 +1,5 @@
 % Abstract --- <= 250 words. Corrects the Avance7 source:
-%   - deployed reasoner is Gemini 3.5 Flash (cloud) / Qwen3.5-35B-A3B on-prem,
+%   - deployed reasoner is Gemini 3.5 Flash (cloud) / Qwen3-30B-A3B on-prem,
 %     NOT "Gemini 2.5-Flash"; the reasoner is frozen (Be My Eyes).
 %   - best-scoring combiner = Stacking-5, held-out parcel macro F1 0.7470 /
 %     accuracy 0.8490 (comparison_us040.csv); DEPLOYED model = Voting-3
@@ -33,7 +33,7 @@ La capa conversacional sigue el
 patrón \emph{Be My Eyes}~\cite{huang2025bemyeyes}: los modelos del equipo
 \emph{perciben} cada parcela y emiten observaciones en texto plano,
 mientras que un razonador frontera congelado --- Gemini~3.5~Flash en la
-nube o Qwen3.5-35B-A3B on-premises para soberanía de datos --- razona
+nube o Qwen3-30B-A3B on-premises para soberanía de datos --- razona
 sobre esas observaciones, invoca herramientas geoespaciales y responde.
 El razonador nunca se usa como clasificador de píxeles; recablear el
 perceptor del agente desde el baseline tabular hacia el ensamble campeón

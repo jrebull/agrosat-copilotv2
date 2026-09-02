@@ -10,7 +10,7 @@ Two concrete backends implement it:
   the public GenAI API, via the ``google-genai`` SDK with automatic function
   calling DISABLED (the agent runs the tool loop itself so tools stay async and
   receive the tenant :class:`~ml.agent.context.ToolContext`).
-- :class:`VLLMOpenAIBackend` -- the on-prem variant, Qwen3.5-35B-A3B served by
+- :class:`VLLMOpenAIBackend` -- the on-prem variant, Qwen3-30B-A3B served by
   vLLM behind an OpenAI-compatible ``/v1/chat/completions`` endpoint (US-048).
 
 :func:`make_backend` selects the backend from the model name so ``/llm/switch``

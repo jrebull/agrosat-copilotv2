@@ -7,7 +7,7 @@ Routers are mounted progressively as the US are closed:
 - /chat (SSE)                   — EPIC 7 (Google ADK agent)
 - /aois, /timeseries            — EPIC 2 (satellite data)
 - /stac/search, /tiles          — EPIC 2 (catalog + TiTiler)
-- /llm/switch                   — EPIC 7 (A/B switch Gemini <-> Qwen3.5)
+- /llm/switch                   — EPIC 7 (A/B switch Gemini <-> Qwen3 on-prem)
 - /jobs                         — EPIC 8 (asynchronous inference via Pub/Sub)
 """
 

@@ -595,7 +595,7 @@ def fig_llm_benchmark_barplot(
         val = entry.get("mean") if isinstance(entry, dict) else None
         return float(val) if val is not None and not _is_nan(val) else 0.0
 
-    label_map = {"gemini": "Gemini 2.5 Pro", "qwen": "Qwen3.5-35B-A3B"}
+    label_map = {"gemini": "Gemini 2.5 Pro", "qwen": "Qwen3-30B-A3B"}
     metrics = [
         ("Tool-sel", "tool_calling", "tool_selection_accuracy"),
         ("Arg-match", "tool_calling", "arg_match_accuracy"),

@@ -93,7 +93,7 @@ __all__ = [
 BACKEND_CATALOG: dict[str, str] = {
     "gemini-3.5-flash": "Gemini 3.5 Flash (nube, Vertex AI / GenAI)",
     "qwen3.6-vl": "Qwen3.6-VL (on-prem multimodal, llama.cpp :8003)",
-    "qwen35": "Qwen3.5-35B (on-prem texto, vLLM :8002)",
+    "qwen35": "Qwen3-30B-A3B (on-prem texto, vLLM :8002)",
 }
 
 #: Default per-result summary length for :func:`summarize_result`.

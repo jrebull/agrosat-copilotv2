@@ -58,7 +58,7 @@ make paper-figures                     # US-070: regenera + ejecuta (papermill) 
 - Atribuciones obligatorias en captions: AlphaEarth = `SATELLITE_EMBEDDING/V1/ANNUAL`
   v1.1 CC-BY-4.0 (NO "v2.1"); SegFormer = B0 RGB 3-banda; AnySat sustituye a
   Swin-UNETR (nunca entrenado); Gemini 2.5-pro = reasoner frozen (Be My Eyes);
-  Qwen on-prem = `Qwen/Qwen3-30B-A3B-Instruct-2507-GPTQ-Int4` (el id "Qwen3.5-35B-A3B" que aun aparece en varias secciones no existe; ver CLAUDE.md raiz). Sin sobre-claims.
+  Qwen on-prem = Qwen3-30B-A3B (`Qwen/Qwen3-30B-A3B-Instruct-2507-GPTQ-Int4`; el id "Qwen3.5-35B-A3B" del plan v8 no existe, ver CLAUDE.md raiz y docs/serving/qwen35.md). Sin sobre-claims.
 
 ## Stack local
 

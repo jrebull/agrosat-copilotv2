@@ -5,7 +5,7 @@ that module's public pieces but never mutates them, exactly like
 :mod:`ml.eval.agent_system_eval`). Where ``agent_bench`` scores the copilot on
 AgroMind + GeoAnalystBench, ``paper_bench`` produces the paper's headline table:
 the two reasoner variants -- **Gemini 2.5-pro** (cloud, GA, 1M ctx) and
-**Qwen3.5-35B-A3B** (on-prem vLLM, GPTQ-Int4, single-GPU; data sovereignty) --
+**Qwen3-30B-A3B** (on-prem vLLM, GPTQ-Int4, single-GPU; data sovereignty) --
 evaluated over **three** benchmarks:
 
 - **GEO-Bench-2** -- the ServiceNow EO vision benchmark (successor of GEO-Bench
@@ -123,7 +123,7 @@ DEFAULT_ITSES_PATH: Path = Path("data/agromind_itses/agromind_itses_500.jsonl")
 #: resolves against this root independently of :data:`DEFAULT_IMAGE_ROOT`.
 DEFAULT_ITSES_IMAGE_ROOT: Path = Path("data/s2_italia")
 
-#: The two paper reasoner variants: the cloud Gemini reasoner and Qwen3.5-35B-A3B
+#: The two paper reasoner variants: the cloud Gemini reasoner and Qwen3-30B-A3B
 #: (on-prem vLLM, GPTQ-Int4, single-GPU). ``multimodal`` gates whether a variant
 #: may consume the GEO-Bench-2 / AgroMind tiles; the on-prem text Qwen is
 #: text-only and skips image-only items (reported, never papered over). Gemma 4
@@ -1380,7 +1380,7 @@ def export_latex_table(out: dict[str, Any], path: Path) -> Path:
     a fabricated number) and the Wilcoxon p-value per benchmark is reported in the
     caption. The caption carries the correct attributions (AlphaEarth
     ``SATELLITE_EMBEDDING/V1/ANNUAL`` v1.1 CC-BY-4.0; Gemini 2.5-pro 1M ctx;
-    AgroMind eval-only; Qwen3.5-35B-A3B GPTQ-Int4 single-GPU) and the reference
+    AgroMind eval-only; Qwen3-30B-A3B GPTQ-Int4 single-GPU) and the reference
     targets (AgroMind >= 0.75 Gemini / >= 0.70 Qwen, not over-claimed).
 
     Args:
@@ -1432,7 +1432,7 @@ def export_latex_table(out: dict[str, Any], path: Path) -> Path:
         "(patron Be My Eyes, arXiv:2511.19417): Gemini 2.5-flash (nube; variante "
         "ejecutada en el benchmark por rapidez y menor tasa de 504 en items "
         "multimodales -- el manuscrito cita 2.5-pro como reasoner de produccion) "
-        "y Qwen3.5-35B-A3B (on-prem vLLM, GPTQ-Int4, single-GPU). Embeddings de "
+        "y Qwen3-30B-A3B (on-prem vLLM, GPTQ-Int4, single-GPU). Embeddings de "
         "AlphaEarth Foundations (SATELLITE\\_EMBEDDING/V1/ANNUAL, data v1.1, "
         "64-dim, CC-BY-4.0). AgroMind y AgroMind-IT/ES son eval-only (sin "
         "re-entrenamiento). Celdas mean $\\pm$ std sobre 3 corridas. Wilcoxon "
@@ -1604,7 +1604,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Evalua los dos reasoners frozen (Gemini 2.5-pro nube y Qwen3.5-35B-A3B "
+            "Evalua los dos reasoners frozen (Gemini 2.5-pro nube y Qwen3-30B-A3B "
             "on-prem) en GEO-Bench-2, AgroMind y AgroMind-IT/ES con barras de error "
             "y Wilcoxon pareado (eval-only, sin entrenamiento; US-069 paper track)."
         )

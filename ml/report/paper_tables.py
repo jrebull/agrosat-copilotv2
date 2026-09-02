@@ -15,7 +15,7 @@ Covered tables (US-070 acceptance criteria):
   harness on fold-5** (18-class contiguous, 128px NEAREST; SegFormer is B0 RGB
   3-band, AnySat substitutes Swin-UNETR which was never trained).
 - ``T3`` EPIC 6 ensembles (4 rubric strategies + incremental E-a/E-b + FarSLIP).
-- ``T4`` LLM benchmark (Gemini 2.5 Pro frozen reasoner vs Qwen3.5-35B-A3B vLLM
+- ``T4`` LLM benchmark (Gemini 2.5 Pro frozen reasoner vs Qwen3-30B-A3B vLLM
   on-prem). AgroMind-IT/ES + error bars columns are blocked (US-068/US-069, H100).
 - ``T5`` Tool ablation (tool selection / arg match / crop grounding / routing).
 - ``Tx`` FarSLIP band ablation (faithful FarSLIP vs AlphaEarth separability).
@@ -397,7 +397,7 @@ def build_llm_benchmark_table(
     ]
     label_map = {
         "gemini": "Gemini 2.5 Pro (frozen)",
-        "qwen": "Qwen3.5-35B-A3B (on-prem)",
+        "qwen": "Qwen3-30B-A3B (on-prem)",
     }
     rows: list[list[str]] = []
     for key in models:
@@ -420,7 +420,7 @@ def build_llm_benchmark_table(
         )
     caption = (
         "Benchmark LLMs del copiloto: Gemini 2.5 Pro (reasoner frozen, patron "
-        "Be My Eyes) vs Qwen3.5-35B-A3B vLLM GPTQ-Int4 on-prem (soberania de "
+        "Be My Eyes) vs Qwen3-30B-A3B vLLM GPTQ-Int4 on-prem (soberania de "
         "datos). Columna AgroMind-IT/ES pendiente (US-068/US-069, H100). "
         "Cifras leidas de us049\\_system\\_eval.json."
     )

@@ -72,7 +72,7 @@ Eyes} pattern~\cite{huang2025bemyeyes}.
 The same agent supports two interchangeable, frozen backends:
 Gemini~3.5~Flash in the cloud (the deployed default, chosen for its
 cost/latency profile)~\cite{google2025gemini25}, or
-Qwen3.5-35B-A3B~\cite{yang2025qwen3} on-premises via vLLM
+Qwen3-30B-A3B~\cite{yang2025qwen3} on-premises via vLLM
 (GPTQ-Int4, single GPU) for clients that require their data never to
 leave their perimeter. Backend selection is handled by a factory
 without touching business logic. The reasoner is never fine-tuned as a

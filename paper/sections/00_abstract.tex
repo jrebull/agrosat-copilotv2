@@ -1,5 +1,5 @@
 % Abstract --- <= 250 words. Corrects the Avance7 source:
-%   - deployed reasoner is Gemini 3.5 Flash (cloud) / Qwen3.5-35B-A3B on-prem,
+%   - deployed reasoner is Gemini 3.5 Flash (cloud) / Qwen3-30B-A3B on-prem,
 %     NOT "Gemini 2.5-Flash"; the reasoner is frozen (Be My Eyes).
 %   - best-scoring combiner = Stacking-5, held-out parcel macro F1 0.7470 /
 %     accuracy 0.8490 (comparison_us040.csv); DEPLOYED model = Voting-3
@@ -31,7 +31,7 @@ The conversational layer follows the
 \emph{Be My Eyes} pattern~\cite{huang2025bemyeyes}: the team's models
 \emph{perceive} each parcel and emit plain-text observations, while a
 frozen frontier reasoner --- Gemini~3.5~Flash in the cloud or
-Qwen3.5-35B-A3B on-premises for data sovereignty --- reasons over those
+Qwen3-30B-A3B on-premises for data sovereignty --- reasons over those
 observations, invokes geospatial tools, and answers. The reasoner is
 never used as a pixel classifier; re-cabling the agent's perceiver from
 the tabular baseline to the deployed Voting-3 champion ensemble raises its
