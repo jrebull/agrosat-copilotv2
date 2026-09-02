@@ -36,6 +36,37 @@ artículo: los artefactos de DE4, la evaluación conversacional, el modelo que n
 reasoner y el serving de Qwen. Siguen listados abajo por si el segundo artículo los
 recupera.
 
+## Para reproducir el repositorio, al margen del artículo
+
+Medido el 2 de septiembre de 2026 contra disco, `git ls-files` y `dvc status --cloud`, no
+contra el markdown heredado. Esto no bloquea el envío del artículo; bloquea que otra
+persona pueda regenerar lo que el repositorio dice tener.
+
+1. **Tres checkpoints de FarSLIP que el código usa por defecto y no están versionados en
+   ningún sitio.** Ni en git, ni en DVC, ni en disco:
+   - `checkpoints/farslip/parcel/18cls/best.safetensors`, que es el que
+     `scripts/run_us043_farslip_ensembles.py` usa para materializar el miembro
+     `farslip-ft18`.
+   - `checkpoints/farslip/parcel/04cls/best.safetensors`, el que
+     `ml/ensemble/farslip_ft18.py` y `dual_head_fusion.py` traen como defecto.
+   - `checkpoints/farslip/incremental/08cls/best.safetensors`, que usa
+     `scripts/farslip_eval_phenology.py`.
+
+   Ojo con la confusión de rutas: sí existe `checkpoints/farslip/incremental/04cls/best.safetensors.dvc`,
+   que es **otra** ruta. Sin los tres de arriba, los dos miembros FarSLIP del ensamble no se
+   pueden regenerar. Si están en la VM o en `F:\`, basta `dvc add` y `dvc push`.
+2. **`data/features/alphaearth_italia_2018.parquet`.** Es lo único que `dvc status --cloud`
+   reporta ausente en el remoto sobre 80 punteros. El resto del catálogo está completo.
+3. **Acceso a Azure**, si alguien más va a operar la VM: `az` CLI con credenciales de la
+   suscripción (grupo `agrosat-rg`, VM `agrosat-h100-prod`) y la clave SSH de `agrosat@`.
+   Hoy no las tenemos, así que `make train-h100` no se puede lanzar desde fuera.
+4. **Rol `roles/secretmanager.secretAccessor`** en el proyecto GCP, solo si se levanta el
+   chat con Clerk o el serving de Qwen.
+
+Lo que **sí** está bien y no hace falta pedir: `checkpoints/segmentation` está en DVC y se
+recupera con `dvc pull`; los once parquets OOF coinciden con el `md5` de su propio `.dvc`;
+PASTIS-R crudo se baja de Zenodo con su MD5 documentado.
+
 ## Decisiones
 
 - [ ] **Autoría.** Confirmar que el artículo va firmado por Arthur Jafed Zizumbo Velasco (primero) y Javier A. Rebull-Saucedo (segundo), y avisar a Isaac Ávila y Aaron Bocanegra, que quedan acreditados como autores del código en el README, `LICENSE` y los créditos del camera-ready, no del artículo.
