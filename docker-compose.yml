@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: infrastructure/docker/postgres.Dockerfile
+      args:
+        POSTGIS_IMAGE: ${POSTGIS_IMAGE:-postgis/postgis:15-3.4}
     image: agrosat-postgres:15-3.4-pgvector
     environment:
       POSTGRES_USER: agrosat

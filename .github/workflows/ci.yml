@@ -77,6 +77,55 @@ jobs:
         run: poetry run mypy -p backend.app || echo "mypy no bloqueante"
 
   # ---------------------------------------------------------------------------
+  # Python unit tests (rapidos, sin Docker ni datos). La suite completa (ML con
+  # datos DVC, testcontainers, integracion) sigue corriendo en local; este job
+  # cubre lo que rompe con mas frecuencia: backend/unit, scripts y los modulos
+  # ML puros. `test_persist_features` usa testcontainers y se excluye aqui.
+  # ---------------------------------------------------------------------------
+  python-unit-tests:
+    name: python-unit-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Poetry
+        run: pipx install poetry==${{ env.POETRY_VERSION }}
+
+      - name: Cache Poetry venv
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pypoetry
+            ~/.cache/pip
+            .venv
+          key: poetry-tests-${{ runner.os }}-${{ hashFiles('poetry.lock', 'pyproject.toml') }}
+
+      - name: Install deps (dev, test, ml, geo) + paquete raiz
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --with dev,test,ml,geo --no-interaction
+          poetry install --only-root --no-interaction
+
+      # Dos invocaciones: backend/tests y tests/ tienen cada uno su conftest y
+      # pytest no puede cargarlos juntos como `tests.conftest`.
+      - name: pytest backend (unit)
+        working-directory: backend
+        run: poetry run pytest tests/unit -q -p no:cacheprovider
+
+      - name: pytest scripts + ML puro
+        run: |
+          poetry run pytest tests/scripts tests/ml/features tests/ml/utils tests/ml/report \
+            tests/ml/agent tests/ml/models tests/ml/losses \
+            -q -m "not slow and not integration and not requires_gee" \
+            --ignore=tests/ml/features/test_persist_features.py -p no:cacheprovider
+
+  # ---------------------------------------------------------------------------
   # Frontend lint
   # ---------------------------------------------------------------------------
   frontend:

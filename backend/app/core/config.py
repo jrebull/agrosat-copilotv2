@@ -202,6 +202,10 @@ class Settings(BaseSettings):
     dvc_remote_name: str = ""
     dvc_remote_url: str = ""
 
+    # Docker base image for the Postgres service (docker-compose build arg; declared
+    # for extra=forbid). arm64 hosts set `imresamu/postgis:15-3.4`.
+    postgis_image: str = "postgis/postgis:15-3.4"
+
     # Host ports (docker-compose, not used by backend but declared)
     postgres_host_port: int = 5432
     redis_host_port: int = 6379

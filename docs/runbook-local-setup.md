@@ -313,11 +313,15 @@ GOOGLE_GENAI_USE_VERTEXAI=true
 GOOGLE_CLOUD_PROJECT=agrosat-copilot
 GOOGLE_CLOUD_LOCATION=us-central1
 CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001,http://localhost:3010
+POSTGIS_IMAGE=imresamu/postgis:15-3.4
 EOF
 docker compose --env-file .env.local up -d --build postgres redis   # 55432 y 63790 (defaults del compose)
 DATABASE_URL='postgres://agrosat:agrosat@localhost:55432/agrosat?sslmode=disable' dbmate --no-dump-schema up
 #   `--no-dump-schema`: sin `pg_dump` local dbmate fallaría al volcar db/schema.sql tras migrar.
-#   La imagen de Postgres es amd64 y corre emulada en arm64: funciona, pero es más lenta.
+#   La imagen oficial postgis/postgis:15-3.4 solo publica amd64 (emulada y lenta en arm64). Con
+#   POSTGIS_IMAGE=imresamu/postgis:15-3.4 en .env.local el build usa la misma receta en arm64
+#   nativo. Si el volumen venia de la imagen amd64: REINDEX DATABASE + ALTER DATABASE ...
+#   REFRESH COLLATION VERSION (cambia la glibc) o recrear el volumen y migrar de nuevo.
 
 # 6) Paper (BasicTeX es de root; instalar paquetes en modo usuario desde el repositorio histórico 2025;
 #    `units` aporta nicefrac.sty, que main.tex carga)
