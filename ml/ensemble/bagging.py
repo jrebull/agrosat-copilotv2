@@ -364,7 +364,7 @@ class BaggingEnsemble(EnsembleModel):
             A DataFrame with ``parcel_id`` (positional int), the AlphaEarth
             features, ``class_id`` and ``patch_id`` if present.
         """
-        keep_meta = [c for c in ("class_id", "patch_id") if c in pool.columns]
+        keep_meta: list[str] = [c for c in ("class_id", "patch_id") if c in pool.columns]
         feature_cols = [c for c in pool.columns if c.startswith(ALPHAEARTH_PREFIX)]
         frame = pool.select(feature_cols + keep_meta)
         return frame.with_row_index(name="parcel_id").with_columns(

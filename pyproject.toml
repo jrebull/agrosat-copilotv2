@@ -41,6 +41,10 @@ python-magic = "^0.4.27"
 clerk-sdk = "^1.1.1"
 titiler-core = "^2.0.2"
 rio-tiler = "^9.0.6"
+# pystac 1.15 se reparte en pystac-core + pystac-ext-* y pisa archivos del paquete
+# pystac clasico (queda sin MediaType); rio-tiler exige pystac<2. Fijado hasta que
+# rio-tiler/titiler soporten el layout nuevo.
+pystac = ">=1.9,<1.15"
 # GCP (solo lo que el backend FastAPI necesita: Pub/Sub para despachar jobs,
 # GCS para firmas, Secret Manager. Vertex AI Agent Engine vive en grupo `ml`)
 google-cloud-pubsub = "^2.38.0"
@@ -50,6 +54,9 @@ google-cloud-secret-manager = "^2.28.0"
 earthengine-api = "^1.7.26"
 eurocropsml = "^0.4.1"
 prometheus-client = "^0.25.0"
+# mlflow-skinny 3.12 exige starlette<1 (pip check); fastapi acepta >=0.46. Quitar
+# cuando mlflow 3.13+ soporte starlette 1.x.
+starlette = "<1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.15.12"

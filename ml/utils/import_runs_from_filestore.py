@@ -28,12 +28,17 @@ from __future__ import annotations
 import argparse
 import contextlib
 import io
+import os
 from collections.abc import Iterator
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import structlog
 import yaml
+
+# MLflow >= 3.13 raises on file:// stores unless explicitly allowed; this module
+# exists precisely to read legacy ./mlruns file stores, so opt in up front.
+os.environ.setdefault("MLFLOW_ALLOW_FILE_STORE", "true")
 
 if TYPE_CHECKING:
     from mlflow.tracking import MlflowClient
