@@ -1,0 +1,6 @@
+combinacion,regimen,n_parcelas,f1_macro,accuracy
+promedio simple,held-out,16640,0.6789598078647923,0.8365384615384616
+"voto ponderado, pesos de otros bloques",held-out,16640,0.7230998399224728,0.85390625
+"voto ponderado, pesos del propio conjunto",in-sample,16640,0.7234603214479904,0.8541466346153846
+"arbitro entrenado, refit en todo",in-sample,16640,0.7486144982078715,0.8494591346153846
+"arbitro entrenado, agrupado espacial",held-out,16640,0.6794481665719216,0.8465745192307692

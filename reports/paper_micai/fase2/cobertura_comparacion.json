@@ -1,0 +1,102 @@
+{
+  "predictor": "tsvit-pheno",
+  "f1_macro_completo": 0.7366636524241267,
+  "comparaciones": {
+    "k=18": {
+      "f1_retirada_medio": 0.561167849983616,
+      "f1_confianza_medio": 0.5612972804241154,
+      "delta_retirada_menos_confianza": -0.00012943044049940067,
+      "ci_low": -0.02932137137910516,
+      "ci_high": 0.030332036835709588,
+      "excluye_cero": 0.0,
+      "cobertura_retirada_media": 1.0,
+      "cobertura_confianza_media": 0.9996911537613059,
+      "clases_en_todas_las_leyendas": 18.0,
+      "clases_en_alguna_leyenda": 18.0
+    },
+    "k=16": {
+      "f1_retirada_medio": 0.5865956177652241,
+      "f1_confianza_medio": 0.5917601464512929,
+      "delta_retirada_menos_confianza": -0.00516452868606887,
+      "ci_low": -0.04066494609529669,
+      "ci_high": 0.026944380485613078,
+      "excluye_cero": 0.0,
+      "cobertura_retirada_media": 0.9416490829036761,
+      "cobertura_confianza_media": 0.9012022303241196,
+      "clases_en_todas_las_leyendas": 11.0,
+      "clases_en_alguna_leyenda": 18.0
+    },
+    "k=14": {
+      "f1_retirada_medio": 0.6236073208190481,
+      "f1_confianza_medio": 0.6101426843485565,
+      "delta_retirada_menos_confianza": 0.013464636470491675,
+      "ci_low": -0.026045894497607785,
+      "ci_high": 0.04634663005529306,
+      "excluye_cero": 0.0,
+      "cobertura_retirada_media": 0.8898758604264282,
+      "cobertura_confianza_media": 0.8570186488977936,
+      "clases_en_todas_las_leyendas": 11.0,
+      "clases_en_alguna_leyenda": 16.0
+    },
+    "k=12": {
+      "f1_retirada_medio": 0.6714729512393982,
+      "f1_confianza_medio": 0.6098377258481482,
+      "delta_retirada_menos_confianza": 0.06163522539124999,
+      "ci_low": 0.012958810005408121,
+      "ci_high": 0.0935203204945455,
+      "excluye_cero": 1.0,
+      "cobertura_retirada_media": 0.8651311346324368,
+      "cobertura_confianza_media": 0.8394970180848812,
+      "clases_en_todas_las_leyendas": 9.0,
+      "clases_en_alguna_leyenda": 14.0
+    },
+    "k=10": {
+      "f1_retirada_medio": 0.7693759424453358,
+      "f1_confianza_medio": 0.6139367409289542,
+      "delta_retirada_menos_confianza": 0.15543920151638158,
+      "ci_low": 0.10471129990368744,
+      "ci_high": 0.19107144984839197,
+      "excluye_cero": 1.0,
+      "cobertura_retirada_media": 0.8388961121026363,
+      "cobertura_confianza_media": 0.8197875780434563,
+      "clases_en_todas_las_leyendas": 9.0,
+      "clases_en_alguna_leyenda": 11.0
+    },
+    "k=9": {
+      "f1_retirada_medio": 0.7783196563541261,
+      "f1_confianza_medio": 0.6241293903350746,
+      "delta_retirada_menos_confianza": 0.1541902660190515,
+      "ci_low": 0.1066809675954639,
+      "ci_high": 0.1971427774275121,
+      "excluye_cero": 1.0,
+      "cobertura_retirada_media": 0.8293828722403784,
+      "cobertura_confianza_media": 0.8130021101669497,
+      "clases_en_todas_las_leyendas": 8.0,
+      "clases_en_alguna_leyenda": 10.0
+    },
+    "k=8": {
+      "f1_retirada_medio": 0.824273026091633,
+      "f1_confianza_medio": 0.626778226629312,
+      "delta_retirada_menos_confianza": 0.19749479946232096,
+      "ci_low": 0.14414681982084618,
+      "ci_high": 0.2284480549621208,
+      "excluye_cero": 1.0,
+      "cobertura_retirada_media": 0.8102292667875123,
+      "cobertura_confianza_media": 0.8021205825982575,
+      "clases_en_todas_las_leyendas": 7.0,
+      "clases_en_alguna_leyenda": 9.0
+    }
+  },
+  "nota": "Los dos mecanismos entregan productos distintos: la retirada de clases promete una leyenda mas corta en todas sus parcelas y el rechazo por confianza promete la leyenda completa en menos parcelas. La comparacion es de la frontera calidad-cobertura, no una prueba de equivalencia. Cada bloque se mide contra UNA leyenda, elegida en los otros bloques; las leyendas de bloques distintos no coinciden, y esa inestabilidad se reporta como parte del resultado.",
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "d3e5779",
+    "polars": "1.44.1",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.0",
+    "generado": "2026-09-02T22:23:06+00:00",
+    "universo": "fold 5 held-out de PASTIS-R, parcelas compartidas por los miembros",
+    "ground_truth": "reports/paper_micai/fase1/parcel_gt_fold5.parquet",
+    "n_boot": 400
+  }
+}

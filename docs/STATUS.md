@@ -63,6 +63,16 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   evaluación se reproduce sin los 68 GB del dataset. El eje de cobertura de la curva de
   cardinalidad ya reproduce exacto contra el CSV sellado en sus siete valores.
 
+- **Fase 2 en curso.** Reproducido al sexto decimal: la cifra campeona 0,7486 es el meta-modelo
+  reentrenado sobre las mismas parcelas que puntúa, no un held-out. Libre de fuga ninguna
+  combinación mejora al mejor miembro individual (tsvit-pheno, F1-macro 0,7367). La
+  contribución central se sostiene: a igual cobertura, retirar clases domina al rechazo por
+  confianza (delta +0,062 a +0,198 con IC que excluye el cero por debajo de doce clases).
+  Detalle y advertencias en [`paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
+- Pregunta abierta para Arthur: `tsvit-pheno` saca 0,7367 y `tsvit-pheno-fullm` 0,2552 sobre
+  las mismas parcelas. Antes de publicar hay que comprobar con qué folds se entrenó cada
+  checkpoint.
+
 ## Entorno y gates
 
 - Corre en macOS Apple Silicon y en Linux/Windows con GPU (ver [`runbook-local-setup.md`](runbook-local-setup.md), Apéndice D para Mac).

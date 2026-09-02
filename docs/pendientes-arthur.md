@@ -11,6 +11,11 @@ Lista única de lo que solo Arthur puede entregar o decidir. Cada punto dice par
 - [ ] **Serving de Qwen.** Confirmar qué produjo los artefactos del copiloto: llama.cpp con GGUF Q4_K_M (lo que documenta `docs/serving/qwen35.md`) o vLLM GPTQ-Int4 (lo que dice el manuscrito).
 - [ ] **Sitio live.** Crear el sitio en Netlify (o dar acceso al equipo de Netlify de Javier) y cargar `NETLIFY_AUTH_TOKEN` y `NETLIFY_SITE_ID` como secretos del repositorio en GitHub.
 
+## Bloqueantes nuevos que salieron de la fase 2
+
+- [ ] **Procedencia de `tsvit-pheno`.** Sobre las mismas 16 640 parcelas del fold 5 saca F1-macro 0,7367 mientras `tsvit-pheno-fullm` saca 0,2552. Una diferencia de 0,48 entre dos variantes de la misma arquitectura obliga a comprobar con qué folds se entrenó cada checkpoint antes de publicar cualquier cifra que dependa de ese miembro. El checkpoint y su registro están en la VM.
+- [ ] **Volcados OOF de los folds 1 a 4.** Hoy solo existen los del fold 5, así que el meta-modelo del stacking solo puede entrenarse con bloques del propio fold 5. Con los volcados de los otros folds el stacking podría validarse como es debido; sin ellos la sección de ensambles no se puede cerrar ni en positivo ni en negativo.
+
 ## Artefactos que solo existen en la VM H100 o en su disco
 
 - [ ] `dvc push` de `data/features/alphaearth_italia_2018.parquet`: su `.dvc` está en git desde julio pero el archivo nunca subió al bucket. Sin él no se reproduce la transferencia a Italia.

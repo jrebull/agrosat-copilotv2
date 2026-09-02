@@ -76,6 +76,10 @@ Responsable: Javier, con entregas de Arthur. Salida: `paper/ARTIFACTS.md` y DVC 
 6. `paper/ARTIFACTS.md`: **hecho**. Tabla elemento del paper, artefacto, MD5, bytes, commit y estado, más una sección de trazabilidad que dice qué artefacto tiene productor en el repositorio y cuáles solo tienen lectores. Gate `scripts/paper_artifacts_check.py` vía `make paper-artifacts-check`, probado en negativo.
 7. Fijar versiones de cómputo en el ledger (`xgboost`, `scikit-learn`, `polars`, `matplotlib`) y el SHA del commit que produjo cada artefacto: **hecho**.
 
+### Fase 2 · Experimentos del ángulo A (CPU, datos en disco) — EN CURSO
+
+Hechos los puntos 1, 2 y 5, con un hallazgo que condiciona el resto: **la cifra campeona 0,7486 es in-sample para el meta-modelo**. `StackingEnsemble` reentrena su árbitro sobre todas las parcelas del fold 5 antes de predecirlas, y las cuatro cifras selladas (0,7486, 0,7470, 0,6477 y 0,6359) reproducen exactamente ese régimen. Libre de fuga, ninguna combinación mejora al mejor miembro individual (tsvit-pheno, 0,7367): el árbitro empata con el promedio y pierde contra el voto ponderado. La contribución central **sí se sostiene**: a igual cobertura, retirar clases domina al rechazo por confianza, con intervalo que excluye el cero por debajo de doce clases. Detalle en [`docs/paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
+
 ### Fase 2 · Experimentos del ángulo A (CPU, datos en disco)
 
 Responsable: Javier. Insumos: `ml/eval/oof/oof_parcel_*_fold5.parquet` (8 miembros, 16 640 parcelas), `us043_farslip_grid.csv`, `us043_winner_cardinality_curve.csv`, `cardinalidad.json`, `ec_neighborhood_result.json`, geometrías de PASTIS-R.

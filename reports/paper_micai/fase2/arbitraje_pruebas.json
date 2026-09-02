@@ -1,0 +1,74 @@
+{
+  "pruebas": {
+    "arbitro_agrupado_vs_promedio": {
+      "delta_f1_macro": 0.0004883587071293771,
+      "ci_low": -0.008583566412387066,
+      "ci_high": 0.009731255716465641,
+      "share_below_zero": 0.453,
+      "n_boot": 1000.0,
+      "excludes_zero": 0.0,
+      "solo_a_acierta": 724.0,
+      "solo_b_acierta": 557.0,
+      "discordantes": 1281.0,
+      "p_value": 3.413038146614838e-06
+    },
+    "arbitro_agrupado_vs_mejor_individual": {
+      "delta_f1_macro": -0.05721548585220504,
+      "ci_low": -0.06439523271814064,
+      "ci_high": -0.0499377885498879,
+      "share_below_zero": 1.0,
+      "n_boot": 1000.0,
+      "excludes_zero": 1.0,
+      "solo_a_acierta": 386.0,
+      "solo_b_acierta": 574.0,
+      "discordantes": 960.0,
+      "p_value": 1.4110133439880845e-09,
+      "mejor_individual": "tsvit-pheno"
+    },
+    "arbitro_agrupado_vs_voto_ponderado": {
+      "delta_f1_macro": -0.0436516733505512,
+      "ci_low": -0.0505670963739728,
+      "ci_high": -0.036549560554727946,
+      "share_below_zero": 1.0,
+      "n_boot": 1000.0,
+      "excludes_zero": 1.0,
+      "solo_a_acierta": 378.0,
+      "solo_b_acierta": 500.0,
+      "discordantes": 878.0,
+      "p_value": 4.319878445076824e-05
+    },
+    "promedio_vs_mejor_individual": {
+      "delta_f1_macro": -0.057703844559334416,
+      "ci_low": -0.06802394992812676,
+      "ci_high": -0.04844421171147305,
+      "share_below_zero": 1.0,
+      "n_boot": 1000.0,
+      "excludes_zero": 1.0,
+      "solo_a_acierta": 449.0,
+      "solo_b_acierta": 804.0,
+      "discordantes": 1253.0,
+      "p_value": 7.615798559526716e-24,
+      "mejor_individual": "tsvit-pheno"
+    }
+  },
+  "parcelas_con_prediccion_libre_de_fuga": 16640,
+  "parcelas_totales": 16640,
+  "miembros_campeon": [
+    "tsvit-pheno",
+    "utae",
+    "xgb-alphaearth",
+    "farslip-ft18",
+    "farslip-zeroshot"
+  ],
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "d3e5779",
+    "polars": "1.44.1",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.0",
+    "generado": "2026-09-02T22:24:39+00:00",
+    "universo": "fold 5 held-out de PASTIS-R, parcelas compartidas por los miembros",
+    "ground_truth": "reports/paper_micai/fase1/parcel_gt_fold5.parquet",
+    "n_boot": 1000
+  }
+}
