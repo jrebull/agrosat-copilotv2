@@ -53,10 +53,15 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
 - Corregido en el camino: `docs/pendientes-arthur.md` daba por perdidos artefactos que sí
   están en disco (la curva k-shot de EuroCropsML lleva en git desde `bc019e5`; los crudos de
   WorldCereal están en DVC).
-- Hallazgo de reproducibilidad: seis artefactos sellados **no tienen productor en el
-  repositorio**, entre ellos `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv`, que
-  sostienen la contribución central; el repositorio solo contiene lectores. La fase 2 los
-  reimplementa desde las posteriores OOF selladas y usa los CSV como comprobación cruzada.
+- Hallazgo de reproducibilidad: seis artefactos sellados **no tienen driver versionado**,
+  entre ellos `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv`, que sostienen la
+  contribución central. Su cálculo sí está en `ml/` (`per_class_analysis`, `ml/ensemble/`);
+  lo que falta es el guion que lo invocó. La fase 2 los vuelve a generar desde las
+  posteriores OOF selladas y usa los CSV como comprobación cruzada.
+- Sellado el ground truth del fold 5 en `reports/paper_micai/fase1/`: 16 640 etiquetas,
+  sus centroides y el soporte por clase, 420 KB en total, derivados de PASTIS-R. Con eso la
+  evaluación se reproduce sin los 68 GB del dataset. El eje de cobertura de la curva de
+  cardinalidad ya reproduce exacto contra el CSV sellado en sus siete valores.
 
 ## Entorno y gates
 

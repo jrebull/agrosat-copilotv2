@@ -353,10 +353,13 @@ pre-registradas quedan en [`ADR-013`](../decisions/ADR-013-angulo-micai.md).
 - **Fase 2** gana un experimento obligatorio: rechazo por confianza a igual cobertura como
   comparador de la curva de cardinalidad. Sin él la contribución central no es defendible.
 - **Fase 2** debe producir intervalos para el barrido de vecindad, no solo el delta puntual.
-- **Fase 2** no puede heredar la curva de retirada de clases del CSV: el sellado de la fase 1
-  revela que `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv` **no tienen productor
-  en el repositorio**, solo lectores. La curva se reimplementa desde las posteriores OOF
-  selladas y el CSV pasa a ser comprobación cruzada del resultado nuevo.
+- **Fase 2** no hereda la curva de retirada de clases del CSV: el sellado de la fase 1
+  muestra que `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv` **no tienen driver
+  versionado**, aunque su cálculo sí lo está (`ml.eval.per_class_analysis` y
+  `ml/ensemble/`). La curva se vuelve a generar llamando a esas funciones desde las
+  posteriores OOF selladas, y el CSV pasa a ser comprobación cruzada. El eje de cobertura
+  ya reproduce: los siete valores de `n_parcels_fold5` salen exactos del ground truth
+  sellado en `reports/paper_micai/fase1/parcel_gt_fold5.parquet`.
 - **Fase 3** hereda cuatro afirmaciones prohibidas y su redacción correcta.
 - **Fase 4** reordena Resultados: la curva calidad-cobertura pasa a ser 4.1.
 - **Fase 5** parte de 43 referencias con identificador ya verificado; quedan por resolver
@@ -376,3 +379,5 @@ pre-registradas quedan en [`ADR-013`](../decisions/ADR-013-angulo-micai.md).
 | `reports/paper_micai/fase0/related_work_verified.csv` | La matriz con título, autores, año, DOI y estado devueltos por la API |
 | `scripts/paper_micai_lit_search.py` | Ejecuta y sella la búsqueda |
 | `scripts/paper_micai_ref_verify.py` | Verifica cada referencia contra arXiv, Crossref y OpenAlex |
+| `reports/paper_micai/fase1/parcel_gt_fold5.parquet` | Las 16 640 etiquetas del fold 5 contra las que se mide todo, derivadas de PASTIS-R |
+| `scripts/paper_micai_seal_fold5.py` | Deriva y sella ese ground truth, sus centroides y su procedencia |

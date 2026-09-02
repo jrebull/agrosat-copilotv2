@@ -1,0 +1,11 @@
+{
+  "descripcion": "Etiquetas y centroides por parcela del fold 5 held-out de PASTIS-R, restringidos al universo compartido por los diez miembros OOF de Francia.",
+  "n_parcels": 16640,
+  "n_patches": 496,
+  "n_classes": 18,
+  "pastis_archive_md5_zenodo": "4887513d6c2d2b07fa935d325bd53e09",
+  "oof_dir": "ml/eval/oof",
+  "code_version": "d6ca043",
+  "polars": "1.44.1",
+  "generado": "2026-09-02T21:07:20+00:00"
+}

@@ -102,11 +102,13 @@ FinOps y toda la narrativa de proceso interno.
 
 - La fase 2 gana un experimento que antes no estaba: el **baseline de rechazo por
   confianza a igual cobertura**, sin el cual la contribución central no es defendible.
-- El sellado de la fase 1 obliga además a **reimplementar** la curva de retirada de clases
-  desde las posteriores OOF: `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv`
-  están sellados y son reales, pero su productor no está en el repositorio, que solo
-  contiene lectores. Los CSV quedan como comprobación cruzada del resultado nuevo, no como
-  su fuente.
+- El sellado de la fase 1 obliga además a **volver a generar** la curva de retirada de
+  clases desde las posteriores OOF: `us043_honest_dropout_curve.csv` y
+  `us043_farslip_grid.csv` están sellados y son reales, y su cálculo sí está versionado
+  (`ml.eval.per_class_analysis.honest_class_dropout_curve` y `ml/ensemble/`), pero el guion
+  que los escribió no lo está. Los CSV quedan como comprobación cruzada del resultado
+  nuevo, no como su fuente. El eje de cobertura ya se comprobó: los siete valores de
+  `n_parcels_fold5` reproducen exactos desde el ground truth sellado del fold 5.
 - La fase 5 debe reconstruir seis entradas bibliográficas con datos falsos; la fase 0 ya
   deja resueltos y verificados los tres anclajes y otras cuarenta referencias.
 - El alcance geográfico se declara: una región, un año, un fold held-out para los modelos

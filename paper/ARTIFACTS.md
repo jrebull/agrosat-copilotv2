@@ -4,7 +4,7 @@ Cada cifra impresa en el artículo debe re-derivarse desde un archivo de esta ta
 Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` recalcula
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
-**Sellado el**: 2026-09-02 · **HEAD del repositorio**: `847c99a`
+**Sellado el**: 2026-09-02 · **HEAD del repositorio**: `d6ca043`
 **Fase**: 1 de [`docs/plan-micai-2027.md`](../docs/plan-micai-2027.md) ·
 **Ángulo vigente**: [`ADR-013`](../docs/decisions/ADR-013-angulo-micai.md) (reencuadre).
 
@@ -51,11 +51,15 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Embeddings WorldCereal de India (Karnataka) | `data/transfer/worldcereal_india_karnataka.parquet` | `f6fb984f62f939e50b6048e9a74aa0cb` | 201319 | `a50cb94` (.dvc) | SELLADO | Insumo crudo del barrido tropical; el resultado del barrido no existe. |
 | Deltas pareados multirregión | `data/transfer/multiregion_paired_delta.parquet` | `608a994e120e74ace9d5eaf4923d46d4` | 3657 | `a50cb94` (.dvc) | SELLADO | Fuera del cuerpo bajo el ángulo reencuadrado. |
 | Macro por clase multirregión | `data/transfer/multiregion_per_class_macro.parquet` | `51496ae0321af2b29ee8cc6edb3642a2` | 2549 | `a50cb94` (.dvc) | SELLADO | Fuera del cuerpo bajo el ángulo reencuadrado. |
-| Registro de la búsqueda sistemática de la fase 0 | `reports/paper_micai/fase0/search_log.csv` | `ac14cc4e5db38c7976c1c6b6c4af05e1` | 12831 | sin seguimiento en git | SELLADO | Consulta, fuente, fecha, código HTTP y registros. |
-| Registro de las consultas manuales de buscador | `reports/paper_micai/fase0/search_log_manual.csv` | `3de611cd854356095debdb34fb0cbbc5` | 2163 | sin seguimiento en git | SELLADO | Las seis consultas tipo Google Scholar. |
-| Candidatos devueltos por la búsqueda | `reports/paper_micai/fase0/search_candidates.csv` | `c56c4aad185e7a08a4dc7a383eaef35f` | 162047 | sin seguimiento en git | SELLADO | Sin filtrar, tal como los devolvió cada API. |
-| Matriz de trabajo relacionado redactada | `reports/paper_micai/fase0/related_work_matrix.csv` | `78fd6400073bcb6bbc26aef72d608cb7` | 25495 | sin seguimiento en git | SELLADO | Método, fortaleza, límite y hueco por entrada. |
-| Matriz de trabajo relacionado verificada por API | `reports/paper_micai/fase0/related_work_verified.csv` | `eb8953b459467dbbd196120a9da53891` | 36052 | sin seguimiento en git | SELLADO | 43 entradas, 43 en estado OK. |
+| Etiquetas por parcela del fold 5, universo compartido por los diez miembros | `reports/paper_micai/fase1/parcel_gt_fold5.parquet` | `dddb1ea9c1b0b15c0f24142e8dd0ec4d` | 68147 | sin seguimiento en git | SELLADO | 16 640 filas derivadas de PASTIS-R. Permite reproducir toda la evaluación sin los 68 GB del dataset. |
+| Centroides por parcela del fold 5 | `reports/paper_micai/fase1/parcel_centroids_fold5.parquet` | `5b1ce7b92059e62f640869a51bc8f1e6` | 358870 | sin seguimiento en git | SELLADO | Geometrías necesarias para los sub-folds espaciales del meta-modelo y para el nulo de vecindad. |
+| Soporte por clase del fold 5 | `reports/paper_micai/fase1/parcel_gt_fold5_support.csv` | `e9c3b084ad2f8dba43e241f5ff607e46` | 136 | sin seguimiento en git | SELLADO | El desbalance del que trata el artículo: de 6 128 parcelas en la clase mayoritaria a 103 en la menor. |
+| Procedencia del ground truth del fold 5 | `reports/paper_micai/fase1/parcel_gt_fold5_provenance.json` | `7ad456fbc109edc82d2490683918f65b` | 414 | sin seguimiento en git | SELLADO | MD5 del archivo de Zenodo de PASTIS-R, conteos, `code_version` y version de polars. |
+| Registro de la búsqueda sistemática de la fase 0 | `reports/paper_micai/fase0/search_log.csv` | `ac14cc4e5db38c7976c1c6b6c4af05e1` | 12831 | `4052b0b` | SELLADO | Consulta, fuente, fecha, código HTTP y registros. |
+| Registro de las consultas manuales de buscador | `reports/paper_micai/fase0/search_log_manual.csv` | `3de611cd854356095debdb34fb0cbbc5` | 2163 | `4052b0b` | SELLADO | Las seis consultas tipo Google Scholar. |
+| Candidatos devueltos por la búsqueda | `reports/paper_micai/fase0/search_candidates.csv` | `c56c4aad185e7a08a4dc7a383eaef35f` | 162047 | `4052b0b` | SELLADO | Sin filtrar, tal como los devolvió cada API. |
+| Matriz de trabajo relacionado redactada | `reports/paper_micai/fase0/related_work_matrix.csv` | `78fd6400073bcb6bbc26aef72d608cb7` | 25495 | `4052b0b` | SELLADO | Método, fortaleza, límite y hueco por entrada. |
+| Matriz de trabajo relacionado verificada por API | `reports/paper_micai/fase0/related_work_verified.csv` | `eb8953b459467dbbd196120a9da53891` | 36052 | `4052b0b` | SELLADO | 43 entradas, 43 en estado OK. |
 
 ## Cifras sin artefacto
 
@@ -93,23 +97,32 @@ memoria.
 | `data/transfer/multiregion_*.parquet` | `ml/transfer/multiregion_model.py` |
 | `reports/paper_micai/fase0/search_*.csv` | `scripts/paper_micai_lit_search.py` |
 | `reports/paper_micai/fase0/related_work_verified.csv` | `scripts/paper_micai_ref_verify.py` |
+| `reports/paper_micai/fase1/parcel_gt_fold5*.{parquet,csv,json}` | `scripts/paper_micai_seal_fold5.py` |
 
-**Sin productor localizado en el repositorio.** Estos archivos están sellados y son
-reales, pero el código que los generó no está versionado aquí: el repositorio solo
-contiene lectores. Regenerarlos hoy exigiría reescribir su cálculo.
+**Con cálculo versionado pero sin driver.** En estos seis, la lógica sí está en el
+repositorio; lo que no está versionado es el guion que la invocó y escribió el archivo.
+Regenerarlos no exige reescribir el cálculo, sino volver a escribir su punto de entrada.
 
-| Artefacto | Qué cifra sostiene |
-|---|---|
-| `reports/ensemble/metrics/us043_farslip_grid.csv` | 0,7486 y 0,8495 del Stacking-5, y 0,7470 del Stacking-3 |
-| `reports/ensemble/metrics/us043_honest_dropout_curve.csv` | toda la curva calidad-cobertura, que es la contribución central |
-| `reports/ensemble/metrics/us043_winner_cardinality_curve.csv` | la curva por soporte acumulado |
-| `reports/ensemble/metrics/us043_winner_per_class.csv` | el desempeño por clase del campeón |
-| `reports/farslip/metrics/us037_farslip_fiel_vs_alphaearth.csv` | la comparación FarSLIP frente a AlphaEarth |
-| `data/transfer/eurocropsml_fewshot_results.parquet` | la curva k-shot LV a EE |
+| Artefacto | Qué cifra sostiene | Dónde está el cálculo |
+|---|---|---|
+| `reports/ensemble/metrics/us043_farslip_grid.csv` | 0,7486 y 0,8495 del Stacking-5, y 0,7470 del Stacking-3 | `ml/ensemble/stacking.py` y `blending.py`, más `_stacking_metrics` y `_blending_metrics` de `scripts/run_us043_farslip_ensembles.py`, que hoy solo barre un universo |
+| `reports/ensemble/metrics/us043_honest_dropout_curve.csv` | toda la curva calidad-cobertura, que es la contribución central | `ml.eval.per_class_analysis.honest_class_dropout_curve`, con el protocolo libre de fuga ya implementado |
+| `reports/ensemble/metrics/us043_winner_cardinality_curve.csv` | la curva por soporte acumulado | `ml.eval.per_class_analysis.cardinality_cutoff_curve` |
+| `reports/ensemble/metrics/us043_winner_per_class.csv` | el desempeño por clase del campeón | `ml.eval.per_class_analysis.per_class_report` |
+| `reports/farslip/metrics/us037_farslip_fiel_vs_alphaearth.csv` | la comparación FarSLIP frente a AlphaEarth | `ml/eval/embedding_separability.py` |
+| `data/transfer/eurocropsml_fewshot_results.parquet` | la curva k-shot LV a EE | `ml.transfer.eurocropsml_alphaearth_fewshot.train_xgb_kshot_alphaearth` |
 
-Consecuencia para la fase 2: el experimento de la curva calidad-cobertura **se
-reimplementa desde las posteriores OOF selladas**, no se hereda del CSV. El CSV queda
-como comprobación cruzada del resultado nuevo.
+Consecuencia para la fase 2: la curva calidad-cobertura **se vuelve a generar llamando a
+`honest_class_dropout_curve` desde las posteriores OOF selladas**, no se hereda del CSV.
+El CSV queda como comprobación cruzada del resultado nuevo.
+
+## Comprobación cruzada ya hecha
+
+El eje de cobertura de la curva **ya reproduce**. Recalculando el soporte de cada
+conjunto de clases retenidas desde `reports/paper_micai/fase1/parcel_gt_fold5.parquet`,
+derivado de PASTIS-R de forma independiente, los siete valores de
+`n_parcels_fold5` coinciden exactamente con los del CSV sellado: 16 640, 16 092, 15 783,
+14 925, 14 200, 13 624 y 13 311. Lo que queda por reproducir es la columna de F1-macro.
 
 ## Cómo se usa
 
