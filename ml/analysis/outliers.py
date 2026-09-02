@@ -7,6 +7,8 @@ Two methods:
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 import polars as pl
 from sklearn.ensemble import IsolationForest
@@ -147,6 +149,6 @@ def detect_outliers_isoforest(
     for r in rows:
         r["n_outliers"] = total_out
         r["pct_outliers"] = float(total_out) / arr.shape[0] * 100.0 if arr.shape[0] else 0.0
-        band_pos = band_cols.index(r["band"])
+        band_pos = band_cols.index(cast("str", r["band"]))
         r["band_mean_outliers"] = float(np.mean(arr[is_out, band_pos])) if total_out else 0.0
     return pl.DataFrame(rows).sort("band")

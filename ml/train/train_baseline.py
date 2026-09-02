@@ -132,6 +132,11 @@ def _log_baseline_run(
 
     output_dir.mkdir(parents=True, exist_ok=True)
     joblib_path = output_dir / f"baseline_{model_kind}_v1.joblib"
+    # Always invoked inside the ``track_experiment`` context, so an active run
+    # exists and carries the ``data_version`` / ``code_version`` lineage tags.
+    active_run = mlflow.active_run()
+    assert active_run is not None
+    run_tags = active_run.data.tags
     payload = {
         "model": result.model,
         "model_kind": model_kind,
@@ -141,8 +146,8 @@ def _log_baseline_run(
         "metrics": result.metrics,
         "cv_metrics": result.cv_metrics,
         "best_params": result.best_params,
-        "data_version": mlflow.active_run().data.tags.get("data_version", "untracked"),
-        "code_version": mlflow.active_run().data.tags.get("code_version", "unknown"),
+        "data_version": run_tags.get("data_version", "untracked"),
+        "code_version": run_tags.get("code_version", "unknown"),
     }
     joblib.dump(payload, joblib_path)
     mlflow.log_artifact(str(joblib_path))

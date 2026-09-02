@@ -383,13 +383,14 @@ def pastis_patch_coords(
             lon, lat = cx, cy
         pid_raw = feat.get("id") or props.get("ID_PATCH")
         pid = str(pid_raw) if pid_raw is not None else ""
+        fold_raw = props.get("Fold")
         rows.append(
             {
                 "patch_id": pid,
                 "lon": float(lon),
                 "lat": float(lat),
                 "tile": str(props.get("TILE", "")),
-                "fold": int(props.get("Fold")) if props.get("Fold") is not None else 0,
+                "fold": int(fold_raw) if fold_raw is not None else 0,
             }
         )
 
@@ -432,11 +433,12 @@ def pastis_patch_index(metadata_geojson: Path | None = None) -> pl.DataFrame:
         pid_raw = feat.get("id") or props.get("ID_PATCH")
         if pid_raw is None:
             continue
+        fold_raw = props.get("Fold")
         rows.append(
             {
                 "patch_id": str(pid_raw),
                 "TILE": str(props.get("TILE", "")),
-                "Fold": int(props.get("Fold")) if props.get("Fold") is not None else 0,
+                "Fold": int(fold_raw) if fold_raw is not None else 0,
             }
         )
 

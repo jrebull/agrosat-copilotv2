@@ -263,11 +263,12 @@ class BlendingEnsemble(EnsembleModel):
             Convex weights ``(n_members,)`` with ``w_i >= 0`` and ``sum(w) == 1``;
             a degenerate all-zero draw falls back to uniform weights.
         """
-        arr = np.clip(np.asarray(raw, dtype=np.float64), 0.0, None)
+        arr: np.ndarray = np.clip(np.asarray(raw, dtype=np.float64), 0.0, None)
         total = arr.sum()
         if total < _SIMPLEX_EPS:
             return np.full(arr.shape, 1.0 / arr.size, dtype=np.float64)
-        return arr / total
+        weights: np.ndarray = arr / total
+        return weights
 
     def _blend(self, probs: np.ndarray, weights: np.ndarray) -> np.ndarray:
         """Combine member probabilities with convex weights.

@@ -25,10 +25,15 @@ aggregation stays in Polars.
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import numpy as np
 import polars as pl
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from collections.abc import Mapping
+
+    from polars._typing import ColumnNameOrSelector, PolarsDataType
 
 SPECTRAL_INDICES_CORE: dict[str, str] = {
     "NDVI": "(B08-B04)/(B08+B04)",
@@ -432,7 +437,9 @@ def phenology_peaks(
             pl.col("_d").dt.year().cast(pl.Int64).alias("peak_ndvi_year"),
         ]
     )
-    return out.unique(subset=["parcel_id"], keep="first").cast(schema)
+    return out.unique(subset=["parcel_id"], keep="first").cast(
+        cast("Mapping[ColumnNameOrSelector | PolarsDataType, PolarsDataType]", schema)
+    )
 
 
 def _resample_monthly_pandas(

@@ -633,7 +633,9 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
     report = {
         "scenario": "FR(PASTIS-R 18cls) -> ES(Catalonia macro-HCAT) dense transfer",
         "fr_ckpt": str(_SEN4_FR_CKPT),
-        "fewshot_ckpt_origin": "recomputed locally (VM best.pt tsvit-pheno-sen4agri-cat-ft-v1 not on this host)",
+        "fewshot_ckpt_origin": (
+            "recomputed locally (VM best.pt tsvit-pheno-sen4agri-cat-ft-v1 not on this host)"
+        ),
         "k_few_shot": _SEN4_K,
         "epochs": epochs,
         "seed": _SEN4_SEED,
@@ -710,7 +712,7 @@ def _plot_sen4agrinet_lang(df: pl.DataFrame, base_stem: Path, lang: str) -> list
         ax.bar(
             x + w / 2, fs_v, w, label=txt["few_shot_label"], color="#2c7fb8", edgecolor="#1a4f73"
         )
-        for xi, v in zip(x, fs_v):
+        for xi, v in zip(x, fs_v, strict=True):
             if v > 0.01:
                 ax.text(xi + w / 2, v + 0.01, f"{v:.2f}", ha="center", va="bottom", fontsize=8)
         ax.set_xticks(x)

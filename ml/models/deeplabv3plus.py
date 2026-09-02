@@ -99,12 +99,10 @@ def build_deeplabv3plus_mobilenet(
     """
     rates = tuple(atrous_rates)
     if len(rates) != 3:
-        raise ValueError(
-            f"atrous_rates debe tener 3 valores enteros, recibido {rates!r}"
-        )
+        raise ValueError(f"atrous_rates debe tener 3 valores enteros, recibido {rates!r}")
 
     try:
-        model = smp.DeepLabV3Plus(
+        model: nn.Module = smp.DeepLabV3Plus(
             encoder_name=_ENCODER_NAME,
             encoder_weights=encoder_weights,
             in_channels=in_channels,
@@ -225,8 +223,8 @@ class DiceCrossEntropyLoss(nn.Module):
             A scalar ``torch.Tensor`` with the weighted combined loss.
         """
         target_long = target.long()
-        dice_term = self.dice(logits, target_long)
-        ce_term = self.ce(logits, target_long)
+        dice_term: torch.Tensor = self.dice(logits, target_long)
+        ce_term: torch.Tensor = self.ce(logits, target_long)
         # A batch/patch entirely ``ignore_index`` (Background/Void) leaves
         # CrossEntropyLoss averaging over zero valid pixels -> NaN, which would
         # poison training. It is neutralized to zero while preserving the

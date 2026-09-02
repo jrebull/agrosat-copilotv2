@@ -18,7 +18,7 @@ English docstrings, Spanish prose in user-facing artifacts, no emojis.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import polars as pl
 import structlog
@@ -117,7 +117,7 @@ def build_dominance_comparison(
         "dominance_comparison_built",
         n_rows=merged.height,
         n_classes=merged["n_classes"].to_list(),
-        mean_delta=round(float(merged["delta_macro_f1"].mean()), 4),
+        mean_delta=round(float(cast("float", merged["delta_macro_f1"].mean())), 4),
     )
     return merged
 

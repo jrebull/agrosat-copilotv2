@@ -57,7 +57,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import structlog
 
@@ -1308,9 +1308,11 @@ def _wilcoxon_table(
         if not g or not q:
             table[benchmark] = WilcoxonResult(math.nan, math.nan, 0, "benchmark pendiente")
             continue
-        g_by_id = dict(zip(g["item_ids"], g["item_scores"], strict=True))  # type: ignore[arg-type]
-        q_by_id = dict(zip(q["item_ids"], q["item_scores"], strict=True))  # type: ignore[arg-type]
-        common = [i for i in g["item_ids"] if i in q_by_id]  # type: ignore[union-attr]
+        g_ids = cast("list[str]", g["item_ids"])
+        q_ids = cast("list[str]", q["item_ids"])
+        g_by_id = dict(zip(g_ids, cast("list[float]", g["item_scores"]), strict=True))
+        q_by_id = dict(zip(q_ids, cast("list[float]", q["item_scores"]), strict=True))
+        common = [i for i in g_ids if i in q_by_id]
         a = [float(g_by_id[i]) for i in common]
         b = [float(q_by_id[i]) for i in common]
         table[benchmark] = wilcoxon_paired(a, b)

@@ -118,7 +118,8 @@ class _FeedForward(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.net(x)
+        out: torch.Tensor = self.net(x)
+        return out
 
 
 class _Attention(nn.Module):
@@ -152,13 +153,12 @@ class _Attention(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: (flattened_batch, n_tokens, dim)
         qkv = self.to_qkv(x).chunk(3, dim=-1)
-        q, k, v = (
-            rearrange(t, "b n (h d) -> b h n d", h=self.heads) for t in qkv
-        )
+        q, k, v = (rearrange(t, "b n (h d) -> b h n d", h=self.heads) for t in qkv)
         attn = torch.softmax((q @ k.transpose(-1, -2)) * self.scale, dim=-1)
         out = attn @ v
         out = rearrange(out, "b h n d -> b n (h d)")
-        return self.to_out(out)
+        projected: torch.Tensor = self.to_out(out)
+        return projected
 
 
 class _TransformerBlock(nn.Module):
@@ -215,17 +215,15 @@ class _Transformer(nn.Module):
     ) -> None:
         super().__init__()
         self.layers = nn.ModuleList(
-            [
-                _TransformerBlock(dim, heads, dim_head, mlp_dim, dropout)
-                for _ in range(depth)
-            ]
+            [_TransformerBlock(dim, heads, dim_head, mlp_dim, dropout) for _ in range(depth)]
         )
         self.norm = nn.LayerNorm(dim)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         for layer in self.layers:
             x = layer(x)
-        return self.norm(x)
+        normed: torch.Tensor = self.norm(x)
+        return normed
 
 
 # ---------------------------------------------------------------------------
@@ -295,8 +293,7 @@ class TSViT(nn.Module):
         super().__init__()
         if img_size % patch_size != 0:
             raise ValueError(
-                f"img_size ({img_size}) must be divisible by patch_size "
-                f"({patch_size})."
+                f"img_size ({img_size}) must be divisible by patch_size ({patch_size})."
             )
 
         self.num_classes = num_classes
@@ -323,18 +320,12 @@ class TSViT(nn.Module):
 
         # --- Temporal positional encoding by DOY (learned table) ------------
         # Indexed by real day-of-year (1..max_doy). Row 0 reserved.
-        self.temporal_pos_embedding = nn.Parameter(
-            torch.randn(max_doy + 1, dim) * 0.02
-        )
+        self.temporal_pos_embedding = nn.Parameter(torch.randn(max_doy + 1, dim) * 0.02)
         # Fallback ordinal temporal PE when doy is not provided.
-        self.temporal_pos_ordinal = nn.Parameter(
-            torch.randn(1, n_timesteps, dim) * 0.02
-        )
+        self.temporal_pos_ordinal = nn.Parameter(torch.randn(1, n_timesteps, dim) * 0.02)
 
         # --- K separable temporal cls-tokens (one per class) ----------------
-        self.temporal_cls_tokens = nn.Parameter(
-            torch.randn(1, num_classes, dim) * 0.02
-        )
+        self.temporal_cls_tokens = nn.Parameter(torch.randn(1, num_classes, dim) * 0.02)
 
         # --- Temporal encoder ----------------------------------------------
         self.temporal_transformer = _Transformer(
@@ -342,9 +333,7 @@ class TSViT(nn.Module):
         )
 
         # --- Learned spatial positional encoding ----------------------------
-        self.spatial_pos_embedding = nn.Parameter(
-            torch.randn(1, self.num_patches, dim) * 0.02
-        )
+        self.spatial_pos_embedding = nn.Parameter(torch.randn(1, self.num_patches, dim) * 0.02)
 
         # --- Spatial encoder -----------------------------------------------
         self.spatial_transformer = _Transformer(
@@ -436,9 +425,7 @@ class TSViT(nn.Module):
         # --- Temporal encoder per spatial position --------------------------
         # Flatten (B, N) into the batch axis to attend only over the temporal axis.
         seq = rearrange(tokens, "b t n d -> (b n) t d")
-        cls = repeat(
-            self.temporal_cls_tokens, "1 k d -> bn k d", bn=b * n
-        )  # (B*N, K, dim)
+        cls = repeat(self.temporal_cls_tokens, "1 k d -> bn k d", bn=b * n)  # (B*N, K, dim)
         seq = torch.cat([cls, seq], dim=1)  # (B*N, K + T, dim)
         seq = self.temporal_transformer(seq)
         # Keep only the K cls-tokens (temporal summary per class).
@@ -452,7 +439,7 @@ class TSViT(nn.Module):
 
         # --- Segmentation head: patch token -> p*p pixels -------------------
         seg = self.to_seg(spatial)  # (B*K, N, p*p)
-        logits = rearrange(
+        logits: torch.Tensor = rearrange(
             seg,
             "(b k) (gh gw) (ph pw) -> b k (gh ph) (gw pw)",
             b=b,

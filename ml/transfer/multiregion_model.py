@@ -55,6 +55,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import cast
 
 import numpy as np
 import polars as pl
@@ -807,8 +808,8 @@ def run_multiregion_experiment(*, seed: int = _RANDOM_STATE) -> MultiRegionResul
         "paired_shared_gain_sum": float(shared_improved.get_column("delta_f1").sum()),
         "paired_shared_loss_sum": float(shared_worsened.get_column("delta_f1").sum()),
         "paired_net_shared_delta": float(shared.get_column("delta_f1").sum()),
-        "paired_shared_mean_f1_pastis": float(shared.get_column("f1_pastis").mean()),
-        "paired_shared_mean_f1_multi": float(shared.get_column("f1_multi").mean()),
+        "paired_shared_mean_f1_pastis": float(cast(float, shared.get_column("f1_pastis").mean())),
+        "paired_shared_mean_f1_multi": float(cast(float, shared.get_column("f1_multi").mean())),
         "paired_n_new_taxonomy_leaves": int(new_tax.height),
         "paired_n_new_taxonomy_f1_over_050": int(new_tax.filter(pl.col("f1_multi") >= 0.50).height),
         "paired_top_rescue": (

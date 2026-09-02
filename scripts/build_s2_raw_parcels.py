@@ -191,17 +191,17 @@ def _parcels_by_patch(
 
 @app.command()
 def main(
-    pastis_root: Path = typer.Option(  # noqa: B008
+    pastis_root: Path = typer.Option(
         Path("data/PASTIS-R"),
         "--pastis-root",
         help="Raiz del dataset PASTIS-R (con DATA_S2/ y ANNOTATIONS/).",
     ),
-    parcels: Path = typer.Option(  # noqa: B008
+    parcels: Path = typer.Option(
         Path("data/processed/pastis_parcels_full.geoparquet"),
         "--parcels",
         help="GeoParquet de poligonos de parcela (vectorize_pastis_parcels.py).",
     ),
-    out: Path = typer.Option(  # noqa: B008
+    out: Path = typer.Option(
         Path("data/cache/pastis/s2_raw_parcels_2019_85951.parquet"),
         "--out",
         help="Parquet de salida con las 10 bandas medias por parcela.",

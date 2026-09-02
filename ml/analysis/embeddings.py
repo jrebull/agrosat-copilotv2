@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from itertools import pairwise
 from pathlib import Path
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import matplotlib.figure
 import matplotlib.pyplot as plt
@@ -30,6 +30,11 @@ import polars as pl
 import structlog
 from scipy.stats import kurtosis as sp_kurtosis
 from scipy.stats import rankdata, shapiro, skew
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from collections.abc import Mapping
+
+    from polars._typing import ColumnNameOrSelector, PolarsDataType
 
 _log = structlog.get_logger(__name__)
 
@@ -613,4 +618,6 @@ def cross_region_consistency(
             (pl.col("importance_italia") + pl.col("importance_francia")).alias("importance_sum"),
         ]
     )
-    return merged.sort("importance_sum", descending=True).cast(schema)
+    return merged.sort("importance_sum", descending=True).cast(
+        cast("Mapping[ColumnNameOrSelector | PolarsDataType, PolarsDataType]", schema)
+    )

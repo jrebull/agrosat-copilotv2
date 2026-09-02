@@ -438,9 +438,10 @@ class StackingEnsemble(EnsembleModel):
             cls_int = int(cls)
             if 0 <= cls_int < _NUM_CLASSES:
                 full[:, cls_int] = proba_local[:, local_idx]
-        row_sums = full.sum(axis=1, keepdims=True)
+        row_sums: np.ndarray = full.sum(axis=1, keepdims=True)
         row_sums = np.where(row_sums < 1e-12, 1.0, row_sums)
-        return full / row_sums
+        normalized: np.ndarray = full / row_sums
+        return normalized
 
     # ------------------------------------------------------------------
     # Fit (anti-leakage core).

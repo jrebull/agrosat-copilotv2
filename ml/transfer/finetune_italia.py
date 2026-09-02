@@ -56,6 +56,8 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     import torch
     from torch import nn
 
+    from ml.models.pheno_semantic_branch import PhenoSemanticBranch
+
 from ml.transfer.italia_label_space import (
     ItaliaLabelSpace,
     build_italia_label_space,
@@ -591,7 +593,7 @@ def _build_italia_pheno_branch(
     *,
     num_classes: int,
     device: str,
-) -> nn.Module:
+) -> PhenoSemanticBranch:
     """Build the LEARNABLE Italian phenology semantic branch (US-079 fix B).
 
     Replaces the previous ``_load_italia_prototypes`` (which L2-normalised the raw
@@ -929,7 +931,7 @@ def run_italia_finetune(
     # run that scored F1 0.737 (NOT the raw MiniLM embeddings used directly).
     # Disabled for U-TAE (no semantic branch) and when lambda_contrast == 0
     # (back-compat / no prototypes on disk).
-    pheno_branch: nn.Module | None = None
+    pheno_branch: PhenoSemanticBranch | None = None
     use_contrast = config.model_kind == "tsvit-pheno" and config.lambda_contrast > 0.0
     if use_contrast:
         proto_path = config.pheno_prototypes or DEFAULT_ITALIA_PROTOTYPES
@@ -1013,7 +1015,7 @@ def run_italia_finetune(
                 doy_list = [all_patches.doys[i] for i in batch]
                 logits, visual_proj = _forward(xb, doy_list, want_proj=epoch_contrast)
                 loss = criterion(logits, yb)
-                if epoch_contrast and visual_proj is not None:
+                if epoch_contrast and visual_proj is not None and pheno_branch is not None:
                     # Project the frozen Italian text prototypes through the
                     # LEARNABLE projection FRESH on every step (no detach), so the
                     # contrast aligns the TSViT visual_proj with the projected

@@ -23,6 +23,7 @@ Permanent operational tool (reproducible), not a smoke/debug script.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING, Literal, cast
 
 import matplotlib
 
@@ -30,6 +31,9 @@ matplotlib.use("Agg", force=False)
 import matplotlib.pyplot as plt
 import numpy as np
 import structlog
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from matplotlib.axes import Axes
 
 logger = structlog.get_logger(__name__)
 
@@ -146,7 +150,7 @@ def curves_from_mlflow(
     axes[0].set_ylabel("Loss")
     axes[0].legend(fontsize=8)
 
-    def _val_panel(ax, series: np.ndarray, title: str, ylabel: str) -> None:
+    def _val_panel(ax: Axes, series: np.ndarray, title: str, ylabel: str) -> None:
         if series.size == 0:
             ax.text(0.5, 0.5, "no registrado", ha="center", va="center", transform=ax.transAxes)
             ax.set_title(title)
@@ -279,7 +283,7 @@ def confusion_from_cm(
 
 
 def regen_deeplab_tsvit(
-    model: str,
+    model: Literal["deeplabv3plus", "tsvit"],
     *,
     checkpoint: Path,
     num_classes: int = 18,
@@ -311,8 +315,10 @@ def regen_deeplab_tsvit(
     from ml.eval.segmentation_inference import evaluate_checkpoint, load_segmentation_model
     from ml.ingest.pastis_loader import PASTIS_R_CLASSES
 
-    model_kind = "tsvit-pheno" if model == "tsvit" else model
-    collapse = "median" if model == "deeplabv3plus" else None
+    model_kind: Literal["deeplabv3plus", "tsvit-pheno"] = (
+        "tsvit-pheno" if model == "tsvit" else model
+    )
+    collapse: Literal["median"] | None = "median" if model == "deeplabv3plus" else None
     ds = PASTISSegmentationDataset(
         folds=val_folds, collapse_time=collapse, n_timesteps=n_timesteps, target="semantic18"
     )
@@ -327,7 +333,10 @@ def regen_deeplab_tsvit(
         net, ds, model_kind=model_kind, num_classes=num_classes, ignore_index=ignore_index
     )
     p_iou = per_class_iou_figure(
-        metrics["per_class_iou"], model, class_names=PASTIS_R_CLASSES, out_dir=out_dir
+        cast("list[float]", metrics["per_class_iou"]),
+        model,
+        class_names=PASTIS_R_CLASSES,
+        out_dir=out_dir,
     )
     p_cm = confusion_from_cm(cm, model, class_names=PASTIS_R_CLASSES, out_dir=out_dir)
     return p_iou, p_cm
@@ -382,7 +391,7 @@ def regen_isaac_model(
         from ml.models.utae import build_utae
         from ml.tune.optuna_segmentation import PASTISMultiTempDataset
 
-        net = build_utae(num_classes=num_classes, input_dim=10).to(dev).eval()
+        net: torch.nn.Module = build_utae(num_classes=num_classes, input_dim=10).to(dev).eval()
         ck = torch.load(checkpoint, map_location=dev, weights_only=False)
         net.load_state_dict(ck.get("model_state_dict", ck))
         ds = PASTISMultiTempDataset(
@@ -410,13 +419,13 @@ def regen_isaac_model(
         seg_std = np.array([671.7, 698.1, 761.3], dtype=np.float32)[:, None, None]
         seg_size = 256
 
-        net = (
+        hf_model = cast(
+            "torch.nn.Module",
             SegformerForSemanticSegmentation.from_pretrained(
                 str(Path(checkpoint).parent / "hf_model")
-            )
-            .to(dev)
-            .eval()
+            ),
         )
+        net = hf_model.to(dev).eval()
         root = Path(pastis_root)
         meta = json.loads((root / "metadata.geojson").read_text())
         pids = [
@@ -560,7 +569,7 @@ def optuna_convergence_figure(
 
 
 def samples_grid(
-    model: str,
+    model: Literal["deeplabv3plus", "tsvit"],
     *,
     checkpoint: Path,
     num_classes: int = 18,
@@ -603,8 +612,10 @@ def samples_grid(
     )
     from ml.ingest.pastis_loader import PASTIS_R_CLASSES
 
-    model_kind = "tsvit-pheno" if model == "tsvit" else model
-    collapse = "median" if model == "deeplabv3plus" else None
+    model_kind: Literal["deeplabv3plus", "tsvit-pheno"] = (
+        "tsvit-pheno" if model == "tsvit" else model
+    )
+    collapse: Literal["median"] | None = "median" if model == "deeplabv3plus" else None
     ds = PASTISSegmentationDataset(
         folds=val_folds, collapse_time=collapse, n_timesteps=n_timesteps, target="semantic18"
     )

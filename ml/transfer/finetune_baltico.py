@@ -47,9 +47,14 @@ Honesty
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 import numpy as np
 import structlog
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    import torch
+    from torch import nn
 
 logger = structlog.get_logger(__name__)
 
@@ -274,7 +279,7 @@ def build_finetune_model(
     model_kind: str,
     pastis_checkpoint: str,
     device: str = "cuda",
-) -> object:
+) -> nn.Module:
     """Build the dense model with a new Baltic head, backbone init from PASTIS.
 
     Loads the PASTIS checkpoint into the backbone (shared layers), attaches a fresh
@@ -302,14 +307,14 @@ def build_finetune_model(
     if model_kind == "utae":
         from ml.models.utae import build_utae
 
-        model = build_utae(num_classes=k_new, input_dim=10)
-        head_w_name, head_b_name = "out_conv.2.weight", "out_conv.2.bias"
+        model: nn.Module = build_utae(num_classes=k_new, input_dim=10)
+        head_names: tuple[str, str] | None = ("out_conv.2.weight", "out_conv.2.bias")
     elif model_kind == "tsvit-pheno-fullm":
         from ml.models.tsvit_wrapper import TSVIT_FULLM_CONFIG, build_tsvit
 
         cfg = {k: v for k, v in TSVIT_FULLM_CONFIG.items() if k != "img_size"}
         model = build_tsvit(num_classes=k_new, in_channels=10, img_size=128, **cfg)
-        head_w_name, head_b_name = None, None  # TSViT head warm-start is per-cls-token
+        head_names = None  # TSViT head warm-start is per-cls-token
     else:
         raise ValueError(f"unsupported model_kind {model_kind!r}")
 
@@ -332,9 +337,10 @@ def build_finetune_model(
     )
 
     # Kept-class flag: warm-start the conserved head rows from the PASTIS head.
-    if head_w_name is not None and head_w_name in pastis_state:
+    if head_names is not None and head_names[0] in pastis_state:
         from ml.data.pastis_filter import SEMANTIC18_CLASS_NAMES
 
+        head_w_name, head_b_name = head_names
         new_w = model.state_dict()[head_w_name].clone().cpu().numpy()
         new_b = model.state_dict()[head_b_name].clone().cpu().numpy()
         pw = pastis_state[head_w_name].cpu().numpy()
@@ -400,7 +406,7 @@ def run_finetune(
     keep = set(label_space.leaves)
     windows = build_season_windows(2021)
 
-    def _load(region: str) -> tuple[np.ndarray, np.ndarray]:
+    def _load(region: str) -> tuple[list[np.ndarray], np.ndarray]:
         reg = _load_region_texture(
             region,
             sh_client=sh_client,
@@ -440,13 +446,17 @@ def run_finetune(
         if config.model_kind == "utae":
             doy = (torch.arange(t, device=device).float() / max(t - 1, 1) * 364.0).round().long()
             positions = doy.unsqueeze(0).repeat(xb.shape[0], 1)
-            return model(xb, positions)
-        return model(xb)
+            utae_logits: torch.Tensor = model(xb, positions)
+            return utae_logits
+        logits: torch.Tensor = model(xb)
+        return logits
 
     def _is_head(name: str) -> bool:
         return "out_conv" in name or "head" in name or "cls_token" in name
 
-    def _epoch(patches: list[np.ndarray], ys: np.ndarray, *, train: bool, opt) -> float:
+    def _epoch(
+        patches: list[np.ndarray], ys: np.ndarray, *, train: bool, opt: torch.optim.Optimizer
+    ) -> float:
         model.train(train)
         if train:
             order = np.random.default_rng(config.seed).permutation(len(patches))

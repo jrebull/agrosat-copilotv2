@@ -182,7 +182,10 @@ def _load_student(
         unexpected=len(unexpected),
     )
     model.eval()
-    model.to(device)
+    # ``PreTrainedModel.to`` is a ``functools.wraps`` proxy of ``nn.Module.to``
+    # whose stub drops the bound ``self``; dispatch through the base type.
+    as_module: torch.nn.Module = model
+    as_module.to(device)
     return model
 
 

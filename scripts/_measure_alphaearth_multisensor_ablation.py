@@ -151,7 +151,10 @@ if __name__ == "__main__":
         "--max-samples",
         type=int,
         default=15000,
-        help="Subsample uniforme determinista para lectura rapida (default 15000; 0 = dataset completo).",
+        help=(
+            "Subsample uniforme determinista para lectura rapida "
+            "(default 15000; 0 = dataset completo)."
+        ),
     )
     args = parser.parse_args()
     raise SystemExit(main(args.max_samples if args.max_samples > 0 else None))

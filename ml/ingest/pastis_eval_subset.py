@@ -135,7 +135,8 @@ def _load_target(pastis_root: Path, patch_id: str) -> np.ndarray | None:
     tgt = pastis_root / "ANNOTATIONS" / f"TARGET_{patch_id}.npy"
     if not tgt.exists():
         return None
-    return np.load(tgt)
+    target: np.ndarray = np.load(tgt)
+    return target
 
 
 def _load_s2(pastis_root: Path, patch_id: str) -> np.ndarray | None:
@@ -151,7 +152,8 @@ def _load_s2(pastis_root: Path, patch_id: str) -> np.ndarray | None:
     s2 = pastis_root / "DATA_S2" / f"S2_{patch_id}.npy"
     if not s2.exists():
         return None
-    return np.load(s2)
+    series: np.ndarray = np.load(s2)
+    return series
 
 
 def _enumerate_parcels(

@@ -140,8 +140,8 @@ def _load_champion(champion: str) -> tuple[_ChampionModel, list[str]]:
         model = cls._load_stacking_five()
         return model, list(model.meta_features_by_id.keys())
     if champion == "voting3":
-        model = cls._load_voting_three()
-        return model, list(model.member_probs_by_id.keys())
+        voting = cls._load_voting_three()
+        return voting, list(voting.member_probs_by_id.keys())
     raise ValueError(f"unknown champion {champion!r}; supported: {CHAMPIONS}.")
 
 
@@ -319,7 +319,7 @@ def evaluate_v2_report(out_path: Path | None = None) -> dict[str, Any]:
     v2_f9 = evaluate(champion="voting3", label_space_name="france-9")
     v2_f12 = evaluate(champion="voting3", label_space_name="france-12")
 
-    report = {
+    report: dict[str, Any] = {
         "description": (
             "US-081 AC1: perceiver champion-vs-baseline over the real fold-5 OOF. "
             "Previous champion (Stacking-5 v1) vs v2 champion (Voting-3 v2) over "

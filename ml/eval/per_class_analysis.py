@@ -44,6 +44,8 @@ Background (0) and Void (19) never appear in this space.
 
 from __future__ import annotations
 
+from typing import cast
+
 import numpy as np
 import polars as pl
 import structlog
@@ -573,8 +575,8 @@ def honest_class_dropout_curve(
     logger.info(
         "honest_class_dropout_curve",
         k_values=list(k_values),
-        full_macro_f1=round(rows[0]["macro_f1_fold5"], 4) if rows else None,
+        full_macro_f1=round(cast("float", rows[0]["macro_f1_fold5"]), 4) if rows else None,
         best_k=rows[-1]["k"] if rows else None,
-        best_macro_f1=round(rows[-1]["macro_f1_fold5"], 4) if rows else None,
+        best_macro_f1=round(cast("float", rows[-1]["macro_f1_fold5"]), 4) if rows else None,
     )
     return pl.DataFrame(rows)

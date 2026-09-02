@@ -14,7 +14,7 @@ accumulation and the macro average.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol, cast
 
 import numpy as np
 import polars as pl
@@ -295,6 +295,12 @@ def _train_norm_stats(
     )
 
 
+class _NormStatsDataset(Protocol):
+    """Duck type of a dataset carrying the per-fold S2 normalization map."""
+
+    _norm_stats: dict[int, tuple[np.ndarray, np.ndarray]]
+
+
 def _apply_train_norm(dataset: object) -> None:
     """Force a dataset to normalize every patch with train-fold stats (no leakage).
 
@@ -318,7 +324,8 @@ def _apply_train_norm(dataset: object) -> None:
     # Map EVERY patch's fold to the same averaged train stats so `_normalize`
     # always uses train-only statistics regardless of the patch's real fold.
     folds_present = set(fold_of.values())
-    dataset._norm_stats = dict.fromkeys(folds_present, train_stats)
+    target = cast("_NormStatsDataset", dataset)
+    target._norm_stats = dict.fromkeys(folds_present, train_stats)
     logger.info(
         "rescore_norm_train_only",
         train_folds=_TRAIN_NORM_FOLDS,

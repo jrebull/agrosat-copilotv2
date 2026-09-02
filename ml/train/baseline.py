@@ -38,7 +38,7 @@ from lightgbm import LGBMClassifier
 from sklearn.base import ClassifierMixin
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from xgboost import XGBClassifier
 
 from ml.eval.metrics import compute_baseline_metrics
@@ -1075,7 +1075,7 @@ def _fit_fold_scaler(
     feature_cols: tuple[str, ...],
     train_idx: np.ndarray,
     fold_idx: int,
-):  # type: ignore[no-untyped-def]
+) -> tuple[StandardScaler, tuple[str, ...]]:
     """Fit a :class:`StandardScaler` on the fold's train only.
 
     Reuses :func:`fit_scaler_on_train` (anti-leakage); the scaler is

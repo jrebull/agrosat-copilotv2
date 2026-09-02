@@ -19,7 +19,7 @@ from datetime import date
 from typing import ClassVar, Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
 
 from ml.eval.class_remap import DEFAULT_LABEL_SPACE
 
@@ -228,7 +228,7 @@ class ParcelTimeseriesInput(BaseModel):
 
     @field_validator("end")
     @classmethod
-    def _validate_window(cls, value: date, info) -> date:
+    def _validate_window(cls, value: date, info: ValidationInfo) -> date:
         """Ensure the end date is not before the start date."""
         start = info.data.get("start")
         if start is not None and value < start:
@@ -255,7 +255,7 @@ class TimeSeries(BaseModel):
 
     @field_validator("values")
     @classmethod
-    def _validate_aligned(cls, value: list[float], info) -> list[float]:
+    def _validate_aligned(cls, value: list[float], info: ValidationInfo) -> list[float]:
         """Ensure ``values`` and ``dates`` have matching length."""
         dates = info.data.get("dates")
         if dates is not None and len(value) != len(dates):

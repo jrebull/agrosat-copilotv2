@@ -56,6 +56,8 @@ from ml.ingest.sh_client import PASTIS_BANDS
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import geopandas as gpd
+    from affine import Affine
+    from rasterio.crs import CRS
 
     from ml.ingest.sh_client import SentinelHubClient
 
@@ -202,9 +204,7 @@ def _load_region_code_to_hcat(
     # numeric and alphabetic codes (e.g. 'AAR'), so a numeric inference fails.
     mapping = pl.read_csv(mapping_csv, infer_schema_length=0)
     region = (
-        mapping.filter(
-            pl.col("nuts").str.to_lowercase().str.starts_with(region_prefix.lower())
-        )
+        mapping.filter(pl.col("nuts").str.to_lowercase().str.starts_with(region_prefix.lower()))
         .select(
             original_code=pl.col("original_code").cast(pl.Utf8),
             hcat4_name=pl.col("hcat4_name").cast(pl.Utf8),
@@ -328,9 +328,7 @@ def load_labeled_polygons(
     if n_dropped:
         logger.info("polygons_empty_dropped", n=n_dropped)
 
-    crosswalk = _load_region_code_to_hcat(
-        mapping_csv, region_prefix=region_prefix
-    ).to_pandas()
+    crosswalk = _load_region_code_to_hcat(mapping_csv, region_prefix=region_prefix).to_pandas()
     gdf["original_code"] = gdf["original_code"].astype(str)
     gdf = gdf.merge(crosswalk, on="original_code", how="left")
     n_unmapped = int(gdf["hcat4_name"].isna().sum())
@@ -497,8 +495,8 @@ class _PatchStack:
     """
 
     stack: np.ndarray
-    transform: object
-    crs: object
+    transform: Affine
+    crs: CRS
     residual_cloud: float
 
 
@@ -618,7 +616,7 @@ def rasterize_patch_mask(
     ]
     if not shapes:
         return np.zeros((PATCH_PX, PATCH_PX), dtype=np.int32)
-    mask = rasterize(
+    mask: np.ndarray = rasterize(
         shapes,
         out_shape=(PATCH_PX, PATCH_PX),
         transform=transform,

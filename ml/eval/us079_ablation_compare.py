@@ -166,7 +166,8 @@ def _collapse_to_coarse(arr: np.ndarray, lut: np.ndarray) -> np.ndarray:
     """
     flat = arr.reshape(-1)
     flat = np.clip(flat, 0, lut.shape[0] - 1)
-    return lut[flat].reshape(arr.shape)
+    coarse: np.ndarray = lut[flat].reshape(arr.shape)
+    return coarse
 
 
 def per_class_scores_from_softmax(

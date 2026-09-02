@@ -20,6 +20,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
+from typing import cast
 
 import polars as pl
 import structlog
@@ -86,7 +87,9 @@ def average_alphaearth_years(
     mean_exprs = []
     for d in dims:
         cols = [d] + [f"{d}_y{j}" for j in range(1, n_years)]
-        mean_exprs.append((sum(pl.col(c) for c in cols) / float(n_years)).alias(d))
+        # ``cols`` is never empty, so the built-in ``sum`` always yields an ``Expr``.
+        total = cast(pl.Expr, sum(pl.col(c) for c in cols))
+        mean_exprs.append((total / float(n_years)).alias(d))
     out = merged.select([id_col, *mean_exprs]).with_columns(pl.lit(n_years).alias("n_years"))
     logger.info(
         "alphaearth_years_averaged",

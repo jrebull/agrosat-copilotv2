@@ -64,7 +64,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import polars as pl
@@ -72,6 +72,8 @@ import structlog
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from collections.abc import Mapping
+
+    import geopandas as gpd
 
 logger = structlog.get_logger(__name__)
 
@@ -165,7 +167,7 @@ def blob_parcels_for_patch(mask: np.ndarray, *, background_id: int = 0) -> np.nd
 
 
 def eurocrops_parcel_id_raster(
-    parcels: object,
+    parcels: gpd.GeoDataFrame,
     bbox_4326: tuple[float, float, float, float],
     *,
     patch_px: int = _PATCH_PX,
@@ -308,7 +310,7 @@ def load_eurocrops_parcel_rasters(
     # over 32 parcels instead of ~22k). FIX: ALWAYS build the parcels over the FULL
     # metadata so the canonical ids match the xgb 1:1, then keep only the rasters of
     # the requested patches AFTER rasterisation.
-    pip_kwargs: dict[str, object] = {"region_prefix": region_prefix}
+    pip_kwargs: dict[str, Any] = {"region_prefix": region_prefix}
     if parcels_parquet is not None:
         pip_kwargs["parcels_parquet"] = parcels_parquet
     if mapping_csv is not None:

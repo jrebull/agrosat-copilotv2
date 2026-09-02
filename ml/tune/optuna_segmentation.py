@@ -39,8 +39,9 @@ import argparse
 import json
 import random
 import time
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import optuna
@@ -60,6 +61,9 @@ from ml.train.train_segmentation import (
     _resolve_device,
     _run_epoch,
 )
+
+if TYPE_CHECKING:  # pragma: no cover - type annotations only
+    from ml.data.pastis_seg_dataset import TargetMode
 
 logger = structlog.get_logger(__name__)
 
@@ -82,7 +86,7 @@ def _build_model_and_data(
     model_kind: str,
     *,
     n_timesteps: int,
-    target: str,
+    target: TargetMode,
     train_folds: tuple[int, ...],
     val_folds: tuple[int, ...],
 ) -> tuple[nn.Module, Any, Any, torch.Tensor | None, int]:
@@ -131,7 +135,7 @@ def _load_init_weights(model: nn.Module, init_ckpt: Path, device: torch.device) 
     ckpt = torch.load(init_ckpt, map_location=device, weights_only=False)
     state = ckpt.get("model_state", ckpt.get("model_state_dict", ckpt))
     model.load_state_dict(state)
-    base = ckpt.get("best_metrics", {})
+    base: dict[str, float] = ckpt.get("best_metrics", {})
     logger.info("warmstart_loaded", ckpt=str(init_ckpt), base_miou=base.get("miou"))
     return base
 
@@ -142,13 +146,13 @@ def build_objective(
     init_ckpt: Path,
     epochs: int,
     n_timesteps: int,
-    target: str,
+    target: TargetMode,
     device: str,
     train_folds: tuple[int, ...],
     val_folds: tuple[int, ...],
     num_workers: int,
     lambda_contrast: float,
-):
+) -> tuple[Callable[[optuna.Trial], float], dict[str, float]]:
     """Build the Optuna ``objective`` for warm-start fine-tuning.
 
     The dataset and the evaluation are fixed across trials; what varies per
@@ -300,7 +304,7 @@ class PASTISMultiTempDataset(Dataset):
         return s2, positions
 
     def _load_mask(self, pid: int) -> np.ndarray:
-        mask = np.load(self.root / "ANNOTATIONS" / f"TARGET_{pid}.npy")
+        mask: np.ndarray = np.load(self.root / "ANNOTATIONS" / f"TARGET_{pid}.npy")
         if mask.ndim == 3:
             mask = mask[0]
         return mask.astype(np.int64)
@@ -339,9 +343,9 @@ class PASTISMultiTempDataset(Dataset):
 
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         pid = self.patch_ids[idx]
-        imgs, positions = self._load_image(pid)
-        mask = self._load_mask(pid)
-        imgs, mask = self._resize(imgs, mask)
+        imgs_np, positions = self._load_image(pid)
+        mask_np = self._load_mask(pid)
+        imgs, mask = self._resize(imgs_np, mask_np)
         if self.augment:
             imgs, mask = self._augment(imgs, mask)
         return {
@@ -363,7 +367,7 @@ def build_objective_utae(
     val_folds: tuple[int, ...],
     num_workers: int,
     ignore_index: int = 19,
-):
+) -> tuple[Callable[[optuna.Trial], float], dict[str, float]]:
     """Build the Optuna ``objective`` for warm-start of U-TAE.
 
     Replicates Isaac's setup (CrossEntropy, clip_grad 5.0, multi-temporal
@@ -460,7 +464,7 @@ def run_study(
     n_trials: int = 30,
     epochs: int = 3,
     n_timesteps: int = 10,
-    target: str = "semantic18",
+    target: TargetMode = "semantic18",
     device: str = "auto",
     train_folds: tuple[int, ...] = _DEFAULT_TRAIN_FOLDS,
     val_folds: tuple[int, ...] = _DEFAULT_VAL_FOLDS,

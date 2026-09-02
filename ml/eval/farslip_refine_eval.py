@@ -17,8 +17,14 @@ the reconstructed GT, the FarSLIP zero-shot head over the chips) and logs to MLf
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
+from typing import TYPE_CHECKING
 
 import structlog
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    import numpy as np
+
+    from ml.eval.class_remap import LabelSpace
 
 logger = structlog.get_logger(__name__)
 
@@ -155,7 +161,7 @@ def run_refine_eval(
 # REAL inputs: the precomputed FarSLIP zero-shot OOF already covers the Voting-3
 # fold-5 parcels, so the delta-F1 runs with no FarSLIP model and no chips.
 # ---------------------------------------------------------------------------
-def _restricted_names(proba, label_space) -> dict[str, float]:
+def _restricted_names(proba: np.ndarray, label_space: LabelSpace) -> dict[str, float]:
     """Restrict an 18-class posterior to the label-space and key it by class name."""
     from ml.eval.class_remap import restrict_posterior
 
@@ -163,7 +169,7 @@ def _restricted_names(proba, label_space) -> dict[str, float]:
     return {label_space.class_names.get(cid, str(cid)): float(p) for cid, p in restricted.items()}
 
 
-def build_farslip_zeroshot_scorer(label_space) -> FarSLIPScorer:
+def build_farslip_zeroshot_scorer(label_space: LabelSpace) -> FarSLIPScorer:
     """Build the REAL per-parcel FarSLIP scorer from the zero-shot fold-5 OOF.
 
     The precomputed FarSLIP zero-shot posterior is restricted to the active
@@ -205,7 +211,9 @@ def build_farslip_zeroshot_scorer(label_space) -> FarSLIPScorer:
     return scorer
 
 
-def load_real_inputs(label_space):
+def load_real_inputs(
+    label_space: LabelSpace,
+) -> tuple[dict[str, dict[str, float]], dict[str, dict[str, str]], dict[str, str]]:
     """Build the REAL Voting-3 posteriors, member predictions and GT (label-space names).
 
     Args:

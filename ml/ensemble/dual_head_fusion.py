@@ -733,7 +733,8 @@ class DualHeadFusionHead(EnsembleModel):
         """Hard per-pixel labels: argmax over the fused class axis."""
         proba = self.predict_proba(patch_ids)
         class_axis = 0 if proba.ndim == 3 else 1
-        return proba.argmax(axis=class_axis).astype(np.int64)
+        labels: np.ndarray = proba.argmax(axis=class_axis).astype(np.int64)
+        return labels
 
     def evaluate_patches(
         self, patch_ids: Sequence[str], *, fold: int = EnsembleModel.HELD_OUT_FOLD
@@ -809,5 +810,6 @@ class DualHeadFusionHead(EnsembleModel):
 
 def _renormalize(softmax_18: np.ndarray) -> np.ndarray:
     """Renormalize a ``(18, H, W)`` map so each pixel's class axis sums to 1."""
-    denom = softmax_18.sum(axis=_CLASS_AXIS, keepdims=True)
-    return softmax_18 / np.where(denom < _RENORM_EPS, 1.0, denom)
+    denom: np.ndarray = softmax_18.sum(axis=_CLASS_AXIS, keepdims=True)
+    renormalized: np.ndarray = softmax_18 / np.where(denom < _RENORM_EPS, 1.0, denom)
+    return renormalized

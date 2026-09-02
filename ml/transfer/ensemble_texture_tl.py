@@ -105,7 +105,8 @@ def fit_patch_to_timesteps(stack: np.ndarray, n: int = _N_TIMESTEPS) -> np.ndarr
         return stack
     if t > n:
         idx = np.linspace(0, t - 1, n).round().astype(int)
-        return stack[idx]
+        subsampled: np.ndarray = stack[idx]
+        return subsampled
     pad = np.repeat(stack[-1:], n - t, axis=0)
     return np.concatenate([stack, pad], axis=0)
 

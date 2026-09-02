@@ -922,7 +922,7 @@ def build_notebook(out_path: Path) -> None:
 
 @app.command()
 def main(
-    out: Path = typer.Option(  # noqa: B008
+    out: Path = typer.Option(
         Path("notebooks/baseline/04_baseline.ipynb"),
         help="Ruta destino del notebook .ipynb.",
     ),

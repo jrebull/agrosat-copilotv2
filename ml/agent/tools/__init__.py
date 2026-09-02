@@ -23,9 +23,9 @@ the SDK knows they may complete out of band.
 from __future__ import annotations
 
 import importlib
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Iterator
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 from google.genai import types
 from pydantic import BaseModel
@@ -56,6 +56,9 @@ from ml.agent.schemas import (
 # its tool module (``ml/agent/schemas.py`` belongs to US-045 and is off-limits to
 # this work-stream). Importing them here is safe: the module imports cleanly.
 from ml.agent.tools.retrieve_context import RetrieveContextInput, RetrievedContext
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from _collections_abc import dict_keys
 
 __all__ = [
     "TOOL_REGISTRY",
@@ -222,7 +225,7 @@ def _resolve_run(module_path: str, tool_name: str) -> ToolFn:
             f"tool module {module_path!r} for tool {tool_name!r} must expose "
             "'async def run(inp, ctx)'"
         )
-    return run_fn
+    return cast("ToolFn", run_fn)
 
 
 def get_tool(name: str) -> ToolSpec:
@@ -277,16 +280,19 @@ class _LazyRegistry(dict):
         self[key] = spec
         return spec
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         return iter(TOOL_SPECS)
 
-    def keys(self):
+    def keys(self) -> dict_keys[str, _ToolDescriptor]:
         return TOOL_SPECS.keys()
 
-    def values(self):
+    # ``values``/``items`` deliberately return materialised lists (each access
+    # resolves and caches a ToolSpec); the ``dict_values``/``dict_items`` view
+    # types of the ``dict`` base cannot express that, hence the targeted ignore.
+    def values(self) -> list[ToolSpec]:  # type: ignore[override]
         return [self[name] for name in TOOL_SPECS]
 
-    def items(self):
+    def items(self) -> list[tuple[str, ToolSpec]]:  # type: ignore[override]
         return [(name, self[name]) for name in TOOL_SPECS]
 
     def __len__(self) -> int:
@@ -332,7 +338,8 @@ def _resolve_ref(node: dict[str, Any], defs: dict[str, Any]) -> dict[str, Any]:
         return node
     # Refs are of the form "#/$defs/Name".
     name = ref.rsplit("/", 1)[-1]
-    return defs.get(name, {})
+    resolved: dict[str, Any] = defs.get(name, {})
+    return resolved
 
 
 def _pydantic_to_genai_schema(json_schema: dict[str, Any], defs: dict[str, Any]) -> types.Schema:
@@ -375,8 +382,12 @@ def _pydantic_to_genai_schema(json_schema: dict[str, Any], defs: dict[str, Any])
     if enum_values is not None:
         kwargs["enum"] = [str(v) for v in enum_values]
 
-    json_type = node.get("type")
-    genai_type = _JSON_TYPE_TO_GENAI.get(json_type, types.Type.STRING)
+    json_type: str | None = node.get("type")
+    genai_type = (
+        _JSON_TYPE_TO_GENAI.get(json_type, types.Type.STRING)
+        if json_type is not None
+        else types.Type.STRING
+    )
     kwargs["type"] = genai_type
 
     if genai_type is types.Type.OBJECT:

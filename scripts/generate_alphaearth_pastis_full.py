@@ -45,7 +45,7 @@ def _polygon_centroid_2154(geom: dict) -> tuple[float, float] | None:
             g = g.buffer(0)
         c = g.centroid
         return float(c.x), float(c.y)
-    except Exception:
+    except Exception:  # noqa: BLE001 - invalid geometry of any kind yields no centroid
         return None
 
 

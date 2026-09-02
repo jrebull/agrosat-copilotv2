@@ -393,7 +393,7 @@ def build_notebook() -> dict[str, Any]:
 
 @app.command()
 def main(
-    output: Path = typer.Option(  # noqa: B008
+    output: Path = typer.Option(
         REPO_ROOT / "notebooks" / "eda" / "Avance1.Equipo17.ipynb",
         "--output",
         "-o",

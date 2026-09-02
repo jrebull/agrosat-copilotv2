@@ -205,7 +205,8 @@ def _select_frames(n_t: int, fixed_t: int) -> list[int]:
         if ``n_t >= fixed_t``; repeating the last one if ``n_t < fixed_t``).
     """
     if n_t >= fixed_t:
-        return np.linspace(0, n_t - 1, fixed_t).round().astype(int).tolist()
+        indices: list[int] = np.linspace(0, n_t - 1, fixed_t).round().astype(int).tolist()
+        return indices
     return list(range(n_t)) + [n_t - 1] * (fixed_t - n_t)
 
 
@@ -311,7 +312,8 @@ class PASTISDataset(Dataset):
 
     def _normalize(self, s2: np.ndarray) -> np.ndarray:
         """Normalize per band ``(T, 10, H, W)`` with the ``(mean, std)`` from init."""
-        return (s2 - self._mean[None]) / self._std[None]
+        normalized: np.ndarray = (s2 - self._mean[None]) / self._std[None]
+        return normalized
 
     def __getitem__(self, idx: int) -> dict[str, Any]:
         """Load, normalize and resize a patch into training tensors.

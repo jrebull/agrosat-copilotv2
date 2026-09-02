@@ -233,7 +233,8 @@ def _get_ipython() -> InteractiveShell | None:
         from IPython import get_ipython
     except ImportError:
         return None
-    return get_ipython()
+    shell: InteractiveShell | None = get_ipython()
+    return shell
 
 
 def _detect_gemini_credentials() -> bool:

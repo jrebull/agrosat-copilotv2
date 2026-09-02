@@ -227,9 +227,11 @@ def build_text_class_bank(
 
 def _softmax_rows(logits: np.ndarray) -> np.ndarray:
     """Row-wise numerically-stable softmax over the last axis."""
-    shifted = logits - logits.max(axis=-1, keepdims=True)
-    exp = np.exp(shifted)
-    return exp / exp.sum(axis=-1, keepdims=True)
+    shifted: np.ndarray = logits - logits.max(axis=-1, keepdims=True)
+    exp: np.ndarray = np.exp(shifted)
+    denom: np.ndarray = exp.sum(axis=-1, keepdims=True)
+    probs: np.ndarray = exp / denom
+    return probs
 
 
 def zeroshot_parcel_proba(
@@ -334,9 +336,10 @@ def _scatter_to_semantic18(
     for col, gid in enumerate(bank_classes):
         if 0 <= int(gid) < _NUM_CLASSES:
             full[:, int(gid)] = proba[:, col]
-    row_sums = full.sum(axis=1, keepdims=True)
+    row_sums: np.ndarray = full.sum(axis=1, keepdims=True)
     full = full / np.where(row_sums < 1e-12, 1.0, row_sums)
-    return full.astype(np.float32)
+    expanded: np.ndarray = full.astype(np.float32)
+    return expanded
 
 
 def _zeroshot_frame(

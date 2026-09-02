@@ -352,7 +352,7 @@ def build_stacking_inference_cards(
             set(table["clase_real"].to_list()) | set(table["clase_predicha"].to_list())
         )
         present_ids = sorted({k for k, v in names.items() if v in present})
-        cmap = ListedColormap(plt.cm.tab20(np.linspace(0, 1, max(len(present_ids), 1))))
+        cmap = ListedColormap(plt.get_cmap("tab20")(np.linspace(0, 1, max(len(present_ids), 1))))
         id_to_slot = {cid: i for i, cid in enumerate(present_ids)}
         bounds = list(range(len(present_ids) + 1))
         norm = BoundaryNorm(bounds, cmap.N) if present_ids else None

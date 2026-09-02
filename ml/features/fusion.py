@@ -609,7 +609,11 @@ def _build_farslip_block(
       and returns ``None`` (the block is omitted without failing).
     """
     explicit_path = farslip_path is not None
-    resolved = Path(farslip_path) if explicit_path else resolve_dataset_path(_DEFAULT_FARSLIP_PATH)
+    resolved = (
+        Path(farslip_path)
+        if farslip_path is not None
+        else resolve_dataset_path(_DEFAULT_FARSLIP_PATH)
+    )
 
     if not resolved.exists():
         if explicit_path:
@@ -688,7 +692,7 @@ def _build_phenology_text_block_lf(
         explicit_path = phenology_text_path is not None
         resolved = (
             Path(phenology_text_path)
-            if explicit_path
+            if phenology_text_path is not None
             else resolve_dataset_path(_DEFAULT_PHENO_TEXT_PATH)
         )
         if not resolved.exists():
@@ -749,7 +753,7 @@ def _build_spectral_signature_block_lf(
         explicit_path = spectral_signature_path is not None
         resolved = (
             Path(spectral_signature_path)
-            if explicit_path
+            if spectral_signature_path is not None
             else resolve_dataset_path(_DEFAULT_SPECTRAL_SIGNATURE_PATH)
         )
         if not resolved.exists():

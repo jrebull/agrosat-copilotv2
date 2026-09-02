@@ -550,7 +550,8 @@ def _decode_tiff(content: bytes) -> np.ndarray | None:
         import rasterio
 
         with rasterio.open(io.BytesIO(content)) as ds:
-            return ds.read().astype(np.float32)
+            decoded: np.ndarray = ds.read().astype(np.float32)
+            return decoded
     except Exception as exc:  # noqa: BLE001 -- a bad tiff is dropped, logged
         logger.warning("sh_tiff_decode_failed", error=str(exc))
         return None

@@ -39,11 +39,13 @@ demo-down:  ## Baja la demo (servicios nativos + tuneles; conserva datos Docker)
 	pwsh scripts/demo_down.ps1 -KeepDocker
 
 # === Lint & format ===
-lint:  ## ruff + ruff format check + mypy
+lint:  ## ruff + ruff format check + mypy (backend, ml, dagster_project) + pnpm lint
 	cd backend && poetry run ruff check .
 	cd backend && poetry run ruff format --check .
 	cd backend && poetry run mypy app/
-	cd ml && poetry run ruff check .
+	poetry run ruff check ml dagster_project scripts
+	poetry run ruff format --check ml dagster_project scripts tests
+	poetry run mypy ml dagster_project
 	cd frontend && pnpm lint
 
 format:  ## ruff format

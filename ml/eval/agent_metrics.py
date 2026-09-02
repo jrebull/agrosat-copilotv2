@@ -42,7 +42,7 @@ from __future__ import annotations
 
 import math
 import re
-from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, cast, runtime_checkable
 
 import structlog
 
@@ -201,7 +201,10 @@ class DeepEvalHallucinationJudge:
                 context=list(sample["context"]),
             )
             self._metric.measure(test_case)
-            return float(self._metric.score)
+            score = self._metric.score
+            if score is None:
+                raise ValueError("deepeval metric produced no score")
+            return float(score)
         except Exception as exc:  # noqa: BLE001 - judge errors must not crash eval
             logger.warning("deepeval_judge_failed", error=str(exc))
             return math.nan
@@ -459,8 +462,8 @@ def bertscore_f1(preds: Sequence[str], golds: Sequence[str]) -> float:
         return 0.0
 
     model = _get_sentence_model()
-    pred_emb = model.encode(list(preds), normalize_embeddings=False)
-    gold_emb = model.encode(list(golds), normalize_embeddings=False)
+    pred_emb = cast("np.ndarray", model.encode(list(preds), normalize_embeddings=False))
+    gold_emb = cast("np.ndarray", model.encode(list(golds), normalize_embeddings=False))
     scores = [_cosine(pred_emb[i], gold_emb[i]) for i in range(len(preds))]
     return sum(scores) / len(scores) if scores else 0.0
 
@@ -604,5 +607,5 @@ def workflow_semantic_similarity(
     if not pred_text or not gold_text:
         return 0.0
     model = _get_sentence_model()
-    emb = model.encode([pred_text, gold_text], normalize_embeddings=False)
+    emb = cast("np.ndarray", model.encode([pred_text, gold_text], normalize_embeddings=False))
     return _cosine(emb[0], emb[1])

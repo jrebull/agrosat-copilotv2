@@ -84,7 +84,8 @@ class _TempCNNBlock(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.dropout(self.act(self.bn(self.conv(x))))
+        out: torch.Tensor = self.dropout(self.act(self.bn(self.conv(x))))
+        return out
 
 
 class TempCNN(nn.Module):
@@ -156,7 +157,8 @@ class TempCNN(nn.Module):
         x = self.block3(x)
         x = self.flatten(x)
         x = self.dense_dropout(self.dense_act(self.dense_bn(self.dense(x))))
-        return self.classifier(x)
+        logits: torch.Tensor = self.classifier(x)
+        return logits
 
 
 # ---------------------------------------------------------------------------
@@ -186,7 +188,7 @@ class _InceptionModule(nn.Module):
     ) -> None:
         super().__init__()
         if bottleneck_channels > 0 and in_channels > 1:
-            self.bottleneck = nn.Conv1d(
+            self.bottleneck: nn.Conv1d | None = nn.Conv1d(
                 in_channels, bottleneck_channels, kernel_size=1, bias=use_bias
             )
             conv_in = bottleneck_channels
@@ -228,7 +230,8 @@ class _InceptionModule(nn.Module):
 
         maxpool_out = self.maxpool_branch(x)[..., :target_t]
         merged = torch.cat([*branches, maxpool_out], dim=1)
-        return self.act(self.bn(merged))
+        out: torch.Tensor = self.act(self.bn(merged))
+        return out
 
 
 class _ShortcutBlock(nn.Module):
@@ -244,7 +247,8 @@ class _ShortcutBlock(nn.Module):
         if residual.size(-1) != out.size(-1):
             residual = residual[..., : out.size(-1)]
         shortcut = self.bn(self.conv(residual))
-        return self.act(shortcut + out)
+        fused: torch.Tensor = self.act(shortcut + out)
+        return fused
 
 
 class InceptionTime(nn.Module):
@@ -314,9 +318,7 @@ class InceptionTime(nn.Module):
 
         self._init_weights()
 
-    def _build_shortcuts(
-        self, input_dim: int, out_channels_per_module: int
-    ) -> None:
+    def _build_shortcuts(self, input_dim: int, out_channels_per_module: int) -> None:
         """Create the 1x1 shortcuts knowing the real channels at each jump.
 
         Shortcuts every 3 blocks: the first compares input vs the output of
@@ -332,9 +334,7 @@ class InceptionTime(nn.Module):
                 sc_modules.append(_ShortcutBlock(input_dim, out_channels_per_module))
             else:
                 # Subsequent shortcuts: previous output -> current output
-                sc_modules.append(
-                    _ShortcutBlock(out_channels_per_module, out_channels_per_module)
-                )
+                sc_modules.append(_ShortcutBlock(out_channels_per_module, out_channels_per_module))
         self.shortcuts = nn.ModuleList(sc_modules)
 
     def _init_weights(self) -> None:
@@ -360,7 +360,8 @@ class InceptionTime(nn.Module):
                 shortcut_idx += 1
         pooled = self.global_pool(out).squeeze(-1)  # (B, out_channels)
         pooled = self.dropout(pooled)
-        return self.classifier(pooled)
+        logits: torch.Tensor = self.classifier(pooled)
+        return logits
 
 
 # ---------------------------------------------------------------------------
@@ -405,6 +406,4 @@ def build_temporal_model(
             num_classes=num_classes,
             **overrides,  # type: ignore[arg-type]
         )
-    raise ValueError(
-        f"model_kind={model_kind!r} not supported. Use 'tempcnn' or 'inceptiontime'."
-    )
+    raise ValueError(f"model_kind={model_kind!r} not supported. Use 'tempcnn' or 'inceptiontime'.")

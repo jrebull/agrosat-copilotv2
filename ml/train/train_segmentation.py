@@ -31,7 +31,7 @@ import sys
 import time
 from collections.abc import Callable
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any, cast
 
 import mlflow
 import numpy as np
@@ -60,6 +60,8 @@ if TYPE_CHECKING:  # pragma: no cover - type annotations only
     from collections.abc import Sequence
 
     from torch.utils.data import Dataset
+
+    from ml.data.pastis_seg_dataset import CollapseMode, TargetMode
 
 try:
     from tqdm.auto import tqdm
@@ -116,7 +118,9 @@ def _build_model(model_name: str, num_classes: int, target_size: int) -> tuple[n
     raise typer.BadParameter("`--model` debe ser 'unet' o 'anysat'.")
 
 
-def _forward(model: nn.Module, model_name: str, batch: dict[str, Any], device: torch.device):
+def _forward(
+    model: nn.Module, model_name: str, batch: dict[str, Any], device: torch.device
+) -> torch.Tensor:
     """Runs the forward adapted to each model's signature.
 
     Args:
@@ -132,8 +136,8 @@ def _forward(model: nn.Module, model_name: str, batch: dict[str, Any], device: t
     if model_name == "anysat":
         dates = batch.get("dates")
         dates = dates.to(device) if dates is not None else None
-        return model(image, dates)
-    return model(image)
+        return cast("torch.Tensor", model(image, dates))
+    return cast("torch.Tensor", model(image))
 
 
 def _make_loader(
@@ -217,6 +221,8 @@ def _evaluate(
             target = batch["semantic"].to(device)
             acc.update(preds, target)
             if acc_grouped is not None:
+                # The three grouped objects are always built together above.
+                assert lut_pred is not None and lut_target is not None
                 acc_grouped.update(lut_pred[preds.clamp(0, 19)], lut_target[target.clamp(0, 19)])
     flat = acc.compute()
     if acc_grouped is None:
@@ -479,10 +485,12 @@ def run_training(
             seg_model.train()
             if model == "anysat":
                 # The frozen encoder stays in eval; only the head trains.
-                seg_model.encoder.eval()
+                # ``nn.Module.__getattr__`` types submodules as ``Tensor | Module``.
+                cast("nn.Module", seg_model.encoder).eval()
             epoch_loss = 0.0
             # Per-batch progress bar within the epoch (progress, it/s, loss).
-            bar = train_loader
+            # ``tqdm`` ships no type information, so the bar is typed as ``Any``.
+            bar: Any = train_loader
             if tqdm is not None:
                 bar = tqdm(
                     train_loader,
@@ -850,7 +858,7 @@ def _evaluate_dense(
     num_classes: int,
     ignore_index: int,
     use_phenology: bool,
-) -> dict[str, float]:
+) -> tuple[dict[str, Any], np.ndarray]:
     """Evaluates the model accumulating the split's dense confusion matrix.
 
     Accumulates the confusion over the whole split (not per-batch) so that
@@ -1151,7 +1159,7 @@ def train_segmentation(
     # cost on Windows with spawn); `prefetch_factor` preloads several batches per
     # worker to overlap the temporal collapse (np.median ~79ms/patch) with the
     # GPU step. They only apply with num_workers > 0.
-    loader_kwargs: dict[str, object] = {
+    loader_kwargs: dict[str, Any] = {
         "pin_memory": resolved_device.type == "cuda",
     }
     if num_workers > 0:
@@ -1430,7 +1438,7 @@ def build_and_train(
     epochs: int = 30,
     batch_size: int = 4,
     n_timesteps: int = 10,
-    target: str = "semantic18",
+    target: TargetMode = "semantic18",
     device: str = "auto",
     lr: float = 1e-3,
     lambda_contrast: float = 0.3,
@@ -1497,7 +1505,7 @@ def build_and_train(
 
     n_classes = 6 if target == "hcat6" else 18
     use_phenology = model_kind == "tsvit-pheno"
-    collapse_time = "median" if model_kind == "deeplabv3plus" else None
+    collapse_time: CollapseMode = "median" if model_kind == "deeplabv3plus" else None
     run_name = mlflow_run_name or _DEFAULT_RUN_NAMES[model_kind]
 
     train_ds = PASTISSegmentationDataset(

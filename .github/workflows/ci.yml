@@ -114,6 +114,9 @@ jobs:
 
       # Dos invocaciones: backend/tests y tests/ tienen cada uno su conftest y
       # pytest no puede cargarlos juntos como `tests.conftest`.
+      - name: "mypy ml + dagster_project (bloqueante, 0 errores desde sep-2026)"
+        run: poetry run mypy ml dagster_project
+
       - name: pytest backend (unit)
         working-directory: backend
         run: poetry run pytest tests/unit -q -p no:cacheprovider

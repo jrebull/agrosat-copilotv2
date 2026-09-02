@@ -146,7 +146,7 @@ def compute_rep(
     # Avoid division by zero by producing explicit NaN values.
     safe_denom = np.where(np.abs(denom) > 1e-12, denom, np.nan)
     numerator = (b04 + b07) / 2.0 - b05
-    rep = 705.0 + 35.0 * (numerator / safe_denom)
+    rep: np.ndarray = 705.0 + 35.0 * (numerator / safe_denom)
     return rep
 
 
@@ -370,7 +370,8 @@ class SpectralSignatureFeatures(BaseEstimator, TransformerMixin):
         num = sig @ cen
         denom = np.linalg.norm(sig, axis=1) * (np.linalg.norm(cen) + 1e-12)
         safe_denom = np.where(denom > 1e-12, denom, np.nan)
-        return (num / safe_denom).reshape(-1, 1)
+        sam: np.ndarray = (num / safe_denom).reshape(-1, 1)
+        return sam
 
     def _transform_redge_moments(self, X: pl.DataFrame) -> np.ndarray:
         """Compute mean/var/skew of the red-edge bands per anchor.

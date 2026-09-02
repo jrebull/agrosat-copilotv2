@@ -318,7 +318,7 @@ _DEFAULT_OUT = Path("notebooks/features/04_farslip_eval_pastis.ipynb")
 
 @app.command()
 def build(
-    out: Path = typer.Option(  # noqa: B008
+    out: Path = typer.Option(
         _DEFAULT_OUT,
         help="Ruta destino del .ipynb generado.",
     ),

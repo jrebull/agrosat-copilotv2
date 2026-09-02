@@ -41,9 +41,18 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import structlog
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    import torch
+    from torch import nn
+
+    from ml.transfer.ensemble_full_tl import _RegionParcels
+    from ml.transfer.ensemble_texture_tl import _RegionTexture
+    from ml.transfer.finetune_baltico import BalticLabelSpace
 
 logger = structlog.get_logger(__name__)
 
@@ -133,7 +142,7 @@ def run_stacking5_tl(
     # is a member every patch is built at 128px (shared across members).
     patch_side = 128 if "tsvit-pheno-fullm" in config.dense_members else 8
 
-    def _load(region: str) -> object:
+    def _load(region: str) -> _RegionParcels | _RegionTexture:
         if config.use_local_npz:
             from ml.transfer.ensemble_full_tl import _load_region_parcels
 
@@ -165,11 +174,13 @@ def run_stacking5_tl(
     reg_src = _load(config.source)
     reg_tgt = _load(config.target)
 
-    def _prep(reg: object) -> tuple[np.ndarray, list[np.ndarray], np.ndarray]:
-        mask = np.array([leaf in keep for leaf in reg.leaf], dtype=bool)  # type: ignore[attr-defined]
-        annual = reg.annual[mask]  # type: ignore[attr-defined]
-        patches = [p for p, m in zip(reg.patches, mask, strict=True) if m]  # type: ignore[attr-defined]
-        y = np.array([label_space.index[leaf] for leaf in reg.leaf[mask]], dtype=np.int64)  # type: ignore[attr-defined]
+    def _prep(
+        reg: _RegionParcels | _RegionTexture,
+    ) -> tuple[np.ndarray, list[np.ndarray], np.ndarray]:
+        mask = np.array([leaf in keep for leaf in reg.leaf], dtype=bool)
+        annual = reg.annual[mask]
+        patches = [p for p, m in zip(reg.patches, mask, strict=True) if m]
+        y = np.array([label_space.index[leaf] for leaf in reg.leaf[mask]], dtype=np.int64)
         return annual, patches, y
 
     a_src, p_src, y_src = _prep(reg_src)
@@ -321,13 +332,13 @@ def run_stacking5_tl(
 
 def _finetune_dense_member(
     kind: str,
-    label_space: object,
+    label_space: BalticLabelSpace,
     patches: list[np.ndarray],
     y: np.ndarray,
     config: Stacking5TLConfig,
     *,
     device: str,
-) -> object:
+) -> nn.Module:
     """Fine-tune one dense member (PASTIS init + kept flag) on the Baltic train set."""
     import torch
     from torch import nn
@@ -338,7 +349,7 @@ def _finetune_dense_member(
         label_space,
         model_kind=kind,
         pastis_checkpoint=_CKPT[kind],
-        device=device,  # type: ignore[arg-type]
+        device=device,
     )
     criterion = nn.CrossEntropyLoss()
 
@@ -346,13 +357,15 @@ def _finetune_dense_member(
         t = xb.shape[1]
         if kind == "utae":
             doy = (torch.arange(t, device=device).float() / max(t - 1, 1) * 364.0).round().long()
-            return model(xb, doy.unsqueeze(0).repeat(xb.shape[0], 1))
-        return model(xb)
+            utae_logits: torch.Tensor = model(xb, doy.unsqueeze(0).repeat(xb.shape[0], 1))
+            return utae_logits
+        logits: torch.Tensor = model(xb)
+        return logits
 
     def _is_head(n: str) -> bool:
         return "out_conv" in n or "head" in n or "cls_token" in n
 
-    def _run_epochs(opt, n_ep: int, tag: str) -> None:
+    def _run_epochs(opt: torch.optim.Optimizer, n_ep: int, tag: str) -> None:
         rng = np.random.default_rng(config.seed)
         for ep in range(n_ep):
             model.train()
@@ -390,7 +403,7 @@ def _finetune_dense_member(
 
 
 def _dense_posteriors(
-    model: object,
+    model: nn.Module,
     patches: list[np.ndarray],
     kind: str,
     config: Stacking5TLConfig,
@@ -401,7 +414,7 @@ def _dense_posteriors(
 
     device = config.device
     out: list[np.ndarray] = []
-    model.eval()  # type: ignore[attr-defined]
+    model.eval()
     with torch.no_grad():
         for s in range(0, len(patches), config.batch_size):
             xb = torch.from_numpy(np.stack(patches[s : s + config.batch_size])).float().to(device)
@@ -409,9 +422,9 @@ def _dense_posteriors(
             if kind == "utae":
                 frac = torch.arange(t, device=device).float() / max(t - 1, 1)
                 doy = (frac * 364.0).round().long()
-                logits = model(xb, doy.unsqueeze(0).repeat(xb.shape[0], 1))  # type: ignore[operator]
+                logits = model(xb, doy.unsqueeze(0).repeat(xb.shape[0], 1))
             else:
-                logits = model(xb)  # type: ignore[operator]
+                logits = model(xb)
             post = torch.softmax(logits.mean(dim=(2, 3)), dim=1)
             out.append(post.float().cpu().numpy())
     return np.concatenate(out, axis=0)
@@ -477,7 +490,8 @@ def _simplex(raw: np.ndarray) -> np.ndarray:
     """Map free logits to the convex simplex (softmax, ``w_i >= 0``, ``sum == 1``)."""
     z = raw - raw.max()
     e = np.exp(z)
-    return e / e.sum()
+    weights: np.ndarray = e / e.sum()
+    return weights
 
 
 def _learn_vote_weights(

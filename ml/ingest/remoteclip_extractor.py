@@ -149,7 +149,10 @@ def _load_model(model_name: str, device: torch.device) -> tuple[CLIPModel, CLIPP
         model_used = FALLBACK_MODEL_ID
 
     model.eval()
-    model.to(device)
+    # ``PreTrainedModel.to`` is a ``functools.wraps`` proxy of ``nn.Module.to``
+    # whose stub drops the bound ``self``; dispatch through the base type.
+    as_module: torch.nn.Module = model
+    as_module.to(device)
     return model, processor, model_used
 
 

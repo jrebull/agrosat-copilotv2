@@ -720,7 +720,7 @@ def _resolve_device(requested: str | None) -> str:
     """
     import torch
 
-    if requested in (None, "auto"):
+    if requested is None or requested == "auto":
         return "cuda" if torch.cuda.is_available() else "cpu"
     if requested == "cuda" and not torch.cuda.is_available():
         logger.warning("cuda_requested_but_unavailable_fallback_cpu")

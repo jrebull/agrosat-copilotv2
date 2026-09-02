@@ -95,7 +95,9 @@ class LTAE2d(nn.Module):
         self.d_k = d_k
 
         if positional_encoding:
-            self.positional_encoder = PositionalEncoding(d=in_channels, T=T, repeat=None)
+            self.positional_encoder: PositionalEncoding | None = PositionalEncoding(
+                d=in_channels, T=T, repeat=None
+            )
         else:
             self.positional_encoder = None
 
@@ -149,7 +151,9 @@ class LTAE2d(nn.Module):
         att = F.softmax(att, dim=-1)  # (B*H*W, n_head, T)
         att = self.dropout(att)
 
-        out = torch.einsum("bnt,btnc->bnc", att, x_heads)  # (B*H*W, n_head, C//n_head)
+        out: torch.Tensor = torch.einsum(
+            "bnt,btnc->bnc", att, x_heads
+        )  # (B*H*W, n_head, C//n_head)
         out = out.view(B * H * W, C)
         out = self.outlayernorm(self.mlp(out))
         out = out.view(B, H, W, -1).permute(0, 3, 1, 2)  # (B, C_out, H, W)
@@ -184,7 +188,8 @@ class ConvLayer(nn.Module):
         self.conv = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.conv(x)
+        out: torch.Tensor = self.conv(x)
+        return out
 
 
 class DownConv(nn.Module):
@@ -201,7 +206,8 @@ class DownConv(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.conv(x)
+        out: torch.Tensor = self.conv(x)
+        return out
 
 
 class UpConv(nn.Module):
@@ -218,7 +224,8 @@ class UpConv(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.conv(x)
+        out: torch.Tensor = self.conv(x)
+        return out
 
 
 class UTAE(nn.Module):
@@ -338,7 +345,8 @@ class UTAE(nn.Module):
             d = torch.cat([d, skip], dim=1)
             d = dec(d)
 
-        return self.out_conv(d)
+        logits: torch.Tensor = self.out_conv(d)
+        return logits
 
 
 def build_utae(num_classes: int = 20, input_dim: int = 10) -> UTAE:

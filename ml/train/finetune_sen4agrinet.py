@@ -46,9 +46,10 @@ from __future__ import annotations
 import json
 import sys
 import time
+from collections.abc import Sized
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 import structlog
@@ -691,7 +692,7 @@ def _train_two_group(
             val_metrics = evaluate_few_shot(
                 model,
                 val_ds,
-                list(range(len(val_ds))),
+                list(range(len(cast("Sized", val_ds)))),
                 device=device,  # type: ignore[arg-type]
             )
             current_lr = optimizer.param_groups[-1]["lr"]

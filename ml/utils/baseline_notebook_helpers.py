@@ -31,13 +31,16 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import polars as pl
 import structlog
 
 from ml.utils.dataset_paths import resolve_dataset_path
 from ml.utils.parcel_id import canonical_parcel_id
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from ml.train.phenology_models import TemporalModelResult
 
 logger = structlog.get_logger(__name__)
 
@@ -416,7 +419,7 @@ def load_temporal_result_from_mlflow(
     *,
     experiment_name: str = "baseline-05-reencuadre",
     tracking_uri: str = "http://localhost:5010",
-):
+) -> TemporalModelResult:
     """Reconstruct a TemporalModelResult from an already-finished MLflow run.
 
     Avoids re-training TempCNN/InceptionTime when there is already a run with

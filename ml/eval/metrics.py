@@ -238,7 +238,7 @@ def classification_report_text(
 
     labels = sorted(int(c) for c in np.union1d(y_true, y_pred))
     target_names = [(class_names.get(c, str(c)) if class_names else str(c)) for c in labels]
-    return classification_report(
+    report: str = classification_report(
         y_true,
         y_pred,
         labels=labels,
@@ -246,6 +246,7 @@ def classification_report_text(
         zero_division=0,
         digits=4,
     )
+    return report
 
 
 # ---------------------------------------------------------------------------

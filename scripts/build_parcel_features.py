@@ -229,7 +229,7 @@ def _load_parcels(path: Path) -> gpd.GeoDataFrame:
     if path.suffix in (".geoparquet", ".parquet"):
         try:
             gdf = gpd.read_parquet(path)
-        except Exception:
+        except Exception:  # noqa: BLE001 - any read failure falls back to the WKT fixture
             # Fallback: parquet plano con `geom` WKT (fixture demo).
             from shapely import wkt
 
@@ -256,7 +256,7 @@ def _load_parcels(path: Path) -> gpd.GeoDataFrame:
 
 def _md5_of_file(path: Path) -> str:
     """Returns the hex MD5 of the file to verify determinism."""
-    h = hashlib.md5()
+    h = hashlib.md5(usedforsecurity=False)  # checksum, not a security primitive
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)

@@ -275,7 +275,8 @@ def gemini_available(settings: Settings) -> tuple[bool, str]:
     )
     if api_key:
         return True, "GEMINI_API_KEY presente en .env.local"
-    if use_vertex and getattr(settings, "google_cloud_project", ""):
+    project = getattr(settings, "google_cloud_project", "")
+    if use_vertex and project:
         return True, "Vertex AI configurado (proyecto + ADC)"
     return False, "sin GEMINI_API_KEY ni Vertex AI configurado"
 

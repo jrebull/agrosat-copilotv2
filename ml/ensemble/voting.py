@@ -33,7 +33,7 @@ docstrings everywhere; visible prose is Spanish, code identifiers English.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
 import structlog
@@ -188,7 +188,7 @@ class VotingEnsemble(EnsembleModel):
             shape=tuple(stacked.shape),
         )
         if stacked.shape[0] == 1:
-            return stacked[0]
+            return cast("np.ndarray", stacked[0])
         return stacked
 
     def _vote_one_patch(
@@ -260,8 +260,9 @@ class VotingEnsemble(EnsembleModel):
         Returns:
             The renormalized ``float64`` map summing to 1 over the class axis.
         """
-        denom = softmax_18.sum(axis=_CLASS_AXIS, keepdims=True)
-        return softmax_18 / np.where(denom < _RENORM_EPS, 1.0, denom)
+        denom: np.ndarray = softmax_18.sum(axis=_CLASS_AXIS, keepdims=True)
+        renormalized: np.ndarray = softmax_18 / np.where(denom < _RENORM_EPS, 1.0, denom)
+        return renormalized
 
     @staticmethod
     def _patch_softmax_index(member: str, df: object) -> dict[str, np.ndarray]:
@@ -307,7 +308,8 @@ class VotingEnsemble(EnsembleModel):
         """
         proba = self.predict_proba(patch_ids)
         class_axis = 0 if proba.ndim == 3 else 1
-        return proba.argmax(axis=class_axis).astype(np.int64)
+        labels: np.ndarray = proba.argmax(axis=class_axis).astype(np.int64)
+        return labels
 
     # ------------------------------------------------------------------
     # Ground truth: PASTIS-R semantic18 fold-5 (not stored in the OOF).
@@ -372,7 +374,7 @@ class VotingEnsemble(EnsembleModel):
             shape=tuple(stacked.shape),
         )
         if stacked.shape[0] == 1:
-            return stacked[0]
+            return cast("np.ndarray", stacked[0])
         return stacked
 
     # ------------------------------------------------------------------

@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import json
 import math
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -561,7 +561,7 @@ def write_all_tables(out_dir: Path = Path("paper/tables/us-070")) -> dict[str, P
         Mapping of table stem -> written path (only the ones produced).
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    builders = {
+    builders: dict[str, Callable[[], str]] = {
         "fm_comparison": build_fm_comparison_table,
         "segmentation_individual_fold5": build_segmentation_table,
         "ensembles_e6": build_ensemble_table,

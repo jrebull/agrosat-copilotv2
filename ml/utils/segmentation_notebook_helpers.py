@@ -544,7 +544,10 @@ def plot_confusion_matrix(
     row_sums = cm.sum(axis=1, keepdims=True)
     cm_norm = np.divide(cm, row_sums, out=np.zeros_like(cm, dtype=float), where=row_sums != 0)
 
-    fig, ax = plt.subplots(figsize=(8, 7))
+    # Explicit layout engine: `ml.report.paper_figures` switches rcParams to
+    # constrained layout at import, and `tight_layout()` on a figure whose
+    # colorbar was placed by that engine raises RuntimeError.
+    fig, ax = plt.subplots(figsize=(8, 7), layout="tight")
     im = ax.imshow(cm_norm, cmap=cmap, vmin=0, vmax=1)
     ax.set_title(title)
     ax.set_xlabel("Prediccion")
@@ -556,7 +559,6 @@ def plot_confusion_matrix(
         ax.set_xticklabels(labels, rotation=90, fontsize=7)
         ax.set_yticklabels(labels, fontsize=7)
     fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    fig.tight_layout()
     if out_path is not None:
         fig.savefig(out_path, bbox_inches="tight")
     return fig

@@ -43,7 +43,9 @@ from ml.features.phenology_class_prototypes import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Iterator, Mapping
+
+    from ml.features.phenology_description import LlmClient
 
 logger = structlog.get_logger(__name__)
 
@@ -157,7 +159,7 @@ def make_ollama_text_client(
     base_url: str = "http://127.0.0.1:11434",
     *,
     timeout_s: float = 120.0,
-):
+) -> LlmClient:
     """Build a text LLM client (Ollama/Gemma) matching the phenology-desc signature.
 
     Returns a callable ``(prompt, *, model, temperature) -> str`` so it can be
@@ -266,7 +268,7 @@ def generate_parcel_phenology_captions(
 
     new_rows: list[dict[str, object]] = []
     if max_workers <= 1:
-        results_iter = (_one(it) for it in pending)
+        results_iter: Iterator[dict[str, object]] = (_one(it) for it in pending)
     else:
         executor = ThreadPoolExecutor(max_workers=max_workers)
         results_iter = executor.map(_one, pending)

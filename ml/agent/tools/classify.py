@@ -67,7 +67,7 @@ from __future__ import annotations
 import functools
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 import structlog
@@ -156,6 +156,12 @@ _HELD_OUT_FOLD: int = 5
 _NEEDS_GEE_SAMPLING: str = "needs_gee_sampling"
 
 
+class _ProbaEstimator(Protocol):
+    """Structural type of the fitted sklearn-compatible estimator being wrapped."""
+
+    def predict_proba(self, x: np.ndarray, /) -> np.ndarray: ...
+
+
 class _XgbAlphaEarthClassifier:
     """Fitted XGBoost-AlphaEarth classifier with a fixed 18-class probability head.
 
@@ -173,7 +179,7 @@ class _XgbAlphaEarthClassifier:
 
     def __init__(
         self,
-        estimator: object,
+        estimator: _ProbaEstimator,
         global_classes: np.ndarray,
         class_names: dict[int, str],
     ) -> None:

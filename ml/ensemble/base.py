@@ -40,7 +40,7 @@ from __future__ import annotations
 import abc
 import time
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import polars as pl
@@ -421,8 +421,11 @@ class EnsembleModel(abc.ABC):
     # Abstract contract (implemented by the four ensembles).
     # ------------------------------------------------------------------
 
+    # ``*args: Any, **kwargs: Any`` (not ``object``) is the mypy lenient-base
+    # form: it lets every concrete ensemble narrow ``fit``/``predict_proba`` to
+    # its real keyword signature without an LSP override error.
     @abc.abstractmethod
-    def fit(self, *args: object, **kwargs: object) -> EnsembleModel:
+    def fit(self, *args: Any, **kwargs: Any) -> EnsembleModel:
         """Fit the ensemble.
 
         Voting is parameter-free (it only averages OOF probabilities) and may
@@ -435,7 +438,7 @@ class EnsembleModel(abc.ABC):
         """
 
     @abc.abstractmethod
-    def predict_proba(self, *args: object, **kwargs: object) -> np.ndarray:
+    def predict_proba(self, *args: Any, **kwargs: Any) -> np.ndarray:
         """Return post-softmax probabilities (sum-to-1 over the class axis).
 
         The output is a probability tensor, NOT logits and NOT hard labels:

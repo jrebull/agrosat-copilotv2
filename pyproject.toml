@@ -227,6 +227,11 @@ extend-exclude = ["frontend/node_modules", ".venv", "data", "models"]
 select = ["E", "F", "I", "B", "BLE", "S", "UP", "RUF"]
 ignore = ["S101", "S301"]  # asserts ok en tests; pickle ok para ML
 
+# typer construye las opciones en los defaults por diseno; B008 los marcaria como
+# llamadas en argumentos por defecto (falso positivo documentado por ruff).
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["typer.Option", "typer.Argument"]
+
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S"]
 "notebooks/**" = ["E402", "F401"]

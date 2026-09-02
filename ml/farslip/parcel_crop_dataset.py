@@ -27,7 +27,7 @@ no emojis.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -97,7 +97,7 @@ def iter_parcel_crops(
     regions: Sequence[tuple[int, int]],
     *,
     resize_to: int = 224,
-):
+) -> Iterator[tuple[str, int, tuple[int, int, int, int], torch.Tensor]]:
     """Yield ``(parcel_id, class_id, bbox, crop_tensor)`` for each region.
 
     Args:

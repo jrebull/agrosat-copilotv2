@@ -100,13 +100,10 @@ class PhenoSemanticBranch(nn.Module):
         if prototype_path is None:
             prototypes_np, class_ids = load_class_prototype_embeddings()
         else:
-            prototypes_np, class_ids = load_class_prototype_embeddings(
-                prototype_path
-            )
+            prototypes_np, class_ids = load_class_prototype_embeddings(prototype_path)
         if prototypes_np.shape[1] != _PROTOTYPE_DIM:
             raise ValueError(
-                f"The prototypes must be {_PROTOTYPE_DIM}-dim; loaded "
-                f"shape {prototypes_np.shape}."
+                f"The prototypes must be {_PROTOTYPE_DIM}-dim; loaded shape {prototypes_np.shape}."
             )
 
         self.num_classes = int(prototypes_np.shape[0])
@@ -200,9 +197,7 @@ def phenology_contrastive_loss(
         no valid pixels or if only one class is present (undefined contrast).
     """
     if visual_proj.dim() != 4:
-        raise ValueError(
-            f"visual_proj must be (B, D, H, W); received {tuple(visual_proj.shape)}."
-        )
+        raise ValueError(f"visual_proj must be (B, D, H, W); received {tuple(visual_proj.shape)}.")
     num_classes, dim = prototypes.shape
     device = visual_proj.device
 
@@ -252,7 +247,8 @@ def phenology_contrastive_loss(
     pos_log_prob = (log_prob_present * pos_mask).sum(dim=1) / pos_counts
     loss_s = -pos_log_prob.mean()
 
-    return 0.5 * (loss_v + loss_s)
+    loss: torch.Tensor = 0.5 * (loss_v + loss_s)
+    return loss
 
 
 # TODO(post-Avance): text branch with a GCN over phenological keywords (Wen et al.

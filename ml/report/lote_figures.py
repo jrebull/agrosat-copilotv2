@@ -27,7 +27,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 import polars as pl
@@ -341,8 +341,8 @@ def per_class_iou_table(metrics: dict[str, object]) -> pl.DataFrame:
     """
     from ml.ingest.pastis_loader import PASTIS_R_CLASSES
 
-    iou = list(metrics.get("per_class_iou", []) or [])
-    f1 = list(metrics.get("per_class_f1", []) or [])
+    iou = list(cast("list[object]", metrics.get("per_class_iou", []) or []))
+    f1 = list(cast("list[object]", metrics.get("per_class_f1", []) or []))
     n = int(max(len(iou), len(f1)))
 
     def _val(seq: list[object], i: int) -> float:
@@ -431,7 +431,9 @@ def load_faithful_student_and_bank(
         n_eval_patches=len(val_ds),
         n_categories=len(class_ids),
     )
-    return trainer, val_ds, trainer._category_prototypes, class_ids
+    prototypes = trainer._category_prototypes
+    assert prototypes is not None  # populated by set_category_prototypes above
+    return trainer, val_ds, prototypes, class_ids
 
 
 def _predict_patch_category(
@@ -651,7 +653,8 @@ def _rgb_from_peak_ndvi(img4: np.ndarray) -> np.ndarray:
     lo, hi = np.nanpercentile(rgb, 2), np.nanpercentile(rgb, 98)
     if hi <= lo:
         hi = lo + 1.0
-    return np.clip((rgb - lo) / (hi - lo), 0.0, 1.0)
+    stretched: np.ndarray = np.clip((rgb - lo) / (hi - lo), 0.0, 1.0)
+    return stretched
 
 
 def _region_category_map(instance: np.ndarray, regions: list[tuple[int, int]]) -> np.ndarray:
@@ -926,10 +929,11 @@ def build_us034_fix_figure(
     rand = rng.standard_normal(real.shape)
 
     def _offdiag_cos(mat: np.ndarray) -> np.ndarray:
-        norm = mat / (np.linalg.norm(mat, axis=1, keepdims=True) + 1e-9)
-        sim = norm @ norm.T
+        norm: np.ndarray = mat / (np.linalg.norm(mat, axis=1, keepdims=True) + 1e-9)
+        sim: np.ndarray = norm @ norm.T
         n = sim.shape[0]
-        return sim[~np.eye(n, dtype=bool)]
+        offdiag: np.ndarray = sim[~np.eye(n, dtype=bool)]
+        return offdiag
 
     cos_real = _offdiag_cos(real)
     cos_rand = _offdiag_cos(rand)

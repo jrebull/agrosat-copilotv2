@@ -155,7 +155,8 @@ def _rgb_from_s2(s2: np.ndarray) -> np.ndarray:
         arr = np.median(arr, axis=0)
     rgb = np.stack([arr[2], arr[1], arr[0]], axis=-1).astype(np.float32)
     lo, hi = np.nanpercentile(rgb, 2), np.nanpercentile(rgb, 98)
-    return np.clip((rgb - lo) / (hi - lo + 1e-6), 0.0, 1.0)
+    stretched: np.ndarray = np.clip((rgb - lo) / (hi - lo + 1e-6), 0.0, 1.0)
+    return stretched
 
 
 def build_paper_inference_maps(

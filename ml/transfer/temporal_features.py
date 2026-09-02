@@ -57,6 +57,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
 import polars as pl
@@ -64,6 +65,9 @@ import structlog
 from sklearn.metrics import f1_score, precision_recall_fscore_support
 
 from ml.train.baseline import _XGB_BASE_PARAMS, build_estimator
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from sklearn.base import ClassifierMixin
 
 logger = structlog.get_logger(__name__)
 
@@ -193,7 +197,8 @@ def _spectral_index_curves(data: np.ndarray) -> dict[str, np.ndarray]:
     eps = 1e-6
 
     def _ratio(num: np.ndarray, den: np.ndarray) -> np.ndarray:
-        return num / np.where(np.abs(den) < eps, np.nan, den)
+        ratio: np.ndarray = num / np.where(np.abs(den) < eps, np.nan, den)
+        return ratio
 
     blue, green, red = b["B02"], b["B03"], b["B04"]
     re1, nir = b["B05"], b["B08"]
@@ -214,7 +219,8 @@ def _doy_axis(dates: np.ndarray) -> np.ndarray:
     d = dates.astype("datetime64[D]")
     year_start = (d.astype("datetime64[Y]")).astype("datetime64[D]")
     doy = (d - year_start) / np.timedelta64(1, "D") + 1.0
-    return doy.astype(np.float64)
+    doy_float: np.ndarray = doy.astype(np.float64)
+    return doy_float
 
 
 def _ndvi_phenology(doy: np.ndarray, ndvi: np.ndarray) -> dict[str, float]:
@@ -645,7 +651,7 @@ def _spatial_split(
 # --------------------------------------------------------------------------- #
 # Train + evaluate both views
 # --------------------------------------------------------------------------- #
-def _fit_xgb(feats: np.ndarray, y: np.ndarray, seed: int) -> object:
+def _fit_xgb(feats: np.ndarray, y: np.ndarray, seed: int) -> ClassifierMixin:
     """Fit the champion XGBoost classifier (CPU, deterministic)."""
     params = dict(_XGB_BASE_PARAMS)
     params["random_state"] = seed
@@ -732,9 +738,15 @@ def run_temporal_vs_annual(
 
     pheno = per_class.filter(pl.col("pheno_similar") & (pl.col("support_test") > 0))
 
-    pheno_mean_annual = float(pheno.get_column("f1_annual").mean()) if pheno.height else 0.0
-    pheno_mean_temporal = float(pheno.get_column("f1_temporal").mean()) if pheno.height else 0.0
-    pheno_mean_fusion = float(pheno.get_column("f1_fusion").mean()) if pheno.height else 0.0
+    pheno_mean_annual = (
+        float(cast(float, pheno.get_column("f1_annual").mean())) if pheno.height else 0.0
+    )
+    pheno_mean_temporal = (
+        float(cast(float, pheno.get_column("f1_temporal").mean())) if pheno.height else 0.0
+    )
+    pheno_mean_fusion = (
+        float(cast(float, pheno.get_column("f1_fusion").mean())) if pheno.height else 0.0
+    )
 
     summary = {
         "regions": list(regions),

@@ -52,6 +52,7 @@ Integration with existing repo dataset::
     kept_ids = f.filter_folds([1, 2, 3])
     # pass kept_ids to your custom sampler or Subset
 """
+
 from __future__ import annotations
 
 import json
@@ -78,61 +79,59 @@ _VOID_CLASS: int = 19
 
 # Full 20-class PASTIS-R label set (indices 0-19)
 PASTIS_CLASS_NAMES: dict[int, str] = {
-    0:  'Background',
-    1:  'Meadow',
-    2:  'Soft winter wheat',
-    3:  'Corn',
-    4:  'Winter barley',
-    5:  'Winter rapeseed',
-    6:  'Spring barley',
-    7:  'Sunflower',
-    8:  'Grapevine',
-    9:  'Beet',
-    10: 'Winter triticale',
-    11: 'Winter durum wheat',
-    12: 'Fruits, vegetables, flowers',
-    13: 'Potatoes',
-    14: 'Leguminous fodder',
-    15: 'Soybeans',
-    16: 'Orchard',
-    17: 'Mixed cereal',
-    18: 'Sorghum',
-    19: 'Void label',
+    0: "Background",
+    1: "Meadow",
+    2: "Soft winter wheat",
+    3: "Corn",
+    4: "Winter barley",
+    5: "Winter rapeseed",
+    6: "Spring barley",
+    7: "Sunflower",
+    8: "Grapevine",
+    9: "Beet",
+    10: "Winter triticale",
+    11: "Winter durum wheat",
+    12: "Fruits, vegetables, flowers",
+    13: "Potatoes",
+    14: "Leguminous fodder",
+    15: "Soybeans",
+    16: "Orchard",
+    17: "Mixed cereal",
+    18: "Sorghum",
+    19: "Void label",
 }
 
 # Semantic-18 remapping (repo's PASTISSegmentationDataset target='semantic18')
 # Background (0) and Void (19) are excluded; remaining 18 classes → 0-17
 SEMANTIC18_CLASS_NAMES: dict[int, str] = {
-    i: name for i, (_, name) in enumerate(
+    i: name
+    for i, (_, name) in enumerate(
         {k: v for k, v in PASTIS_CLASS_NAMES.items() if k not in (0, 19)}.items()
     )
 }
 
 # Convenience group: all non-background, non-meadow, non-void crop classes
 # in the full 20-class scheme
-ALL_CROP_CLASSES: list[int] = [
-    2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
-]
+ALL_CROP_CLASSES: list[int] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 
 # filtering classes based on the number of patches that would be kept at 50% coverage threshold
-CLASSES_OF_INTEREST: list[int] = [
-    2, 3, 8
-]
+CLASSES_OF_INTEREST: list[int] = [2, 3, 8]
 
 # HCAT Level-1 groups → class indices (full 20-class scheme)
 HCAT_GROUPS: dict[str, list[int]] = {
-    'CEREALS':        [2, 3, 4, 6, 10, 11, 17, 18],
-    'OILSEEDS':       [5, 7],
-    'LEGUMES':        [14, 15],
-    'ROOT_CROPS':     [9, 13],
-    'PERMANENT_WOODY':[8, 16],
-    'OTHER':          [1, 12],
+    "CEREALS": [2, 3, 4, 6, 10, 11, 17, 18],
+    "OILSEEDS": [5, 7],
+    "LEGUMES": [14, 15],
+    "ROOT_CROPS": [9, 13],
+    "PERMANENT_WOODY": [8, 16],
+    "OTHER": [1, 12],
 }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Core filter
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 class PastisFilter:
     """Scans PASTIS-R annotation files and returns patch IDs that pass
@@ -186,36 +185,37 @@ class PastisFilter:
         ratio: float = 3.0,
         meadow_class: int = 1,
     ) -> None:
-        self.root          = Path(pastis_root)
-        self.target_classes = set(target_classes if target_classes is not None
-                                  else ALL_CROP_CLASSES)
-        self.min_coverage  = min_coverage
-        self.ignore_index  = ignore_index
+        self.root = Path(pastis_root)
+        self.target_classes = set(
+            target_classes if target_classes is not None else ALL_CROP_CLASSES
+        )
+        self.min_coverage = min_coverage
+        self.ignore_index = ignore_index
         self.annotation_key = annotation_key
-        self.verbose       = verbose
-        self.mode          = mode
-        self.ratio         = ratio
-        self.meadow_class  = meadow_class
+        self.verbose = verbose
+        self.mode = mode
+        self.ratio = ratio
+        self.meadow_class = meadow_class
         self.total_scanned = 0
 
-        meta_path = self.root / 'metadata.geojson'
+        meta_path = self.root / "metadata.geojson"
         if not meta_path.exists():
-            raise FileNotFoundError(f'metadata.geojson not found in {self.root}')
+            raise FileNotFoundError(f"metadata.geojson not found in {self.root}")
         with open(meta_path) as f:
             self._meta = json.load(f)
 
         # Build fold → patch_id mapping
         self._fold_map: dict[int, list[int]] = {}
-        for feat in self._meta['features']:
-            fold = feat['properties']['Fold']
-            pid  = feat['properties']['ID_PATCH']
+        for feat in self._meta["features"]:
+            fold = feat["properties"]["Fold"]
+            pid = feat["properties"]["ID_PATCH"]
             self._fold_map.setdefault(fold, []).append(pid)
 
     # ------------------------------------------------------------------
     def _load_mask(self, pid: int) -> np.ndarray:
         """Load semantic label mask for patch ``pid`` → (H, W) int32."""
-        path = self.root / 'ANNOTATIONS' / f'TARGET_{pid}.npy'
-        mask = np.load(str(path))
+        path = self.root / "ANNOTATIONS" / f"TARGET_{pid}.npy"
+        mask: np.ndarray = np.load(str(path))
         if mask.ndim == 3:
             mask = mask[self.annotation_key]
         return mask.astype(np.int32)
@@ -241,7 +241,7 @@ class PastisFilter:
             return self._passes_dominance(mask)
         # --- legacy coverage branch (unchanged) ---
         valid_mask = mask != self.ignore_index
-        n_valid    = valid_mask.sum()
+        n_valid = valid_mask.sum()
         if n_valid == 0:
             return False, 0.0
         n_target = np.isin(mask, list(self.target_classes)).sum()
@@ -325,7 +325,7 @@ class PastisFilter:
             all_ids.extend(self._fold_map.get(fold, []))
 
         kept = self.filter_patch_ids(all_ids)
-        pct  = 100 * len(kept) / max(len(all_ids), 1)
+        pct = 100 * len(kept) / max(len(all_ids), 1)
         log_kwargs: dict[str, Any] = {
             "folds": list(folds),
             "target_classes": sorted(self.target_classes),
@@ -362,29 +362,30 @@ class PastisFilter:
         for fold in folds:
             all_ids.extend(self._fold_map.get(fold, []))
 
-        coverages = []
+        metrics: list[float] = []
         for pid in all_ids:
             mask = self._load_mask(pid)
             _, cov = self._passes(mask)
-            coverages.append(cov)
+            metrics.append(cov)
 
-        coverages = np.array(coverages)
+        coverages = np.array(metrics)
         return {
-            'n_patches':  len(coverages),
-            'mean':       float(coverages.mean()),
-            'median':     float(np.median(coverages)),
-            'p25':        float(np.percentile(coverages, 25)),
-            'p75':        float(np.percentile(coverages, 75)),
-            'pct_above_50': float((coverages >= 0.50).mean()),
-            'pct_above_30': float((coverages >= 0.30).mean()),
-            'pct_above_70': float((coverages >= 0.70).mean()),
-            'coverages':  coverages,
+            "n_patches": len(coverages),
+            "mean": float(coverages.mean()),
+            "median": float(np.median(coverages)),
+            "p25": float(np.percentile(coverages, 25)),
+            "p75": float(np.percentile(coverages, 75)),
+            "pct_above_50": float((coverages >= 0.50).mean()),
+            "pct_above_30": float((coverages >= 0.30).mean()),
+            "pct_above_70": float((coverages >= 0.70).mean()),
+            "coverages": coverages,
         }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Drop-in filtered dataset wrapper
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 class FilteredPASTISDataset(Dataset):
     """Filtered wrapper around the repo's ``PASTISSegmentationDataset``.
@@ -445,36 +446,34 @@ class FilteredPASTISDataset(Dataset):
 
         # ── Run the filter ────────────────────────────────────────────────
         filt = PastisFilter(
-            pastis_root    = root,
-            target_classes = target_classes,
-            min_coverage   = min_coverage,
-            ignore_index   = ignore_index,
-            verbose        = verbose,
-            mode           = mode,
-            ratio          = ratio,
-            meadow_class   = meadow_class,
+            pastis_root=root,
+            target_classes=target_classes,
+            min_coverage=min_coverage,
+            ignore_index=ignore_index,
+            verbose=verbose,
+            mode=mode,
+            ratio=ratio,
+            meadow_class=meadow_class,
         )
         kept_ids = filt.filter_folds(folds)
-        self._kept_ids  = kept_ids
-        self._n_total   = filt.total_scanned
-        self._n_kept    = len(kept_ids)
-        self._coverage  = self._n_kept / max(self._n_total, 1)
+        self._kept_ids = kept_ids
+        self._n_total = filt.total_scanned
+        self._n_kept = len(kept_ids)
+        self._coverage = self._n_kept / max(self._n_total, 1)
 
         # ── Build full dataset then subset to kept patches ────────────────
-        full_ds = PASTISSegmentationDataset(
-            root=root, folds=list(folds), **dataset_kwargs
-        )
+        full_ds = PASTISSegmentationDataset(root=root, folds=list(folds), **dataset_kwargs)
 
         # Map kept patch IDs → dataset indices
         # PASTISSegmentationDataset stores patch_ids in the same order as
         # metadata.geojson filtered by fold — we replicate that order.
-        meta_path = root / 'metadata.geojson'
+        meta_path = root / "metadata.geojson"
         with open(meta_path) as f:
             meta = json.load(f)
         ordered_ids = [
-            feat['properties']['ID_PATCH']
-            for feat in meta['features']
-            if feat['properties']['Fold'] in folds
+            feat["properties"]["ID_PATCH"]
+            for feat in meta["features"]
+            if feat["properties"]["Fold"] in folds
         ]
         kept_set = set(kept_ids)
         kept_indices = [i for i, pid in enumerate(ordered_ids) if pid in kept_set]
@@ -495,7 +494,8 @@ class FilteredPASTISDataset(Dataset):
         return len(self._dataset)
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
-        return self._dataset[idx]
+        item: tuple[torch.Tensor, torch.Tensor] = self._dataset[idx]
+        return item
 
     @property
     def n_total(self) -> int:

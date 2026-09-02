@@ -40,13 +40,17 @@ import signal
 import subprocess
 import sys
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from threading import Event, Lock
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from types import FrameType
 
 try:
+    import google.cloud.pubsub_v1 as pubsub_v1
     import structlog
-    from google.cloud import pubsub_v1
 except ImportError as exc:  # pragma: no cover
     sys.stderr.write(
         f"FATAL: dependencias missing ({exc}). Run pip install google-cloud-pubsub structlog\n"
@@ -133,7 +137,7 @@ def _run_command(payload: dict[str, Any]) -> int:
         return 124
 
 
-def _make_callback(state: DaemonState):
+def _make_callback(state: DaemonState) -> Callable[[pubsub_v1.subscriber.message.Message], None]:
     def callback(message: pubsub_v1.subscriber.message.Message) -> None:
         try:
             payload = json.loads(message.data.decode("utf-8"))
@@ -179,7 +183,7 @@ def main() -> int:
         lock=Lock(),
     )
 
-    def _handle_sigterm(_signum, _frame):
+    def _handle_sigterm(_signum: int, _frame: FrameType | None) -> None:
         log.info("sigterm_received")
         state.shutdown_requested.set()
 

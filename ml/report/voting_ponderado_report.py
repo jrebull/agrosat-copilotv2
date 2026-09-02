@@ -89,7 +89,9 @@ class VotingReport:
     meta: dict[str, object] = field(default_factory=dict)
 
 
-def _restrict(labels: np.ndarray, proba18: np.ndarray, kept: tuple[int, ...]):
+def _restrict(
+    labels: np.ndarray, proba18: np.ndarray, kept: tuple[int, ...]
+) -> tuple[dict[str, float], dict[int, float]]:
     """Deployed ``restrict`` metrics over ``kept``: macro-F1, accuracy, per-class.
 
     Scores only parcels whose true class is in ``kept`` and masks the posterior to
@@ -107,7 +109,7 @@ def _restrict(labels: np.ndarray, proba18: np.ndarray, kept: tuple[int, ...]):
         fn = int(((yt == c) & (yp != c)).sum())
         den = 2 * tp + fp + fn
         f1[int(c)] = (2 * tp / den) if den else 0.0
-    summary = {
+    summary: dict[str, float] = {
         "f1_macro": float(np.mean(list(f1.values()))),
         "accuracy": float((yt == yp).mean()) if yt.size else 0.0,
         "n": int(yt.size),
@@ -166,11 +168,13 @@ def build_voting_report(
     v_proba = vote3.predict_proba()
 
     # --- Simple vote (1/N) over the same cached tensor -----------------------
-    n_m = vote3._member_probs.shape[0]
-    simple_proba = vote3._blend(vote3._member_probs, np.full(n_m, 1.0 / n_m))
+    member_probs = vote3._member_probs
+    assert member_probs is not None  # populated by ``fit`` above
+    n_m = member_probs.shape[0]
+    simple_proba = vote3._blend(member_probs, np.full(n_m, 1.0 / n_m))
 
     # --- Stacking (3 and 5 members) ------------------------------------------
-    def _stack(members: tuple[str, ...]):
+    def _stack(members: tuple[str, ...]) -> tuple[np.ndarray, np.ndarray]:
         st = StackingEnsemble(
             members, meta="logreg", oof_dir=oof_dir, random_state=random_state
         ).fit(geoms_pl, gt_labels=gt)

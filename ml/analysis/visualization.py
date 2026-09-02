@@ -29,7 +29,8 @@ def stretch_2_98(arr: np.ndarray) -> np.ndarray:
     if arr.ndim == 2:
         lo, hi = np.percentile(arr, [2.0, 98.0])
         out = (arr - lo) / max(hi - lo, 1e-6)
-        return np.clip(out, 0.0, 1.0)
+        stretched: np.ndarray = np.clip(out, 0.0, 1.0)
+        return stretched
     if arr.ndim == 3:
         # Detect layout (C, H, W) vs (H, W, C) by the axis size
         if arr.shape[0] <= 12 and arr.shape[0] < arr.shape[-1]:

@@ -59,7 +59,8 @@ def server_is_reachable(server_url: str, *, timeout: float = _HEALTH_TIMEOUT_S) 
     health_url = f"{server_url.rstrip('/')}/health"
     try:
         with urllib.request.urlopen(health_url, timeout=timeout) as response:  # noqa: S310 - local dev URL
-            return 200 <= response.status < 300
+            status: int = response.status
+            return 200 <= status < 300
     except (urllib.error.URLError, OSError, ValueError):
         return False
 

@@ -35,11 +35,15 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 import numpy as np
 import structlog
 
 from ml.ingest.sh_client import PASTIS_BANDS, SentinelHubClient, _orbit_evalscript
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from rasterio.io import DatasetReader
 
 logger = structlog.get_logger(__name__)
 
@@ -122,7 +126,8 @@ def _cluster_centroids(
         from sklearn.cluster import KMeans
 
         coords = np.column_stack([lons, lats])
-        return KMeans(n_clusters=k, random_state=42, n_init=10).fit_predict(coords)
+        labels: np.ndarray = KMeans(n_clusters=k, random_state=42, n_init=10).fit_predict(coords)
+        return labels
     except Exception as exc:  # noqa: BLE001 -- documented fallback
         logger.warning("tile_cluster_fallback_single", error=str(exc))
         return np.zeros(n, dtype=int)
@@ -138,7 +143,7 @@ def _download_tile(
     width: int,
     height: int,
     max_cloud: float,
-) -> tuple[np.ndarray, object] | None:
+) -> tuple[np.ndarray, DatasetReader] | None:
     """Download one multi-temporal ORBIT tile and return ``(stack, transform)``.
 
     Args:

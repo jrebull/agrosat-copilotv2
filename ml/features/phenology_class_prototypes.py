@@ -58,6 +58,7 @@ import polars as pl
 import structlog
 
 if TYPE_CHECKING:
+    import argparse
     from collections.abc import Sequence
 
 logger = structlog.get_logger(__name__)
@@ -403,7 +404,7 @@ def _encode_descriptions(descriptions: Sequence[str]) -> np.ndarray:
     from sentence_transformers import SentenceTransformer
 
     model = SentenceTransformer(_SENTENCE_MODEL)
-    emb = model.encode(
+    emb: np.ndarray = model.encode(
         list(descriptions),
         normalize_embeddings=True,
         convert_to_numpy=True,
@@ -647,7 +648,7 @@ def load_class_prototype_matrix_by_id(
     return matrix
 
 
-def _build_arg_parser():  # pragma: no cover - CLI thin wrapper.
+def _build_arg_parser() -> argparse.ArgumentParser:  # pragma: no cover - CLI thin wrapper.
     import argparse
 
     p = argparse.ArgumentParser(

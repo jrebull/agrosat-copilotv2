@@ -51,13 +51,14 @@ def build_unet(
     Returns:
         ``nn.Module`` mapping ``(B, in_channels, H, W) -> (B, num_classes, H, W)``.
     """
-    return smp.Unet(
+    model: nn.Module = smp.Unet(
         encoder_name=encoder_name,
         encoder_weights=encoder_weights,
         in_channels=in_channels,
         classes=num_classes,
         activation=None,
     )
+    return model
 
 
 def build_deeplabv3plus(
@@ -83,13 +84,14 @@ def build_deeplabv3plus(
     Returns:
         Dense segmentation ``nn.Module``.
     """
-    return smp.DeepLabV3Plus(
+    model: nn.Module = smp.DeepLabV3Plus(
         encoder_name=encoder_name,
         encoder_weights=encoder_weights,
         in_channels=in_channels,
         classes=num_classes,
         activation=None,
     )
+    return model
 
 
 SEGMENTATION_BUILDERS: dict[str, Callable[..., nn.Module]] = {

@@ -284,7 +284,7 @@ def _default_google_genai_client(prompt: str, *, model: str, temperature: float)
     # it only for 3.x; the numeric `thinking_budget` was deprecated per the 3.5
     # docs, so 2.x runs with the default thinking config.
     thinking_config = (
-        types.ThinkingConfig(thinking_level="minimal")
+        types.ThinkingConfig(thinking_level=types.ThinkingLevel.MINIMAL)
         if _model_supports_thinking_level(model)
         else None
     )

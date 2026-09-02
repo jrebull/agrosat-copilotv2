@@ -39,6 +39,7 @@ module.
 
 import hashlib
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import structlog
 from dagster import (
@@ -75,6 +76,10 @@ DATA_VERSION_TAG = "fused-features-italy-v1"
 CODE_VERSION_LABEL = "us-016"
 
 
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    import geopandas as gpd
+
+
 def _hash_file_md5(path: Path) -> str:
     """Computes the MD5 hash of an existing file for lineage metadata."""
     hasher = hashlib.md5(usedforsecurity=False)
@@ -84,7 +89,7 @@ def _hash_file_md5(path: Path) -> str:
     return hasher.hexdigest()
 
 
-def _load_parcels_geodataframe(parcels_path: Path):
+def _load_parcels_geodataframe(parcels_path: Path) -> "gpd.GeoDataFrame":
     """Loads the parcels GeoDataFrame from a parquet or demo fixture.
 
     Args:

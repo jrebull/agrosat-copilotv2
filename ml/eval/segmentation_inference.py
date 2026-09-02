@@ -320,7 +320,8 @@ def predict_patch(
         doy_b = doy.unsqueeze(0).to(device) if doy is not None else None
         out = model(xb, doy=doy_b)
         logits = out[0] if isinstance(out, tuple) else out
-    return logits.argmax(dim=1).squeeze(0).cpu().numpy()
+    mask: np.ndarray = logits.argmax(dim=1).squeeze(0).cpu().numpy()
+    return mask
 
 
 def _ordinal_positions(n_timesteps: int, *, device: torch.device) -> torch.Tensor:
@@ -626,7 +627,8 @@ def rgb_from_patch(x_2d: np.ndarray) -> np.ndarray:
     lo, hi = np.nanpercentile(rgb, 2), np.nanpercentile(rgb, 98)
     if hi <= lo:
         hi = lo + 1.0
-    return np.clip((rgb - lo) / (hi - lo), 0.0, 1.0)
+    stretched: np.ndarray = np.clip((rgb - lo) / (hi - lo), 0.0, 1.0)
+    return stretched
 
 
 @torch.no_grad()

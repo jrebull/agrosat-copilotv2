@@ -57,7 +57,7 @@ def load_anysat_encoder(
         RuntimeError: if the hub load fails (no internet, inaccessible repo).
     """
     try:
-        encoder = torch.hub.load(
+        encoder: nn.Module = torch.hub.load(
             repo,
             model,
             pretrained=pretrained,

@@ -387,7 +387,8 @@ def _knn_indices(coords: np.ndarray, k_max: int) -> np.ndarray:
     nn.fit(coords)
     _, idx = nn.kneighbors(coords)
     # Column 0 is self (distance 0); drop it.
-    return idx[:, 1 : k_max + 1].astype(np.int64)
+    neighbors: np.ndarray = idx[:, 1 : k_max + 1].astype(np.int64)
+    return neighbors
 
 
 # ----------------------------------------------------------------------
@@ -415,11 +416,12 @@ def _refine(posteriors: np.ndarray, neighbor_idx: np.ndarray, k: int, alpha: flo
     if alpha == 0.0:
         return posteriors
     idx = neighbor_idx[:, :k]
-    neighbor_mean = posteriors[idx].mean(axis=1)  # (n, 18)
+    neighbor_mean: np.ndarray = posteriors[idx].mean(axis=1)  # (n, 18)
     refined = (1.0 - alpha) * posteriors + alpha * neighbor_mean
-    denom = refined.sum(axis=1, keepdims=True)
+    denom: np.ndarray = refined.sum(axis=1, keepdims=True)
     denom = np.where(denom < 1e-12, 1.0, denom)
-    return refined / denom
+    normalized: np.ndarray = refined / denom
+    return normalized
 
 
 def _f1_macro_france9(y_true: np.ndarray, y_pred: np.ndarray) -> float:

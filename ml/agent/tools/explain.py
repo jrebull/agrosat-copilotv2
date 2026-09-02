@@ -153,7 +153,7 @@ def _reconstruct_ndvi_curve(phenology_json: dict[str, Any]) -> np.ndarray | None
     matrix = _reconstruct_curve(frame, index_name=_INDEX, sequence_length=_SEQUENCE_LENGTH)
     if matrix.shape[0] == 0:
         return None
-    curve = matrix[0].astype(np.float64)
+    curve: np.ndarray = matrix[0].astype(np.float64)
     if not np.any(np.isfinite(curve)) or float(np.nanmax(np.abs(curve))) == 0.0:
         return None
     return curve
