@@ -5,7 +5,7 @@
 > hay en disco y en la base de datos; para el detalle histórico de cada US ver
 > [`us-resolved/`](us-resolved/) y para lo abierto [`blockers/PENDIENTES.md`](blockers/PENDIENTES.md).
 
-Última actualización: 2 de septiembre de 2026.
+Última actualización: 2 de septiembre de 2026 (fase 0 del artículo MICAI cerrada, fase 1 en curso).
 
 ## Base de datos (fuente de verdad: `dbmate status`)
 
@@ -29,6 +29,34 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
 - Campeón desplegado: Voting-3 v2, 12 clases (`france-12`), F1-macro 0.8992 (`reports/agent_bench/perceiver_champion_eval_v2.json`).
 - Modelo final del curso: Stacking-5 heterogéneo con FarSLIP, F1-macro 0.7486 held-out fold-5 (`reports/ensemble/metrics/us043_farslip_grid.csv`); el Stacking-3 sin FarSLIP de US-040 da 0.7470 (`comparison_us040.csv`).
 - Datos versionados en DVC (`gs://agrosat-dvc-remote`): features, OOF, embeddings FarSLIP, checkpoints y datasets de transferencia. Falta en el remoto `data/features/alphaearth_italia_2018.parquet`. PASTIS-R crudo no está en DVC: se descarga de Zenodo (53.7 GB, MD5 `4887513d6c2d2b07fa935d325bd53e09`) y en esta máquina ya está extraído en `data/PASTIS-R/` (gitignorado).
+
+## Artículo MICAI 2027
+
+- **Fase 0 cerrada** con veredicto de **reencuadre**: el ángulo A no se abandona pero se
+  reordena. La contribución central pasa a ser el contraste entre dos mecanismos de recorte
+  de cobertura (retirar clases enteras frente a rechazo por confianza) a igual cobertura y
+  bajo F1-macro; el arbitraje heterogéneo queda como mecanismo y la vecindad espacial como
+  control negativo acotado. Evidencia en [`paper/novedad.md`](paper/novedad.md); decisión en
+  [`ADR-013`](decisions/ADR-013-angulo-micai.md), pendiente de firma de Arthur y Javier.
+- Búsqueda sistemática sellada en `reports/paper_micai/fase0/`: 59 consultas automáticas en
+  arXiv, Semantic Scholar y OpenAlex más seis manuales, con respuesta cruda por consulta, y
+  una matriz de 43 trabajos con método, fortaleza, límite y hueco, todos con identificador
+  resuelto por API (0 filas fuera de estado `OK`).
+- Las tres referencias ancla del manuscrito tenían título y autores inventados. Ya están
+  leídas y contrastadas: el artículo de Be My Eyes nunca menciona alucinación ni evalúa nada
+  geoespacial, «Harvesting AlphaEarth» no recomienda adaptación few-shot y dice que el
+  embedding anual carece de sensibilidad temporal, y AgroMind se contradice consigo mismo en
+  el conteo de pares QA entre el resumen de arXiv y el texto completo de su v3.
+- **Fase 1 en curso**: [`paper/ARTIFACTS.md`](../paper/ARTIFACTS.md) sella 33 artefactos con
+  MD5 y declara 8 cifras sin artefacto. Gate `make paper-artifacts-check` en verde y probado
+  en negativo. Los once parquets OOF coinciden con el `md5` de su propio `.dvc`.
+- Corregido en el camino: `docs/pendientes-arthur.md` daba por perdidos artefactos que sí
+  están en disco (la curva k-shot de EuroCropsML lleva en git desde `bc019e5`; los crudos de
+  WorldCereal están en DVC).
+- Hallazgo de reproducibilidad: seis artefactos sellados **no tienen productor en el
+  repositorio**, entre ellos `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv`, que
+  sostienen la contribución central; el repositorio solo contiene lectores. La fase 2 los
+  reimplementa desde las posteriores OOF selladas y usa los CSV como comprobación cruzada.
 
 ## Entorno y gates
 

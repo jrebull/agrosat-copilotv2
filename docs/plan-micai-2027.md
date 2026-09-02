@@ -4,6 +4,7 @@
 **Estado de partida:** 2 de septiembre de 2026, tres auditorías independientes del manuscrito heredado (contenido científico, reproducibilidad y formato LNCS). Resumen de hallazgos en la sección 2.
 **Pendientes que dependen de Arthur:** [`pendientes-arthur.md`](pendientes-arthur.md).
 **Regla de oro heredada y vigente:** cifras reales o nada; cada número impreso se rederiva desde un artefacto versionado; no se concluye más de lo que mide el dato.
+**Fase 0 cerrada (2 de septiembre de 2026):** veredicto **reencuadre**, no confirmación. Evidencia en [`docs/paper/novedad.md`](paper/novedad.md) (43 trabajos con identificador verificado por API, 59 consultas registradas en tres fuentes y seis consultas manuales) y decisión en [`ADR-013`](decisions/ADR-013-angulo-micai.md), pendiente de firma. **Fase 1 arrancada:** `paper/ARTIFACTS.md` sella 33 artefactos con MD5 y declara 8 cifras sin artefacto; el gate `make paper-artifacts-check` está en verde y probado en negativo.
 **Infraestructura lista (2 de septiembre de 2026):** entorno completo en macOS (Apéndice D del runbook), acceso al proyecto GCP `agrosat-copilot` con ADC, artefactos ligeros de DVC en disco, PASTIS-R crudo extraído en `data/PASTIS-R/` (2 433 parches, 68 GB), `make lint` y `make test-all` en verde, mypy en cero. La fase 0 puede empezar sin esperar nada de terceros.
 
 Las fechas de la convocatoria MICAI 2027 no están publicadas. Este plan se ordena por dependencias, no por calendario; cuando salga la convocatoria se fija el calendario hacia atrás desde la fecha de envío (MICAI 2026 recomendó 12 páginas y admitió 20; confirmar para 2027).
@@ -48,7 +49,9 @@ Las cifras que se rederivan hoy desde disco: 61 %. Las que contradicen el artefa
 
 ## 3. Fases
 
-### Fase 0 · Aporte real: ¿el paper contribuye algo?
+### Fase 0 · Aporte real: ¿el paper contribuye algo? — CERRADA (2 de septiembre de 2026)
+
+**Resultado: reencuadre.** El ángulo A no se abandona, pero dos de sus tres afirmaciones no sobreviven a la verificación: la de cardinalidad tiene un precedente muy cercano (Turkoglu et al. 2021, curvas de cobertura frente a confianza en cultivos) y la de contexto espacial es insostenible tal como estaba escrita (el artefacto propio da +0,0027 de F1-macro, positivo y bajo el umbral, no un cero; y hay trabajo previo que muestra que el contexto intraparcela sí aporta sobre estos embeddings). La contribución central pasa a ser el contraste entre dos mecanismos de recorte de cobertura a igual cobertura y bajo F1-macro. Detalle en [`docs/paper/novedad.md`](paper/novedad.md); decisión, afirmaciones prohibidas y reglas pre-registradas en [`ADR-013`](decisions/ADR-013-angulo-micai.md).
 
 Antes de reescribir una línea. Responsable: Javier. Salida: `docs/paper/novedad.md`.
 
@@ -59,7 +62,9 @@ Antes de reescribir una línea. Responsable: Javier. Salida: `docs/paper/novedad
 5. Veredicto explícito con tres salidas posibles: contribución confirmada (seguir con A), reencuadre (qué cambia), o abandono del ángulo. Criterio: existe al menos un experimento ejecutable en CPU que aísla el mecanismo y ningún trabajo previo lo reporta en este dominio con este protocolo.
 6. Decisión conjunta con Arthur registrada en `docs/decisions/ADR-013-angulo-micai.md`.
 
-### Fase 1 · Sellado de artefactos
+### Fase 1 · Sellado de artefactos — EN CURSO
+
+Hecho: `paper/ARTIFACTS.md` con 33 artefactos sellados por MD5 y 8 filas `SIN_ARTEFACTO`; `scripts/paper_artifacts_check.py` más `make paper-artifacts-check`, probado en negativo; los once parquets OOF coinciden con el `md5` de su propio `.dvc`. Corregido: `docs/pendientes-arthur.md` daba por perdidos artefactos que sí están (la curva k-shot de EuroCropsML lleva en git desde `bc019e5` y los crudos de WorldCereal están en DVC). **Hallazgo que cambia la fase 2**: seis artefactos sellados no tienen productor en el repositorio, entre ellos `us043_honest_dropout_curve.csv` y `us043_farslip_grid.csv`, que sostienen la contribución central; el repositorio solo contiene lectores. La curva calidad-cobertura se reimplementa desde las posteriores OOF selladas y el CSV queda como comprobación cruzada. Pendiente: lo que depende de Arthur y los puntos 2 a 5 de abajo.
 
 Responsable: Javier, con entregas de Arthur. Salida: `paper/ARTIFACTS.md` y DVC actualizado.
 
@@ -68,17 +73,17 @@ Responsable: Javier, con entregas de Arthur. Salida: `paper/ARTIFACTS.md` y DVC 
 3. Una sola corrida sellada de Sen4AgriNet: parquet, JSON per-clase y checkpoint; regenerar texto y figura desde ella.
 4. Emitir CSV con los conteos por escena que hoy solo viven en títulos de PNG.
 5. Figuras: `make paper-figures` emite SVG y PDF versionados; retirar `*.png` del flujo; `aoi_italy` desde caché sellada, no GEE en vivo.
-6. `paper/ARTIFACTS.md`: tabla elemento del paper, artefacto, MD5, commit, fecha. Gate: `scripts/paper_artifacts_check.py` compara los MD5 y falla si algo cambió sin registro.
-7. Fijar versiones de cómputo en el ledger (`xgboost`, `scikit-learn`, `polars`, `matplotlib`) y el SHA del commit que produjo cada artefacto.
+6. `paper/ARTIFACTS.md`: **hecho**. Tabla elemento del paper, artefacto, MD5, bytes, commit y estado, más una sección de trazabilidad que dice qué artefacto tiene productor en el repositorio y cuáles solo tienen lectores. Gate `scripts/paper_artifacts_check.py` vía `make paper-artifacts-check`, probado en negativo.
+7. Fijar versiones de cómputo en el ledger (`xgboost`, `scikit-learn`, `polars`, `matplotlib`) y el SHA del commit que produjo cada artefacto: **hecho**.
 
 ### Fase 2 · Experimentos del ángulo A (CPU, datos en disco)
 
 Responsable: Javier. Insumos: `ml/eval/oof/oof_parcel_*_fold5.parquet` (8 miembros, 16 640 parcelas), `us043_farslip_grid.csv`, `us043_winner_cardinality_curve.csv`, `cardinalidad.json`, `ec_neighborhood_result.json`, geometrías de PASTIS-R.
 
 1. Homogéneo contra heterogéneo sobre las mismas OOF: media simple, voto ponderado y stacking; delta por clase; bootstrap pareado por parcela (B = 1000) y McNemar.
-2. Curva calidad contra cobertura con intervalo bootstrap y, como baseline de clasificación selectiva, rechazo por umbral de confianza a igual cobertura.
+2. **Contribución central tras el reencuadre.** Curva calidad contra cobertura por retirada de clases con intervalo bootstrap y, obligatoriamente, el comparador de clasificación selectiva: rechazo por umbral de confianza **a igual cobertura**, medido en F1-macro. Sin ese comparador la curva repite lo ya publicado (regla R2 de [`ADR-013`](decisions/ADR-013-angulo-micai.md)).
 3. Aporte de FarSLIP 5 contra 3 miembros en un solo universo, con intervalo; declarar por qué se elige ese universo.
-4. Nulo de vecindad espacial con intervalo (`ml/ensemble/ec_neighborhood.py`).
+4. Nulo de vecindad espacial con intervalo bootstrap pareado (`ml/ensemble/ec_neighborhood.py`). Ojo: el artefacto actual da un delta **positivo** de +0,0027 a +0,0068, no un cero; si el intervalo excluye el cero se reporta como mejora pequeña y no accionable (regla R1 de [`ADR-013`](decisions/ADR-013-angulo-micai.md)).
 5. Tabla de individuales bajo un solo protocolo (fold-5, todos los miembros, mismo harness).
 6. Cada experimento produce CSV o JSON bajo `reports/paper_micai/` con semilla, versiones y SHA; entra al ledger de la fase 1.
 
@@ -93,7 +98,8 @@ Responsable: Javier. Barrido completo tras cada cambio (abstract, introducción,
 5. Un solo reasoner en todo el texto y en la cita: Gemini 2.5 Pro (Vertex AI); repetir la medición de intercambio de backends con n mayor o igual a 30 consultas, o reducirla a una frase.
 6. Serving de Qwen descrito como fue (llama.cpp, GGUF Q4_K_M) o eliminado; sin "Qwen 3.6-VL" sin cita; sin Gemma.
 7. Eliminar toda mención de resultados pendientes, jerga interna (US-0xx, EPIC, H100, blockers, engram), rutas del repositorio y costos FinOps.
-8. Limitaciones con lo que debilita las conclusiones: un solo fold held-out para los densos, un par denso con 10 parches, artefactos regenerados.
+8. Retirar las cuatro afirmaciones prohibidas por [`ADR-013`](decisions/ADR-013-angulo-micai.md): «el contexto espacial no aporta», «AlphaEarth ya codifica la fenología», la cardinalidad como novedad a secas y «adoptamos Be My Eyes al pie de la letra».
+9. Limitaciones con lo que debilita las conclusiones: un solo fold held-out para los densos, un par denso con 10 parches, artefactos regenerados.
 
 ### Fase 4 · Reescritura en 12 a 15 páginas LNCS
 
@@ -117,6 +123,7 @@ Reglas de estilo: abstract de 150 a 250 palabras sin cifras ni siglas de métric
 
 Responsable: Javier. Gate: `scripts/paper_cite_check.py` más verificación por API de cada id.
 
+0. Punto de partida: `reports/paper_micai/fase0/related_work_verified.csv` trae 43 entradas con título, autores y año resueltos por arXiv, Crossref u OpenAlex, y los tres anclajes ya leídos y contrastados.
 1. Reconstruir desde la fuente las seis entradas con datos falsos o dudosos: `huang2025bemyeyes`, `harvesting2026alphaearth`, `ruan2025agromind`, `reuss2025eurocropsml`, `li2025farslip`, `wen2025phenology`; corregir `garnot2021utae`.
 2. DOI en las 22 entradas actuales y en las nuevas; retirar los campos `note`; proteger siglas con llaves; más de seis autores se listan seis y "et al.".
 3. Añadir las referencias que un revisor de IA espera: TempCNN (Pelletier 2019), Rußwurm y Körner 2020, ReAct, Toolformer, RAG (Lewis 2020), LLM-as-judge (Zheng 2023), stacking (Wolpert 1992), validación espacial (Roberts 2017), clasificación selectiva (Geifman y El-Yaniv 2017), EuroCrops y HCAT (Schneider 2023), Prithvi, SatMAE, Optuna.
@@ -187,7 +194,7 @@ Total orientativo: 16 a 18 días de trabajo, sin contar esperas de terceros.
 
 ## 5. Criterios de cierre por fase
 
-- Fase 0: `novedad.md` con matriz de al menos 25 trabajos y veredicto firmado por ambos en un ADR.
+- Fase 0: **cumplido salvo la firma**. `novedad.md` con matriz de 43 trabajos verificados y veredicto de reencuadre; falta que Arthur y Javier firmen `ADR-013`.
 - Fase 1: `make paper-artifacts-check` en verde; un clon limpio con `dvc pull` regenera todas las tablas y figuras.
 - Fase 2: cada experimento con CSV o JSON sellado, semilla, versiones y prueba estadística con n.
 - Fase 3: cero menciones de "pending", jerga interna o rutas en el texto; cada cifra con `% src:` verificable por script.
