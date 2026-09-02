@@ -87,7 +87,10 @@ def fit_scaler_on_train(
         )
 
     train_set = set(int(x) for x in train_ids)
-    train_df = df.filter(pl.col("parcel_id").is_in(list(train_set))).select(numeric_cols)
+    # Match the column dtype explicitly: ``parcel_id`` may be stored as String while
+    # the ids arrive as ints, and polars >= 1.3x refuses ``is_in`` across dtypes.
+    train_id_series = pl.Series("parcel_id", sorted(train_set)).cast(df.schema["parcel_id"])
+    train_df = df.filter(pl.col("parcel_id").is_in(train_id_series)).select(numeric_cols)
     if train_df.height == 0:
         raise ValueError(
             "After filtering by `train_ids` the frame is empty. IDs in another fold?"

@@ -146,6 +146,7 @@ dagster_home/
 $DAGSTER_HOME/
 tmp_dagster_home_*/
 schedules/
+!dagster_project/schedules/
 storage/
 history/
 compute_logs/

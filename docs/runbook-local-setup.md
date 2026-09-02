@@ -272,3 +272,58 @@ Lo ideal es que el equipo deje el entorno consistente desde el lock para no depe
 - Considerar **fijar `torchvision==0.26.0+cu130`** en el grupo `ml-gpu` (source `pytorch-cu130`) del `pyproject.toml`, para que `poetry install` traiga la torchvision correcta.
 - Revisar el pin de `polars` (que el wheel traiga `polars-runtime-*`).
 - Tras ajustar, `poetry lock` + commit, y todos hacen `poetry install --with dev,test,ml,ml-gpu,geo` sin parches.
+
+## Apéndice D — macOS Apple Silicon (verificado 2-sep-2026, M3 Pro, macOS 26)
+
+Todo el repo corre en Mac arm64 sin GPU NVIDIA. Estos son los pasos y parches que
+hicieron falta además de los del cuerpo del runbook; ninguno toca el `poetry.lock`.
+
+```bash
+# 1) Herramientas (Homebrew)
+brew install poetry pnpm gitleaks dbmate libomp librsvg
+brew tap hashicorp/tap && brew install hashicorp/tap/terraform   # solo para `terraform validate`
+
+# 2) Entorno Python (venv dentro del repo, Python 3.12 de Homebrew)
+export POETRY_VIRTUALENVS_IN_PROJECT=true
+poetry env use /opt/homebrew/opt/python@3.12/bin/python3.12
+poetry install --with dev,test,ml,geo,dagster,paper    # FALLA en torch: el lock lo fija a +cu130
+poetry run pip install "torch==2.11.0" "torchvision==0.26.0"   # ruedas macOS arm64 de PyPI (MPS)
+poetry install --with dev,test,ml,geo,dagster,paper --dry-run  # lista lo que quedo sin instalar;
+#   instalar esa lista con `poetry run pip install pkg==ver` EXCEPTO torch y tree-sitter-python
+poetry install --only-root                              # instala el paquete raiz (ml, backend, dagster_project)
+
+# 3) OpenMP: torch trae su propio libomp.dylib y xgboost/lightgbm usan el de Homebrew.
+#    Con dos runtimes cargados el proceso hace segfault (exit 139) o se cuelga.
+#    Solucion: que torch use el mismo libomp que el resto.
+TL=.venv/lib/python3.12/site-packages/torch/lib/libomp.dylib
+mv "$TL" "$TL.orig" && ln -s /opt/homebrew/opt/libomp/lib/libomp.dylib "$TL"
+
+# 4) Frontend
+cd frontend && pnpm install && cd ..                    # pnpm 11 cambia solo a la 10.24.0 del packageManager
+
+# 5) Infra local
+cp .env.example .env.local   # o el minimo del paso 1 del runbook, con REDIS_URL en :63790
+docker compose --env-file .env.local up -d --build postgres redis
+DATABASE_URL='postgres://agrosat:agrosat@localhost:55432/agrosat?sslmode=disable' dbmate --no-dump-schema up
+#   `--no-dump-schema`: sin `pg_dump` local dbmate fallaria al volcar db/schema.sql tras migrar
+
+# 6) Paper (BasicTeX es de root; instalar paquetes en modo usuario desde el repo historico 2025)
+tlmgr init-usertree
+tlmgr --usermode --repository https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final install units multirow import
+#   Las figuras PNG del paper estan gitignoradas; se regeneran desde reports/ (ver paper/AGENTS.md)
+#   o se rasterizan desde los SVG versionados:
+cd paper && for s in $(git ls-files 'figures/*/*.svg' | grep -v '_es\.svg$'); do
+  [ -f "${s%.svg}.png" ] || rsvg-convert --dpi-x 300 --dpi-y 300 --zoom 3 -o "${s%.svg}.png" "$s"; done; cd ..
+make paper-pdf
+```
+
+Limitaciones conocidas en Mac:
+
+- `tree-sitter-python==0.21.0` (grupo `dev`, dependencia de `codebleu`) no existe para Python 3.12
+  en ninguna plataforma; `ml/eval/agent_bench.py` lo importa solo para la metrica CodeBLEU.
+- `make secrets-scan` marcaba un falso positivo historico en `docs/us-planning/us-017.md`
+  (docstring "CLS token output" junto a una URI `gs://`); esta listado en `.gitleaksignore`.
+- Sin credenciales del equipo (GCS del DVC, GEE, Vertex) no se descargan datos ni pesos: los tests
+  marcados `empirical`/`requires_gee` se saltan y `make notebooks-check` no aplica.
+- `mypy -p backend.app` desde la raiz reporta deuda preexistente en `ml/` (no bloqueante en CI);
+  `cd backend && mypy app/` (el `make lint`) queda limpio.

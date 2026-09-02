@@ -123,7 +123,7 @@ def test_figures_emitted(built: Path) -> None:
     Every figure is emitted in both languages: English keeps the canonical base name
     and Spanish gets an ``_es`` suffix on the stem.
     """
-    for stem in (b.KSHOT_FIGURE, b.MEXICO_FIGURE):
+    for stem in (b.KSHOT_FIGURE,):
         for lang in b.LANGS:
             lang_stem = b._lang_stem(built / stem, lang)
             png = lang_stem.with_suffix(".png")
@@ -132,10 +132,11 @@ def test_figures_emitted(built: Path) -> None:
             assert svg.is_file() and svg.stat().st_size > 0
     # The English base name must exist bare (no language suffix).
     assert (built / Path(f"{b.KSHOT_FIGURE}.png")).is_file()
-    assert (built / Path(f"{b.MEXICO_FIGURE}.png")).is_file()
     # The Spanish variant must exist with the ``_es`` suffix.
     assert (built / b.FIGURES_DIR / "kshot_curve_es.png").is_file()
-    assert (built / b.FIGURES_DIR / "mexico_phenology_es.svg").is_file()
+    # The Mexico avocado/guava figure is intentionally no longer emitted (the
+    # manuscript keeps real-metric experiments only; see ``build_all``).
+    assert not (built / Path(f"{b.MEXICO_FIGURE}.png")).exists()
 
 
 @requires_artefacts
@@ -146,13 +147,11 @@ def test_figure_text_is_translated(built: Path) -> None:
     presence of a phrase in the SVG proves it was drawn. English words must be absent
     from the Spanish variant and vice-versa (only strings differ, never the data).
     """
-    en_svg = (built / Path(f"{b.MEXICO_FIGURE}.svg")).read_text(encoding="utf-8")
-    es_svg = (built / b.FIGURES_DIR / "mexico_phenology_es.svg").read_text(
-        encoding="utf-8"
-    )
-    assert "Day of year" in en_svg and "Avocado" in en_svg
-    assert "Day of year" not in es_svg
+    en_svg = (built / Path(f"{b.KSHOT_FIGURE}.svg")).read_text(encoding="utf-8")
+    es_svg = (built / b.FIGURES_DIR / "kshot_curve_es.svg").read_text(encoding="utf-8")
+    assert "labelled samples" in en_svg and "query set" in en_svg
+    assert "labelled samples" not in es_svg
     # Spanish accented strings round-trip through the UTF-8 SVG.
-    assert "Día del año" in es_svg  # "Día del año"
-    assert "Michoacán" in es_svg  # "Michoacán"
-    assert "fenológica" in es_svg  # "fenológica"
+    assert "muestras etiquetadas" in es_svg
+    assert "país objetivo" in es_svg  # "país objetivo"
+    assert "conjunto de consulta" in es_svg

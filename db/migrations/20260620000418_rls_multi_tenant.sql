@@ -122,4 +122,8 @@ REVOKE USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public FROM agrosat_app;
 REVOKE SELECT ON rag_documents FROM agrosat_app;
 REVOKE SELECT, INSERT, UPDATE, DELETE ON chat_sessions, aois, parcels, features_parcels FROM agrosat_app;
 
+-- Later migrations (chat_messages, list_chat_sessions) grant more privileges to the
+-- role; DROP OWNED BY revokes every privilege it still holds in this database (the
+-- role owns no objects) so the role can be dropped regardless of what came after.
+DROP OWNED BY agrosat_app;
 DROP ROLE IF EXISTS agrosat_app;

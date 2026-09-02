@@ -13,9 +13,10 @@ no hand-typed numbers:
 - ``paper/figures/us-073-transfer/kshot_curve.{png,svg}`` -- the k-shot curve plot
   with per-seed error bars for the three real scenarios (LV+PT->EE, LV->EE,
   sin-pretrain->EE).
-- ``paper/figures/us-073-transfer/mexico_phenology.{png,svg}`` -- the qualitative
-  Mexico avocado/guava NDVI phenological curves from the real GEE pulls
-  (``data/transfer/mexico_demo_ndvi.parquet``, US-077). NO classifier, NO F1.
+- (No longer emitted) ``mexico_phenology.{png,svg}`` -- the qualitative Mexico
+  avocado/guava NDVI curves (``data/transfer/mexico_demo_ndvi.parquet``, US-077)
+  left the manuscript; :func:`build_mexico_figure` is kept but ``build_all`` does
+  not call it. NO classifier, NO F1.
 
 Every figure is emitted in two languages: the English version is the canonical base
 name (``<name>.{png,svg}``, for the English paper) and the Spanish version carries an

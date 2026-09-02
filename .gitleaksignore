@@ -1,0 +1,4 @@
+# Falsos positivos verificados de gitleaks (make secrets-scan).
+# Formato: <commit>:<archivo>:<regla>:<linea>
+# us-017.md: docstring "CLS token output" + URI gs:// en snippet de planeacion; no es credencial.
+7816dbb491a619d1422e7f23ba8dfb4e5142966d:docs/us-planning/us-017.md:generic-api-key:393

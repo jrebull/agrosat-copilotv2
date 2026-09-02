@@ -22,6 +22,9 @@ pytestmark = pytest.mark.integration
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SEED_SCRIPT = REPO_ROOT / "scripts" / "seed.py"
+
+# Candidate images in preference order; first that boots wins.
+_IMAGE_CANDIDATES = ("agrosat-postgres:15-3.4-pgvector", "postgis/postgis:15-3.4")
 MIGRATION_SQL = REPO_ROOT / "db" / "migrations" / "20260511213942_initial_schema.sql"
 DEMO_LABEL = "Demo parcel - Tuscany"
 
@@ -30,6 +33,11 @@ def _extract_migrate_up(sql_text: str) -> str:
     """Extract the block between ``-- migrate:up`` and ``-- migrate:down``."""
     after_up = sql_text.split("-- migrate:up", 1)[1]
     up_block = after_up.split("-- migrate:down", 1)[0]
+    # Drop full-line SQL comments: a ``;`` inside a comment would otherwise split the
+    # block into a comment-only "statement" (asyncpg chokes on it) plus garbage.
+    up_block = "\n".join(
+        line for line in up_block.splitlines() if not line.strip().startswith("--")
+    )
     return up_block.strip()
 
 
@@ -47,8 +55,11 @@ async def _apply_migration(dsn: str, up_sql: str) -> None:
                 await conn.execute(stmt)
             except Exception as exc:
                 if "CREATE EXTENSION" in stmt.upper():
-                    # Optional extensions (postgis_topology, pg_stat_statements,
-                    # vector) may be missing in the postgis/postgis:15-3.4 image.
+                    if "VECTOR" in stmt.upper():
+                        # Not optional: the schema needs ``vector(64)`` columns.
+                        pytest.skip(f"pgvector no disponible en la imagen: {exc}")
+                    # Optional extensions (postgis_topology, pg_stat_statements)
+                    # may be missing in the postgis/postgis:15-3.4 image.
                     print(f"skip optional stmt ({exc}): {stmt[:60]}")
                     continue
                 raise
@@ -74,17 +85,27 @@ def test_seed_smoke_idempotent() -> None:
 
     pytest.importorskip("asyncpg")
 
-    container = PostgresContainer(
-        image="postgis/postgis:15-3.4",
-        username="agrosat",
-        password="agrosat",
-        dbname="agrosat",
-    )
-
-    try:
-        container.start()
-    except Exception as exc:  # noqa: BLE001
-        pytest.skip(f"Docker no disponible para testcontainers: {exc}")
+    # Same preference order as ``test_rls_isolation``: the compose-built image ships
+    # pgvector (the initial schema declares ``vector(64)`` columns); the upstream
+    # PostGIS image is the fallback and skips cleanly if pgvector is absent.
+    container = None
+    last_exc: Exception | None = None
+    for image in _IMAGE_CANDIDATES:
+        candidate = PostgresContainer(
+            image=image,
+            username="agrosat",
+            password="agrosat",
+            dbname="agrosat",
+        )
+        try:
+            candidate.start()
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            continue
+        container = candidate
+        break
+    if container is None:
+        pytest.skip(f"Docker no disponible para testcontainers: {last_exc}")
 
     try:
         # URL for asyncpg (without +psycopg2 suffix)
