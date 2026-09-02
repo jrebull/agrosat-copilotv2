@@ -109,7 +109,7 @@ PASTIS-R crudo se baja de Zenodo con su MD5 documentado.
 
 ## Metadatos y repositorio
 
-- [ ] ORCID de Arthur y forma exacta de su nombre para paper, sistema del congreso y licencia.
+- [x] ~~ORCID de Arthur.~~ Recibido y **verificado contra el registro público** el 2 de septiembre de 2026: `0009-0002-1603-8946` devuelve «Arthur Jafed · Zizumbo Velasco», que coincide con la firma. Queda en [`docs/paper/metadatos-autoria.md`](paper/metadatos-autoria.md) junto con el de Javier. Sigue pendiente la **forma exacta del nombre** en `pyproject.toml`, donde hoy aparece como «Arthur Zizumbo».
 - [ ] Valorar mover el repositorio a una organización neutra antes del camera-ready (barato ahora, caro después), o al menos: `LICENSE` en formato que GitHub reconozca como MIT, `CITATION.cff` y una release con DOI en Zenodo.
 - [ ] Decidir si los 21 commits de arreglos del fork (tests, mypy, lock para Mac, Postgres arm64, CI, `/readyz`, documentación) se suben al upstream como pull request.
 - [ ] `docs/licenses/DATA_LICENSE.md` sigue marcando WorldCereal como "no ingerido" aunque el paper lo usa; corregir con la atribución `ESA/WorldCereal/2021/MODELS/v100`, CC-BY-4.0.
