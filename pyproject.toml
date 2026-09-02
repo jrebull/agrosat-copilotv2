@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "SaaS conversacional open-source para análisis satelital agrícola"
 authors = [
     { name = "Arthur Zizumbo" },
+    { name = "Javier A. Rebull-Saucedo", email = "rebull@exatec.tec.mx" },
     { name = "Aaron Bocanegra" },
     { name = "Isaac Ávila" },
 ]

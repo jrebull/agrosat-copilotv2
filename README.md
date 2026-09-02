@@ -21,7 +21,7 @@ Un artículo científico derivado de AgroSatCopilot para la
 
 <br>
 
-Mantenido por **Javier Rebull** · [jrebull](https://github.com/jrebull)
+Mantenido por **Javier A. Rebull-Saucedo** · [jrebull](https://github.com/jrebull) · [ORCID 0009-0008-2089-5274](https://orcid.org/0009-0008-2089-5274)
 
 </div>
 
@@ -227,7 +227,11 @@ macOS Apple Silicon, con sus parches, está en el
 AgroSatCopilot fue desarrollado por **Carlos Isaac Ávila Gutiérrez**, **Carlos Aaron Bocanegra Buitrón**
 y **Arthur Jafed Zizumbo Velasco** (Equipo 17, Maestría en Inteligencia Artificial Aplicada, Tec de Monterrey),
 con el **Dr. Gerardo Jesús Camacho González** como sponsor académico.
-Este fork conserva esa autoría y construye sobre ella. La autoría del artículo para MICAI se acordará con ellos antes del envío.
+Este fork conserva esa autoría y construye sobre ella.
+
+Autores del artículo para MICAI 2027, en este orden: **Arthur Jafed Zizumbo Velasco**,
+**Javier A. Rebull-Saucedo** ([ORCID 0009-0008-2089-5274](https://orcid.org/0009-0008-2089-5274), rebull@exatec.tec.mx),
+**Carlos Isaac Ávila Gutiérrez** y **Carlos Aaron Bocanegra Buitrón**.
 
 Código MIT · Datasets y modelos bajo sus licencias respectivas, ver [`docs/licenses/DATA_LICENSE.md`](docs/licenses/DATA_LICENSE.md)
 
