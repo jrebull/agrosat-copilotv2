@@ -21,6 +21,8 @@
 // under import.meta.client). No module-level singletons — each useMap() call
 // owns its own map instance, so multi-instance and per-navigation cleanup work.
 
+// vue-tsc 3.3 ya no expone el namespace global `GeoJSON`; se importa el tipo explicitamente.
+import type * as GeoJSON from "geojson";
 import { storeToRefs } from "pinia";
 import type {
   Map as MlMap,

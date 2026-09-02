@@ -159,15 +159,14 @@ placeholders honestos en las celdas que dependen de la eval LLM.
 
 ## 3. Deuda tecnica menor (rapida, no bloquea)
 
-### 3.1 `dvc add` + commit de los parquets nuevos de transfer
-- **Que es**: los parquets generados esta sesion en `data/transfer/` (resultados
-  AlphaEarth few-shot, WorldCereal tropical, per-clase, multi-region) estan
-  **gitignored** y NO versionados en DVC (verificado: `git check-ignore` los marca; no
-  hay `.dvc` para ellos, solo `eurocropsml.dvc`).
-- **Por que esta pendiente**: en los workflows de esta sesion NO se toco git.
-- **Como completar**: `dvc add data/transfer/*.parquet` (o el directorio) + commit de
-  los `.dvc`. Aplica a, entre otros: `eurocropsml_alphaearth_fewshot_results.parquet`,
-  `worldcereal_*.parquet`, `multiregion_*.parquet`, `pastis_only_*.parquet`.
+### 3.1 `dvc add` + commit de los parquets nuevos de transfer — PARCIALMENTE RESUELTO
+- Verificado 2026-09-02 en el fork: `multiregion_*.parquet` y `worldcereal_*.parquet` ya tienen
+  `.dvc` y estan en el remoto; `eurocropsml_fewshot_results.parquet`, `mexico_demo_ndvi.parquet` y
+  `mexico_demo_alphaearth.parquet` (4-20 KB) estan versionados directamente en git.
+- Siguen sin existir en ningun sitio (ni disco, ni git, ni remoto DVC):
+  `eurocropsml_alphaearth_fewshot_results.parquet` y `pastis_only_*.parquet`; solo la VM H100
+  del equipo puede regenerarlos. Tambien falta en el remoto `data/features/alphaearth_italia_2018.parquet`
+  (su `.dvc` existe, nunca se hizo `dvc push`).
 
 ### 3.2 `method_farslip.tex` esta en espanol — RESUELTO
 - Traducido a ingles en el upstream (commit `1134c3b`, 2026-06-30). Sin accion pendiente.
