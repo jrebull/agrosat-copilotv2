@@ -221,6 +221,9 @@ checkpoints/transfer/voting-italia/
 !backend/tests/fixtures/**/*.parquet
 !ml/tests/fixtures/**/*.parquet
 !data/test_fixtures/**/*.parquet
+# El sello del fold 5 del articulo MICAI son 420 KB y sustituyen a los 68 GB de
+# PASTIS-R para reproducir toda su evaluacion; van a git, no a DVC.
+!reports/paper_micai/**/*.parquet
 
 # ── Notebooks: SE COMMITEAN con outputs poblados ──────────────────────────────
 # Los .ipynb son entregable visual del curso: outputs (HTML tables, PNG inline,
