@@ -59,7 +59,8 @@ nbstripout = "^0.9.1"
 notebook = "^7.5.6"
 psycopg = {extras = ["binary"], version = "^3.3.4"}
 codebleu = "^0.7.0"
-tree-sitter-python = "<0.22"
+# Sin rueda para macOS arm64 (ni sdist): se omite ahi; codebleu degrada a 0.0 con aviso.
+tree-sitter-python = { version = "<0.22", markers = "sys_platform != 'darwin' or platform_machine != 'arm64'" }
 rio-cogeo = "^7.0.2"
 
 [tool.poetry.group.test.dependencies]
@@ -88,6 +89,8 @@ xgboost = "^3.2.0"
 lightgbm = "^4.6.0"
 scikit-learn = "^1.8.0"
 scipy = "^1.15.0"
+# macOS: torch de PyPI (ruedas arm64 con MPS). En Linux/Windows lo aporta el grupo ml-gpu (cu130).
+torch = { version = "2.11.0", markers = "sys_platform == 'darwin'" }
 segmentation-models-pytorch = "^0.5.0"
 monai = "^1.5.2"
 optuna = "^4.8.0"
@@ -142,7 +145,7 @@ optional = true
 [tool.poetry.group.ml-gpu.dependencies]
 # Cross-platform GPU: torch CUDA 13.0 + bitsandbytes. Funciona en Win + Linux con
 # GPU NVIDIA (driver >= 580). Wheels desde el index oficial PyTorch (cu130).
-torch = { version = "2.11.0+cu130", source = "pytorch-cu130" }
+torch = { version = "2.11.0+cu130", source = "pytorch-cu130", markers = "sys_platform != 'darwin'" }
 bitsandbytes = "^0.49.2"
 
 [tool.poetry.group.ml-gpu-linux]
