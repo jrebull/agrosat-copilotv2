@@ -125,11 +125,11 @@ def extract_png_outputs(notebook_path: Path, output_dir: Path) -> list[Path]:
 
 @app.command()
 def main(
-    notebook: Path = typer.Argument(  # noqa: B008
+    notebook: Path = typer.Argument(
         ...,
         help="Path al notebook .ipynb a procesar.",
     ),
-    output: Path = typer.Option(  # noqa: B008
+    output: Path = typer.Option(
         REPO_ROOT / "paper" / "figures" / "avance1",
         "--output",
         "-o",

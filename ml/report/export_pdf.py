@@ -118,19 +118,19 @@ def _html_to_pdf(html_str: str, output: Path, css_path: Path, base_url: Path) ->
 
 @app.command()
 def main(
-    output: Path = typer.Option(  # noqa: B008
+    output: Path = typer.Option(
         DEFAULT_OUTPUT,
         "--output",
         "-o",
         help="Path destino del PDF generado.",
     ),
-    figures_dir: Path = typer.Option(  # noqa: B008
+    figures_dir: Path = typer.Option(
         DEFAULT_FIGURES_DIR,
         "--figures-dir",
         "-f",
         help="Directorio raiz con subdirectorios us-010/us-011/us-012/avance1.",
     ),
-    template: Path = typer.Option(  # noqa: B008
+    template: Path = typer.Option(
         DEFAULT_TEMPLATE,
         "--template",
         "-t",

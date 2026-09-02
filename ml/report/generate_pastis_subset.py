@@ -35,13 +35,13 @@ app = typer.Typer(
 
 @app.command()
 def main(
-    source: Path = typer.Option(  # noqa: B008
+    source: Path = typer.Option(
         REPO_ROOT / "data" / "PASTIS-R" / "metadata.geojson",
         "--source",
         "-s",
         help="GeoJSON original de PASTIS-R (2.433 patches en EPSG:2154).",
     ),
-    output: Path = typer.Option(  # noqa: B008
+    output: Path = typer.Option(
         REPO_ROOT / "data" / "reference" / "pastis_tiles_dissolved.geojson",
         "--output",
         "-o",
