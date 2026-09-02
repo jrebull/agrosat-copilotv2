@@ -108,7 +108,9 @@ def _try_apply_migrations(engine: Engine) -> bool:
         if "-- migrate:down" in up_section:
             up_section = up_section.split("-- migrate:down", 1)[0]
         with engine.begin() as conn:
-            conn.execute(text(up_section))
+            # exec_driver_sql: the raw migration text is sent as-is. ``text()`` would
+            # parse ``:8002`` / ``:11434`` inside SQL comments as bind parameters.
+            conn.exec_driver_sql(up_section)
     return True
 
 

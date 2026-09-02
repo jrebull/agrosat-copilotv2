@@ -191,7 +191,9 @@ pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
 ```
 
 Para el stack completo con Docker, Poetry y pnpm, sigue el
-[README original](docs/README-upstream-agrosat-copilot.md).
+[README original](docs/README-upstream-agrosat-copilot.md). El setup verificado en
+macOS Apple Silicon, con sus parches, está en el
+[Apéndice D del runbook](docs/runbook-local-setup.md#apéndice-d--macos-apple-silicon-verificado-2-sep-2026-m3-pro-macos-26).
 
 <br>
 

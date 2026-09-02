@@ -141,6 +141,10 @@ def fit_scaler_on_train(
     # nanmean emits no warnings.
     col_means = np.nanmean(matrix, axis=0)
     inds = np.where(np.isnan(matrix))
+    # polars >= 1.3x may hand back a read-only zero-copy array; imputation
+    # below writes in place, so own the buffer first.
+    if not matrix.flags.writeable:
+        matrix = matrix.copy()
     matrix[inds] = np.take(col_means, inds[1])
 
     scaler = StandardScaler()
