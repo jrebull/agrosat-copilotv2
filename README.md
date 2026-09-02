@@ -229,9 +229,10 @@ y **Arthur Jafed Zizumbo Velasco** (Equipo 17, Maestría en Inteligencia Artific
 con el **Dr. Gerardo Jesús Camacho González** como sponsor académico.
 Este fork conserva esa autoría y construye sobre ella.
 
-Autores del artículo para MICAI 2027, en este orden: **Arthur Jafed Zizumbo Velasco**,
-**Javier A. Rebull-Saucedo** ([ORCID 0009-0008-2089-5274](https://orcid.org/0009-0008-2089-5274), rebull@exatec.tec.mx),
-**Carlos Isaac Ávila Gutiérrez** y **Carlos Aaron Bocanegra Buitrón**.
+Autores del artículo para MICAI 2027, en este orden: **Arthur Jafed Zizumbo Velasco** y
+**Javier A. Rebull-Saucedo** ([ORCID 0009-0008-2089-5274](https://orcid.org/0009-0008-2089-5274), rebull@exatec.tec.mx).
+Isaac Ávila y Aaron Bocanegra quedan acreditados como autores del código, no del artículo.
+Plan de trabajo: [`docs/plan-micai-2027.md`](docs/plan-micai-2027.md). Pendientes del equipo original: [`docs/pendientes-arthur.md`](docs/pendientes-arthur.md).
 
 Código MIT · Datasets y modelos bajo sus licencias respectivas, ver [`docs/licenses/DATA_LICENSE.md`](docs/licenses/DATA_LICENSE.md)
 
