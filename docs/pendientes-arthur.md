@@ -2,6 +2,40 @@
 
 Lista única de lo que solo Arthur puede entregar o decidir. Cada punto dice para qué sirve y qué desbloquea. Actualizada el 2 de septiembre de 2026 tras la fase 0 y el sellado de la fase 1, verificando cada ruta contra el disco y contra `git ls-files` en lugar de contra el markdown heredado; se tacha o se marca cuando se cierre.
 
+## Lo urgente, en orden (2 de septiembre de 2026, tras la fase 2)
+
+Lo demás de este documento sigue siendo cierto, pero el reencuadre bajó su prioridad. Esto
+es lo que bloquea de verdad hoy.
+
+1. **Procedencia de `tsvit-pheno`. Es lo único que puede invalidar resultados ya escritos.**
+   Sobre las mismas 16 640 parcelas del fold 5 saca F1-macro 0,7367 mientras
+   `tsvit-pheno-fullm` saca 0,2552. Una diferencia de 0,48 entre dos variantes de la misma
+   arquitectura no es normal. Hace falta el registro de entrenamiento del checkpoint: **con
+   qué folds se entrenó**. Si vio el fold 5, el mejor individual se cae y hay que rehacer
+   toda la sección de resultados. Para Arthur son minutos en la VM; para el artículo es la
+   diferencia entre poder enviarlo y no.
+2. **Firmar o rebatir [`ADR-013`](decisions/ADR-013-angulo-micai.md) con su enmienda.** El
+   encuadre cambió: artículo nuevo desde cero sobre el punto de operación, el manuscrito
+   heredado no se repara. Sin esa firma no se escribe la introducción ni el título.
+3. **Autoría, confirmada por escrito.** Arthur primero, Javier segundo. Y avisar a Isaac
+   Ávila y Aaron Bocanegra de que quedan acreditados como autores del código en README,
+   `LICENSE` y los créditos del camera-ready, no del artículo.
+4. **Autor de correspondencia.** Firma la licencia de Springer **a mano** y no se puede
+   cambiar después del camera-ready. Decidirlo ahora cuesta un minuto; decidirlo tarde
+   cuesta el envío.
+5. **Ventana H100 para el reentrenamiento OOF de cinco folds.** No bloquea el envío, pero
+   es la mejora grande: el universo pasa de 16 640 parcelas a unas 83 000, el meta-modelo
+   por fin se entrena como es debido, y de paso resuelve el punto 1 por construcción,
+   porque el entrenamiento sería nuestro con folds conocidos. Si no hay ventana, se declara
+   la limitación y se envía igual.
+6. **`dvc push` de `data/features/alphaearth_italia_2018.parquet`.** Es lo único que
+   `dvc status --cloud` reporta como ausente en el remoto. Barato y cierra un hueco.
+
+Lo que **bajó de prioridad** con el reencuadre, porque su contenido sale del cuerpo del
+artículo: los artefactos de DE4, la evaluación conversacional, el modelo que nombra el
+reasoner y el serving de Qwen. Siguen listados abajo por si el segundo artículo los
+recupera.
+
 ## Decisiones
 
 - [ ] **Autoría.** Confirmar que el artículo va firmado por Arthur Jafed Zizumbo Velasco (primero) y Javier A. Rebull-Saucedo (segundo), y avisar a Isaac Ávila y Aaron Bocanegra, que quedan acreditados como autores del código en el README, `LICENSE` y los créditos del camera-ready, no del artículo.
