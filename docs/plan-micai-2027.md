@@ -91,6 +91,10 @@ Responsable: Javier. Insumos: `ml/eval/oof/oof_parcel_*_fold5.parquet` (8 miembr
 5. Tabla de individuales bajo un solo protocolo (fold-5, todos los miembros, mismo harness).
 6. Cada experimento produce CSV o JSON bajo `reports/paper_micai/` con semilla, versiones y SHA; entra al ledger de la fase 1.
 
+### Fase 2 bis · Qué artículo sale, escrito desde cero
+
+Tras la fase 2 la tesis del ensamble ya no se sostiene, así que antes de corregir cifras hay que decidir qué artículo se escribe. El análisis está en [`docs/paper/que-paper-sale.md`](paper/que-paper-sale.md): inventario de lo defendible, lo que falta, cuatro encuadres candidatos con su riesgo y su coste, y la recomendación de escribir **desde cero** un artículo sobre el punto de operación, con el resultado negativo del ensamble dentro como sección de protocolo. Incluye título de trabajo, contribuciones, esqueleto de doce páginas, los cinco experimentos de CPU que faltan y las cuatro objeciones previsibles con su respuesta. Requiere enmienda a ADR-013 firmada por ambos.
+
 ### Fase 3 · Corrección de cifras y afirmaciones
 
 Responsable: Javier. Barrido completo tras cada cambio (abstract, introducción, resultados, discusión, limitaciones, conclusión, pies y tablas).
