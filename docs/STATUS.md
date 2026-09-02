@@ -28,7 +28,7 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
 
 - Campeón desplegado: Voting-3 v2, 12 clases (`france-12`), F1-macro 0.8992 (`reports/agent_bench/perceiver_champion_eval_v2.json`).
 - Modelo final del curso: Stacking-5 heterogéneo con FarSLIP, F1-macro 0.7486 held-out fold-5 (`reports/ensemble/metrics/us043_farslip_grid.csv`); el Stacking-3 sin FarSLIP de US-040 da 0.7470 (`comparison_us040.csv`).
-- Datos versionados en DVC (`gs://agrosat-dvc-remote`): features, OOF, embeddings FarSLIP, checkpoints y datasets de transferencia. Falta en el remoto `data/features/alphaearth_italia_2018.parquet`. PASTIS-R crudo no está en DVC (Zenodo/EOTDL, 53.7 GB).
+- Datos versionados en DVC (`gs://agrosat-dvc-remote`): features, OOF, embeddings FarSLIP, checkpoints y datasets de transferencia. Falta en el remoto `data/features/alphaearth_italia_2018.parquet`. PASTIS-R crudo no está en DVC: se descarga de Zenodo (53.7 GB, MD5 `4887513d6c2d2b07fa935d325bd53e09`) y en esta máquina ya está extraído en `data/PASTIS-R/` (gitignorado).
 
 ## Entorno y gates
 

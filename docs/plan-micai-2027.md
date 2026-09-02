@@ -4,6 +4,7 @@
 **Estado de partida:** 2 de septiembre de 2026, tres auditorías independientes del manuscrito heredado (contenido científico, reproducibilidad y formato LNCS). Resumen de hallazgos en la sección 2.
 **Pendientes que dependen de Arthur:** [`pendientes-arthur.md`](pendientes-arthur.md).
 **Regla de oro heredada y vigente:** cifras reales o nada; cada número impreso se rederiva desde un artefacto versionado; no se concluye más de lo que mide el dato.
+**Infraestructura lista (2 de septiembre de 2026):** entorno completo en macOS (Apéndice D del runbook), acceso al proyecto GCP `agrosat-copilot` con ADC, artefactos ligeros de DVC en disco, PASTIS-R crudo extraído en `data/PASTIS-R/` (2 433 parches, 68 GB), `make lint` y `make test-all` en verde, mypy en cero. La fase 0 puede empezar sin esperar nada de terceros.
 
 Las fechas de la convocatoria MICAI 2027 no están publicadas. Este plan se ordena por dependencias, no por calendario; cuando salga la convocatoria se fija el calendario hacia atrás desde la fecha de envío (MICAI 2026 recomendó 12 páginas y admitió 20; confirmar para 2027).
 
