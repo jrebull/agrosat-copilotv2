@@ -17,6 +17,12 @@ bootstrap-gpu-linux:  ## Como bootstrap-gpu + flash-attn + vllm (solo Linux, rep
 	poetry install --with dev,test,ml,ml-gpu,ml-gpu-linux,geo,dagster,paper
 	cd frontend && pnpm install
 
+fix-libomp-macos:  ## macOS: torch usa el libomp de Homebrew (evita segfault con xgboost/lightgbm)
+	@TL=$$(poetry run python -c "import torch, os; print(os.path.join(os.path.dirname(torch.__file__), 'lib', 'libomp.dylib'))"); \
+	BREW=/opt/homebrew/opt/libomp/lib/libomp.dylib; \
+	if [ ! -f "$$BREW" ]; then echo "falta libomp: brew install libomp"; exit 1; fi; \
+	if [ -L "$$TL" ]; then echo "ya enlazado: $$TL"; else mv "$$TL" "$$TL.orig" && ln -s "$$BREW" "$$TL" && echo "enlazado: $$TL -> $$BREW"; fi
+
 verify-structure:  ## Valida estructura de directorios (AC-4 de US-001)
 	@bash scripts/verify_structure.sh
 

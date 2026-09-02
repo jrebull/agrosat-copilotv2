@@ -286,18 +286,15 @@ brew tap hashicorp/tap && brew install hashicorp/tap/terraform   # solo para `te
 # 2) Entorno Python (venv dentro del repo, Python 3.12 de Homebrew)
 export POETRY_VIRTUALENVS_IN_PROJECT=true
 poetry env use /opt/homebrew/opt/python@3.12/bin/python3.12
-poetry install --with dev,test,ml,geo,dagster,paper    # FALLA en torch: el lock lo fija a +cu130
-poetry run pip install "torch==2.11.0" "torchvision==0.26.0"   # ruedas macOS arm64 de PyPI (MPS)
-poetry install --with dev,test,ml,geo,dagster,paper --dry-run  # lista lo que quedó sin instalar;
-#   instalar esa lista con `poetry run pip install pkg==ver` EXCEPTO torch y tree-sitter-python
-poetry install --only-root                              # instala el paquete raíz (ml, backend, dagster_project)
+poetry install --with dev,test,ml,geo,dagster,paper    # desde sep-2026 el lock resuelve torch de PyPI en
+#   macOS (marker sys_platform) y omite tree-sitter-python en arm64: instala limpio, sin parches pip
 
 # 3) OpenMP: torch trae su propio libomp.dylib y xgboost/lightgbm usan el de Homebrew.
 #    Con dos runtimes cargados el proceso hace segfault (exit 139) o se cuelga.
 #    Solución: que torch use el mismo libomp que el resto. (scikit-learn trae una
 #    tercera copia en `sklearn/.dylibs/`, que no ha dado problemas.)
-TL=.venv/lib/python3.12/site-packages/torch/lib/libomp.dylib
-mv "$TL" "$TL.orig" && ln -s /opt/homebrew/opt/libomp/lib/libomp.dylib "$TL"
+make fix-libomp-macos      # enlaza torch/lib/libomp.dylib al de Homebrew (idempotente); repetir si
+#                          # poetry reinstala torch
 
 # 4) Frontend
 cd frontend && pnpm install && cd ..                    # pnpm 11 cambia solo a la 10.24.0 del packageManager
