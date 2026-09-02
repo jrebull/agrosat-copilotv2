@@ -1,0 +1,420 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "openalex",
+  "query": "selective classification reject option remote sensing",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W3183516990",
+      "title": "Machine learning with a reject option: a survey",
+      "authors": [
+        "Kilian Hendrickx",
+        "Lorenzo Perini",
+        "Dries Van der Plas",
+        "Wannes Meert",
+        "Jesse Davis"
+      ],
+      "year": 2024,
+      "doi": "10.1007/s10994-024-06534-x",
+      "venue": "Machine Learning",
+      "cited_by_count": 81
+    },
+    {
+      "openalex_id": "W4309779554",
+      "title": "Fine-grained TLS services classification with reject option",
+      "authors": [
+        "Jan Luxemburk",
+        "Tomáš Čejka"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.comnet.2022.109467",
+      "venue": "Computer Networks",
+      "cited_by_count": 50
+    },
+    {
+      "openalex_id": "W2918316070",
+      "title": "Aggregated Deep Local Features for Remote Sensing Image Retrieval",
+      "authors": [
+        "Raffaele Imbriaco",
+        "Clint Sebastian",
+        "Egor Bondarev",
+        "Peter H. N. de With"
+      ],
+      "year": 2019,
+      "doi": "10.3390/rs11050493",
+      "venue": "Remote Sensing",
+      "cited_by_count": 76
+    },
+    {
+      "openalex_id": "W3127706219",
+      "title": "Predicting catchment-scale methane fluxes with multi-source remote sensing",
+      "authors": [
+        "Aleksi Räsänen",
+        "Terhikki Manninen",
+        "Mika Korkiakoski",
+        "Annalea Lohila",
+        "Tarmo Virtanen"
+      ],
+      "year": 2021,
+      "doi": "10.1007/s10980-021-01194-x",
+      "venue": "Landscape Ecology",
+      "cited_by_count": 53
+    },
+    {
+      "openalex_id": "W3022116776",
+      "title": "Photoacoustic-Based Gas Sensing: A Review",
+      "authors": [
+        "Stefan Palzer"
+      ],
+      "year": 2020,
+      "doi": "10.3390/s20092745",
+      "venue": "Sensors",
+      "cited_by_count": 139
+    },
+    {
+      "openalex_id": "W4385374058",
+      "title": "Machine Learning with a Reject Option: A survey",
+      "authors": [
+        "Kilian Hendrickx",
+        "Lorenzo Perini",
+        "Dries Van der Plas",
+        "Wannes Meert",
+        "Jesse Davis"
+      ],
+      "year": 2021,
+      "doi": "10.48550/arxiv.2107.11277",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 31
+    },
+    {
+      "openalex_id": "W3203170306",
+      "title": "Remote Sensing of Wetlands in the Prairie Pothole Region of North America",
+      "authors": [
+        "Joshua Montgomery",
+        "Craig Mahoney",
+        "Brian Brisco",
+        "Lyle Boychuk",
+        "Danielle Cobbaert",
+        "Chris Hopkinson"
+      ],
+      "year": 2021,
+      "doi": "10.3390/rs13193878",
+      "venue": "Remote Sensing",
+      "cited_by_count": 28
+    },
+    {
+      "openalex_id": "W3135574654",
+      "title": "Decarbonizing the food and beverages industry: A critical and systematic review of developments, sociotechnical systems and policy options",
+      "authors": [
+        "Benjamin K. Sovacool",
+        "Morgan Bazilian",
+        "Steve Griffiths",
+        "Jinsoo Kim",
+        "Aoife Foley",
+        "David W. Rooney"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.rser.2021.110856",
+      "venue": "Renewable and Sustainable Energy Reviews",
+      "cited_by_count": 199
+    },
+    {
+      "openalex_id": "W4311772445",
+      "title": "Object perception in underwater environments: a survey on sensors and sensing methodologies",
+      "authors": [
+        "Dinh Quang Huy",
+        "Nicholas Sadjoli",
+        "Abu Bakr Azam",
+        "Basman Elhadidi",
+        "Yiyu Cai",
+        "Gerald Seet"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.oceaneng.2022.113202",
+      "venue": "Ocean Engineering",
+      "cited_by_count": 129
+    },
+    {
+      "openalex_id": "W3202272738",
+      "title": "Frequency selective surfaces as spatial filters: Fundamentals, analysis and applications",
+      "authors": [
+        "Ankush Kapoor",
+        "Ranjan Mishra",
+        "Pradeep Kumar"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.aej.2021.09.046",
+      "venue": "Alexandria Engineering Journal",
+      "cited_by_count": 94
+    },
+    {
+      "openalex_id": "W4307546654",
+      "title": "Weakly Supervised Object Detection for Remote Sensing Images: A Survey",
+      "authors": [
+        "Corrado Fasana",
+        "Samuele Pasini",
+        "Federico Milani",
+        "Piero Fraternali"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14215362",
+      "venue": "Remote Sensing",
+      "cited_by_count": 23
+    },
+    {
+      "openalex_id": "W4367049970",
+      "title": "A systematic review of neurophysiological sensing for the assessment of acute pain",
+      "authors": [
+        "Raul Fernandez Rojas",
+        "Nicholas A. T. Brown",
+        "Gordon Waddington",
+        "Roland Goecke"
+      ],
+      "year": 2023,
+      "doi": "10.1038/s41746-023-00810-1",
+      "venue": "npj Digital Medicine",
+      "cited_by_count": 79
+    },
+    {
+      "openalex_id": "W3125664696",
+      "title": "A review on deep learning in UAV remote sensing",
+      "authors": [
+        "Lucas Prado Osco",
+        "José Marcato",
+        "Ana Paula Marques Ramos",
+        "Lúcio André de Castro Jorge",
+        "Sarah Narges Fatholahi",
+        "Jonathan de Andrade Silva",
+        "Edson Takashi Matsubara",
+        "Hemerson Pistori",
+        "Wesley Nunes Gonçalves",
+        "Jonathan Li"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jag.2021.102456",
+      "venue": "International Journal of Applied Earth Observation and Geoinformation",
+      "cited_by_count": 9
+    },
+    {
+      "openalex_id": "W4383877898",
+      "title": "Water pollution control and revitalization using advanced technologies: Uncovering artificial intelligence options towards environmental health protection, sustainability and water security",
+      "authors": [
+        "Emmanuel Kwame Nti",
+        "Samuel Jerry Cobbina",
+        "Eunice Efua Attafuah",
+        "Lydia Dziedzorm Senanu",
+        "Gloria Amenyeku",
+        "Michael Amoah Gyan",
+        "Dorcas Forson",
+        "Abdul-Rafiw Safo"
+      ],
+      "year": 2023,
+      "doi": "10.1016/j.heliyon.2023.e18170",
+      "venue": "Heliyon",
+      "cited_by_count": 99
+    },
+    {
+      "openalex_id": "W3107669251",
+      "title": "A Novel Image Fusion Method of Multi-Spectral and SAR Images for Land Cover Classification",
+      "authors": [
+        "Yinghui Quan",
+        "Yingping Tong",
+        "Wei Feng",
+        "Gabriel Dauphin",
+        "Wenjiang Huang",
+        "Mengdao Xing"
+      ],
+      "year": 2020,
+      "doi": "10.3390/rs12223801",
+      "venue": "Remote Sensing",
+      "cited_by_count": 60
+    },
+    {
+      "openalex_id": "W4395033690",
+      "title": "Augmenting the Softmax with Additional Confidence Scores for Improved Selective Classification with Out-of-Distribution Data",
+      "authors": [
+        "Guoxuan Xia",
+        "Christos-Savvas Bouganis"
+      ],
+      "year": 2024,
+      "doi": "10.1007/s11263-024-02029-3",
+      "venue": "International Journal of Computer Vision",
+      "cited_by_count": 13
+    },
+    {
+      "openalex_id": "W4399021799",
+      "title": "Remote 3D Imaging and Classification of Pelagic Microorganisms with A Short‐Range Multispectral Confocal LiDAR",
+      "authors": [
+        "Joaquim Santos",
+        "Hans Jakobsen",
+        "Paul Michael Petersen",
+        "Christian Pedersen"
+      ],
+      "year": 2024,
+      "doi": "10.1002/lpor.202301291",
+      "venue": "Laser & Photonics Review",
+      "cited_by_count": 11
+    },
+    {
+      "openalex_id": "W4285205927",
+      "title": "Zero Trust Architecture (ZTA): A Comprehensive Survey",
+      "authors": [
+        "Naeem Syed",
+        "Syed Wajid Ali Shah",
+        "Arash Shaghaghi",
+        "Adnan Anwar",
+        "Zubair Baig",
+        "Robin Doss"
+      ],
+      "year": 2022,
+      "doi": "10.1109/access.2022.3174679",
+      "venue": "IEEE Access",
+      "cited_by_count": 355
+    },
+    {
+      "openalex_id": "W4384558963",
+      "title": "Contribution of remote sensing to wildfire trend and dynamic analysis in two of Ghana’s ecological zones: Guinea-savanna and Forest-savanna mosaic",
+      "authors": [
+        "Kueshi Sémanou Dahan",
+        "Raymond Abudu Kasei",
+        "Rikiatu Husseini"
+      ],
+      "year": 2023,
+      "doi": "10.1186/s42408-023-00198-z",
+      "venue": "Fire Ecology",
+      "cited_by_count": 15
+    },
+    {
+      "openalex_id": "W2762019694",
+      "title": "Creation and analysis of biochemical constraint-based models using the COBRA Toolbox v.3.0",
+      "authors": [
+        "Laurent Heirendt",
+        "Sylvain Arreckx",
+        "Thomas Pfau",
+        "Sebastián N. Mendoza",
+        "Anne Richelle",
+        "Almut Heinken",
+        "Hulda S. Haraldsdóttir",
+        "Jacek Wachowiak",
+        "Sarah Keating",
+        "Vanja Vlasov",
+        "Stefanía Magnúsdóttir",
+        "Chiam Yu Ng",
+        "German Preciat",
+        "Alise Žagare",
+        "Siu Hung Joshua Chan",
+        "Maike K. Aurich",
+        "Catherine M. Clancy",
+        "Jennifer Modamio",
+        "John T. Sauls",
+        "Alberto Noronha",
+        "Aarash Bordbar",
+        "Benjamin Cousins",
+        "Diana C. El Assal",
+        "Luis V. Valcárcel",
+        "Iñigo Apaolaza",
+        "Susan Ghaderi",
+        "Masoud Ahookhosh",
+        "Marouen Ben Guebila",
+        "Andrejs Kostromins",
+        "Nicolas Sompairac",
+        "Hoai Minh Le",
+        "Ding Ma",
+        "Yuekai Sun",
+        "Lin Wang",
+        "James T. Yurkovich",
+        "Miguel A. P. Oliveira",
+        "Phan Tu Vuong",
+        "Lemmer P. El Assal",
+        "Inna Kuperstein",
+        "Andreï Zinovyev",
+        "H.S. Hinton",
+        "William A Bryant",
+        "Francisco J. Aragón Artacho",
+        "Francisco J. Planes",
+        "Egils Stalidzāns",
+        "Alejandro Maass",
+        "Santosh Vempala",
+        "Michael Hucka",
+        "Michael A. Saunders",
+        "Costas D. Maranas",
+        "Nathan E. Lewis",
+        "Thomas Sauter",
+        "Bernhard Ø. Palsson",
+        "Ines Thiele",
+        "Ronan M. T. Fleming"
+      ],
+      "year": 2019,
+      "doi": "10.1038/s41596-018-0098-2",
+      "venue": "Nature Protocols",
+      "cited_by_count": 1392
+    },
+    {
+      "openalex_id": "W4410922745",
+      "title": "Close-Range Remote Sensing of Forest Structure for Biodiversity Assessments: A Systematic Literature Review",
+      "authors": [
+        "Jan Feigl",
+        "Julian Frey",
+        "Thomas Seifert",
+        "Barbara Koch"
+      ],
+      "year": 2025,
+      "doi": "10.1007/s40725-025-00251-x",
+      "venue": "Current Forestry Reports",
+      "cited_by_count": 10
+    },
+    {
+      "openalex_id": "W4387568632",
+      "title": "Nanotechnology and E-Sensing for Food Chain Quality and Safety",
+      "authors": [
+        "Elisabetta Poeta",
+        "Aris Liboà",
+        "Simone Mistrali",
+        "Estefanía Núñez-Carmona",
+        "Veronica Sberveglieri"
+      ],
+      "year": 2023,
+      "doi": "10.3390/s23208429",
+      "venue": "Sensors",
+      "cited_by_count": 38
+    },
+    {
+      "openalex_id": "W3134260948",
+      "title": "A wrapper methodology to learn interval-valued fuzzy rule-based classification systems",
+      "authors": [
+        "José Sanz",
+        "Humberto Bustince"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.asoc.2021.107249",
+      "venue": "Applied Soft Computing",
+      "cited_by_count": 37
+    },
+    {
+      "openalex_id": "W1739686760",
+      "title": "Wicked Problems in Public Policy",
+      "authors": [
+        "Brian Head"
+      ],
+      "year": 2023,
+      "doi": "10.1007/978-3-030-90434-0_43-1",
+      "venue": "",
+      "cited_by_count": 738
+    },
+    {
+      "openalex_id": "W4404734402",
+      "title": "Naturally constrained reject option classification",
+      "authors": [
+        "Nicholas Kashani Motlagh",
+        "Jim Davis",
+        "Timothy Anderson",
+        "Jeremy Gwinnup"
+      ],
+      "year": 2024,
+      "doi": "10.1007/s00138-024-01620-5",
+      "venue": "Machine Vision and Applications",
+      "cited_by_count": 1
+    }
+  ]
+}

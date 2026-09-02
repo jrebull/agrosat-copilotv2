@@ -1,0 +1,421 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "openalex",
+  "query": "heterogeneous ensemble learning land cover classification meta-learner",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W4296079469",
+      "title": "A Survey of Ensemble Learning: Concepts, Algorithms, Applications, and Prospects",
+      "authors": [
+        "Ibomoiye Domor Mienye",
+        "Yanxia Sun"
+      ],
+      "year": 2022,
+      "doi": "10.1109/access.2022.3207287",
+      "venue": "IEEE Access",
+      "cited_by_count": 1279
+    },
+    {
+      "openalex_id": "W3102100346",
+      "title": "A review of uncertainty quantification in deep learning: Techniques, applications and challenges",
+      "authors": [
+        "Moloud Abdar",
+        "Farhad Pourpanah",
+        "Sadiq Hussain",
+        "Dana Rezazadegan",
+        "Li Liu",
+        "Mohammad Ghavamzadeh",
+        "Paul Fieguth",
+        "Xiaochun Cao",
+        "Abbas Khosravi",
+        "U. Rajendra Acharya",
+        "Vladimir Makarenkov",
+        "Saeid Nahavandi"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.inffus.2021.05.008",
+      "venue": "Information Fusion",
+      "cited_by_count": 2642
+    },
+    {
+      "openalex_id": "W3088162569",
+      "title": "Support Vector Machine Versus Random Forest for Remote Sensing Image Classification: A Meta-Analysis and Systematic Review",
+      "authors": [
+        "Mohammadreza Sheykhmousa",
+        "Masoud Mahdianpari",
+        "Hamid Ghanbari",
+        "Fariba Mohammadimanesh",
+        "Pedram Ghamisi",
+        "Saeid Homayouni"
+      ],
+      "year": 2020,
+      "doi": "10.1109/jstars.2020.3026724",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "cited_by_count": 1093
+    },
+    {
+      "openalex_id": "W4293526428",
+      "title": "A Review of Ensemble Learning Algorithms Used in Remote Sensing Applications",
+      "authors": [
+        "Yuzhen Zhang",
+        "Jingjing Liu",
+        "Wenjuan Shen"
+      ],
+      "year": 2022,
+      "doi": "10.3390/app12178654",
+      "venue": "Applied Sciences",
+      "cited_by_count": 375
+    },
+    {
+      "openalex_id": "W4210916416",
+      "title": "Tackling Climate Change with Machine Learning",
+      "authors": [
+        "Lynn H. Kaack",
+        "David Rolnick",
+        "Priya L. Donti",
+        "Kelly Kochanski",
+        "Alexandre Lacoste",
+        "Kris Sankaran",
+        "Andrew Slavin Ross",
+        "Nikola Milojevic-Dupont",
+        "Natasha Jaques",
+        "Anna Waldman‐Brown",
+        "Alexandra Sasha Luccioni",
+        "Tegan Maharaj",
+        "Evan David Sherwin",
+        "Mukkavilli, Karthik",
+        "Konrad P. Körding",
+        "Carla P. Gomes",
+        "Andrew Y. Ng",
+        "Demis Hassabis",
+        "John Platt",
+        "Felix Creutzig",
+        "Jennifer Chayes",
+        "Yoshua Bengio"
+      ],
+      "year": 2022,
+      "doi": "10.1145/3485128",
+      "venue": "OPUS 4 (Zuse Institute Berlin)",
+      "cited_by_count": 974
+    },
+    {
+      "openalex_id": "W3072681182",
+      "title": "An Ensemble Learning Approach for Estimating High Spatiotemporal Resolution of Ground-Level Ozone in the Contiguous United States",
+      "authors": [
+        "Weeberb J. Réquia",
+        "Qian Di",
+        "Rachel Silvern",
+        "James T. Kelly",
+        "Petros Koutrakis",
+        "Loretta J. Mickley",
+        "Melissa P. Sulprizio",
+        "Heresh Amini",
+        "Liuhua Shi",
+        "Joel Schwartz"
+      ],
+      "year": 2020,
+      "doi": "10.1021/acs.est.0c01791",
+      "venue": "Environmental Science & Technology",
+      "cited_by_count": 262
+    },
+    {
+      "openalex_id": "W4392199044",
+      "title": "Deep Learning for Time Series Classification and Extrinsic Regression: A Current Survey",
+      "authors": [
+        "Navid Mohammadi Foumani",
+        "Lynn Miller",
+        "Chang Wei Tan",
+        "Geoffrey I. Webb",
+        "Germain Forestier",
+        "Mahsa Salehi"
+      ],
+      "year": 2024,
+      "doi": "10.1145/3649448",
+      "venue": "ACM Computing Surveys",
+      "cited_by_count": 243
+    },
+    {
+      "openalex_id": "W3028081629",
+      "title": "Coastal Wetland Mapping Using Ensemble Learning Algorithms: A Comparative Study of Bagging, Boosting and Stacking Techniques",
+      "authors": [
+        "Li Wen",
+        "Michael G. Hughes"
+      ],
+      "year": 2020,
+      "doi": "10.3390/rs12101683",
+      "venue": "Remote Sensing",
+      "cited_by_count": 141
+    },
+    {
+      "openalex_id": "W4387092456",
+      "title": "Ensemble Multifeatured Deep Learning Models and Applications: A Survey",
+      "authors": [
+        "Satheesh Abimannan",
+        "El-Sayed M. El-Alfy",
+        "Yue‐Shan Chang",
+        "Shahid Hussain",
+        "Saurabh Shukla",
+        "Dhivyadharsini Satheesh"
+      ],
+      "year": 2023,
+      "doi": "10.1109/access.2023.3320042",
+      "venue": "IEEE Access",
+      "cited_by_count": 81
+    },
+    {
+      "openalex_id": "W4403343918",
+      "title": "A comprehensive investigation of multimodal deep learning fusion strategies for breast cancer classification",
+      "authors": [
+        "Fatima-Zahrae Nakach",
+        "Ali Idri",
+        "Evgin Göçeri"
+      ],
+      "year": 2024,
+      "doi": "10.1007/s10462-024-10984-z",
+      "venue": "Artificial Intelligence Review",
+      "cited_by_count": 124
+    },
+    {
+      "openalex_id": "W4283313119",
+      "title": "The Role of Machine Learning in Cybersecurity",
+      "authors": [
+        "Giovanni Apruzzese",
+        "Pavel Laskov",
+        "Edgardo Montes de",
+        "Wissam Mallouli",
+        "Luis Brdalo Rapa",
+        "Athanasios Vasileios Grammatopoulos",
+        "Fabio Di Franco"
+      ],
+      "year": 2022,
+      "doi": "10.1145/3545574",
+      "venue": "Digital Threats Research and Practice",
+      "cited_by_count": 270
+    },
+    {
+      "openalex_id": "W3099912322",
+      "title": "Active Learning Based Federated Learning for Waste and Natural Disaster Image Classification",
+      "authors": [
+        "L. Jubair Ahmed",
+        "Kashif Ahmad",
+        "Naina Said",
+        "Basheer Qolomany",
+        "Junaid Qadir",
+        "Ala Al‐Fuqaha"
+      ],
+      "year": 2020,
+      "doi": "10.1109/access.2020.3038676",
+      "venue": "IEEE Access",
+      "cited_by_count": 93
+    },
+    {
+      "openalex_id": "W4391725565",
+      "title": "Streamlit Application for Advanced Ensemble Learning Methods in Crop Recommendation Systems – A Review and Implementation",
+      "authors": [
+        "Yaganteeswarudu Akkem",
+        "Biswas Saroj Kumar",
+        "Aruna Varanasi"
+      ],
+      "year": 2023,
+      "doi": "10.17485/ijst/v16i48.2850",
+      "venue": "Indian Journal of Science and Technology",
+      "cited_by_count": 88
+    },
+    {
+      "openalex_id": "W3047278178",
+      "title": "Potential of Ensemble Learning to Improve Tree-Based Classifiers for Landslide Susceptibility Mapping",
+      "authors": [
+        "Jiahui Song",
+        "Yi Wang",
+        "Zhice Fang",
+        "Ling Peng",
+        "Haoyuan Hong"
+      ],
+      "year": 2020,
+      "doi": "10.1109/jstars.2020.3014143",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "cited_by_count": 56
+    },
+    {
+      "openalex_id": "W2943160824",
+      "title": "A Brief Review of Random Forests for Water Scientists and Practitioners and Their Recent History in Water Resources",
+      "authors": [
+        "Hristos Tyralis",
+        "Georgia Papacharalampous",
+        "Andreas Langousis"
+      ],
+      "year": 2019,
+      "doi": "10.3390/w11050910",
+      "venue": "Water",
+      "cited_by_count": 772
+    },
+    {
+      "openalex_id": "W4401124905",
+      "title": "Ensemble Machine Learning on the Fusion of Sentinel Time Series Imagery with High-Resolution Orthoimagery for Improved Land Use/Land Cover Mapping",
+      "authors": [
+        "Mukti Ram Subedi",
+        "Carlos Portillo‐Quintero",
+        "Nancy E. McIntyre",
+        "Samantha S. Kahl",
+        "Robert D. Cox",
+        "Gad Perry",
+        "Xiao‐Peng Song"
+      ],
+      "year": 2024,
+      "doi": "10.3390/rs16152778",
+      "venue": "Remote Sensing",
+      "cited_by_count": 9
+    },
+    {
+      "openalex_id": "W3200723554",
+      "title": "Meta-Learning to Improve Unsupervised Intrusion Detection in Cyber-Physical Systems",
+      "authors": [
+        "Tommaso Zoppi",
+        "Mohamad Gharib",
+        "Muhammad Atif",
+        "Andrea Bondavalli"
+      ],
+      "year": 2021,
+      "doi": "10.1145/3467470",
+      "venue": "ACM Transactions on Cyber-Physical Systems",
+      "cited_by_count": 45
+    },
+    {
+      "openalex_id": "W3107569396",
+      "title": "70 years of machine learning in geoscience in review",
+      "authors": [
+        "Jesper Dramsch"
+      ],
+      "year": 2020,
+      "doi": "",
+      "venue": "Technical University of Denmark, DTU Orbit (Technical University of Denmark, DTU)",
+      "cited_by_count": 239
+    },
+    {
+      "openalex_id": "W4206484811",
+      "title": "A Metaverse: Taxonomy, Components, Applications, and Open Challenges",
+      "authors": [
+        "Sangmin Park",
+        "Young‐Gab Kim"
+      ],
+      "year": 2022,
+      "doi": "10.1109/access.2021.3140175",
+      "venue": "IEEE Access",
+      "cited_by_count": 1820
+    },
+    {
+      "openalex_id": "W4378802379",
+      "title": "Machine Learning With Data Assimilation and Uncertainty Quantification for Dynamical Systems: A Review",
+      "authors": [
+        "Sibo Cheng",
+        "César Quilodrán-Casas",
+        "Said Ouala",
+        "Alban Farchi",
+        "Che Liu",
+        "Pierre Tandeo",
+        "Ronan Fablet",
+        "Didier Lucor",
+        "Bertrand Iooss",
+        "Julien Brajard",
+        "Dunhui Xiao",
+        "Tijana Janjić",
+        "Weiping Ding",
+        "Yike Guo",
+        "Alberto Carrassi",
+        "Marc Bocquet",
+        "Rossella Arcucci"
+      ],
+      "year": 2023,
+      "doi": "10.1109/jas.2023.123537",
+      "venue": "IEEE/CAA Journal of Automatica Sinica",
+      "cited_by_count": 294
+    },
+    {
+      "openalex_id": "W2950398529",
+      "title": "Tackling Climate Change with Machine Learning",
+      "authors": [
+        "David Rolnick",
+        "Priya L. Donti",
+        "Lynn H. Kaack",
+        "Kelly Kochanski",
+        "Alexandre Lacoste",
+        "Kris Sankaran",
+        "Andrew Slavin Ross",
+        "Nikola Milojevic-Dupont",
+        "Natasha Jaques",
+        "Anna Waldman‐Brown",
+        "Alexandra Sasha Luccioni",
+        "Tegan Maharaj",
+        "Evan David Sherwin",
+        "S. Karthik Mukkavilli",
+        "Konrad P. Körding",
+        "Carla P. Gomes",
+        "Andrew Y. Ng",
+        "Demis Hassabis",
+        "John Platt",
+        "Felix Creutzig",
+        "Jennifer Chayes",
+        "Yoshua Bengio"
+      ],
+      "year": 2022,
+      "doi": "10.1145/3485128",
+      "venue": "ACM Computing Surveys",
+      "cited_by_count": 193
+    },
+    {
+      "openalex_id": "W4319296823",
+      "title": "A Survey on Active Learning: State-of-the-Art, Practical Challenges and Research Directions",
+      "authors": [
+        "Alaa Tharwat",
+        "Wolfram Schenck"
+      ],
+      "year": 2023,
+      "doi": "10.3390/math11040820",
+      "venue": "Mathematics",
+      "cited_by_count": 167
+    },
+    {
+      "openalex_id": "W2948545016",
+      "title": "LAND USE AND LAND COVER CLASSIFICATION USING HYPERSPECTRAL IMAGERY: EVALUATING THE PERFORMANCE OF SPECTRAL ANGLE MAPPER, SUPPORT VECTOR MACHINE AND RANDOM FOREST",
+      "authors": [
+        "Luiz E. Christovam",
+        "Guilherme Gomes Pessoa",
+        "Milton Hirokazu Shimabukuro",
+        "Maria de Lourdes Bueno Trindade Galo"
+      ],
+      "year": 2019,
+      "doi": "10.5194/isprs-archives-xlii-2-w13-1841-2019",
+      "venue": "The international archives of the photogrammetry, remote sensing and spatial information sciences/International archives of the photogrammetry, remote sensing and spatial information sciences",
+      "cited_by_count": 43
+    },
+    {
+      "openalex_id": "W4285195707",
+      "title": "dropCyclic: Snapshot Ensemble Convolutional Neural Network Based on a New Learning Rate Schedule for Land Use Classification",
+      "authors": [
+        "Sangdaow Noppitak",
+        "Olarik Surinta"
+      ],
+      "year": 2022,
+      "doi": "10.1109/access.2022.3180844",
+      "venue": "IEEE Access",
+      "cited_by_count": 20
+    },
+    {
+      "openalex_id": "W4386119820",
+      "title": "A Novel Heterogeneous Ensemble Framework Based on Machine Learning Models for Shallow Landslide Susceptibility Mapping",
+      "authors": [
+        "Haozhe Tang",
+        "Changming Wang",
+        "Silong An",
+        "Qingyu Wang",
+        "Cheng‐Lin Jiang"
+      ],
+      "year": 2023,
+      "doi": "10.3390/rs15174159",
+      "venue": "Remote Sensing",
+      "cited_by_count": 22
+    }
+  ]
+}

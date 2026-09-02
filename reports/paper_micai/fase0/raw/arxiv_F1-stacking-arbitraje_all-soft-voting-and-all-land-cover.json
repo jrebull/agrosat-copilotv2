@@ -1,0 +1,8 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "arxiv",
+  "query": "all:\"soft voting\" AND all:\"land cover\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": []
+}

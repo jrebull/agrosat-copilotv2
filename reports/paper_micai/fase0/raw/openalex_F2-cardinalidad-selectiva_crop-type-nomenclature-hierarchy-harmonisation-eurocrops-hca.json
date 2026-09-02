@@ -1,0 +1,77 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "openalex",
+  "query": "crop type nomenclature hierarchy harmonisation EuroCrops HCAT",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W4405270212",
+      "title": "Policy relevant crop diversity monitoring based on earth observation and farmers’ declarations",
+      "authors": [
+        "Marijn van der Velde",
+        "Martin Claverie",
+        "Raphaël d’Andrimont",
+        "Melissande Machefer",
+        "Simona Bosco",
+        "Rui Catarino",
+        "Frank Dentener",
+        "Vincenzo Angilieri"
+      ],
+      "year": 2024,
+      "doi": "10.1088/1748-9326/ad9d61",
+      "venue": "Environmental Research Letters",
+      "cited_by_count": 6
+    },
+    {
+      "openalex_id": "W4306312208",
+      "title": "Challenges and Opportunities of Large Transnational Datasets: A Case Study on European Administrative Crop Data",
+      "authors": [
+        "Maja Schneider",
+        "Christian Marchington",
+        "Marco Körner"
+      ],
+      "year": 2022,
+      "doi": "10.48550/arxiv.2210.07178",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 3
+    },
+    {
+      "openalex_id": "W4391022307",
+      "title": "Advancing Transnational Assessments of Biodiversity Drivers in European Agriculture with an Updated Hierarchical Crop and Agriculture Taxonomy (HCAT)",
+      "authors": [
+        "Maja Schneider",
+        "David Gackstetter",
+        "Jonathan Prexl",
+        "Sebastian T. Meyer",
+        "Marco Körner"
+      ],
+      "year": 2024,
+      "doi": "10.21203/rs.3.rs-3725140/v2",
+      "venue": "Research Square",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W7164925238",
+      "title": "EuroCrops v2.0: multi-annual harmonized parcel level crop type data linked to European Union-wide survey, statistical, and Earth Observation products",
+      "authors": [
+        "Martin Claverie",
+        "Ayshah Chan",
+        "Linda See",
+        "Helena Ramos",
+        "Renate Koeble",
+        "Momchil Yordanov",
+        "Jon Olav Skøien",
+        "Ferdinando Urbano",
+        "Raphaël d’Andrimont",
+        "Maja Schneider",
+        "Marco Körner",
+        "Marijn van der Velde"
+      ],
+      "year": 2026,
+      "doi": "10.5194/essd-18-4075-2026",
+      "venue": "Earth system science data",
+      "cited_by_count": 0
+    }
+  ]
+}

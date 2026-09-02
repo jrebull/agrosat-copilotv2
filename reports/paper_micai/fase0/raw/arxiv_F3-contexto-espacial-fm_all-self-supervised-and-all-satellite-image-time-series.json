@@ -1,0 +1,87 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "arxiv",
+  "query": "all:\"self-supervised\" AND all:\"satellite image time series\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2607.18791v1",
+      "title": "STS-NET: Spatio-Temporal Stress Network for Self-Supervised Crop Stress Detection using Satellite Image Time Series",
+      "authors": [
+        "Pradeep Dalal",
+        "Rajiv Ranjan",
+        "Sushil Ghildiyal",
+        "Shashank Tamaskar",
+        "Neeraj Goel"
+      ],
+      "published": "2026-07-21T07:11:03Z",
+      "doi": null,
+      "summary": "Early and accurate detection of crop stress is essential to improve agricultural productivity and ensure global food security. However, collecting a large labeled crop stress dataset is a challenging task. To address this challenge, we introduce a novel spatial-temporal stress network (STS-NET), built on a self-supervised 3D-convolutional autoencoder (3D-CAE), designed to utilize Satellite Image Time Series (SITS) data for crop stress detection. STS-NET exploits four vegetation indices: Normalized Difference Vegetation Index (NDVI), Normalized Difference Vegetation Index (GNDVI), Red-Edge Chlorophyll Index (RECI) and Normalized Difference Red-Edge Index (NDRE) obtained from high resolution Planetscope imagery to capture spatiotemporal stress patterns. The model is trained on our BSPT (Barnala Spatial-Temporal) dataset and evaluated on a real-world sugarcane dataset collected over a year from a 2.5-acre test plot located in Lakhimpur-Kheri (LK) district in Uttar Pradesh in India. STS-NET achieved a precision of 97. 98\\% for water stress, 85.08\\% for nitrogen stress, and 83.47\\% for combined stress. The results demonstrate the potential of STS-NET in effectively detecting stress in sugarcane crops with minimal reliance on labeled data. Furthermore, STS-NET can serve as a robust feature extractor for simpler models."
+    },
+    {
+      "arxiv_id": "2510.21813v1",
+      "title": "SITS-DECO: A Generative Decoder Is All You Need For Multitask Satellite Image Time Series Modelling",
+      "authors": [
+        "Samuel J. Barrett",
+        "Docko Sow"
+      ],
+      "published": "2025-10-21T14:42:55Z",
+      "doi": null,
+      "summary": "Earth Observation (EO) Foundation Modelling (FM) holds great promise for simplifying and improving the use of EO data for diverse real-world tasks. However, most existing models require additional adaptation before they can be used and are structured rigidly around particular data sources or training approaches. To address this, we take inspiration from large language models, where diverse tasks, both pre-training and downstream, are implicitly captured through next-token prediction over unified token sequences, leveraging the structure and diversity of the training data. We introduce SITS-DECO (Satellite Image Time Series-DECoder Only), a proof-of-concept generative model that applies this unified-sequence framing to EO data. Using a simple GPT-style decoder-only architecture, and demonstrate its ability to perform useful EO tasks (pixel-wise, multi-temporal, multi-modal crop-type classification) in a purely generative framework. Through symbolic prompting, we show that the model can perform multiple supervised and self-supervised tasks within a single unified architecture, without task- or modality-specific adaptation. Despite its simplicity and lack of spatial context, SITS-DECO outperforms much larger EO foundation models on crop-type classification (PASTIS-R) demonstrating that dense temporal sequence modelling is a critical missing ingredient in the current paradigm. This work exemplifies a data-centric modelling paradigm in which capability arises from the diversity and structure of the training data rather than from architectural complexity. SITS-DECO provides a lightweight, practical route to multi-modal, multi-task EO modelling, and a conceptual bridge toward future generative EO foundation models."
+    },
+    {
+      "arxiv_id": "2405.01656v2",
+      "title": "S4: Self-Supervised Sensing Across the Spectrum",
+      "authors": [
+        "Jayanth Shenoy",
+        "Xingjian Davis Zhang",
+        "Shlok Mehrotra",
+        "Bill Tao",
+        "Rem Yang",
+        "Han Zhao",
+        "Deepak Vasisht"
+      ],
+      "published": "2024-05-02T18:26:15Z",
+      "doi": null,
+      "summary": "Satellite image time series (SITS) segmentation is crucial for many applications like environmental monitoring, land cover mapping and agricultural crop type classification. However, training models for SITS segmentation remains a challenging task due to the lack of abundant training data, which requires fine grained annotation. We propose S4 a new self-supervised pre-training approach that significantly reduces the requirement for labeled training data by utilizing two new insights: (a) Satellites capture images in different parts of the spectrum such as radio frequencies, and visible frequencies. (b) Satellite imagery is geo-registered allowing for fine-grained spatial alignment. We use these insights to formulate pre-training tasks in S4. We also curate m2s2-SITS, a large-scale dataset of unlabeled, spatially-aligned, multi-modal and geographic specific SITS that serves as representative pre-training data for S4. Finally, we evaluate S4 on multiple SITS segmentation datasets and demonstrate its efficacy against competing baselines while using limited labeled data."
+    },
+    {
+      "arxiv_id": "2506.18587v1",
+      "title": "Resampling Augmentation for Time Series Contrastive Learning: Application to Remote Sensing",
+      "authors": [
+        "Antoine Saget",
+        "Baptiste Lafabregue",
+        "Antoine Cornuéjols",
+        "Pierre Gançarski"
+      ],
+      "published": "2025-06-23T12:48:19Z",
+      "doi": null,
+      "summary": "Given the abundance of unlabeled Satellite Image Time Series (SITS) and the scarcity of labeled data, contrastive self-supervised pretraining emerges as a natural tool to leverage this vast quantity of unlabeled data. However, designing effective data augmentations for contrastive learning remains challenging for time series. We introduce a novel resampling-based augmentation strategy that generates positive pairs by upsampling time series and extracting disjoint subsequences while preserving temporal coverage. We validate our approach on multiple agricultural classification benchmarks using Sentinel-2 imagery, showing that it outperforms common alternatives such as jittering, resizing, and masking. Further, we achieve state-of-the-art performance on the S2-Agri100 dataset without employing spatial information or temporal encodings, surpassing more complex masked-based SSL frameworks. Our method offers a simple, yet effective, contrastive learning augmentation for remote sensing time series."
+    },
+    {
+      "arxiv_id": "2602.01799v1",
+      "title": "Spatio-Temporal Transformers for Long-Term NDVI Forecasting",
+      "authors": [
+        "Ido Faran",
+        "Nathan S. Netanyahu",
+        "Maxim Shoshany"
+      ],
+      "published": "2026-02-02T08:29:45Z",
+      "doi": null,
+      "summary": "Long-term satellite image time series (SITS) analysis in heterogeneous landscapes faces significant challenges, particularly in Mediterranean regions where complex spatial patterns, seasonal variations, and multi-decade environmental changes interact across different scales. This paper presents the Spatio-Temporal Transformer for Long Term Forecasting (STT-LTF ), an extended framework that advances beyond purely temporal analysis to integrate spatial context modeling with temporal sequence prediction. STT-LTF processes multi-scale spatial patches alongside temporal sequences (up to 20 years) through a unified transformer architecture, capturing both local neighborhood relationships and regional climate influences. The framework employs comprehensive self-supervised learning with spatial masking, temporal masking, and horizon sampling strategies, enabling robust model training from 40 years of unlabeled Landsat imagery. Unlike autoregressive approaches, STT-LTF directly predicts arbitrary future time points without error accumulation, incorporating spatial patch embeddings, cyclical temporal encoding, and geographic coordinates to learn complex dependencies across heterogeneous Mediterranean ecosystems. Experimental evaluation on Landsat data (1984-2024) demonstrates that STT-LTF achieves a Mean Absolute Error (MAE) of 0.0328 and R^2 of 0.8412 for next-year predictions, outperforming traditional statistical methods, CNN-based approaches, LSTM networks, and standard transformers. The framework's ability to handle irregular temporal sampling and variable prediction horizons makes it particularly suitable for analysis of heterogeneous landscapes experiencing rapid ecological transitions."
+    },
+    {
+      "arxiv_id": "2601.04127v1",
+      "title": "Pixel-Wise Multimodal Contrastive Learning for Remote Sensing Images",
+      "authors": [
+        "Leandro Stival",
+        "Ricardo da Silva Torres",
+        "Helio Pedrini"
+      ],
+      "published": "2026-01-07T17:41:11Z",
+      "doi": null,
+      "summary": "Satellites continuously generate massive volumes of data, particularly for Earth observation, including satellite image time series (SITS). However, most deep learning models are designed to process either entire images or complete time series sequences to extract meaningful features for downstream tasks. In this study, we propose a novel multimodal approach that leverages pixel-wise two-dimensional (2D) representations to encode visual property variations from SITS more effectively. Specifically, we generate recurrence plots from pixel-based vegetation index time series (NDVI, EVI, and SAVI) as an alternative to using raw pixel values, creating more informative representations. Additionally, we introduce PIxel-wise Multimodal Contrastive (PIMC), a new multimodal self-supervision approach that produces effective encoders based on two-dimensional pixel time series representations and remote sensing imagery (RSI). To validate our approach, we assess its performance on three downstream tasks: pixel-level forecasting and classification using the PASTIS dataset, and land cover classification on the EuroSAT dataset. Moreover, we compare our results to state-of-the-art (SOTA) methods on all downstream tasks. Our experimental results show that the use of 2D representations significantly enhances feature extraction from SITS, while contrastive learning improves the quality of representations for both pixel time series and RSI. These findings suggest that our multimodal method outperforms existing models in various Earth observation tasks, establishing it as a robust self-supervision framework for processing both SITS and RSI. Code avaliable on"
+    }
+  ]
+}

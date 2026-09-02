@@ -1,0 +1,378 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "arxiv",
+  "query": "all:\"multi-agent\" AND all:\"perception\" AND all:\"reasoning\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2608.30498v1",
+      "title": "CM2: Multimodal Cultural Reasoning via an Integrated Multi-Agent Framework",
+      "authors": [
+        "Qi Li",
+        "Zhaojie Kang",
+        "Yingjie He",
+        "Zheng Lin",
+        "Hao Zhang",
+        "Guangxin Wu",
+        "Yan Gong",
+        "Rong Fu",
+        "Jianyuan Ni"
+      ],
+      "published": "2026-08-31T09:29:04Z",
+      "doi": null,
+      "summary": "Multimodal Large Language Models (MLLMs) have shown remarkable success in STEM domains, where progress is often driven by vertical, step-by-step deduction under relatively stable symbol systems. Their horizontal, interdisciplinary cultural reasoning, however, remains underexplored.We propose CM2, a multi-agent framework grounded in the cognitive pathway of human cultural interpretation. CM2 integrates multimodal perception, retrieval-augmented generation, networked reasoning, gated fusion, and reward-driven feedback.Experiments on CM2D across multiple MLLM backbones show consistent gains over CoT and typical reasoning paradigms; ablations validate each module's contribution, and conflict analyses confirm genuine cross-modal arbitration."
+    },
+    {
+      "arxiv_id": "2603.14052v3",
+      "title": "A Multi-Agent Perception-Action Alliance for Efficient Long Video Reasoning",
+      "authors": [
+        "Yichang Xu",
+        "Gaowen Liu",
+        "Ramana Rao Kompella",
+        "Tiansheng Huang",
+        "Sihao Hu",
+        "Fatih Ilhan",
+        "Selim Furkan Tekin",
+        "Zachary Yahn",
+        "Ling Liu"
+      ],
+      "published": "2026-03-14T17:43:53Z",
+      "doi": null,
+      "summary": "This paper presents a multi-agent perception-action exploration alliance, dubbed A4VL, for efficient long-video reasoning. A4VL operates in a multi-round perception-action exploration loop with a selection of VLM agents. In each round, the team of agents performs video question-answer (VideoQA) via perception exploration followed by action exploration. During perception exploration, each agent learns to extract query-specific perception clue(s) from a few sampled frames and performs clue-based alignment to find the video block(s) that are most relevant to the query-specific event. During action exploration, A4VL performs video reasoning in three steps: (1) each agent produces its initial answer with rational, (2) all agents collaboratively scores one another through cross-reviews and relevance ranking, and (3) based on whether a satisfactory consensus is reached, the decision is made either to start a new round of perception-action deliberation by pruning (e.g., filtering out the lowest performing agent) and re-staging (e.g., new-clue and matching block based perception-action exploration), or to conclude by producing its final answer. The integration of the multi-agent alliance through multi-round perception-action exploration, coupled with event-driven partitioning and cue-guided block alignment, enables A4VL to effectively scale to real world long videos while preserving high quality video reasoning. Evaluation Results on five popular VideoQA benchmarks show that A4VL outperforms 18 existing representative VLMs and 11 recent methods optimized for long-video reasoning, while achieving significantly lower inference latency. Our code is released at https://github.com/git-disl/A4VL."
+    },
+    {
+      "arxiv_id": "2603.20143v2",
+      "title": "Synergistic Perception and Generative Recomposition: A Multi-Agent Orchestration for Expert-Level Building Inspection",
+      "authors": [
+        "Hui Zhong",
+        "Yichun Gao",
+        "Luyan Liu",
+        "Xusen Guo",
+        "Zhaonian Kuang",
+        "Qiming Zhang",
+        "Xinhu Zheng"
+      ],
+      "published": "2026-03-20T17:17:22Z",
+      "doi": null,
+      "summary": "Building facade defect inspection is fundamental to structural health monitoring and sustainable urban maintenance, yet it remains a formidable challenge due to extreme geometric variability, low contrast against complex backgrounds, and the inherent complexity of composite defects (e.g., cracks co-occurring with spalling). Such characteristics lead to severe pixel imbalance and feature ambiguity, which, coupled with the critical scarcity of high-quality pixel-level annotations, hinder the generalization of existing detection and segmentation models. To address gaps, we propose \\textit{FacadeFixer}, a unified multi-agent framework that treats defect perception as a collaborative reasoning task rather than isolated recognition. Specifically,\\textit{FacadeFixer} orchestrates specialized agents for detection and segmentation to handle multi-type defect interference, working in tandem with a generative agent to enable semantic recomposition. This process decouples intricate defects from noisy backgrounds and realistically synthesizes them onto diverse clean textures, generating high-fidelity augmented data with precise expert-level masks. To support this, we introduce a comprehensive multi-task dataset covering six primary facade categories with pixel-level annotations. Extensive experiments demonstrate that \\textit{FacadeFixer} significantly outperforms state-of-the-art (SOTA) baselines. Specifically, it excels in capturing pixel-level structural anomalies and highlights generative synthesis as a robust solution to data scarcity in infrastructure inspection. Our code and dataset will be made publicly available."
+    },
+    {
+      "arxiv_id": "2603.08369v1",
+      "title": "M$^3$-ACE: Rectifying Visual Perception in Multimodal Math Reasoning via Multi-Agentic Context Engineering",
+      "authors": [
+        "Peijin Xie",
+        "Zhen Xu",
+        "Bingquan Liu",
+        "Baoxun Wang"
+      ],
+      "published": "2026-03-09T13:32:25Z",
+      "doi": null,
+      "summary": "Multimodal large language models have recently shown promising progress in visual mathematical reasoning. However, their performance is often limited by a critical yet underexplored bottleneck: inaccurate visual perception. Through systematic analysis, we find that the most failures originate from incorrect or incomplete visual evidence extraction rather than deficiencies in reasoning capability. Moreover, models tend to remain overly confident in their initial perceptions, making standard strategies such as prompt engineering, multi-round self-reflection, or posterior guidance insufficient to reliably correct errors. To address this limitation, we propose M3-ACE, a multi-agentic context engineering framework designed to rectify visual perception in multimodal math reasoning. Instead of directly aggregating final answers, our approach decouples perception and reasoning by dynamically maintaining a shared context centered on visual evidence lists. Multiple agents collaboratively contribute complementary observations, enabling the system to expose inconsistencies and recover missing perceptual information. To support stable multi-turn collaboration, we further introduce two lightweight tools: a Summary Tool that organizes evidence from different agents into consistent, complementary, and conflicting components, and a Refine Tool that filters unreliable samples and guides iterative correction. Extensive experiments demonstrate that M3-ACE substantially improves visual mathematical reasoning performance across multiple benchmarks. Our method establishes new state-of-the-art results 89.1 on the MathVision benchmark and achieves consistent improvements on other related datasets, including MathVista and MathVerse. These results highlight the importance of perception-centric multi-agent collaboration for advancing multimodal reasoning systems."
+    },
+    {
+      "arxiv_id": "2607.03069v1",
+      "title": "SafeGuard: A Multi-Agent Perception-Reasoning Framework for Social-Risk AI-Generated Video Detection",
+      "authors": [
+        "Wenlin Wu",
+        "Sheng Zhou",
+        "Peipei Song",
+        "Wenhao Wang",
+        "Junbin Xiao",
+        "Xun Yang"
+      ],
+      "published": "2026-07-03T08:03:35Z",
+      "doi": null,
+      "summary": "As video generation paradigms evolve from localized manipulation to full-scene synthesis, AI-generated video detection becomes increasingly challenging, as forgeries exhibit coherent global structure and high perceptual realism. However, existing benchmarks are biased toward perceptual fidelity and primarily evaluate detectors based on perceptual artifacts, providing limited coverage of scenarios that require reasoning about violations of physical laws, structural coherence, or social logic. This dataset bias shapes current approaches and results in a Perception-Reasoning Gap: artifact-centric models capture low-level statistical irregularities yet lack semantic inference, whereas vision-language models perform semantic reasoning but remain insensitive to fine-grained forensic cues. To bridge this gap, we propose SafeGuard, a multi-agent framework that enables collaborative specialization between forensic perception and semantic reasoning. A hierarchical perceptual solver extracts fine-grained forensic evidence, while a self-reflective verifier enforces consistency between semantic inference and physical plausibility, forming an interpretable evidence chain. To support evaluation, we introduce SafeVid, a novel AI-generated video detection benchmark comprising 20K videos spanning 10 social risk categories, designed to evaluate physical plausibility, structural consistency, and the rationality of social behaviors. Extensive experiments demonstrate the generalization of SafeGuard, improving accuracy on SafeVid by +18.7% and consistently outperforming prior methods across four public benchmarks."
+    },
+    {
+      "arxiv_id": "2605.13213v1",
+      "title": "Hierarchical Attacks for Multi-Modal Multi-Agent Reasoning",
+      "authors": [
+        "Hao Zhou",
+        "Tiru Wu",
+        "Yan Jiang",
+        "Wanqi Zhou",
+        "Junxing Hu",
+        "Ai Han"
+      ],
+      "published": "2026-05-13T09:06:21Z",
+      "doi": null,
+      "summary": "Multi-modal multi-agent systems (MM-MAS) have gained increasing attention for their capacity to enable complex reasoning and coordination across diverse modalities. As these systems continue to expand in scale and functionality, investigating their potential vulnerabilities has become increasingly important. However, existing studies on adversarial attacks in multi-agent systems primarily focus on isolated agents or unimodal settings, leaving the vulnerabilities of MM-MAS largely underexplored. To bridge this gap, we introduce HAM$^{3}$, a Hierarchical Attack framework for multi-modal multi-agent systems that decomposes attacks into three interconnected layers. Specifically, at the perception layer, HAM$^{3}$ mounts attacks by perturbing visual inputs, textual inputs, and their fused visual-textual representations. At the communication layer, it performs communication-level attacks that corrupt message content and interaction topology, such as manipulating shared context or communication links to distort collective information flow. At the reasoning layer, it conducts reasoning-level attacks that interfere with each agent's cognitive pipeline, biasing reasoning trajectories and ultimately compromising final decisions. We evaluate HAM$^{3}$ on the GQA benchmark through multi-agent systems built on distinct reasoning paradigms including ReAct, Plan-and-Solve, and Reflexion. Experiments demonstrate that our framework achieves an Attack Success Rate of up to 78.3%, with reasoning-layer attacks being the most effective. More than half of the successful attacks lead multiple agents to produce consistent errors. These findings offer valuable insights for building more robust and interpretable multi-agent intelligence."
+    },
+    {
+      "arxiv_id": "2307.11514v2",
+      "title": "CORE: Cooperative Reconstruction for Multi-Agent Perception",
+      "authors": [
+        "Binglu Wang",
+        "Lei Zhang",
+        "Zhaozhong Wang",
+        "Yongqiang Zhao",
+        "Tianfei Zhou"
+      ],
+      "published": "2023-07-21T11:50:05Z",
+      "doi": null,
+      "summary": "This paper presents CORE, a conceptually simple, effective and communication-efficient model for multi-agent cooperative perception. It addresses the task from a novel perspective of cooperative reconstruction, based on two key insights: 1) cooperating agents together provide a more holistic observation of the environment, and 2) the holistic observation can serve as valuable supervision to explicitly guide the model learning how to reconstruct the ideal observation based on collaboration. CORE instantiates the idea with three major components: a compressor for each agent to create more compact feature representation for efficient broadcasting, a lightweight attentive collaboration component for cross-agent message aggregation, and a reconstruction module to reconstruct the observation based on aggregated feature representations. This learning-to-reconstruct idea is task-agnostic, and offers clear and reasonable supervision to inspire more effective collaboration, eventually promoting perception tasks. We validate CORE on OPV2V, a large-scale multi-agent percetion dataset, in two tasks, i.e., 3D object detection and semantic segmentation. Results demonstrate that the model achieves state-of-the-art performance on both tasks, and is more communication-efficient."
+    },
+    {
+      "arxiv_id": "2509.26306v5",
+      "title": "Interactive Learning for LLM Reasoning",
+      "authors": [
+        "Hehai Lin",
+        "Shilei Cao",
+        "Sudong Wang",
+        "Haotian Wu",
+        "Minzhi Li",
+        "Linyi Yang",
+        "Juepeng Zheng",
+        "Chengwei Qin"
+      ],
+      "published": "2025-09-30T14:21:31Z",
+      "doi": null,
+      "summary": "Existing multi-agent learning approaches have developed interactive training environments to explicitly promote collaboration among multiple Large Language Models (LLMs), thereby constructing stronger multi-agent systems (MAS). However, during inference, they require re-executing the MAS to obtain final solutions, which diverges from human cognition that individuals can enhance their reasoning capabilities through interactions with others and resolve questions independently in the future. To investigate whether multi-agent interaction can enhance LLMs' independent problem-solving ability, we introduce ILR, a novel co-learning framework for MAS that integrates two key components: Dynamic Interaction and Perception Calibration. Specifically, Dynamic Interaction first adaptively selects either cooperative or competitive strategies depending on question difficulty and model ability. LLMs then exchange information through Idea3, an innovative interaction paradigm designed to mimic human discussion, before deriving their respective final answers. In Perception Calibration, ILR employs Group Relative Policy Optimization (GRPO) to train LLMs while integrating one LLM's reward distribution characteristics into another's reward function, thereby enhancing the cohesion of multi-agent interactions. We evaluate the effectiveness of ILR across three LLMs from two model families of varying scales on five mathematical, one coding, one general question answering, and one scientific reasoning benchmarks. Experimental results show that ILR consistently outperforms single-agent learning, yielding an improvement of up to 5% over the strongest baseline. We further discover that Idea3 can enhance the robustness of stronger LLMs during multi-agent inference, and dynamic interaction types can boost multi-agent learning compared to pure cooperative or competitive strategies."
+    },
+    {
+      "arxiv_id": "2604.24443v1",
+      "title": "PhysNote: Self-Knowledge Notes for Evolvable Physical Reasoning in Vision-Language Model",
+      "authors": [
+        "Sinin Zhang",
+        "Yunfei Xie",
+        "Yuxuan Cheng",
+        "Haoyu Zhang",
+        "Tong Zhang"
+      ],
+      "published": "2026-04-27T13:10:52Z",
+      "doi": null,
+      "summary": "Vision-Language Models (VLMs) have demonstrated strong performance on textbook-style physics problems, yet they frequently fail when confronted with dynamic real-world scenarios that require temporal consistency and causal reasoning across frames. We identify two fundamental challenges underlying these failures: (1) spatio-temporal identity drift, where objects lose their physical identity across successive frames and break causal chains, and (2) volatility of inference-time insights, where a model may occasionally produce correct physical reasoning but never consolidates it for future reuse. To address these challenges, we propose PhysNote, an agentic framework that enables VLMs to externalize and refine physical knowledge through self-generated \"Knowledge Notes.\" PhysNote stabilizes dynamic perception through spatio-temporal canonicalization, organizes self-generated insights into a hierarchical knowledge repository, and drives an iterative reasoning loop that grounds hypotheses in visual evidence before consolidating verified knowledge. Experiments on PhysBench demonstrate that PhysNote achieves 56.68% overall accuracy, a 4.96% improvement over the best multi-agent baseline, with consistent gains across all four physical reasoning domains."
+    },
+    {
+      "arxiv_id": "2511.16205v2",
+      "title": "ChemLabs on ChemO: A Multi-Agent System for Multimodal Reasoning on IChO 2025",
+      "authors": [
+        "Qiang Xu",
+        "Shengyuan Bai",
+        "Leqing Chen",
+        "Zijing Liu",
+        "Yu Li"
+      ],
+      "published": "2025-11-20T10:15:39Z",
+      "doi": null,
+      "summary": "Olympiad-level benchmarks in mathematics and physics are crucial testbeds for advanced AI reasoning, but chemistry, with its unique multimodal symbolic language, has remained an open challenge. We introduce ChemO, a new benchmark built from the International Chemistry Olympiad (IChO) 2025. ChemO features two key innovations for automated assessment: Assessment-Equivalent Reformulation (AER), which converts problems requiring visual outputs (e.g., drawing molecules) into computationally tractable formats, and Structured Visual Enhancement (SVE), a diagnostic mechanism to disentangle a model's visual perception capabilities from its core chemical reasoning. To tackle this benchmark, we propose ChemLabs, a hierarchical multi-agent framework that mimics human expert collaboration through specialized agents for problem decomposition, perception, reasoning, and auditing. Experiments on state-of-the-art multimodal models demonstrate that combining SVE with our multi-agent system yields dramatic performance gains. Our top configuration achieves a score of 93.6 out of 100, surpassing an estimated human gold medal threshold and establishing a new state-of-the-art in automated chemical problem-solving. ChemO Dataset: https://huggingface.co/datasets/IDEA-AI4SCI/ChemO"
+    },
+    {
+      "arxiv_id": "2605.28077v1",
+      "title": "MACReD: A Multi-Agent Collaborative Reasoning Framework for Reaction Diagram Parsing",
+      "authors": [
+        "Chuang Tang",
+        "Chenhao Lin",
+        "Yin Xu",
+        "Hao Wang",
+        "Jinrui Zhou",
+        "Xin Li",
+        "Mingjun Xiao",
+        "Enhong Chen"
+      ],
+      "published": "2026-05-27T07:32:13Z",
+      "doi": null,
+      "summary": "Parsing chemical reaction diagrams from scientific literature is challenging due to heterogeneous layouts, intertwined visual elements, and the difficulty of integrating recognition and reasoning. Existing vision-language models advance multimodal understanding but still fail on complex diagrams, struggling to maintain spatial coherence and to integrate multidimensional information during reasoning. To address these issues, we propose MACReD, a hierarchical multi-agent framework that coordinates specialized agents for molecular perception, arrow understanding, text extraction, and reaction reconstruction within a unified VLM-guided architecture. The planning and perception layers use flexible, fine-grained detection to handle visual complexity, while the reasoning layer uses a multigraph fusion mechanism to integrate heterogeneous cues and enforce chemically consistent global reasoning. Experiments on the RxnScribe benchmark show that MACReD achieves state-of-the-art performance, with F1 scores of 75.2% and 84.6% under hard and soft match criteria, outperforming the RxnScribe baseline, which obtains 69.1% and 80.0%, respectively. These results demonstrate the robustness of MACReD across diverse diagram layouts, including multi-step and tree-structured reactions."
+    },
+    {
+      "arxiv_id": "2601.09295v3",
+      "title": "MACRO-LLM: LLM-Empowered Multi-Agent Collaborative Reasoning under Spatiotemporal Partial Observability",
+      "authors": [
+        "Handi Chen",
+        "Running Zhao",
+        "Xiuzhe Wu",
+        "Zhanfeng Xu",
+        "Edith C. H. Ngai"
+      ],
+      "published": "2026-01-14T08:54:55Z",
+      "doi": null,
+      "summary": "Large Language Model (LLM) agents deployed in complex real-world scenarios increasingly operate as spatially distributed entities. However, this physical dispersion constrains agents to limited local perception and finite temporal horizons. We characterize this bottleneck as spatiotemporal partial observability, where spatial and temporal limitations are fundamentally coupled: resolving spatial conflicts requires temporal reasoning about neighbors' future actions, while temporal planning requires spatial context beyond local perception. To bridge this gap, we introduce MACRO-LLM, LLM-empowered multi-agent collaborative reasoning under spatiotemporal partial observability. The architecture interleaves spatial and temporal reasoning within each decision cycle via three interdependent modules: (1) the CoProposer mitigates temporal uncertainty by verifying candidate actions via predictive rollouts; (2) the Negotiator overcomes spatial myopia by resolving conflicts through mean-field statistical aggregation, grounded in the CoProposer's rollout rewards; and (3) the Introspector closes the reasoning loop by analyzing environmental drift and attributing performance changes to refine strategies. Extensive evaluations on two complex long-horizon tasks, cooperative platoon planning and pandemic control, demonstrate that our framework enables robust coordination under spatiotemporal partial observability."
+    },
+    {
+      "arxiv_id": "2509.16971v2",
+      "title": "AudioGenie-Reasoner: A Training-Free Multi-Agent Framework for Coarse-to-Fine Audio Deep Reasoning",
+      "authors": [
+        "Yan Rong",
+        "Chenxing Li",
+        "Dong Yu",
+        "Li Liu"
+      ],
+      "published": "2025-09-21T08:08:08Z",
+      "doi": null,
+      "summary": "Audio deep reasoning is a challenging task that requires expert-level perception, multi-step logical inference, and the integration of contextual knowledge. However, existing models suffer from a gap between audio perception and reasoning abilities due to the lack of training data with explicit reasoning chains and the absence of mechanisms for active exploration and iterative refinement. To address these challenges, we propose AudioGenie-Reasoner (AGR), the first unified training-free multi-agent system that coordinates perception and reasoning over an evolving chain of textual evidence. Our key idea is a paradigm shift that transforms audio deep reasoning into complex text understanding task from a new perspective, thereby unlocking the full potential of large language models. Specifically, the design of AGR mimics the human coarse-to-fine cognitive process. It first transforms the input audio into a coarse text-based document. Then, we design a novel proactive iterative document refinement loop, featuring tool-augmented routes and specialized agents, to continuously search for missing information and augment the evidence chain in a coarse-to-fine manner until sufficient question-related information is gathered for making final predictions. Experimental results show that AGR achieves state-of-the-art (SOTA) performance over existing open-source audio deep reasoning models across various benchmarks. The code will be available at https://github.com/ryysayhi/AudioGenie-Reasoner."
+    },
+    {
+      "arxiv_id": "2505.02123v1",
+      "title": "DriveAgent: Multi-Agent Structured Reasoning with LLM and Multimodal Sensor Fusion for Autonomous Driving",
+      "authors": [
+        "Xinmeng Hou",
+        "Wuqi Wang",
+        "Long Yang",
+        "Hao Lin",
+        "Jinglun Feng",
+        "Haigen Min",
+        "Xiangmo Zhao"
+      ],
+      "published": "2025-05-04T14:13:00Z",
+      "doi": null,
+      "summary": "We introduce DriveAgent, a novel multi-agent autonomous driving framework that leverages large language model (LLM) reasoning combined with multimodal sensor fusion to enhance situational understanding and decision-making. DriveAgent uniquely integrates diverse sensor modalities-including camera, LiDAR, GPS, and IMU-with LLM-driven analytical processes structured across specialized agents. The framework operates through a modular agent-based pipeline comprising four principal modules: (i) a descriptive analysis agent identifying critical sensor data events based on filtered timestamps, (ii) dedicated vehicle-level analysis conducted by LiDAR and vision agents that collaboratively assess vehicle conditions and movements, (iii) environmental reasoning and causal analysis agents explaining contextual changes and their underlying mechanisms, and (iv) an urgency-aware decision-generation agent prioritizing insights and proposing timely maneuvers. This modular design empowers the LLM to effectively coordinate specialized perception and reasoning agents, delivering cohesive, interpretable insights into complex autonomous driving scenarios. Extensive experiments on challenging autonomous driving datasets demonstrate that DriveAgent is achieving superior performance on multiple metrics against baseline methods. These results validate the efficacy of the proposed LLM-driven multi-agent sensor fusion framework, underscoring its potential to substantially enhance the robustness and reliability of autonomous driving systems."
+    },
+    {
+      "arxiv_id": "2606.21123v1",
+      "title": "A Multi-Agent Audit Framework for High-Stakes Reasoning: Evaluation and Interpretability in Clinical Mental Health Screening",
+      "authors": [
+        "Jingchen Ye",
+        "Yanpei Yu",
+        "Luyao Zhang"
+      ],
+      "published": "2026-06-19T05:51:03Z",
+      "doi": null,
+      "summary": "High-stakes reasoning tasks necessitate transparent and verifiable workflows, yet conventional single-model large language models (LLMs) often struggle with hallucination and low interpretability under zero-shot paradigms. To address this general AI challenge, we propose a Multi-Agent Audit Framework that simulates a collaborative, multi-step verification process. We empirically validate this architecture in the sensitive domain of clinical mental health screening using a modular LangChain workflow. Our framework decomposes the reasoning process into a Perception Agent, Knowledge Retrieval-Augmented Generation (RAG), Chain-of-Thought (CoT) clinical inference, and a critical Audit verification stage. We evaluated this framework on the DAIC-WOZ dataset using locally deployed open-source models. Experimental results demonstrate that our multi-agent pipeline significantly outperforms single-agent baselines, reducing the Mean Absolute Error (MAE) for PHQ-8 depression severity prediction from 5.35 to 5.02. By exposing cross-agent validation traces, the framework mitigates reasoning drift and provides highly interpretable diagnostic rationales, offering a generalizable paradigm for reliable AI-assisted decision support beyond isolated model scaling. We make data and code open access on GitHub for replicability."
+    },
+    {
+      "arxiv_id": "2508.17205v1",
+      "title": "Multi-Agent Visual-Language Reasoning for Comprehensive Highway Scene Understanding",
+      "authors": [
+        "Yunxiang Yang",
+        "Ningning Xu",
+        "Jidong J. Yang"
+      ],
+      "published": "2025-08-24T03:55:24Z",
+      "doi": null,
+      "summary": "This paper introduces a multi-agent framework for comprehensive highway scene understanding, designed around a mixture-of-experts strategy. In this framework, a large generic vision-language model (VLM), such as GPT-4o, is contextualized with domain knowledge to generates task-specific chain-of-thought (CoT) prompts. These fine-grained prompts are then used to guide a smaller, efficient VLM (e.g., Qwen2.5-VL-7B) in reasoning over short videos, along with complementary modalities as applicable. The framework simultaneously addresses multiple critical perception tasks, including weather classification, pavement wetness assessment, and traffic congestion detection, achieving robust multi-task reasoning while balancing accuracy and computational efficiency. To support empirical validation, we curated three specialized datasets aligned with these tasks. Notably, the pavement wetness dataset is multimodal, combining video streams with road weather sensor data, highlighting the benefits of multimodal reasoning. Experimental results demonstrate consistently strong performance across diverse traffic and environmental conditions. From a deployment perspective, the framework can be readily integrated with existing traffic camera systems and strategically applied to high-risk rural locations, such as sharp curves, flood-prone lowlands, or icy bridges. By continuously monitoring the targeted sites, the system enhances situational awareness and delivers timely alerts, even in resource-constrained environments."
+    },
+    {
+      "arxiv_id": "2606.12902v1",
+      "title": "PRISM: Prosody-Integrated Multi-Agent Reasoning Framework for Empathetic Spoken Dialogue",
+      "authors": [
+        "Wen Zhang",
+        "Xiaocui Yang",
+        "Zhuoyue Gao",
+        "Shi Feng",
+        "Daling Wang",
+        "Yifei Zhang"
+      ],
+      "published": "2026-06-11T04:59:33Z",
+      "doi": null,
+      "summary": "Empathetic spoken dialogue systems require not only semantically appropriate responses but also emotionally aligned prosodic expression. However, cascade pipelines often discard acoustic cues during speech-to-text conversion, while end-to-end speech models lack interpretable control over emotion and knowledge integration. To address these challenges, we propose PRISM, a multi-agent framework for empathetic spoken dialogue that decouples speech perception, response generation, and speech synthesis into coordinated components. PRISM introduces a prosody-to-language translation mechanism to stabilize large language model reasoning and enables on-demand invocation of external knowledge tools for empathetic dialogue generation. Experimental results demonstrate that PRISM achieves consistent improvements in empathy, prosodic appropriateness, and text response generation quality across objective and subjective metrics. Our code is available at: https://github.com/Bxzfrm/PRISM."
+    },
+    {
+      "arxiv_id": "2608.07621v1",
+      "title": "CMU-Drive and V2V-VLA: Cooperative Multi-agent Unified Driving with Reasoning Benchmark and Vehicle-to-Vehicle Vision-Language-Action Models",
+      "authors": [
+        "Hsu-kuang Chiu",
+        "Stephen F. Smith"
+      ],
+      "published": "2026-08-07T09:00:39Z",
+      "doi": null,
+      "summary": "Vision-Language-Action (VLA) models have recently achieved impressive performance for end-to-end autonomous driving, yet existing approaches are primarily designed for an individual single autonomous driving agent with limited support for cooperative perception, reasoning, and planning. We present Cooperative Multi-agent Unified Driving with Reasoning (CMU-Drive), a closed-loop end-to-end benchmark for evaluating cooperative autonomous driving with multiple connected autonomous vehicles (CAVs) operating in safety-critical driving scenarios with background traffic participants. We further propose Vehicle-to-Vehicle Vision-Language-Action (V2V-VLA), a cooperative VLA model that integrates cooperative driving into a single forward pass by jointly generating driving actions, future waypoints, language reasoning, and communication policies. Experiments on CMU-Drive establish the first benchmark and baseline for cooperative VLA driving and provide a foundation for future research on multi-agent, closed-loop, end-to-end cooperative autonomous driving. Our code, benchmark, and model checkpoint will be publicly released to facilitate open-source research."
+    },
+    {
+      "arxiv_id": "2606.14766v1",
+      "title": "XMedFusion: A Knowledge-Guided Multimodal Perception and Reasoning Framework for Autonomous Medical Systems",
+      "authors": [
+        "Hamza Riaz",
+        "Arham Haroon",
+        "Maha Baig",
+        "Muhammad Dawood Rizwan",
+        "Muhammad Naseer Bajwa",
+        "Muhammad Moazam Fraz"
+      ],
+      "published": "2026-06-08T20:26:32Z",
+      "doi": "10.1109/ICRAI70912.2026.11551956",
+      "summary": "Autonomous medical and robotic systems increasingly rely on intelligent perception and reasoning capabilities to interpret visual data and support clinical decision making. Radiology report generation represents a critical component of such automated diagnostic workflows, yet existing end-to-end multimodal models often suffer from weak visual grounding, resulting in unreliable interpretations and omission of subtle clinical findings. This paper presents XMedFusion, a modular AI framework designed as an intelligent perception and reasoning module for autonomous medical systems. The proposed framework decomposes visual information into coordinated functional components that emulate expert-driven analysis, including a visual perception agent that extracts image-grounded evidence, a knowledge graph construction agent that structures clinically relevant findings, and a retrieval-guided drafting process that ensures a consistent reporting structure. A synthesis agent iteratively integrates visual and structured evidence through reasoning-driven verification to produce reliable and interpretable diagnostic outputs. Experimental evaluation on a public chest radiograph dataset demonstrates significant improvements over baseline vision-language models, achieving gains from 0.0493 to 0.3359 in BLEU-1, 0.0863 to 0.2440 in ROUGE-L, and 0.0829 to 0.1708 in METEOR, along with substantial improvements in semantic evaluation metrics such as Consistency (2.38 to 7.80) and Accuracy (2.34 to 6.93). The results highlight the effectiveness of structured multi-agent perception and reasoning for enhancing robustness, transparency, and automation in intelligent medical imaging systems, enabling integration into autonomous healthcare and robotic diagnostic workflows."
+    },
+    {
+      "arxiv_id": "2511.11025v2",
+      "title": "AirCopBench: A Benchmark for Multi-drone Collaborative Embodied Perception and Reasoning",
+      "authors": [
+        "Jirong Zha",
+        "Yuxuan Fan",
+        "Tianyu Zhang",
+        "Geng Chen",
+        "Yingfeng Chen",
+        "Chen Gao",
+        "Xinlei Chen"
+      ],
+      "published": "2025-11-14T07:23:05Z",
+      "doi": null,
+      "summary": "Multimodal Large Language Models (MLLMs) have shown promise in single-agent vision tasks, yet benchmarks for evaluating multi-agent collaborative perception remain scarce. This gap is critical, as multi-drone systems provide enhanced coverage, robustness, and collaboration compared to single-sensor setups. Existing multi-image benchmarks mainly target basic perception tasks using high-quality single-agent images, thus failing to evaluate MLLMs in more complex, egocentric collaborative scenarios, especially under real-world degraded perception conditions.To address these challenges, we introduce AirCopBench, the first comprehensive benchmark designed to evaluate MLLMs in embodied aerial collaborative perception under challenging perceptual conditions. AirCopBench includes 14.6k+ questions derived from both simulator and real-world data, spanning four key task dimensions: Scene Understanding, Object Understanding, Perception Assessment, and Collaborative Decision, across 14 task types. We construct the benchmark using data from challenging degraded-perception scenarios with annotated collaborative events, generating large-scale questions through model-, rule-, and human-based methods under rigorous quality control. Evaluations on 40 MLLMs show significant performance gaps in collaborative perception tasks, with the best model trailing humans by 24.38% on average and exhibiting inconsistent results across tasks. Fine-tuning experiments further confirm the feasibility of sim-to-real transfer in aerial collaborative perception and reasoning."
+    },
+    {
+      "arxiv_id": "2511.11751v1",
+      "title": "Concept-RuleNet: Grounded Multi-Agent Neurosymbolic Reasoning in Vision Language Models",
+      "authors": [
+        "Sanchit Sinha",
+        "Guangzhi Xiong",
+        "Zhenghao He",
+        "Aidong Zhang"
+      ],
+      "published": "2025-11-13T18:13:56Z",
+      "doi": null,
+      "summary": "Modern vision-language models (VLMs) deliver impressive predictive accuracy yet offer little insight into 'why' a decision is reached, frequently hallucinating facts, particularly when encountering out-of-distribution data. Neurosymbolic frameworks address this by pairing black-box perception with interpretable symbolic reasoning, but current methods extract their symbols solely from task labels, leaving them weakly grounded in the underlying visual data. In this paper, we introduce a multi-agent system - Concept-RuleNet that reinstates visual grounding while retaining transparent reasoning. Specifically, a multimodal concept generator first mines discriminative visual concepts directly from a representative subset of training images. Next, these visual concepts are utilized to condition symbol discovery, anchoring the generations in real image statistics and mitigating label bias. Subsequently, symbols are composed into executable first-order rules by a large language model reasoner agent - yielding interpretable neurosymbolic rules. Finally, during inference, a vision verifier agent quantifies the degree of presence of each symbol and triggers rule execution in tandem with outputs of black-box neural models, predictions with explicit reasoning pathways. Experiments on five benchmarks, including two challenging medical-imaging tasks and three underrepresented natural-image datasets, show that our system augments state-of-the-art neurosymbolic baselines by an average of 5% while also reducing the occurrence of hallucinated symbols in rules by up to 50%."
+    },
+    {
+      "arxiv_id": "2602.22923v1",
+      "title": "WaterVideoQA: ASV-Centric Perception and Rule-Compliant Reasoning via Multi-Modal Agents",
+      "authors": [
+        "Runwei Guan",
+        "Shaofeng Liang",
+        "Ningwei Ouyang",
+        "Weichen Fei",
+        "Shanliang Yao",
+        "Wei Dai",
+        "Chenhao Ge",
+        "Penglei Sun",
+        "Xiaohui Zhu",
+        "Tao Huang",
+        "Ryan Wen Liu",
+        "Hui Xiong"
+      ],
+      "published": "2026-02-26T12:12:40Z",
+      "doi": null,
+      "summary": "While autonomous navigation has achieved remarkable success in passive perception (e.g., object detection and segmentation), it remains fundamentally constrained by a void in knowledge-driven, interactive environmental cognition. In the high-stakes domain of maritime navigation, the ability to bridge the gap between raw visual perception and complex cognitive reasoning is not merely an enhancement but a critical prerequisite for Autonomous Surface Vessels to execute safe and precise maneuvers. To this end, we present WaterVideoQA, the first large-scale, comprehensive Video Question Answering benchmark specifically engineered for all-waterway environments. This benchmark encompasses 3,029 video clips across six distinct waterway categories, integrating multifaceted variables such as volatile lighting and dynamic weather to rigorously stress-test ASV capabilities across a five-tier hierarchical cognitive framework. Furthermore, we introduce NaviMind, a pioneering multi-agent neuro-symbolic system designed for open-ended maritime reasoning. By synergizing Adaptive Semantic Routing, Situation-Aware Hierarchical Reasoning, and Autonomous Self-Reflective Verification, NaviMind transitions ASVs from superficial pattern matching to regulation-compliant, interpretable decision-making. Experimental results demonstrate that our framework significantly transcends existing baselines, establishing a new paradigm for intelligent, trustworthy interaction in dynamic maritime environments."
+    },
+    {
+      "arxiv_id": "2607.09059v1",
+      "title": "ARCANA: A Reflective Multi-Agent Program Synthesis Framework for ARC-AGI-2 Reasoning",
+      "authors": [
+        "Kunbo Zhang",
+        "Lei Fu",
+        "Zeyu Wang",
+        "Zijing Liu",
+        "Kejian Tong"
+      ],
+      "published": "2026-07-10T03:03:42Z",
+      "doi": null,
+      "summary": "We present ARCANA, a collaborative multi agent framework for solving ARC AGI 2 tasks under strict test time and hardware constraints. ARCANA decomposes each task into iterative perception, hypothesis generation, symbolic execution, and reflective refinement. A perceptual grounding agent builds object centric scene graphs from raw grids, a latent program policy proposes diverse DSL programs, a symbolic executor verifies candidates on demonstrations, and a reflective agent synthesizes failure driven feedback for the next turn. These agents communicate through a shared differentiable blackboard and are scheduled by a learned meta controller. The design combines structured program search with adaptive multi turn correction, improving reasoning efficiency and solution quality on challenging abstract transformation tasks."
+    },
+    {
+      "arxiv_id": "2603.20308v1",
+      "title": "Reason-to-Transmit: Deliberative Adaptive Communication for Cooperative Perception",
+      "authors": [
+        "Aayam Bansal",
+        "Ishaan Gangwani"
+      ],
+      "published": "2026-03-19T15:54:26Z",
+      "doi": null,
+      "summary": "Cooperative perception among autonomous agents overcomes the limitations of single-agent sensing, but bandwidth constraints in vehicle-to-everything (V2X) networks require efficient communication policies. Existing approaches rely on reactive mechanisms, such as confidence maps, learned gating, or sparse masks, to decide what to transmit, without reasoning about why a message benefits the receiver. We introduce Reason-to-Transmit (R2T), a framework that equips each agent with a lightweight transformer-based module that reasons over local scene context, estimated neighbor information gaps, and bandwidth budget to make per-region transmission decisions. Trained end-to-end with a bandwidth-aware objective, R2T is evaluated against nine baselines in a multi-agent bird's-eye-view perception environment. Any communication improves performance by about 58% AP over no communication. At low bandwidth, all selective methods perform similarly, but R2T shows clear gains under high occlusion, where information asymmetry is greatest, approaching oracle performance. All methods degrade gracefully under packet drops up to 50%, showing robustness to communication failures. These results indicate that while fusion design dominates performance, deliberative communication provides additional gains in challenging scenarios. R2T introduces a reasoning-based approach to communication, enabling more efficient and context-aware information sharing in cooperative perception."
+    },
+    {
+      "arxiv_id": "2604.18988v1",
+      "title": "A Multi-Agent Framework with Structured Reasoning and Reflective Refinement for Multimodal Empathetic Response Generation",
+      "authors": [
+        "Liping Wang",
+        "Cheng Ye",
+        "Weidong Chen",
+        "Peipei Song",
+        "Bo Hu",
+        "Zhendong Mao"
+      ],
+      "published": "2026-04-21T02:18:18Z",
+      "doi": null,
+      "summary": "Multimodal empathetic response generation (MERG) aims to generate emotionally engaging and empathetic responses based on users' multimodal contexts. Existing approaches usually rely on an implicit one-pass generation paradigm from multimodal context to the final response, which overlooks two intrinsic characteristics of MERG: (1) Human perception of emotional cues is inherently structured rather than a direct mapping. The conventional paradigm neglects the hierarchical progression of emotion perception, leading to distorted emotional judgments. (2) Given the inherent complexity and ambiguity of human emotions, the conventional paradigm is prone to significant emotional biases, ultimately resulting in suboptimal empathy. In this paper, we propose a multi-agent framework for MERG, which enhances empathy through structured reasoning and reflective refinement. Specifically, we first introduce a structured empathetic reasoning-to-generation module that explicitly decomposes response generation via multimodal perception, consistency-aware emotion forecasting, pragmatic strategy planning, and strategy-guided response generation, providing a clearer intermediate path from multimodal evidence to response realization. Besides, we develop a global reflection and refinement module, in which a global reflection agent performs step-wise auditing over intermediate states and the generated response, eliminating existing emotional biases and empathy errors, and triggering targeted regeneration. Overall, such a closed-loop framework enables our model to gradually improve the accuracy of emotion perception and eliminate emotion biases during the iteration process. Experiments on several benchmarks, e.g., IEMOCAP and MELD, demonstrate that our model has superior empathic response generation capabilities compared to state-of-the-art methods."
+    }
+  ]
+}

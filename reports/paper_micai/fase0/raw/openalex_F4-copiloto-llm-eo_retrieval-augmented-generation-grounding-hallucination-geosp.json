@@ -1,0 +1,486 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "openalex",
+  "query": "retrieval augmented generation grounding hallucination geospatial",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W4416035916",
+      "title": "Mitigating Geospatial Knowledge Hallucination in Large Language Models: Benchmarking and Dynamic Factuality Aligning",
+      "authors": [
+        "Shengyuan Wang",
+        "Jie Feng",
+        "Tianhui Liu",
+        "Dan Pei",
+        "Yong Li"
+      ],
+      "year": 2025,
+      "doi": "10.18653/v1/2025.findings-emnlp.45",
+      "venue": "",
+      "cited_by_count": 4
+    },
+    {
+      "openalex_id": "W4413286386",
+      "title": "Generative AI for Geospatial Analysis: Fine-Tuning ChatGPT to Convert Natural Language into Python-Based Geospatial Computations",
+      "authors": [
+        "Zachary Sherman",
+        "Sandesh Sharma Dulal",
+        "Jin-Hee Cho",
+        "Mengxi Zhang",
+        "Junghwan Kim"
+      ],
+      "year": 2025,
+      "doi": "10.3390/ijgi14080314",
+      "venue": "ISPRS International Journal of Geo-Information",
+      "cited_by_count": 10
+    },
+    {
+      "openalex_id": "W4416118075",
+      "title": "Remote Sensing Retrieval-Augmented Generation: Bridging remote sensing imagery and comprehensive knowledge with a multimodal dataset and retrieval-augmented generation model",
+      "authors": [
+        "Congcong Wen",
+        "Y. S. Lin",
+        "Xiaokang Qu",
+        "Nan Li",
+        "Yong Liao",
+        "Xiang Li",
+        "Hui Lin"
+      ],
+      "year": 2026,
+      "doi": "10.1109/mgrs.2025.3645852",
+      "venue": "IEEE Geoscience and Remote Sensing Magazine",
+      "cited_by_count": 2
+    },
+    {
+      "openalex_id": "W4403580375",
+      "title": "Can Large Language Models Generate Geospatial Code?",
+      "authors": [
+        "Shuyang Hou",
+        "Zhangxiao Shen",
+        "Liang Jianyuan",
+        "Zhao Anqi",
+        "Gui Zhipeng",
+        "Li Rui",
+        "Huayi Wu"
+      ],
+      "year": 2024,
+      "doi": "10.48550/arxiv.2410.09738",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 5
+    },
+    {
+      "openalex_id": "W4410637100",
+      "title": "Retrieval and Structuring Augmented Generation with LLMs for Web Applications",
+      "authors": [
+        "Yizhu Jiao",
+        "Siru Ouyang",
+        "Ming Zhong",
+        "Yunyi Zhang",
+        "Linyi Ding",
+        "Sizhe Zhou",
+        "Jiawei Han"
+      ],
+      "year": 2025,
+      "doi": "10.1145/3701716.3715870",
+      "venue": "",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W4409147473",
+      "title": "The generative revolution: AI foundation models in geospatial health—applications, challenges and future research",
+      "authors": [
+        "Bernd Resch",
+        "Polychronis Kolokoussis",
+        "David Hanny",
+        "Maria Antonia Brovelli",
+        "Maged N. Kamel Boulos"
+      ],
+      "year": 2025,
+      "doi": "10.1186/s12942-025-00391-0",
+      "venue": "International Journal of Health Geographics",
+      "cited_by_count": 10
+    },
+    {
+      "openalex_id": "W4411120349",
+      "title": "RAD-Bench: Evaluating Large Language Models’ Capabilities in Retrieval Augmented Dialogues",
+      "authors": [
+        "Tzu-Lin Kuo",
+        "Feng-Ting Liao",
+        "Mu-Wei Hsieh",
+        "Fu‐Chieh Chang",
+        "Po-Chun Hsu",
+        "Da-shan Shiu"
+      ],
+      "year": 2025,
+      "doi": "10.18653/v1/2025.naacl-industry.66",
+      "venue": "",
+      "cited_by_count": 4
+    },
+    {
+      "openalex_id": "W4414098962",
+      "title": "ForestGPT and Beyond: A Trustworthy Domain-Specific Large Language Model Paving the Way to Forestry 5.0",
+      "authors": [
+        "Florian Sommer",
+        "Benno Eberhard",
+        "Andreas Holzinger"
+      ],
+      "year": 2025,
+      "doi": "10.3390/electronics14183583",
+      "venue": "Electronics",
+      "cited_by_count": 18
+    },
+    {
+      "openalex_id": "W4402243741",
+      "title": "Towards Next-Generation Urban Decision Support Systems through AI-Powered Construction of Scientific Ontology Using Large Language Models—A Case in Optimizing Intermodal Freight Transportation",
+      "authors": [
+        "Jose Tupayachi",
+        "Haowen Xu",
+        "Olufemi A. Omitaomu",
+        "Mustafa Can Camur",
+        "Aliza Sharmin",
+        "Xueping Li"
+      ],
+      "year": 2024,
+      "doi": "10.3390/smartcities7050094",
+      "venue": "Smart Cities",
+      "cited_by_count": 47
+    },
+    {
+      "openalex_id": "W7128926176",
+      "title": "CARAG: Context-Aware Retrieval-Augmented Generation for Railway Operation and Maintenance Question Answering over Spatial Knowledge Graph",
+      "authors": [
+        "Wenkui Zheng",
+        "Mengzheng Yang",
+        "Yanfei Ren",
+        "Haoyu Wang",
+        "Chun Zeng",
+        "Yong Zhang"
+      ],
+      "year": 2026,
+      "doi": "10.3390/ijgi15020078",
+      "venue": "ISPRS International Journal of Geo-Information",
+      "cited_by_count": 2
+    },
+    {
+      "openalex_id": "W7131251970",
+      "title": "Bridging natural language and GIS: a multi-agent framework for LLM-driven autonomous geospatial analysis",
+      "authors": [
+        "Ali Mansourian",
+        "Rachid Oucheikh"
+      ],
+      "year": 2026,
+      "doi": "10.1080/17538947.2026.2633849",
+      "venue": "International Journal of Digital Earth",
+      "cited_by_count": 3
+    },
+    {
+      "openalex_id": "W4416035887",
+      "title": "Scientific Paper Retrieval with LLM-Guided Semantic-Based Ranking",
+      "authors": [
+        "Yunyi Zhang",
+        "Ruozhen Yang",
+        "Siqi Jiao",
+        "SeongKu Kang",
+        "Jiawei Han"
+      ],
+      "year": 2025,
+      "doi": "10.18653/v1/2025.findings-emnlp.108",
+      "venue": "",
+      "cited_by_count": 7
+    },
+    {
+      "openalex_id": "W7167709112",
+      "title": "Retrieval-Augmented Generation for Curated Thematic Corpora: A Critical Survey, Bibliometric Evidence, and the ThemePath-RAG Framework",
+      "authors": [
+        "Winda Monika",
+        "Deshinta Arrova Dewi",
+        "Arbi Haza Nasution",
+        "Aytuğ Onan",
+        "Yohei Murakami"
+      ],
+      "year": 2026,
+      "doi": "10.3390/info17070660",
+      "venue": "Information",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W4403747456",
+      "title": "RAD-Bench: Evaluating Large Language Models Capabilities in Retrieval Augmented Dialogues",
+      "authors": [
+        "Tzu-Lin Kuo",
+        "Feng-Ting Liao",
+        "Hsieh, Mu-Wei",
+        "Fu‐Chieh Chang",
+        "Po-Chun Hsu",
+        "Da-shan Shiu"
+      ],
+      "year": 2024,
+      "doi": "10.48550/arxiv.2409.12558",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7160164450",
+      "title": "EduMSRA: A Multi-Source Educational Research Agent Integrating Retrieval-Augmented Generation and Model Context Protocol for Adaptive Intelligent Tutoring Systems",
+      "authors": [
+        "Thi-Linh Ho",
+        "Thanh-Phong Lam"
+      ],
+      "year": 2026,
+      "doi": "10.3390/app16094400",
+      "venue": "Applied Sciences",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W4399594884",
+      "title": "When geoscience meets generative AI and large language models: Foundations, trends, and future challenges",
+      "authors": [
+        "Abdenour Hadid",
+        "Tanujit Chakraborty",
+        "D. Busby"
+      ],
+      "year": 2024,
+      "doi": "10.1111/exsy.13654",
+      "venue": "Expert Systems",
+      "cited_by_count": 48
+    },
+    {
+      "openalex_id": "W4413782100",
+      "title": "Intelligent National Map: A Vision for Distributed and Agentic Geospatial Intelligence",
+      "authors": [
+        "Samantha T. Arundel",
+        "Wenwen Li",
+        "Kevin McKeehan",
+        "B. B. Campbell",
+        "Jung‐Kuan Liu",
+        "Lawrence V. Stanislawski",
+        "Ethan Sharvers",
+        "Greg Matthews",
+        "Philip T. Thiem",
+        "Dalia E. Varanka",
+        "E. Lynn Usery"
+      ],
+      "year": 2025,
+      "doi": "10.31223/x5w163",
+      "venue": "",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W4417041577",
+      "title": "An Agent-Based RAG Architecture for Intelligent Tourism Assistance: The Valencia Case Study",
+      "authors": [
+        "Andrea Bonetti",
+        "Adrián Salcedo-Puche",
+        "Joan Vila‐Francés",
+        "Xaro Benavent-Garcia",
+        "Emilio Fernández-Vargas",
+        "Rafael Magdalena‐Benedito",
+        "Emilio Soria‐Olivas"
+      ],
+      "year": 2025,
+      "doi": "10.3390/tourhosp6050266",
+      "venue": "Tourism and Hospitality",
+      "cited_by_count": 3
+    },
+    {
+      "openalex_id": "W4410291923",
+      "title": "Foundation models and intelligent decision-making: Progress, challenges, and perspectives",
+      "authors": [
+        "Jincai Huang",
+        "Yongjun Xu",
+        "Qi Wang",
+        "Qi Wang",
+        "Xingxing Liang",
+        "Fei Wang",
+        "Zhao Zhang",
+        "Wei Wei",
+        "Boxuan Zhang",
+        "Libo Huang",
+        "Ji Yoon Chang",
+        "Lizhi Ma",
+        "Ting Ma",
+        "Yuxuan Liang",
+        "Jie Zhang",
+        "Jianwei Guo",
+        "Xuhui Jiang",
+        "Xinxin Fan",
+        "Zhulin An",
+        "Tingting Li",
+        "Xuefei Li",
+        "Zezhi Shao",
+        "Tangwen Qian",
+        "Tao Sun",
+        "Boyu Diao",
+        "Chuanguang Yang",
+        "Chenqing Yu",
+        "Yiqing Wu",
+        "Mengxian Li",
+        "Haifeng Zhang",
+        "Yongcheng Zeng",
+        "Zhicheng Zhang",
+        "Zhengqiu Zhu",
+        "Yiqin Lv",
+        "Aming Li",
+        "Chen Xu",
+        "Bo An",
+        "Wei Xiao",
+        "Chenguang Bai",
+        "Yuxing Mao",
+        "Zhigang Yin",
+        "Sheng Gui",
+        "Wentao Su",
+        "Yinghao Zhu",
+        "Junyi Gao",
+        "Xinyu He",
+        "Yizhou Li",
+        "Guangyin Jin",
+        "Xiang Ao",
+        "Xuehao Zhai",
+        "Haoran Tan",
+        "Lijun Yun",
+        "Hongquan Shi",
+        "Jun Li",
+        "Changjun Fan",
+        "Kuihua Huang",
+        "Ewen M. Harrison",
+        "Victor C. M. Leung",
+        "Sihang Qiu",
+        "Yanjie Dong",
+        "Xiaolong Zheng",
+        "Gang Wang",
+        "Yu Zheng",
+        "Yuanzhuo Wang",
+        "Jiafeng Guo",
+        "Lizhe Wang",
+        "Xueqi Cheng",
+        "Yaonan Wang",
+        "Shanlin Yang",
+        "Mengyin Fu",
+        "Aiguo Fei"
+      ],
+      "year": 2025,
+      "doi": "10.1016/j.xinn.2025.100948",
+      "venue": "The Innovation",
+      "cited_by_count": 58
+    },
+    {
+      "openalex_id": "W7125150029",
+      "title": "AgroLLM: Connecting Farmers and Agricultural Practices Through Large Language Models for Enhanced Knowledge Transfer and Practical Application",
+      "authors": [
+        "R. Dinesh Jackson Samuel",
+        "Inna Skarga-Bandurova",
+        "V. Sivakumar",
+        "Muhammad Awais",
+        "Mithra S"
+      ],
+      "year": 2026,
+      "doi": "10.3390/agriengineering8010038",
+      "venue": "AgriEngineering",
+      "cited_by_count": 8
+    },
+    {
+      "openalex_id": "W4385327621",
+      "title": "Foundational Models Defining a New Era in Vision: A Survey and Outlook",
+      "authors": [
+        "Muhammad Awais",
+        "Muzammal Naseer",
+        "Salman Khan",
+        "Rao Muhammad Anwer",
+        "Hisham Cholakkal",
+        "Mubarak Shah",
+        "Ming–Hsuan Yang",
+        "Fahad Shahbaz Khan"
+      ],
+      "year": 2023,
+      "doi": "10.48550/arxiv.2307.13721",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 68
+    },
+    {
+      "openalex_id": "W4401615828",
+      "title": "Evolution and Prospects of Foundation Models: From Large Language Models to Large Multimodal Models",
+      "authors": [
+        "Zheyi Chen",
+        "Liuchang Xu",
+        "Hongting Zheng",
+        "Luyao Chen",
+        "Amr Tolba",
+        "Liang Zhao",
+        "Keping Yu",
+        "Hailin Feng"
+      ],
+      "year": 2024,
+      "doi": "10.32604/cmc.2024.052618",
+      "venue": "Computers, materials & continua/Computers, materials & continua (Print)",
+      "cited_by_count": 90
+    },
+    {
+      "openalex_id": "W4416295706",
+      "title": "AI-Augmented Water Quality Event Response: The Role of Generative Models for Decision Support",
+      "authors": [
+        "S. R. Mounce",
+        "Richard Mounce",
+        "Joby Boxall"
+      ],
+      "year": 2025,
+      "doi": "10.3390/w17223260",
+      "venue": "Water",
+      "cited_by_count": 3
+    },
+    {
+      "openalex_id": "W4391901199",
+      "title": "Generative AI in the Construction Industry: A State-of-the-art Analysis",
+      "authors": [
+        "Ridwan Taiwo",
+        "Idris Temitope Bello",
+        "Sulemana Fatoama Abdulai",
+        "Abdul‐Mugis Yussif",
+        "Babatunde Abiodun Salami",
+        "Abdullahi B. Saka",
+        "Tarek Zayed"
+      ],
+      "year": 2024,
+      "doi": "10.48550/arxiv.2402.09939",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 18
+    },
+    {
+      "openalex_id": "W4405486711",
+      "title": "The potential for AI to revolutionize conservation: a horizon scan",
+      "authors": [
+        "S.A. Reynolds",
+        "Sara Beery",
+        "Neil D. Burgess",
+        "Mark A. Burgman",
+        "Stuart H. M. Butchart",
+        "Steven J. Cooke",
+        "David A. Coomes",
+        "Finn Danielsen",
+        "Enrico Di Minin",
+        "América Paz Durán",
+        "Francis Gassert",
+        "Amy Hinsley",
+        "Sadiq Jaffer",
+        "Julia P. G. Jones",
+        "Binbin V. Li",
+        "Oisin Mac Aodha",
+        "Anil Madhavapeddy",
+        "Stephanie O’Donnell",
+        "William M Oxbury",
+        "Lloyd S. Peck",
+        "Nathalie Pettorelli",
+        "Jon Paul Rodrı́guez",
+        "Emily Shuckburgh",
+        "Bernardo B. N. Strassburg",
+        "Hiromi Yamashita",
+        "Zhongqi Miao",
+        "William J. Sutherland"
+      ],
+      "year": 2024,
+      "doi": "10.1016/j.tree.2024.11.013",
+      "venue": "Trends in Ecology & Evolution",
+      "cited_by_count": 101
+    }
+  ]
+}

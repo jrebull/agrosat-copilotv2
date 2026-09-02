@@ -1,0 +1,74 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "arxiv",
+  "query": "all:\"reject curves\" AND all:\"classification\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2308.08381v3",
+      "title": "Precision and Recall Reject Curves for Classification",
+      "authors": [
+        "Lydia Fischer",
+        "Patricia Wollstadt"
+      ],
+      "published": "2023-08-16T14:09:48Z",
+      "doi": null,
+      "summary": "For some classification scenarios, it is desirable to use only those classification instances that a trained model associates with a high certainty. To obtain such high-certainty instances, previous work has proposed accuracy-reject curves. Reject curves allow to evaluate and compare the performance of different certainty measures over a range of thresholds for accepting or rejecting classifications. However, the accuracy may not be the most suited evaluation metric for all applications, and instead precision or recall may be preferable. This is the case, for example, for data with imbalanced class distributions. We therefore propose reject curves that evaluate precision and recall, the recall-reject curve and the precision-reject curve. Using prototype-based classifiers from learning vector quantization, we first validate the proposed curves on artificial benchmark data against the accuracy reject curve as a baseline. We then show on imbalanced benchmarks and medical, real-world data that for these scenarios, the proposed precision- and recall-curves yield more accurate insights into classifier performance than accuracy reject curves."
+    },
+    {
+      "arxiv_id": "2506.21802v1",
+      "title": "Classification with Reject Option: Distribution-free Error Guarantees via Conformal Prediction",
+      "authors": [
+        "Johan Hallberg Szabadváry",
+        "Tuwe Löfström",
+        "Ulf Johansson",
+        "Cecilia Sönströd",
+        "Ernst Ahlberg",
+        "Lars Carlsson"
+      ],
+      "published": "2025-06-26T23:04:25Z",
+      "doi": "10.1016/j.mlwa.2025.100664",
+      "summary": "Machine learning (ML) models always make a prediction, even when they are likely to be wrong. This causes problems in practical applications, as we do not know if we should trust a prediction. ML with reject option addresses this issue by abstaining from making a prediction if it is likely to be incorrect. In this work, we formalise the approach to ML with reject option in binary classification, deriving theoretical guarantees on the resulting error rate. This is achieved through conformal prediction (CP), which produce prediction sets with distribution-free validity guarantees. In binary classification, CP can output prediction sets containing exactly one, two or no labels. By accepting only the singleton predictions, we turn CP into a binary classifier with reject option. Here, CP is formally put in the framework of predicting with reject option. We state and prove the resulting error rate, and give finite sample estimates. Numerical examples provide illustrations of derived error rate through several different conformal prediction settings, ranging from full conformal prediction to offline batch inductive conformal prediction. The former has a direct link to sharp validity guarantees, whereas the latter is more fuzzy in terms of validity guarantees but can be used in practice. Error-reject curves illustrate the trade-off between error rate and reject rate, and can serve to aid a user to set an acceptable error rate or reject rate in practice."
+    },
+    {
+      "arxiv_id": "2406.17346v1",
+      "title": "Stacked Confusion Reject Plots (SCORE)",
+      "authors": [
+        "Stephan Hasler",
+        "Lydia Fischer"
+      ],
+      "published": "2024-06-25T07:59:29Z",
+      "doi": null,
+      "summary": "Machine learning is more and more applied in critical application areas like health and driver assistance. To minimize the risk of wrong decisions, in such applications it is necessary to consider the certainty of a classification to reject uncertain samples. An established tool for this are reject curves that visualize the trade-off between the number of rejected samples and classification performance metrics. We argue that common reject curves are too abstract and hard to interpret by non-experts. We propose Stacked Confusion Reject Plots (SCORE) that offer a more intuitive understanding of the used data and the classifier's behavior. We present example plots on artificial Gaussian data to document the different options of SCORE and provide the code as a Python package."
+    },
+    {
+      "arxiv_id": "2608.04899v1",
+      "title": "Evaluation Pitfalls and Sparsity Limitations in LLM-based Confidence Estimates for Classification",
+      "authors": [
+        "Elena Merdjanovska",
+        "Omar Zaidan",
+        "Andreas Rücklé"
+      ],
+      "published": "2026-08-05T14:24:34Z",
+      "doi": "10.18653/v1/2026.findings-acl.1671",
+      "summary": "Confidence estimation is essential when LLMs are used for classification, indicating when predictions can be trusted. However, common approaches such as verbalization produce extremely sparse outputs. For instance, Qwen3-32B verbalizes only eight unique confidence values on SST-2, with over half being exactly 95%, a pattern we observe consistently across four datasets and two LLMs. Besides limiting practical utility, we show that this sparsity critically affects evaluation: the choice of interpolation in area under the accuracy-rejection curve (AUARC) dramatically alters rankings, with consistency sampling dropping from best to worst under stepwise versus linear interpolation. We advocate for standardizing stepwise interpolation for a fairer comparison. Under such a fair evaluation, we find that weighting verbalized digits by token probabilities, a method we term verbalization logprobs, addresses sparsity and achieves the best AUARC (+2.3 points over vanilla verbalization) without incurring additional inference cost."
+    },
+    {
+      "arxiv_id": "2404.15360v1",
+      "title": "Towards Robust and Interpretable EMG-based Hand Gesture Recognition using Deep Metric Meta Learning",
+      "authors": [
+        "Simon Tam",
+        "Shriram Tallam Puranam Raghu",
+        "Étienne Buteau",
+        "Erik Scheme",
+        "Mounir Boukadoum",
+        "Alexandre Campeau-Lecours",
+        "Benoit Gosselin"
+      ],
+      "published": "2024-04-17T23:37:50Z",
+      "doi": null,
+      "summary": "Current electromyography (EMG) pattern recognition (PR) models have been shown to generalize poorly in unconstrained environments, setting back their adoption in applications such as hand gesture control. This problem is often due to limited training data, exacerbated by the use of supervised classification frameworks that are known to be suboptimal in such settings. In this work, we propose a shift to deep metric-based meta-learning in EMG PR to supervise the creation of meaningful and interpretable representations. We use a Siamese Deep Convolutional Neural Network (SDCNN) and contrastive triplet loss to learn an EMG feature embedding space that captures the distribution of the different classes. A nearest-centroid approach is subsequently employed for inference, relying on how closely a test sample aligns with the established data distributions. We derive a robust class proximity-based confidence estimator that leads to a better rejection of incorrect decisions, i.e. false positives, especially when operating beyond the training data domain. We show our approach's efficacy by testing the trained SDCNN's predictions and confidence estimations on unseen data, both in and out of the training domain. The evaluation metrics include the accuracy-rejection curve and the Kullback-Leibler divergence between the confidence distributions of accurate and inaccurate predictions. Outperforming comparable models on both metrics, our results demonstrate that the proposed meta-learning approach improves the classifier's precision in active decisions (after rejection), thus leading to better generalization and applicability."
+    }
+  ]
+}

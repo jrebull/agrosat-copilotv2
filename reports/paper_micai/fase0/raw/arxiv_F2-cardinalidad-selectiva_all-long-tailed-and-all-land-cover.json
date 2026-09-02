@@ -1,0 +1,79 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "arxiv",
+  "query": "all:\"long-tailed\" AND all:\"land cover\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2107.12016v2",
+      "title": "Cost-effective Land Cover Classification for Remote Sensing Images",
+      "authors": [
+        "Dongwei Li",
+        "Shuliang Wang",
+        "Qiang He",
+        "Yun Yang"
+      ],
+      "published": "2021-07-26T08:13:21Z",
+      "doi": null,
+      "summary": "Land cover maps are of vital importance to various fields such as land use policy development, ecosystem services, urban planning and agriculture monitoring, which are mainly generated from remote sensing image classification techniques. Traditional land cover classification usually needs tremendous computational resources, which often becomes a huge burden to the remote sensing community. Undoubtedly cloud computing is one of the best choices for land cover classification, however, if not managed properly, the computation cost on the cloud could be surprisingly high. Recently, cutting the unnecessary computation long tail has become a promising solution for saving the cost in the cloud. For land cover classification, it is generally not necessary to achieve the best accuracy and 85% can be regarded as a reliable land cover classification. Therefore, in this paper, we propose a framework for cost-effective remote sensing classification. Given the desired accuracy, the clustering algorithm can stop early for cost-saving whilst achieving sufficient accuracy for land cover image classification. Experimental results show that achieving 85%-99.9% accuracy needs only 27.34%-60.83% of the total cloud computation cost for achieving a 100% accuracy. To put it into perspective, for the US land cover classification example, the proposed approach can save over $1,593,490.18 for the government in each single-use when the desired accuracy is 90%."
+    },
+    {
+      "arxiv_id": "2412.11407v1",
+      "title": "An Enhanced Classification Method Based on Adaptive Multi-Scale Fusion for Long-tailed Multispectral Point Clouds",
+      "authors": [
+        "TianZhu Liu",
+        "BangYan Hu",
+        "YanFeng Gu",
+        "Xian Li",
+        "Aleksandra Pižurica"
+      ],
+      "published": "2024-12-16T03:21:20Z",
+      "doi": "10.1007/s11432-024-4324-6",
+      "summary": "Multispectral point cloud (MPC) captures 3D spatial-spectral information from the observed scene, which can be used for scene understanding and has a wide range of applications. However, most of the existing classification methods were extensively tested on indoor datasets, and when applied to outdoor datasets they still face problems including sparse labeled targets, differences in land-covers scales, and long-tailed distributions. To address the above issues, an enhanced classification method based on adaptive multi-scale fusion for MPCs with long-tailed distributions is proposed. In the training set generation stage, a grid-balanced sampling strategy is designed to reliably generate training samples from sparse labeled datasets. In the feature learning stage, a multi-scale feature fusion module is proposed to fuse shallow features of land-covers at different scales, addressing the issue of losing fine features due to scale variations in land-covers. In the classification stage, an adaptive hybrid loss module is devised to utilize multi-classification heads with adaptive weights to balance the learning ability of different classes, improving the classification performance of small classes due to various-scales and long-tailed distributions in land-covers. Experimental results on three MPC datasets demonstrate the effectiveness of the proposed method compared with the state-of-the-art methods."
+    },
+    {
+      "arxiv_id": "2601.15705v1",
+      "title": "Enhanced LULC Segmentation via Lightweight Model Refinements on ALOS-2 SAR Data",
+      "authors": [
+        "Ali Caglayan",
+        "Nevrez Imamoglu",
+        "Toru Kouyama"
+      ],
+      "published": "2026-01-22T07:18:06Z",
+      "doi": null,
+      "summary": "This work focuses on national-scale land-use/land-cover (LULC) semantic segmentation using ALOS-2 single-polarization (HH) SAR data over Japan, together with a companion binary water detection task. Building on SAR-W-MixMAE self-supervised pretraining [1], we address common SAR dense-prediction failure modes, boundary over-smoothing, missed thin/slender structures, and rare-class degradation under long-tailed labels, without increasing pipeline complexity. We introduce three lightweight refinements: (i) injecting high-resolution features into multi-scale decoding, (ii) a progressive refine-up head that alternates convolutional refinement and stepwise upsampling, and (iii) an $α$-scale factor that tempers class reweighting within a focal+dice objective. The resulting model yields consistent improvements on the Japan-wide ALOS-2 LULC benchmark, particularly for under-represented classes, and improves water detection across standard evaluation metrics."
+    },
+    {
+      "arxiv_id": "2209.12995v1",
+      "title": "Habitat classification from satellite observations with sparse annotations",
+      "authors": [
+        "Mikko Impiö",
+        "Pekka Härmä",
+        "Anna Tammilehto",
+        "Saku Anttila",
+        "Jenni Raitoharju"
+      ],
+      "published": "2022-09-26T20:14:59Z",
+      "doi": null,
+      "summary": "Remote sensing benefits habitat conservation by making monitoring of large areas easier compared to field surveying especially if the remote sensed data can be automatically analyzed. An important aspect of monitoring is classifying and mapping habitat types present in the monitored area. Automatic classification is a difficult task, as classes have fine-grained differences and their distributions are long-tailed and unbalanced. Usually training data used for automatic land cover classification relies on fully annotated segmentation maps, annotated from remote sensed imagery to a fairly high-level taxonomy, i.e., classes such as forest, farmland, or urban area. A challenge with automatic habitat classification is that reliable data annotation requires field-surveys. Therefore, full segmentation maps are expensive to produce, and training data is often sparse, point-like, and limited to areas accessible by foot. Methods for utilizing these limited data more efficiently are needed. We address these problems by proposing a method for habitat classification and mapping, and apply this method to classify the entire northern Finnish Lapland area into Natura2000 classes. The method is characterized by using finely-grained, sparse, single-pixel annotations collected from the field, combined with large amounts of unannotated data to produce segmentation maps. Supervised, unsupervised and semi-supervised methods are compared, and the benefits of transfer learning from a larger out-of-domain dataset are demonstrated. We propose a \\ac{CNN} biased towards center pixel classification ensembled with a random forest classifier, that produces higher quality classifications than the models themselves alone. We show that cropping augmentations, test-time augmentation and semi-supervised learning can help classification even further."
+    },
+    {
+      "arxiv_id": "2506.06281v1",
+      "title": "TerraFM: A Scalable Foundation Model for Unified Multisensor Earth Observation",
+      "authors": [
+        "Muhammad Sohail Danish",
+        "Muhammad Akhtar Munir",
+        "Syed Roshaan Ali Shah",
+        "Muhammad Haris Khan",
+        "Rao Muhammad Anwer",
+        "Jorma Laaksonen",
+        "Fahad Shahbaz Khan",
+        "Salman Khan"
+      ],
+      "published": "2025-06-06T17:59:50Z",
+      "doi": null,
+      "summary": "Modern Earth observation (EO) increasingly leverages deep learning to harness the scale and diversity of satellite imagery across sensors and regions. While recent foundation models have demonstrated promising generalization across EO tasks, many remain limited by the scale, geographical coverage, and spectral diversity of their training data, factors critical for learning globally transferable representations. In this work, we introduce TerraFM, a scalable self-supervised learning model that leverages globally distributed Sentinel-1 and Sentinel-2 imagery, combined with large spatial tiles and land-cover aware sampling to enrich spatial and semantic coverage. By treating sensing modalities as natural augmentations in our self-supervised approach, we unify radar and optical inputs via modality-specific patch embeddings and adaptive cross-attention fusion. Our training strategy integrates local-global contrastive learning and introduces a dual-centering mechanism that incorporates class-frequency-aware regularization to address long-tailed distributions in land cover.TerraFM achieves strong generalization on both classification and segmentation tasks, outperforming prior models on GEO-Bench and Copernicus-Bench. Our code and pretrained models are publicly available at: https://github.com/mbzuai-oryx/TerraFM ."
+    }
+  ]
+}

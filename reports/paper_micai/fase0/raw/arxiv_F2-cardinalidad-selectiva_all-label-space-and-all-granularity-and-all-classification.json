@@ -1,0 +1,168 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "arxiv",
+  "query": "all:\"label space\" AND all:\"granularity\" AND all:\"classification\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2106.09260v1",
+      "title": "Joining datasets via data augmentation in the label space for neural networks",
+      "authors": [
+        "Jake Zhao",
+        "Mingfeng Ou",
+        "Linji Xue",
+        "Yunkai Cui",
+        "Sai Wu",
+        "Gang Chen"
+      ],
+      "published": "2021-06-17T06:08:11Z",
+      "doi": null,
+      "summary": "Most, if not all, modern deep learning systems restrict themselves to a single dataset for neural network training and inference. In this article, we are interested in systematic ways to join datasets that are made of similar purposes. Unlike previous published works that ubiquitously conduct the dataset joining in the uninterpretable latent vectorial space, the core to our method is an augmentation procedure in the label space. The primary challenge to address the label space for dataset joining is the discrepancy between labels: non-overlapping label annotation sets, different labeling granularity or hierarchy and etc. Notably we propose a new technique leveraging artificially created knowledge graph, recurrent neural networks and policy gradient that successfully achieve the dataset joining in the label space. Empirical results on both image and text classification justify the validity of our approach."
+    },
+    {
+      "arxiv_id": "2503.15578v3",
+      "title": "MedSpaformer: a Transferable Transformer with Multi-granularity Token Sparsification for Medical Time Series Classification",
+      "authors": [
+        "Jiexia Ye",
+        "Weiqi Zhang",
+        "Ziyue Li",
+        "Jia Li",
+        "Fugee Tsung"
+      ],
+      "published": "2025-03-19T13:22:42Z",
+      "doi": null,
+      "summary": "Accurate medical time series (MedTS) classification is essential for effective clinical diagnosis, yet remains challenging due to complex multi-channel temporal dependencies, information redundancy, and label scarcity. While transformer-based models have shown promise in time series analysis, most are designed for forecasting tasks and fail to fully exploit the unique characteristics of MedTS. In this paper, we introduce MedSpaformer, a transformer-based framework tailored for MedTS classification. It incorporates a sparse token-based dual-attention mechanism that enables global context modeling and token sparsification, allowing dynamic feature refinement by focusing on informative tokens while reducing redundancy. This mechanism is integrated into a multi-granularity cross-channel encoding scheme to capture intra- and inter-granularity temporal dependencies and inter-channel correlations, enabling progressive refinement of task-relevant patterns in medical signals. The sparsification design allows our model to flexibly accommodate inputs with variable lengths and channel dimensions. We also introduce an adaptive label encoder to extract label semantics and address cross-dataset label space misalignment. Together, these components enhance the model's transferability across heterogeneous medical datasets, which helps alleviate the challenge of label scarcity. Our model outperforms 13 baselines across 7 medical datasets under supervised learning. It also excels in few-shot learning and demonstrates zero-shot capability in both in-domain and cross-domain diagnostics. These results highlight MedSpaformer's robustness and its potential as a unified solution for MedTS classification across diverse settings."
+    },
+    {
+      "arxiv_id": "2303.16887v2",
+      "title": "Towards Understanding the Effect of Pretraining Label Granularity",
+      "authors": [
+        "Guan Zhe Hong",
+        "Yin Cui",
+        "Ariel Fuxman",
+        "Stanley H. Chan",
+        "Enming Luo"
+      ],
+      "published": "2023-03-29T17:56:36Z",
+      "doi": null,
+      "summary": "In this paper, we study how the granularity of pretraining labels affects the generalization of deep neural networks in image classification tasks. We focus on the \"fine-to-coarse\" transfer learning setting, where the pretraining label space is more fine-grained than that of the target problem. Empirically, we show that pretraining on the leaf labels of ImageNet21k produces better transfer results on ImageNet1k than pretraining on other coarser granularity levels, which supports the common practice used in the community. Theoretically, we explain the benefit of fine-grained pretraining by proving that, for a data distribution satisfying certain hierarchy conditions, 1) coarse-grained pretraining only allows a neural network to learn the \"common\" or \"easy-to-learn\" features well, while 2) fine-grained pretraining helps the network learn the \"rarer\" or \"fine-grained\" features in addition to the common ones, thus improving its accuracy on hard downstream test samples in which common features are missing or weak in strength. Furthermore, we perform comprehensive experiments using the label hierarchies of iNaturalist 2021 and observe that the following conditions, in addition to proper choice of label granularity, enable the transfer to work well in practice: 1) the pretraining dataset needs to have a meaningful label hierarchy, and 2) the pretraining and target label functions need to align well."
+    },
+    {
+      "arxiv_id": "2607.17952v1",
+      "title": "What Transfers Under Source Shift? Definitions, Examples, and Fine-Tuning for Climate Disclosure Classification",
+      "authors": [
+        "Guosheng Li",
+        "Fenghui Ren",
+        "Bin Liu",
+        "Chuan Yu",
+        "Kaiying Ji",
+        "Lin Yue",
+        "Jun Shen",
+        "Sasa Qian"
+      ],
+      "published": "2026-07-20T13:54:40Z",
+      "doi": null,
+      "summary": "Climate disclosure classification is a fundamental task for analysing corporate climate disclosures, yet such disclosures appear in many different sources -- annual reports, press releases, and earnings calls -- that differ in length, purpose, and writing style. Existing evaluations are mostly conducted within a single source, leaving open whether common LLM adaptation strategies remain effective under source shift. We reframe climate disclosure classification as a cross-source adaptation problem and study three widely used adaptation strategies -- definitions, examples, and fine-tuning -- across eleven open- and closed-source LLMs, using two corpora that share the same label space but come from different sources. We find that all strategies bring positive cross-source gains on average, but the strongest in-source strategies are not the strongest cross-source ones: similarity-based retrieval and LoRA fine-tuning gain most in-source but lose most of that advantage under source shift; randomly selected few-shot examples, a weaker in-source baseline, retain their advantage more reliably; definitions transfer most consistently, though only when their granularity matches the target text. Across these strategies, when the source changes, simpler is often safer."
+    },
+    {
+      "arxiv_id": "2606.21838v1",
+      "title": "Beyond Flat Labels: Level-Restricted Contrastive Learning for Hierarchical Fine-Grained Vision Classification",
+      "authors": [
+        "Zhiyuan Tao",
+        "Srikumar Sastry",
+        "Matthew J Thompson",
+        "Elizabeth G Campolongo",
+        "Net Zhang",
+        "Ziheng Zhang",
+        "Hilmar Lapp",
+        "Yu Su",
+        "Tanya Berger-Wolf",
+        "Nathan Jacobs",
+        "Wei-Lun Chao",
+        "Jianyang Gu"
+      ],
+      "published": "2026-06-20T02:12:05Z",
+      "doi": null,
+      "summary": "Multimodal contrastive learning has enabled zero-shot visual classification by aligning images with textual categories. However, in hierarchically structured label spaces, existing methods often produce predictions that are inconsistent across taxonomic levels. For example, a model may predict a fine-grained category whose parent category contradicts its simultaneously predicted higher-level label. By analysis, the issue originates from false negative labels when contrastive comparison involves multiple taxonomic levels. To this end, we propose to restrict contrastive comparisons to categories within the same taxonomic level. In addition, we adopt a group-balanced design, ensuring each taxonomic level receives adequate optimization. As a result, the proposed framework improves both hierarchical consistency and classification accuracy from coarse to fine granularity. We train our model with TreeOfLife-10M based on BioCLIP and evaluate it across multiple hierarchical classification benchmarks, where the model demonstrates significantly improved hierarchical consistency in both Euclidean and hyperbolic spaces. Notably, on iNaturalist 2021 (iNat21), our method improves average accuracy across levels by 30.47% over the baseline, highlighting its effectiveness for hierarchical zero-shot classification."
+    },
+    {
+      "arxiv_id": "2410.20401v1",
+      "title": "Prototypical Extreme Multi-label Classification with a Dynamic Margin Loss",
+      "authors": [
+        "Kunal Dahiya",
+        "Diego Ortego",
+        "David Jiménez"
+      ],
+      "published": "2024-10-27T10:24:23Z",
+      "doi": null,
+      "summary": "Extreme Multi-label Classification (XMC) methods predict relevant labels for a given query in an extremely large label space. Recent works in XMC address this problem using deep encoders that project text descriptions to an embedding space suitable for recovering the closest labels. However, learning deep models can be computationally expensive in large output spaces, resulting in a trade-off between high performing brute-force approaches and efficient solutions. In this paper, we propose PRIME, a XMC method that employs a novel prototypical contrastive learning technique to reconcile efficiency and performance surpassing brute-force approaches. We frame XMC as a data-to-prototype prediction task where label prototypes aggregate information from related queries. More precisely, we use a shallow transformer encoder that we coin as Label Prototype Network, which enriches label representations by aggregating text-based embeddings, label centroids and learnable free vectors. We jointly train a deep encoder and the Label Prototype Network using an adaptive triplet loss objective that better adapts to the high granularity and ambiguity of extreme label spaces. PRIME achieves state-of-the-art results in several public benchmarks of different sizes and domains, while keeping the model efficient."
+    },
+    {
+      "arxiv_id": "2402.07270v2",
+      "title": "Open-ended VQA benchmarking of Vision-Language models by exploiting Classification datasets and their semantic hierarchy",
+      "authors": [
+        "Simon Ging",
+        "María A. Bravo",
+        "Thomas Brox"
+      ],
+      "published": "2024-02-11T18:26:18Z",
+      "doi": null,
+      "summary": "The evaluation of text-generative vision-language models is a challenging yet crucial endeavor. By addressing the limitations of existing Visual Question Answering (VQA) benchmarks and proposing innovative evaluation methodologies, our research seeks to advance our understanding of these models' capabilities. We propose a novel VQA benchmark based on well-known visual classification datasets which allows a granular evaluation of text-generative vision-language models and their comparison with discriminative vision-language models. To improve the assessment of coarse answers on fine-grained classification tasks, we suggest using the semantic hierarchy of the label space to ask automatically generated follow-up questions about the ground-truth category. Finally, we compare traditional NLP and LLM-based metrics for the problem of evaluating model predictions given ground-truth answers. We perform a human evaluation study upon which we base our decision on the final metric. We apply our benchmark to a suite of vision-language models and show a detailed comparison of their abilities on object, action, and attribute classification. Our contributions aim to lay the foundation for more precise and meaningful assessments, facilitating targeted progress in the exciting field of vision-language modeling."
+    },
+    {
+      "arxiv_id": "2006.03629v1",
+      "title": "Hierarchical Class-Based Curriculum Loss",
+      "authors": [
+        "Palash Goyal",
+        "Shalini Ghosh"
+      ],
+      "published": "2020-06-05T18:48:57Z",
+      "doi": null,
+      "summary": "Classification algorithms in machine learning often assume a flat label space. However, most real world data have dependencies between the labels, which can often be captured by using a hierarchy. Utilizing this relation can help develop a model capable of satisfying the dependencies and improving model accuracy and interpretability. Further, as different levels in the hierarchy correspond to different granularities, penalizing each label equally can be detrimental to model learning. In this paper, we propose a loss function, hierarchical curriculum loss, with two properties: (i) satisfy hierarchical constraints present in the label space, and (ii) provide non-uniform weights to labels based on their levels in the hierarchy, learned implicitly by the training paradigm. We theoretically show that the proposed loss function is a tighter bound of 0-1 loss compared to any other loss satisfying the hierarchical constraints. We test our loss function on real world image data sets, and show that it significantly substantially outperforms multiple baselines."
+    },
+    {
+      "arxiv_id": "2210.03246v1",
+      "title": "HealthE: Classifying Entities in Online Textual Health Advice",
+      "authors": [
+        "Joseph Gatto",
+        "Parker Seegmiller",
+        "Garrett Johnston",
+        "Sarah M. Preum"
+      ],
+      "published": "2022-10-06T23:18:24Z",
+      "doi": null,
+      "summary": "The processing of entities in natural language is essential to many medical NLP systems. Unfortunately, existing datasets vastly under-represent the entities required to model public health relevant texts such as health advice often found on sites like WebMD. People rely on such information for personal health management and clinically relevant decision making. In this work, we release a new annotated dataset, HealthE, consisting of 6,756 health advice. HealthE has a more granular label space compared to existing medical NER corpora and contains annotation for diverse health phrases. Additionally, we introduce a new health entity classification model, EP S-BERT, which leverages textual context patterns in the classification of entity classes. EP S-BERT provides a 4-point increase in F1 score over the nearest baseline and a 34-point increase in F1 when compared to off-the-shelf medical NER tools trained to extract disease and medication mentions from clinical texts. All code and data are publicly available on Github."
+    },
+    {
+      "arxiv_id": "2605.11742v1",
+      "title": "Online Continual Learning with Dynamic Label Hierarchies",
+      "authors": [
+        "Xinrui Wang",
+        "Shao-Yuan Li",
+        "Bartłomiej Twardowski",
+        "Alexandra Gomez-Villa",
+        "Songcan Chen"
+      ],
+      "published": "2026-05-12T08:20:23Z",
+      "doi": null,
+      "summary": "Online Continual Learning (OCL) aims to learn from endless non\\text{-}stationary data streams, yet most existing methods assume a flat label space and overlook the hierarchical organization of real\\text{-}world concepts that evolves both horizontally (sibling classes) and vertically (coarse or fine categories). To better reflect this context, we introduce a new problem setting, DHOCL (Online Continual Learning from Dynamic Hierarchies), where taxonomies evolve across granularities and each sample provides supervision at a single hierarchical level. In this setting, we find two fundamental issues: (i) partial supervision under mixed granularities provides only point-wise signals over an evolving path-wise hierarchy, which constrains plasticity and undermines cross-level semantic consistency, and (ii) the dynamically evolving hierarchies induce granularity-dependent interference, destabilizing popular replay and regularization mechanisms and thereby exacerbating catastrophic forgetting. To tackle these issues, we propose HALO (Hierarchical Adaptive Learning with Organized Prototypes), which adaptively combines complementary classification heads, regularized by organized learnable hierarchical prototypes, enabling rapid adaptation, hierarchical consistency, and structured knowledge consolidation as the taxonomy evolves. Extensive experiments on multiple benchmarks demonstrate that HALO consistently outperforms existing methods across hierarchical accuracy, mistake severity, and continual performance."
+    },
+    {
+      "arxiv_id": "2012.03515v3",
+      "title": "Fine-grained Angular Contrastive Learning with Coarse Labels",
+      "authors": [
+        "Guy Bukchin",
+        "Eli Schwartz",
+        "Kate Saenko",
+        "Ori Shahar",
+        "Rogerio Feris",
+        "Raja Giryes",
+        "Leonid Karlinsky"
+      ],
+      "published": "2020-12-07T08:09:02Z",
+      "doi": null,
+      "summary": "Few-shot learning methods offer pre-training techniques optimized for easier later adaptation of the model to new classes (unseen during training) using one or a few examples. This adaptivity to unseen classes is especially important for many practical applications where the pre-trained label space cannot remain fixed for effective use and the model needs to be \"specialized\" to support new categories on the fly. One particularly interesting scenario, essentially overlooked by the few-shot literature, is Coarse-to-Fine Few-Shot (C2FS), where the training classes (e.g. animals) are of much `coarser granularity' than the target (test) classes (e.g. breeds). A very practical example of C2FS is when the target classes are sub-classes of the training classes. Intuitively, it is especially challenging as (both regular and few-shot) supervised pre-training tends to learn to ignore intra-class variability which is essential for separating sub-classes. In this paper, we introduce a novel 'Angular normalization' module that allows to effectively combine supervised and self-supervised contrastive pre-training to approach the proposed C2FS task, demonstrating significant gains in a broad study over multiple baselines and datasets. We hope that this work will help to pave the way for future research on this new, challenging, and very practical topic of C2FS classification."
+    }
+  ]
+}

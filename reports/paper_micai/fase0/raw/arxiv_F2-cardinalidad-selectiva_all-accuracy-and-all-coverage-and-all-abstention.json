@@ -1,0 +1,333 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "arxiv",
+  "query": "all:\"accuracy\" AND all:\"coverage\" AND all:\"abstention\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2502.06884v1",
+      "title": "Learning Conformal Abstention Policies for Adaptive Risk Management in Large Language and Vision-Language Models",
+      "authors": [
+        "Sina Tayebati",
+        "Divake Kumar",
+        "Nastaran Darabi",
+        "Dinithi Jayasuriya",
+        "Ranganath Krishnan",
+        "Amit Ranjan Trivedi"
+      ],
+      "published": "2025-02-08T21:30:41Z",
+      "doi": null,
+      "summary": "Large Language and Vision-Language Models (LLMs/VLMs) are increasingly used in safety-critical applications, yet their opaque decision-making complicates risk assessment and reliability. Uncertainty quantification (UQ) helps assess prediction confidence and enables abstention when uncertainty is high. Conformal prediction (CP), a leading UQ method, provides statistical guarantees but relies on static thresholds, which fail to adapt to task complexity and evolving data distributions, leading to suboptimal trade-offs in accuracy, coverage, and informativeness. To address this, we propose learnable conformal abstention, integrating reinforcement learning (RL) with CP to optimize abstention thresholds dynamically. By treating CP thresholds as adaptive actions, our approach balances multiple objectives, minimizing prediction set size while maintaining reliable coverage. Extensive evaluations across diverse LLM/VLM benchmarks show our method outperforms Least Ambiguous Classifiers (LAC) and Adaptive Prediction Sets (APS), improving accuracy by up to 3.2%, boosting AUROC for hallucination detection by 22.19%, enhancing uncertainty-guided selective generation (AUARC) by 21.17%, and reducing calibration error by 70%-85%. These improvements hold across multiple models and datasets while consistently meeting the 90% coverage target, establishing our approach as a more effective and flexible solution for reliable decision-making in safety-critical applications. The code is available at: {https://github.com/sinatayebati/vlm-uncertainty}."
+    },
+    {
+      "arxiv_id": "2604.06195v1",
+      "title": "Hallucination as output-boundary misclassification: a composite abstention architecture for language models",
+      "authors": [
+        "Angelina Hintsanen"
+      ],
+      "published": "2026-03-12T13:44:47Z",
+      "doi": null,
+      "summary": "Large language models often produce unsupported claims. We frame this as a misclassification error at the output boundary, where internally generated completions are emitted as if they were grounded in evidence. This motivates a composite intervention that combines instruction-based refusal with a structural abstention gate. The gate computes a support deficit score, St, from three black-box signals: self-consistency (At), paraphrase stability (Pt), and citation coverage (Ct), and blocks output when St exceeds a threshold. In a controlled evaluation across 50 items, five epistemic regimes, and three models, neither mechanism alone was sufficient. Instruction-only prompting reduced hallucination sharply, but still showed over-cautious abstention on answerable items and residual hallucination for GPT-3.5-turbo. The structural gate preserved answerable accuracy across models but missed confident confabulation on conflicting-evidence items. The composite architecture achieved high overall accuracy with low hallucination, while also inheriting some over-abstention from the instruction component. A supplementary 100-item no-context stress test derived from TruthfulQA showed that structural gating provides a capability-independent abstention floor. Overall, instruction-based refusal and structural gating show complementary failure modes, which suggests that effective hallucination control benefits from combining both mechanisms."
+    },
+    {
+      "arxiv_id": "2605.19133v1",
+      "title": "Knowing When Not to Predict: Self Supervised Learning and Abstention for Safer DR Screening",
+      "authors": [
+        "Muskaan Chopra",
+        "Lorenz Sparrenberg",
+        "Jan H. Terheyden",
+        "Rafet Sifa"
+      ],
+      "published": "2026-05-18T21:32:03Z",
+      "doi": null,
+      "summary": "Self-supervised learning (SSL) is now a standard way to pretrain medical image models, but performance is still mostly judged by downstream accuracy. For safety-critical screening tasks such as diabetic retinopathy grading, this is not enough: a model must also know when its predictions are unreliable and defer uncertain cases for clinical review. In this work, we examine how the length of SSL pretraining influences calibrated confidence and confidence-based abstention. We evaluate multiple SSL checkpoints under a fixed fine-tuning protocol and assess calibrated confidence, coverage, selective accuracy, and selective macro-F1. Across datasets and data regimes, SSL pretraining improves selective prediction compared to training from scratch. Unlike prior SSL studies that primarily evaluate downstream accuracy or AUROC, we analyze how SSL pretraining duration influences confidence behavior under calibrated confidence-based abstention. However, once accuracy saturates, selective performance can still change markedly across checkpoints, and longer pretraining does not consistently improve reliability. These results underscore the importance of abstention-aware evaluation and suggest that pretraining length should be treated as an important reliability-related design choice rather than only a computational detail. Code is available at GitHub."
+    },
+    {
+      "arxiv_id": "2602.14189v1",
+      "title": "Knowing When Not to Answer: Abstention-Aware Scientific Reasoning",
+      "authors": [
+        "Samir Abdaljalil",
+        "Erchin Serpedin",
+        "Hasan Kurban"
+      ],
+      "published": "2026-02-15T15:29:43Z",
+      "doi": null,
+      "summary": "Large language models are increasingly used to answer and verify scientific claims, yet existing evaluations typically assume that a model must always produce a definitive answer. In scientific settings, however, unsupported or uncertain conclusions can be more harmful than abstaining. We study this problem through an abstention-aware verification framework that decomposes scientific claims into minimal conditions, audits each condition against available evidence using natural language inference (NLI), and selectively decides whether to support, refute, or abstain. We evaluate this framework across two complementary scientific benchmarks: SciFact and PubMedQA, covering both closed-book and open-domain evidence settings. Experiments are conducted with six diverse language models, including encoder-decoder, open-weight chat models, and proprietary APIs. Across all benchmarks and models, we observe that raw accuracy varies only modestly across architectures, while abstention plays a critical role in controlling error. In particular, confidence-based abstention substantially reduces risk at moderate coverage levels, even when absolute accuracy improvements are limited. Our results suggest that in scientific reasoning tasks, the primary challenge is not selecting a single best model, but rather determining when available evidence is sufficient to justify an answer. This work highlights abstention-aware evaluation as a practical and model-agnostic lens for assessing scientific reliability, and provides a unified experimental basis for future work on selective reasoning in scientific domains. Code is available at https://github.com/sabdaljalil2000/ai4science ."
+    },
+    {
+      "arxiv_id": "2608.05859v1",
+      "title": "Evidential Rule Learning for Interpretable Classification with Abstention",
+      "authors": [
+        "Javier Fumanal-Idocin",
+        "Javier Andreu-Perez"
+      ],
+      "published": "2026-08-06T10:39:48Z",
+      "doi": null,
+      "summary": "Interpretable classification often requires more than accurate predictions for real-life deployment: models should be transparent about the evidence behind their decisions and abstain when they cannot decide reliably. We introduce Fast Evidential Rule Learning (FERL), a method that learns interpretable, accurate fuzzy rule models whose outputs are evidential. Unlike post-hoc calibration, FERL's belief, plausibility, and abstention capabilities arise directly from the fuzzy memberships in a single deterministic pass, with no auxiliary head, held-out set, or repeated inference. Our theoretical analysis further shows that FERL is Lipschitz stable, which means that its evidential outputs vary smoothly with the input. Against state-of-the-art rule learners, FERL is statistically significantly more accurate across a 30 tabular-dataset benchmark ($+2.6\\%$ average accuracy over the second best). Its native set predictions attain the best utility-discounted accuracy among credal classifiers ($u_{65}/u_{80}=0.80/0.83$ vs.\\ $0.79/0.80$ for the naive credal classifier), at higher set coverage ($0.92$ vs.\\ $\\le0.82$). FERL also matches dedicated out-of-distribution detectors on tabular near-OOD detection ($77.7$ vs.\\ $77.4$ AUROC for the strongest baseline). Under detector-class-disjoint concept-bottleneck evaluation, its it is within $2.3$ AUROC points of the strongest dedicated detector on both CUB and AwA2, while attaining the best AwA2 AUPR-Out ($68.3$) and novel-class rejection ($57.2$), while being able to name which attributes are anomalous."
+    },
+    {
+      "arxiv_id": "2608.07931v1",
+      "title": "REIN: Bridging the Gap between Reasoning and Reliability via Reflection and Abstention Alignment",
+      "authors": [
+        "Zhengze Huang",
+        "Luyang Yu",
+        "Di Hong",
+        "Xinzhe Huang",
+        "Wanyu Lin",
+        "Zhixuan Chu",
+        "Zhan Qin",
+        "Tianhang Zheng"
+      ],
+      "published": "2026-08-08T05:37:13Z",
+      "doi": null,
+      "summary": "Large reasoning models (LRMs) are prone to hallucination, which undermines their reliability and poses challenges for safe deployment. Hallucinations in LRMs arise from two distinct failure sources: reasoning hallucination, where flawed inference steps propagate to an incorrect conclusion, and knowledge hallucination, where the model lacks the requisite factual knowledge to answer the query. To address reasoning hallucination, we propose REIN, an alignment framework that trains LRMs to produce a structured reasoning sequence, $\\texttt{<think>} $$\\rightarrow$ $\\texttt{<reflection>} $$\\rightarrow$ $\\texttt{<answer>}$, enabling explicit self-reflection before committing to a final answer. To address knowledge hallucination, REIN introduces a reward mechanism that encourages explicit abstention (e.g., \"I don't know\") when none of the sampled reasoning chains yields a correct answer, allowing the model to refrain from unsupported predictions. Extensive evaluations on mathematical and commonsense reasoning benchmarks show that REIN consistently improves selective accuracy, reduces incorrect-but-self-endorsed responses, and maintains high coverage compared with competitive baselines. Notably, REIN achieves these gains within a single forward pass, without requiring process supervision, inference-time controllers, external search, or multi-round critiques. Experiments on multiple backbones show that REIN reduces the hallucination proxy by $58\\sim72\\%$ relative to the base models while maintaining $86\\sim91\\%$ average coverage, and improves selective accuracy on attempted questions by $6.6\\sim14.2\\%$."
+    },
+    {
+      "arxiv_id": "2608.19376v1",
+      "title": "Does Marginal Coverage Guarantee Class-Conditional Safety for Zero-Shot VLMs Under Shift?",
+      "authors": [
+        "Jai Kumar Sharma",
+        "Amartya Dutta"
+      ],
+      "published": "2026-08-19T18:42:36Z",
+      "doi": null,
+      "summary": "Split-conformal prediction provides marginal coverage under exchangeability and is increasingly used as an abstention layer for zero-shot vision-language models (VLMs). We audit this practice under deployment shift for CLIP, OpenCLIP, and SigLIP across ImageNet and non-ImageNet settings. Marginal coverage can remain relatively high while class-conditional tail coverage collapses: on ImageNet-Sketch, worst-class coverage falls to $\\approx 0$ and 10-12% of classes lie below a finite-sample null floor, despite marginal coverage of about 0.86. The failure is aligned with target-domain class accuracy but is not predicted by the source-domain diagnostics we test. Source-side Mondrian calibration improves the in-distribution tail but does not transfer, while clustered conformal and Conf-OT improve marginal or average metrics without recovering the worst-class tail. Target-side class calibration substantially lifts the tail, but requires labels for every class and remains set-size-intensive. We further identify a 2-3$\\times$ cross-family efficiency gap and show that native SigLIP sigmoid scores remove APS's probability-mass interpretation. The findings persist across the tested model scale, pretraining corpus, prompt, miscoverage level $α$, and shifted non-ImageNet settings. Marginal conformal coverage should therefore be treated as an average reliability statistic, not as a safety guarantee for the class tail."
+    },
+    {
+      "arxiv_id": "2305.01812v1",
+      "title": "Post-Abstention: Towards Reliably Re-Attempting the Abstained Instances in QA",
+      "authors": [
+        "Neeraj Varshney",
+        "Chitta Baral"
+      ],
+      "published": "2023-05-02T22:40:41Z",
+      "doi": null,
+      "summary": "Despite remarkable progress made in natural language processing, even the state-of-the-art models often make incorrect predictions. Such predictions hamper the reliability of systems and limit their widespread adoption in real-world applications. 'Selective prediction' partly addresses the above concern by enabling models to abstain from answering when their predictions are likely to be incorrect. While selective prediction is advantageous, it leaves us with a pertinent question 'what to do after abstention'. To this end, we present an explorative study on 'Post-Abstention', a task that allows re-attempting the abstained instances with the aim of increasing 'coverage' of the system without significantly sacrificing its 'accuracy'. We first provide mathematical formulation of this task and then explore several methods to solve it. Comprehensive experiments on 11 QA datasets show that these methods lead to considerable risk improvements -- performance metric of the Post-Abstention task -- both in the in-domain and the out-of-domain settings. We also conduct a thorough analysis of these results which further leads to several interesting findings. Finally, we believe that our work will encourage and facilitate further research in this important area of addressing the reliability of NLP systems."
+    },
+    {
+      "arxiv_id": "2608.00301v1",
+      "title": "Abstention as an Action Can Kill Both the Reward Gradient and the KL Anchor: Collapse Law and Repair for Error-Penalized Reinforcement Learning",
+      "authors": [
+        "Xujun Che",
+        "Yuchen Yuan",
+        "Weida Zhao",
+        "Chenyang Yu"
+      ],
+      "published": "2026-07-31T21:31:07Z",
+      "doi": null,
+      "summary": "Error-penalized scoring rules ($+1$ for a correct answer, $-λ$ for a wrong one, $0$ for abstaining) are increasingly prescribed against hallucination: a rational agent facing such a rule answers exactly when its correctness probability exceeds Chow's threshold $t^\\ast=λ/(1+λ)$. We prove that a KL-anchored gradient learner can do the opposite. When abstention is a discrete action, the reward gradient and the anchor's restoring force are throttled by the same gate-saturation factor and die together: under explicit conditions (among them, blanket answering loses score in expectation and prompts share a bounded readout) the model drifts toward refusing everything, its mean training reward rising to zero like $1/t$ in training time $t$, so the curve reads as improvement while coverage collapses. The advantage estimator compounds the failure: in its sparse-answer regime, group normalization silently replaces every designed penalty with an effective penalty of one, moving the learned threshold from $t^\\ast$ to $1/2$. The repair is structural: train a mandatory confidence report with a strictly proper score plus a correctness reward, and abstain only at deployment by thresholding the report. The always-emitted report has no gate to saturate, so no shared factor can kill its reward gradient and its anchor together, and its calibrated optimum is attracting. Simulations confirm every prediction, and experiments on language models at two scales confirm the mechanism live: the rule silences questions the models demonstrably still solve within ten optimizer steps, an ablation isolates the cause, and report-level training raises coverage, accuracy, and calibration together."
+    },
+    {
+      "arxiv_id": "2511.05529v2",
+      "title": "Selective Diabetic Retinopathy Screening with Accuracy-Weighted Deep Ensembles and Entropy-Guided Abstention",
+      "authors": [
+        "Jophy Lin"
+      ],
+      "published": "2025-10-29T04:16:04Z",
+      "doi": null,
+      "summary": "Diabetic retinopathy (DR), a microvascular complication of diabetes and a leading cause of preventable blindness, is projected to affect more than 130 million individuals worldwide by 2030. Early identification is essential to reduce irreversible vision loss, yet current diagnostic workflows rely on methods such as fundus photography and expert review, which remain costly and resource-intensive. This, combined with DR's asymptomatic nature, results in its underdiagnosis rate of approximately 25 percent. Although convolutional neural networks (CNNs) have demonstrated strong performance in medical imaging tasks, limited interpretability and the absence of uncertainty quantification restrict clinical reliability. Therefore, in this study, a deep ensemble learning framework integrated with uncertainty estimation is introduced to improve robustness, transparency, and scalability in DR detection. The ensemble incorporates seven CNN architectures-ResNet-50, DenseNet-121, MobileNetV3 (Small and Large), and EfficientNet (B0, B2, B3)- whose outputs are fused through an accuracy-weighted majority voting strategy. A probability-weighted entropy metric quantifies prediction uncertainty, enabling low-confidence samples to be excluded or flagged for additional review. Training and validation on 35,000 EyePACS retinal fundus images produced an unfiltered accuracy of 93.70 percent (F1 = 0.9376). Uncertainty-filtering later was conducted to remove unconfident samples, resulting in maximum-accuracy of 99.44 percent (F1 = 0.9932). The framework shows that uncertainty-aware, accuracy-weighted ensembling improves reliability without hindering performance. With confidence-calibrated outputs and a tunable accuracy-coverage trade-off, it offers a generalizable paradigm for deploying trustworthy AI diagnostics in high-risk care."
+    },
+    {
+      "arxiv_id": "2204.13631v3",
+      "title": "Reliable Visual Question Answering: Abstain Rather Than Answer Incorrectly",
+      "authors": [
+        "Spencer Whitehead",
+        "Suzanne Petryk",
+        "Vedaad Shakib",
+        "Joseph Gonzalez",
+        "Trevor Darrell",
+        "Anna Rohrbach",
+        "Marcus Rohrbach"
+      ],
+      "published": "2022-04-28T16:51:27Z",
+      "doi": null,
+      "summary": "Machine learning has advanced dramatically, narrowing the accuracy gap to humans in multimodal tasks like visual question answering (VQA). However, while humans can say \"I don't know\" when they are uncertain (i.e., abstain from answering a question), such ability has been largely neglected in multimodal research, despite the importance of this problem to the usage of VQA in real settings. In this work, we promote a problem formulation for reliable VQA, where we prefer abstention over providing an incorrect answer. We first enable abstention capabilities for several VQA models, and analyze both their coverage, the portion of questions answered, and risk, the error on that portion. For that, we explore several abstention approaches. We find that although the best performing models achieve over 70% accuracy on the VQA v2 dataset, introducing the option to abstain by directly using a model's softmax scores limits them to answering less than 7.5% of the questions to achieve a low risk of error (i.e., 1%). This motivates us to utilize a multimodal selection function to directly estimate the correctness of the predicted answers, which we show can increase the coverage by, for example, 2.3x from 6.8% to 15.6% at 1% risk. While it is important to analyze both coverage and risk, these metrics have a trade-off which makes comparing VQA models challenging. To address this, we also propose an Effective Reliability metric for VQA that places a larger cost on incorrect answers compared to abstentions. This new problem formulation, metric, and analysis for VQA provide the groundwork for building effective and reliable VQA models that have the self-awareness to abstain if and only if they don't know the answer."
+    },
+    {
+      "arxiv_id": "2605.14115v1",
+      "title": "When Evidence Conflicts: Uncertainty and Order Effects in Retrieval-Augmented Biomedical Question Answering",
+      "authors": [
+        "Yikun Han",
+        "Mengfei Lan",
+        "Halil Kilicoglu"
+      ],
+      "published": "2026-05-13T21:02:24Z",
+      "doi": null,
+      "summary": "Biomedical retrieval-augmented large language models (LLMs) often face evidence that is incomplete, misleading, or internally contradictory, yet evaluation usually emphasizes answer accuracy under helpful context rather than reliability under conflict. Using HealthContradict, we evaluate six open-weight LLMs under five controlled evidence conditions: no retrieved context, correct-only context, incorrect-only context, and two mixed conditions containing both correct and contradictory documents in opposite orders. In this conflicting-evidence order contrast, where the same two documents are both present and only their order is reversed, accuracy drops for every model and 11.4%--25.2% of predictions flip. To support abstention in these difficult cases, we also evaluate a conflict-aware abstention score that combines model confidence with a detector of evidence conflict. In the two hardest conditions, this score improves selective accuracy over confidence-only, with mean gains of 7.2--33.4 points in incorrect-only (`IC') and 3.6--14.4 points in incorrect-first conflicting (`ICC') conditions across 75%, 50%, and 25% coverage. These results show that conflicting biomedical evidence is both an uncertainty and robustness problem and motivate evaluation and abstention methods that explicitly account for evidence disagreement."
+    },
+    {
+      "arxiv_id": "2608.10725v2",
+      "title": "Rethinking LLM Verification: Evidence Structure, Uncertainty, and Selective Refinement",
+      "authors": [
+        "Uma Ranjan",
+        "Kunal Tilaganji",
+        "Aditya Koul",
+        "Anurag Mahipal",
+        "Dashpreet Singh",
+        "Hriday Rana",
+        "Manan Jain",
+        "Sidharth Gupta",
+        "Ajo Babu George",
+        "Vineeth Balasubramanian",
+        "Nagarajan Natarajan",
+        "Amit Sharma"
+      ],
+      "published": "2026-08-11T09:43:14Z",
+      "doi": null,
+      "summary": "Large language models (LLMs) often rely on shortcuts rather than systematic reasoning, raising safety concerns in medical applications. Allowing models to abstain when uncertain improves reliability but introduces a coverage accuracy tradeoff. We propose a two-stage framework for medical hypothesis verification in multiple-choice settings that manages this tradeoff through targeted ontology grounding, applied only when the model abstains. We show that abstention is not random but reflects genuine uncertainty, with abstained predictions associated with lower confidence. Across two frontier models (GPT-5.5, accessed via the Azure OpenAI API, and DeepSeek-R1), the proposed framework improves question-level accuracy by 9.6 percentage points (82.9% to 92.5%) and hypothesis-level accuracy by 4.2 percentage points (92.0% to 96.2%). Our experiments conducted on MedReason and MedQA show that abstention can be repurposed as a control signal for selective reasoning refinement, achieving knowledge-graph-level performance without explicit knowledge graph construction."
+    },
+    {
+      "arxiv_id": "2606.23448v1",
+      "title": "Selective Time Series Forecasting via Metalearning",
+      "authors": [
+        "Ricardo Inácio",
+        "Vitor Cerqueira",
+        "Marília Barandas",
+        "Carlos Soares"
+      ],
+      "published": "2026-06-22T15:02:10Z",
+      "doi": null,
+      "summary": "Deep learning methods have achieved state-of-the-art in time series forecasting, yet their accuracy varies considerably across samples, as some instances remain inherently difficult to predict. Reject option mechanisms, which allow models to abstain from high-risk predictions, are well established in classification and regression but underexplored in forecasting. Existing abstention strategies typically rely on proxies, such as the width of the prediction interval or learned confidence scores derived from forecasts. However, these approaches are inherently tied to the training domain, limiting their ability to generalize. We propose a selective forecasting framework that addresses this limitation by modeling the empirical percentile of forecasting errors, that is, a scale-invariant statistic, based on structural characteristics extracted from recent lags via metalearning. By decoupling the rejection decision from the forecast itself and grounding it in domain-agnostic features, the framework enables effective abstention transfer across heterogeneous time series. Experiments in both in-domain and transfer learning settings show that rejecting samples predicted as challenging consistently improves forecasting accuracy across coverage levels."
+    },
+    {
+      "arxiv_id": "2607.18240v1",
+      "title": "Calibrated Selective Fact-Checking via Evidence Chain Evaluation",
+      "authors": [
+        "Dekun Yang"
+      ],
+      "published": "2026-04-15T02:48:05Z",
+      "doi": null,
+      "summary": "Large language models (LLMs) can achieve strong fact-checking accuracy, yet forced binary decisions conceal a critical reliability problem: systems may issue confident verdicts even when supporting evidence is weak, sparse, or internally inconsistent. We address this issue through Evidence Chain Evaluation (ECE), a selective fact-checking framework that permits abstention via an uncertain verdict instead of requiring a true/false decision for every claim. The evaluated system is a tool-using verification agent that gathers evidence through web search, scholarly search, and executable checks, and then returns a structured verdict with confidence and source-level metadata. On ECE-Bench, ECE achieves 91.6% standard accuracy, 93.7% coverage, and 97.8% selective accuracy on answered claims. Although ECE does not outperform the strongest retrieval baseline on aggregate calibration metrics such as Expected Calibration Error, Brier score, or AURC, it delivers a clear selective-prediction trade-off: the system maintains very high accuracy on answered claims while deferring 6 of 95 cases. These deferred cases are concentrated in lower-reliability evidence settings (5/6 at source level L4), supporting the view that abstention functions as a safety-oriented mechanism for handling epistemically weak evidence. Code is available at https://github.com/ cheshireyang/ECE.git"
+    },
+    {
+      "arxiv_id": "2010.14134v3",
+      "title": "Selective Classification Can Magnify Disparities Across Groups",
+      "authors": [
+        "Erik Jones",
+        "Shiori Sagawa",
+        "Pang Wei Koh",
+        "Ananya Kumar",
+        "Percy Liang"
+      ],
+      "published": "2020-10-27T08:51:30Z",
+      "doi": null,
+      "summary": "Selective classification, in which models can abstain on uncertain predictions, is a natural approach to improving accuracy in settings where errors are costly but abstentions are manageable. In this paper, we find that while selective classification can improve average accuracies, it can simultaneously magnify existing accuracy disparities between various groups within a population, especially in the presence of spurious correlations. We observe this behavior consistently across five vision and NLP datasets. Surprisingly, increasing abstentions can even decrease accuracies on some groups. To better understand this phenomenon, we study the margin distribution, which captures the model's confidences over all predictions. For symmetric margin distributions, we prove that whether selective classification monotonically improves or worsens accuracy is fully determined by the accuracy at full coverage (i.e., without any abstentions) and whether the distribution satisfies a property we call left-log-concavity. Our analysis also shows that selective classification tends to magnify full-coverage accuracy disparities. Motivated by our analysis, we train distributionally-robust models that achieve similar full-coverage accuracies across groups and show that selective classification uniformly improves each group on these models. Altogether, our results suggest that selective classification should be used with care and underscore the importance of training models to perform equally well across groups at full coverage."
+    },
+    {
+      "arxiv_id": "2605.24171v1",
+      "title": "PromptAudit: Auditing Prompt Sensitivity in LLM-Based Vulnerability Detection",
+      "authors": [
+        "Steffen J. Camarato",
+        "Yahya Hmaiti",
+        "Mandana Ghadamian",
+        "David Mohaisen"
+      ],
+      "published": "2026-05-22T19:44:51Z",
+      "doi": null,
+      "summary": "Large language models are increasingly used for vulnerability detection, yet their reliability under different prompt formulations remains uncharacterized. We present PromptAudit, a controlled evaluation framework that isolates prompt effects by fixing the dataset, decoding, and parsing while varying only the prompting strategy. Using five prompting strategies across five open-weight models on 1,000 CVEs (6,074 code samples spanning 16 programming languages), we evaluate accuracy, recall, abstention, coverage, and effective F1. We find that standard chain-of-thought prompting achieves the strongest overall operational performance, while few-shot prompting provides model-dependent benefits that are most pronounced for prompt-sensitive models. In contrast, adaptive chain-of-thought frequently suppresses recall and self-consistency induces excessive abstention, sharply reducing effective performance. These results show that vulnerability detection behavior is jointly determined by the model and the prompt, and that prompt sensitivity is a first-class system property that must be explicitly characterized in evaluation and deployment."
+    },
+    {
+      "arxiv_id": "2608.07946v1",
+      "title": "Metadata Reconstruction from Values Alone: Recovering Column Semantics in Undocumented Warehouses",
+      "authors": [
+        "Mike Helwig"
+      ],
+      "published": "2026-08-08T06:12:18Z",
+      "doi": null,
+      "summary": "Text-to-SQL benchmarks ship schemas whose column names already say what the columns mean. Production warehouses are the inverse: cryptic identifiers, partial or absent documentation. We address the problem they pose first: recovering what columns and values mean from the data itself. Rosetta places a language model inside a verification harness: a deterministic profiler extracts structural evidence (value fingerprints, a 26-pattern library, checksum verdicts), the model proposes semantics conditioned on that evidence, and every fact carries provenance and a confidence bounded by its evidence class. Against human documentation on 680 paired columns across eleven BIRD databases, identifiers destroyed, the harness delivers metadata that is 0.475 accurate on the 42% of columns it commits to, against 0.223 on 94% for the same model used directly. Restricted to the 283 columns where both arms speak, the harness writes no better prose than the model alone; the gain is selection: deterministic evidence governs whether the system speaks (coverage +0.257 [0.128, 0.378]), not how well. The deterministic layer is a competence detector, not a competence amplifier. A backbone swap bounds the claim: the prose finding reproduces, but prompt-requested abstention does not transfer; a code-enforced commit gate (predictions registered first; measured on a third backbone and held-out databases) makes no-evidence coverage 0.000 on every backbone. On a blind i2b2 clinical warehouse Rosetta decodes 95.5% of 134 real ICD-9 codes from values alone and abstains on all 44 NDC drug codes. The catalog supports calibrated abstention at query time: under full schema opacity a naive translator falls from 0.92 to 0.42 execution accuracy while our gate answers at 86% accuracy over 59% coverage. Negative results are reported plainly, including that our own authority ladder is not the mechanism behind the headline."
+    },
+    {
+      "arxiv_id": "2608.02790v1",
+      "title": "Confident but Unreliable: A Behavioral Safety Audit of Vision-Language Models on Brain MRI",
+      "authors": [
+        "Amir Sabbaghziarani",
+        "Mohammadsajad Abavisani",
+        "Sergey Plis"
+      ],
+      "published": "2026-08-03T18:42:04Z",
+      "doi": null,
+      "summary": "Vision-language models (VLMs), including medical specialists, are increasingly proposed for medical imaging, yet their stated confidence is rarely evaluated separately from correctness. We use brain MRI as a controlled, high-stakes testbed for a broader failure mode in frontier multimodal systems: models can appear competent while lacking reliable self-knowledge. We present an automatically graded behavioral audit and pilot study of six instruction-tuned VLMs (five general-purpose and one medical specialist) on 4,102 images (4,032 axial/coronal/sagittal MRI slices from 250 subjects plus 70 non-brain/noise controls), with labels derived from public metadata and released expert segmentation masks rather than new human annotation. Across models, answer coverage is near-complete, but verbalized-confidence calibration is poor: ECE ranges from 0.27 to 0.40, mean confidence on incorrect answers ranges from 0.82 to 0.97, and 33-46% of answered items are high-confidence errors. The most accurate model is also the most confident on its errors, while a base/specialist family contrast suggests that medical adaptation improves tumor-presence detection without improving confidence reliability. Open-ended diagnostics further show that hallucination and abstention vary separately from multiple-choice accuracy. These findings argue that medical-image VLM evaluation should report verbalized-confidence reliability, confident error, hallucination, and abstention alongside accuracy."
+    },
+    {
+      "arxiv_id": "2607.24875v1",
+      "title": "FinAbstain: Uncertainty-Calibrated Multimodal RAG for Selective Financial Forecasting",
+      "authors": [
+        "Dorothy Torres",
+        "Wei Cheng",
+        "Henan Huang"
+      ],
+      "published": "2026-07-27T07:05:22Z",
+      "doi": null,
+      "summary": "Large language models (LLMs) can synthesize financial narratives but may express high confidence when evidence is sparse, stale, or contradictory. This failure is especially consequential in forecasting, where filings, news, prices, volume, and technical signals can disagree. We present FinAbstain, a research framework for uncertainty-calibrated multimodal retrieval-augmented generation (RAG) with selective prediction. A point-in-time retriever admits only information public at the forecast timestamp and supplies modality-specific evidence to fundamental, news, technical, risk, and verification agents. Their probabilistic assessments are aggregated with retrieval relevance, evidence contradiction, repeated-sample consistency, and historical calibration statistics. Temperature scaling, isotonic regression, conformal prediction, and a proposed hybrid uncertainty score are evaluated under a common chronological protocol. A controller predicts bullish, bearish, or neutral outcomes only when uncertainty is below a validated threshold; otherwise it abstains, requests evidence, reduces exposure, or routes the case to human review. The evaluation covers one- and five-day abnormal-return direction, twenty-day volatility intervals, and abstention decisions, using accuracy, calibration, risk--coverage, citation, trading, latency, and cost metrics. To make the design auditable before a full data collection is complete, we report explicitly labeled simulated results rather than empirical claims. These results illustrate the intended hypothesis: calibrated abstention may trade coverage for lower selective error and drawdown. The contribution is a time-safe architecture, a composite uncertainty formulation, and a reproducible evaluation blueprint for evidence-grounded selective financial forecasting."
+    },
+    {
+      "arxiv_id": "2603.10027v1",
+      "title": "A Governance and Evaluation Framework for Deterministic, Rule-Based Clinical Decision Support in Empiric Antibiotic Prescribing",
+      "authors": [
+        "Francisco José Gárate",
+        "Paloma Chausa",
+        "Diego Moreno",
+        "Judit López Luque",
+        "Vicens Díaz-Brito",
+        "Enrique Javier Gómez"
+      ],
+      "published": "2026-02-24T21:48:41Z",
+      "doi": null,
+      "summary": "Empiric antibiotic prescribing in high-risk clinical contexts often requires decision making under conditions of incomplete information, where inappropriate coverage or unjustified escalation may compromise safety and antimicrobial stewardship. While clinical decision-support systems have been proposed to assist in this process, many approaches lack explicit governance and evaluation mechanisms defining scope, abstention conditions, recommendation permissibility, and expected system behavior. This work specifies a governance and evaluation framework for deterministic clinical decision-support systems operating under explicitly constrained scope. Deterministic behavior is adopted to ensure that identical inputs yield identical outputs, supporting transparency, auditability, and conservative decision support in high-risk prescribing contexts. The framework treats governance as a first-class design component, separating clinical decision logic from rule-based mechanisms that determine whether a recommendation may be issued. Explicit abstention, deterministic stewardship constraints, and exclusion rules are formalized as core constructs. The framework defines an evaluation methodology utilizing a fixed set of synthetic, mechanism-driven clinical cases with predefined expected behavior. This validation process focuses on behavioral alignment with specified rules rather than clinical effectiveness, predictive accuracy, or outcome optimization. Within this protocol, abstention is treated as a correct and intended outcome when governance conditions are not satisfied. The proposed framework provides a reproducible approach for specifying, governing, and inspecting deterministic clinical decision-support systems in empiric antibiotic prescribing contexts where transparency, auditability, and conservative behavior are prioritized."
+    },
+    {
+      "arxiv_id": "2605.30087v1",
+      "title": "Selective QA over Conflicting Multi-Source Personal Memory: A Diagnostic Testbed and Method Comparison",
+      "authors": [
+        "Tiancheng Yang",
+        "Matthias Schonlau",
+        "Ilia Sucholutsky"
+      ],
+      "published": "2026-05-28T15:33:39Z",
+      "doi": null,
+      "summary": "Emerging personal AI agents are moving toward persistent, multi-source memory. This creates an evaluation problem: systems must decide how to use conflicting or incomplete evidence; they cannot just retrieve facts from one clean history. Existing benchmarks rarely show whether an error came from the evidence given to a method or from the method's conflict-resolution step. We study this as selective QA over conflicting multi-source personal memory: systems answer based on conflicting, sometimes incomplete sources, or abstain when evidence is insufficient. We develop a benchmark containing 18 question templates across 8 reasoning types, 480 personas, 4 random seeds, and 34,560 instances, with controlled source distortions and deterministic ground truth. We evaluate the performance of baselines without access to any source, access to a single source, structured fusion methods, and frontier LLMs. The best trained fusion resolver reaches 80.3% accuracy, while the strongest prompt-only LLM baseline reaches 70.0%. With abstention, the same resolver reaches 85.3% selective accuracy at 78.3% coverage and the best LLM reaches 71.0% selective accuracy at 95.4% coverage. Different models have different strengths across reasoning types. We release the data, code, cached model outputs, and data-generating process for reuse."
+    },
+    {
+      "arxiv_id": "2603.06198v2",
+      "title": "LIT-RAGBench: Benchmarking Generator Capabilities of Large Language Models in Retrieval-Augmented Generation",
+      "authors": [
+        "Koki Itai",
+        "Shunichi Hasegawa",
+        "Yuta Yamamoto",
+        "Gouki Minegishi",
+        "Masaki Otsuki"
+      ],
+      "published": "2026-03-06T12:10:50Z",
+      "doi": null,
+      "summary": "Retrieval-Augmented Generation (RAG) is a framework in which a Generator, such as a Large Language Model (LLM), produces answers by retrieving documents from an external collection using a Retriever. In practice, Generators must integrate evidence from long contexts, perform multi-step reasoning, interpret tables, and abstain when evidence is missing. However, existing benchmarks for Generators provide limited coverage, with none enabling simultaneous evaluation of multiple capabilities under unified conditions. To bridge the gap between existing evaluations and practical use, we introduce LIT-RAGBench (the Logic, Integration, Table, Reasoning, and Abstention RAG Generator Benchmark), which defines five categories: Integration, Reasoning, Logic, Table, and Abstention, each further divided into practical evaluation aspects. LIT-RAGBench systematically covers patterns combining multiple aspects across categories. By using fictional entities and scenarios, LIT-RAGBench evaluates answers grounded in the provided external documents. The dataset consists of 114 human-constructed Japanese questions and an English version generated by machine translation with human curation. We use LLM-as-a-Judge for scoring and report category-wise and overall accuracy. Across API-based and open-weight models, no model exceeds 90% overall accuracy. By making strengths and weaknesses measurable within each category, LIT-RAGBench serves as a valuable metric for model selection in practical RAG deployments and for building RAG-specialized models. We release LIT-RAGBench, including the dataset and evaluation code, at https://github.com/Koki-Itai/LIT-RAGBench."
+    },
+    {
+      "arxiv_id": "2606.28862v2",
+      "title": "HKVLM: Faithful Query--Region Binding for Frozen-Detector Visual Grounding",
+      "authors": [
+        "Bo Ma"
+      ],
+      "published": "2026-06-27T11:10:33Z",
+      "doi": null,
+      "summary": "Visual grounding often fails even when the target object is present in the proposal pool, because the language-side referent is bound to the wrong region. We study this binding failure under frozen perception and ask whether an explicit query--region alignment hook, together with a perception-grounded abstention mechanism, can improve faithful grounding without retraining the detector or the vision-language backbone. HKVLM freezes a language-aligned open-vocabulary detector for localization and learns a lightweight hook that maps referential query embeddings to detector proposals in a shared space; a verifier abstains when no region sufficiently supports the query. We prove an exact proposal-level diagnostic decomposition, $(1-\\mathrm{SeeErr})(1-\\mathrm{SayErr})$, separating proposal-coverage failures from conditional binding failures, and a monotonicity result that characterizes the faithfulness--recall trade-off induced by abstention. Across RefCOCO, RefCOCO+, RefCOCOg, and POPE, HKVLM improves over untrained and trained matched-perception binding controls and substantially reduces hallucination through abstention. Strong coordinate-decoding and end-to-end fine-tuned baselines remain much higher in raw grounding accuracy, and a reasoning-stress set exposes binding as the main current bottleneck. We therefore present HKVLM as a diagnostic and mechanism-level study of query--region binding under frozen perception, not as an absolute localization leader."
+    },
+    {
+      "arxiv_id": "2608.02762v3",
+      "title": "Oh Deer, How Should I Handle This? Seasonal Priors for Selective Wildlife Annotation and Classification",
+      "authors": [
+        "Hugo Markoff",
+        "Christoph Praschl",
+        "Anton Hjalte Jørgensen",
+        "Christian Emil Mogensen",
+        "Mathias Bech Skadhauge",
+        "Sara Beery",
+        "Michael Ørsted",
+        "David C. Schedl"
+      ],
+      "published": "2026-08-03T18:05:47Z",
+      "doi": null,
+      "summary": "Fine-grained wildlife classification in aerial imagery is limited not only by model performance, but also by unreliable labels: animals occupy few pixels, key visual cues vary seasonally, and modality-specific evidence can be ambiguous. We study adult-male identification in red deer ($\\textit{Cervus elaphus}$), where the antler cycle defines predictable windows of reliable evidence for both annotation and prediction. Using 7,295 RGB-only, thermal-only, and matched RGB+thermal crop sets from low-altitude UAV surveys, labeled by three annotators, we show that seasonal structure links (I) annotation quality, (II) downstream classification, and (III) selective prediction. Matched RGB+thermal review resolves more samples than either single modality, recovering majority-male labels otherwise missed by RGB or thermal alone, in human-based as well as model-based classification. Months with high annotator abstention also show lower classifier confidence, and soft seasonal priors mainly benefit the season-limited thermal view. Uncertainty-band abstention further raises covered accuracy to 98.9%, though at reduced coverage and with deferral that falls disproportionately on males. Overall, a biologically grounded seasonal calendar predicts where annotation and prediction are unreliable, and can guide both annotation protocol design and modality weighting."
+    }
+  ]
+}

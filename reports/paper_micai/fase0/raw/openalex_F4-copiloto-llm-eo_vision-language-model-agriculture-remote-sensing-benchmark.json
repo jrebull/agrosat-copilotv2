@@ -1,0 +1,405 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "openalex",
+  "query": "vision language model agriculture remote sensing benchmark",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W2940726923",
+      "title": "Deep learning in remote sensing applications: A meta-analysis and review",
+      "authors": [
+        "Lei Ma",
+        "Yü Liu",
+        "Xueliang Zhang",
+        "Yuanxin Ye",
+        "Gaofei Yin",
+        "Brian Alan Johnson"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.isprsjprs.2019.04.015",
+      "venue": "ISPRS Journal of Photogrammetry and Remote Sensing",
+      "cited_by_count": 2411
+    },
+    {
+      "openalex_id": "W4362519158",
+      "title": "Transformers in Remote Sensing: A Survey",
+      "authors": [
+        "Abdulaziz Amer Aleissaee",
+        "Amandeep Kumar",
+        "Rao Muhammad Anwer",
+        "Salman Khan",
+        "Hisham Cholakkal",
+        "Gui-Song Xia",
+        "Fahad Shahbaz Khan"
+      ],
+      "year": 2023,
+      "doi": "10.3390/rs15071860",
+      "venue": "Remote Sensing",
+      "cited_by_count": 406
+    },
+    {
+      "openalex_id": "W3082766779",
+      "title": "Google Earth Engine Cloud Computing Platform for Remote Sensing Big Data Applications: A Comprehensive Review",
+      "authors": [
+        "Meisam Amani",
+        "Arsalan Ghorbanian",
+        "Seyed Ali Ahmadi",
+        "Mohammad Kakooei",
+        "Armin Moghimi",
+        "S. Mohammad Mirmazloumi",
+        "Sayyed Hamed Alizadeh Moghaddam",
+        "Sahel Mahdavi",
+        "Masoud Ghahremanloo",
+        "Saeid Parsian",
+        "Qiusheng Wu",
+        "Brian Brisco"
+      ],
+      "year": 2020,
+      "doi": "10.1109/jstars.2020.3021052",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "cited_by_count": 1145
+    },
+    {
+      "openalex_id": "W3088162569",
+      "title": "Support Vector Machine Versus Random Forest for Remote Sensing Image Classification: A Meta-Analysis and Systematic Review",
+      "authors": [
+        "Mohammadreza Sheykhmousa",
+        "Masoud Mahdianpari",
+        "Hamid Ghanbari",
+        "Fariba Mohammadimanesh",
+        "Pedram Ghamisi",
+        "Saeid Homayouni"
+      ],
+      "year": 2020,
+      "doi": "10.1109/jstars.2020.3026724",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "cited_by_count": 1093
+    },
+    {
+      "openalex_id": "W4406488712",
+      "title": "Deep learning and computer vision in plant disease detection: a comprehensive review of techniques, models, and trends in precision agriculture",
+      "authors": [
+        "Abhishek Upadhyay",
+        "Narendra Singh Chandel",
+        "Krishna Pratap Singh",
+        "Subir Kumar Chakraborty",
+        "B. M. Nandede",
+        "Mohit Kumar",
+        "A. Subeesh",
+        "Konga Upendar",
+        "Ali Salem",
+        "Ahmed Elbeltagi"
+      ],
+      "year": 2025,
+      "doi": "10.1007/s10462-024-11100-x",
+      "venue": "Artificial Intelligence Review",
+      "cited_by_count": 419
+    },
+    {
+      "openalex_id": "W2964535757",
+      "title": "Internet-of-Things (IoT)-Based Smart Agriculture: Toward Making the Fields Talk",
+      "authors": [
+        "Muhammad Ayaz",
+        "Mohammad Ammad-Uddin",
+        "Zubair Sharif",
+        "Ali Mansour",
+        "El‐Hadi M. Aggoune"
+      ],
+      "year": 2019,
+      "doi": "10.1109/access.2019.2932609",
+      "venue": "IEEE Access",
+      "cited_by_count": 1284
+    },
+    {
+      "openalex_id": "W2943781490",
+      "title": "Deep neural network for remote-sensing image interpretation: status and perspectives",
+      "authors": [
+        "Jiayi Li",
+        "Xin Huang",
+        "Jianya Gong"
+      ],
+      "year": 2019,
+      "doi": "10.1093/nsr/nwz058",
+      "venue": "National Science Review",
+      "cited_by_count": 136
+    },
+    {
+      "openalex_id": "W3109998321",
+      "title": "Multiattention Network for Semantic Segmentation of Fine-Resolution Remote Sensing Images",
+      "authors": [
+        "Rui Li",
+        "Shunyi Zheng",
+        "Ce Zhang",
+        "Chenxi Duan",
+        "Jianlin Su",
+        "Libo Wang",
+        "Peter M. Atkinson"
+      ],
+      "year": 2021,
+      "doi": "10.1109/tgrs.2021.3093977",
+      "venue": "IEEE Transactions on Geoscience and Remote Sensing",
+      "cited_by_count": 330
+    },
+    {
+      "openalex_id": "W4298148810",
+      "title": "Deep learning based computer vision approaches for smart agricultural applications",
+      "authors": [
+        "V. G. Dhanya",
+        "A. Subeesh",
+        "Nand Lal Kushwaha",
+        "Dinesh Kumar Vishwakarma",
+        "T. Nagesh Kumar",
+        "Gianetan Singh Sekhon Ritika",
+        "Abhishek Singh"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.aiia.2022.09.007",
+      "venue": "Artificial Intelligence in Agriculture",
+      "cited_by_count": 299
+    },
+    {
+      "openalex_id": "W3209915885",
+      "title": "Boost Precision Agriculture with Unmanned Aerial Vehicle Remote Sensing and Edge Intelligence: A Survey",
+      "authors": [
+        "Jia Liu",
+        "Jianjian Xiang",
+        "Yongjun Jin",
+        "Renhua Liu",
+        "Jining Yan",
+        "Lizhe Wang"
+      ],
+      "year": 2021,
+      "doi": "10.3390/rs13214387",
+      "venue": "Remote Sensing",
+      "cited_by_count": 193
+    },
+    {
+      "openalex_id": "W3037640242",
+      "title": "Deep Learning for Change Detection in Remote Sensing Images: Comprehensive Review and Meta-Analysis",
+      "authors": [
+        "Lazhar Khelifi",
+        "Max Mignotte"
+      ],
+      "year": 2020,
+      "doi": "10.1109/access.2020.3008036",
+      "venue": "IEEE Access",
+      "cited_by_count": 434
+    },
+    {
+      "openalex_id": "W4393159564",
+      "title": "SkyScript: A Large and Semantically Diverse Vision-Language Dataset for Remote Sensing",
+      "authors": [
+        "Zhecheng Wang",
+        "Rajanie Prabha",
+        "Tianyuan Huang",
+        "Jiajun Wu",
+        "Ram Rajagopal"
+      ],
+      "year": 2024,
+      "doi": "10.1609/aaai.v38i6.28393",
+      "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+      "cited_by_count": 85
+    },
+    {
+      "openalex_id": "W4385436442",
+      "title": "RSGPT: A Remote Sensing Vision Language Model and Benchmark",
+      "authors": [
+        "Yuan Hu",
+        "Jianlong Yuan",
+        "Congcong Wen",
+        "Xiaonan Lü",
+        "Xiang Li"
+      ],
+      "year": 2023,
+      "doi": "10.48550/arxiv.2307.15266",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 36
+    },
+    {
+      "openalex_id": "W3019464069",
+      "title": "Implementation of artificial intelligence in agriculture for optimisation of irrigation and application of pesticides and herbicides",
+      "authors": [
+        "Tanha Talaviya",
+        "Dhara Shah",
+        "Nivedita Patel",
+        "Hiteshri Yagnik",
+        "Manan Shah"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.aiia.2020.04.002",
+      "venue": "Artificial Intelligence in Agriculture",
+      "cited_by_count": 908
+    },
+    {
+      "openalex_id": "W4390826350",
+      "title": "Remote Sensing Object Detection in the Deep Learning Era—A Review",
+      "authors": [
+        "Shengxi Gui",
+        "Shuang Song",
+        "Rongjun Qin",
+        "Yang Tang"
+      ],
+      "year": 2024,
+      "doi": "10.3390/rs16020327",
+      "venue": "Remote Sensing",
+      "cited_by_count": 276
+    },
+    {
+      "openalex_id": "W4387402974",
+      "title": "RS-CLIP: Zero shot remote sensing scene classification via contrastive vision-language supervision",
+      "authors": [
+        "Li Xiang",
+        "Congcong Wen",
+        "Yuan Hu",
+        "Nan Zhou"
+      ],
+      "year": 2023,
+      "doi": "10.1016/j.jag.2023.103497",
+      "venue": "International Journal of Applied Earth Observation and Geoinformation",
+      "cited_by_count": 107
+    },
+    {
+      "openalex_id": "W3137572916",
+      "title": "Multistage Attention ResU-Net for Semantic Segmentation of Fine-Resolution Remote Sensing Images",
+      "authors": [
+        "Rui Li",
+        "Shunyi Zheng",
+        "Chenxi Duan",
+        "Jianlin Su",
+        "Ce Zhang"
+      ],
+      "year": 2021,
+      "doi": "10.1109/lgrs.2021.3063381",
+      "venue": "IEEE Geoscience and Remote Sensing Letters",
+      "cited_by_count": 290
+    },
+    {
+      "openalex_id": "W3003667836",
+      "title": "Digital Twin: Values, Challenges and Enablers From a Modeling Perspective",
+      "authors": [
+        "Adil Rasheed",
+        "Omer San",
+        "Trond Kvamsdal"
+      ],
+      "year": 2020,
+      "doi": "10.1109/access.2020.2970143",
+      "venue": "IEEE Access",
+      "cited_by_count": 1842
+    },
+    {
+      "openalex_id": "W4386142022",
+      "title": "Interpreting Black-Box Models: A Review on Explainable Artificial Intelligence",
+      "authors": [
+        "Vikas Hassija",
+        "Vinay Chamola",
+        "Atmesh Mahapatra",
+        "Abhinandan Singal",
+        "Divyansh Goel",
+        "Kaizhu Huang",
+        "Simone Scardapane",
+        "Indro Spinelli",
+        "Mufti Mahmud",
+        "Amir Hussain"
+      ],
+      "year": 2023,
+      "doi": "10.1007/s12559-023-10179-8",
+      "venue": "Cognitive Computation",
+      "cited_by_count": 1978
+    },
+    {
+      "openalex_id": "W4400081502",
+      "title": "Change Detection Methods for Remote Sensing in the Last Decade: A Comprehensive Review",
+      "authors": [
+        "Guangliang Cheng",
+        "Yunmeng Huang",
+        "Xiangtai Li",
+        "Shuchang Lyu",
+        "Zhaoyang Xu",
+        "Hongbo Zhao",
+        "Qi Zhao",
+        "Shiming Xiang"
+      ],
+      "year": 2024,
+      "doi": "10.3390/rs16132355",
+      "venue": "Remote Sensing",
+      "cited_by_count": 242
+    },
+    {
+      "openalex_id": "W3028964554",
+      "title": "A critical review on computer vision and artificial intelligence in food industry",
+      "authors": [
+        "Vijay Kakani",
+        "Van Huan Nguyen",
+        "Basivi Praveen Kumar",
+        "Hakil Kim",
+        "Visweswara Rao Pasupuleti"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.jafr.2020.100033",
+      "venue": "Journal of Agriculture and Food Research",
+      "cited_by_count": 507
+    },
+    {
+      "openalex_id": "W2995946162",
+      "title": "Agri-food 4.0: A survey of the supply chains and technologies for the future agriculture",
+      "authors": [
+        "Mario Lezoche",
+        "Jorge E. Hernández",
+        "M. M. E. Alemany",
+        "Hervé Panetto",
+        "Janusz Kacprzyk"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.compind.2020.103187",
+      "venue": "Computers in Industry",
+      "cited_by_count": 830
+    },
+    {
+      "openalex_id": "W4213147678",
+      "title": "Unmanned Aerial Vehicles (UAVs): A Survey on Civil Applications and Key Research Challenges",
+      "authors": [
+        "Hazim Shakhatreh",
+        "Ahmad Sawalmeh",
+        "Ala Al‐Fuqaha",
+        "Zuochao Dou",
+        "Eyad Almaita",
+        "Issa Khalil",
+        "Noor Shamsiah Othman",
+        "Abdallah Khreishah",
+        "Mohsen Guizani"
+      ],
+      "year": 2019,
+      "doi": "10.1109/access.2019.2909530",
+      "venue": "IEEE Access",
+      "cited_by_count": 2355
+    },
+    {
+      "openalex_id": "W4386050676",
+      "title": "A Review of Practical AI for Remote Sensing in Earth Sciences",
+      "authors": [
+        "Bhargavi Janga",
+        "Gokul Prathin Asamani",
+        "Ziheng Sun",
+        "Nicoleta Cristea"
+      ],
+      "year": 2023,
+      "doi": "10.3390/rs15164112",
+      "venue": "Remote Sensing",
+      "cited_by_count": 186
+    },
+    {
+      "openalex_id": "W4367598041",
+      "title": "Comparing Vision Transformers and Convolutional Neural Networks for Image Classification: A Literature Review",
+      "authors": [
+        "José Maurício",
+        "Inês Domingues",
+        "Jorge Bernardino"
+      ],
+      "year": 2023,
+      "doi": "10.3390/app13095521",
+      "venue": "Applied Sciences",
+      "cited_by_count": 568
+    }
+  ]
+}

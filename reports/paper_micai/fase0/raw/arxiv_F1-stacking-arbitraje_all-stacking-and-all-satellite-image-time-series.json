@@ -1,0 +1,21 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "arxiv",
+  "query": "all:\"stacking\" AND all:\"satellite image time series\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2203.16149v1",
+      "title": "Tampered VAE for Improved Satellite Image Time Series Classification",
+      "authors": [
+        "Xin Cai",
+        "Yaxin Bi",
+        "Peter Nicholl"
+      ],
+      "published": "2022-03-30T08:48:06Z",
+      "doi": null,
+      "summary": "The unprecedented availability of spatial and temporal high-resolution satellite image time series (SITS) for crop type mapping is believed to necessitate deep learning architectures to accommodate challenges arising from both dimensions. Recent state-of-the-art deep learning models have shown promising results by stacking spatial and temporal encoders. However, we present a Pyramid Time-Series Transformer (PTST) that operates solely on the temporal dimension, i.e., neglecting the spatial dimension, can produce superior results with a drastic reduction in GPU memory consumption and easy extensibility. Furthermore, we augment it to perform semi-supervised learning by proposing a classification-friendly VAE framework that introduces clustering mechanisms into latent space and can promote linear separability therein. Consequently, a few principal axes of the latent space can explain the majority of variance in raw data. Meanwhile, the VAE framework with proposed tweaks can maintain competitive classification performance as its purely discriminative counterpart when only $40\\%$ of labelled data is used. We hope the proposed framework can serve as a baseline for crop classification with SITS for its modularity and simplicity."
+    }
+  ]
+}

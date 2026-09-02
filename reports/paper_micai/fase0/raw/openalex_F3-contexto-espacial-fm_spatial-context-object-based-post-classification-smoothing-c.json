@@ -1,0 +1,446 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "openalex",
+  "query": "spatial context object based post-classification smoothing crop map",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W3027225766",
+      "title": "A Spatial-Temporal Attention-Based Method and a New Dataset for Remote Sensing Image Change Detection",
+      "authors": [
+        "Hao Chen",
+        "Zhenwei Shi"
+      ],
+      "year": 2020,
+      "doi": "10.3390/rs12101662",
+      "venue": "Remote Sensing",
+      "cited_by_count": 1855
+    },
+    {
+      "openalex_id": "W3114720220",
+      "title": "Attention-Based Adaptive Spectral–Spatial Kernel ResNet for Hyperspectral Image Classification",
+      "authors": [
+        "Swalpa Kumar Roy",
+        "Suvojit Manna",
+        "Tiecheng Song",
+        "Lorenzo Bruzzone"
+      ],
+      "year": 2020,
+      "doi": "10.1109/tgrs.2020.3043267",
+      "venue": "IEEE Transactions on Geoscience and Remote Sensing",
+      "cited_by_count": 520
+    },
+    {
+      "openalex_id": "W4200503226",
+      "title": "Mapping of crop types and crop sequences with combined time series of Sentinel-1, Sentinel-2 and Landsat 8 data for Germany",
+      "authors": [
+        "Lukas Blickensdörfer",
+        "Marcel Schwieder",
+        "Dirk Pflugmacher",
+        "Claas Nendel",
+        "Stefan Erasmi",
+        "Patrick Hostert"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.rse.2021.112831",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 396
+    },
+    {
+      "openalex_id": "W3047317383",
+      "title": "Deep Learning for Land Use and Land Cover Classification Based on Hyperspectral and Multispectral Earth Observation Data: A Review",
+      "authors": [
+        "Ava Vali",
+        "Sara Comai",
+        "Matteo Matteucci"
+      ],
+      "year": 2020,
+      "doi": "10.3390/rs12152495",
+      "venue": "Remote Sensing",
+      "cited_by_count": 449
+    },
+    {
+      "openalex_id": "W2944165510",
+      "title": "Object Detection in 20 Years: A Survey",
+      "authors": [
+        "Zhengxia Zou",
+        "Chen, Keyan",
+        "Zhenwei Shi",
+        "Yuhong Guo",
+        "Jieping Ye"
+      ],
+      "year": 2019,
+      "doi": "10.48550/arxiv.1905.05055",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 563
+    },
+    {
+      "openalex_id": "W4282579661",
+      "title": "Spatially resolved multi-omics deciphers bidirectional tumor-host interdependence in glioblastoma",
+      "authors": [
+        "Vidhya M. Ravi",
+        "Paulina Will",
+        "Jan Kueckelhaus",
+        "Na Sun",
+        "Kevin Joseph",
+        "Henrike Salié",
+        "Lea Vollmer",
+        "Ugnė Kuliešiūtė",
+        "Jasmin von Ehr",
+        "Jasim Kada Benotmane",
+        "Nicolas Neidert",
+        "Marie Follo",
+        "Florian Scherer",
+        "Jonathan M. Goeldner",
+        "Simon P. Behringer",
+        "Pamela Franco",
+        "Mohammed Khiat",
+        "Junyi Zhang",
+        "Ulrich Hofmann",
+        "Christian Fung",
+        "Franz Ricklefs",
+        "Katrin Lamszus",
+        "Melanie Boerries",
+        "Manching Ku",
+        "Jürgen Beck",
+        "Roman Sankowski",
+        "Marius Schwabenland",
+        "Marco Prinz",
+        "Ulrich Schüller",
+        "Saskia Killmer",
+        "Bertram Bengsch",
+        "Axel Walch",
+        "Daniel Delev",
+        "Oliver Schnell",
+        "Dieter Henrik Heiland"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.ccell.2022.05.009",
+      "venue": "Cancer Cell",
+      "cited_by_count": 693
+    },
+    {
+      "openalex_id": "W3135028703",
+      "title": "Machine Learning: Algorithms, Real-World Applications and Research Directions",
+      "authors": [
+        "Iqbal H. Sarker"
+      ],
+      "year": 2021,
+      "doi": "10.1007/s42979-021-00592-x",
+      "venue": "SN Computer Science",
+      "cited_by_count": 5366
+    },
+    {
+      "openalex_id": "W2946046457",
+      "title": "Object-Based Land Cover Classification of Cork Oak Woodlands using UAV Imagery and Orfeo ToolBox",
+      "authors": [
+        "Giandomenico De Luca",
+        "João M. N. Silva",
+        "Sofia Cerasoli",
+        "João Victor Alcoforado de Araújo",
+        "José Rafael Campos",
+        "Salvatore Di Fazio",
+        "Giuseppe Modica"
+      ],
+      "year": 2019,
+      "doi": "10.3390/rs11101238",
+      "venue": "Remote Sensing",
+      "cited_by_count": 152
+    },
+    {
+      "openalex_id": "W3035060554",
+      "title": "Bootstrap your own latent: A new approach to self-supervised Learning",
+      "authors": [
+        "Jean-Bastien Grill",
+        "Florian Strub",
+        "Florent Altché",
+        "Corentin Tallec",
+        "Pierre H. Richemond",
+        "Elena Buchatskaya",
+        "Carl Doersch",
+        "Bernardo Ávila Pires",
+        "Zhaohan Daniel Guo",
+        "Mohammad Gheshlaghi Azar",
+        "Bilal Piot",
+        "Koray Kavukcuoglu",
+        "Rémi Munos",
+        "Michal Valko"
+      ],
+      "year": 2020,
+      "doi": "10.48550/arxiv.2006.07733",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 3447
+    },
+    {
+      "openalex_id": "W3024007459",
+      "title": "Nonlocal Graph Convolutional Networks for Hyperspectral Image Classification",
+      "authors": [
+        "Lichao Mou",
+        "Xiaoqiang Lu",
+        "Xuelong Li",
+        "Xiao Xiang Zhu"
+      ],
+      "year": 2020,
+      "doi": "10.1109/tgrs.2020.2973363",
+      "venue": "IEEE Transactions on Geoscience and Remote Sensing",
+      "cited_by_count": 289
+    },
+    {
+      "openalex_id": "W4293004892",
+      "title": "Fos ensembles encode and shape stable spatial maps in the hippocampus",
+      "authors": [
+        "Noah L. Pettit",
+        "Ee-Lynn Yap",
+        "Michael E. Greenberg",
+        "Christopher D. Harvey"
+      ],
+      "year": 2022,
+      "doi": "10.1038/s41586-022-05113-1",
+      "venue": "Nature",
+      "cited_by_count": 163
+    },
+    {
+      "openalex_id": "W4280563474",
+      "title": "Deep Learning-Based Object Detection Techniques for Remote Sensing Images: A Survey",
+      "authors": [
+        "Zheng Li",
+        "Yongcheng Wang",
+        "Ning Zhang",
+        "Yuxi Zhang",
+        "Zhikang Zhao",
+        "Dongdong Xu",
+        "Guangli Ben",
+        "Yunxiao Gao"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14102385",
+      "venue": "Remote Sensing",
+      "cited_by_count": 195
+    },
+    {
+      "openalex_id": "W4364323147",
+      "title": "Object Detection Using Deep Learning, CNNs and Vision Transformers: A Review",
+      "authors": [
+        "Ayoub Benali Amjoud",
+        "Mustapha Amrouch"
+      ],
+      "year": 2023,
+      "doi": "10.1109/access.2023.3266093",
+      "venue": "IEEE Access",
+      "cited_by_count": 312
+    },
+    {
+      "openalex_id": "W4405446156",
+      "title": "The YOLO Framework: A Comprehensive Review of Evolution, Applications, and Benchmarks in Object Detection",
+      "authors": [
+        "Momina Liaqat Ali",
+        "Zhou Zhang"
+      ],
+      "year": 2024,
+      "doi": "10.3390/computers13120336",
+      "venue": "Computers",
+      "cited_by_count": 366
+    },
+    {
+      "openalex_id": "W2996948100",
+      "title": "Dimensionality Reduction and Feature Selection for Object-Based Land Cover Classification based on Sentinel-1 and Sentinel-2 Time Series Using Google Earth Engine",
+      "authors": [
+        "Oliver Stromann",
+        "Andrea Nascetti",
+        "Osama Yousif",
+        "Yifang Ban"
+      ],
+      "year": 2019,
+      "doi": "10.3390/rs12010076",
+      "venue": "Remote Sensing",
+      "cited_by_count": 134
+    },
+    {
+      "openalex_id": "W4385495695",
+      "title": "Statistical Analysis of Design Aspects of Various YOLO-Based Deep Learning Models for Object Detection",
+      "authors": [
+        "Uddagiri Sirisha",
+        "S. Phani Praveen",
+        "Parvathaneni Naga Srinivasu",
+        "Paolo Barsocchi",
+        "Akash Kumar Bhoi"
+      ],
+      "year": 2023,
+      "doi": "10.1007/s44196-023-00302-w",
+      "venue": "International Journal of Computational Intelligence Systems",
+      "cited_by_count": 224
+    },
+    {
+      "openalex_id": "W3083485545",
+      "title": "Exploring Deep Learning-Based Architecture, Strategies, Applications and Current Trends in Generic Object Detection: A Comprehensive Review",
+      "authors": [
+        "Lubna Aziz",
+        "Md. Sah Bin Haji Salam",
+        "Usman Ullah Sheikh",
+        "Sara Ayub"
+      ],
+      "year": 2020,
+      "doi": "10.1109/access.2020.3021508",
+      "venue": "IEEE Access",
+      "cited_by_count": 204
+    },
+    {
+      "openalex_id": "W4395447370",
+      "title": "An Improved YOLOv8 to Detect Moving Objects",
+      "authors": [
+        "Mukaram Safaldin",
+        "Nizar Zaghden",
+        "Mahmoud Mejdoub"
+      ],
+      "year": 2024,
+      "doi": "10.1109/access.2024.3393835",
+      "venue": "IEEE Access",
+      "cited_by_count": 170
+    },
+    {
+      "openalex_id": "W4390826350",
+      "title": "Remote Sensing Object Detection in the Deep Learning Era—A Review",
+      "authors": [
+        "Shengxi Gui",
+        "Shuang Song",
+        "Rongjun Qin",
+        "Yang Tang"
+      ],
+      "year": 2024,
+      "doi": "10.3390/rs16020327",
+      "venue": "Remote Sensing",
+      "cited_by_count": 276
+    },
+    {
+      "openalex_id": "W4311726887",
+      "title": "RTMDet: An Empirical Study of Designing Real-Time Object Detectors",
+      "authors": [
+        "Chengqi Lyu",
+        "Wenwei Zhang",
+        "Haian Huang",
+        "Yue Zhou",
+        "Yudong Wang",
+        "Yanyi Liu",
+        "Shilong Zhang",
+        "Kai Chen"
+      ],
+      "year": 2022,
+      "doi": "10.48550/arxiv.2212.07784",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 315
+    },
+    {
+      "openalex_id": "W4213124617",
+      "title": "Deep Learning-Based Change Detection in Remote Sensing Images: A Review",
+      "authors": [
+        "Ayesha Shafique",
+        "Guo Cao",
+        "Zia U. Khan",
+        "Muhammad Asad",
+        "Muhammad Aslam"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14040871",
+      "venue": "Remote Sensing",
+      "cited_by_count": 407
+    },
+    {
+      "openalex_id": "W4289792395",
+      "title": "Multi-sensor spectral synergies for crop stress detection and monitoring in the optical domain: A review",
+      "authors": [
+        "Katja Berger",
+        "Miriam Machwitz",
+        "Marlena Kycko",
+        "Shawn C. Kefauver",
+        "Shari Van Wittenberghe",
+        "Max Gerhards",
+        "Jochem Verrelst",
+        "Clement Atzberger",
+        "Christiaan van der Tol",
+        "Alexander Damm",
+        "Uwe Rascher",
+        "Ittai Herrmann",
+        "Verónica Sobejano Paz",
+        "Sven Fahrner",
+        "Roland Pieruschka",
+        "Egor Prikaziuk",
+        "Ma. Luisa Buchaillot",
+        "Andrej Halabuk",
+        "Marco Celesti",
+        "Gerbrand Koren",
+        "Esra Tunç Görmüş",
+        "Micol Rossini",
+        "Michael Foerster",
+        "Bastian Siegmann",
+        "Asmaa Abdelbaki",
+        "Giulia Tagliabue",
+        "Tobias Hank",
+        "Roshanak Darvishzadeh",
+        "Helge Aasen",
+        "Mónica García",
+        "Isabel Pôças",
+        "Subhajit Bandopadhyay",
+        "Mauro Sulis",
+        "Enrico Tomelleri",
+        "Offer Rozenstein",
+        "Lachezar Filchev",
+        "Gheorghe Stancile",
+        "Martin Schlerf"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.rse.2022.113198",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 275
+    },
+    {
+      "openalex_id": "W4322761329",
+      "title": "Fruit ripeness classification: A survey",
+      "authors": [
+        "Matteo Rizzo",
+        "Matteo Marcuzzo",
+        "Alessandro Zangari",
+        "Andrea Gasparetto",
+        "Andrea Albarelli"
+      ],
+      "year": 2023,
+      "doi": "10.1016/j.aiia.2023.02.004",
+      "venue": "Artificial Intelligence in Agriculture",
+      "cited_by_count": 165
+    },
+    {
+      "openalex_id": "W4224269597",
+      "title": "CCTNet: Coupled CNN and Transformer Network for Crop Segmentation of Remote Sensing Images",
+      "authors": [
+        "Hong Wang",
+        "Xianzhong Chen",
+        "Tianxiang Zhang",
+        "Zhiyong Xu",
+        "Jiangyun Li"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14091956",
+      "venue": "Remote Sensing",
+      "cited_by_count": 123
+    },
+    {
+      "openalex_id": "W4382202677",
+      "title": "TrOCR: Transformer-Based Optical Character Recognition with Pre-trained Models",
+      "authors": [
+        "Minghao Li",
+        "Tengchao Lv",
+        "Jingye Chen",
+        "Lei Cui",
+        "Yijuan Lu",
+        "Dinei Florêncio",
+        "Cha Zhang",
+        "Zhoujun Li",
+        "Furu Wei"
+      ],
+      "year": 2023,
+      "doi": "10.1609/aaai.v37i11.26538",
+      "venue": "Proceedings of the AAAI Conference on Artificial Intelligence",
+      "cited_by_count": 472
+    }
+  ]
+}

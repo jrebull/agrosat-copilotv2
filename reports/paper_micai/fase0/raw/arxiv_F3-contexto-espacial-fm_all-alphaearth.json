@@ -1,0 +1,368 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "arxiv",
+  "query": "all:\"AlphaEarth\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2605.21804v1",
+      "title": "Mapping Tomato Cropping Systems in California Using AlphaEarth Geospatial Embeddings and Deep Learning Analysis",
+      "authors": [
+        "Mohammadreza Narimani",
+        "Alireza Pourreza",
+        "Parastoo Farajpoor"
+      ],
+      "published": "2026-05-20T23:00:54Z",
+      "doi": null,
+      "summary": "Field-scale crop maps support supply-chain forecasting and policy, yet statewide crop identification still often depends on retrospective surveys or remote-sensing workflows built around hand-engineered spectral features. Those pipelines can be accurate, but they require repeated preprocessing and often lose robustness across years. This study evaluated whether Google DeepMind's AlphaEarth geospatial embeddings can serve as an analysis-ready alternative for mapping processing tomato systems in California. LandIQ 2018 crop polygons were used to assemble a balanced reference dataset of 4,742 tomato and 4,742 non-tomato fields. For each polygon, 64-band AlphaEarth embedding chips were extracted and aligned with binary masks, then divided into spatially independent training (n = 6,638), validation (n = 1,422), and test (n = 1,424) sets. A U-Net segmentation model was trained on AWS SageMaker using a composite masked binary cross-entropy and soft Dice loss. To complement hard predictions, Monte Carlo dropout was retained at inference and repeated 100 times per chip to estimate predictive mean and variance. On the independent test set, the model achieved 99.19% pixel accuracy, 98.69% precision, 99.40% recall, 99.04% F1 score, 98.11% intersection over union, and 99.02% chip accuracy. Uncertainty maps were consistently highest near field edges and low within field interiors. The results show that AlphaEarth embeddings retain crop-relevant spatial and temporal structure and can support accurate, field-scale tomato mapping without manual feature engineering."
+    },
+    {
+      "arxiv_id": "2509.07852v1",
+      "title": "Deep Learning-Based Burned Area Mapping Using Bi-Temporal Siamese Networks and AlphaEarth Foundation Datasets",
+      "authors": [
+        "Seyd Teymoor Seydi"
+      ],
+      "published": "2025-09-09T15:29:18Z",
+      "doi": null,
+      "summary": "Accurate and timely mapping of burned areas is crucial for environmental monitoring, disaster management, and assessment of climate change. This study presents a novel approach to automated burned area mapping using the AlphaEArth dataset combined with the Siamese U-Net deep learning architecture. The AlphaEArth Dataset, comprising high-resolution optical and thermal infrared imagery with comprehensive ground-truth annotations, provides an unprecedented resource for training robust burned area detection models. We trained our model with the Monitoring Trends in Burn Severity (MTBS) dataset in the contiguous US and evaluated it with 17 regions cross in Europe. Our experimental results demonstrate that the proposed ensemble approach achieves superior performance with an overall accuracy of 95%, IoU of 0.6, and F1-score of 74% on the test dataset. The model successfully identifies burned areas across diverse ecosystems with complex background, showing particular strength in detecting partially burned vegetation and fire boundaries and its transferability and high generalization in burned area mapping. This research contributes to the advancement of automated fire damage assessment and provides a scalable solution for global burn area monitoring using the AlphaEarth dataset."
+    },
+    {
+      "arxiv_id": "2507.22291v2",
+      "title": "AlphaEarth Foundations: An embedding field model for accurate and efficient global mapping from sparse label data",
+      "authors": [
+        "Christopher F. Brown",
+        "Michal R. Kazmierski",
+        "Valerie J. Pasquarella",
+        "William J. Rucklidge",
+        "Masha Samsikova",
+        "Chenhui Zhang",
+        "Evan Shelhamer",
+        "Estefania Lahera",
+        "Olivia Wiles",
+        "Simon Ilyushchenko",
+        "Noel Gorelick",
+        "Lihui Lydia Zhang",
+        "Sophia Alj",
+        "Emily Schechter",
+        "Sean Askay",
+        "Oliver Guinan",
+        "Rebecca Moore",
+        "Alexis Boukouvalas",
+        "Pushmeet Kohli"
+      ],
+      "published": "2025-07-29T23:55:00Z",
+      "doi": null,
+      "summary": "Unprecedented volumes of Earth observation data are continually collected around the world, but high-quality labels remain scarce given the effort required to make physical measurements and observations. This has led to considerable investment in bespoke modeling efforts translating sparse labels into maps. Here we introduce AlphaEarth Foundations, an embedding field model yielding a highly general, geospatial representation that assimilates spatial, temporal, and measurement contexts across multiple sources, enabling accurate and efficient production of maps and monitoring systems from local to global scales. The embeddings generated by AlphaEarth Foundations are the only to consistently outperform a suite of other well-known/widely accepted featurization approaches tested on a diverse set of mapping evaluations without re-training. We have released a dataset of global, annual, analysis-ready embedding field layers from 2017 through 2024."
+    },
+    {
+      "arxiv_id": "2608.29553v1",
+      "title": "BEACON: Behavioral and Semantic Enrichment of AlphaEarth Embeddings through Tri-Modal Contrastive Learning",
+      "authors": [
+        "Hao Tian",
+        "Heng Cai",
+        "Yifan Yang"
+      ],
+      "published": "2026-08-30T04:46:23Z",
+      "doi": "10.1145/3841645.3843383",
+      "summary": "Geospatial foundation models such as the AlphaEarth Foundation produce compact and globally consistent representations of the Earth's surface that transfer effectively to a wide range of downstream tasks. However, because these models are trained primarily on Earth-observation imagery, their embeddings mainly capture physical and spectral characteristics while encoding human activity and urban function only weakly. To address this limitation, we propose BEACON, a tri-modal contrastive learning framework that aligns three complementary views of urban space: physical representations from AE embeddings, semantic representations from point-of-interest (POI) text, and human behavioral representations from hourly POI visitation, while keeping the deployed representation image-only. Using the Houston Metropolitan Area as a case study area, we evaluated the performance of the BEACON framework on nine downstream tasks, including seven regression and two classification tasks against six baselines (raw coordinates, Space2Vec, SatCLIP, TESSERA, Clay and AlphaEarth), using frozen linear and MLP probes over five seeds. Under a linear probe, BEACON improves relative R^2 over AlphaEarth by up to 43% for obesity prevalence, 34% for poor mental health, and 22% for median household income, while remaining competitive in the prediction of physical and environmental variables. These findings highlight the value of augmenting geospatial foundation models with semantic and behavioral signals, extending their applicability from physical Earth observation to human-centered urban analytics."
+    },
+    {
+      "arxiv_id": "2606.29134v1",
+      "title": "Beyond Backscatter: AlphaEarth Land-Cover Priors for Rapid SAR Flood Segmentation Across Foundation Backbones",
+      "authors": [
+        "Sanjay Thasma",
+        "Yu-Hsuan Ho",
+        "Ali Mostafavi"
+      ],
+      "published": "2026-06-28T00:46:00Z",
+      "doi": null,
+      "summary": "Rapid flood mapping is critical for emergency response, yet optical imagery is often unusable during major flooding and single-temporal SAR is ambiguous, since new inundation, permanent water, and other smooth surfaces produce similar backscatter. This study evaluates whether stable land-context priors can improve post-event SAR flood segmentation when a registered, seasonally matched pre-event acquisition is unavailable. Using the CONUS (Continental United States) subset of ImpactMesh-Flood, we compare four backbones spanning distinct pretraining regimes-a from-scratch CNN UNet, an ImageNet-pretrained UNet, the SAR-pretrained TerraMind Vision Transformer, and the optical-satellite-pretrained DINOv3 Vision Transformer-in SAR-only, SAR+DEM, and SAR+AlphaEarth configurations under an identical fusion design, training protocol, and event-stratified split. Models are selected on a validation flood event and evaluated separately on two held-out events, Hurricane Florence and the Louisiana floods, with three-seed reporting for auxiliary configurations. Both auxiliary priors improve over the observed SAR-only baselines across all backbones and test events. AlphaEarth exceeds DEM on the harder Florence event for every backbone and achieves the best Florence IoU, while DEM is competitive on Louisiana and produces the best result there. The seed analysis reveals a trade-off: DEM is more stable across initializations, whereas AlphaEarth offers higher peak performance and higher recall on the harder event. Cross-event differences track flood-class prevalence and similarity to the training distribution, underscoring the need for per-event evaluation. We reframe single-temporal SAR flood segmentation as an alignment between radar observations and stable land-surface priors, where learned and physical context offer complementary pathways to more reliable rapid flood mapping."
+    },
+    {
+      "arxiv_id": "2607.01082v1",
+      "title": "When Context Compensates for Sparse Event History: AlphaEarth for Spatio-Temporal Point-Process Forecasting",
+      "authors": [
+        "Yahya Aalaila",
+        "Mouad Elhamdi",
+        "Gerrit Großmann",
+        "Daniel Jenson",
+        "Elizaveta Semenova",
+        "Sebastian Vollmer"
+      ],
+      "published": "2026-07-01T15:38:39Z",
+      "doi": null,
+      "summary": "Spatio-temporal point-process models must often generalise across space when local event histories are sparse. We study whether exogenous spatial context can compensate in such regimes. Using a fixed log-Gaussian Cox process backbone, we compare an event-only model with the same model augmented by AlphaEarth embeddings as linear spatial context. We evaluate spatial transfer on emergency medical services (EMS) forecasting across eight held-out regions, fixed forecast anchors, and a sweep over history length $w$, using only AlphaEarth (AE) embeddings available strictly before each anchor. AE improves out-of-region predictive performance across all history regimes, with the largest gains under scarce histories: approximately $2$--$6\\times$ multiplicative improvements at $1-2$ weeks, tapering to roughly $10$--$20\\%$ at $w=20$--$104$ weeks. These results show that contextual information can substantially stabilise spatially transferred point-process forecasts when event history is limited."
+    },
+    {
+      "arxiv_id": "2602.17250v1",
+      "title": "Inferring Height from Earth Embeddings: First insights using Google AlphaEarth",
+      "authors": [
+        "Alireza Hamoudzadeh",
+        "Valeria Belloni",
+        "Roberta Ravanelli"
+      ],
+      "published": "2026-02-19T10:52:50Z",
+      "doi": null,
+      "summary": "This study investigates whether the geospatial and multimodal features encoded in \\textit{Earth Embeddings} can effectively guide deep learning (DL) regression models for regional surface height mapping. In particular, we focused on AlphaEarth Embeddings at 10 m spatial resolution and evaluated their capability to support terrain height inference using a high-quality Digital Surface Model (DSM) as reference. U-Net and U-Net++ architectures were thus employed as lightweight convolutional decoders to assess how well the geospatial information distilled in the embeddings can be translated into accurate surface height estimates. Both architectures achieved strong training performance (both with $R^2 = 0.97$), confirming that the embeddings encode informative and decodable height-related signals. On the test set, performance decreased due to distribution shifts in height frequency between training and testing areas. Nevertheless, U-Net++ shows better generalization ($R^2 = 0.84$, median difference = -2.62 m) compared with the standard U-Net ($R^2 = 0.78$, median difference = -7.22 m), suggesting enhanced robustness to distribution mismatch. While the testing RMSE (approximately 16 m for U-Net++) and residual bias highlight remaining challenges in generalization, strong correlations indicate that the embeddings capture transferable topographic patterns. Overall, the results demonstrate the promising potential of AlphaEarth Embeddings to guide DL-based height mapping workflows, particularly when combined with spatially aware convolutional architectures, while emphasizing the need to address bias for improved regional transferability."
+    },
+    {
+      "arxiv_id": "2510.09894v2",
+      "title": "Beyond AlphaEarth: Toward Human-Centered Geospatial Foundation Models via POI-Guided Contrastive Learning",
+      "authors": [
+        "Junyuan Liu",
+        "Quan Qin",
+        "Guangsheng Dong",
+        "Xinglei Wang",
+        "Jiazhuang Feng",
+        "Zichao Zeng",
+        "Tao Cheng"
+      ],
+      "published": "2025-10-10T22:20:39Z",
+      "doi": null,
+      "summary": "Recent geospatial foundation models (GFMs) produce spatially extensive representations of the Earth's surface that capture rich physical and environmental patterns. Among them, the AlphaEarth Foundation (AE) represents a major step, generating 10 m embeddings from multi-source Earth Observation (EO) data that include diverse environmental and spectral characteristics. However, such EO-driven representations primarily encode physical and spectral patterns rather than human activities or urban semantics, limiting their ability to capture the functional dimensions of cities and making the learned representations difficult to interpret or query using natural language. We introduce AETHER (AlphaEarth-POI Enriched Representation Learning), a lightweight framework that aligns AlphaEarth with human-centered urban analysis through multimodal alignment guided by Points of Interest (POIs). By enforcing both cross-modal AE-POI alignment and intra-modal multi-scale consistency, AETHER integrates functional urban semantics with EO-driven representations and grounds the embedding space in natural language. The resulting representations support both urban mapping tasks and natural language-conditioned spatial retrieval. Experiments across four downstream tasks in Greater London and Singapore demonstrate consistent state-of-the-art performance, with relative improvements ranging from 4.5% to 21.9%. Furthermore, the aligned embedding space enables spatial localization through natural language queries. By aligning EO-based foundation models with human-centered semantics, AETHER improves the interpretability of geospatial representations and advances geospatial representation learning toward human-centered, language-accessible geospatial foundation models."
+    },
+    {
+      "arxiv_id": "2608.12663v1",
+      "title": "Evaluating AlphaEarth Foundations Embeddings for Wildfire Susceptibility Mapping",
+      "authors": [
+        "Yuan Zhuang",
+        "Sanaa Hobeichi",
+        "Peng Shi",
+        "Fei Huang"
+      ],
+      "published": "2026-08-12T23:52:37Z",
+      "doi": null,
+      "summary": "Wildfire susceptibility mapping typically relies on physical variables assembled from multiple remote-sensing, climate, and geospatial products. AlphaEarth Foundations (AEF) provides analysis-ready geospatial embeddings that may reduce this dependence on heavy harmonisation and task-specific feature engineering, but their value for wildfire susceptibility mapping has not been systematically evaluated. Using Victoria, Australia (2017-2025), as a case study, we show that AEF embeddings can reconstruct commonly used variables in wildfire susceptibility analysis with high accuracy. In downstream susceptibility models trained on satellite-derived fire occurrence data, embedding-based susceptibility models achieve ROC-AUC values above 0.92 and consistently identify high wildfire susceptibility across eastern Victoria, particularly Gippsland and the north-eastern uplands, with additional localized hotspots in central and northwestern Victoria. A key feature of AEF embeddings is their strong near-region transferability within climatically similar regions. When embedding-based models trained in Victoria are applied to Canberra and Western Sydney-Blue Mountains, ROC-AUC improves by around 4% at Canberra and declines by around 2% at Western Sydney-Blue Mountains, compared with a mean decrease of approximately 25% for physical-variable models. These findings provide practical guidance for using AEF embeddings and lay a foundation for scalable wildfire susceptibility mapping workflows for downstream users such as government agencies and (re)insurers."
+    },
+    {
+      "arxiv_id": "2604.14756v1",
+      "title": "Subsurface Property Mapping using Google AlphaEarth Foundations",
+      "authors": [
+        "Nori Nakata",
+        "Jingxiao Liu",
+        "Guodong Chen",
+        "Rie Nakata",
+        "Charuleka Varadharajan"
+      ],
+      "published": "2026-04-16T08:10:42Z",
+      "doi": null,
+      "summary": "Subsurface properties are essential for hazard assessment, energy and environmental management, and infrastructure resilience, but direct observations are sparse and uneven, motivating the use of surface observations as indirect constraints. Here we explore whether AlphaEarth embeddings can be applied to subsurface estimation despite indirect and non-unique physical links between surface and depth. We test this idea in two conterminous U.S. applications: shallow seismic site characterization using $V_S 30$ with embedding features alone and with conventional covariates (topographic slope and a tectonic-status indicator), and subsurface temperature reconstruction using embedding-based nonlinear regression. Across both applications, embedding-informed models recover spatially coherent, physically plausible patterns and outperform simpler baselines. The comparison also highlights a key difference: domain covariates materially stabilize $V_S 30$ regression, whereas temperature mapping relies primarily on embedding features. Overall, the results support the feasibility of foundation-model surface representations for regional surface-to-subsurface inference, while emphasizing the need for robust spatial validation under heterogeneous labels and uneven data coverage."
+    },
+    {
+      "arxiv_id": "2608.16310v1",
+      "title": "Cross-View Urban Sensing: Mapping Subjective Streetscape Perception via AlphaEarth Embeddings and Urban Context",
+      "authors": [
+        "Peilin Li",
+        "Pengfei Chen",
+        "Jingyu Wang",
+        "Zhifeng Yang",
+        "Tiansheng Chen",
+        "Mengjie Gong",
+        "Xiao Cheng"
+      ],
+      "published": "2026-08-17T09:21:30Z",
+      "doi": null,
+      "summary": "Residents' perception of the urban streetscape is an important factor in public health, active mobility, and social wellbeing. Street view imagery (SVI) has emerged as a widely used data source for assessing these perceptual qualities, yet its uneven coverage and irregular updating limit large-scale measurement. Here, we present CVLNet, a Cross-View Learning Network that predicts street-level perception from AlphaEarth embeddings and multi-source urban contextual data without requiring SVI at inference. CVLNet applies per-task adaptive gating to jointly model five perceptual dimensions, using labels from the pretrained SVI-Percept model as ground truth. The proposed method is evaluated across four Southeast Asian cities: Singapore, Kuala Lumpur, Jakarta, and Manila. CVLNet achieves a median road-segment-level Adjusted $R^{2}$ of 0.76 and consistently outperforms the baseline models, with gains ranging from 5.9--11.3% across the five perceptual dimensions. Ablation experiments show that AlphaEarth features and urban contextual features contribute complementary information. We further produce citywide road-level streetscape perception maps for five subjective perceptual dimensions across all four cities, extending perception estimation from the 13--31% of the road network directly covered by available SVI to the complete road network of each city. Integrating these maps with WorldPop gridded population data, we quantify exposure inequality across population-density, demographic, and land-use groups using the Deficit Palma Ratio. These results demonstrate that remote sensing can serve as a scalable alternative to SVI for citywide streetscape perception mapping, enabling a more comprehensive assessment of urban environmental inequality."
+    },
+    {
+      "arxiv_id": "2605.05547v2",
+      "title": "Characterizing Brazilian Atlantic Forest Restoration Outcomes with Geospatial AlphaEarth Embeddings",
+      "authors": [
+        "Alice Heiman"
+      ],
+      "published": "2026-05-07T00:52:06Z",
+      "doi": null,
+      "summary": "The Atlantic Forest in Brazil is a critical biodiversity hotspot, yet less than 12-15% of its original cover remains. Although monitoring forest restoration on a large scale is essential, traditional methods are limited by the impracticality of on-the-ground reporting on such a scale and by the saturation of remote-sensing indices such as NDVI. Furthermore, reforestation is a gradual process as opposed to the rapid spectral changes caused by deforestation. In this study, we examine 1,729 restoration sites in São Paulo, using satellite embeddings from the AlphaEarth Foundation's model to evaluate their effectiveness in characterising early restoration success. We introduce the concept of a 'Reference Trajectory Embedding', defining a metric of restoration success based on cosine similarity to reference sites of mature secondary forest. We observe distinct clusters in embedding space according to different land use and land cover (LULC) types, and we can identify sites with clear change vectors. However, the signal can be noisy, and embeddings may require further fine-tuning to capture and predict site metadata beyond LULC."
+    },
+    {
+      "arxiv_id": "2606.20034v1",
+      "title": "Exploring the potential of AlphaEarth and TESSERA embeddings for Fine-scale Local Climate Zone Mapping: A case study across five cities in Switzerland",
+      "authors": [
+        "Htet Yamin Ko Ko",
+        "Clement Atzberger"
+      ],
+      "published": "2026-06-18T10:06:42Z",
+      "doi": null,
+      "summary": "Understanding urban spatial morphology is critical for climate modeling, risk assessment, and sustainable urban design, and Local Climate Zone (LCZ) mapping provides the basic framework for this. However, many cities still use coarse ~100-m resolution LCZ records, which are unsuitable for fine-scale urban research. In this study, precomputed embeddings from TESSERA (Feng et al., 2025) and AlphaEarth (Brown et al., 2025) are compared to traditional Sentinel-1/2 (S1S2) composites in five Swiss cities to see if they can upscale coarse LCZ maps to 10-m resolution using an attention-based U-Net. Three experiments assess multi-city transferability, the impact of higher-resolution reference data, and temporal robustness to year-to-year phenology changes. We find that all datasets achieve strong performance with test data Intersection-over-Union (IoU) ranging from 0.59-0.69 and 0.77-0.82 in the first two experiments. TESSERA consistently outperforms both S1S2 and AlphaEarth across both settings As expected, we find that the transfer of embedding-based models from one year to another remains an open challenge. Overall, however, our results demonstrate the promising potential of embeddings derived from EO foundation models to reduce time consuming preprocessing, respectively, manual feature engineering tasks and to guide a universal deep learning-based LCZ mapping workflow. When combined with a simple location-aware attention U-Net architecture, the embeddings enhance regional transferability and scalability, supporting the development of comprehensive and reproducible fine-scale LCZ maps for global urban climate applications Improving reference data quality remains the strongest lever for further accuracy gains."
+    },
+    {
+      "arxiv_id": "2603.16911v1",
+      "title": "What on Earth is AlphaEarth? Hierarchical structure and functional interpretability for global land cover",
+      "authors": [
+        "Ivan Felipe Benavides-Martinez",
+        "Justin Guthrie",
+        "Jhon Edwin Arias",
+        "Yeison Alberto Garces-Gomez",
+        "Angela Ines Guzman-Alvis",
+        "Cristiam Victoriano Portilla-Cabrera",
+        "Somnath Mondal",
+        "Andrew J. Allyn",
+        "Auroop R. Ganguly"
+      ],
+      "published": "2026-03-08T02:40:03Z",
+      "doi": null,
+      "summary": "Geospatial foundation models generate high-dimensional embeddings that achieve strong predictive performance, yet their internal organization remains obscure, limiting their scientific use. Recent interpretability studies relate Google AlphaEarth Foundations (GAEF) embeddings to continuous environmental variables, but it is still unclear whether the embedding space exhibits a functional or hierarchical organization, in which some dimensions act as specialized representations while others encode shared or broader geospatial structure. In this work, we propose a functional interpretability framework that reverse-engineers the role of embedding dimensions by characterizing their contribution to land cover structure from observed classification behavior. The approach combines large-scale experimentation with a structural analysis of embedding-class relationships based on feature importance patterns and progressive ablation. Our results show that embedding dimensions exhibit consistent and non-uniform functional behavior, allowing them to be categorized along a hierarchical functional spectrum: specialist dimensions associated with specific land cover classes, low- and mid-generalist dimensions capturing shared characteristics between classes, and highgeneralist dimensions reflecting broader environmental gradients. Critically, we find that accurate land cover classification (98% of baseline performance) can be achieved using as few as 2 to 12 of the 64 available dimensions, depending on the class. This demonstrates substantial redundancy in the embedding space and offers a pathway toward significant reductions in computational cost. Together, these findings reveal that AlphaEarth embeddings are not only physically informative, but also functionally organized into a hierarchical structure, providing practical guidance for dimension selection in operational classification tasks."
+    },
+    {
+      "arxiv_id": "2604.18715v1",
+      "title": "Characterizing AlphaEarth Embedding Geometry for Agentic Environmental Reasoning",
+      "authors": [
+        "Mashrekur Rahman",
+        "Samuel J. Barrett",
+        "Christina Last"
+      ],
+      "published": "2026-04-20T18:14:33Z",
+      "doi": null,
+      "summary": "Earth observation foundation models encode land surface information into dense embedding vectors, yet the geometric structure of these representations and its implications for downstream reasoning remain underexplored. We characterize the manifold geometry of Google AlphaEarth's 64-dimensional embeddings across 12.1 million Continental United States samples (2017--2023) and develop an agentic system that leverages this geometric understanding for environmental reasoning. The manifold is non-Euclidean: effective dimensionality is 13.3 (participation ratio) from 64 raw dimensions, with local intrinsic dimensionality of approximately 10. Tangent spaces rotate substantially, with 84\\% of locations exceeding 60\\textdegree{} and local-global alignment (mean$|\\cosθ| = 0.17$) approaching the random baseline of 0.125. Supervised linear probes indicate that concept directions rotate across the manifold, and compositional vector arithmetic using both PCA-derived and probe-derived directions yields poor precision. Retrieval instead produces physically coherent results, with local geometry predicting retrieval coherence ($R^2 = 0.32$). Building on this characterization, we introduce an agentic system with nine specialized tools that decomposes environmental queries into reasoning chains over a FAISS-indexed embedding database. A five-condition ablation (120 queries, three complexity tiers) shows that embedding retrieval dominates response quality ($μ= 3.79 \\pm 0.90$ vs.\\ $3.03 \\pm 0.77$ parametric-only; scale 1--5), with peak performance on multi-step comparisons ($μ= 4.28 \\pm 0.43$). A cross-model benchmark show that geometric tools reduce Sonnet 4.5's score by 0.12 points but improve Opus 4.6's by 0.07, with Opus achieving higher geometric grounding (3.38 vs.\\ 2.64), suggesting that the value of geometric characterization scales with the reasoning capability of the consuming model."
+    },
+    {
+      "arxiv_id": "2508.11739v1",
+      "title": "Scalable Geospatial Data Generation Using AlphaEarth Foundations Model",
+      "authors": [
+        "Luc Houriez",
+        "Sebastian Pilarski",
+        "Behzad Vahedi",
+        "Ali Ahmadalipour",
+        "Teo Honda Scully",
+        "Nicholas Aflitto",
+        "David Andre",
+        "Caroline Jaffe",
+        "Martha Wedner",
+        "Rich Mazzola",
+        "Josh Jeffery",
+        "Ben Messinger",
+        "Sage McGinley-Smith",
+        "Sarah Russell"
+      ],
+      "published": "2025-08-15T17:09:48Z",
+      "doi": null,
+      "summary": "High-quality labeled geospatial datasets are essential for extracting insights and understanding our planet. Unfortunately, these datasets often do not span the entire globe and are limited to certain geographic regions where data was collected. Google DeepMind's recently released AlphaEarth Foundations (AEF) provides an information-dense global geospatial representation designed to serve as a useful input across a wide gamut of tasks. In this article we propose and evaluate a methodology which leverages AEF to extend geospatial labeled datasets beyond their initial geographic regions. We show that even basic models like random forests or logistic regression can be used to accomplish this task. We investigate a case study of extending LANDFIRE's Existing Vegetation Type (EVT) dataset beyond the USA into Canada at two levels of granularity: EvtPhys (13 classes) and EvtGp (80 classes). Qualitatively, for EvtPhys, model predictions align with ground truth. Trained models achieve 81% and 73% classification accuracy on EvtPhys validation sets in the USA and Canada, despite discussed limitations."
+    },
+    {
+      "arxiv_id": "2605.10949v1",
+      "title": "AlphaEarth Satellite Embeddings for Modelling Climate Sensitive Diseases Towards Global Health Resilience",
+      "authors": [
+        "Usman Nazir",
+        "I-Han Cheng",
+        "Sara Khalid"
+      ],
+      "published": "2026-04-29T21:14:31Z",
+      "doi": null,
+      "summary": "Malaria, childhood acute respiratory infection, and child undernutrition together account for over two million deaths annually in children under five, with the burden concentrated in low and middle-income countries where climate variability modulates transmission, exposure, and nutritional outcomes. Routine health surveillance in these settings remains sparse and reactive. Satellite-derived representations of the Earth's surface offer a scalable, low-cost complement to traditional covariates, yet their utility as predictors of population health outcomes is poorly characterised. We summarise findings from three studies evaluating AlphaEarth Foundations 64-dimensional satellite embeddings as predictors of population health outcomes, focusing on vulnerable populations. The studies span infectious disease (malaria, respiratory infection) and stunting. In each study, embeddings provide predictive value at sufficient spatial granularity: (i) malaria prediction across Nigeria shows consistent per-region R^2 gains; (ii) childhood acute respiratory infection prediction across 11 DHS countries increases pooled R^2 from 0.157 to 0.206 across three tree-based estimators; (iii) stunting prediction across 35 countries is neutral at country level due to collinearity with fixed effects. The stunting case is currently limited by lack of DHS cluster-level coordinates, which is the next key experiment."
+    },
+    {
+      "arxiv_id": "2601.01558v2",
+      "title": "Utilizing Earth Foundation Models to Enhance the Simulation Performance of Hydrological Models with AlphaEarth Embeddings",
+      "authors": [
+        "Pengfei Qu",
+        "Wenyu Ouyang",
+        "Chi Zhang",
+        "Yikai Chai",
+        "Shuolong Xu",
+        "Lei Ye",
+        "Yongri Piao",
+        "Miao Zhang",
+        "Huchuan Lu"
+      ],
+      "published": "2026-01-04T15:14:16Z",
+      "doi": null,
+      "summary": "Predicting river flow in places without streamflow records is challenging because basins respond differently to climate, terrain, vegetation, and soils. Traditional basin attributes describe some of these differences, but they cannot fully represent the complexity of natural environments. This study examines whether AlphaEarth Foundation embeddings, which are learned from large collections of satellite images rather than designed by experts, offer a more informative way to describe basin characteristics. These embeddings summarize patterns in vegetation, land surface properties, and long-term environmental dynamics. We find that models using them achieve higher accuracy when predicting flows in basins not used for training, suggesting that they capture key physical differences more effectively than traditional attributes. We further investigate how selecting appropriate donor basins influences prediction in ungauged regions. Similarity based on the embeddings helps identify basins with comparable environmental and hydrological behavior, improving performance, whereas adding many dissimilar basins can reduce accuracy. The results show that satellite-informed environmental representations can strengthen hydrological forecasting and support the development of models that adapt more easily to different landscapes."
+    },
+    {
+      "arxiv_id": "2601.00857v1",
+      "title": "Harvesting AlphaEarth: Benchmarking the Geospatial Foundation Model for Agricultural Downstream Tasks",
+      "authors": [
+        "Yuchi Ma",
+        "Yawen Shen",
+        "Anu Swatantran",
+        "David B. Lobell"
+      ],
+      "published": "2025-12-30T01:04:22Z",
+      "doi": "10.1016/j.jag.2026.105258",
+      "summary": "Geospatial foundation models (GFMs) have emerged as a promising approach to overcoming the limitations in existing featurization methods. More recently, Google DeepMind has introduced AlphaEarth Foundation (AEF), a GFM pre-trained using multi-source EOs across continuous time. An annual and global embedding dataset is produced using AEF that is ready for analysis and modeling. The internal experiments show that AEF embeddings have outperformed operational models in 15 EO tasks without re-training. However, those experiments are mostly about land cover and land use classification. Applying AEF and other GFMs to agricultural monitoring require an in-depth evaluation in critical agricultural downstream tasks. There is also a lack of comprehensive comparison between the AEF-based models and traditional remote sensing (RS)-based models under different scenarios, which could offer valuable guidance for researchers and practitioners. This study addresses some of these gaps by evaluating AEF embeddings in three agricultural downstream tasks in the U.S., including crop yield prediction, tillage mapping, and cover crop mapping. Datasets are compiled from both public and private sources to comprehensively evaluate AEF embeddings across tasks at different scales and locations, and RS-based models are trained as comparison models. AEF-based models generally exhibit strong performance on all tasks and are competitive with purpose-built RS-based models in yield prediction and county-level tillage mapping when trained on local data. However, we also find several limitations in current AEF embeddings, such as limited spatial transferability compared to RS-based models, low interpretability, and limited time sensitivity. These limitations recommend caution when applying AEF embeddings in agriculture, where time sensitivity, generalizability, and interpretability is important."
+    },
+    {
+      "arxiv_id": "2601.07268v1",
+      "title": "From Landslide Conditioning Factors to Satellite Embeddings: Evaluating the Utilisation of Google AlphaEarth for Landslide Susceptibility Mapping using Deep Learning",
+      "authors": [
+        "Yusen Cheng",
+        "Qinfeng Zhu",
+        "Lei Fan"
+      ],
+      "published": "2026-01-12T07:17:43Z",
+      "doi": null,
+      "summary": "Data-driven landslide susceptibility mapping (LSM) typically relies on landslide conditioning factors (LCFs), whose availability, heterogeneity, and preprocessing-related uncertainties can constrain mapping reliability. Recently, Google AlphaEarth (AE) embeddings, derived from multi-source geospatial observations, have emerged as a unified representation of Earth surface conditions. This study evaluated the potential of AE embeddings as alternative predictors for LSM. Two AE representations, including retained principal components and the full set of 64 embedding bands, were systematically compared with conventional LCFs across three study areas (Nantou County, Taiwan; Hong Kong; and part of Emilia-Romagna, Italy) using three deep learning models (CNN1D, CNN2D, and Vision Transformer). Performance was assessed using multiple evaluation metrics, ROC-AUC analysis, error statistics, and spatial pattern assessment. Results showed that AE-based models consistently outperformed LCFs across all regions and models, yielding higher F1-scores, AUC values, and more stable error distributions. Such improvement was most pronounced when using the full 64-band AE representation, with F1-score improvements of approximately 4% to 15% and AUC increased ranging from 0.04 to 0.11, depending on the study area and model. AE-based susceptibility maps also exhibited clearer spatial correspondence with observed landslide occurrences and enhanced sensitivity to localised landslide-prone conditions. Performance improvements were more evident in Nantou and Emilia than in Hong Kong, revealing that closer temporal alignment between AE embeddings and landslide inventories may lead to more effective LSM outcomes. These findings highlight the strong potential of AE embeddings as a standardised and information-rich alternative to conventional LCFs for LSM."
+    },
+    {
+      "arxiv_id": "2602.10354v1",
+      "title": "Physically Interpretable AlphaEarth Foundation Model Embeddings Enable LLM-Based Land Surface Intelligence",
+      "authors": [
+        "Mashrekur Rahman"
+      ],
+      "published": "2026-02-10T22:58:50Z",
+      "doi": null,
+      "summary": "Satellite foundation models produce dense embeddings whose physical interpretability remains poorly understood, limiting their integration into environmental decision systems. Using 12.1 million samples across the Continental United States (2017--2023), we first present a comprehensive interpretability analysis of Google AlphaEarth's 64-dimensional embeddings against 26 environmental variables spanning climate, vegetation, hydrology, temperature, and terrain. Combining linear, nonlinear, and attention-based methods, we show that individual embedding dimensions map onto specific land surface properties, while the full embedding space reconstructs most environmental variables with high fidelity (12 of 26 variables exceed $R^2 > 0.90$; temperature and elevation approach $R^2 = 0.97$). The strongest dimension-variable relationships converge across all three analytical methods and remain robust under spatial block cross-validation (mean $ΔR^2 = 0.017$) and temporally stable across all seven study years (mean inter-year correlation $r = 0.963$). Building on these validated interpretations, we then developed a Land Surface Intelligence system that implements retrieval-augmented generation over a FAISS-indexed embedding database of 12.1 million vectors, translating natural language environmental queries into satellite-grounded assessments. An LLM-as-Judge evaluation across 360 query--response cycles, using four LLMs in rotating generator, system, and judge roles, achieved weighted scores of $μ= 3.74 \\pm 0.77$ (scale 1--5), with grounding ($μ= 3.93$) and coherence ($μ= 4.25$) as the strongest criteria. Our results demonstrate that satellite foundation model embeddings are physically structured representations that can be operationalized for environmental and geospatial intelligence."
+    },
+    {
+      "arxiv_id": "2606.20697v1",
+      "title": "AEF-Econ: Toward Plug-and-Play Socioeconomic Foundation Embeddings from AlphaEarth for Urban Remote Sensing",
+      "authors": [
+        "Shuyang Hou",
+        "Ziqi Liu",
+        "Haoyue Jiao",
+        "Lutong Xie",
+        "Yaxian Qing",
+        "Xiaopu Zhang",
+        "Qingyang Xu",
+        "Zhangyan Xu",
+        "Xuefeng Guan",
+        "Huayi Wu"
+      ],
+      "published": "2026-06-15T08:43:25Z",
+      "doi": null,
+      "summary": "AlphaEarth Foundations (AEF) unify global remote sensing foundation embeddings through multimodal self-supervised learning, but their pretraining focuses on physical land-surface signals, limiting plug-and-play use in socioeconomic tasks. We integrate seven heterogeneous data streams across 36 Chinese cities over eight years - AEF embeddings, population, nighttime lights, remote sensing indices, points of interest (POIs), urban morphology, and cross-lingual text - and construct CHN-Econ, a socioeconomic benchmark with 16 labels in three categories. We conduct 31 controlled experiments along five axes: fusion architecture, self-supervised objective, text integration, embedding dimensionality, and normalization. Used alone as a linear probe, AEF achieves R2 values of only 0.301 for cross-region and 0.160 for cross-tier evaluation. The five-axis ablated backbone improves these scores to 0.832 and 0.671, respectively, but reveals that low-dimensional semantic streams are consistently suppressed by high-dimensional streams under shared reconstruction. To address this bottleneck, we propose Capacity-Adaptive Reconstruction (CAR), replacing shared reconstruction with per-stream decoders and stream-level losses to mitigate inter-stream capacity competition. CAR further raises cross-region and cross-tier R2 to 0.848 and 0.693, and restores collapsed labels from negative R2 to a stable range. Using CAR, we infer 14.4 million pixels across 36 cities and eight years and release AEF-Econ, including 128d and 64d compressed versions. Self-diagnostics and case studies show that AEF-Econ captures cross-city hierarchies and intra-urban spatial organization under unsupervised settings, providing a socioeconomic remote sensing foundation embedding complementary to AEF physical embeddings."
+    },
+    {
+      "arxiv_id": "2605.10029v1",
+      "title": "Slum Detection and Density Mapping with AlphaEarth Foundations: A Representation Learning Evaluation Across 12 Global Cities",
+      "authors": [
+        "Shuyang Hou",
+        "Ziqi Liu",
+        "Haoyue Jiao",
+        "Zhangyan Xu",
+        "Xiaopu Zhang",
+        "Lutong Xie",
+        "Yaxian Qing",
+        "Jianyuan Liang",
+        "Xuefeng Guan",
+        "Huayi Wua"
+      ],
+      "published": "2026-05-11T05:54:15Z",
+      "doi": null,
+      "summary": "Pixel-level slum mapping has long been constrained by limited cross-city generalisation, the absence of continuous density estimation, and weak global comparability. AlphaEarth Foundations (AEF), a globally consistent 64-dimensional annual surface embedding at 10 m, offers a new analysis-ready basis for lightweight slum monitoring, but its applicability to slum detection - an indirectly coupled task shaped by both built form and socio-economic processes - remains untested. We evaluate AEF on slum classification and sub-pixel density estimation across 12 cities and 69 city-year pairs (2017-2024), using GRAM pseudo-masks as supervisory labels. The evaluation spans four training strategies, two protocols (random split and 3x3 spatial block cross-validation), six auxiliary feature configurations, and five baseline models, complemented by representation-level analyses (PCA, SHAP) and full-AOI mapping. Five findings emerge. (1) Same-city cross-year training is optimal under both protocols (median spatial F1 = 0.616, R^2 = 0.466); temporal expansion outperforms cross-city transfer, indicating city-scale representational drift. (2) Regression R^2 is driven primarily by zero/non-zero boundary discrimination: positive-pixel R^2 is consistently negative across all cities, revealing limited capacity to model intra-pixel density gradients at 10 m. (3) PC36 is consistently top-ranked across tasks; classification saturates at k = 32 while regression remains unsaturated at k = 64. (4) POI features yield the largest density gain (Delta R^2 = +0.064). (5) For six cities meeting dual-task usability thresholds, full-AOI inference across 2017-2024 preserves slum cluster structure (mean SSIM = 0.926). The study delineates the capabilities and complementarity needs of foundation-model embeddings for slum monitoring."
+    },
+    {
+      "arxiv_id": "2605.14120v1",
+      "title": "Mini-JEPA Foundation Model Fleet Enables Agentic Hydrologic Intelligence",
+      "authors": [
+        "Mashrekur Rahman"
+      ],
+      "published": "2026-05-13T21:11:14Z",
+      "doi": null,
+      "summary": "Geospatial foundation models compress multispectral observations into dense embeddings increasingly used in natural-language environmental reasoning systems. A single planetary-scale model, e.g. Google AlphaEarth, handles broad characterization well but may compromise on specialized hydrologic signals. Such generalist models are also often inaccessible, expensive, and require large-scale compute. We propose Mini-JEPAs: a fleet of small sensor-specialized Joint Embedding Predictive Architecture (JEPA) foundation models consulted by a routing agent for specialized questions. We pretrained five 22M-parameter Mini-JEPAs sharing an identical Vision Transformer backbone, JEPA recipe, and 64-d output space, using Sentinel-2 optical, Sentinel-1 SAR, MODIS thermal, multi-temporal Sentinel-2 phenology, and a topography-soil stack. Each Mini-JEPA reconstructs the variable matched to its sensor, with cross-validated $R^2$ reaching 0.97 for elevation, 0.97 for temperature, and 0.81 for precipitation. The five manifolds differ in geometric structure, with global participation ratios from 8.9 to 20.2 and local intrinsic dimensionalities from 2.3 to 9.0. Joint topography-soil and phenology models add predictive value beyond AlphaEarth alone for soil moisture, aridity, and precipitation ($ΔR^2$ up to 0.031). A router LLM reads per-modality references and selects appropriate sensors with a perfect hit rate over a curated question set. In paired LLM-as-Judge evaluation, dual retrieval over AlphaEarth and the routed fleet outperforms AlphaEarth alone on physics-matched questions (Cohen's $d = 1.10$, $p = 0.031$). Locally-trained Mini-JEPAs can be operationalized for hydrologic intelligence with modest compute."
+    },
+    {
+      "arxiv_id": "2609.00661v1",
+      "title": "Do Satellites See Commuters? A Critical Benchmark of Vision Foundation Models",
+      "authors": [
+        "Ashiq Shukoor Iqbal",
+        "Wilson Wongso",
+        "Flora D. Salim"
+      ],
+      "published": "2026-09-01T03:39:26Z",
+      "doi": null,
+      "summary": "Satellite foundation models offer a globally available alternative to census data for commuting origin-destination (OD) generation, yet no study has systematically compared encoder paradigms within a single downstream pipeline. We ablate four satellite vision encoders: language-supervised (RemoteCLIP), self-supervised (DINOv3), and geographically grounded (SatCLIP, AlphaEarth) within an identical WeDAN graph diffusion framework across 1,925 US counties, 325 UK districts, and 14 global cities under five random seeds. Three main findings emerge. First, language-supervised features achieve the strongest in-distribution performance (RemoteCLIP CPC 0.602), while geographically grounded encoders transfer more reliably zero-shot: AlphaEarth improves CPC by 33% over RemoteCLIP on UK districts. Second, pretraining corpus scale alone is insufficient: DINOv3, trained on a substantially larger satellite corpus, underperforms RemoteCLIP by 0.091 CPC in-distribution and collapses to CPC 0.022 globally. Third, no encoder transfers usefully to global cities (best CPC 0.122 for RemoteCLIP, 0.022 for DINOv3), confirming cross-continental OD generation remains an open problem. We additionally clarify the semantics of the census noise parameter $η$, whose ordering reverses under cross-continental evaluation, a distinction critical to correctly interpreting prior results. Training scripts and evaluation logs will be released."
+    }
+  ]
+}

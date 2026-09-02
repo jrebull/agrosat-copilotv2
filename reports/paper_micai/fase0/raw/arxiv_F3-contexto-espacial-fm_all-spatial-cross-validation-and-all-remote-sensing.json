@@ -1,0 +1,98 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "arxiv",
+  "query": "all:\"spatial cross-validation\" AND all:\"remote sensing\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2511.11680v1",
+      "title": "Probabilistic Wildfire Susceptibility from Remote Sensing Using Random Forests and SHAP",
+      "authors": [
+        "Udaya Bhasker Cheerala",
+        "Varun Teja Chirukuri",
+        "Venkata Akhil Kumar Gummadi",
+        "Jintu Moni Bhuyan",
+        "Praveen Damacharla"
+      ],
+      "published": "2025-11-12T06:05:41Z",
+      "doi": null,
+      "summary": "Wildfires pose a significant global threat to ecosystems worldwide, with California experiencing recurring fires due to various factors, including climate, topographical features, vegetation patterns, and human activities. This study aims to develop a comprehensive wildfire risk map for California by applying the random forest (RF) algorithm, augmented with Explainable Artificial Intelligence (XAI) through Shapley Additive exPlanations (SHAP), to interpret model predictions. Model performance was assessed using both spatial and temporal validation strategies. The RF model demonstrated strong predictive performance, achieving near-perfect discrimination for grasslands (AUC = 0.996) and forests (AUC = 0.997). Spatial cross-validation revealed moderate transferability, yielding ROC-AUC values of 0.6155 for forests and 0.5416 for grasslands. In contrast, temporal split validation showed enhanced generalization, especially for forests (ROC-AUC = 0.6615, PR-AUC = 0.8423). SHAP-based XAI analysis identified key ecosystem-specific drivers: soil organic carbon, tree cover, and Normalized Difference Vegetation Index (NDVI) emerged as the most influential in forests, whereas Land Surface Temperature (LST), elevation, and vegetation health indices were dominant in grasslands. District-level classification revealed that Central Valley and Northern Buttes districts had the highest concentration of high-risk grasslands, while Northern Buttes and North Coast Redwoods dominated forested high-risk areas. This RF-SHAP framework offers a robust, comprehensible, and adaptable method for assessing wildfire risks, enabling informed decisions and creating targeted strategies to mitigate dangers."
+    },
+    {
+      "arxiv_id": "2505.00265v1",
+      "title": "Field-scale soil moisture estimated from Sentinel-1 SAR data using a knowledge-guided deep learning approach",
+      "authors": [
+        "Yi Yu",
+        "Patrick Filippi",
+        "Thomas F. A. Bishop"
+      ],
+      "published": "2025-05-01T03:12:25Z",
+      "doi": "10.1109/IGARSS55030.2025.11243730",
+      "summary": "Soil moisture (SM) estimation from active microwave data remains challenging due to the complex interactions between radar backscatter and surface characteristics. While the water cloud model (WCM) provides a semi-physical approach for understanding these interactions, its empirical component often limits performance across diverse agricultural landscapes. This research presents preliminary efforts for developing a knowledge-guided deep learning approach, which integrates WCM principles into a long short-term memory (LSTM) model, to estimate field SM using Sentinel-1 Synthetic Aperture Radar (SAR) data. Our proposed approach leverages LSTM's capacity to capture spatiotemporal dependencies while maintaining physical consistency through a modified dual-component loss function, including a WCM-based semi-physical component and a boundary condition regularisation. The proposed approach is built upon the soil backscatter coefficients isolated from the total backscatter, together with Landsat-resolution vegetation information and surface characteristics. A four-fold spatial cross-validation was performed against in-situ SM data to assess the model performance. Results showed the proposed approach reduced SM retrieval uncertainties by 0.02 m$^3$/m$^3$ and achieved correlation coefficients (R) of up to 0.64 in areas with varying vegetation cover and surface conditions, demonstrating the potential to address the over-simplification in WCM."
+    },
+    {
+      "arxiv_id": "1908.07805v1",
+      "title": "Importance of spatial predictor variable selection in machine learning applications -- Moving from data reproduction to spatial prediction",
+      "authors": [
+        "Hanna Meyer",
+        "Christoph Reudenbach",
+        "Stephan Wöllauer",
+        "Thomas Nauss"
+      ],
+      "published": "2019-08-21T11:47:38Z",
+      "doi": "10.1016/j.ecolmodel.2019.108815",
+      "summary": "Machine learning algorithms find frequent application in spatial prediction of biotic and abiotic environmental variables. However, the characteristics of spatial data, especially spatial autocorrelation, are widely ignored. We hypothesize that this is problematic and results in models that can reproduce training data but are unable to make spatial predictions beyond the locations of the training samples. We assume that not only spatial validation strategies but also spatial variable selection is essential for reliable spatial predictions. We introduce two case studies that use remote sensing to predict land cover and the leaf area index for the \"Marburg Open Forest\", an open research and education site of Marburg University, Germany. We use the machine learning algorithm Random Forests to train models using non-spatial and spatial cross-validation strategies to understand how spatial variable selection affects the predictions. Our findings confirm that spatial cross-validation is essential in preventing overoptimistic model performance. We further show that highly autocorrelated predictors (such as geolocation variables, e.g. latitude, longitude) can lead to considerable overfitting and result in models that can reproduce the training data but fail in making spatial predictions. The problem becomes apparent in the visual assessment of the spatial predictions that show clear artefacts that can be traced back to a misinterpretation of the spatially autocorrelated predictors by the algorithm. Spatial variable selection could automatically detect and remove such variables that lead to overfitting, resulting in reliable spatial prediction patterns and improved statistical spatial model performance. We conclude that in addition to spatial validation, a spatial variable selection must be considered in spatial predictions of ecological data to produce reliable predictions."
+    },
+    {
+      "arxiv_id": "2509.26171v1",
+      "title": "Neighbor-aware informal settlement mapping with graph convolutional networks",
+      "authors": [
+        "Thomas Hallopeau",
+        "Joris Guérin",
+        "Laurent Demagistri",
+        "Christovam Barcellos",
+        "Nadine Dessay"
+      ],
+      "published": "2025-09-30T12:25:25Z",
+      "doi": null,
+      "summary": "Mapping informal settlements is crucial for addressing challenges related to urban planning, public health, and infrastructure in rapidly growing cities. Geospatial machine learning has emerged as a key tool for detecting and mapping these areas from remote sensing data. However, existing approaches often treat spatial units independently, neglecting the relational structure of the urban fabric. We propose a graph-based framework that explicitly incorporates local geographical context into the classification process. Each spatial unit (cell) is embedded in a graph structure along with its adjacent neighbors, and a lightweight Graph Convolutional Network (GCN) is trained to classify whether the central cell belongs to an informal settlement. Experiments are conducted on a case study in Rio de Janeiro using spatial cross-validation across five distinct zones, ensuring robustness and generalizability across heterogeneous urban landscapes. Our method outperforms standard baselines, improving Kappa coefficient by 17 points over individual cell classification. We also show that graph-based modeling surpasses simple feature concatenation of neighboring cells, demonstrating the benefit of encoding spatial structure for urban scene understanding."
+    },
+    {
+      "arxiv_id": "2512.09576v1",
+      "title": "Seeing Soil from Space: Towards Robust and Scalable Remote Soil Nutrient Analysis",
+      "authors": [
+        "David Seu",
+        "Nicolas Longepe",
+        "Gabriel Cioltea",
+        "Erik Maidik",
+        "Calin Andrei"
+      ],
+      "published": "2025-12-10T12:08:55Z",
+      "doi": null,
+      "summary": "Environmental variables are increasingly affecting agricultural decision-making, yet accessible and scalable tools for soil assessment remain limited. This study presents a robust and scalable modeling system for estimating soil properties in croplands, including soil organic carbon (SOC), total nitrogen (N), available phosphorus (P), exchangeable potassium (K), and pH, using remote sensing data and environmental covariates. The system employs a hybrid modeling approach, combining the indirect methods of modeling soil through proxies and drivers with direct spectral modeling. We extend current approaches by using interpretable physics-informed covariates derived from radiative transfer models (RTMs) and complex, nonlinear embeddings from a foundation model. We validate the system on a harmonized dataset that covers Europes cropland soils across diverse pedoclimatic zones. Evaluation is conducted under a robust validation framework that enforces strict spatial blocking, stratified splits, and statistically distinct train-test sets, which deliberately make the evaluation harder and produce more realistic error estimates for unseen regions. The models achieved their highest accuracy for SOC and N. This performance held across unseen locations, under both spatial cross-validation and an independent test set. SOC obtained a MAE of 5.12 g/kg and a CCC of 0.77, and N obtained a MAE of 0.44 g/kg and a CCC of 0.77. We also assess uncertainty through conformal calibration, achieving 90 percent coverage at the target confidence level. This study contributes to the digital advancement of agriculture through the application of scalable, data-driven soil analysis frameworks that can be extended to related domains requiring quantitative soil evaluation, such as carbon markets."
+    },
+    {
+      "arxiv_id": "2603.17626v1",
+      "title": "A Multi-Agent System for Building-Age Cohort Mapping to Support Urban Energy Planning",
+      "authors": [
+        "Kundan Thota",
+        "Thorsten Schlachter",
+        "Veit Hagenmeyer"
+      ],
+      "published": "2026-03-18T11:46:54Z",
+      "doi": null,
+      "summary": "Determining the age distribution of the urban building stock is crucial for sustainable municipal heat planning and upgrade prioritization. However, existing approaches often rely on datasets gathered via sensors or remote sensing techniques, leaving inconsistencies and gaps in data. We present a multi-agent LLM system comprising three key agents, the Zensus agent, the OSM agent, and the Monument agent, that fuse data from heterogeneous sources. A data orchestrator and harmonizer geocodes and deduplicates building imprints. Using this fused ground truth, we introduce BuildingAgeCNN, a satellite-only classifier based on a ConvNeXt backbone augmented with a Feature Pyramid Network (FPN), CoordConv spatial channels, and Squeeze-and-Excitation (SE) blocks. Under spatial cross validation, BuildingAgeCNN attains an overall accuracy of 90.69% but a modest macro-F1 of 67.25%, reflecting strong class imbalance and persistent confusions between adjacent historical cohorts. To mitigate risk for planning applications, the address-to prediction pipeline includes calibrated confidence estimates and flags low-confidence cases for manual review. This multi-agent LLM system not only assists in gathering structured data but also helps energy demand planners optimize district-heating networks and target low-carbon sustainable energy systems."
+    },
+    {
+      "arxiv_id": "2111.08478v1",
+      "title": "Spatial machine-learning model diagnostics: a model-agnostic distance-based approach",
+      "authors": [
+        "Alexander Brenning"
+      ],
+      "published": "2021-11-13T01:50:36Z",
+      "doi": "10.1080/13658816.2022.2131789",
+      "summary": "While significant progress has been made towards explaining black-box machine-learning (ML) models, there is still a distinct lack of diagnostic tools that elucidate the spatial behaviour of ML models in terms of predictive skill and variable importance. This contribution proposes spatial prediction error profiles (SPEPs) and spatial variable importance profiles (SVIPs) as novel model-agnostic assessment and interpretation tools for spatial prediction models with a focus on prediction distance. Their suitability is demonstrated in two case studies representing a regionalization task in an environmental-science context, and a classification task from remotely-sensed land cover classification. In these case studies, the SPEPs and SVIPs of geostatistical methods, linear models, random forest, and hybrid algorithms show striking differences but also relevant similarities. Limitations of related cross-validation techniques are outlined, and the case is made that modelers should focus their model assessment and interpretation on the intended spatial prediction horizon. The range of autocorrelation, in contrast, is not a suitable criterion for defining spatial cross-validation test sets. The novel diagnostic tools enrich the toolkit of spatial data science, and may improve ML model interpretation, selection, and design."
+    }
+  ]
+}

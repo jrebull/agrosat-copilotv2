@@ -1,0 +1,369 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "openalex",
+  "query": "AlphaEarth Foundations embeddings evaluation",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W4415282371",
+      "title": "Machine Learning for Urban Air Quality Prediction Using Google AlphaEarth Foundations Satellite Embeddings: A Case Study of Quito, Ecuador",
+      "authors": [
+        "César Iván Álvarez",
+        "Carlos E. Vaca",
+        "Neptali Armando Echeverria Llumipanta"
+      ],
+      "year": 2025,
+      "doi": "10.3390/rs17203472",
+      "venue": "Remote Sensing",
+      "cited_by_count": 14
+    },
+    {
+      "openalex_id": "W4413300536",
+      "title": "Machine Learning for Urban Air Quality Prediction Using Google AlphaEarth Foundations Satellite Embeddings: A Case Study of Quito, Ecuador",
+      "authors": [
+        "César Iván Álvarez",
+        "Carlos E. Vaca",
+        "Neptali Armando Echeverria Llumipanta"
+      ],
+      "year": 2025,
+      "doi": "10.20944/preprints202508.1202.v1",
+      "venue": "Preprints.org",
+      "cited_by_count": 7
+    },
+    {
+      "openalex_id": "W4414365981",
+      "title": "Leveraging AlphaEarth Foundations Embeddings for High-Accuracy County-Scale Corn and Soybean Yield Estimation",
+      "authors": [
+        "Jichao Fang",
+        "Mingda Wu",
+        "Zhou Zhang",
+        "Wei Luo"
+      ],
+      "year": 2025,
+      "doi": "10.36227/techrxiv.175825526.60198358/v1",
+      "venue": "",
+      "cited_by_count": 5
+    },
+    {
+      "openalex_id": "W7141622182",
+      "title": "Harvesting AlphaEarth: Benchmarking the geospatial foundation model for agricultural downstream tasks",
+      "authors": [
+        "Yuchi Ma",
+        "Yawen Shen",
+        "Anu Swatantran",
+        "David B. Lobell"
+      ],
+      "year": 2026,
+      "doi": "10.1016/j.jag.2026.105258",
+      "venue": "International Journal of Applied Earth Observation and Geoinformation",
+      "cited_by_count": 5
+    },
+    {
+      "openalex_id": "W7124290634",
+      "title": "Streamlining Wetland Vegetation Mapping with AlphaEarth Embeddings: Comparable Accuracy to Traditional Methods with Cleaner Maps and Minimal Preprocessing",
+      "authors": [
+        "Shawn Ryan",
+        "Megan Powell",
+        "Joanne Ling",
+        "Li Wen"
+      ],
+      "year": 2026,
+      "doi": "10.3390/rs18020293",
+      "venue": "Remote Sensing",
+      "cited_by_count": 4
+    },
+    {
+      "openalex_id": "W7119541039",
+      "title": "On the foundations of Earth foundation models",
+      "authors": [
+        "Xiao Xiang Zhu",
+        "Zhitong Xiong",
+        "Yi Wang",
+        "Adam J. Stewart",
+        "Konrad Heidler",
+        "Yuanyuan Wang",
+        "Zhenghang Yuan",
+        "Thomas Dujardin",
+        "Qingsong Xu",
+        "Yilei Shi"
+      ],
+      "year": 2026,
+      "doi": "10.1038/s43247-025-03127-x",
+      "venue": "Communications Earth & Environment",
+      "cited_by_count": 18
+    },
+    {
+      "openalex_id": "W4416776366",
+      "title": "Evaluating AlphaEarth Foundation Embeddings for Pixel- and Object-Based Land Cover Classification in Google Earth Engine",
+      "authors": [
+        "Hayat Khan",
+        "Aftab Ahmad"
+      ],
+      "year": 2025,
+      "doi": "10.20944/preprints202511.2172.v1",
+      "venue": "Preprints.org",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W4415986637",
+      "title": "Estimating River Water Quality Indicators in South Korea Using AlphaEarth Embeddings",
+      "authors": [
+        "Young Jun Kim",
+        "Gibeom Nam",
+        "Eui-Ho Hwang"
+      ],
+      "year": 2025,
+      "doi": "10.7780/kjrs.2025.41.5.10",
+      "venue": "대한원격탐사학회지",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7118575070",
+      "title": "Spectral indices outperform AlphaEarth foundation embeddings for aboveground biomass estimation in tropical Andean Forests",
+      "authors": [
+        "Juan Camilo Rojas Lucero",
+        "Nicholas Kolarik",
+        "Jodi Brandt",
+        "Trevor Caughlin",
+        "Tatiana Solano"
+      ],
+      "year": 2026,
+      "doi": "10.31223/x58x7v",
+      "venue": "",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7203493621",
+      "title": "Evaluating AlphaEarth Foundations Embeddings for Wildfire Susceptibility Mapping",
+      "authors": [
+        "Yuan Zhuang",
+        "Sanaa Hobeichi",
+        "Peng Shi",
+        "Fei Huang"
+      ],
+      "year": 2026,
+      "doi": "10.48550/arxiv.2608.12663",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W4413417087",
+      "title": "Within- and cross-regional crop classification for cool climate upland agriculture using AlphaEarth.",
+      "authors": [
+        "Keach Murakami"
+      ],
+      "year": 2025,
+      "doi": "10.31220/agrirxiv.2025.00354",
+      "venue": "",
+      "cited_by_count": 2
+    },
+    {
+      "openalex_id": "W7123432572",
+      "title": "Boosting Algorithm: An Ensemble Learning Tool for Land Use Land Cover Classification Using Google Alpha Earth Foundations Satellite Embeddings",
+      "authors": [
+        "Saviour Mantey",
+        "Isaac Selasi Kojo Attipoe",
+        "Joel Kwabena Lawerteh"
+      ],
+      "year": 2026,
+      "doi": "10.4236/ars.2026.151001",
+      "venue": "Advances in Remote Sensing",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7166469931",
+      "title": "Evaluating Google AlphaEarth and Landsat 8/9 Multisource Data Using Random Forest, Rotation Forest, and Canonical Correlation Forest for Enhanced Land Cover Classification",
+      "authors": [
+        "Saviour Mantey",
+        "Isaac S.K. Attipoe",
+        "Toffick W. Mohammed"
+      ],
+      "year": 2026,
+      "doi": "10.55779/ng62650",
+      "venue": "Nova Geodesia",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7126232803",
+      "title": "Assessing the Utility of Satellite Embedding Features for Biomass Prediction in Subtropical Forests with Machine Learning",
+      "authors": [
+        "Chao Jin",
+        "Xiaodong Jiang",
+        "Lina Wen",
+        "呉 初平",
+        "Xia Xu",
+        "Jiejie Jiao"
+      ],
+      "year": 2026,
+      "doi": "10.3390/rs18030436",
+      "venue": "Remote Sensing",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7148681222",
+      "title": "Foundation‐Scale Satellite Embeddings Reframe Hydrological Generalization as a Representation Problem",
+      "authors": [
+        "Zhigang Ou",
+        "Yi Zheng"
+      ],
+      "year": 2026,
+      "doi": "10.1029/2025gl121604",
+      "venue": "Geophysical Research Letters",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7168146443",
+      "title": "Is sub-metre resolution necessary for cocoa mapping? A landscape-stratified evaluation of very high resolution imagery, decametric Earth Observation inputs, and operational products in Cote d'Ivoire",
+      "authors": [
+        "Kasimir Orlowski",
+        "Filip Sabo",
+        "Michele Meroni",
+        "Astrid Verhegghen",
+        "Mariana Belgiu",
+        "Felix Rembold"
+      ],
+      "year": 2026,
+      "doi": "10.48550/arxiv.2607.08945",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 2
+    },
+    {
+      "openalex_id": "W7140923759",
+      "title": "Code and Results for the GRL Paper \"Foundation-scale Satellite Embeddings Reframe Hydrological Generalization as a Representation Problem\"",
+      "authors": [
+        "Zhigang Ou"
+      ],
+      "year": 2026,
+      "doi": "10.5281/zenodo.19234398",
+      "venue": "Zenodo (CERN European Organization for Nuclear Research)",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7167888740",
+      "title": "Geospatial foundation models enable data-efficient tree species mapping in temperate mountain forests",
+      "authors": [
+        "James Ball",
+        "Jana Annika Wicklein",
+        "Zhengpeng Feng",
+        "Jovana Knezevic",
+        "Sadiq Jaffer",
+        "Anil Madhavapeddy",
+        "Clement Atzberger",
+        "Michele Dalponte",
+        "David A. Coomes"
+      ],
+      "year": 2026,
+      "doi": "10.1016/j.srs.2026.100466",
+      "venue": "Science of Remote Sensing",
+      "cited_by_count": 4
+    },
+    {
+      "openalex_id": "W7160605742",
+      "title": "Impact of Impervious Surface Expansion on Urban Thermal Environment Across Tropical Southeast Asian Megacities: Reliable Assessment Through Foundation Model Embeddings",
+      "authors": [
+        "Sitthisak Moukomla",
+        "Phurith Meeprom",
+        "Kritchayan Intarat"
+      ],
+      "year": 2026,
+      "doi": "10.3390/earth7030076",
+      "venue": "Earth",
+      "cited_by_count": 1
+    },
+    {
+      "openalex_id": "W7172426341",
+      "title": "Comparing AlphaEarth Foundations embeddings and satellite time-series for rice crop event prediction",
+      "authors": [
+        "James Brinkhoff",
+        "Sharon McGavin"
+      ],
+      "year": 2026,
+      "doi": "10.2139/ssrn.7228924",
+      "venue": "SSRN Electronic Journal",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W7172056683",
+      "title": "Fusion of AlphaEarth Embeddings and Sentinel-1 Time-Series for Conflict-Related Urban Damage Mapping",
+      "authors": [
+        "Jakub Slesinski",
+        "Kinga Karwowska",
+        "Magdalena Lewinska"
+      ],
+      "year": 2026,
+      "doi": "10.5194/isprs-archives-xlix-b3-2026-1331-2026",
+      "venue": "The international archives of the photogrammetry, remote sensing and spatial information sciences/International archives of the photogrammetry, remote sensing and spatial information sciences",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W7161127264",
+      "title": "AlphaEarth Foundations (AEF) in Earth Observation: A Systematic Review of Applications and Practices",
+      "authors": [
+        "Shuyang Hou",
+        "Haoyue Jiao",
+        "Ziqi Liu",
+        "Lutong Xie",
+        "Guanyu Chen",
+        "Shaowen Wu",
+        "Zhangyan Xu",
+        "Zengjie Wang",
+        "Shaoqing Tang",
+        "Yaxian Qing",
+        "Jianyuan Liang",
+        "Xuefeng Guan",
+        "Huayi Wu"
+      ],
+      "year": 2026,
+      "doi": "10.20944/preprints202605.0981.v1",
+      "venue": "Preprints.org",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W7161090191",
+      "title": "Slum Detection and Density Mapping with AlphaEarth Foundations: A Representation Learning Evaluation Across 12 Global Cities",
+      "authors": [
+        "Shuyang Hou",
+        "Ziqi Liu",
+        "Haoyue Jiao",
+        "Zhangyan Xu",
+        "Xiaopu Zhang",
+        "Lutong Xie",
+        "Yaxian Qing",
+        "Jianyuan Liang",
+        "Xuefeng Guan",
+        "Huayi Wua"
+      ],
+      "year": 2026,
+      "doi": "",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W7135200389",
+      "title": "Scalable Mapping of Urban Green Cooling Services Using AlphaEarth Foundations",
+      "authors": [
+        "Hanyu Li",
+        "Alby Duarte Rocha",
+        "Christine I.B. Wallis"
+      ],
+      "year": 2026,
+      "doi": "10.5194/egusphere-egu26-14736",
+      "venue": "",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W7161204501",
+      "title": "AlphaEarth Satellite Embeddings for Modelling Climate Sensitive Diseases Towards Global Health Resilience",
+      "authors": [
+        "Usman Nazir",
+        "I. K. P. Cheng",
+        "Sara Khalid"
+      ],
+      "year": 2026,
+      "doi": "",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 0
+    }
+  ]
+}

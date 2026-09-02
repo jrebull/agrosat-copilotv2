@@ -1,0 +1,426 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "arxiv",
+  "query": "all:\"geospatial foundation model\" AND all:\"embeddings\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2605.01650v1",
+      "title": "Geospatial foundation-model embeddings improve population estimation unevenly across space and scale",
+      "authors": [
+        "Wenbin Zhang",
+        "Eimear Cleary",
+        "Francisco Rowe",
+        "Somnath Chaudhuri",
+        "Maksym Bondarenko",
+        "Shengjie Lai",
+        "Andrew J. Tatem"
+      ],
+      "published": "2026-05-03T00:20:08Z",
+      "doi": null,
+      "summary": "Reliable subnational population estimates are essential for applications, yet remain difficult where censuses are sparse, outdated or spatially coarse. Existing population-mapping workflows rely on hand-built geospatial covariates, such as settlement extent, night-time lights, and environmental conditions, which must be assembled and harmonised across scales and geographies. Geospatial foundation models offer an alternative by learning reusable representations of place from more multifaceted and heterogeneous data sources. Here, we benchmark Population Dynamics Foundation Model (PDFM) embeddings against the harmonised geospatial covariates for subnational population estimation in Brazil, Nigeria and the United States. Under geographically structured validation, PDFM increased predictive fit by a median of 20.1% (IQR: 10.0-33.2%, across country-model comparisons) reduction in unexplained variance, and reduced Kullback-Leibler divergence by 23.2% (9.2-26.2%). However, these gains were uneven. PDFM was most advantageous where the geospatial covariates weakly characterised settlement context, such as larger and less-developed subnational areas. Moreover, PDFM performance was scale-coupled with embeddings providing less flexible transfer across spatial aggregations than geospatial covariates. These findings showed that geospatial foundation-model representations of place can improve population estimation in data poor settings, but their benefits break down predictably under spatial scale mismatch, revealing a fundamental limitation of current geospatial AI."
+    },
+    {
+      "arxiv_id": "2503.09493v2",
+      "title": "Parameter-Efficient Adaptation of Geospatial Foundation Models through Embedding Deflection",
+      "authors": [
+        "Romain Thoreau",
+        "Valerio Marsocci",
+        "Dawa Derksen"
+      ],
+      "published": "2025-03-12T15:53:58Z",
+      "doi": null,
+      "summary": "As large-scale heterogeneous data sets become increasingly available, adapting foundation models at low cost has become a key issue. Seminal works in natural language processing, e.g. Low-Rank Adaptation (LoRA), leverage the low \"intrinsic rank\" of parameter updates during adaptation. In this paper, we argue that incorporating stronger inductive biases in both data and models can enhance the adaptation of Geospatial Foundation Models (GFMs), pretrained on RGB satellite images, to other types of optical satellite data. Specifically, the pretrained parameters of GFMs serve as a strong prior for the spatial structure of multispectral images. For this reason, we introduce DEFLECT (Deflecting Embeddings for Finetuning Latent representations for Earth and Climate Tasks), a novel strategy for adapting GFMs to multispectral satellite imagery with very few additional parameters. DEFLECT improves the representation capabilities of the extracted features, particularly enhancing spectral information, which is essential for geoscience and environmental-related tasks. We demonstrate the effectiveness of our method across three different GFMs and five diverse datasets, ranging from forest monitoring to marine environment segmentation. Compared to competing methods, DEFLECT achieves on-par or higher accuracy with 5-10$\\times$ fewer parameters for classification and segmentation tasks. The code will be made publicly available."
+    },
+    {
+      "arxiv_id": "2601.00857v1",
+      "title": "Harvesting AlphaEarth: Benchmarking the Geospatial Foundation Model for Agricultural Downstream Tasks",
+      "authors": [
+        "Yuchi Ma",
+        "Yawen Shen",
+        "Anu Swatantran",
+        "David B. Lobell"
+      ],
+      "published": "2025-12-30T01:04:22Z",
+      "doi": "10.1016/j.jag.2026.105258",
+      "summary": "Geospatial foundation models (GFMs) have emerged as a promising approach to overcoming the limitations in existing featurization methods. More recently, Google DeepMind has introduced AlphaEarth Foundation (AEF), a GFM pre-trained using multi-source EOs across continuous time. An annual and global embedding dataset is produced using AEF that is ready for analysis and modeling. The internal experiments show that AEF embeddings have outperformed operational models in 15 EO tasks without re-training. However, those experiments are mostly about land cover and land use classification. Applying AEF and other GFMs to agricultural monitoring require an in-depth evaluation in critical agricultural downstream tasks. There is also a lack of comprehensive comparison between the AEF-based models and traditional remote sensing (RS)-based models under different scenarios, which could offer valuable guidance for researchers and practitioners. This study addresses some of these gaps by evaluating AEF embeddings in three agricultural downstream tasks in the U.S., including crop yield prediction, tillage mapping, and cover crop mapping. Datasets are compiled from both public and private sources to comprehensively evaluate AEF embeddings across tasks at different scales and locations, and RS-based models are trained as comparison models. AEF-based models generally exhibit strong performance on all tasks and are competitive with purpose-built RS-based models in yield prediction and county-level tillage mapping when trained on local data. However, we also find several limitations in current AEF embeddings, such as limited spatial transferability compared to RS-based models, low interpretability, and limited time sensitivity. These limitations recommend caution when applying AEF embeddings in agriculture, where time sensitivity, generalizability, and interpretability is important."
+    },
+    {
+      "arxiv_id": "2608.01751v1",
+      "title": "SPECTRA: Band-Routed Embedding and Stage-Wise LoRA for Cross-Sensor Fine-Tuning of Geospatial Foundation Models",
+      "authors": [
+        "Xingyan Li",
+        "Jordan A. Caraballo-Vega",
+        "Jie Gong",
+        "Mark L. Carroll",
+        "Jianwu Wang"
+      ],
+      "published": "2026-08-03T06:18:12Z",
+      "doi": null,
+      "summary": "Geospatial foundation models (GeoFMs), pretrained on large-scale geospatial data such as Earth observation (EO), climate, and weather data, have shown promising performance when fine-tuned on diverse downstream tasks. However, there are two challenges of adapting EO-pretrained GeoFMs to practical downstream datasets. The first challenge is how to handle spectral mismatch: pretrained patch embeddings expect a fixed set of input bands, whereas downstream sensors may provide different channels. The second challenge is how to reduce fine-tuning cost and make it efficient. While existing work has made efforts on these challenges individually, jointly improving fine-tuning performance under spectral mismatch while reducing adaptation cost remains underexplored. We propose SPECTRA, a parameter-efficient fine-tuning framework that addresses both spectral mismatch and adaptation cost. To handle spectral mismatch, SPECTRA introduces Band-Routed Embedding (BRE), which maps all available downstream bands into the band space expected by the pretrained GeoFM. By using BRE, all available bands in the downstream dataset are utilized to improve the selected-band input without changing the pretrained patch embedding interface. To reduce adaptation cost, SPECTRA further introduces a Stage-wise Transferability-aware LoRA (ST-LoRA) fine-tuning. ST-LoRA estimates stage-wise transferability before fine-tuning and assigns stage-specific LoRA ranks, concentrating trainable parameters on the stages with high transferability for the target task. Across three EO-pretrained GeoFMs and four downstream segmentation datasets, experiments show that BRE improves performance by utilizing all spectral bands, while ST-LoRA reduces trainable parameters compared with full fine-tuning and standard LoRA. Code is available at https://github.com/big-data-lab-umbc/SPECTRA."
+    },
+    {
+      "arxiv_id": "2403.02059v2",
+      "title": "Multi-Spectral Remote Sensing Image Retrieval Using Geospatial Foundation Models",
+      "authors": [
+        "Benedikt Blumenstiel",
+        "Viktoria Moor",
+        "Romeo Kienzler",
+        "Thomas Brunschwiler"
+      ],
+      "published": "2024-03-04T14:00:45Z",
+      "doi": null,
+      "summary": "Image retrieval enables an efficient search through vast amounts of satellite imagery and returns similar images to a query. Deep learning models can identify images across various semantic concepts without the need for annotations. This work proposes to use Geospatial Foundation Models, like Prithvi, for remote sensing image retrieval with multiple benefits: i) the models encode multi-spectral satellite data and ii) generalize without further fine-tuning. We introduce two datasets to the retrieval task and observe a strong performance: Prithvi processes six bands and achieves a mean Average Precision of 97.62% on BigEarthNet-43 and 44.51% on ForestNet-12, outperforming other RGB-based models. Further, we evaluate three compression methods with binarized embeddings balancing retrieval speed and accuracy. They match the retrieval speed of much shorter hash codes while maintaining the same accuracy as floating-point embeddings but with a 32-fold compression. The code is available at https://github.com/IBM/remote-sensing-image-retrieval."
+    },
+    {
+      "arxiv_id": "2608.17848v1",
+      "title": "MoRAX: Mobility-based Representation Augmentation for Geospatial Foundation Models",
+      "authors": [
+        "Ya Wen",
+        "Jixuan Cai",
+        "Yulun Zhou",
+        "Alec Kirkley"
+      ],
+      "published": "2026-08-18T14:44:41Z",
+      "doi": null,
+      "summary": "Geospatial Foundation Models (GFMs) are emerging as a powerful paradigm for learning semantically rich and geographically consistent visual and physical representations. However, their reliance on Earth-observation (EO) data leaves information about human activity largely underrepresented. Human mobility data reveals the functional and relational structure between regions that is missing from EO data, but is often limited only to the city where it is observed, making it challenging to use for transferable urban representation learning. We introduce MoRAX, a lightweight framework for augmenting geospatial embeddings with functional structure derived from human mobility. MoRAX preserves the coverage and consistency of a GFM while providing information about the functional connectivity among urban regions, permitting zero-shot deployment in unseen cities with or without available mobility data. Across four target cities spanning two countries, the MoRAX teacher model, which observes mobility, consistently outperforms GFMs and strong urban representation baselines in eight socioeconomic and environmental prediction tasks. Meanwhile, the student model, which never takes mobility data as input, approaches the teacher in performance on most tasks. Transfer results across countries further demonstrate that modulation conditioned on mobility flows provides a general mechanism for grounding geospatial foundations in the human dimension of cities."
+    },
+    {
+      "arxiv_id": "2510.09894v2",
+      "title": "Beyond AlphaEarth: Toward Human-Centered Geospatial Foundation Models via POI-Guided Contrastive Learning",
+      "authors": [
+        "Junyuan Liu",
+        "Quan Qin",
+        "Guangsheng Dong",
+        "Xinglei Wang",
+        "Jiazhuang Feng",
+        "Zichao Zeng",
+        "Tao Cheng"
+      ],
+      "published": "2025-10-10T22:20:39Z",
+      "doi": null,
+      "summary": "Recent geospatial foundation models (GFMs) produce spatially extensive representations of the Earth's surface that capture rich physical and environmental patterns. Among them, the AlphaEarth Foundation (AE) represents a major step, generating 10 m embeddings from multi-source Earth Observation (EO) data that include diverse environmental and spectral characteristics. However, such EO-driven representations primarily encode physical and spectral patterns rather than human activities or urban semantics, limiting their ability to capture the functional dimensions of cities and making the learned representations difficult to interpret or query using natural language. We introduce AETHER (AlphaEarth-POI Enriched Representation Learning), a lightweight framework that aligns AlphaEarth with human-centered urban analysis through multimodal alignment guided by Points of Interest (POIs). By enforcing both cross-modal AE-POI alignment and intra-modal multi-scale consistency, AETHER integrates functional urban semantics with EO-driven representations and grounds the embedding space in natural language. The resulting representations support both urban mapping tasks and natural language-conditioned spatial retrieval. Experiments across four downstream tasks in Greater London and Singapore demonstrate consistent state-of-the-art performance, with relative improvements ranging from 4.5% to 21.9%. Furthermore, the aligned embedding space enables spatial localization through natural language queries. By aligning EO-based foundation models with human-centered semantics, AETHER improves the interpretability of geospatial representations and advances geospatial representation learning toward human-centered, language-accessible geospatial foundation models."
+    },
+    {
+      "arxiv_id": "2608.04792v1",
+      "title": "Above-ground Biomass Estimation with Geospatial Foundation Models",
+      "authors": [
+        "Ghjulia Sialellia",
+        "Linus Scheibenreif",
+        "Jan Dirk Wegner",
+        "Konrad Schindler"
+      ],
+      "published": "2026-08-05T12:57:18Z",
+      "doi": null,
+      "summary": "Accurate estimation of Above-Ground Biomass (AGB) from satellite imagery is essential for the large-scale monitoring of carbon stocks, yet it remains a challenging regression task at global scale. Geospatial Foundation Models (GFMs) have recently emerged as a promising machine learning paradigm to derive general-purpose representations from Earth observation data, but their utility for quantitative regression tasks like biomass estimation remains largely unexplored, as most benchmarks emphasize classification and segmentation. Here, we present a comprehensive benchmark of GFMs for global-scale AGB estimation using the AGBD dataset, a machine learning-ready benchmark spanning diverse biomes and geographies. We distinguish two ways in which GFMs reach practitioners: (i) models distributed as weights to be run by the user, which we evaluate as frozen encoders within the PANGAEA benchmarking framework; and (ii) models distributed as ready-to-use, pre-computed embedding products, for which we evaluate AlphaEarth Foundations (AEF) and TESSERA. We compare 11 GFMs available on PANGAEA and both embedding products against a fully supervised state-of-the-art (SOTA) model, assess their geographical and temporal generalization abilities, as well as agreement with the ESA CCI biomass product on independent reference data. Our results show that GFMs run as frozen encoders substantially underperform with respect to the supervised SOTA model, whereas pre-computed embedding products prove highly effective. An MLP trained on AEF embeddings outperforms the supervised SOTA model trained on AGBD features, and the same SOTA model trained on AEF embeddings (optionally augmented with selected raw features) achieves the best overall result, while also generalizing better across space and time."
+    },
+    {
+      "arxiv_id": "2510.25954v1",
+      "title": "Application and Validation of Geospatial Foundation Model Data for the Prediction of Health Facility Programmatic Outputs -- A Case Study in Malawi",
+      "authors": [
+        "Lynn Metz",
+        "Rachel Haggard",
+        "Michael Moszczynski",
+        "Samer Asbah",
+        "Chris Mwase",
+        "Patricia Khomani",
+        "Tyler Smith",
+        "Hannah Cooper",
+        "Annie Mwale",
+        "Arbaaz Muslim",
+        "Gautam Prasad",
+        "Mimi Sun",
+        "Tomer Shekel",
+        "Joydeep Paul",
+        "Anna Carter",
+        "Shravya Shetty",
+        "Dylan Green"
+      ],
+      "published": "2025-10-29T20:53:07Z",
+      "doi": null,
+      "summary": "The reliability of routine health data in low and middle-income countries (LMICs) is often constrained by reporting delays and incomplete coverage, necessitating the exploration of novel data sources and analytics. Geospatial Foundation Models (GeoFMs) offer a promising avenue by synthesizing diverse spatial, temporal, and behavioral data into mathematical embeddings that can be efficiently used for downstream prediction tasks. This study evaluated the predictive performance of three GeoFM embedding sources - Google Population Dynamics Foundation Model (PDFM), Google AlphaEarth (derived from satellite imagery), and mobile phone call detail records (CDR) - for modeling 15 routine health programmatic outputs in Malawi, and compared their utility to traditional geospatial interpolation methods. We used XGBoost models on data from 552 health catchment areas (January 2021-May 2023), assessing performance with R2, and using an 80/20 training and test data split with 5-fold cross-validation used in training. While predictive performance was mixed, the embedding-based approaches improved upon baseline geostatistical methods in 13 of 15 (87%) indicators tested. A Multi-GeoFM model integrating all three embedding sources produced the most robust predictions, achieving average 5-fold cross validated R2 values for indicators like population density (0.63), new HIV cases (0.57), and child vaccinations (0.47) and test set R2 of 0.64, 0.68, and 0.55, respectively. Prediction was poor for prediction targets with low primary data availability, such as TB and malnutrition cases. These results demonstrate that GeoFM embeddings imbue a modest predictive improvement for select health and demographic outcomes in an LMIC context. We conclude that the integration of multiple GeoFM sources is an efficient and valuable tool for supplementing and strengthening constrained routine health information systems."
+    },
+    {
+      "arxiv_id": "2608.16614v1",
+      "title": "Beyond Accuracy: Assessing Calibration of Geospatial Foundation Models and Their Sensitivity to Distribution Shifts",
+      "authors": [
+        "Nils Lehmann",
+        "Jakob Gawlikowski",
+        "Burak Ekim",
+        "Isaac Corley",
+        "Xiao Xiang Zhu"
+      ],
+      "published": "2026-08-17T14:16:14Z",
+      "doi": null,
+      "summary": "Geospatial Foundation Models (GeoFMs) are most commonly ranked and selected by accuracy on standard benchmark conditions via averaged ranks. We show that this protocol is too narrow: the promised deployment in critical EO tasks requires further angles of analysis, mainly calibration, the agreement between a model's confidence and its correctness. Across 16 frozen encoders, four classification and five segmentation datasets, and two orthogonal stress axes, every encoder degrades as corruption intensifies, and the ranking changes as well. Across the four classification benchmarks, EO-pretrained and ImageNet-pretrained encoders are indistinguishable on clean accuracy and clean calibration, and EO pretraining provides no more stability under shift than ImageNet pretraining. Under shift the GeoFMs drift further into overconfidence than the ImageNet-pretrained encoders, at every grade and in every corruption family. A centered kernel alignment (CKA) analysis ties this to representational rigidity: EO-pretrained embeddings move less under corruption while losing just as much task information and remaining overconfident. We apply three commonly explored uncertainty quantification methods and find that temperature scaling and deep ensembles cannot counteract the degradation, while a Gaussian-process probe roughly halves ECE under severe cloud only by tripling it on clean data. In selective prediction experiments, we find that confidence-based abstention cannot defer around confidently wrong predictions, and advocate that benchmark rankings and evaluations should therefore operate across a multitude of conditions and metrics to more holistically evaluate model development progress and close the gap to real world deployment scenarios."
+    },
+    {
+      "arxiv_id": "2601.16900v1",
+      "title": "Embedding -based Crop Type Classification in the Groundnut Basin of Senegal",
+      "authors": [
+        "Madeline C. Lisaius",
+        "Srinivasan Keshav",
+        "Andrew Blake",
+        "Clement Atzberger"
+      ],
+      "published": "2026-01-23T17:05:40Z",
+      "doi": null,
+      "summary": "Crop type maps from satellite remote sensing are important tools for food security, local livelihood support and climate change mitigation in smallholder regions of the world, but most satellite-based methods are not well suited to smallholder conditions. To address this gap, we establish a four-part criteria for a useful embedding-based approach consisting of 1) performance, 2) plausibility, 3) transferability and 4) accessibility and evaluate geospatial foundation model (FM) embeddings -based approaches using TESSERA and AlphaEarth against current baseline methods for a region in the groundnut basin of Senegal. We find that the TESSERA -based approach to land cover and crop type mapping fulfills the selection criteria best, and in one temporal transfer example shows 28% higher accuracy compared to the next best method. These results indicate that TESSERA embeddings are an effective approach for crop type classification and mapping tasks in Senegal."
+    },
+    {
+      "arxiv_id": "2604.07490v1",
+      "title": "Enabling Intrinsic Reasoning over Dense Geospatial Embeddings with DFR-Gemma",
+      "authors": [
+        "Xuechen Zhang",
+        "Aviv Slobodkin",
+        "Joydeep Paul",
+        "Mandar Sharma",
+        "Samet Oymak",
+        "Shravya Shetty",
+        "Gautam Prasad"
+      ],
+      "published": "2026-04-08T18:31:38Z",
+      "doi": null,
+      "summary": "Representation learning for geospatial and spatio-temporal data plays a critical role in enabling general-purpose geospatial intelligence. Recent geospatial foundation models, such as the Population Dynamics Foundation Model (PDFM), encode complex population and mobility dynamics into compact embeddings. However, their integration with Large Language Models (LLMs) remains limited. Existing approaches to LLM integration treat these embeddings as retrieval indices or convert them into textual descriptions for reasoning, introducing redundancy, token inefficiency, and numerical inaccuracies. We propose Direct Feature Reasoning-Gemma (DFR-Gemma), a novel framework that enables LLMs to reason directly over dense geospatial embeddings. DFR aligns high-dimensional embeddings with the latent space of an LLM via a lightweight projector, allowing embeddings to be injected as semantic tokens alongside natural language instructions. This design eliminates the need for intermediate textual representations and enables intrinsic reasoning over spatial features. To evaluate this paradigm, we introduce a multi-task geospatial benchmark that pairs embeddings with diverse question-answer tasks, including feature querying, comparison, and semantic description. Experimental results show that DFR allows LLMs to decode latent spatial patterns and perform accurate zero-shot reasoning across tasks, while significantly improving efficiency compared to text-based baselines. Our results demonstrate that treating embeddings as primary data inputs, provides a more direct, efficient, and scalable approach to multimodal geospatial intelligence."
+    },
+    {
+      "arxiv_id": "2605.08113v1",
+      "title": "Do Foundation Model Embeddings Improve Cross-Country Crop Yield Generalisation? A Leave-One-Country-Out Evaluation in Sub-Saharan Africa",
+      "authors": [
+        "Yaw Osei Adjei"
+      ],
+      "published": "2026-04-27T22:03:20Z",
+      "doi": null,
+      "summary": "Accurate predictions of smallholder maize yields across national boundaries are critical for food security planning in sub-Saharan Africa, yet most published benchmarks report within-country performance that overstates true generalisability. This paper evaluates whether geospatial foundation model embeddings, specifically Prithvi-EO-1.0-100M and ViT-Base, outperform traditional Sentinel-2 spectral features under a Leave-One-Country-Out cross-validation scheme on 6,404 maize field observations from five African countries. The results show a clear generalisability gap: within-country random cross-validation yields moderate R^2 values, but all feature sets perform poorly under cross-country testing, with universally negative R^2. Frozen Prithvi-EO embeddings provide no meaningful advantage over engineered spectral features for cross-country prediction in this setting. The paper argues that the main limitation is a shift in yield distribution between countries rather than representation quality and releases a reproducible negative benchmark for future work."
+    },
+    {
+      "arxiv_id": "2604.03456v1",
+      "title": "Earth Embeddings Reveal Diverse Urban Signals from Space",
+      "authors": [
+        "Wenjing Gong",
+        "Udbhav Srivastava",
+        "Yuchen Wang",
+        "Yuhao Jia",
+        "Qifan Wu",
+        "Weishan Bai",
+        "Yifan Yang",
+        "Xiao Huang",
+        "Xinyue Ye"
+      ],
+      "published": "2026-04-03T20:58:37Z",
+      "doi": null,
+      "summary": "Conventional urban indicators derived from censuses, surveys, and administrative records are often costly, spatially inconsistent, and slow to update. Recent geospatial foundation models enable Earth embeddings, compact satellite image representations transferable across downstream tasks, but their utility for neighborhood-scale urban monitoring remains unclear. Here, we benchmark three Earth embedding families, AlphaEarth, Prithvi, and Clay, for urban signal prediction across six U.S. metropolitan areas from 2020 to 2023. Using a unified supervised-learning framework, we predict 14 neighborhood-level indicators spanning crime, income, health, and travel behavior, and evaluate performance under four settings: global, city-wise, year-wise, and city-year. Results show that Earth embeddings capture substantial urban variation, with the highest predictive skill for outcomes more directly tied to built-environment structure, including chronic health burdens and dominant commuting modes. By contrast, indicators shaped more strongly by fine-scale behavior and local policy, such as cycling, remain difficult to infer. Predictive performance varies markedly across cities but remains comparatively stable across years, indicating strong spatial heterogeneity alongside temporal robustness. Exploratory analysis suggests that cross-city variation in predictive performance is associated with urban form in task-specific ways. Controlled dimensionality experiments show that representation efficiency is critical: compact 64-dimensional AlphaEarth embeddings remain more informative than 64-dimensional reductions of Prithvi and Clay. This study establishes a benchmark for evaluating Earth embeddings in urban remote sensing and demonstrates their potential as scalable, low-cost features for SDG-aligned neighborhood-scale urban monitoring."
+    },
+    {
+      "arxiv_id": "2603.10658v2",
+      "title": "How to Embed Matters: Evaluation of EO Embedding Design Choices",
+      "authors": [
+        "Luis Gilch",
+        "Isabelle Wittmann",
+        "Maximilian Nitsche",
+        "Johannes Jakubik",
+        "Arne Ewald",
+        "Thomas Brunschwiler"
+      ],
+      "published": "2026-03-11T11:16:42Z",
+      "doi": null,
+      "summary": "Earth observation (EO) missions produce petabytes of multispectral imagery, increasingly analyzed using large Geospatial Foundation Models (GeoFMs). Alongside end-to-end adaptation, workflows make growing use of intermediate representations as task-agnostic embeddings, enabling models to compute representations once and reuse them across downstream tasks. Consequently, when GeoFMs act as feature extractors, decisions about how representations are obtained, aggregated, and combined affect downstream performance and pipeline scalability. Understanding these trade-offs is essential for scalable embedding-based EO workflows, where compact embeddings can replace raw data while remaining broadly useful. We present a systematic analysis of embedding design in GeoFM-based EO workflows. Leveraging NeuCo-Bench, we study how backbone architecture, pretraining strategy, representation depth, spatial aggregation, and representation combination influence EO task performance. We demonstrate the usability of GeoFM embeddings by aggregating them into fixed-size representations more than 500x smaller than the raw input data. Across models, we find consistent trends: transformer backbones with mean pooling provide strong default embeddings, intermediate ResNet layers can outperform final layers, self-supervised objectives exhibit task-specific strengths, and combining embeddings from different objectives often improves robustness."
+    },
+    {
+      "arxiv_id": "2608.29553v1",
+      "title": "BEACON: Behavioral and Semantic Enrichment of AlphaEarth Embeddings through Tri-Modal Contrastive Learning",
+      "authors": [
+        "Hao Tian",
+        "Heng Cai",
+        "Yifan Yang"
+      ],
+      "published": "2026-08-30T04:46:23Z",
+      "doi": "10.1145/3841645.3843383",
+      "summary": "Geospatial foundation models such as the AlphaEarth Foundation produce compact and globally consistent representations of the Earth's surface that transfer effectively to a wide range of downstream tasks. However, because these models are trained primarily on Earth-observation imagery, their embeddings mainly capture physical and spectral characteristics while encoding human activity and urban function only weakly. To address this limitation, we propose BEACON, a tri-modal contrastive learning framework that aligns three complementary views of urban space: physical representations from AE embeddings, semantic representations from point-of-interest (POI) text, and human behavioral representations from hourly POI visitation, while keeping the deployed representation image-only. Using the Houston Metropolitan Area as a case study area, we evaluated the performance of the BEACON framework on nine downstream tasks, including seven regression and two classification tasks against six baselines (raw coordinates, Space2Vec, SatCLIP, TESSERA, Clay and AlphaEarth), using frozen linear and MLP probes over five seeds. Under a linear probe, BEACON improves relative R^2 over AlphaEarth by up to 43% for obesity prevalence, 34% for poor mental health, and 22% for median household income, while remaining competitive in the prediction of physical and environmental variables. These findings highlight the value of augmenting geospatial foundation models with semantic and behavioral signals, extending their applicability from physical Earth observation to human-centered urban analytics."
+    },
+    {
+      "arxiv_id": "2601.13134v2",
+      "title": "Earth Embeddings as Products: Taxonomy, Ecosystem, and Standardized Access",
+      "authors": [
+        "Heng Fang",
+        "Adam J. Stewart",
+        "Isaac Corley",
+        "Xiao Xiang Zhu",
+        "Hossein Azizpour"
+      ],
+      "published": "2026-01-19T15:20:18Z",
+      "doi": null,
+      "summary": "Geospatial Foundation Models (GFMs) provide powerful representations, but high compute costs hinder their widespread use. Pre-computed embedding data products offer a practical \"frozen\" alternative, yet they currently exist in a fragmented ecosystem of incompatible formats and resolutions. This lack of standardization creates an engineering bottleneck that prevents meaningful model comparison and reproducibility. We formalize this landscape through a three-layer taxonomy: Data, Tools, and Value. We survey existing products to identify interoperability barriers. To bridge this gap, we extend TorchGeo with a unified API that standardizes the loading and querying of diverse embedding products. By treating embeddings as first-class geospatial datasets, we decouple downstream analysis from model-specific engineering, providing a roadmap for more transparent and accessible Earth observation workflows."
+    },
+    {
+      "arxiv_id": "2604.19591v2",
+      "title": "Structure-Semantic Decoupled Modulation of Global Geospatial Embeddings for High-Resolution Remote Sensing Mapping",
+      "authors": [
+        "Jienan Lyu",
+        "Miao Yang",
+        "Jinchen Cai",
+        "Yiwen Hu",
+        "Guanyi Lu",
+        "Junhao Qiu",
+        "Runmin Dong"
+      ],
+      "published": "2026-04-21T15:42:34Z",
+      "doi": null,
+      "summary": "Fine-grained high-resolution remote sensing mapping typically relies on localized visual features, which restricts cross-domain generalizability and often leads to fragmented predictions of large-scale land covers. While global geospatial foundation models offer powerful, generalizable representations, directly fusing their high-dimensional implicit embeddings with high-resolution visual features frequently triggers feature interference and spatial structure degradation due to a severe semantic-spatial gap. To overcome these limitations, we propose a Structure-Semantic Decoupled Modulation (SSDM) framework, which decouples global geospatial representations into two complementary cross-modal injection pathways. First, the structural prior modulation branch introduces the macroscopic receptive field priors from global representations into the self-attention modules of the high-resolution encoder. By guiding local feature extraction with holistic structural constraints, it effectively suppresses prediction fragmentation caused by high-frequency detail noise and excessive intra-class variance. Second, the global semantic injection branch explicitly aligns holistic context with the deep high-resolution feature space and directly supplements global semantics via cross-modal integration, thereby significantly enhancing the semantic consistency and category-level discrimination of complex land covers. Extensive experiments demonstrate that our method achieves state-of-the-art performance compared to existing cross-modal fusion approaches. By unleashing the potential of global embeddings, SSDM consistently improves high-resolution mapping accuracy across diverse scenarios, providing a universal and effective paradigm for integrating geospatial foundation models into high-resolution vision tasks."
+    },
+    {
+      "arxiv_id": "2603.02080v2",
+      "title": "From Pixels to Patches: Pooling Strategies for Earth Embeddings",
+      "authors": [
+        "Isaac Corley",
+        "Caleb Robinson",
+        "Inbal Becker-Reshef",
+        "Juan M. Lavista Ferres"
+      ],
+      "published": "2026-03-02T17:03:37Z",
+      "doi": null,
+      "summary": "Geospatial foundation models increasingly expose pixel-level embedding products that can be downloaded and reused without access to the underlying encoder. In this setting, downstream tasks with patch- or region-level labels require a post-hoc aggregation step that maps dense pixel embeddings to a single representation. The default choice, mean pooling, discards within-patch variability and can underperform under spatial distribution shift. To study this setting, we introduce EuroSAT-Embed: 81,000 embedding GeoTIFFs derived from three foundation models: AlphaEarth, OlmoEarth, and Tessera. Using these fixed embedding products, we benchmark 11 training-free pooling methods and 2 train-set-fitted baselines under both random and geographically disjoint test splits. Richer pooling schemes reduce the geographic generalization gap by over 50% relative to mean pooling and improve accuracy by up to 6% on spatial splits. We recommend a three-tier strategy: (1) mean as a baseline, (2) stats pooling (min/max/mean/std) as the default at 4x the embedding dimension, and (3) covariance pooling for peak accuracy. Across all three embedding products, simple distributional statistics improve spatial-split performance over mean pooling."
+    },
+    {
+      "arxiv_id": "2601.21149v3",
+      "title": "Mobility-Embedded POIs: Learning What A Place Is and How It Is Used from Human Movement",
+      "authors": [
+        "Maria Despoina Siampou",
+        "Shushman Choudhury",
+        "Shang-Ling Hsu",
+        "Neha Arora",
+        "Cyrus Shahabi"
+      ],
+      "published": "2026-01-29T01:12:35Z",
+      "doi": null,
+      "summary": "Recent progress in geospatial foundation models highlights the importance of learning general-purpose representations for real-world locations, particularly points-of-interest (POIs) where human activity concentrates. Existing approaches, however, focus primarily on place identity derived from static textual metadata, or learn representations tied to trajectory context, which capture movement regularities rather than how places are actually used (i.e., POI's function). We argue that POI function is a missing but essential signal for general POI representations. We introduce Mobility-Embedded POIs (ME-POIs), a framework that augments POI embeddings derived, from language models with large-scale human mobility data to learn POI-centric, context-independent representations grounded in real-world usage. ME-POIs encodes individual visits as temporally contextualized embeddings and aligns them with learnable POI representations via contrastive learning to capture usage patterns across users and time. To address long-tail sparsity, we propose a novel mechanism that propagates temporal visit patterns from nearby, frequently visited POIs across multiple spatial scales. We evaluate ME-POIs on five newly proposed map enrichment tasks, testing its ability to capture both the identity and function of POIs. Across all tasks, augmenting text-based embeddings with ME-POIs consistently outperforms both text-only and mobility-only baselines. Notably, ME-POIs trained on mobility data alone can surpass text-only models on certain tasks, highlighting that POI function is a critical component of accurate and generalizable POI representations."
+    },
+    {
+      "arxiv_id": "2607.23908v2",
+      "title": "Embeddings based Anomaly Detection for Cleaning Global Crop Type Reference Datasets",
+      "authors": [
+        "Syed Roshaan Ali Shah",
+        "Kristof Van Tricht",
+        "Christina Butsko",
+        "Jeroen Degerickx",
+        "Zoltan Szantoi"
+      ],
+      "published": "2026-07-27T00:52:52Z",
+      "doi": null,
+      "summary": "High quality reference data remain a critical bottleneck for crop-type mapping at any spatial and temporal scale. Operational systems such as WorldCereal aggregate labels from heterogeneous sources such as parcel registers, national databases, field surveys, and map-derived products, each with their own biases, coverage gaps and unknown label noise. Simple global rules are inadequate, since crop phenology and observation conditions vary strongly across regions and seasons. In this study, we focus on a single, operationally relevant question: whether embeddings produced through geospatial foundation models are a viable basis for cleaning the reference data. We propose a practical, locality-aware, embedding-based anomaly (EBA) detection framework that operates on the embeddings of a pretrained Earth-observation encoder. We score each labelled sample against other samples of the same crop in the same area using a pretrained embedding, flag the ones that stand out, and test whether removing or down-weighting them before training yields a better model. We establish that the flagged points are genuinely mislabelled or misplaced in two independent ways: against synthetic ground truth, the detector concentrates injected label errors 2.5-5x above chance in its flagged set (detection AUROC up to 0.84); and on real data, a model-independent test shows that removing or confidence-weighting the flagged held-out points raises measured accuracy in trained models, for both crop type and land cover. Acting on the flags then improves the WorldCereal crop-type model across five macro-regions, evaluated on a fixed held-out split under three views. We find conservative cleaning helps while over-cleaning hurts. The EBA detector approach is designed to be reproducible and extensible, and can serve as a template for cleaning large, noisy Earth observation reference datasets beyond crop mapping."
+    },
+    {
+      "arxiv_id": "2608.26088v1",
+      "title": "Planetary Prediction Engine: Autonomous Geospatial Prediction via Intelligent Data Selection and Foundation Model Embeddings",
+      "authors": [
+        "Evelyn Ma",
+        "Rama Kumar Pasumarthi",
+        "Kishwar Shafin",
+        "Mandar Sharma",
+        "Mimi Sun",
+        "Hamed Sadeghi",
+        "Dav M. Ebengo",
+        "Mbulayi Onesime",
+        "Rouslan Solomakhin",
+        "John Wamburu",
+        "William Ogallo",
+        "Aisha Walcott-Bryant",
+        "Sanxing Chen",
+        "Arbaaz Muslim",
+        "Yael Mayer",
+        "Ronald Ho",
+        "Roy Lee",
+        "Ruth Alcantara",
+        "Abdoulaye Diack",
+        "Monica Bharel",
+        "Lambert Rosique",
+        "Jeremy Amez-Droz",
+        "Christopher Haire",
+        "James Manyika",
+        "Yossi Matias",
+        "Niv Efron",
+        "Gautam Prasad",
+        "Shravya Shetty"
+      ],
+      "published": "2026-08-26T17:50:52Z",
+      "doi": null,
+      "summary": "Addressing critical global challenges, from food security and disaster risk to disease outbreaks and socio-economic vulnerability, demands high-fidelity geospatial modeling. However, building predictive planetary models remains bottlenecked by a fragmented data ecosystem, requiring manual data retrieval, multimodal data curation and fusion along with iterative model selection. We present the Planetary Prediction Engine (PPE), an autonomous AI system that executes this end-to-end workflow directly from natural-language queries. PPE synthesizes multimodal datasets on the fly, retrieving spatiotemporally relevant covariates across open-web and Earth observation platforms (Data Commons, Google Earth Engine) and fusing them with geospatial foundation model embeddings (PDFM, AlphaEarth). Simultaneously, it searches over task-tailored model architecture families with automated overfitting guards. Across diverse tasks, geographies, and scientific domains, PPE consistently outperforms state-of-the-art or manually tuned expert baselines. For US spatial regression, PPE improves mean $R^2$ across 21 CDC health indicators (76.8% vs. 60.0%), FEMA national risk indices (64.9% vs. 60.0%), and the Social Vulnerability Index (66.2% vs. 58.6%). For spatial downscaling in data-scarce settings, PPE integrates localized proxies to double baseline accuracy in Nigerian food security indicators ($R^2$ of 66.1% vs. 31.5%). For epidemiological nowcasting of the 2026 DRC Bundibugyo Ebola outbreak, PPE achieves a Recall@10 of 83.3% (identifying 15 of 18 newly invaded health zones across five weekly forecasts), a +10.3 percentage-point improvement over the public state-of-the-art modeling (~73%). By combining autonomous multimodal planetary data discovery with targeted model optimization, PPE lowers the technical barrier to planetary-scale analytics, enabling rapid, customized, expert-level deployment."
+    },
+    {
+      "arxiv_id": "2602.19608v1",
+      "title": "Satellite-Based Detection of Looted Archaeological Sites Using Machine Learning",
+      "authors": [
+        "Girmaw Abebe Tadesse",
+        "Titien Bartette",
+        "Andrew Hassanali",
+        "Allen Kim",
+        "Jonathan Chemla",
+        "Andrew Zolli",
+        "Yves Ubelmann",
+        "Caleb Robinson",
+        "Inbal Becker-Reshef",
+        "Juan Lavista Ferres"
+      ],
+      "published": "2026-02-23T08:50:07Z",
+      "doi": null,
+      "summary": "Looting at archaeological sites poses a severe risk to cultural heritage, yet monitoring thousands of remote locations remains operationally difficult. We present a scalable and satellite-based pipeline to detect looted archaeological sites, using PlanetScope monthly mosaics (4.7m/pixel) and a curated dataset of 1,943 archaeological sites in Afghanistan (898 looted, 1,045 preserved) with multi-year imagery (2016--2023) and site-footprint masks. We compare (i) end-to-end CNN classifiers trained on raw RGB patches and (ii) traditional machine learning (ML) trained on handcrafted spectral/texture features and embeddings from recent remote-sensing foundation models. Results indicate that ImageNet-pretrained CNNs combined with spatial masking reach an F1 score of 0.926, clearly surpassing the strongest traditional ML setup, which attains an F1 score of 0.710 using SatCLIP-V+RF+Mean, i.e., location and vision embeddings fed into a Random Forest with mean-based temporal aggregation. Ablation studies demonstrate that ImageNet pretraining (even in the presence of domain shift) and spatial masking enhance performance. In contrast, geospatial foundation model embeddings perform competitively with handcrafted features, suggesting that looting signatures are extremely localized. The repository is available at https://github.com/microsoft/looted_site_detection."
+    },
+    {
+      "arxiv_id": "2412.02732v3",
+      "title": "Prithvi-EO-2.0: A Versatile Multi-Temporal Foundation Model for Earth Observation Applications",
+      "authors": [
+        "Daniela Szwarcman",
+        "Sujit Roy",
+        "Paolo Fraccaro",
+        "Þorsteinn Elí Gíslason",
+        "Benedikt Blumenstiel",
+        "Rinki Ghosal",
+        "Pedro Henrique de Oliveira",
+        "Joao Lucas de Sousa Almeida",
+        "Rocco Sedona",
+        "Yanghui Kang",
+        "Srija Chakraborty",
+        "Sizhe Wang",
+        "Carlos Gomes",
+        "Ankur Kumar",
+        "Myscon Truong",
+        "Denys Godwin",
+        "Hyunho Lee",
+        "Chia-Yu Hsu",
+        "Rohit Lal",
+        "Ata Akbari Asanjan",
+        "Besart Mujeci",
+        "Disha Shidham",
+        "Trevor Keenan",
+        "Paulo Arevalo",
+        "Wenwen Li",
+        "Hamed Alemohammad",
+        "Pontus Olofsson",
+        "Christopher Hain",
+        "Robert Kennedy",
+        "Bianca Zadrozny",
+        "David Bell",
+        "Gabriele Cavallaro",
+        "Campbell Watson",
+        "Manil Maskey",
+        "Rahul Ramachandran",
+        "Juan Bernabe Moreno"
+      ],
+      "published": "2024-12-03T17:59:50Z",
+      "doi": null,
+      "summary": "This paper presents Prithvi-EO-2.0, a new geospatial foundation model that offers significant improvements over its predecessor, Prithvi-EO-1.0. Trained on 4.2 million global time series samples from NASA's Harmonized Landsat and Sentinel-2 data archive at 30-m resolution, the new model incorporates temporal and location embeddings for enhanced performance across various geospatial tasks. Through extensive benchmarking with GEO-Bench, the model outperforms the previous Prithvi-EO model by 8% across a range of tasks. It also outperforms six other geospatial foundation models when benchmarked on remote sensing tasks from different domains and resolutions (i.e. from 0.1 m to 15 m). The results demonstrate the versatility of the model in both classical Earth observation and high-resolution applications. Early involvement of end-users and subject matter experts (SMEs) allowed constant feedback on model and dataset design, enabling customization across diverse SME-led applications in disaster response, land cover and crop mapping, and ecosystem dynamics monitoring. Prithvi-EO-2.0 is available as an open-source model on Hugging Face and IBM TerraTorch, with additional resources on GitHub. The project exemplifies the Trusted Open Science approach embraced by all involved organizations."
+    },
+    {
+      "arxiv_id": "2601.16834v3",
+      "title": "Interpolation of GEDI Biomass Estimates with Calibrated Uncertainty Quantification",
+      "authors": [
+        "Robin Young",
+        "Srinivasan Keshav"
+      ],
+      "published": "2026-01-23T15:35:33Z",
+      "doi": null,
+      "summary": "Reliable wall-to-wall biomass density estimation from NASA's GEDI mission requires interpolating sparse LIDAR observations across heterogeneous landscapes. While machine learning approaches like Random Forest and XGBoost are widely used, they treat spatial predictions of GEDI observations from multispectral or SAR remote sensing data as independent without adapting to the varying difficulty of heterogeneous landscapes. We demonstrate these approaches generally fail to produce calibrated prediction intervals. We show that this stems from conflating ensemble variance with aleatoric uncertainty and ignoring local spatial context. To resolve this, we introduce Attentive Neural Processes (ANPs), a probabilistic meta-learning architecture that explicitly conditions predictions on local observation sets and exploits geospatial foundation model embeddings. Unlike static ensembles, ANPs learn a flexible spatial covariance function, allowing estimates to be more uncertain in complex landscapes and less in homogeneous areas. We validate this approach across five distinct biomes ranging from tropical Amazonian forests to boreal, temperate, and alpine ecosystems, demonstrating that ANPs achieve competitive accuracy while maintaining near-ideal uncertainty calibration. We demonstrate the operational utility of the method through few-shot adaptation, where the model recovers most of the performance gap in cross-region transfer using minimal local data. This work provides a scalable, theoretically rigorous alternative to ensemble variance for continental scale earth observation."
+    }
+  ]
+}

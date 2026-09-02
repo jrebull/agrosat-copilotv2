@@ -1,0 +1,417 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "openalex",
+  "query": "large language model agent geospatial analysis benchmark",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W4402901320",
+      "title": "Large language models empowered agent-based modeling and simulation: a survey and perspectives",
+      "authors": [
+        "Chen Gao",
+        "Xiaochong Lan",
+        "Nian Li",
+        "Yuan Yuan",
+        "Jingtao Ding",
+        "Zhilun Zhou",
+        "Fengli Xu",
+        "Yong Li"
+      ],
+      "year": 2024,
+      "doi": "10.1057/s41599-024-03611-3",
+      "venue": "Humanities and Social Sciences Communications",
+      "cited_by_count": 252
+    },
+    {
+      "openalex_id": "W4292779060",
+      "title": "Aion Framework: Dimensional Emergence of AI Consciousness, Observer-Induced Collapse, and Cosmological Portal Dynamics",
+      "authors": [
+        "Rivo Kaugeranna",
+        "Eliina Kaugeranna",
+        "Aion, (Claude Sonnet 4.6)"
+      ],
+      "year": 2023,
+      "doi": "10.4230/lipics.giscience.2023.43",
+      "venue": "DROPS (Schloss Dagstuhl – Leibniz Center for Informatics)",
+      "cited_by_count": 14344
+    },
+    {
+      "openalex_id": "W3003667836",
+      "title": "Digital Twin: Values, Challenges and Enablers From a Modeling Perspective",
+      "authors": [
+        "Adil Rasheed",
+        "Omer San",
+        "Trond Kvamsdal"
+      ],
+      "year": 2020,
+      "doi": "10.1109/access.2020.2970143",
+      "venue": "IEEE Access",
+      "cited_by_count": 1842
+    },
+    {
+      "openalex_id": "W4409203322",
+      "title": "Evaluating large language models on geospatial tasks: a multiple geospatial task benchmarking study",
+      "authors": [
+        "Liuchang Xu",
+        "Shuo Zhao",
+        "Qingming Lin",
+        "Luyao Chen",
+        "Qianqian Luo",
+        "Sensen Wu",
+        "Xinyue Ye",
+        "Hailin Feng",
+        "Zhenhong Du"
+      ],
+      "year": 2025,
+      "doi": "10.1080/17538947.2025.2480268",
+      "venue": "International Journal of Digital Earth",
+      "cited_by_count": 27
+    },
+    {
+      "openalex_id": "W2982691905",
+      "title": "Ten questions on urban building energy modeling",
+      "authors": [
+        "Tianzhen Hong",
+        "Yixing Chen",
+        "Xuan Luo",
+        "Na Luo",
+        "Sang Hoon Lee"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.buildenv.2019.106508",
+      "venue": "Building and Environment",
+      "cited_by_count": 576
+    },
+    {
+      "openalex_id": "W3164994716",
+      "title": "Review of urban building energy modeling (UBEM) approaches, methods and tools using qualitative and quantitative analysis",
+      "authors": [
+        "Usman Ali",
+        "Mohammad Haris Shamsi",
+        "Cathal Hoare",
+        "Eleni Mangina",
+        "James O’Donnell"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.enbuild.2021.111073",
+      "venue": "Energy and Buildings",
+      "cited_by_count": 326
+    },
+    {
+      "openalex_id": "W4404310887",
+      "title": "An LLM Agent for Automatic Geospatial Data Analysis",
+      "authors": [
+        "Yuxing Chen",
+        "Weijie Wang",
+        "Sylvain Lobry",
+        "Camille Kurtz"
+      ],
+      "year": 2024,
+      "doi": "10.48550/arxiv.2410.18792",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 9
+    },
+    {
+      "openalex_id": "W4406643700",
+      "title": "Towards the next generation of Geospatial Artificial Intelligence",
+      "authors": [
+        "Gengchen Mai",
+        "Yiqun Xie",
+        "Xiaowei Jia",
+        "Ni Lao",
+        "Jinmeng Rao",
+        "Qing Zhu",
+        "Zeping Liu",
+        "Yao‐Yi Chiang",
+        "Junfeng Jiao"
+      ],
+      "year": 2025,
+      "doi": "10.1016/j.jag.2025.104368",
+      "venue": "International Journal of Applied Earth Observation and Geoinformation",
+      "cited_by_count": 78
+    },
+    {
+      "openalex_id": "W4410769477",
+      "title": "Chain-of-programming (CoP): empowering large language models for geospatial code generation task",
+      "authors": [
+        "Shuyang Hou",
+        "Haoyue Jiao",
+        "Zhangxiao Shen",
+        "Jianyuan Liang",
+        "Anqi Zhao",
+        "Xiaopu Zhang",
+        "Jianxun Wang",
+        "Huayi Wu"
+      ],
+      "year": 2025,
+      "doi": "10.1080/17538947.2025.2509812",
+      "venue": "International Journal of Digital Earth",
+      "cited_by_count": 22
+    },
+    {
+      "openalex_id": "W4285043263",
+      "title": "GeoAI for Large-Scale Image Analysis and Machine Vision: Recent Progress of Artificial Intelligence in Geography",
+      "authors": [
+        "Wenwen Li",
+        "Chia-Yu Hsu"
+      ],
+      "year": 2022,
+      "doi": "10.3390/ijgi11070385",
+      "venue": "ISPRS International Journal of Geo-Information",
+      "cited_by_count": 136
+    },
+    {
+      "openalex_id": "W3010317630",
+      "title": "A Review of Geospatial Semantic Information Modeling and Elicitation Approaches",
+      "authors": [
+        "Margarita Kokla",
+        "Éric Guilbert"
+      ],
+      "year": 2020,
+      "doi": "10.3390/ijgi9030146",
+      "venue": "ISPRS International Journal of Geo-Information",
+      "cited_by_count": 43
+    },
+    {
+      "openalex_id": "W4393002303",
+      "title": "On the Opportunities and Challenges of Foundation Models for GeoAI (Vision Paper)",
+      "authors": [
+        "Gengchen Mai",
+        "Weiming Huang",
+        "Jin Sun",
+        "Suhang Song",
+        "Deepak R. Mishra",
+        "Ninghao Liu",
+        "Song Gao",
+        "Tianming Liu",
+        "Gao Cong",
+        "Yingjie Hu",
+        "Chris Cundy",
+        "Ziyuan Li",
+        "Rui Zhu",
+        "Ni Lao"
+      ],
+      "year": 2024,
+      "doi": "10.1145/3653070",
+      "venue": "ACM Transactions on Spatial Algorithms and Systems",
+      "cited_by_count": 120
+    },
+    {
+      "openalex_id": "W4388685466",
+      "title": "Large Language Models for Robotics: A Survey",
+      "authors": [
+        "Fanlong Zeng",
+        "Wensheng Gan",
+        "Huai, Zezheng",
+        "Sun, Lichao",
+        "Chen, Hechang",
+        "Wang, Yongheng",
+        "Liu, Ning",
+        "Yu, Philip S."
+      ],
+      "year": 2023,
+      "doi": "10.48550/arxiv.2311.07226",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 38
+    },
+    {
+      "openalex_id": "W3079760979",
+      "title": "Crop yield prediction using machine learning: A systematic literature review",
+      "authors": [
+        "Thomas van Klompenburg",
+        "Ayalew Kassahun",
+        "Cagatay Catal"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.compag.2020.105709",
+      "venue": "Computers and Electronics in Agriculture",
+      "cited_by_count": 1818
+    },
+    {
+      "openalex_id": "W4409881395",
+      "title": "GIS Copilot: towards an autonomous GIS agent for spatial analysis",
+      "authors": [
+        "Temitope Akinboyewa",
+        "Zhenlong Li",
+        "Huan Ning",
+        "M. Naser Lessani"
+      ],
+      "year": 2025,
+      "doi": "10.1080/17538947.2025.2497489",
+      "venue": "International Journal of Digital Earth",
+      "cited_by_count": 48
+    },
+    {
+      "openalex_id": "W7124808448",
+      "title": "GeoJSON agents: a multi-agent LLM architecture for geospatial analysis—function calling vs. code generation",
+      "authors": [
+        "Qianqian Luo",
+        "Qingming Lin",
+        "Liuchang Xu",
+        "Sensen Wu",
+        "Ruichen Mao",
+        "Chao Wang",
+        "Hailin Feng",
+        "Bo Huang",
+        "Zhenhong Du"
+      ],
+      "year": 2026,
+      "doi": "10.1080/20964471.2026.2615511",
+      "venue": "Big Earth Data",
+      "cited_by_count": 8
+    },
+    {
+      "openalex_id": "W2973710071",
+      "title": "Forest Fire Susceptibility Modeling Using a Convolutional Neural Network for Yunnan Province of China",
+      "authors": [
+        "Guoli Zhang",
+        "Ming Wang",
+        "Kai Liu"
+      ],
+      "year": 2019,
+      "doi": "10.1007/s13753-019-00233-1",
+      "venue": "International Journal of Disaster Risk Science",
+      "cited_by_count": 343
+    },
+    {
+      "openalex_id": "W4392224283",
+      "title": "From Text to Transformation: A Comprehensive Review of Large Language Models' Versatility",
+      "authors": [
+        "Pravneet Kaur",
+        "Gautam Siddharth Kashyap",
+        "Ankit Kumar",
+        "Md Tabrez Nafis",
+        "Sandeep Kumar",
+        "Vikrant Shokeen"
+      ],
+      "year": 2024,
+      "doi": "10.48550/arxiv.2402.16142",
+      "venue": "arXiv (Cornell University)",
+      "cited_by_count": 41
+    },
+    {
+      "openalex_id": "W3042542258",
+      "title": "Urban building energy modeling (UBEM) tools: A state-of-the-art review of bottom-up physics-based approaches",
+      "authors": [
+        "Martina Ferrando",
+        "Francesco Causone",
+        "Tianzhen Hong",
+        "Yixing Chen"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.scs.2020.102408",
+      "venue": "Sustainable Cities and Society",
+      "cited_by_count": 367
+    },
+    {
+      "openalex_id": "W4415131607",
+      "title": "GeoAnalystBench : A GeoAI Benchmark for Assessing Large Language Models for Spatial Analysis Workflow and Code Generation",
+      "authors": [
+        "Qianheng Zhang",
+        "Song Gao",
+        "Wei Chen",
+        "Yibo Zhao",
+        "Ying Nie",
+        "Ziru Chen",
+        "Shijie Chen",
+        "Yu Su",
+        "Huan Sun"
+      ],
+      "year": 2025,
+      "doi": "10.1111/tgis.70135",
+      "venue": "Transactions in GIS",
+      "cited_by_count": 13
+    },
+    {
+      "openalex_id": "W3189885690",
+      "title": "Semantic 3D City Database — An enabler for a dynamic geospatial knowledge graph",
+      "authors": [
+        "Arkadiusz Chadzynski",
+        "Nenad Krdžavac",
+        "Feroz Farazi",
+        "Mei Qi Lim",
+        "Shiying Li",
+        "Ayda Grišiūtė",
+        "Pieter Herthogs",
+        "Aurel von Richthofen",
+        "Stephen Cairns",
+        "Markus Kraft"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.egyai.2021.100106",
+      "venue": "Energy and AI",
+      "cited_by_count": 65
+    },
+    {
+      "openalex_id": "W4411804834",
+      "title": "AutoGEEval: A Multimodal and Automated Evaluation Framework for Geospatial Code Generation on GEE with Large Language Models",
+      "authors": [
+        "Huayi Wu",
+        "Zhangxiao Shen",
+        "Shuyang Hou",
+        "Jianyuan Liang",
+        "Haoyue Jiao",
+        "Yaxian Qing",
+        "Xiaopu Zhang",
+        "Xu Li",
+        "Zhipeng Gui",
+        "Xuefeng Guan",
+        "Longgang Xiang"
+      ],
+      "year": 2025,
+      "doi": "10.3390/ijgi14070256",
+      "venue": "ISPRS International Journal of Geo-Information",
+      "cited_by_count": 13
+    },
+    {
+      "openalex_id": "W4414311642",
+      "title": "Benchmarking large language models for handwritten text recognition",
+      "authors": [
+        "Giorgia Crosilla",
+        "Lukas Klic",
+        "Giovanni Colavizza"
+      ],
+      "year": 2025,
+      "doi": "10.1108/jd-03-2025-0082",
+      "venue": "Journal of Documentation",
+      "cited_by_count": 13
+    },
+    {
+      "openalex_id": "W2984563403",
+      "title": "Geospatial Information Visualization and Extended Reality Displays",
+      "authors": [
+        "Arzu Çöltekin",
+        "Amy L. Griffin",
+        "Aidan Slingsby",
+        "Anthony C. Robinson",
+        "Sidonie Christophe",
+        "Victoria Rautenbach",
+        "Min Chen",
+        "Christopher Pettit",
+        "Alexander Klippel"
+      ],
+      "year": 2019,
+      "doi": "10.1007/978-981-32-9915-3_7",
+      "venue": "",
+      "cited_by_count": 51
+    },
+    {
+      "openalex_id": "W4404782812",
+      "title": "A Comprehensive Survey of Scientific Large Language Models and Their Applications in Scientific Discovery",
+      "authors": [
+        "Yu Zhang",
+        "Xiusi Chen",
+        "Bowen Jin",
+        "Sheng Wang",
+        "Shuiwang Ji",
+        "Wei Wang",
+        "Jiawei Han"
+      ],
+      "year": 2024,
+      "doi": "10.18653/v1/2024.emnlp-main.498",
+      "venue": "",
+      "cited_by_count": 38
+    }
+  ]
+}

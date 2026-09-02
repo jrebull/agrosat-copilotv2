@@ -1,0 +1,940 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "semanticscholar",
+  "query": "spatial autocorrelation validation machine learning ecology",
+  "executed_at": "2026-09-02T20:25:25+00:00",
+  "status": 200,
+  "records": [
+    {
+      "paperId": "5d3eb2748a8bb62ea9d9bb10764d35567cf67900",
+      "externalIds": {
+        "DOI": "10.1007/s10980-025-02195-w",
+        "CorpusId": 280832014
+      },
+      "title": "Spatial prediction of evapotranspiration in a tropical mosaic landscape using remote sensing and explainable machine learning",
+      "venue": "Landscape Ecology",
+      "year": 2025,
+      "citationCount": 5,
+      "openAccessPdf": {
+        "url": "https://link.springer.com/content/pdf/10.1007/s10980-025-02195-w.pdf",
+        "status": "HYBRID",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1007/s10980-025-02195-w?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1007/s10980-025-02195-w, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2377036492",
+          "name": "Raunak Kirti"
+        },
+        {
+          "authorId": "1398108003",
+          "name": "Alejandra Valdés-Uribe"
+        },
+        {
+          "authorId": "2377126279",
+          "name": "Dirk Hölscher"
+        }
+      ],
+      "abstract": "Tropical forest regions are being transformed to other land covers at a high rate, often resulting in landscapes with heterogeneous vegetation structures. In combination with environmental factors this may influence ecosystem services, including evapotranspiration (ET). We aimed to predict the spatial variability of ET using spaceborne observations in a heterogenous tropical landscape, with a particular focus on elucidating the importance of vegetation structural characteristics and their interactions with environmental factors. The study region was located in northeastern Madagascar. Daily ET was retrieved from ECOsystem Spaceborne Thermal Radiometer Experiment on Space Station (ECOSTRESS). Meteorological, topographical, soil and vegetation structure predictor variables were procured from various open sources. We applied forward feature selection and target oriented cross validation to address potential spatial autocorrelation and used SHAP analyses for elucidating interactions. Random forest models achieved high accuracies in the spatial prediction of ET, with R2 values between 0.7 and 0.9 across different days. The explainable machine learning method, SHAP, revealed that highest contribution was by meteorological variables, followed by vegetation structure, topography, and soil. Analysis of key interactions between variables highlighted the role of vegetation structure in driving ET under different rainfall and wind speed conditions. We conclude that the spatial variability of ET in this tropical mosaic landscape can be explained by a combination of biophysical variables, with vegetation structure contributing significantly. The underlying relationships can be useful to understand and potentially steer the climate regulation function of human-modified landscapes."
+    },
+    {
+      "paperId": "dc3fe560dcef002855fa6a86d1b72930c8272fe3",
+      "externalIds": {
+        "DOI": "10.1186/s40317-025-00419-z",
+        "CorpusId": 280453644
+      },
+      "title": "Assessing acoustic receiver detection efficiency using autocorrelation adjusted machine learning models",
+      "venue": "Animal Biotelemetry",
+      "year": 2025,
+      "citationCount": 1,
+      "openAccessPdf": {
+        "url": "https://animalbiotelemetry.biomedcentral.com/counter/pdf/10.1186/s40317-025-00419-z",
+        "status": "GOLD",
+        "license": "CCBYNCND",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1186/s40317-025-00419-z?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1186/s40317-025-00419-z, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2374939695",
+          "name": "Devon A. Smith"
+        },
+        {
+          "authorId": "2259898789",
+          "name": "James A. Crossman"
+        },
+        {
+          "authorId": "2299653624",
+          "name": "Eduardo G. Martins"
+        }
+      ],
+      "abstract": "Detection efficiency is a key performance metric for acoustic telemetry arrays, providing an estimate of the probability of detecting a passing tagged organism. It is influenced by environmental (e.g., discharge), technological (e.g., transmitter power), and habitat (e.g., noise) factors, making predictions of detection efficiency a challenging task in the field of movement ecology. To predict detection efficiency, we applied regression-based machine learning models in two distinct river systems: a small mountainous and a large regulated river. The models incorporated daily discharge, water temperature and depth, substrate type, a receiver metadata metric indicative of noise, and the distance between receiver and acoustic tag. While both spatial and temporal autocorrelation were evaluated, only temporal autocorrelation required adjustment, which was addressed using a rolling cross-validation approach. Optimal cross-validation parameters differed between systems, with 30-day validation windows and 90-day steps for the large river, and 3-day validation windows and 5-day steps for the mountainous stream. Receiver distance and our utilization of receiver metadata as an indication of environmental noise consistently emerged as the most influential predictors, while environmental variables contributed relatively evenly to model performance. The small mountainous river model explained 30.7–89.5% of the variability in detection efficiency while the large regulated river model explained 43.8–90.6% of the variability explained. The model’s accuracy varied across resamples based on short rapid environmental changes during rolling cross-validation temporal binning. Our autocorrelation adjusted machine learning model demonstrated adequate estimates of detection efficiency, explaining an average of 68% of the variability across two distinct rivers. Restricted data availability in the mountainous stream and short rapid environmental changes in both systems presented challenges for model accuracy. Accounting for detection efficiency is an important component of describe animal movement using acoustic telemetry and our findings demonstrate machine learning models as an approach to predicting detection efficiency in acoustic receiver arrays across riverine environments with diverse hydrological and geomorphological characteristics."
+    },
+    {
+      "paperId": "b827138e2fc449b97700682d3bb0eba172dec67f",
+      "externalIds": {
+        "DBLP": "journals/ecoi/KmochHCU25",
+        "DOI": "10.1016/j.ecoinf.2025.103057",
+        "CorpusId": 276175116
+      },
+      "title": "Spatial autocorrelation in machine learning for modelling soil organic carbon",
+      "venue": "Ecological Informatics",
+      "year": 2025,
+      "citationCount": 32,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1016/j.ecoinf.2025.103057",
+        "status": "GOLD",
+        "license": "CCBYNCND",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1016/j.ecoinf.2025.103057?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1016/j.ecoinf.2025.103057, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "3441114",
+          "name": "A. Kmoch"
+        },
+        {
+          "authorId": "51075090",
+          "name": "Clay Harrison"
+        },
+        {
+          "authorId": "2378495599",
+          "name": "Jeonghwan Choi"
+        },
+        {
+          "authorId": "11974836",
+          "name": "E. Uuemaa"
+        }
+      ],
+      "abstract": null
+    },
+    {
+      "paperId": "4ec411565d703196f6cac974f5f874c7b308a237",
+      "externalIds": {
+        "DOI": "10.3390/rs17020213",
+        "CorpusId": 275449615
+      },
+      "title": "Random Cross-Validation Produces Biased Assessment of Machine Learning Performance in Regional Landslide Susceptibility Prediction",
+      "venue": "Remote Sensing",
+      "year": 2025,
+      "citationCount": 48,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/17/2/213/pdf?version=1736406804",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs17020213?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs17020213, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2339656856",
+          "name": "Chandan Kumar"
+        },
+        {
+          "authorId": "2264834471",
+          "name": "Gabriel Walton"
+        },
+        {
+          "authorId": "2280580788",
+          "name": "Paul Santi"
+        },
+        {
+          "authorId": "2210465638",
+          "name": "C. Luza"
+        }
+      ],
+      "abstract": "Machine learning (ML) models are extensively used in spatial predictive modeling, including landslide susceptibility prediction. The performance statistics of these models are vital for assessing their reliability, which is typically obtained using the random cross-validation (R-CV) method. However, R-CV has a major drawback, i.e., it ignores the spatial autocorrelation (SAC) inherent in spatial datasets when partitioning the training and testing sets. We assessed the impact of SAC at three crucial phases of ML modeling: hyperparameter tuning, performance evaluation, and learning curve analysis. As an alternative to R-CV, we used spatial cross-validation (S-CV). This method considers SAC when partitioning the training and testing subsets. This experiment was conducted on regional landslide susceptibility prediction using different ML models: logistic regression (LR), k-nearest neighbor (KNN), linear discriminant analysis (LDA), artificial neural networks (ANN), support vector machine (SVM), random forest (RF), and C5.0. The experimental results showed that R-CV often produces optimistic performance estimates, e.g., 6–18% higher than those obtained using the S-CV. R-CV also occasionally fails to reveal the true importance of the hyperparameters of models such as SVM and ANN. Additionally, R-CV falsely portrays a considerable improvement in model performance as the number of variables increases. However, this was not the case when the models were evaluated using S-CV. The impact of SAC was more noticeable in complex models such as SVM, RF, and C5.0 (except for ANN) than in simple models such as LDA and LR (except for KNN). Overall, we recommend S-CV over R-CV for a reliable assessment of ML model performance in large-scale LSM."
+    },
+    {
+      "paperId": "57dd6a4d11e2afda94e788753e3011f628b72a67",
+      "externalIds": {
+        "DOI": "10.1007/s00477-025-03079-w",
+        "CorpusId": 281233086
+      },
+      "title": "A hybrid framework for landslide prediction integrating machine learning and sample enhanced by spatial autocorrelation",
+      "venue": "Stochastic environmental research and risk assessment (Print)",
+      "year": 2025,
+      "citationCount": 6,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1007/s00477-025-03079-w?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1007/s00477-025-03079-w, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2188864620",
+          "name": "Longying Ding"
+        },
+        {
+          "authorId": "2291610956",
+          "name": "Wenliang Jiang"
+        },
+        {
+          "authorId": "2278442649",
+          "name": "Qiang Li"
+        },
+        {
+          "authorId": "102510748",
+          "name": "W. Shen"
+        }
+      ],
+      "abstract": null
+    },
+    {
+      "paperId": "4412aee0e7a8f6e06b29fcf503a47f1ab09ffd8c",
+      "externalIds": {
+        "DBLP": "journals/ijgi/LiuKZ22",
+        "DOI": "10.3390/ijgi11040242",
+        "CorpusId": 248037491
+      },
+      "title": "Incorporating Spatial Autocorrelation in Machine Learning Models Using Spatial Lag and Eigenvector Spatial Filtering Features",
+      "venue": "ISPRS Int. J. Geo Inf.",
+      "year": 2022,
+      "citationCount": 78,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2220-9964/11/4/242/pdf?version=1649398052",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/ijgi11040242?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/ijgi11040242, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2110963296",
+          "name": "Xiaojian Liu"
+        },
+        {
+          "authorId": "2852567",
+          "name": "O. Kounadi"
+        },
+        {
+          "authorId": "1398130447",
+          "name": "R. Zurita-Milla"
+        }
+      ],
+      "abstract": "Applications of machine-learning-based approaches in the geosciences have witnessed a substantial increase over the past few years. Here we present an approach that accounts for spatial autocorrelation by introducing spatial features to the models. In particular, we explore two types of spatial features, namely spatial lag and eigenvector spatial filtering (ESF). These features are used within the widely used random forest (RF) method, and their effect is illustrated on two public datasets of varying sizes (Meuse and California housing datasets). The least absolute shrinkage and selection operator (LASSO) is used to determine the best subset of spatial features, and nested cross-validation is used for hyper-parameter tuning and performance evaluation. We utilize Moran’s I and local indicators of spatial association (LISA) to assess how spatial autocorrelation is captured at both global and local scales. Our results show that RF models combined with either spatial lag or ESF features yield lower errors (up to 33% different) and reduce the global spatial autocorrelation of the residuals (up to 95% decrease in Moran’s I) compared to the RF model with no spatial features. The local autocorrelation patterns of the residuals are weakened as well. Compared to benchmark geographically weighted regression (GWR) models, the RF models with spatial features yielded more accurate models with similar levels of global and local autocorrelation in the prediction residuals. This study reveals the effectiveness of spatial features in capturing spatial autocorrelation and provides a generic machine-learning modelling workflow for spatial prediction."
+    },
+    {
+      "paperId": "2bb2d33d86c5318871a0a1e2f99505ab928a219a",
+      "externalIds": {
+        "DOI": "10.3390/w15122278",
+        "CorpusId": 259242393
+      },
+      "title": "Spatial or Random Cross-Validation? The Effect of Resampling Methods in Predicting Groundwater Salinity with Machine Learning in Mediterranean Region",
+      "venue": "Water",
+      "year": 2023,
+      "citationCount": 35,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2073-4441/15/12/2278/pdf?version=1687240005",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/w15122278?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/w15122278, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "3078592",
+          "name": "P. Tziachris"
+        },
+        {
+          "authorId": "2154472919",
+          "name": "Melpomeni Nikou"
+        },
+        {
+          "authorId": "145775504",
+          "name": "V. Aschonitis"
+        },
+        {
+          "authorId": "35066504",
+          "name": "A. Kallioras"
+        },
+        {
+          "authorId": "2193910821",
+          "name": "Katerina Sachsamanoglou"
+        },
+        {
+          "authorId": "19306822",
+          "name": "M. Fidelibus"
+        },
+        {
+          "authorId": "12606509",
+          "name": "E. Tziritis"
+        }
+      ],
+      "abstract": "Machine learning (ML) algorithms are extensively used with outstanding prediction accuracy. However, in some cases, their overfitting capabilities, along with inadvertent biases, might produce overly optimistic results. Spatial data are a special kind of data that could introduce biases to ML due to their intrinsic spatial autocorrelation. To address this issue, a special resampling method has emerged called spatial cross-validation (SCV). The purpose of this study was to evaluate the performance of SCV compared with conventional random cross-validation (CCV) used in most ML studies. Multiple ML models were created with CCV and SCV to predict groundwater electrical conductivity (EC) with data (A) from Rhodope, Greece, in the summer of 2020; (B) from the same area but at a different time (summer 2019); and (C) from a new area (the Salento peninsula, Italy). The results showed that the SCV provides ML models with superior generalization capabilities and, hence, better prediction results in new unknown data. The SCV seems to be able to capture the spatial patterns in the data while also reducing the over-optimism bias that is often associated with CCV methods. Based on the results, SCV could be applied with ML in studies that use spatial data."
+    },
+    {
+      "paperId": "6c2103fb808d27b1fc875fcf29390588807a776b",
+      "externalIds": {
+        "DOI": "10.3390/eng6100270",
+        "CorpusId": 281958823
+      },
+      "title": "A Comparative Assessment of Regular and Spatial Cross-Validation in Subfield Machine Learning Prediction of Maize Yield from Sentinel-2 Phenology",
+      "venue": "Engineer",
+      "year": 2025,
+      "citationCount": 12,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2673-4117/6/10/270/pdf?version=1760007027",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/eng6100270?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/eng6100270, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "146537970",
+          "name": "Dorijan Radočaj"
+        },
+        {
+          "authorId": "87329586",
+          "name": "I. Plaščak"
+        },
+        {
+          "authorId": "79040980",
+          "name": "M. Jurišić"
+        }
+      ],
+      "abstract": "The aim of this study is to determine the reliability of regular and spatial cross-validation methods in predicting subfield-scale maize yields using phenological measures derived by Sentinel-2. Three maize fields from eastern Croatia were monitored during the 2023 growing season, with high-resolution ground truth yield data collected using combine harvester sensors. Sentinel-2 time series were used to compute two vegetation indices, Enhanced Vegetation Index (EVI) and Wide Dynamic Range Vegetation Index (WDRVI). These features served as inputs for three machine learning models, including Random Forest (RF) and Bayesian Generalized Linear Model (BGLM), which were trained and evaluated using both regular and spatial 10-fold cross-validation. Results showed that spatial cross-validation produced a more realistic and conservative estimate of the performance of the model, while regular cross-validation overestimated predictive accuracy systematically because of spatial dependence among the samples. EVI-based models were more reliable than WDRVI, generating more accurate phenomenological fits and yield predictions across parcels. These results emphasize the importance of spatially explicit validation for subfield yield modeling and suggest that overlooking spatial structure can lead to misleading conclusions about model accuracy and generalizability."
+    },
+    {
+      "paperId": "2669c07b258b4a7ebf100a169563598b7b9e9190",
+      "externalIds": {
+        "DOI": "10.3390/min11111172",
+        "CorpusId": 239948595
+      },
+      "title": "Importance of Spatial Autocorrelation in Machine Learning Modeling of Polymetallic Nodules, Model Uncertainty and Transferability at Local Scale",
+      "venue": "Minerals",
+      "year": 2021,
+      "citationCount": 20,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2075-163X/11/11/1172/pdf?version=1634904333",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/min11111172?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/min11111172, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "114584218",
+          "name": "I. Gazis"
+        },
+        {
+          "authorId": "2508241",
+          "name": "J. Greinert"
+        }
+      ],
+      "abstract": "Machine learning spatial modeling is used for mapping the distribution of deep-sea polymetallic nodules (PMN). However, the presence and influence of spatial autocorrelation (SAC) have not been extensively studied. SAC can provide information regarding the variable selection before modeling, and it results in erroneous validation performance when ignored. ML models are also problematic when applied in areas far away from the initial training locations, especially if the (new) area to be predicted covers another feature space. Here, we study the spatial distribution of PMN in a geomorphologically heterogeneous area of the Peru Basin, where SAC of PMN exists. The local Moran’s I analysis showed that there are areas with a significantly higher or lower number of PMN, associated with different backscatter values, aspect orientation, and seafloor geomorphological characteristics. A quantile regression forests (QRF) model is used using three cross-validation (CV) techniques (random-, spatial-, and cluster-blocking). We used the recently proposed “Area of Applicability” method to quantify the geographical areas where feature space extrapolation occurs. The results show that QRF predicts well in morphologically similar areas, with spatial block cross-validation being the least unbiased method. Conversely, random-CV overestimates the prediction performance. Under new conditions, the model transferability is reduced even on local scales, highlighting the need for spatial model-based dissimilarity analysis and transferability assessment in new areas."
+    },
+    {
+      "paperId": "d5d36a92632666d9776db982024b8249619f4cd2",
+      "externalIds": {
+        "DBLP": "journals/algorithms/Bridgelall26a",
+        "DOI": "10.3390/a19060455",
+        "CorpusId": 289041934
+      },
+      "title": "Quantifying System-Level Risk at Highway-Rail Grade Crossings: Integrating Spatial Autocorrelation and Explainable Machine Learning",
+      "venue": "Algorithms",
+      "year": 2026,
+      "citationCount": 1,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.3390/a19060455",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/a19060455?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/a19060455, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2745954",
+          "name": "R. Bridgelall"
+        }
+      ],
+      "abstract": "Highway–rail grade crossing (HRGC) safety analysis is often based on raw incident counts or site-level models that do not adequately control for regional crossing-density exposure and frequently ignore spatial dependence. This limits the ability to identify where risk is structurally concentrated across the rail network. The problem is important because misidentifying high-risk environments leads to inefficient allocation of limited safety resources and weakens corridor-level intervention strategies. This study introduces accumulated incidents per crossing (AIPX), a crossing-count-normalized cumulative incident intensity metric that measured cumulative incident burden at the county level over a 51-year period (1975–2025). The study developed an algorithmic framework that integrates data reconciliation with spatial autocorrelation analysis, distributional modeling, and nonparametric machine learning to identify and interpret high-intensity risk environments. Global Moran’s I indicates statistically significant positive spatial autocorrelation (I = 0.359, p = 0.001), suggesting that incident intensity is spatially clustered rather than random. Local indicators identify statistically significant high and low intensity county clusters. Distributional analysis shows that AIPX within high-intensity clusters was best represented by lognormal and Johnson SU distributions. Machine learning models achieved strong classification performance (AUC ≈ 0.85). Explainability methods consistently identified temperature, train direction, crossing warning configuration, train composition, and track class as dominant associated features. These variables function as proxies for broader geographic, operational, exposure, and network-structure differences rather than direct causal drivers. The findings indicate a pattern consistent with regional and network-level exposure regimes concentrated along freight-intensive corridors. The study provides a transparent analytical workflow that supports corridor-level prioritization of safety interventions and more effective allocation of infrastructure investments."
+    },
+    {
+      "paperId": "3822a4924c28781a91da7eb3771fa5fb9cb036ee",
+      "externalIds": {
+        "DOI": "10.3390/su18041779",
+        "CorpusId": 285531439
+      },
+      "title": "Assessing Nonlinear Effects of Landscape Patterns on Habitat Quality in the Yellow River Basin: An Integrated Framework Combining Interpretable Machine Learning and Spatial Autocorrelation",
+      "venue": "Sustainability",
+      "year": 2026,
+      "citationCount": 1,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2071-1050/18/4/1779/pdf",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/su18041779?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/su18041779, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2410457768",
+          "name": "Faming Li"
+        },
+        {
+          "authorId": "2241694916",
+          "name": "Kai-lin Yang"
+        },
+        {
+          "authorId": "2261179749",
+          "name": "Tianmin Sun"
+        },
+        {
+          "authorId": "2275101559",
+          "name": "Yuming Shao"
+        },
+        {
+          "authorId": "2410125662",
+          "name": "Yanhong Huo"
+        },
+        {
+          "authorId": "2108303213",
+          "name": "Yiqing Liu"
+        }
+      ],
+      "abstract": "In the context of accelerating worldwide urbanization and ecosystem decline, deciphering the interactions between landscape patterns and habitat quality is essential for biodiversity preservation, particularly within ecologically sensitive zones like the Yellow River Basin. This research investigates the spatiotemporal dynamics, spatial linkages, and nonlinear relationships connecting landscape patterns and habitat quality across the basin. Utilizing land use datasets spanning 1980–2023, we combined the InVEST model, landscape pattern indices, spatial autocorrelation analysis, the XGBoost algorithm, and SHAP interpretability methods. The results show that: (1) Landscape patterns underwent a clear transition around 1995, shifting from regularization and connectivity toward fragmentation and heterogeneity, evidenced by increases in PD, LSI, and SHEI, alongside decreases in LPI and CONTAG. (2) Mean habitat quality progressively declined, exhibited a spatial distribution characterized by “higher in the west, lower in the east.” Low-quality habitat areas expanded from 2.12% to 3.76%, whereas high-quality areas decreased from 23.12% to 22.45%, with better habitats largely maintained in western headwaters and the Qinling Mountains. (3) Significant spatial correlations were observed: LPI positively correlated with habitat quality, while PD, LSI, SHEI, and CONTAG showed negative correlations. Two dominant spatial aggregations emerged—namely “high connectivity–high quality” in the west and “high fragmentation–low quality” in the east. (4) CONTAG was identified as the dominant factor influencing habitat quality, with all landscape indices exhibiting distinct threshold effects. The proposed framework, which integrates spatial statistics, machine learning, and interpretability methods, offers a novel approach for deciphering complex ecological processes. Moreover, the identified thresholds and zonal management strategies offer a scientific foundation for ecological conservation and spatial planning in the Yellow River Basin and other vulnerable river systems worldwide."
+    },
+    {
+      "paperId": "cb9b0fbd74b5d737ae77afa871d5d72f28fdba70",
+      "externalIds": {
+        "DOI": "10.20944/preprints202310.0862.v1",
+        "CorpusId": 266103189
+      },
+      "title": "A Comparative Analysis of Machine Learning Techniques for National Glacier Mapping: Evaluating Performance through Spatial Cross-Validation in Perú",
+      "venue": "Water",
+      "year": 2023,
+      "citationCount": 5,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2073-4441/15/24/4214/pdf?version=1701912381",
+        "status": "GREEN",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.20944/preprints202310.0862.v1?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.20944/preprints202310.0862.v1, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2272113763",
+          "name": "Marcelo Bueno"
+        },
+        {
+          "authorId": "2037370963",
+          "name": "Briggitte Macera"
+        },
+        {
+          "authorId": "2291661796",
+          "name": "N. Montoya"
+        }
+      ],
+      "abstract": "Accurate glacier mapping is crucial for assessing future water security in Andean ecosystems. Traditional accuracy assessment may be biased due to overlooking spatial autocorrelation during map validation. In recent years, spatial cross-validation (CV) strategies have been proposed in environmental and ecological modeling to reduce bias in predictive accuracy. In this study, we demonstrate the influence of spatial autocorrelation on the accuracy assessment of glacier surface predictive models. This is achieved by comparing the performance of several widely used machine learning algorithms including the gradient-boosting machines (GBM), k-nearest neighbors (KNN), random forest (RF), and logistic regression (LR) for mapping nine main Peruvian glacier regions. Spatial and non-spatial cross-validation methods were used to evaluate the model’s classification errors in terms of the Matthews correlation coefficient. Performance differences of up to 18% were found between bias-reduced (spatial) and overoptimistic (non-spatial) cross-validation results. Regarding only spatial CV, the k-nearest neighbors were the overall best model across Huallanca (0.90), Huayhuasha (0.78), Huaytapallana (0.96), Raura (0.93), Urubamba (0.96), Vilcabamba (0.93), and Vilcanota (0.92) regions, consistently demonstrating the highest performance followed by logistic regression at Blanca (0.95) and Central (0.97) regions. Our validation approach, accounting for spatial characteristics, provides valuable insights for glacier mapping studies and future efforts on glacier retreat monitoring. Incorporating this approach improves the reliability of glacier mapping, guiding future national-level initiatives."
+    },
+    {
+      "paperId": "8322d16c8e89994195200afa517c5621a00847cb",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/KilleenKYB24",
+        "DOI": "10.3390/rs16040683",
+        "CorpusId": 267696748
+      },
+      "title": "Corn Grain Yield Prediction Using UAV-Based High Spatiotemporal Resolution Imagery, Machine Learning, and Spatial Cross-Validation",
+      "venue": "Remote Sensing",
+      "year": 2024,
+      "citationCount": 63,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/16/4/683/pdf?version=1707923904",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs16040683?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs16040683, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2279031848",
+          "name": "Patrick Killeen"
+        },
+        {
+          "authorId": "2648782",
+          "name": "Iluju Kiringa"
+        },
+        {
+          "authorId": "2162859127",
+          "name": "T. Yeap"
+        },
+        {
+          "authorId": "2279031625",
+          "name": "Paula Branco"
+        }
+      ],
+      "abstract": "Food demand is expected to rise significantly by 2050 due to the increase in population; additionally, receding water levels, climate change, and a decrease in the amount of available arable land will threaten food production. To address these challenges and increase food security, input cost reductions and yield optimization can be accomplished using yield precision maps created by machine learning models; however, without considering the spatial structure of the data, the precision map’s accuracy evaluation assessment risks being over-optimistic, which may encourage poor decision making that can lead to negative economic impacts (e.g., lowered crop yields). In fact, most machine learning research involving spatial data, including the unmanned aerial vehicle (UAV) imagery-based yield prediction literature, ignore spatial structure and likely obtain over-optimistic results. The present work is a UAV imagery-based corn yield prediction study that analyzed the effects of image spatial and spectral resolution, image acquisition date, and model evaluation scheme on model performance. We used various spatial generalization evaluation methods, including spatial cross-validation (CV), to (a) identify over-optimistic models that overfit to the spatial structure found inside datasets and (b) estimate true model generalization performance. We compared and ranked the prediction power of 55 vegetation indices (VIs) and five spectral bands over a growing season. We gathered yield data and UAV-based multispectral (MS) and red-green-blue (RGB) imagery from a Canadian smart farm and trained random forest (RF) and linear regression (LR) models using 10-fold CV and spatial CV approaches. We found that imagery from the middle of the growing season produced the best results. RF and LR generally performed best with high and low spatial resolution data, respectively. MS imagery led to generally better performance than RGB imagery. Some of the best-performing VIs were simple ratio index(near-infrared and red-edge), normalized difference red-edge index, and normalized green index. We found that 10-fold CV coupled with spatial CV could be used to identify over-optimistic yield prediction models. When using high spatial resolution MS imagery, RF and LR obtained 0.81 and 0.56 correlation coefficient (CC), respectively, when using 10-fold CV, and obtained 0.39 and 0.41, respectively, when using a k-means-based spatial CV approach. Furthermore, when using only location features, RF and LR obtained an average CC of 1.00 and 0.49, respectively. This suggested that LR had better spatial generalizability than RF, and that RF was likely being over-optimistic and was overfitting to the spatial structure of the data."
+    },
+    {
+      "paperId": "9f99a4426d75bc8816752552adc1e547a9e29f08",
+      "externalIds": {
+        "DOI": "10.1111/gwat.13081",
+        "CorpusId": 231757081,
+        "PubMed": "33521933"
+      },
+      "title": "Beware of Spatial Autocorrelation When Applying Machine Learning Algorithms to Borehole Geophysical Logs",
+      "venue": "Ground Water",
+      "year": 2021,
+      "citationCount": 5,
+      "openAccessPdf": {
+        "url": "",
+        "status": "CLOSED",
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1111/gwat.13081?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1111/gwat.13081, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "1391845493",
+          "name": "N. Terry"
+        },
+        {
+          "authorId": "2350698491",
+          "name": "Carole D. Johnson"
+        },
+        {
+          "authorId": "1402484173",
+          "name": "F. Day‐Lewis"
+        },
+        {
+          "authorId": "144022030",
+          "name": "B. Parker"
+        },
+        {
+          "authorId": "80488218",
+          "name": "L. Slater"
+        }
+      ],
+      "abstract": "models trained on borehole geophysical logs to predict contaminant concentrations in new areas is explained by spatial autocorrelation and use of random shufﬂing in cross validation"
+    },
+    {
+      "paperId": "60779e78cdf13f26d1cda329a081da0603af65ab",
+      "externalIds": {
+        "DBLP": "journals/corr/abs-2504-12450",
+        "ArXiv": "2504.12450",
+        "DOI": "10.1111/gean.70011",
+        "CorpusId": 277857571
+      },
+      "title": "Can Moran Eigenvectors Improve Machine Learning of Spatial Data? Insights from Synthetic Data Validation",
+      "venue": "Geographical Analysis",
+      "year": 2025,
+      "citationCount": 4,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://arxiv.org/abs/2504.12450, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2304157050",
+          "name": "Ziqi Li"
+        },
+        {
+          "authorId": "2151722891",
+          "name": "Zhan Peng"
+        }
+      ],
+      "abstract": "Moran eigenvector spatial filtering (ESF) approaches have shown promise in accounting for spatial effects in statistical models. Can this extend to machine learning? This article examines the effectiveness of using Moran Eigenvectors as additional spatial features in machine learning models. We generate synthetic datasets with known processes involving spatially varying and nonlinear effects across two different geometries. Moran Eigenvectors calculated from different spatial weights matrices, with and without a priori eigenvector selection, are tested. We assess the performance of popular machine learning models, including Random Forests, LightGBM, XGBoost, and TabNet, and benchmark their accuracies in terms of cross‐validated values against models that use only coordinates as features. We also extract coefficients and functions from the models using GeoShapley and compare them with the true processes. The results show that machine learning models using only location coordinates achieve better accuracies than eigenvector‐based approaches across various experiments and datasets. Furthermore, we discuss that while these findings are relevant for spatial processes that exhibit positive spatial autocorrelation, they do not necessarily apply when modeling network autocorrelation and cases with negative spatial autocorrelation, where Moran Eigenvectors would still be useful."
+    },
+    {
+      "paperId": "7e613d19c033d84220d5f17cf46de641a48698ed",
+      "externalIds": {
+        "DOI": "10.3390/app13074497",
+        "CorpusId": 257944208
+      },
+      "title": "Spatial Autocorrelation Incorporated Machine Learning Model for Geotechnical Subsurface Modeling",
+      "venue": "Applied Sciences",
+      "year": 2023,
+      "citationCount": 11,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2076-3417/13/7/4497/pdf?version=1680506120",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/app13074497?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/app13074497, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "153761166",
+          "name": "H. Kim"
+        },
+        {
+          "authorId": "2213497621",
+          "name": "Kevin Bagas A. Mawuntu"
+        },
+        {
+          "authorId": "143982139",
+          "name": "T. Park"
+        },
+        {
+          "authorId": "2155255987",
+          "name": "Hyeong-soo Kim"
+        },
+        {
+          "authorId": "2213505261",
+          "name": "Jun-Young Park"
+        },
+        {
+          "authorId": "2105576265",
+          "name": "Yeong-Seon Jeong"
+        }
+      ],
+      "abstract": "Machine learning models for spatial prediction have been applied in various types of research. However, spatial relation has not been fully considered in modeling, since the Cartesian coordinates of the observed points are directly employed as the location information for machine learning features. This study presents a machine learning modeling process which incorporates spatial autocorrelation for geotechnical subsurface modeling. A new set of features called the Euclidean distance field (EDF) was generated based on the distance between the query points and the observed boreholes in order to incorporate spatial autocorrelation into the machine learning model. Principal component analysis (PCA) was performed to reduce the increasing dimensionality of the dataset caused by the EDF features. Optimized machine learning models based on several popular algorithms (Support Vector Machine, Gaussian Process Regression, Artificial Neural Network, and k-Nearest Neighbor) were employed for predicting several geotechnical information as the targets. The results showed that the optimized machine learning models constructed with the EDF modeling approach generate a slightly lower Root Mean Square Error (RMSE) score compared to the model with the direct XY coordinate approach by 0.041, 0.046, 1.302, and 1.561 for ground surface elevation, groundwater level, SPT-N value, and percent finer than 0.075 mm sieve, respectively. Both modeling approaches performed well for USCS-based soil classification with the EDF model having slightly improved classification accuracy by 0.72%. Furthermore, the model can perform balance multiclass classification as indicated by the >95% precision, recall, f1-score, and balanced accuracy score. These results indicate that spatial autocorrelation has a noticeable effect. Hence, it needs to be considered to improve the overall performance of spatial machine learning modeling. Comparison of geotechnical subsurface predictions generated based on different machine learning algorithms showed that the selection of the best-performing model based only on the lowest prediction error is not appropriate for spatial prediction modeling. Therefore, thorough analysis of the predicted data by visualization is necessary in the selection process for spatial prediction modeling."
+    },
+    {
+      "paperId": "b82155372570363cc08d36f7f4f503474727dc53",
+      "externalIds": {
+        "DOI": "10.1111/gean.12423",
+        "CorpusId": 276979313
+      },
+      "title": "Geographical Gaussian Process Regression: A Spatial Machine‐Learning Model Based on Spatial Similarity",
+      "venue": "Geographical Analysis",
+      "year": 2025,
+      "citationCount": 14,
+      "openAccessPdf": {
+        "url": "",
+        "status": "CLOSED",
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1111/gean.12423?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1111/gean.12423, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2349984432",
+          "name": "Zhenzhi Jiao"
+        },
+        {
+          "authorId": "2296481616",
+          "name": "Ran Tao"
+        }
+      ],
+      "abstract": "This study proposes a new spatial machine‐learning model called geographical Gaussian process regression (GGPR). GGPR is extended from Gaussian process regression (GPR) by adopting the principle of spatial similarity for calibration, and it is designed to conduct spatial prediction and exploratory spatial data analysis (ESDA). GGPR addresses several key challenges in spatial machine learning. First, as a probabilistic model, GGPR avoids the conflict between spatial autocorrelation and the assumption of independent and identically distributed (i.i.d.), thus enhancing the model's objectivity and reliability in spatial prediction. Second, GGPR is suitable for small‐sample prediction, a task that most existing models struggle with. Finally, when integrated with GeoShapley, GGPR is an explainable model that can measure spatial effects and explain the outcomes. Evaluated on two distinct datasets, GGPR demonstrates superior predictive performance compared to other popular machine‐learning models across various sampling ratios, with its advantage becoming especially evident with smaller sample sizes. As an ESDA model, GGPR demonstrates enhanced accuracy, better computational efficiency, and a comparable ability to measure spatial effects against both multiscale geographically weighted regression and geographical random forests. In short, GGPR offers spatial data scientists a new method for predicting and exploring complex geographical processes."
+    },
+    {
+      "paperId": "39b8a886e324286dd473d52d1856098b9c0f0366",
+      "externalIds": {
+        "PubMedCentral": "11199124",
+        "DOI": "10.1002/ece3.11605",
+        "CorpusId": 270760438,
+        "PubMed": "38932949"
+      },
+      "title": "Spatial prediction of plant invasion using a hybrid of machine learning and geostatistical method",
+      "venue": "Ecology and Evolution",
+      "year": 2024,
+      "citationCount": 9,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1002/ece3.11605",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC11199124, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2381013481",
+          "name": "Liang Shen"
+        },
+        {
+          "authorId": "2308426563",
+          "name": "Elizabeth LaRue"
+        },
+        {
+          "authorId": "2260706429",
+          "name": "Songlin Fei"
+        },
+        {
+          "authorId": "2299285021",
+          "name": "Hao Zhang"
+        }
+      ],
+      "abstract": "Abstract Modeling ecological patterns and processes often involve large‐scale and complex high‐dimensional spatial data. Due to the nonlinearity and multicollinearity of ecological data, traditional geostatistical methods have faced great challenges in model accuracy. As machine learning has increased our ability to construct models on big data, the main focus of the study is to propose the use of statistical models that hybridize machine learning and spatial interpolation methods to cope with increasingly large‐scale and complex ecological data. Here, two machine learning algorithms, boosted regression tree (BRT) and least absolute shrinkage and selection operator (LASSO), were combined with ordinary kriging (OK) to model plant invasions across the eastern United States. The accuracies of the hybrid models and conventional models were evaluated by 10‐fold cross‐validation. Based on an invasive plants dataset of 15 ecoregions across the eastern United States, the results showed that the hybrid algorithms were significantly better at predicting plant invasion when compared to commonly used algorithms in terms of RMSE and paired‐samples t‐test (with the p‐value < .0001). Besides, the additional aspect of the combined algorithms is to have the ability to select influential variables associated with the establishment of invasive cover, which cannot be achieved by conventional geostatistics. Higher accuracy in the prediction of large‐scale biological invasions improves our understanding of the ecological conditions that lead to the establishment and spread of plants into novel habitats across spatial scales. The results demonstrate the effectiveness and robustness of the hybrid BRTOK and LASOK that can be used to analyze large‐scale and high‐dimensional spatial datasets, and it has offered an optional source of models for spatial interpolation of ecology properties. It will also provide a better basis for management decisions in early‐detection modeling of invasive species."
+    },
+    {
+      "paperId": "fbfff3f2193e0e220ffad395b85b6b98cb86d5c1",
+      "externalIds": {
+        "PubMedCentral": "12307974",
+        "DOI": "10.1038/s41598-025-13639-3",
+        "CorpusId": 280387900,
+        "PubMed": "40731082"
+      },
+      "title": "Unravelling the importance of spatial and temporal resolutions in modeling urban air pollution using a machine learning approach",
+      "venue": "Scientific Reports",
+      "year": 2025,
+      "citationCount": 12,
+      "openAccessPdf": {
+        "url": "https://www.nature.com/articles/s41598-025-13639-3.pdf",
+        "status": "GOLD",
+        "license": "CCBYNCND",
+        "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC12307974, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2369592536",
+          "name": "Alireza Zhalehdoost"
+        },
+        {
+          "authorId": "2369564769",
+          "name": "Mohammad Taleai"
+        }
+      ],
+      "abstract": "Urban air pollution poses a major threat to public health and environmental sustainability. This study proposes a structured machine learning (ML)-based framework to examine how temporal and spatial resolution choices affect the accuracy of urban air pollution modeling. The research is conducted in two distinct phases. In the temporal phase, the impact of incorporating pollutant autocorrelation into ML models (Multilayer Perceptron (MLP) and Random Forest (RF)) is analyzed by comparing results with and without temporal lag features derived through autoregressive (AR) modeling. In the spatial phase, emission inventory data are aggregated at three spatial resolutions (500 m, 750 m, and 1000 m) to evaluate their effect on model performance in predicting PM and NOx concentrations. Results from the temporal modeling phase indicate that including lag features significantly improves PM predictions: RMSE for PM₁₀ is reduced by 25.9% (from 92.56 µg/m3 to 68.59 µg/m3), and for PM2.5 by 38.9% (from 61.10 µg/m3 to 37.30 µg/m3). Conversely, for NOx, RMSE increases by 53.2% (from 7.90 µg/m3 to 12.10 µg/m3), indicating pollutant-specific temporal behavior. In spatial modeling, a coarser resolution (1000 m) yields better performance for PM (RMSE = 13.51 kg/year), while a finer resolution (500 m) is more effective for NOx (RMSE = 307.50 kg/year). Among the evaluated algorithms, MLP consistently achieves the highest predictive accuracy across both temporal and spatial scenarios. These findings underscore the importance of selecting appropriate temporal and spatial resolutions tailored to each pollutant type. The proposed framework offers a flexible, resolution-aware modeling strategy that can support more effective urban air quality management policies."
+    },
+    {
+      "paperId": "bcc706f3671e545ed0c621883f0708688b914530",
+      "externalIds": {
+        "PubMedCentral": "11871637",
+        "DOI": "10.1186/s12889-025-22077-9",
+        "CorpusId": 276723930,
+        "PubMed": "40025455"
+      },
+      "title": "Spatial analysis of air pollutant exposure and its association with metabolic diseases using machine learning",
+      "venue": "BMC Public Health",
+      "year": 2025,
+      "citationCount": 10,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1186/s12889-025-22077-9",
+        "status": "GOLD",
+        "license": "CCBYNCND",
+        "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC11871637, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2348072658",
+          "name": "Jingjing Liu"
+        },
+        {
+          "authorId": "2348211513",
+          "name": "Chang Liu"
+        },
+        {
+          "authorId": "2017636292",
+          "name": "Zhangdaihong Liu"
+        },
+        {
+          "authorId": "2364960689",
+          "name": "Yibing Zhou"
+        },
+        {
+          "authorId": "2348117405",
+          "name": "Xiaoguang Li"
+        },
+        {
+          "authorId": "2348242501",
+          "name": "Yang Yang"
+        }
+      ],
+      "abstract": "Metabolic diseases (MDs), exemplified by diabetes, hypertension, and dyslipidemia, have become increasingly prevalent with rising living standards, posing significant public health challenges. The MDs are influenced by a complex interplay of genetic factors, lifestyle choices, and socioeconomic conditions. Additionally, environmental pollutants, particularly air pollutants (APs), have attracted increasing attention for their potential role in exacerbating these MDs. However, the impact of APs on the MDs remains unclear. This study introduces a novel machine learning (ML) pipeline, an Algorithm for Spatial Relationships Analysis between Exposome and Metabolic Diseases (ASEMD), to analyze spatial associations between APs and MDs at the prefecture-level city scale in China. The ASEMD pipeline comprises three main steps: (i) Spatial autocorrelation between APs and MDs is evaluated using Moran’s I statistic and Local Indicators of Spatial Association (LISA) maps. (ii) dimensionality reduction and spatial similarities identification between APs and MDs clusters using Principal Component Analysis (PCA), k-means clustering, and Jaccard index calculations, further validated through spatial maps. (iii) AP exposure is adjusted by demographic and lifestyle confounders to predict MDs using machine learning models (e.g., eXtreme Gradient Boosting (XGBoost), Random Forest (RF), Decision Tree (DT), LightGBM, and Multi-Layer Perceptron (MLP)). SHAP values are employed to identify key adjusted APs that are linked to MDs. Model performance is evaluated through 10-fold cross-validation using five different metrics. The data utilized include CHARLS (2015) and meteorological data (2013-2015). Significant spatial correlations were found between APs and the prevalence of diabetes, dyslipidemia, and hypertension, with higher prevalence rates observed in alignment with elevated APs concentrations. By adjusting for demographic and lifestyle confounders, APs effectively predicted the risk of developing MDs (AUROC=0.890, 0.877, 0.710 for diabetes, dyslipidemia, and hypertension, respectively). The results showed that CO\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm CO$$\\end{document}, PM2.5\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm PM_{2.5}$$\\end{document}, and AQI\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm AQI$$\\end{document} were strongly correlated with diabetes, whereas NO2\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm NO_{2}$$\\end{document}, PM2.5\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm PM_{2.5}$$\\end{document}, and PM10\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm PM_{10}$$\\end{document} were significantly associated with dyslipidemia. For hypertension, CO\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm CO$$\\end{document}, O3\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm O_{3}$$\\end{document}, and AQI\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm AQI$$\\end{document} were mostly correlated. Sensitivity analyses across different regions and different types of APs underscored the robustness of our conclusions. The ASEMD pipeline successfully integrates ML models, epidemiological methods, and spatial analysis techniques, providing a robust framework for understanding the complex interactions between APs and MDs. We also identified specific APs, including PM10\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$PM_{10}$$\\end{document}, CO\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm CO$$\\end{document}, and SO2\\documentclass[12pt]{minimal} \\usepackage{amsmath} \\usepackage{wasysym} \\usepackage{amsfonts} \\usepackage{amssymb} \\usepackage{amsbsy} \\usepackage{mathrsfs} \\usepackage{upgreek} \\setlength{\\oddsidemargin}{-69pt} \\begin{document}$$\\mathrm SO_{2}$$\\end{document}, as being strongly linked to higher rates of diabetes, dyslipidemia, and hypertension in central and northern cities. Future region-specific public health strategies or interventions, especially in those areas with high pollutant levels, are needed to mitigate air pollution’s impact on metabolic health."
+    },
+    {
+      "paperId": "f9c62d36aa05fa1ef957aae7525f733fd3d9b877",
+      "externalIds": {
+        "PubMedCentral": "12322267",
+        "DOI": "10.1038/s41598-025-12872-0",
+        "CorpusId": 280526024,
+        "PubMed": "40760068"
+      },
+      "title": "Unraveling global malaria incidence and mortality using machine learning and artificial intelligence–driven spatial analysis",
+      "venue": "Scientific Reports",
+      "year": 2025,
+      "citationCount": 10,
+      "openAccessPdf": {
+        "url": "https://www.nature.com/articles/s41598-025-12872-0.pdf",
+        "status": "GOLD",
+        "license": "CCBYNCND",
+        "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC12322267, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2366242165",
+          "name": "Md. Siddikur Rahman"
+        },
+        {
+          "authorId": "2365815594",
+          "name": "Md Abu Bokkor Shiddik"
+        }
+      ],
+      "abstract": "Malaria remains a significant global health concern, contributing to substantial morbidity and mortality worldwide. To inform efforts aimed at alleviating the global malaria burden, this study utilized spatial analysis, advanced machine learning (ML), and explainable AI (XAI) to identify high-risk areas, uncover key determinants, predict disease outcomes, and establish causal relationships. This study analyzed data from 106 countries between 2000 and 2022, sourced from the World Health Organization, World Bank and UNICEF. A high-performance ML classifier, XGBoost, combined with XAI and causal AI (CAI) techniques was employed to evaluate malaria incidence and mortality. Spatial autocorrelation analyses, such as Getis-Ord Gi* and Moran’s I, were utilized to detect significant geographical clusters and hotspots of malaria. In 2022, malaria cases reached 251.75 million, while the peak of malaria-related fatalities occurred in 2020, totaling 99,554. Nigeria recorded the highest malaria incidence (1,332.99 million), followed by the Democratic Republic of the Congo (623.16 million) and India (319.83 million). South Sudan (149,753), Zambia (143,546), and the Central African Republic (124,801) exhibited the highest malaria mortality rates. High-incidence clusters were observed in Benin, Burkina Faso, and Ghana, with substantial mortality clusters in Benin, the Central African Republic, and Liberia. The XGBoost model demonstrated the best predictive performance for malaria incidence and mortality (RMSE = 0.63, r² = 0.93, adjusted r² = 0.92, and MAE = 0.46). The XAI and CAI methodologies identified key determinants of malaria, such as access to basic sanitation, electricity availability, population growth, and the under-5 mortality rate. Our integrated framework, driven by machine learning and artificial intelligence, offers actionable insights for identifying determinants and hotspots of malaria through spatial analysis. The study advocates for the incorporation of AI-driven spatial models into national malaria surveillance systems to facilitate evidence-based and targeted interventions."
+    },
+    {
+      "paperId": "89aa194da93dd953fb863d2f37227a6e542cffb1",
+      "externalIds": {
+        "DOI": "10.3390/rs17122084",
+        "CorpusId": 279463794
+      },
+      "title": "A Hybrid Regression–Kriging–Machine Learning Framework for Imputing Missing TROPOMI NO2 Data over Taiwan",
+      "venue": "Remote Sensing",
+      "year": 2025,
+      "citationCount": 8,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/17/12/2084/pdf?version=1750169093",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs17122084?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs17122084, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2275280403",
+          "name": "Alyssa Valerio"
+        },
+        {
+          "authorId": "2319615328",
+          "name": "Yi-Chun Chen"
+        },
+        {
+          "authorId": "2244577705",
+          "name": "Chian-Yi Liu"
+        },
+        {
+          "authorId": "2301501975",
+          "name": "Yi‐Ying Chen"
+        },
+        {
+          "authorId": "2168594910",
+          "name": "Chuan-yao Lin"
+        }
+      ],
+      "abstract": "This study presents a novel application of a hybrid regression–kriging (RK) and machine learning (ML) framework to impute missing tropospheric NO2 data from the TROPOMI satellite over Taiwan during the winter months of January, February, and December 2022. The proposed approach combines geostatistical interpolation with nonlinear modeling by integrating RK with ML models—specifically comparing gradient boosting regression (GBR), random forest (RF), and K-nearest neighbors (KNN)—to determine the most suitable auxiliary predictor. This structure enables the framework to capture both spatial autocorrelation and complex relationships between NO2 concentrations and environmental drivers. Model performance was evaluated using the coefficient of determination (r2), computed against observed TROPOMI NO2 column values filtered by quality assurance criteria. GBR achieved the highest validation r2 values of 0.83 for January and February, while RF yielded 0.82 and 0.79 in January and December, respectively. These results demonstrate the model’s robustness in capturing intra-seasonal patterns and nonlinear trends in NO2 distribution. In contrast, models using only static land cover inputs performed poorly (r2 < 0.58), emphasizing the limited predictive capacity of such variables in isolation. Interpretability analysis using the SHapley Additive exPlanations (SHAP) method revealed temperature as the most influential meteorological driver of NO2 variation, particularly during winter, while forest cover consistently emerged as a key land-use factor mitigating NO2 levels through dry deposition. By integrating dynamic meteorological variables and static land cover features, the hybrid RK–ML framework enhances the spatial and temporal completeness of satellite-derived air quality datasets. As the first RK–ML application for TROPOMI data in Taiwan, this study establishes a regional benchmark and offers a transferable methodology for satellite data imputation. Future research should explore ensemble-based RK variants, incorporate real-time auxiliary data, and assess transferability across diverse geographic and climatological contexts."
+    },
+    {
+      "paperId": "73174065d5e9686dea9f9891e03976cfb118cf32",
+      "externalIds": {
+        "DOI": "10.3390/f15060975",
+        "CorpusId": 270231092
+      },
+      "title": "Improving Forest Above-Ground Biomass Estimation by Integrating Individual Machine Learning Models",
+      "venue": "Forests",
+      "year": 2024,
+      "citationCount": 63,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/1999-4907/15/6/975/pdf?version=1717377814",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/f15060975?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/f15060975, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2287298858",
+          "name": "Mi Luo"
+        },
+        {
+          "authorId": "1840223722",
+          "name": "S. A. Anees"
+        },
+        {
+          "authorId": "2148361819",
+          "name": "Qiuyan Huang"
+        },
+        {
+          "authorId": "47719702",
+          "name": "Xin Qin"
+        },
+        {
+          "authorId": "2244245344",
+          "name": "Zhihao Qin"
+        },
+        {
+          "authorId": "2304603448",
+          "name": "Jianlong Fan"
+        },
+        {
+          "authorId": "2289829383",
+          "name": "Guangping Han"
+        },
+        {
+          "authorId": "2342619904",
+          "name": "Liguo Zhang"
+        },
+        {
+          "authorId": "52298106",
+          "name": "H. Shafri"
+        }
+      ],
+      "abstract": "The accurate estimation of forest above-ground biomass (AGB) is crucial for sustainable forest management and tracking the carbon cycle of forest ecosystem. Machine learning algorithms have been proven to have great potential in forest AGB estimation with remote sensing data. Though many studies have demonstrated that a single machine learning model can produce highly accurate estimations of forest AGB in many situations, efforts are still required to explore the possible improvement in forest AGB estimation for a specific scenario under study. This study aims to investigate the performance of novel ensemble machine learning methods for forest AGB estimation and analyzes whether these methods are affected by forest types, independent variables, and spatial autocorrelation. Four well-known machine learning models (CatBoost, LightGBM, random forest (RF), and XGBoost) were compared for forest AGB estimation in the study using eight scenarios devised on the basis of two study regions, two variable types, and two validation strategies. Subsequently, a hybrid model combining the strengths of these individual models was proposed for forest AGB estimation. The findings indicated that no individual model outperforms the others in all scenarios. The RF model demonstrates superior performance in scenarios 5, 6, and 7, while the CatBoost model shows the best performance in the remaining scenarios. Moreover, the proposed hybrid model consistently has the best performance in all scenarios in spite of some uncertainties. The ensemble strategy developed in this study for the hybrid model substantially improves estimation accuracy and exhibits greater stability, effectively addressing the challenge of model selection encountered in the forest AGB forecasting process."
+    },
+    {
+      "paperId": "a8fdc15b34d9aabbc6d99e96c451df281cef44ea",
+      "externalIds": {
+        "DOI": "10.5194/essd-17-3987-2025",
+        "CorpusId": 280810006
+      },
+      "title": "An upgraded high-precision gridded precipitation dataset for the Chinese mainland considering spatial autocorrelation and covariates",
+      "venue": "Earth System Science Data",
+      "year": 2025,
+      "citationCount": 58,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.5194/essd-17-3987-2025",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.5194/essd-17-3987-2025?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.5194/essd-17-3987-2025, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2265380912",
+          "name": "Jinlong Hu"
+        },
+        {
+          "authorId": "2164178633",
+          "name": "Chiyuan Miao"
+        },
+        {
+          "authorId": "2314810101",
+          "name": "Jiajia Su"
+        },
+        {
+          "authorId": "2188461565",
+          "name": "Qi Zhang"
+        },
+        {
+          "authorId": "39305679",
+          "name": "Jiaojiao Gou"
+        },
+        {
+          "authorId": "12736164",
+          "name": "Qiaohong Sun"
+        }
+      ],
+      "abstract": "Abstract. Precipitation is a critical driver of the water cycle, profoundly influencing water resources, agricultural productivity, and natural disasters. However, existing gridded precipitation datasets exhibit markable deficiencies in capturing the spatial autocorrelation and associated environmental and climatic influences – here referred to collectively as precipitation-related covariates – that limit their accuracy, particularly in regions with sparse meteorological stations. To address these challenges, this study proposes a completely new gridded precipitation generation scheme that integrates long-term daily observations from 3746 gauges with 11 key precipitation-related covariates. Building upon the improved inverse distance weighting interpolation method used in our previous dataset CHM_PRE V1, we integrated a machine learning algorithm – light gradient boosting machine (LGBM) – to incorporate precipitation-related covariates in a data-driven manner. This integration allows for a more comprehensive characterization of precipitation patterns, jointly capturing spatial autocorrelation and covariate-based variability. By this novel scheme, a new high-precision, long-term, daily gridded precipitation dataset for the Chinese mainland (CHM_PRE V2) was developed. Validation against 63 397 high-density gauges demonstrated that CHM_PRE V2 significantly outperforms existing gridded precipitation datasets. Specifically, it achieves a mean absolute error of 1.48 mm d−1 and a Kling-Gupta efficiency of 0.88, representing improvements of 12.84 % and 12.86 %, respectively, compared to the previously optimal dataset. Regarding precipitation event detection, CHM_PRE V2 achieved a Heidke skill score of 0.68 and a false alarm ratio of 0.24, surpassing the previously optimal dataset by 17.24 % and 29.17 %, respectively. These results demonstrate that CHM_PRE V2 markedly enhances precipitation measurement accuracy, reduces overestimation of precipitation events, and provides a reliable foundation for hydrological modeling and climate assessments. This dataset features a resolution of 0.1°, spans from 1960 to 2023, and will be updated annually. Free access to the dataset can be found at https://doi.org/10.11888/Atmos.tpdc.300523 (Hu and Miao, 2025).\n"
+    },
+    {
+      "paperId": "00a11ab6ac92b4d7f8731f3e8ab2798c8926cc2a",
+      "externalIds": {
+        "DOI": "10.1080/15481603.2025.2533487",
+        "CorpusId": 280286052
+      },
+      "title": "Identifying climate and environmental determinants of spatial disparities in wheat production using a geospatial machine learning model",
+      "venue": "GIScience &amp; Remote Sensing",
+      "year": 2025,
+      "citationCount": 8,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1080/15481603.2025.2533487",
+        "status": "GOLD",
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1080/15481603.2025.2533487?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1080/15481603.2025.2533487, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2310741922",
+          "name": "Kai Ren"
+        },
+        {
+          "authorId": "2278356144",
+          "name": "Yongze Song"
+        },
+        {
+          "authorId": "2373564055",
+          "name": "Linchao Li"
+        },
+        {
+          "authorId": "2239409829",
+          "name": "Francesco Mancini"
+        },
+        {
+          "authorId": "2296086028",
+          "name": "Zhuoyao Xiao"
+        },
+        {
+          "authorId": "2277414163",
+          "name": "Xueyuan Zhang"
+        },
+        {
+          "authorId": "2259027877",
+          "name": "Rui Qu"
+        },
+        {
+          "authorId": "2309200004",
+          "name": "Qiang Yu"
+        }
+      ],
+      "abstract": "ABSTRACT Wheat production is crucial in global food security and sustainable development, especially in severe global climate change, frequent extreme weather events, and significant population growth worldwide. A deeper understanding of spatial variation in wheat production and its determining factors is essential for implementing different cultivation practices, water and fertilizer management, and adaptive variety selection across different regions. However, existing methods primarily focused on identifying single-variable factors while lacking geographical spatial characteristics, which may lead to an incomplete exploration of spatial disparities in wheat production, predictions, and responses to changes in determining factors. This study develops a geospatial machine learning model by integrating spatial autocorrelation, spatial stratified heterogeneity, and decision tree to identify spatial disparities and their determinants of wheat production. The model is applied to wheat production analysis in Australia, the world’s 5th (2022) wheat-producing country. First, a spatial autocorrelation method is employed to identify the hotspot area of wheat production in Australia. Next, the geographically optimal zones-based heterogeneity (GOZH) model, an integration of spatial stratified heterogeneity and decision tree learning models, is used to identify determinants and their interactions on spatial disparities of wheat production. Finally, the developed geospatial machine learning model is evaluated by comparing its effectiveness with the commonly used geographical detector model. The results demonstrate pronounced spatial heterogeneity in Australian wheat production driven by environmental, climatic, and soil factors and their interactions. Identifying these spatial determinants enables more efficient crop management – such as targeted sub – regional practices, climate – adaptive variety selection, and soil health strategies – thereby supporting food security and sustainable agricultural systems."
+    }
+  ]
+}

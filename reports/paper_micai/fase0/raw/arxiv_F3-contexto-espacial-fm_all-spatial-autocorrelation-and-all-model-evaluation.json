@@ -1,0 +1,41 @@
+{
+  "front": "F3-contexto-espacial-fm",
+  "source": "arxiv",
+  "query": "all:\"spatial autocorrelation\" AND all:\"model evaluation\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2607.26625v1",
+      "title": "Enhancing Automated Machine Learning via Homogeneous Train-Test Splitting Methods",
+      "authors": [
+        "Yearn Tan Yin Tze",
+        "Charles Grellois"
+      ],
+      "published": "2026-07-29T08:53:11Z",
+      "doi": null,
+      "summary": "Accurate model evaluation in machine learning depends critically on how datasets are split into training and testing subsets. Standard random splitting assumes that both partitions share the same underlying distribution, an assumption often violated in datasets with class imbalance, natural clustering, or spatial autocorrelation. This paper investigates the role of statistical similarity in train-test splitting and its consequences for AutoML model evaluation. Five established strategies are compared across fifteen UCI benchmark datasets: random splitting, stratified sampling, Kennard-Stone, Duplex, and SPXY. Similarity is assessed using chi-square, Kolmogorov-Smirnov, and Maximum Mean Discrepancy (MMD) tests. Geometry-based methods consistently produce near-zero MMD scores, introducing instability into downstream performance estimates. The proposed Optimised-Distribution method treats similarity as an explicit optimisation objective and achieves the highest mean MMD similarity, 89.0%, across all strategies evaluated."
+    },
+    {
+      "arxiv_id": "2303.11312v1",
+      "title": "waywiser: Ergonomic Methods for Assessing Spatial Models",
+      "authors": [
+        "Michael J Mahoney"
+      ],
+      "published": "2023-03-20T17:51:36Z",
+      "doi": null,
+      "summary": "Assessing predictive models can be challenging. Modelers must navigate a wide array of evaluation methodologies implemented with incompatible interfaces across multiple packages which may give different or even contradictory results, while ensuring that their chosen approach properly estimates the performance of their model when generalizing to new observations. Assessing models fit to spatial data can be particularly difficult, given that model errors may exhibit spatial autocorrelation, model predictions are often aggregated to multiple spatial scales by end users, and models are often tasked with generalizing into spatial regions outside the boundaries of their initial training data. The waywiser package for the R language attempts to make assessing spatial models easier by providing an ergonomic toolkit for model evaluation tasks, with functions for multiple assessment methodologies sharing a unified interface. Functions from waywiser share standardized argument names and default values, making the user-facing interface simple and easy to learn. These functions are additionally designed to be easy to integrate into a wide variety of modeling workflows, accepting standard classes as inputs and returning size- and type-stable outputs, ensuring that their results are of consistent and predictable data types and dimensions. Additional features make it particularly easy to use waywiser along packages and workflows in the tidymodels ecosystem."
+    },
+    {
+      "arxiv_id": "2502.03480v2",
+      "title": "Foundation for unbiased cross-validation of spatio-temporal models for species distribution modeling",
+      "authors": [
+        "Diana Koldasbayeva",
+        "Alexey Zaytsev"
+      ],
+      "published": "2025-01-27T23:02:05Z",
+      "doi": "10.1016/j.ecoinf.2025.103521",
+      "summary": "Evaluating the predictive performance of species distribution models (SDMs) under realistic deployment scenarios requires careful handling of spatial and temporal dependencies in the data. Cross-validation (CV) is the standard approach for model evaluation, but its design strongly influences the validity of performance estimates. When SDMs are intended for spatial or temporal transfer, random CV can lead to overoptimistic results due to spatial autocorrelation (SAC) among neighboring observations. We benchmark four machine learning algorithms (GBM, XGBoost, LightGBM, Random Forest) on two real-world presence-absence datasets, a temperate plant and an anadromous fish, using multiple CV designs: random, spatial, spatio-temporal, environmental, and forward-chaining. Two training data usage strategies (LAST FOLD and RETRAIN) are evaluated, with hyperparameter tuning performed within each CV scheme. Model performance is assessed on independent out-of-time test sets using AUC, MAE, and correlation metrics. Random CV overestimates AUC by up to 0.16 and produces MAE values up to 80 percent higher than spatially blocked alternatives. Blocking at the empirical SAC range substantially reduces this bias. Training strategy affects evaluation outcomes: LAST FOLD yields smaller validation-test discrepancies under strong SAC, while RETRAIN achieves higher test AUC when SAC is weaker. Boosted ensemble models consistently perform best under spatially structured CV designs. We recommend a robust SDM workflow based on SAC-aware blocking, blocked hyperparameter tuning, and external temporal validation to improve reliability under spatial and temporal shifts."
+    }
+  ]
+}

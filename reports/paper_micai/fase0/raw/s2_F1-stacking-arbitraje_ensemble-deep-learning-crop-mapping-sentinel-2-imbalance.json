@@ -1,0 +1,1091 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "semanticscholar",
+  "query": "ensemble deep learning crop mapping Sentinel-2 imbalance",
+  "executed_at": "2026-09-02T20:53:16+00:00",
+  "status": 200,
+  "records": [
+    {
+      "paperId": "4d9e2194cb55b216f897afa9c058da861202a1f8",
+      "externalIds": {
+        "DOI": "10.3390/rs17183207",
+        "CorpusId": 281470424
+      },
+      "title": "Deep Learning Applications for Crop Mapping Using Multi-Temporal Sentinel-2 Data and Red-Edge Vegetation Indices: Integrating Convolutional and Recurrent Neural Networks",
+      "venue": "Remote Sensing",
+      "year": 2025,
+      "citationCount": 17,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.3390/rs17183207",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs17183207?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs17183207, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2138998993",
+          "name": "Rahat Tufail"
+        },
+        {
+          "authorId": "31918833",
+          "name": "P. Tassinari"
+        },
+        {
+          "authorId": "33327533",
+          "name": "D. Torreggiani"
+        }
+      ],
+      "abstract": "Accurate crop classification using satellite imagery is critical for agricultural monitoring, yield estimation, and land-use planning. However, this task remains challenging due to the spectral similarity among crops. Although crops differ in physiological characteristics, including chlorophyll content, they often exhibit only subtle differences in their spectral reflectance, which make their precise discrimination challenging. To address this, this study uses the high temporal and spectral resolution of Sentinel-2 imagery, including its red-edge bands and derived vegetation indices, which are particularly sensitive to vegetation health and structural differences. This study presents a hybrid deep learning framework for crop classification, conducted through a case study in a complex agricultural region of Northern Italy. We investigated the combined use of spectral bands and NDVI & red-edge-based vegetation indices as inputs to hybrid deep learning models. Previous studies have applied 1D CNN, 2D CNN, LSTM, and GRU, often standalone, but their capacity to jointly process spectral and vegetative features through integrated CNN-RNN structures remains underexplored in mixed agricultural regions. To fill this gap, we developed and assessed four hybrid architectures: (1) 1D CNN-LSTM, (2) 1D CNN-GRU, (3) 2D CNN-LSTM, and (4) 2D CNN-GRU. These models were trained using optimized hyperparameters on combined spectral and vegetative input features. The 2D CNN-GRU model achieved the highest overall accuracy (99.12%) and F1-macro (99.14%), followed by 2D CNN-LSTM (98.51%), while 1D CNN-GRU and 1D CNN-LSTM performed slightly lower (93.46% and 92.54%), respectively."
+    },
+    {
+      "paperId": "fe33f5426a85e5f27547e91c6793469c5ef54108",
+      "externalIds": {
+        "DOI": "10.9734/jgeesi/2025/v29i12992",
+        "CorpusId": 284122110
+      },
+      "title": "Integrating GeoAI and Deep Learning for Sustainable Agriculture: Sentinel-2 Based Crop Mapping and Yield Prediction for Selected Crops in Sokoto, Nigeria",
+      "venue": "Journal of Geography Environment and Earth Science International",
+      "year": 2025,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.9734/jgeesi/2025/v29i12992",
+        "status": "GOLD",
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.9734/jgeesi/2025/v29i12992?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.9734/jgeesi/2025/v29i12992, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2329029357",
+          "name": "Abdulmumin Garba Budah"
+        },
+        {
+          "authorId": "2400328067",
+          "name": "Tijani Habeeb"
+        },
+        {
+          "authorId": "2384979849",
+          "name": "S. Faiza"
+        }
+      ],
+      "abstract": "Sustainable agriculture, particularly in semi-arid areas, depends on precise crop mapping and yield forecasting. In this study, Random Forest (RF) classification and regression implemented in Google Earth Engine (GEE) are combined with GeoAI and machine learning techniques. It evaluates crop distribution and predicts yields in Sokoto State, Nigeria, using Sentinel-2 surface reflectance imagery. 3,167.57 hectares of cropland were analysed using 690 cloud-filtered Sentinel-2 scenes that were gathered between January and December of 2023.  Crop classification demonstrated good reliability in identifying rice, pepper, and onion crops with an overall accuracy of 99.7% and a Kappa coefficient of 0.82. With a coefficient of determination (R²) of 0.84 and a Pearson correlation of 0.92, the Random Forest yield model predicted crop yields, demonstrating a very significant positive link between observed and anticipated yields. With a little positive bias of +9,244 kg/ha, the model's root mean squared error (RMSE) and mean absolute error (MAE) were 10,870 kg/ha and 9,244 kg/ha, respectively.  According to yield figures, the average yield was 20,971 kg/ha, with a range of 7,000 to 40,000 kg/ha. These findings show how precise crop mapping and yield estimation can be achieved by combining GeoAI, multispectral satellite data, and machine-learning approaches. The results assist better decision-making, sustainable farming methods, and increased food security in semi-arid regions by providing agricultural scientists and policymakers with practical insights."
+    },
+    {
+      "paperId": "5a64aa0b2b7bcf42f3fa591bfe2a7646c96135f9",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/WernerBBRTASLMCEF24",
+        "DOI": "10.3390/rs16081421",
+        "CorpusId": 269226326
+      },
+      "title": "Mapping Integrated Crop-Livestock Systems Using Fused Sentinel-2 and PlanetScope Time Series and Deep Learning",
+      "venue": "Remote Sensing",
+      "year": 2024,
+      "citationCount": 13,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/16/8/1421/pdf?version=1713358658",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs16081421?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs16081421, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "108450724",
+          "name": "J. P. Werner"
+        },
+        {
+          "authorId": "3300590",
+          "name": "Mariana Belgiu"
+        },
+        {
+          "authorId": "30722662",
+          "name": "I. T. Bueno"
+        },
+        {
+          "authorId": "2276888481",
+          "name": "A. A. D. Reis"
+        },
+        {
+          "authorId": "2265265037",
+          "name": "Ana P. S. G. D. Toro"
+        },
+        {
+          "authorId": "2265262847",
+          "name": "J. F. Antunes"
+        },
+        {
+          "authorId": "2242833739",
+          "name": "Alfred Stein"
+        },
+        {
+          "authorId": "98304867",
+          "name": "R. A. Lamparelli"
+        },
+        {
+          "authorId": "2238838783",
+          "name": "P. S. Magalhães"
+        },
+        {
+          "authorId": "13343037",
+          "name": "A. Coutinho"
+        },
+        {
+          "authorId": "1580408013",
+          "name": "J. Esquerdo"
+        },
+        {
+          "authorId": "108752766",
+          "name": "G. Figueiredo"
+        }
+      ],
+      "abstract": "Integrated crop–livestock systems (ICLS) are among the main viable strategies for sustainable agricultural production. Mapping these systems is crucial for monitoring land use changes in Brazil, playing a significant role in promoting sustainable agricultural production. Due to the highly dynamic nature of ICLS management, mapping them is a challenging task. The main objective of this research was to develop a method for mapping ICLS using deep learning algorithms applied on Satellite Image Time Series (SITS) data cubes, which consist of Sentinel-2 (S2) and PlanetScope (PS) satellite images, as well as data fused (DF) from both sensors. This study focused on two Brazilian states with varying landscapes and field sizes. Targeting ICLS, field data were combined with S2 and PS data to build land use and land cover classification models for three sequential agricultural years (2018/2019, 2019/2020, and 2020/2021). We tested three experimental settings to assess the classification performance using S2, PS, and DF data cubes. The test classification algorithms included Random Forest (RF), Temporal Convolutional Neural Network (TempCNN), Residual Network (ResNet), and a Lightweight Temporal Attention Encoder (L-TAE), with the latter incorporating an attention-based model, fusing S2 and PS within the temporal encoders. Experimental results did not show statistically significant differences between the three data sources for both study areas. Nevertheless, the TempCNN outperformed the other classifiers with an overall accuracy above 90% and an F1-Score of 86.6% for the ICLS class. By selecting the best models, we generated annual ICLS maps, including their surrounding landscapes. This study demonstrated the potential of deep learning algorithms and SITS to successfully map dynamic agricultural systems."
+    },
+    {
+      "paperId": "9eed8574211b042ebea3224e9c53535738c4cdc4",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/SongFWZDWHAZL23",
+        "DOI": "10.3390/rs15133417",
+        "CorpusId": 259516675
+      },
+      "title": "Bi-Objective Crop Mapping from Sentinel-2 Images Based on Multiple Deep Learning Networks",
+      "venue": "Remote Sensing",
+      "year": 2023,
+      "citationCount": 23,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/15/13/3417/pdf?version=1688619640",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs15133417?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs15133417, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2221716570",
+          "name": "Weicheng Song"
+        },
+        {
+          "authorId": "2063968245",
+          "name": "Aiqing Feng"
+        },
+        {
+          "authorId": "1630578473",
+          "name": "Guojie Wang"
+        },
+        {
+          "authorId": "2221713774",
+          "name": "Qixia Zhang"
+        },
+        {
+          "authorId": "2180931211",
+          "name": "Wen Dai"
+        },
+        {
+          "authorId": "1618037328",
+          "name": "Xikun Wei"
+        },
+        {
+          "authorId": "2149296129",
+          "name": "Yifan Hu"
+        },
+        {
+          "authorId": "1685385878",
+          "name": "S. Amankwah"
+        },
+        {
+          "authorId": "2092042810",
+          "name": "Feihong Zhou"
+        },
+        {
+          "authorId": "2222362159",
+          "name": "Yi Liu"
+        }
+      ],
+      "abstract": "Accurate assessment of the extent of crop distribution and mapping different crop types are essential for monitoring and managing modern agriculture. Medium and high spatial resolution remote sensing (RS) for Earth observation and deep learning (DL) constitute one of the most major and effective tools for crop mapping. In this study, we used high-resolution Sentinel-2 imagery from Google Earth Engine (GEE) to map paddy rice and winter wheat in the Bengbu city of Anhui Province, China. We compared the performance of different popular DL backbone networks with the traditional machine learning (ML) methods, including HRNet, MobileNet, Xception, and Swin Transformer, within the improved DeepLabv3+ architecture, Segformer and random forest (RF). The results showed that the Segformer based on the combination of the Transformer architecture encoder and the lightweight multilayer perceptron (MLP) decoder achieved an overall accuracy (OA) value of 91.06%, a mean F1 Score (mF1) value of 89.26% and a mean Intersection over Union (mIoU) value of 80.70%. The Segformer outperformed other DL methods by combining the results of multiple evaluation metrics. Except for Swin Transformer, which was slightly lower than RF in OA, all DL methods significantly outperformed RF methods in accuracy for the main mapping objects, with mIoU improving by about 13.5~26%. The predicted images of paddy rice and winter wheat from the Segformer were characterized by high mapping accuracy, clear field edges, distinct detail features and a low false classification rate. Consequently, DL is an efficient option for fast and accurate mapping of paddy rice and winter wheat based on RS imagery."
+    },
+    {
+      "paperId": "de93de6470f0db948d4062d5a3fa5d4322c0b545",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/Selea23",
+        "DOI": "10.3390/rs15122980",
+        "CorpusId": 259555812
+      },
+      "title": "AgriSen-COG, a Multicountry, Multitemporal Large-Scale Sentinel-2 Benchmark Dataset for Crop Mapping Using Deep Learning",
+      "venue": "Remote Sensing",
+      "year": 2023,
+      "citationCount": 18,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/15/12/2980/pdf?version=1686299525",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs15122980?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs15122980, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "3435827",
+          "name": "Teodora Selea"
+        }
+      ],
+      "abstract": "With the increasing volume of collected Earth observation (EO) data, artificial intelligence (AI) methods have become state-of-the-art in processing and analyzing them. However, there is still a lack of high-quality, large-scale EO datasets for training robust networks. This paper presents AgriSen-COG, a large-scale benchmark dataset for crop type mapping based on Sentinel-2 data. AgriSen-COG deals with the challenges of remote sensing (RS) datasets. First, it includes data from five different European countries (Austria, Belgium, Spain, Denmark, and the Netherlands), targeting the problem of domain adaptation. Second, it is multitemporal and multiyear (2019–2020), therefore enabling analysis based on the growth of crops in time and yearly variability. Third, AgriSen-COG includes an anomaly detection preprocessing step, which reduces the amount of mislabeled information. AgriSen-COG comprises 6,972,485 parcels, making it the most extensive available dataset for crop type mapping. It includes two types of data: pixel-level data and parcel aggregated information. By carrying this out, we target two computer vision (CV) problems: semantic segmentation and classification. To establish the validity of the proposed dataset, we conducted several experiments using state-of-the-art deep-learning models for temporal semantic segmentation with pixel-level data (U-Net and ConvStar networks) and time-series classification with parcel aggregated information (LSTM, Transformer, TempCNN networks). The most popular models (U-Net and LSTM) achieve the best performance in the Belgium region, with a weighted F1 score of 0.956 (U-Net) and 0.918 (LSTM).The proposed data are distributed as a cloud-optimized GeoTIFF (COG), together with a SpatioTemporal Asset Catalog (STAC), which makes AgriSen-COG a findable, accessible, interoperable, and reusable (FAIR) dataset."
+    },
+    {
+      "paperId": "0f60e0f4ad2947494eb09887e6c44b1d23c2cdc1",
+      "externalIds": {
+        "DBLP": "journals/cea/FengGLYY23",
+        "DOI": "10.1016/j.compag.2023.108227",
+        "CorpusId": 261649640
+      },
+      "title": "A deep learning framework for crop mapping with reconstructed Sentinel-2 time series images",
+      "venue": "Computers and Electronics in Agriculture",
+      "year": 2023,
+      "citationCount": 41,
+      "openAccessPdf": {
+        "url": "",
+        "status": "CLOSED",
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1016/j.compag.2023.108227?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1016/j.compag.2023.108227, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2090369224",
+          "name": "Fukang Feng"
+        },
+        {
+          "authorId": "87240142",
+          "name": "Maofang Gao"
+        },
+        {
+          "authorId": "47246367",
+          "name": "Ronghua Liu"
+        },
+        {
+          "authorId": "2238717219",
+          "name": "Shuihong Yao"
+        },
+        {
+          "authorId": "2238909080",
+          "name": "Guijun Yang"
+        }
+      ],
+      "abstract": null
+    },
+    {
+      "paperId": "01d1c5d42c5c8109a10cdc9439d588d47cec5ffa",
+      "externalIds": {
+        "DOI": "10.1016/j.rsase.2026.102075",
+        "CorpusId": 288537038
+      },
+      "title": "Deep Learning–eXtreme Gradient Boosting ensemble approach for reliable additive mapping of above- and belowground carbon pools in tropical dry dipterocarp forests from Sentinel-2 imagery",
+      "venue": "Remote Sensing Applications Society and Environment",
+      "year": 2026,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1016/j.rsase.2026.102075?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1016/j.rsase.2026.102075, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "89534327",
+          "name": "B. Huy"
+        },
+        {
+          "authorId": "46305764",
+          "name": "K. Poudel"
+        },
+        {
+          "authorId": "1947402",
+          "name": "H. Temesgen"
+        },
+        {
+          "authorId": "1382265736",
+          "name": "A. Braun"
+        },
+        {
+          "authorId": "2151412951",
+          "name": "N. Q. Truong"
+        },
+        {
+          "authorId": "89040532",
+          "name": "Pham Cong Tri"
+        },
+        {
+          "authorId": "2160092357",
+          "name": "Nguyen The Hien"
+        },
+        {
+          "authorId": "83250051",
+          "name": "N. Q. Khiem"
+        }
+      ],
+      "abstract": null
+    },
+    {
+      "paperId": "6239f93d8b04417550798d3c1e8279772748a990",
+      "externalIds": {
+        "DOI": "10.1016/j.isprsjprs.2023.04.002",
+        "CorpusId": 258122049
+      },
+      "title": "An unsupervised domain adaptation deep learning method for spatial and temporal transferable crop type mapping using Sentinel-2 imagery",
+      "venue": "Isprs Journal of Photogrammetry and Remote Sensing",
+      "year": 2023,
+      "citationCount": 78,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1016/j.isprsjprs.2023.04.002?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1016/j.isprsjprs.2023.04.002, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "11319845",
+          "name": "Yumiao Wang"
+        },
+        {
+          "authorId": "27620638",
+          "name": "Luwei Feng"
+        },
+        {
+          "authorId": "1801050",
+          "name": "Zuxun Zhang"
+        },
+        {
+          "authorId": "2161063495",
+          "name": "Fengkai Tian"
+        }
+      ],
+      "abstract": null
+    },
+    {
+      "paperId": "14b370dfe08ecb9e5871b84c51fd70bd9a6f5864",
+      "externalIds": {
+        "DOI": "10.1109/ICETISI67983.2025.11406072",
+        "CorpusId": 286135534
+      },
+      "title": "Deep Learning–Based Mapping of Urban Land Degradation in Jakarta Using Sentinel-2, U-Net, and Google Earth Engine",
+      "venue": "2025 1st International Conference on Emerging Trends in Information Systems and Informatics (ICETISI)",
+      "year": 2025,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1109/ICETISI67983.2025.11406072?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1109/ICETISI67983.2025.11406072, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2420742920",
+          "name": "David Arrown"
+        },
+        {
+          "authorId": "2163911",
+          "name": "Panca Dewi Pamungkasari"
+        },
+        {
+          "authorId": "2181147952",
+          "name": "Ratih Titi Komala Sari"
+        },
+        {
+          "authorId": "2420743027",
+          "name": "Erina Rahmazani"
+        },
+        {
+          "authorId": "2420745920",
+          "name": "Lili Dwi Yulianto"
+        }
+      ],
+      "abstract": "Rapid urban expansion in Jakarta has led to widespread conversion of vegetated land into built-up and bare surfaces, degrading ecosystem services and exacerbating flood risk and heat stress. This paper presents a deep learning workflow for mapping urban land degradation from Sentinel-2 imagery using a U-Net segmentation network and probabilistic post-processing implemented on Google Earth Engine (GEE). Cloud-free mosaics for the 2024 dry season are combined with manually interpreted polygons of vegetation-to-built-up transitions to produce a patch-based training dataset over the Jakarta metropolitan area. The model is trained on 256×256 pixel tiles and yields a validation Dice coefficient of approximately 0.23, reflecting the challenging class imbalance and label noise in the available annotations. The resulting degradation probability map at 10 m resolution is thresholded to produce binary masks, which are further analysed at the sub-district (kecamatan) level using zonal statistics. We summarise degraded area and degradation fraction for each administrative unit and highlight coastal and eastern fringe districts as hotspots. The proposed framework demonstrates the feasibility of combining cloud-based geospatial processing, deep neural networks, and spatial statistics to provide actionable information on urban land degradation for local planning."
+    },
+    {
+      "paperId": "932e196131d008318aad3ca647a38a1a82a4924b",
+      "externalIds": {
+        "DBLP": "journals/informatics/MachichiEIBHLBZB22",
+        "DOI": "10.3390/informatics9040096",
+        "CorpusId": 254249198
+      },
+      "title": "CerealNet: A Hybrid Deep Learning Architecture for Cereal Crop Mapping Using Sentinel-2 Time-Series",
+      "venue": "Informatics",
+      "year": 2022,
+      "citationCount": 11,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2227-9709/9/4/96/pdf?version=1669788564",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/informatics9040096?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/informatics9040096, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "147524841",
+          "name": "Mouad Alami Machichi"
+        },
+        {
+          "authorId": "3349008",
+          "name": "L. Elmansouri"
+        },
+        {
+          "authorId": "1659347438",
+          "name": "Y. Imani"
+        },
+        {
+          "authorId": "2279690",
+          "name": "Omar Bourja"
+        },
+        {
+          "authorId": "3205356",
+          "name": "R. Hadria"
+        },
+        {
+          "authorId": "1665278983",
+          "name": "O. Lahlou"
+        },
+        {
+          "authorId": "2089889827",
+          "name": "Samir Benmansour"
+        },
+        {
+          "authorId": "46186681",
+          "name": "Yahya Zennayi"
+        },
+        {
+          "authorId": "3283790",
+          "name": "François Bourzeix"
+        }
+      ],
+      "abstract": "Remote sensing-based crop mapping has continued to grow in economic importance over the last two decades. Given the ever-increasing rate of population growth and the implications of multiplying global food production, the necessity for timely, accurate, and reliable agricultural data is of the utmost importance. When it comes to ensuring high accuracy in crop maps, spectral similarities between crops represent serious limiting factors. Crops that display similar spectral responses are notorious for being nearly impossible to discriminate using classical multi-spectral imagery analysis. Chief among these crops are soft wheat, durum wheat, oats, and barley. In this paper, we propose a unique multi-input deep learning approach for cereal crop mapping, called “CerealNet”. Two time-series used as input, from the Sentinel-2 bands and NDVI (Normalized Difference Vegetation Index), were fed into separate branches of the LSTM-Conv1D (Long Short-Term Memory Convolutional Neural Networks) model to extract the temporal and spectral features necessary for the pixel-based crop mapping. The approach was evaluated using ground-truth data collected in the Gharb region (northwest of Morocco). We noted a categorical accuracy and an F1-score of 95% and 94%, respectively, with minimal confusion between the four cereal classes. CerealNet proved insensitive to sample size, as the least-represented crop, oats, had the highest F1-score. This model was compared with several state-of-the-art crop mapping classifiers and was found to outperform them. The modularity of CerealNet could possibly allow for injecting additional data such as Synthetic Aperture Radar (SAR) bands, especially when optical imagery is not available."
+    },
+    {
+      "paperId": "000278f408aac33949bc24c2eecc102a7aea04a7",
+      "externalIds": {
+        "DOI": "10.5194/isprs-annals-x-5-w2-2025-397-2025",
+        "CorpusId": 284085656
+      },
+      "title": "Classification and Phenological Stage Monitoring of Grape Crop using Sentinel-1 and Sentinel-2 Time Series and Deep Learning Techniques",
+      "venue": "ISPRS Annals of the Photogrammetry, Remote Sensing and Spatial Information Sciences",
+      "year": 2025,
+      "citationCount": 1,
+      "openAccessPdf": {
+        "url": "https://isprs-annals.copernicus.org/articles/X-5-W2-2025/397/2025/isprs-annals-X-5-W2-2025-397-2025.pdf",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.5194/isprs-annals-x-5-w2-2025-397-2025?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.5194/isprs-annals-x-5-w2-2025-397-2025, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "97750088",
+          "name": "S. Mukherjee"
+        },
+        {
+          "authorId": "2275126310",
+          "name": "Sahil K. Shah"
+        },
+        {
+          "authorId": "2379980178",
+          "name": "T. Singh"
+        },
+        {
+          "authorId": "12648735",
+          "name": "V. Kumbhar"
+        }
+      ],
+      "abstract": "Abstract. The demand for food production is increasing rapidly with a surge in the population. To cope with this increasing food demand, precise agricultural management is essential. The existing techniques involve extensive field surveys for agricultural land discrimination. To minimize the man-hour efforts and time required by these techniques, automated techniques for precise crop type mapping and monitoring have been used. These techniques utilize satellite imagery and advanced machine learning techniques for crop type mapping and monitoring. However, the performance of such techniques is affected by factors such as fragmented land parcels, seasonal variability, and inconsistent field-level observations. To overcome these issues, this study attempts to classify grape and non-grape crops and monitor their phenological stages in the study area in Pune district, India, using Sentinel-2 satellite imagery and deep learning (DL) segmentation techniques: U-Net and DeepLabV3. Further, Sentinel- 1C SAR imagery (VV and VH polarization) for the years 2016 to 2024 was utilized to train and evaluate a long short-term memory network (LSTM) model with an aim to analyze the temporal behavior of the grape crop from pruning to harvesting stage with emphasis on growth stages like leaf set, fruit set, and ripening. The experimental results demonstrate that U-Net outperforms DeepLabV3 (F1-score: 0.96; mAP: 0.95) in grape crop classification. The LSTM model showed performance (F1-score 0.82) for phenological stage identification. This study can help agricultural stakeholders in effective and large-scale crop discrimination with minimum human intervention. It has the potential to reveal grape distribution and development stages in a faster time."
+    },
+    {
+      "paperId": "4987727cc43f0aa146d36e43ffd9038399280dc6",
+      "externalIds": {
+        "DOI": "10.3390/green1010005",
+        "CorpusId": 289418980
+      },
+      "title": "Resource-Aware Citrus Crop Mapping from Sentinel-2 Time Series Using a Pixel-Set Encoder Convolutional Neural Network for Sustainable Agricultural Monitoring",
+      "venue": "Green",
+      "year": 2026,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.3390/green1010005",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/green1010005?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/green1010005, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2443496681",
+          "name": "Eduardo Vidoretti Argenton"
+        },
+        {
+          "authorId": "2393278",
+          "name": "Everton Gomede"
+        },
+        {
+          "authorId": null,
+          "name": "Leonardo de Souza Mendes"
+        }
+      ],
+      "abstract": "Context: Accurate citrus crop mapping is essential for agricultural monitoring, production planning, and supply-chain management, particularly in Brazil, one of the world’s leading orange producers and the leading orange-juice exporter. Satellite image time series from Sentinel-2 provide rich spectral and temporal information for crop identification. However, citrus mapping remains challenging due to fragmented agricultural landscapes, cloud contamination, class imbalance, and spectral overlap with other vegetation classes. Problem: Conventional machine learning models often depend on handcrafted vegetation indices, while attention-based deep learning models may require larger datasets and can become unstable under geographically constrained conditions. Therefore, there is a need for a compact and robust deep learning architecture capable of extracting citrus phenological signatures directly from multispectral time-series data. Methods: This study evaluates a Spatio-Temporal Pixel-Set Encoder Convolutional Neural Network (PSE-CNN) for citrus crop classification in the immediate geographic regions of São João da Boa Vista and Mogi Guaçu, São Paulo, Brazil. MapBiomas Collection 10.1 data from 2019 to 2024 were used to derive reference polygons, and Sentinel-2 imagery was processed into cloud-masked, 15-day temporal composites using ten spectral bands. The proposed PSE-CNN was benchmarked against PSE-TAE, PSE-Transformer, Random Forest, and XGBoost using spatially grouped data partitioning and temporal test years. Results: The proposed PSE-CNN achieved the highest Unified F1-Score of 0.704 and the lowest coefficient of variation of 3.03%, indicating stronger inter-annual stability across test years and random seeds among the evaluated models. It also outperformed classical models that relied on handcrafted vegetation indices and demonstrated greater overall stability than attention-based deep learning alternatives. Conclusions: The results indicate that combining pixel-set encoding with temporal convolution provides a resource-aware and stable framework for retrospective citrus crop mapping from Sentinel-2 satellite image time series. These findings suggest that PSE-CNN can support scalable agricultural monitoring, contributing to sustainable crop inventory systems in regions where labeled data and computational infrastructure are limited."
+    },
+    {
+      "paperId": "4982184facc44a08c5c13b9941f043cad7244ab6",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/ZhaoDLSR21",
+        "DOI": "10.3390/rs13142790",
+        "CorpusId": 236521263
+      },
+      "title": "Evaluation of Five Deep Learning Models for Crop Type Mapping Using Sentinel-2 Time Series Images with Missing Information",
+      "venue": "Remote Sensing",
+      "year": 2021,
+      "citationCount": 58,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/13/14/2790/pdf?version=1626671782",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs13142790?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs13142790, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "153716287",
+          "name": "Hongwei Zhao"
+        },
+        {
+          "authorId": "145403795",
+          "name": "Sibo Duan"
+        },
+        {
+          "authorId": "2108772076",
+          "name": "Jia Liu"
+        },
+        {
+          "authorId": "4954332",
+          "name": "Liang Sun"
+        },
+        {
+          "authorId": "66954757",
+          "name": "L. Reymondin"
+        }
+      ],
+      "abstract": "Accurate crop type maps play an important role in food security due to their widespread applicability. Optical time series data (TSD) have proven to be significant for crop type mapping. However, filling in missing information due to clouds in optical imagery is always needed, which will increase the workload and the risk of error transmission, especially for imagery with high spatial resolution. The development of optical imagery with high temporal and spatial resolution and the emergence of deep learning algorithms provide solutions to this problem. Although the one-dimensional convolutional neural network (1D CNN), long short-term memory (LSTM), and gate recurrent unit (GRU) models have been used to classify crop types in previous studies, their ability to identify crop types using optical TSD with missing information needs to be further explored due to their different mechanisms for handling invalid values in TSD. In this research, we designed two groups of experiments to explore the performances and characteristics of the 1D CNN, LSTM, GRU, LSTM-CNN, and GRU-CNN models for crop type mapping using unfilled Sentinel-2 (Sentinel-2) TSD and to discover the differences between unfilled and filled Sentinel-2 TSD based on the same algorithm. A case study was conducted in Hengshui City, China, of which 70.3% is farmland. The results showed that the 1D CNN, LSTM-CNN, and GRU-CNN models achieved acceptable classification accuracies (above 85%) using unfilled TSD, even though the total missing rate of the sample values was 43.5%; these accuracies were higher and more stable than those obtained using filled TSD. Furthermore, the models recalled more samples on crop types with small parcels when using unfilled TSD. Although LSTM and GRU models did not attain accuracies as high as the other three models using unfilled TSD, their results were almost close to those with filled TSD. This research showed that crop types could be identified by deep learning features in Sentinel-2 dense time series images with missing information due to clouds or cloud shadows randomly, which avoided spending a lot of time on missing information reconstruction."
+    },
+    {
+      "paperId": "c2c80e81938f071b228ee79b671900ae4cee611c",
+      "externalIds": {
+        "DOI": "10.3390/rs17060974",
+        "CorpusId": 276919274
+      },
+      "title": "Domain Adaptation and Fine-Tuning of a Deep Learning Segmentation Model of Small Agricultural Burn Area Detection Using High-Resolution Sentinel-2 Observations: A Case Study of Punjab, India",
+      "venue": "Remote Sensing",
+      "year": 2025,
+      "citationCount": 10,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.3390/rs17060974",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs17060974?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs17060974, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2267110370",
+          "name": "A. Anand"
+        },
+        {
+          "authorId": "72463024",
+          "name": "R. Imasu"
+        },
+        {
+          "authorId": "2244351818",
+          "name": "Surendra K. Dhaka"
+        },
+        {
+          "authorId": "2267439120",
+          "name": "P. Patra"
+        }
+      ],
+      "abstract": "High-resolution Sentinel-2 imagery combined with a deep learning (DL) segmentation model offers a promising approach for accurate mapping of small and fragmented agricultural burn areas. Initially, the model was trained using ICNF burn area data from Portugal to capture large fire and burn area delineation, thereby achieving moderate accuracy. Subsequent fine-tuning using annotated data from Punjab improved the model’s ability to detect small burn patches, demonstrating higher accuracy than the baseline Normalized Burn Ratio (NBR) Index method. On-ground validation using buffer zone analysis and crop field images confirmed the effectiveness of DL approach. Challenges such as cloud interference, temporal gaps in satellite data, and limited reference data for training persist, but this study underscores the methodogical advancements and potential of DL models applied for small burn area detection in agricultural settings. The model achieved overall accuracy of 98.7%, a macro-F1 score of 97.6%, IoU 0.54, and a Dice coefficient of 0.64, demonstrating its capability for detailed burn area delineation. The model can capture burn area smaller than 250 m2, but the model at present is less efficient at representing the full extent of the fires. Overall, outcomes demonstrate the model’s applicability to generalize to a new domain despite regional differences among research areas."
+    },
+    {
+      "paperId": "eebf85c06f99ac79c50e5cd53db35caf2d8313b9",
+      "externalIds": {
+        "DOI": "10.1080/01431161.2025.2514250",
+        "CorpusId": 279463870
+      },
+      "title": "An efficient in-season crop mapping using Sentinel-2 imagery and transformer-based semantic segmentation in Andhra Pradesh, India",
+      "venue": "International Journal of Remote Sensing",
+      "year": 2025,
+      "citationCount": 2,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1080/01431161.2025.2514250?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1080/01431161.2025.2514250, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "66996098",
+          "name": "M. Venkatanaresh"
+        },
+        {
+          "authorId": "31289162",
+          "name": "I. Kullayamma"
+        }
+      ],
+      "abstract": "ABSTRACT Accurate and timely mapping of crop types, along with reliable data on cultivation patterns and areas, is crucial for numerous applications, and remote sensing (RS) has been widely used to classify crop types. Deep Learning (DL) algorithms can predict crop types more accurately with less time and complexity. Still, they require extensive ground data and struggle to scale across large areas due to regional variations and temporal differences in remote sensing images. To resolve this, a novel transformer-based semantic segmentation is proposed for crop mapping using sentinel imagery. For effective segmentation, a Feature Aggregation Module with Dense Connections (FAMDC) is employed. Then, the aggregated features are classified using a swin transformer that minimizes computational complexity using the global attention technique. The sentinel-2 imagery is utilized, and the in-season crops across the entire sentinel are mapped for the proposed approach. Moreover, the performance of this approach is validated in Python. The proposed model has achieved an accuracy of 99.13% and Kappa of 99.11%. When compared with existing approaches, the proposed approach is improved by an accuracy of 7.93%, precision of 7.93%, recall of 7.96%, f1-score of 7.93%, mIoU of 9.59%, and Kappa of 8.14%. Therefore, the higher performance indicates the superiority of the proposed approach."
+    },
+    {
+      "paperId": "f5a9cba2a31b40d50d14d1508299f381bedfa306",
+      "externalIds": {
+        "DOI": "10.1109/JSTARS.2026.3702956",
+        "CorpusId": 289206002
+      },
+      "title": "Large-Scale Crop Mapping in the Sanjiang Plain Using a Deep Spatial–Temporal Fusion Network With Time-Series Sentinel-2 Imagery",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "year": 2026,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1109/jstars.2026.3702956",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1109/JSTARS.2026.3702956?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1109/JSTARS.2026.3702956, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2136096120",
+          "name": "Xubin Li"
+        },
+        {
+          "authorId": "2372639111",
+          "name": "Xiaodong Na"
+        },
+        {
+          "authorId": "2292890244",
+          "name": "Zeyu Zhang"
+        },
+        {
+          "authorId": "2283877609",
+          "name": "Sunai Ma"
+        },
+        {
+          "authorId": "2275289048",
+          "name": "Yizhe Wang"
+        }
+      ],
+      "abstract": "Accurate mapping of crop types is essential for agricultural management and food security. While deep learning using multitemporal imagery achieves high performance, the dimensionality of time-series data often causes feature interference and excessive computational costs, hindering large-scale deployment. To address the issue, a novel deep learning model named the spatial–temporal fusion network (STF-Net) is proposed in this study. The architecture consists of a dual-branch structure and a gated fusion module. The dual-branch structure is responsible for separating and processing spatial and temporal features, where the spatial branch focuses on extracting spatial features of crop planting areas, and the temporal branch focuses on extracting temporal features of crop growth. The adaptive weighting and integration of information extracted from both branches is then handled by the gated fusion module. To evaluate model performance, crop mapping experiments were conducted for major grain crops in the Sanjiang Plain using time-series Sentinel-2 imagery. The results demonstrated that STF-Net delivered efficient crop mapping while effectively reducing salt-and-pepper noise. STF-Net achieved the best accuracy, with an overall accuracy of 92.58%, a mean intersection of union of 0.85, and an average Kappa coefficient of 0.89. The producer accuracy for rice, maize, and soybean is 95.49%, 90.26%, and 91.24%, respectively. The crop mapping results from our model show good agreement with official crop planting area statistics, with coefficients of determination R² exceeding 0.97. These results indicate that the proposed approach is a promising solution for accurate, cost-effective large-scale crop mapping."
+    },
+    {
+      "paperId": "41bd047d2e9f6593637141848596c30ab0344e3c",
+      "externalIds": {
+        "DOI": "10.1016/j.actatropica.2026.108044",
+        "CorpusId": 286396472,
+        "PubMed": "41802557"
+      },
+      "title": "Fine-scale mapping of Oncomelania hupensis habitats in eastern China using multi-season Sentinel-2 imagery and semi-supervised deep learning.",
+      "venue": "Acta Tropica",
+      "year": 2026,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1016/j.actatropica.2026.108044?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1016/j.actatropica.2026.108044, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2054547662",
+          "name": "Ke Dai"
+        },
+        {
+          "authorId": "2343101889",
+          "name": "Zihan Xu"
+        },
+        {
+          "authorId": "2318270549",
+          "name": "Zelan Lv"
+        },
+        {
+          "authorId": "14548854",
+          "name": "Ji-Ya Dai"
+        },
+        {
+          "authorId": "2045402384",
+          "name": "Yongwen Ke"
+        },
+        {
+          "authorId": "7182861",
+          "name": "Hongsong Lu"
+        },
+        {
+          "authorId": "50433711",
+          "name": "Fenghua Gao"
+        },
+        {
+          "authorId": "2256189081",
+          "name": "Yi Hu"
+        }
+      ],
+      "abstract": "Accurate mapping of Oncomelania hupensis, the intermediate host of Schistosoma japonicum, is challenging due to sparse field data and dynamic seasonal flooding. We developed SnailMatch, a semi‑supervised deep learning framework combining multi‑seasonal Sentinel‑2 imagery to delineate snail habitats in Guichi, China. The model used 229 field-confirmed snail presence sites, 229 systematically sampled absence sites, and 5,759 unlabeled locations. Twelve cloud-free Sentinel-2 scenes covering all seasons of 2023 are processed through an attention-based Multi-Seasonal Fusion module that captures subtle seasonal and ecological patterns relevant to snail habitat suitability. In parallel, a Random Forest model trained on seven environmental covariates provided complementary ecological information. A Bayesian‑optimised ensemble produced habitat maps at a resolution of 100 m. Spatial block cross-validation (6-fold) demonstrated the ensemble achieved superior performance (accuracy=92.44%, AUC=96.31%, F1=91.67%) compared to individual models. High - probability habitats (>70 %) were concentrated in flooded vegetation, agricultural lands, and dense bushland, capturing 73.80 % of presence sites while covering 57.56 % of the study area. Post-hoc environmental factor analysis and shapley analysis indicated that seasonal inundation and vegetation density increased suitability, whereas high land-surface temperature combined with strong nighttime illumination-reflecting urban heat island conditions-reduced suitability. Model transferability was evaluated at the Anhui-Jiangxi border, where the ensemble achieved similarly strong performance (accuracy=91.94%, AUC=96.25%, F1=91.88%), demonstrating robustness across distinct landscapes. This cost-effective, interpretable approach supports targeted molluscicide application and vegetation management, aligning with WHO's 2030 elimination targets and demonstrating the utility of multi-seasonal remote sensing and explainable AI in environmental health surveillance under climate and land-use changes."
+    },
+    {
+      "paperId": "160c51f601194a0fcfcd51bbb4088835d0db9822",
+      "externalIds": {
+        "DOI": "10.1631/jzus.B2500403",
+        "CorpusId": 287520342,
+        "PubMed": "42152569"
+      },
+      "title": "Deep learning-based phenology extraction and crop classification in arid oasis using Sentinel-2 time series",
+      "venue": "Journal of Zhejiang University SCIENCE B",
+      "year": 2026,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1631/jzus.B2500403?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1631/jzus.B2500403, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2368072288",
+          "name": "Chunli Wang"
+        },
+        {
+          "authorId": "2267552882",
+          "name": "Jianan Chi"
+        },
+        {
+          "authorId": "2238788159",
+          "name": "Xiao Zhang"
+        },
+        {
+          "authorId": "2238893490",
+          "name": "Nannan Zhang"
+        }
+      ],
+      "abstract": "Multi-temporal remote sensing data in large-scale crop phenology identification and classification have become increasingly utilized, particularly for precision management in arid oasis agricultural regions with complex cropping systems. In this study, we developed a deep learning framework integrating Sentinel-2 multi-temporal imagery and normalized difference vegetation index (NDVI) time series for mapping cotton, winter jujube, and tiger nut crops in Tumushuke City, Xinjiang Uygur Autonomous Region, China. We employed the minimum redundancy maximum relevance (mRMR) algorithm for spectral and vegetation index feature selection, followed by Savitzky-Golay (S-G) filtering and double logistic function fitting, to automatically extract the key phenological parameters (start of season (SOS), peak of season (POS), and end of season (EOS)), significantly improving phenological feature extraction accuracy. By incorporating multi-temporal Sentinel-2 data and a multi-scale feature fusion approach, we could systematically compare five classification models (multi-layer perceptron (MLP), residual network-18 (ResNet-18), convolutional long short-term memory (ConvLSTM), Transformer, and random forest classifier (RFC)), demonstrating that high-resolution spatial details substantially enhance crop boundary delineation and classification consistency in complex environments. Further optimization of Transformer’s spatial representation through multi-scale window analysis revealed that the use of 1×1+3×3+5×5 convolutional windows achieves an optimal balance between accuracy and computational efficiency. Independent validation on unseen areas confirmed robust model transferability, with F1 scores of 94.37%, 87.75%, and 86.35% for the three crops (winter jujube, cotton, and tiger nut), respectively. This study validates the high-precision identification potential of Sentinel-2 temporal data and deep neural networks for multi-crop environments, enabling the precise spatial mapping of crop distributions and providing methodological support for smart agricultural decision-making in arid oasis regions."
+    },
+    {
+      "paperId": "c0225e707dceb36783727f22fa10512945b85779",
+      "externalIds": {
+        "DOI": "10.1016/j.rsase.2025.101525",
+        "CorpusId": 277092527
+      },
+      "title": "Assessing Feature Extraction, Selection, and Classification Combinations for Crop Mapping Using Sentinel-2 Time Series: A Case Study in Northern Italy",
+      "venue": "Remote Sensing Applications Society and Environment",
+      "year": 2025,
+      "citationCount": 19,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1016/j.rsase.2025.101525",
+        "status": "HYBRID",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1016/j.rsase.2025.101525?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1016/j.rsase.2025.101525, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2138998993",
+          "name": "Rahat Tufail"
+        },
+        {
+          "authorId": "31918833",
+          "name": "P. Tassinari"
+        },
+        {
+          "authorId": "33327533",
+          "name": "D. Torreggiani"
+        }
+      ],
+      "abstract": "Rural areas need constant monitoring to ensure sustainable farming and respond to environmental and climatic impacts. Over the last few decades, remote sensing data have been extensively used in agricultural monitoring, allowing cost-effective and efficient crop management. Selecting the suitable data combinations for crop mapping while reducing dimensionality and redundancy to speed up processing remains a challenge. This study address the challenges by testing and assessing the efficiency of various combinations of feature extraction, feature selection, and feature classification methods. We used Sentinel-2 time series data, which focused on spectral features and derived vegetation indices. Particularly, the red-edge indices which are critical for crop discrimination. To select the optimal data for classifiers, we have tested two feature selection techniques: Random Forest and Principal Component Analysis, for both spectral bands and vegetational indices. Then, we have employed three machine learning algorithms: Extreme Gradient Boost (XGB), Random Forest (RF), and Support Vector Machine (SVM) along with one deep learning approach, Pixel-Set Encoders and Temporal Self-Attention (PSETAE), to evaluate the datasets. The results suggest that the most effective feature set is the Sentinel-2 spectral bands selected by the Random Forest feature selection method. The results obtained from the previous step achieve the highest overall accuracy with the XGB classifier and outperform the RF, SVM, and PSETAE classifiers. Further, quantitative analysis of overall classification accuracies showed that Random Forest is the second-best performing classifier, and PSETAE classifier produced the lowest results for all data models."
+    },
+    {
+      "paperId": "6248c8b394114b4556234ce926b88b38da74d55d",
+      "externalIds": {
+        "PubMedCentral": "9967001",
+        "DBLP": "journals/sensors/KhanGJACCHC23",
+        "DOI": "10.3390/s23041779",
+        "CorpusId": 256655279,
+        "PubMed": "36850377"
+      },
+      "title": "Early Identification of Crop Type for Smallholder Farming Systems Using Deep Learning on Time-Series Sentinel-2 Imagery",
+      "venue": "Italian National Conference on Sensors",
+      "year": 2023,
+      "citationCount": 30,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/1424-8220/23/4/1779/pdf?version=1675580828",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://pmc.ncbi.nlm.nih.gov/articles/PMC9967001, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2204727113",
+          "name": "H. Khan"
+        },
+        {
+          "authorId": "2139934001",
+          "name": "Zeeshan Gillani"
+        },
+        {
+          "authorId": "2146135744",
+          "name": "M. H. Jamal"
+        },
+        {
+          "authorId": "66885964",
+          "name": "Atifa Athar"
+        },
+        {
+          "authorId": "2048146",
+          "name": "M. T. Chaudhry"
+        },
+        {
+          "authorId": "150120934",
+          "name": "Haoyu Chao"
+        },
+        {
+          "authorId": "2145949262",
+          "name": "Yong He"
+        },
+        {
+          "authorId": "2144366782",
+          "name": "Ming Chen"
+        }
+      ],
+      "abstract": "Climate change and the COVID-19 pandemic have disrupted the food supply chain across the globe and adversely affected food security. Early estimation of staple crops can assist relevant government agencies to take timely actions for ensuring food security. Reliable crop type maps can play an essential role in monitoring crops, estimating yields, and maintaining smooth food supplies. However, these maps are not available for developing countries until crops have matured and are about to be harvested. The use of remote sensing for accurate crop-type mapping in the first few weeks of sowing remains challenging. Smallholder farming systems and diverse crop types further complicate the challenge. For this study, a ground-based survey is carried out to map fields by recording the coordinates and planted crops in respective fields. The time-series images of the mapped fields are acquired from the Sentinel-2 satellite. A deep learning-based long short-term memory network is used for the accurate mapping of crops at an early growth stage. Results show that staple crops, including rice, wheat, and sugarcane, are classified with 93.77% accuracy as early as the first four weeks of sowing. The proposed method can be applied on a large scale to effectively map crop types for smallholder farms at an early stage, allowing the authorities to plan a seamless availability of food."
+    },
+    {
+      "paperId": "b1fa256cceeab3a22dd0aa4395505804252f0bc5",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/MirzaeiPCCRSPLP24",
+        "DOI": "10.3390/rs16132431",
+        "CorpusId": 270949715
+      },
+      "title": "Early-Season Crop Mapping by PRISMA Images Using Machine/Deep Learning Approaches: Italy and Iran Test Cases",
+      "venue": "Remote Sensing",
+      "year": 2024,
+      "citationCount": 15,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/16/13/2431/pdf?version=1719924871",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs16132431?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs16132431, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "153493524",
+          "name": "Saham Mirzaei"
+        },
+        {
+          "authorId": "2442601",
+          "name": "S. Pascucci"
+        },
+        {
+          "authorId": "36267596",
+          "name": "M. F. Carfora"
+        },
+        {
+          "authorId": "2255346576",
+          "name": "Raffaele Casa"
+        },
+        {
+          "authorId": "2265589653",
+          "name": "Francesco Rossi"
+        },
+        {
+          "authorId": "144764551",
+          "name": "F. Santini"
+        },
+        {
+          "authorId": "2160695",
+          "name": "A. Palombo"
+        },
+        {
+          "authorId": "2258141665",
+          "name": "Giovanni Laneve"
+        },
+        {
+          "authorId": "2756871",
+          "name": "S. Pignatti"
+        }
+      ],
+      "abstract": "Despite its high importance for crop yield prediction and monitoring, early-season crop mapping is severely hampered by the absence of timely ground truth. To cope with this issue, this study aims at evaluating the capability of PRISMA hyperspectral satellite images compared with Sentinel-2 multispectral imagery to produce early- and in-season crop maps using consolidated machine and deep learning algorithms. Results show that the accuracy of crop type classification using Sentinel-2 images is meaningfully poor compared with PRISMA (14% in overall accuracy (OA)). The 1D-CNN algorithm, with 89%, 91%, and 92% OA for winter, summer, and perennial cultivations, respectively, shows for the PRISMA images the highest accuracy in the in-season crop mapping and the fastest algorithm that achieves acceptable accuracy (OA 80%) for the winter, summer, and perennial cultivations early-season mapping using PRISMA images. Moreover, the 1D-CNN algorithm shows a limited reduction (6%) in performance, appearing to be the best algorithm for crop mapping within operational use in cross-farm applications. Machine/deep learning classification algorithms applied on the test fields cross-scene demonstrate that PRISMA hyperspectral time series images can provide good results for early- and in-season crop mapping."
+    },
+    {
+      "paperId": "e93afd6943ec8e8d1ac5ac5bafbe865509505760",
+      "externalIds": {
+        "DBLP": "journals/remotesensing/LiHDZHMCW23",
+        "DOI": "10.3390/rs15040875",
+        "CorpusId": 256659487
+      },
+      "title": "Multi-Year Crop Type Mapping Using Sentinel-2 Imagery and Deep Semantic Segmentation Algorithm in the Hetao Irrigation District in China",
+      "venue": "Remote Sensing",
+      "year": 2023,
+      "citationCount": 24,
+      "openAccessPdf": {
+        "url": "https://www.mdpi.com/2072-4292/15/4/875/pdf?version=1675500222",
+        "status": "GOLD",
+        "license": "CCBY",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.3390/rs15040875?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.3390/rs15040875, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2151299893",
+          "name": "Guang Li"
+        },
+        {
+          "authorId": "1782267",
+          "name": "Wenting Han"
+        },
+        {
+          "authorId": "2219055741",
+          "name": "Yuxin Dong"
+        },
+        {
+          "authorId": "2204728057",
+          "name": "Xuedong Zhai"
+        },
+        {
+          "authorId": "2122353283",
+          "name": "Shenjin Huang"
+        },
+        {
+          "authorId": "2111665485",
+          "name": "Weitong Ma"
+        },
+        {
+          "authorId": "2087078060",
+          "name": "Xin Cui"
+        },
+        {
+          "authorId": "2154460972",
+          "name": "Yi Wang"
+        }
+      ],
+      "abstract": "Accurately obtaining the multi-year spatial distribution information of crops combined with the corresponding agricultural production data is of great significance to the optimal management of agricultural production in the future. However, there are still some problems, such as low generality of crop type mapping models and susceptibility to cloud pollution in large-area crop mapping. Here, the models were constructed by using multi-phase images at the key periods to improve model generality. Multi-phase images in key periods masked each other to obtain large-area cloud-free images, which were combined with the general models to map large areas. The key periods were determined by calculating the global separation index (GSI) of the main crops (wheat, maize, sunflower, and squash) in different growth stages in the Hetao Irrigation District (HID) in China. The multi-phase images in the key period were used to make the data set and were then combined with a variety of deep learning algorithms (U-Net, U-Net++, Deeplabv3+, and SegFormer) to construct general models. The selection of the key periods, the acquisition of regional cloud-free images, and the construction of the general crop mapping models were all based on 2021 data. Relevant models and methods were respectively applied to crop mapping of the HID from 2017 to 2020 to study the generality of mapping methods. The results show that the images obtained by combining multi-phase images in the key period effectively avoided the influence of clouds and aerosols in large areas. Compared with the other three algorithms, U-Net had better mapping results. The F1-score, mean intersection-over-union, and overall accuracy were 78.13%, 75.39% and 96.28%, respectively. The crop mapping model was applied to images in 2020, and its average overall accuracy was more than 88.28%. When we applied the model to map crops (county food crops, cash crops, and cultivated land area) from 2017 to 2019, the regression analysis between the mapping areas obtained by the model and the ground measurements was made. The R2 was 0.856, and the RMSE was 17,221 ha, which reached the application accuracy, indicating that the mapping method has certain universality for mapping in different years."
+    },
+    {
+      "paperId": "4d3615daf2c49e02f19f56f316a9f5dd6e90d29b",
+      "externalIds": {
+        "DOI": "10.1080/15481603.2024.2395700",
+        "CorpusId": 272205453
+      },
+      "title": "A new transferable deep learning approach for crop mapping",
+      "venue": "GIScience &amp; Remote Sensing",
+      "year": 2024,
+      "citationCount": 13,
+      "openAccessPdf": {
+        "url": "https://doi.org/10.1080/15481603.2024.2395700",
+        "status": "GOLD",
+        "license": "CCBYNC",
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1080/15481603.2024.2395700?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1080/15481603.2024.2395700, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2318381080",
+          "name": "Hongyan Che"
+        },
+        {
+          "authorId": "2297251231",
+          "name": "Yaozhong Pan"
+        },
+        {
+          "authorId": "143797322",
+          "name": "X. Xia"
+        },
+        {
+          "authorId": "1798488",
+          "name": "Xiufang Zhu"
+        },
+        {
+          "authorId": "2238091801",
+          "name": "Le Li"
+        },
+        {
+          "authorId": "2262024305",
+          "name": "Yongsheng Huang"
+        },
+        {
+          "authorId": "2185829003",
+          "name": "Xuechang Zheng"
+        },
+        {
+          "authorId": "2318926294",
+          "name": "Lingang Wang"
+        }
+      ],
+      "abstract": "ABSTRACT Accurate crop mapping provides important information for government decision-making and agricultural management. Recent advancements in deep learning have significantly enhanced the capabilities of remote sensing-based crop mapping. In this study, we developed a new deep learning approach, DSH, which comprises three modules, DeepLabV3+ (D), channel self-attention (S), and histogram matching (H). The DeepLabV3+ module learns the spatial distribution of crops in the spatial and spectral dimensions. The channel self-attention module was used to enhance the weights of the important features. The histogram-matching module addresses the domain gap between the training and testing images and enhances the transferability of the DSH. In addition, the input data of the DSH are monthly synthesized Sentinel-2 data, thus relaxing the data collection requirements. The performance of the DSH was evaluated and benchmarked against HRNetV2, DeepLabV3+, and random forest (RF) at eight sites in the U.S. China, and France with different farming structures, climate conditions, and landscape complexities. Temporal transfer revealed that the classification performance of DSH improved as the growth season progressed, peaked in the peak growth season (August), and then declined at each study site. The DSH model trained during the peak growth season demonstrated superior temporal transferability. Spatial transfer experiments demonstrated that transferring DSH to sites with similar planting structures achieved higher precision than full spatial transfers. Spatiotemporal transfer experiments conducted at eight sites over three years (2020–2022) demonstrated an average overall accuracy (OA) of 88.1% for DSH, highlighting the importance of similar planting structures for effective spatiotemporal transfer. DSH outperformed HRNetV2, DeepLabV3+, and RF in OA, producer’s accuracy, and user’s accuracy at all eight study sites. Notably, DSH exhibited comparable performance during both the peak and full growth seasons, with an average OA of 93.9%. The classification accuracy of test images after histogram matching remained stable from 2020 to 2022, whereas the accuracy of raw test images fluctuated annually. This indicates that histogram matching is effective in improving the transferability of DSH. Embedding the channel self-attention module into the position of the high-level features had a more significant impact on improving DSH’s performance than other configurations. Visualizing features from the channel self-attention and high-level layers revealed that integrating the channel self-attention module with DeepLabV3+‘s high-level features significantly improved crop mapping by enhancing relevant semantic information. Overall, DSH exhibits robust spatiotemporal generalizability and requires minimal input data, making it suitable for large-scale crop mapping."
+    },
+    {
+      "paperId": "ab2a4626c2da75c935062530a6a7f4d04ea96827",
+      "externalIds": {
+        "DBLP": "journals/mta/GuptaGSTK25",
+        "DOI": "10.1007/s11042-024-19737-0",
+        "CorpusId": 271069670
+      },
+      "title": "Ensemble methods-based comparative study of Landsat 8 operational land imager (OLI) and sentinel 2 multi-spectral images (MSI) for smart farming crop classification",
+      "venue": "Multimedia tools and applications",
+      "year": 2024,
+      "citationCount": 5,
+      "openAccessPdf": {
+        "url": "",
+        "status": "CLOSED",
+        "license": null,
+        "disclaimer": "Notice: The following paper fields have been elided by the publisher: {'abstract'}. Paper or abstract available at https://api.unpaywall.org/v2/10.1007/s11042-024-19737-0?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1007/s11042-024-19737-0, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "2276208858",
+          "name": "Priyanka Gupta"
+        },
+        {
+          "authorId": "2244595066",
+          "name": "Prateek Gupta"
+        },
+        {
+          "authorId": "2310604399",
+          "name": "Suraj Kumar Singh"
+        },
+        {
+          "authorId": "2310495269",
+          "name": "Bhavna Thakur"
+        },
+        {
+          "authorId": "2310723594",
+          "name": "Manoj Kumar"
+        }
+      ],
+      "abstract": null
+    },
+    {
+      "paperId": "1cfd664f8f3ec6d294552be6ab8519e6a727c9a4",
+      "externalIds": {
+        "DOI": "10.1109/InGARSS61818.2024.10984317",
+        "CorpusId": 278432461
+      },
+      "title": "Deep Learning-Based Multi-Sensor Remote Sensing for Automated Jute Crop Mapping",
+      "venue": "2024 IEEE India Geoscience and Remote Sensing Symposium (InGARSS)",
+      "year": 2024,
+      "citationCount": 0,
+      "openAccessPdf": {
+        "url": "",
+        "status": null,
+        "license": null,
+        "disclaimer": "Notice: Paper or abstract available at https://api.unpaywall.org/v2/10.1109/InGARSS61818.2024.10984317?email=<INSERT_YOUR_EMAIL> or https://doi.org/10.1109/InGARSS61818.2024.10984317, which is subject to the license by the author or copyright owner provided with this content. Please go to the source to verify the license and copyright information for your use."
+      },
+      "authors": [
+        {
+          "authorId": "89510867",
+          "name": "Pruthivi Raj Behera"
+        },
+        {
+          "authorId": "2348379992",
+          "name": "R. Adhikari"
+        },
+        {
+          "authorId": "2359834809",
+          "name": "Uday Kumar Gutta"
+        },
+        {
+          "authorId": "2306375061",
+          "name": "Abhishek Chakraborty"
+        },
+        {
+          "authorId": "2390192246",
+          "name": "Rama Rao"
+        },
+        {
+          "authorId": "104672491",
+          "name": "P. Manjusree"
+        }
+      ],
+      "abstract": "Jute, India’s second most important natural fibre, holds significant historical and economic importance globally, leading to increased demand. In the Murshidabad district of West Bengal, which represents over $10 \\%$ of India’s jute cultivation area, jute farming plays a vital role in the local economy and agricultural landscape. This paper utilizes multi-sensor data from Sentinel-1 and Sentinel-2, collected for the jute crop cycle for jute mapping. Deep learning-based segmentation models are implemented for automated jute crop mapping, with the UNet model performing best, achieving a precision (0.94), recall (0.85), IoU (0.817) and dice score (0.827), indicating accurate mapping of the jute crop. Further improvements were made using data augmentation techniques, hyperparameter tuning, and optimization."
+    }
+  ]
+}

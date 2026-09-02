@@ -1,0 +1,266 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "arxiv",
+  "query": "all:\"retrieval augmented generation\" AND all:\"geospatial\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2502.18470v5",
+      "title": "Spatial-RAG: Spatial Retrieval Augmented Generation for Real-World Geospatial Reasoning Questions",
+      "authors": [
+        "Dazhou Yu",
+        "Riyang Bao",
+        "Ruiyu Ning",
+        "Jinghong Peng",
+        "Gengchen Mai",
+        "Liang Zhao"
+      ],
+      "published": "2025-02-04T01:30:06Z",
+      "doi": null,
+      "summary": "Answering real-world geospatial questions--such as finding restaurants along a travel route or amenities near a landmark--requires reasoning over both geographic relationships and semantic user intent. However, existing large language models (LLMs) lack spatial computing capabilities and access to up-to-date, ubiquitous real-world geospatial data, while traditional geospatial systems fall short in interpreting natural language. To bridge this gap, we introduce Spatial-RAG, a Retrieval-Augmented Generation (RAG) framework designed for geospatial question answering. Spatial-RAG integrates structured spatial databases with LLMs via a hybrid spatial retriever that combines sparse spatial filtering and dense semantic matching. It formulates the answering process as a multi-objective optimization over spatial and semantic relevance, identifying Pareto-optimal candidates and dynamically selecting the best response based on user intent. Experiments across multiple tourism and map-based QA datasets show that Spatial-RAG significantly improves accuracy, precision, and ranking performance over strong baselines."
+    },
+    {
+      "arxiv_id": "2410.18792v2",
+      "title": "An LLM Agent for Automatic Geospatial Data Analysis",
+      "authors": [
+        "Yuxing Chen",
+        "Weijie Wang",
+        "Sylvain Lobry",
+        "Camille Kurtz"
+      ],
+      "published": "2024-10-24T14:47:25Z",
+      "doi": null,
+      "summary": "Large language models (LLMs) are being used in data science code generation tasks, but they often struggle with complex sequential tasks, leading to logical errors. Their application to geospatial data processing is particularly challenging due to difficulties in incorporating complex data structures and spatial constraints, effectively utilizing diverse function calls, and the tendency to hallucinate less-used geospatial libraries. To tackle these problems, we introduce GeoAgent, a new interactive framework designed to help LLMs handle geospatial data processing more effectively. GeoAgent pioneers the integration of a code interpreter, static analysis, and Retrieval-Augmented Generation (RAG) techniques within a Monte Carlo Tree Search (MCTS) algorithm, offering a novel approach to geospatial data processing. In addition, we contribute a new benchmark specifically designed to evaluate the LLM-based approach in geospatial tasks. This benchmark leverages a variety of Python libraries and includes both single-turn and multi-turn tasks such as data acquisition, data analysis, and visualization. By offering a comprehensive evaluation among diverse geospatial contexts, this benchmark sets a new standard for developing LLM-based approaches in geospatial data analysis tasks. Our findings suggest that relying solely on knowledge of LLM is insufficient for accurate geospatial task programming, which requires coherent multi-step processes and multiple function calls. Compared to the baseline LLMs, the proposed GeoAgent has demonstrated superior performance, yielding notable improvements in function calls and task completion. In addition, these results offer valuable insights for the future development of LLM agents in automatic geospatial data analysis task programming."
+    },
+    {
+      "arxiv_id": "2605.22811v1",
+      "title": "GS-QA: A Benchmark for Geospatial Question Answering",
+      "authors": [
+        "Majid Saeedan",
+        "Muhammad Shihab Rashid",
+        "Ahmed Eldawy",
+        "Vagelis Hristidis"
+      ],
+      "published": "2026-05-21T17:57:38Z",
+      "doi": null,
+      "summary": "Recent advances in Large Language Models (LLMs) have led to dramatic improvements in question answering (QA). To address the challenge of evaluating QA systems, standardized benchmarks have been introduced. This work focuses on the problem of geospatial QA, where a large collection of geospatial data is available in the form of a spatial database or other forms. Existing work on geospatial QA benchmarks has various limitations, including a small number of questions, limited spatial predicates, narrow output types, and no multi-source reasoning. We present GS-QA, an extensible geospatial QA benchmark with 2,800 question-answer pairs across 28 templates on top of OpenStreetMap and Wikipedia data, covering a wide range of spatial objects, predicates (including directional and towards filtering), and answer types (entity names, locations, distances, directions, counts, and aggregated areas/lengths). A key feature of GS-QA is that some questions require combining information from multiple sources, e.g., geospatial information from OSM and factual information from Wikipedia. GS-QA includes a comprehensive evaluation methodology that combines text-based QA measures with geospatial-specific measures such as distance error and angular error. We implemented nine LLM-based geospatial QA baselines using three LLMs (GPT-4o, Claude Sonnet 4.6, and Ministral-3) with combinations of direct prompting, retrieval-augmented generation, and text-to-SQL. Our results show that existing solutions perform reasonably well on simple spatial predicates with entity name outputs, but accuracy degrades significantly for questions involving complex spatial predicates, numeric output types, and multi-source reasoning, demonstrating that geospatial QA remains a challenging open problem warranting further research."
+    },
+    {
+      "arxiv_id": "2410.20975v1",
+      "title": "Geo-FuB: A Method for Constructing an Operator-Function Knowledge Base for Geospatial Code Generation Tasks Using Large Language Models",
+      "authors": [
+        "Shuyang Hou",
+        "Anqi Zhao",
+        "Jianyuan Liang",
+        "Zhangxiao Shen",
+        "Huayi Wu"
+      ],
+      "published": "2024-10-28T12:50:27Z",
+      "doi": "10.1016/j.knosys.2025.113624",
+      "summary": "The rise of spatiotemporal data and the need for efficient geospatial modeling have spurred interest in automating these tasks with large language models (LLMs). However, general LLMs often generate errors in geospatial code due to a lack of domain-specific knowledge on functions and operators. To address this, a retrieval-augmented generation (RAG) approach, utilizing an external knowledge base of geospatial functions and operators, is proposed. This study introduces a framework to construct such a knowledge base, leveraging geospatial script semantics. The framework includes: Function Semantic Framework Construction (Geo-FuSE), Frequent Operator Combination Statistics (Geo-FuST), and Semantic Mapping (Geo-FuM). Techniques like Chain-of-Thought, TF-IDF, and the APRIORI algorithm are utilized to derive and align geospatial functions. An example knowledge base, Geo-FuB, built from 154,075 Google Earth Engine scripts, is available on GitHub. Evaluation metrics show a high accuracy, reaching 88.89% overall, with structural and semantic accuracies of 92.03% and 86.79% respectively. Geo-FuB's potential to optimize geospatial code generation through the RAG and fine-tuning paradigms is highlighted."
+    },
+    {
+      "arxiv_id": "2508.05666v1",
+      "title": "HySemRAG: A Hybrid Semantic Retrieval-Augmented Generation Framework for Automated Literature Synthesis and Methodological Gap Analysis",
+      "authors": [
+        "Alejandro Godinez"
+      ],
+      "published": "2025-08-01T20:30:42Z",
+      "doi": null,
+      "summary": "We present HySemRAG, a framework that combines Extract, Transform, Load (ETL) pipelines with Retrieval-Augmented Generation (RAG) to automate large-scale literature synthesis and identify methodological research gaps. The system addresses limitations in existing RAG architectures through a multi-layered approach: hybrid retrieval combining semantic search, keyword filtering, and knowledge graph traversal; an agentic self-correction framework with iterative quality assurance; and post-hoc citation verification ensuring complete traceability. Our implementation processes scholarly literature through eight integrated stages: multi-source metadata acquisition, asynchronous PDF retrieval, custom document layout analysis using modified Docling architecture, bibliographic management, LLM-based field extraction, topic modeling, semantic unification, and knowledge graph construction. The system creates dual data products - a Neo4j knowledge graph enabling complex relationship queries and Qdrant vector collections supporting semantic search - serving as foundational infrastructure for verifiable information synthesis. Evaluation across 643 observations from 60 testing sessions demonstrates structured field extraction achieving 35.1% higher semantic similarity scores (0.655 $\\pm$ 0.178) compared to PDF chunking approaches (0.485 $\\pm$ 0.204, p < 0.000001). The agentic quality assurance mechanism achieves 68.3% single-pass success rates with 99.0% citation accuracy in validated responses. Applied to geospatial epidemiology literature on ozone exposure and cardiovascular disease, the system identifies methodological trends and research gaps, demonstrating broad applicability across scientific domains for accelerating evidence synthesis and discovery."
+    },
+    {
+      "arxiv_id": "2512.12084v2",
+      "title": "FloodSQL-Bench: A Retrieval-Augmented Benchmark for Geospatially-Grounded Text-to-SQL",
+      "authors": [
+        "Hanzhou Liu",
+        "Kai Yin",
+        "Zhitong Chen",
+        "Chenyue Liu",
+        "Ali Mostafavi"
+      ],
+      "published": "2025-12-12T23:25:00Z",
+      "doi": null,
+      "summary": "Existing Text-to-SQL benchmarks primarily focus on single-table queries or limited joins in general-purpose domains, and thus fail to reflect the complexity of domain-specific, multi-table and geospatial reasoning, To address this limitation, we introduce FLOODSQL-BENCH, a geospatially grounded benchmark for the flood management domain that integrates heterogeneous datasets through key-based, spatial, and hybrid joins. The benchmark captures realistic flood-related information needs by combining social, infrastructural, and hazard data layers. We systematically evaluate recent large language models with the same retrieval-augmented generation settings and measure their performance across difficulty tiers. By providing a unified, open benchmark grounded in real-world disaster management data, FLOODSQL-BENCH establishes a practical testbed for advancing Text-to-SQL research in high-stakes application domains."
+    },
+    {
+      "arxiv_id": "2605.05594v1",
+      "title": "The Cost of Context: Mitigating Textual Bias in Multimodal Retrieval-Augmented Generation",
+      "authors": [
+        "Hoin Jung",
+        "Xiaoqian Wang"
+      ],
+      "published": "2026-05-07T02:27:04Z",
+      "doi": null,
+      "summary": "While Multimodal Large Language Models (MLLMs) are increasingly integrated with Retrieval-Augmented Generation (RAG) to mitigate hallucinations, the introduction of external documents can conceal severe failure modes at the instance level. We identify and formalize the phenomenon of recorruption, where the introduction of even perfectly accurate \"oracle\" context causes a capable model to abandon an initially correct prediction. Through a mechanistic diagnosis of internal attention matrices, we show that recorruption is driven by a two-fold attentional collapse: (1) visual blindness, characterized by the systemic suppression of visual attention mass ($M_{vis}$) and sharpness ($S_{vis}$), and (2) a structural positional bias that forces the model to prioritize boundary tokens over semantic relevance. Our analysis reveals an Illusion of Success, demonstrating that many seemingly correct RAG outcomes are merely positional coincidences where the model's textual copying bias happens to align with the ground-truth location. To address these vulnerabilities, we propose Bottleneck Attention Intervention for Recovery (BAIR), a parameter-free, inference-time framework that restores visual saliency and applies position-aware penalties to textual distractors. Across medical factuality, social fairness, and geospatial benchmarks, BAIR successfully restores multimodal grounding and improves diagnostic reliability without requiring model retraining or fine-tuning."
+    },
+    {
+      "arxiv_id": "2606.15838v1",
+      "title": "Intelligent Multimodal Retrieval and Reasoning for Geospatial Knowledge Discovery on the I-GUIDE Platform",
+      "authors": [
+        "Yunfan Kang",
+        "Erick Li",
+        "Furqan Baig",
+        "Wei Hu",
+        "Alexander Michels",
+        "Anand Padmanabhan",
+        "Shaowen Wang"
+      ],
+      "published": "2026-06-14T14:39:29Z",
+      "doi": null,
+      "summary": "Geospatial knowledge discovery increasingly requires search across heterogeneous artifacts: datasets, maps, notebooks, software, publications, and the provenance links among them. Conventional geoportals support metadata and spatial filtering, but they rarely provide semantic retrieval, graph-aware provenance traversal, and conversational synthesis in one integrated system. This paper presents I-GUIDE Smart Search, a production multimodal geospatial retrieval-augmented generation (RAG) system embedded in the I-GUIDE Platform, and reports on its design, deployment, and evaluation. The system combines production-maintained OpenSearch keyword, vector, and spatial indexes with a Neo4j knowledge graph and an iterative RAG pipeline for memory-aware query augmentation, reasoning, retrieval-method routing, relevance grading, grounded generation, hallucination and relevance checking. In a single-A100 RAG deployment, I-GUIDE Smart Search supports interactive use up to about 100 concurrent simulated users, reaching 4.4 requests per second with p50 latency near 25 seconds despite 20-50 LLM calls per query. For answer quality, we evaluate a four-category benchmark of 170 unique human-filtered user-facing queries, together with ten intent-specific probe sets generated from the deployed indexes and graph. Smart Search improves retrieved evidence coverage and judged answer quality over non-retrieval and naive-RAG baselines, with the clearest gains on exact-identifier, spatially constrained, simple-recommendation, and domain-specific factual queries requiring current indexed evidence. We distill transferable deployment lessons for spatial RAG systems, covering spatial metadata quality, graph provenance, retrieval routing, interface contracts, refusal-aware evaluation, latency-cost tradeoffs, and the role of the user interface in deployed geospatial cyberinfrastructure."
+    },
+    {
+      "arxiv_id": "2412.05587v2",
+      "title": "GEE-OPs: An Operator Knowledge Base for Geospatial Code Generation on the Google Earth Engine Platform Powered by Large Language Models",
+      "authors": [
+        "Shuyang Hou",
+        "Jianyuan Liang",
+        "Anqi Zhao",
+        "Huayi Wu"
+      ],
+      "published": "2024-12-07T08:50:24Z",
+      "doi": null,
+      "summary": "As the scale and complexity of spatiotemporal data continue to grow rapidly, the use of geospatial modeling on the Google Earth Engine (GEE) platform presents dual challenges: improving the coding efficiency of domain experts and enhancing the coding capabilities of interdisciplinary users. To address these challenges and improve the performance of large language models (LLMs) in geospatial code generation tasks, we propose a framework for building a geospatial operator knowledge base tailored to the GEE JavaScript API. This framework consists of an operator syntax knowledge table, an operator relationship frequency table, an operator frequent pattern knowledge table, and an operator relationship chain knowledge table. By leveraging Abstract Syntax Tree (AST) techniques and frequent itemset mining, we systematically extract operator knowledge from 185,236 real GEE scripts and syntax documentation, forming a structured knowledge base. Experimental results demonstrate that the framework achieves over 90% accuracy, recall, and F1 score in operator knowledge extraction. When integrated with the Retrieval-Augmented Generation (RAG) strategy for LLM-based geospatial code generation tasks, the knowledge base improves performance by 20-30%. Ablation studies further quantify the necessity of each knowledge table in the knowledge base construction. This work provides robust support for the advancement and application of geospatial code modeling techniques, offering an innovative approach to constructing domain-specific knowledge bases that enhance the code generation capabilities of LLMs, and fostering the deeper integration of generative AI technologies within the field of geoinformatics."
+    },
+    {
+      "arxiv_id": "2509.17544v2",
+      "title": "A Multimodal Conversational Assistant for the Characterization of Agricultural Plots from Geospatial Open Data",
+      "authors": [
+        "Juan Cañada",
+        "Raúl Alonso",
+        "Julio Molleda",
+        "Fidel Díez"
+      ],
+      "published": "2025-09-22T09:02:53Z",
+      "doi": "10.1109/GIRST67753.2025.11382141",
+      "summary": "The increasing availability of open Earth Observation (EO) and agricultural datasets holds great potential for supporting sustainable land management. However, their high technical entry barrier limits accessibility for non-expert users. This study presents an open-source conversational assistant that integrates multimodal retrieval and large language models (LLMs) to enable natural language interaction with heterogeneous agricultural and geospatial data. The proposed architecture combines orthophotos, Sentinel-2 vegetation indices, and user-provided documents through retrieval-augmented generation (RAG), allowing the system to flexibly determine whether to rely on multimodal evidence, textual knowledge, or both in formulating an answer. To assess response quality, we adopt an LLM-as-a-judge methodology using Qwen3-32B in a zero-shot, unsupervised setting, applying direct scoring in a multi-dimensional quantitative evaluation framework. Preliminary results show that the system is capable of generating clear, relevant, and context-aware responses to agricultural queries, while remaining reproducible and scalable across geographic regions. The primary contributions of this work include an architecture for fusing multimodal EO and textual knowledge sources, a demonstration of lowering the barrier to access specialized agricultural information through natural language interaction, and an open and reproducible design."
+    },
+    {
+      "arxiv_id": "2601.01891v1",
+      "title": "Agentic AI in Remote Sensing: Foundations, Taxonomy, and Emerging Systems",
+      "authors": [
+        "Niloufar Alipour Talemi",
+        "Julia Boone",
+        "Fatemeh Afghah"
+      ],
+      "published": "2026-01-05T08:34:17Z",
+      "doi": null,
+      "summary": "The paradigm of Earth Observation analysis is shifting from static deep learning models to autonomous agentic AI. Although recent vision foundation models and multimodal large language models advance representation learning, they often lack the sequential planning and active tool orchestration required for complex geospatial workflows. This survey presents the first comprehensive review of agentic AI in remote sensing. We introduce a unified taxonomy distinguishing between single-agent copilots and multi-agent systems while analyzing architectural foundations such as planning mechanisms, retrieval-augmented generation, and memory structures. Furthermore, we review emerging benchmarks that move the evaluation from pixel-level accuracy to trajectory-aware reasoning correctness. By critically examining limitations in grounding, safety, and orchestration, this work outlines a strategic roadmap for the development of robust, autonomous geospatial intelligence."
+    },
+    {
+      "arxiv_id": "2310.01429v1",
+      "title": "Chatmap : Large Language Model Interaction with Cartographic Data",
+      "authors": [
+        "Eren Unlu"
+      ],
+      "published": "2023-09-28T15:32:36Z",
+      "doi": null,
+      "summary": "The swift advancement and widespread availability of foundational Large Language Models (LLMs), complemented by robust fine-tuning methodologies, have catalyzed their adaptation for innovative and industrious applications. Enabling LLMs to recognize and interpret geospatial data, while offering a linguistic access to vast cartographic datasets, is of significant importance. OpenStreetMap (OSM) is the most ambitious open-source global initiative offering detailed urban and rural geographic data, curated by a community of over 10 million contributors, which constitutes a great potential for LLM applications. In this study, we demonstrate the proof of concept and details of the process of fine-tuning a relatively small scale (1B parameters) LLM with a relatively small artificial dataset curated by a more capable teacher model, in order to provide a linguistic interface to the OSM data of an arbitrary urban region. Through this interface, users can inquire about a location's attributes, covering a wide spectrum of concepts, such as its touristic appeal or the potential profitability of various businesses in that vicinity. The study aims to provide an initial guideline for such generative artificial intelligence (AI) adaptations and demonstrate early signs of useful emerging abilities in this context even in minimal computational settings. The embeddings of artificially curated prompts including OSM data are also investigated in detail, which might be instrumental for potential geospatially aware urban Retrieval Augmented Generation (RAG) applications."
+    },
+    {
+      "arxiv_id": "2411.14476v1",
+      "title": "StreetviewLLM: Extracting Geographic Information Using a Chain-of-Thought Multimodal Large Language Model",
+      "authors": [
+        "Zongrong Li",
+        "Junhao Xu",
+        "Siqin Wang",
+        "Yifan Wu",
+        "Haiyang Li"
+      ],
+      "published": "2024-11-19T05:15:19Z",
+      "doi": null,
+      "summary": "Geospatial predictions are crucial for diverse fields such as disaster management, urban planning, and public health. Traditional machine learning methods often face limitations when handling unstructured or multi-modal data like street view imagery. To address these challenges, we propose StreetViewLLM, a novel framework that integrates a large language model with the chain-of-thought reasoning and multimodal data sources. By combining street view imagery with geographic coordinates and textual data, StreetViewLLM improves the precision and granularity of geospatial predictions. Using retrieval-augmented generation techniques, our approach enhances geographic information extraction, enabling a detailed analysis of urban environments. The model has been applied to seven global cities, including Hong Kong, Tokyo, Singapore, Los Angeles, New York, London, and Paris, demonstrating superior performance in predicting urban indicators, including population density, accessibility to healthcare, normalized difference vegetation index, building height, and impervious surface. The results show that StreetViewLLM consistently outperforms baseline models, offering improved predictive accuracy and deeper insights into the built environment. This research opens new opportunities for integrating the large language model into urban analytics, decision-making in urban planning, infrastructure management, and environmental monitoring."
+    },
+    {
+      "arxiv_id": "2409.14516v1",
+      "title": "Beyond Words: Evaluating Large Language Models in Transportation Planning",
+      "authors": [
+        "Shaowei Ying",
+        "Zhenlong Li",
+        "Manzhu Yu"
+      ],
+      "published": "2024-09-22T16:20:00Z",
+      "doi": null,
+      "summary": "The resurgence and rapid advancement of Generative Artificial Intelligence (GenAI) in 2023 has catalyzed transformative shifts across numerous industry sectors, including urban transportation and logistics. This study investigates the evaluation of Large Language Models (LLMs), specifically GPT-4 and Phi-3-mini, to enhance transportation planning. The study assesses the performance and spatial comprehension of these models through a transportation-informed evaluation framework that includes general geospatial skills, general transportation domain skills, and real-world transportation problem-solving. Utilizing a mixed-methods approach, the research encompasses an evaluation of the LLMs' general Geographic Information System (GIS) skills, general transportation domain knowledge as well as abilities to support human decision-making in the real-world transportation planning scenarios of congestion pricing. Results indicate that GPT-4 demonstrates superior accuracy and reliability across various GIS and transportation-specific tasks compared to Phi-3-mini, highlighting its potential as a robust tool for transportation planners. Nonetheless, Phi-3-mini exhibits competence in specific analytical scenarios, suggesting its utility in resource-constrained environments. The findings underscore the transformative potential of GenAI technologies in urban transportation planning. Future work could explore the application of newer LLMs and the impact of Retrieval-Augmented Generation (RAG) techniques, on a broader set of real-world transportation planning and operations challenges, to deepen the integration of advanced AI models in transportation management practices."
+    },
+    {
+      "arxiv_id": "2512.10114v1",
+      "title": "AgriRegion: Region-Aware Retrieval for High-Fidelity Agricultural Advice",
+      "authors": [
+        "Mesafint Fanuel",
+        "Mahmoud Nabil Mahmoud",
+        "Crystal Cook Marshal",
+        "Vishal Lakhotia",
+        "Biswanath Dari",
+        "Kaushik Roy",
+        "Shaohu Zhang"
+      ],
+      "published": "2025-12-10T22:06:41Z",
+      "doi": null,
+      "summary": "Large Language Models (LLMs) have demonstrated significant potential in democratizing access to information. However, in the domain of agriculture, general-purpose models frequently suffer from contextual hallucination, which provides non-factual advice or answers are scientifically sound in one region but disastrous in another due to variations in soil, climate, and local regulations. We introduce AgriRegion, a Retrieval-Augmented Generation (RAG) framework designed specifically for high-fidelity, region-aware agricultural advisory. Unlike standard RAG approaches that rely solely on semantic similarity, AgriRegion incorporates a geospatial metadata injection layer and a region-prioritized re-ranking mechanism. By restricting the knowledge base to verified local agricultural extension services and enforcing geo-spatial constraints during retrieval, AgriRegion ensures that the advice regarding planting schedules, pest control, and fertilization is locally accurate. We create a novel benchmark dataset, AgriRegion-Eval, which comprises 160 domain-specific questions across 12 agricultural subfields. Experiments demonstrate that AgriRegion reduces hallucinations by 10-20% compared to state-of-the-art LLMs systems and significantly improves trust scores according to a comprehensive evaluation."
+    },
+    {
+      "arxiv_id": "2508.12536v4",
+      "title": "jXBW: A Compressed Index Enabling Structure-Aware JSONL Retrieval for Structured RAG",
+      "authors": [
+        "Yasuo Tabei"
+      ],
+      "published": "2025-08-18T00:14:24Z",
+      "doi": null,
+      "summary": "Providing \\textit{structured} information to large language models (LLMs) improves multi-step reasoning and factual grounding, and recent retrieval-augmented generation (RAG) systems therefore reconstruct structure from retrieved text on every query. When the corpus is \\emph{already} structured --- as in JSON Lines (JSONL), a popular format for LLM prompts, chemical compounds, and geospatial records --- this per-query rebuilding can be replaced by direct \\emph{structural retrieval}. The core primitive is \\textit{substructure search}: finding all JSON objects in a collection that contain a given query pattern. Existing approaches index each document separately, so both index space and query time grow with the total collection size; XML-based engines add conversion overhead and semantic mismatches. We propose \\textbf{jXBW}, a compressed index for fast substructure search over JSONL, combining three innovations: (i) a merged tree representation that consolidates repeated structures across objects, (ii) a succinct tree index based on the eXtended Burrows--Wheeler Transform (XBW), and (iii) a newly developed three-phase substructure search algorithm that runs on this index. Together they achieve \\textbf{query-dependent complexity}: \\chgb{the search avoids a full scan of the collection and is candidate- and output-sensitive}, in compressed space. Experiments on seven real-world datasets, including PubChem ($10^6$ compounds) and OpenStreetMap ($6.6 \\times 10^6$ objects), show that jXBW outperforms the strongest tree-based baseline by $\\mathbf{16\\times}$ on the smallest dataset and by up to $\\mathbf{2{,}800\\times}$ on the largest, and is more than $\\mathbf{2 \\times 10^6\\times}$ faster than the XQuery engine Saxon. jXBW thus brings structural retrieval over million-record JSONL collections into the sub-millisecond range."
+    },
+    {
+      "arxiv_id": "2606.00042v1",
+      "title": "TransResAI: A Compound AI System for Coastal Transportation Resilience",
+      "authors": [
+        "Qingwen Pu",
+        "Kun Xie",
+        "Chenyu Yan"
+      ],
+      "published": "2026-04-28T15:39:53Z",
+      "doi": null,
+      "summary": "Coastal flooding increasingly threatens transportation infrastructure, yet the analytical tools needed for resilience management remain difficult for many non-specialist practitioners to use. This study presents TransResAI, a compound AI system that supports analysis of flood-aware transportation resilience via natural-language interactions. The system integrates a locally deployable Large Language Model (LLM) with modules for task decomposition, secure code generation, geospatial analysis, retrieval-augmented generation, and interactive map rendering. TransResAI links MATSim flood-scenario simulation outputs, OpenStreetMap-derived flood-risk networks, equity-focused demographic indicators, and regional documents in Hampton Roads, Virginia. A structured user study with domain experts demonstrated that TransResAI reduced task completion time by 80-88% relative to conventional GIS workflows, compressing analytical tasks from a mean of 197.1 seconds to 29.7 seconds and visualization tasks from 364.0 seconds to 46.1 seconds, while maintaining mean accuracy of 4.60/5.00 and task completion rates exceeding 94%. These findings demonstrate that compound AI architectures bridge the gap between general-purpose language models and specialized domain knowledge, as well as the quantitative rigor required for infrastructure resilience, providing transportation agencies and communities with faster, more accessible analytical tools for decision-making under growing climate uncertainty."
+    },
+    {
+      "arxiv_id": "2608.22634v1",
+      "title": "GeoRisk-RAG: A Hierarchy-Aware Risk Framework for Improving RAG Reliability through Selective Answering",
+      "authors": [
+        "Meenu Ravi",
+        "Shailik Sarkar",
+        "Lulwah AlKulaib",
+        "Yordanos Tessema",
+        "Chang-Tien Lu"
+      ],
+      "published": "2026-08-23T22:39:21Z",
+      "doi": null,
+      "summary": "Current work on improving reliability in large language model (LLM)- generated answers has primarily leveraged Retrieval-Augmented Generation (RAG), knowledge-graph augmentation, and reinforcement learning. While these methods are adept at enhancing and measuring reliability through semantic similarity and faithfulness, they often struggle to distinguish semantic similarity from geographic validity. This is especially critical in natural hazard management domains where geographic granularity (i.e., town vs. city vs. state) is significant for decision-making, as responses valid in one municipality may not transfer to another. In such domains, a confidently wrong answer carries greater risk than abstaining. We present GeoRisk-RAG, a novel hierarchy-aware framework that addresses this geographic-validity gap through selective answering. This framework explicitly estimates geographic applicability using a Directed Acyclic Graph (DAG)-based distance for context retrieval before response generation. Experiments on a novel held-out wildfire-related question-answering (QA) dataset show that GeoRisk-RAG significantly reduces false confidence rates for location-dependent questions, lowering the rate to 0.009 compared with ~0.090 for standard semantic similarity and reranking baselines, while consistently achieving higher human preference alignment. This work provides a more comprehensive assessment of end-to-end RAG pipelines by integrating geographic validity and selective-answering behavior for safer decision-making in geospatial domains."
+    },
+    {
+      "arxiv_id": "2602.10354v1",
+      "title": "Physically Interpretable AlphaEarth Foundation Model Embeddings Enable LLM-Based Land Surface Intelligence",
+      "authors": [
+        "Mashrekur Rahman"
+      ],
+      "published": "2026-02-10T22:58:50Z",
+      "doi": null,
+      "summary": "Satellite foundation models produce dense embeddings whose physical interpretability remains poorly understood, limiting their integration into environmental decision systems. Using 12.1 million samples across the Continental United States (2017--2023), we first present a comprehensive interpretability analysis of Google AlphaEarth's 64-dimensional embeddings against 26 environmental variables spanning climate, vegetation, hydrology, temperature, and terrain. Combining linear, nonlinear, and attention-based methods, we show that individual embedding dimensions map onto specific land surface properties, while the full embedding space reconstructs most environmental variables with high fidelity (12 of 26 variables exceed $R^2 > 0.90$; temperature and elevation approach $R^2 = 0.97$). The strongest dimension-variable relationships converge across all three analytical methods and remain robust under spatial block cross-validation (mean $ΔR^2 = 0.017$) and temporally stable across all seven study years (mean inter-year correlation $r = 0.963$). Building on these validated interpretations, we then developed a Land Surface Intelligence system that implements retrieval-augmented generation over a FAISS-indexed embedding database of 12.1 million vectors, translating natural language environmental queries into satellite-grounded assessments. An LLM-as-Judge evaluation across 360 query--response cycles, using four LLMs in rotating generator, system, and judge roles, achieved weighted scores of $μ= 3.74 \\pm 0.77$ (scale 1--5), with grounding ($μ= 3.93$) and coherence ($μ= 4.25$) as the strongest criteria. Our results demonstrate that satellite foundation model embeddings are physically structured representations that can be operationalized for environmental and geospatial intelligence."
+    },
+    {
+      "arxiv_id": "2406.07089v4",
+      "title": "RS-Agent: Automating Remote Sensing Tasks through Intelligent Agent",
+      "authors": [
+        "Wenjia Xu",
+        "Zijian Yu",
+        "Boyang Mu",
+        "Jiuniu Wang",
+        "Zhiwei Wei",
+        "Mugen Peng"
+      ],
+      "published": "2024-06-11T09:30:02Z",
+      "doi": "10.1007/s11432-026-5026-5",
+      "summary": "Recent advances in Multimodal Large Language Models (MLLMs) have shown promise for remote sensing tasks such as visual question answering and scene understanding. However, existing models remain limited to basic instruction-following and struggle with real-world scenarios that require multi-source data integration, fine-grained spatial reasoning, and domain expertise. To address this gap, we propose RS-Agent, a domain-adapted intelligent agent that connects user intent with professional remote sensing workflows through structured task planning and tool orchestration. RS-Agent consists of four components aligned with typical remote sensing workflows: a Central Controller for intent understanding and process planning, a dynamic toolkit for tool execution, a Solution Space for task-specific expert guidance, and a Knowledge Space for domain knowledge support. We further introduce Task-Aware Retrieval, which improves planning by identifying task types and retrieving expert-defined solutions, and DualRAG, a weighted dual-path retrieval-augmented generation method that enhances the relevance and completeness of retrieved knowledge. RS-Agent natively supports multiple imaging modalities, including optical and SAR imagery, and can automatically organize dedicated SAR processing tools into executable workflows. Experiments on 9 datasets and 18 remote sensing tasks show that RS-Agent significantly outperforms state-of-the-art MLLMs, achieving over 95% task planning accuracy and strong results in scene classification, object counting, and remote sensing visual question answering. These results demonstrate the value of combining LLM reasoning with remote sensing expertise for intelligent geospatial analysis."
+    }
+  ]
+}

@@ -1,0 +1,408 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "openalex",
+  "query": "class imbalance macro F1 crop type classification",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W3021001507",
+      "title": "COVID-19 identification in chest X-ray images on flat and hierarchical classification scenarios",
+      "authors": [
+        "Rodolfo M. Pereira",
+        "Diego Bertolini",
+        "Lucas Teixeira",
+        "Carlos N. Silla",
+        "Yandre M. G. Costa"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.cmpb.2020.105532",
+      "venue": "Computer Methods and Programs in Biomedicine",
+      "cited_by_count": 533
+    },
+    {
+      "openalex_id": "W4391346405",
+      "title": "Selecting and Interpreting Multiclass Loss and Accuracy Assessment Metrics for Classifications with Class Imbalance: Guidance and Best Practices",
+      "authors": [
+        "Sarah Farhadpour",
+        "Timothy A. Warner",
+        "Aaron E. Maxwell"
+      ],
+      "year": 2024,
+      "doi": "10.3390/rs16030533",
+      "venue": "Remote Sensing",
+      "cited_by_count": 124
+    },
+    {
+      "openalex_id": "W3114688163",
+      "title": "Automated multi-class classification of skin lesions through deep convolutional neural network with dermoscopic images",
+      "authors": [
+        "Imran Iqbal",
+        "Muhammad Younus",
+        "Khuram Walayat",
+        "Mohib Ullah Kakar",
+        "Jinwen Ma"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.compmedimag.2020.101843",
+      "venue": "Computerized Medical Imaging and Graphics",
+      "cited_by_count": 315
+    },
+    {
+      "openalex_id": "W4383426985",
+      "title": "Comparative Analysis using Various Performance Metrics in Imbalanced Data for Multi-class Text Classification",
+      "authors": [
+        "Slamet Riyanto",
+        "Imas Sukaesih Sitanggang",
+        "Taufik Djatna",
+        "Tika Dewi Atikah"
+      ],
+      "year": 2023,
+      "doi": "10.14569/ijacsa.2023.01406116",
+      "venue": "International Journal of Advanced Computer Science and Applications",
+      "cited_by_count": 72
+    },
+    {
+      "openalex_id": "W3215008255",
+      "title": "Multitemporal Polarimetric SAR Change Detection for Crop Monitoring and Crop Type Classification",
+      "authors": [
+        "Cristian Silva-Perez",
+        "Armando Marino",
+        "Juan M. López‐Sánchez",
+        "Iain Cameron"
+      ],
+      "year": 2021,
+      "doi": "10.1109/jstars.2021.3130186",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "cited_by_count": 47
+    },
+    {
+      "openalex_id": "W4308391678",
+      "title": "Detection and Classification of Tomato Crop Disease Using Convolutional Neural Network",
+      "authors": [
+        "Gnanavel Sakkarvarthi",
+        "Godfrey Winster Sathianesan",
+        "Vetri Selvan Murugan",
+        "Avulapalli Jayaram Reddy",
+        "Prabhu Jayagopal",
+        "Mahmoud Elsisi"
+      ],
+      "year": 2022,
+      "doi": "10.3390/electronics11213618",
+      "venue": "Electronics",
+      "cited_by_count": 115
+    },
+    {
+      "openalex_id": "W2888358068",
+      "title": "Attention gated networks: Learning to leverage salient regions in medical images",
+      "authors": [
+        "Jo Schlemper",
+        "Ozan Oktay",
+        "Michiel Schaap",
+        "Mattias P. Heinrich‬",
+        "Bernhard Kainz",
+        "Ben Glocker",
+        "Daniel Rueckert"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.media.2019.01.012",
+      "venue": "Medical Image Analysis",
+      "cited_by_count": 1993
+    },
+    {
+      "openalex_id": "W3181411924",
+      "title": "An approach for multiclass skin lesion classification based on ensemble learning",
+      "authors": [
+        "Zillur Rahman",
+        "Md. Sabir Hossain",
+        "Md. Rabiul Islam",
+        "Md. Mynul Hasan",
+        "Rubaiyat Alim Hridhee"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.imu.2021.100659",
+      "venue": "Informatics in Medicine Unlocked",
+      "cited_by_count": 160
+    },
+    {
+      "openalex_id": "W4386266758",
+      "title": "MCNN-LSTM: Combining CNN and LSTM to Classify Multi-Class Text in Imbalanced News Data",
+      "authors": [
+        "Khan Md. Hasib",
+        "Sami Azam",
+        "Asif Karim",
+        "Ahmed Al Marouf",
+        "F. M. Javed Mehedi Shamrat",
+        "Sidratul Montaha",
+        "Kheng Cher Yeo",
+        "Mirjam Jonkman",
+        "Reda Alhajj",
+        "Jon Rokne"
+      ],
+      "year": 2023,
+      "doi": "10.1109/access.2023.3309697",
+      "venue": "IEEE Access",
+      "cited_by_count": 65
+    },
+    {
+      "openalex_id": "W3136993381",
+      "title": "Computer-vision classification of corn seed varieties using deep convolutional neural network",
+      "authors": [
+        "Shima Javanmardi",
+        "Seyed‐Hassan Miraei Ashtiani",
+        "Fons J. Verbeek",
+        "Alex Martynenko"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jspr.2021.101800",
+      "venue": "Journal of Stored Products Research",
+      "cited_by_count": 187
+    },
+    {
+      "openalex_id": "W2991083105",
+      "title": "Analysis of the Human Protein Atlas Image Classification competition",
+      "authors": [
+        "Wei Ouyang",
+        "Casper F. Winsnes",
+        "Martin Hjelmare",
+        "Anthony J. Cesnik",
+        "Lovisa Åkesson",
+        "Hao Xu",
+        "Devin P. Sullivan",
+        "Shubin Dai",
+        "Jun Lan",
+        "Jinmo Park",
+        "Shaikat M. Galib",
+        "Christof Henkel",
+        "Kevin Hwang",
+        "Dmytro Poplavskiy",
+        "Bojan Tunguz",
+        "Russel D. Wolfinger",
+        "Yinzheng Gu",
+        "Chuanpeng Li",
+        "Jinbin Xie",
+        "Dmitry Buslov",
+        "Sergei Fironov",
+        "Alexander Kiselev",
+        "Dmytro Panchenko",
+        "Xuan Cao",
+        "Runmin Wei",
+        "Yuanhao Wu",
+        "Xun Zhu",
+        "Kuan-Lun Tseng",
+        "Zhifeng Gao",
+        "Cheng Ju",
+        "Xiaohan Yi",
+        "Hongdong Zheng",
+        "Constantin Kappel",
+        "Emma Lundberg"
+      ],
+      "year": 2019,
+      "doi": "10.1038/s41592-019-0658-6",
+      "venue": "Nature Methods",
+      "cited_by_count": 140
+    },
+    {
+      "openalex_id": "W2950123062",
+      "title": "Land Cover Classification from fused DSM and UAV Images Using Convolutional Neural Networks",
+      "authors": [
+        "Husam A. H. Al-Najjar",
+        "Bahareh Kalantar",
+        "Biswajeet Pradhan",
+        "Vahideh Saeidi",
+        "Alfian Abdul Halin",
+        "Naonori Ueda",
+        "Shattri Mansor"
+      ],
+      "year": 2019,
+      "doi": "10.3390/rs11121461",
+      "venue": "Remote Sensing",
+      "cited_by_count": 207
+    },
+    {
+      "openalex_id": "W3171108477",
+      "title": "Automated Detection and Classification of Oral Lesions Using Deep Learning to Detect Oral Potentially Malignant Disorders",
+      "authors": [
+        "Gizem Tanriver",
+        "Merva Soluk Tekkeşin",
+        "Onur Ergen"
+      ],
+      "year": 2021,
+      "doi": "10.3390/cancers13112766",
+      "venue": "Cancers",
+      "cited_by_count": 214
+    },
+    {
+      "openalex_id": "W3165319944",
+      "title": "Machine Learning in Agriculture: A Comprehensive Updated Review",
+      "authors": [
+        "Lefteris Benos",
+        "Aristotelis C. Tagarakis",
+        "Georgios Dolias",
+        "Remigio Berruto",
+        "Dimitrios Katerıs",
+        "Dionysis Bochtis"
+      ],
+      "year": 2021,
+      "doi": "10.3390/s21113758",
+      "venue": "Sensors",
+      "cited_by_count": 871
+    },
+    {
+      "openalex_id": "W2980444207",
+      "title": "A Deep Learning Ensemble Approach for Diabetic Retinopathy Detection",
+      "authors": [
+        "Sehrish Qummar",
+        "Fiaz Gul Khan",
+        "Sajid Shah",
+        "Ahmad Khan",
+        "Shahaboddin Shamshirband",
+        "Zia Ur Rehman",
+        "Iftikhar Ahmed Khan",
+        "Waqas Jadoon"
+      ],
+      "year": 2019,
+      "doi": "10.1109/access.2019.2947484",
+      "venue": "IEEE Access",
+      "cited_by_count": 628
+    },
+    {
+      "openalex_id": "W4406933890",
+      "title": "A Survey of Methods for Addressing Imbalance Data Problems in Agriculture Applications",
+      "authors": [
+        "Tajul Miftahushudur",
+        "Halil Mertkan Sahin",
+        "Bruce Grieve",
+        "Hujun Yin"
+      ],
+      "year": 2025,
+      "doi": "10.3390/rs17030454",
+      "venue": "Remote Sensing",
+      "cited_by_count": 52
+    },
+    {
+      "openalex_id": "W4224324554",
+      "title": "Deep learning based classification of sheep behaviour from accelerometer data with imbalance",
+      "authors": [
+        "Kirk E. Turner",
+        "A. N. Thompson",
+        "Ian Harris",
+        "Mark Ferguson",
+        "Ferdous Sohel"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.inpa.2022.04.001",
+      "venue": "Information Processing in Agriculture",
+      "cited_by_count": 35
+    },
+    {
+      "openalex_id": "W4226312434",
+      "title": "Automatic Severity Classification of Diabetic Retinopathy Based on DenseNet and Convolutional Block Attention Module",
+      "authors": [
+        "Mohamed Farag",
+        "Mariam Fouad",
+        "Amr T. Abdel-Hamid"
+      ],
+      "year": 2022,
+      "doi": "10.1109/access.2022.3165193",
+      "venue": "IEEE Access",
+      "cited_by_count": 198
+    },
+    {
+      "openalex_id": "W4224216771",
+      "title": "Vision Transformer for femur fracture classification",
+      "authors": [
+        "Leonardo Tanzi",
+        "Andrea Audisio",
+        "Giansalvo Cirrincione",
+        "Alessandro Aprato",
+        "Enrico Vezzetti"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.injury.2022.04.013",
+      "venue": "Injury",
+      "cited_by_count": 92
+    },
+    {
+      "openalex_id": "W3197288968",
+      "title": "An investigation of XGBoost-based algorithm for breast cancer classification",
+      "authors": [
+        "Xin Yu Liew",
+        "Nazia Hameed",
+        "Jérémie Clos"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.mlwa.2021.100154",
+      "venue": "Machine Learning with Applications",
+      "cited_by_count": 150
+    },
+    {
+      "openalex_id": "W2990405126",
+      "title": "Skin Lesions Classification Using Deep Learning Based on Dilated Convolution",
+      "authors": [
+        "Md. Aminur Rab Ratul",
+        "M. Hamed Mozaffari",
+        "Won‐Sook Lee",
+        "Enea Parimbelli"
+      ],
+      "year": 2019,
+      "doi": "10.1101/860700",
+      "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+      "cited_by_count": 85
+    },
+    {
+      "openalex_id": "W3173302161",
+      "title": "Sentiment analysis and classification of Indian farmers’ protest using twitter data",
+      "authors": [
+        "Ashwin Sanjay Neogi",
+        "Kirti Anilkumar Garg",
+        "Ram Krishn Mishra",
+        "Yogesh K. Dwivedi"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.jjimei.2021.100019",
+      "venue": "International Journal of Information Management Data Insights",
+      "cited_by_count": 188
+    },
+    {
+      "openalex_id": "W4312105496",
+      "title": "Nutrients deficiency diagnosis of rice crop by weighted average ensemble learning",
+      "authors": [
+        "Md. Simul Hasan Talukder",
+        "Ajay Krishno Sarkar"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.atech.2022.100155",
+      "venue": "Smart Agricultural Technology",
+      "cited_by_count": 94
+    },
+    {
+      "openalex_id": "W4281492951",
+      "title": "A Deep Learning-Based Model for Date Fruit Classification",
+      "authors": [
+        "Khalied M. Albarrak",
+        "Yonis Gulzar",
+        "Yasir Hamid",
+        "Abid Mehmood",
+        "Arjumand Bano Soomro"
+      ],
+      "year": 2022,
+      "doi": "10.3390/su14106339",
+      "venue": "Sustainability",
+      "cited_by_count": 136
+    },
+    {
+      "openalex_id": "W4405995154",
+      "title": "Advanced Brain Tumor Classification in MR Images Using Transfer Learning and Pre-Trained Deep CNN Models",
+      "authors": [
+        "Rukiye Disci",
+        "Fatih Gürcan",
+        "Ahmet Soylu"
+      ],
+      "year": 2025,
+      "doi": "10.3390/cancers17010121",
+      "venue": "Cancers",
+      "cited_by_count": 107
+    }
+  ]
+}

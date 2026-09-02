@@ -1,0 +1,533 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "openalex",
+  "query": "number of crop classes legend accuracy trade-off mapping",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W4200503226",
+      "title": "Mapping of crop types and crop sequences with combined time series of Sentinel-1, Sentinel-2 and Landsat 8 data for Germany",
+      "authors": [
+        "Lukas Blickensdörfer",
+        "Marcel Schwieder",
+        "Dirk Pflugmacher",
+        "Claas Nendel",
+        "Stefan Erasmi",
+        "Patrick Hostert"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.rse.2021.112831",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 396
+    },
+    {
+      "openalex_id": "W4318041127",
+      "title": "End-to-end learned early classification of time series for in-season crop type mapping",
+      "authors": [
+        "Marc Rußwurm",
+        "Nicolas Courty",
+        "Rémi Emonet",
+        "Sébastien Lefèvre",
+        "Devis Tuia",
+        "Romain Tavenard"
+      ],
+      "year": 2023,
+      "doi": "10.1016/j.isprsjprs.2022.12.016",
+      "venue": "ISPRS Journal of Photogrammetry and Remote Sensing",
+      "cited_by_count": 96
+    },
+    {
+      "openalex_id": "W3002582828",
+      "title": "Co-benefits and trade-offs of agroforestry for climate change mitigation and other sustainability goals in West Africa",
+      "authors": [
+        "Héloïse Tschora",
+        "Francesco Cherubini"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.gecco.2020.e00919",
+      "venue": "Global Ecology and Conservation",
+      "cited_by_count": 147
+    },
+    {
+      "openalex_id": "W3037944196",
+      "title": "Characterizing and mapping cropping patterns in a complex agro-ecosystem: An iterative participatory mapping procedure using machine learning algorithms and MODIS vegetation indices",
+      "authors": [
+        "Gudina Legese Feyisa",
+        "Leo Kris Palao",
+        "Andy Nelson",
+        "Murali Krishna Gumma",
+        "Ambica Paliwal",
+        "Khin Thawda Win",
+        "Khin Htar Nge",
+        "David E. Johnson"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.compag.2020.105595",
+      "venue": "Computers and Electronics in Agriculture",
+      "cited_by_count": 54
+    },
+    {
+      "openalex_id": "W4283324343",
+      "title": "Mapping Crop Types of Germany by Combining Temporal Statistical Metrics of Sentinel-1 and Sentinel-2 Time Series with LPIS Data",
+      "authors": [
+        "Sarah Asam",
+        "Ursula Geßner",
+        "Roger Almengor González",
+        "Martina Wenzl",
+        "Jennifer Kriese",
+        "Claudia Kuenzer"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14132981",
+      "venue": "Remote Sensing",
+      "cited_by_count": 62
+    },
+    {
+      "openalex_id": "W2955593274",
+      "title": "Mapping global development potential for renewable energy, fossil fuels, mining and agriculture sectors",
+      "authors": [
+        "James R. Oakleaf",
+        "Christina M. Kennedy",
+        "Sharon Baruch‐Mordo",
+        "James Gerber",
+        "Paul West",
+        "Justin A. Johnson",
+        "Joseph M. Kiesecker"
+      ],
+      "year": 2019,
+      "doi": "10.1038/s41597-019-0084-8",
+      "venue": "Scientific Data",
+      "cited_by_count": 121
+    },
+    {
+      "openalex_id": "W2998349956",
+      "title": "Strengthening agricultural decisions in countries at risk of food insecurity: The GEOGLAM Crop Monitor for Early Warning",
+      "authors": [
+        "Inbal Becker‐Reshef",
+        "Christina Justice",
+        "B. Barker",
+        "M. L. Humber",
+        "Felix Rembold",
+        "Rogério Bonifácio",
+        "Mario Zappacosta",
+        "Mike Budde",
+        "Tamuka Magadzire",
+        "Chris Shitote",
+        "Jonathan Pound",
+        "Alessandro Constantino",
+        "Catherine Nakalembe",
+        "Kenneth Mwangi",
+        "Shinichi Sobue",
+        "Terry Newby",
+        "A. K. Whitcraft",
+        "Ian Jarvis",
+        "J. P. Verdin"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.rse.2019.111553",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 136
+    },
+    {
+      "openalex_id": "W3034246221",
+      "title": "Mapping hotspots and bundles of forest ecosystem services across the European Union",
+      "authors": [
+        "Francesco Orsi",
+        "Marco Ciolli",
+        "Eeva Primmer",
+        "Liisa Varumo",
+        "Davide Geneletti"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.landusepol.2020.104840",
+      "venue": "Land Use Policy",
+      "cited_by_count": 148
+    },
+    {
+      "openalex_id": "W3096936835",
+      "title": "High-resolution wall-to-wall land-cover mapping and land change assessment for Australia from 1985 to 2015",
+      "authors": [
+        "Marco Calderón-Loor",
+        "Michalis Hadjikakou",
+        "Brett A. Bryan"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.rse.2020.112148",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 130
+    },
+    {
+      "openalex_id": "W4393160402",
+      "title": "Phosphorus applications adjusted to optimal crop yields can help sustain global phosphorus reserves",
+      "authors": [
+        "R. W. McDowell",
+        "Peter Pletnyakov",
+        "P. M. Haygarth"
+      ],
+      "year": 2024,
+      "doi": "10.1038/s43016-024-00952-9",
+      "venue": "Nature Food",
+      "cited_by_count": 138
+    },
+    {
+      "openalex_id": "W4286498159",
+      "title": "Time management governs climate resilience and productivity in the coupled rice–wheat cropping systems of eastern India",
+      "authors": [
+        "Andrew J. McDonald",
+        "Balwinder Singh",
+        "Alwin Keil",
+        "Amit K. Srivastava",
+        "Peter Craufurd",
+        "Avinash Kishore",
+        "Virender Kumar",
+        "Gokul P. Paudel",
+        "Sudhanshu S. Singh",
+        "Aditya Singh",
+        "R. K. Sohane",
+        "R. K. Malik"
+      ],
+      "year": 2022,
+      "doi": "10.1038/s43016-022-00549-0",
+      "venue": "Nature Food",
+      "cited_by_count": 97
+    },
+    {
+      "openalex_id": "W4288420805",
+      "title": "Fifty years of Landsat science and impacts",
+      "authors": [
+        "Michael A. Wulder",
+        "David P. Roy",
+        "Volker C. Radeloff",
+        "Thomas R. Loveland",
+        "Martha C. Anderson",
+        "David M. Johnson",
+        "Sean P. Healey",
+        "Zhe Zhu",
+        "Theodore A. Scambos",
+        "Nima Pahlevan",
+        "Matthew C. Hansen",
+        "Noel Gorelick",
+        "Christopher J. Crawford",
+        "Jeffrey G. Masek",
+        "Txomin Hermosilla",
+        "Joanne C. White",
+        "Alan Belward",
+        "Crystal Schaaf",
+        "Curtis E. Woodcock",
+        "Justin Huntington",
+        "Leo Lymburner",
+        "Patrick Hostert",
+        "Feng Gao",
+        "Alexei Lyapustin",
+        "Jean‐François Pekel",
+        "Peter Strobl",
+        "Bruce D. Cook"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.rse.2022.113195",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 747
+    },
+    {
+      "openalex_id": "W3123327024",
+      "title": "Mapping soil organic carbon stocks and trends with satellite-driven high resolution maps over South Africa",
+      "authors": [
+        "Zander S. Venter",
+        "Heidi‐Jayne Hawkins",
+        "Michael D. Cramer",
+        "Anthony Mills"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.scitotenv.2021.145384",
+      "venue": "The Science of The Total Environment",
+      "cited_by_count": 117
+    },
+    {
+      "openalex_id": "W4322754442",
+      "title": "Thematic accuracy assessment of the NLCD 2019 land cover for the conterminous United States",
+      "authors": [
+        "James Wickham",
+        "Stephen V. Stehman",
+        "Daniel G. Sorenson",
+        "Leila Gass",
+        "Jon Dewitz"
+      ],
+      "year": 2023,
+      "doi": "10.1080/15481603.2023.2181143",
+      "venue": "GIScience & Remote Sensing",
+      "cited_by_count": 116
+    },
+    {
+      "openalex_id": "W4200236397",
+      "title": "Global maps of cropland extent and change show accelerated cropland expansion in the twenty-first century",
+      "authors": [
+        "Peter Potapov",
+        "Svetlana Turubanova",
+        "Matthew C. Hansen",
+        "Alexandra Tyukavina",
+        "Viviana Zalles",
+        "Ahmad Khan",
+        "Xiao‐Peng Song",
+        "Amy Pickens",
+        "Quan Shen",
+        "Jocelyn Alejandra Cortez-Núñez"
+      ],
+      "year": 2021,
+      "doi": "10.1038/s43016-021-00429-z",
+      "venue": "Nature Food",
+      "cited_by_count": 1086
+    },
+    {
+      "openalex_id": "W4296125632",
+      "title": "Two decades of land cover mapping in the Río de la Plata grassland region: The MapBiomas Pampa initiative",
+      "authors": [
+        "Santiago Baeza",
+        "Eduardo Vélez‐Martin",
+        "Diego de Abelleyra",
+        "Santiago Banchero",
+        "Federico Gallego",
+        "J. Schirmbeck",
+        "Santiago R. Verón",
+        "María Vallejos",
+        "Eliseu José Weber",
+        "Mariano Oyarzábal",
+        "Alisson Flávio Barbieri",
+        "M. Petek",
+        "M. Guerra Lara",
+        "S.S. Sarrailhé",
+        "Germán Baldi",
+        "Camilo Bagnato",
+        "L. Bruzzone",
+        "S. R. R. Ramos",
+        "Heinrich Hasenack"
+      ],
+      "year": 2022,
+      "doi": "10.1016/j.rsase.2022.100834",
+      "venue": "Remote Sensing Applications Society and Environment",
+      "cited_by_count": 87
+    },
+    {
+      "openalex_id": "W4402901097",
+      "title": "European Union crop map 2022: Earth observation’s 10-meter dive into Europe’s crop tapestry",
+      "authors": [
+        "Babak Ghassemi",
+        "Emma Izquierdo‐Verdiguier",
+        "Astrid Verhegghen",
+        "Momchil Yordanov",
+        "Guido Lemoine",
+        "Álvaro Moreno‐Martínez",
+        "Davide De Marchi",
+        "Marijn van der Velde",
+        "Francesco Vuolo",
+        "Raphaël d’Andrimont"
+      ],
+      "year": 2024,
+      "doi": "10.1038/s41597-024-03884-y",
+      "venue": "Scientific Data",
+      "cited_by_count": 40
+    },
+    {
+      "openalex_id": "W3093215896",
+      "title": "Global priority areas for ecosystem restoration",
+      "authors": [
+        "Bernardo B. N. Strassburg",
+        "Álvaro Iribarrem",
+        "Hawthorne L. Beyer",
+        "Carlos Leandro Cordeiro",
+        "Renato Crouzeilles",
+        "Catarina C. Jakovac",
+        "André Braga Junqueira",
+        "Eduardo Lacerda",
+        "Agnieszka E. Latawiec",
+        "Andrew Balmford",
+        "Thomas M. Brooks",
+        "Stuart H. M. Butchart",
+        "Robin L. Chazdon",
+        "Karl‐Heinz Erb",
+        "Pedro H. S. Brancalion",
+        "Graeme M. Buchanan",
+        "David Cooper",
+        "Sandra Dı́az",
+        "Paul F. Donald",
+        "Valerie Kapos",
+        "David Leclère",
+        "Lera Miles",
+        "Michael Obersteiner",
+        "Christoph Plutzar",
+        "Carlos Alberto de Mattos Scaramuzza",
+        "Fábio Rúbio Scarano",
+        "Piero Visconti"
+      ],
+      "year": 2020,
+      "doi": "10.1038/s41586-020-2784-9",
+      "venue": "Nature",
+      "cited_by_count": 1141
+    },
+    {
+      "openalex_id": "W4394903452",
+      "title": "Ecosystem service multifunctionality and trade-offs in English Green Belt peri-urban planning",
+      "authors": [
+        "Matthew Kirby",
+        "Joanna Zawadzka",
+        "Alister Scott"
+      ],
+      "year": 2024,
+      "doi": "10.1016/j.ecoser.2024.101620",
+      "venue": "Ecosystem Services",
+      "cited_by_count": 32
+    },
+    {
+      "openalex_id": "W2971585857",
+      "title": "A reference genome for pea provides insight into legume genome evolution",
+      "authors": [
+        "Jonathan Kreplak",
+        "Mohammed‐Amin Madoui",
+        "Petr Cápal",
+        "Petr Novák",
+        "Karine Labadie",
+        "Grégoire Aubert",
+        "Philipp E. Bayer",
+        "Krishna Kishore Gali",
+        "Robert A. Syme",
+        "Dorrie Main",
+        "Anthony Klein",
+        "Aurélie Berard",
+        "Iva Vrbová",
+        "Cyril Fournier",
+        "Léo d’Agata",
+        "Caroline Belser",
+        "Wahiba Berrabah",
+        "Helena Toegelová",
+        "Zbyněk Milec",
+        "Jan Vrána",
+        "HueyTyng Lee",
+        "Ayité Kougbeadjo",
+        "Morgane Térézol",
+        "Cécile Huneau",
+        "Chala Turo",
+        "Nacer Mohellibi",
+        "Pavel Neumann",
+        "Matthieu Falque",
+        "Karine Gallardo",
+        "Rebecca J. McGee",
+        "Bunyamin Tar’an",
+        "Abdelhafid Bendahmane",
+        "Jean‐Marc Aury",
+        "Jacqueline Batley",
+        "Marie‐Christine Le Paslier",
+        "Noel Ellis",
+        "Thomas D. Warkentin",
+        "Clarice J. Coyne",
+        "Jérôme Salse",
+        "David Edwards",
+        "Judith Lichtenzveig",
+        "Jir̆ı́ Macas",
+        "Jaroslav Doležel",
+        "Patrick Wincker",
+        "Judith Burstin"
+      ],
+      "year": 2019,
+      "doi": "10.1038/s41588-019-0480-1",
+      "venue": "Nature Genetics",
+      "cited_by_count": 569
+    },
+    {
+      "openalex_id": "W3040709534",
+      "title": "Unambiguous identification of fungi: where do we stand and how accurate and precise is fungal DNA barcoding?",
+      "authors": [
+        "Robert Lücking",
+        "M. Catherine Aime",
+        "Barbara Robbertse",
+        "Andrew N. Miller",
+        "Hiran A. Ariyawansa",
+        "Takayuki Aoki",
+        "Gianluigi Cardinali",
+        "P.W. Crous",
+        "Irina S. Druzhinina",
+        "David M. Geiser",
+        "David L. Hawksworth",
+        "Kevin D. Hyde",
+        "László Irinyi",
+        "Rajesh Jeewon",
+        "Peter R. Johnston",
+        "Paul M. Kirk",
+        "Elaine Malosso",
+        "Tom W. May",
+        "Wieland Meyer",
+        "Maarja Öpik",
+        "Vincent Robert",
+        "Marc Stadler",
+        "Marco Thines",
+        "Duong Vu",
+        "Andrey Yurkov",
+        "Ning Zhang",
+        "Conrad L. Schoch"
+      ],
+      "year": 2020,
+      "doi": "10.1186/s43008-020-00033-z",
+      "venue": "IMA Fungus",
+      "cited_by_count": 510
+    },
+    {
+      "openalex_id": "W3158553145",
+      "title": "Toward Large-Scale Mapping of Tree Crops with High-Resolution Satellite Imagery and Deep Learning Algorithms: A Case Study of Olive Orchards in Morocco",
+      "authors": [
+        "Chenxi Lin",
+        "Zhenong Jin",
+        "D. J. Mulla",
+        "Rahul Ghosh",
+        "Kaiyu Guan",
+        "Vipin Kumar",
+        "Yaping Cai"
+      ],
+      "year": 2021,
+      "doi": "10.3390/rs13091740",
+      "venue": "Remote Sensing",
+      "cited_by_count": 33
+    },
+    {
+      "openalex_id": "W3092963667",
+      "title": "Mapping Land Use Land Cover Transitions at Different Spatiotemporal Scales in West Africa",
+      "authors": [
+        "Beatrice Asenso Barnieh",
+        "Jia Li",
+        "Massimo Menenti",
+        "Jie Zhou",
+        "Yelong Zeng"
+      ],
+      "year": 2020,
+      "doi": "10.3390/su12208565",
+      "venue": "Sustainability",
+      "cited_by_count": 80
+    },
+    {
+      "openalex_id": "W4308736555",
+      "title": "Sentinel2GlobalLULC: A Sentinel-2 RGB image tile dataset for global land use/cover mapping with deep learning",
+      "authors": [
+        "Yassir Benhammou",
+        "Domingo Alcaraz‐Segura",
+        "Emilio Guirado",
+        "Rohaifa Khaldi",
+        "Boujemâa Achchab",
+        "Francisco Herrera",
+        "Siham Tabik"
+      ],
+      "year": 2022,
+      "doi": "10.1038/s41597-022-01775-8",
+      "venue": "Scientific Data",
+      "cited_by_count": 54
+    },
+    {
+      "openalex_id": "W2969695601",
+      "title": "Combining ASNARO-2 XSAR HH and Sentinel-1 C-SAR VH/VV Polarization Data for Improved Crop Mapping",
+      "authors": [
+        "Rei Sonobe"
+      ],
+      "year": 2019,
+      "doi": "10.3390/rs11161920",
+      "venue": "Remote Sensing",
+      "cited_by_count": 26
+    }
+  ]
+}

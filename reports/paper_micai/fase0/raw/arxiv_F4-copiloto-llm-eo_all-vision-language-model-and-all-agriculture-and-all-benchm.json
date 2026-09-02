@@ -1,0 +1,417 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "arxiv",
+  "query": "all:\"vision language model\" AND all:\"agriculture\" AND all:\"benchmark\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2507.20519v1",
+      "title": "AgroBench: Vision-Language Model Benchmark in Agriculture",
+      "authors": [
+        "Risa Shinoda",
+        "Nakamasa Inoue",
+        "Hirokatsu Kataoka",
+        "Masaki Onishi",
+        "Yoshitaka Ushiku"
+      ],
+      "published": "2025-07-28T04:58:29Z",
+      "doi": null,
+      "summary": "Precise automated understanding of agricultural tasks such as disease identification is essential for sustainable crop production. Recent advances in vision-language models (VLMs) are expected to further expand the range of agricultural tasks by facilitating human-model interaction through easy, text-based communication. Here, we introduce AgroBench (Agronomist AI Benchmark), a benchmark for evaluating VLM models across seven agricultural topics, covering key areas in agricultural engineering and relevant to real-world farming. Unlike recent agricultural VLM benchmarks, AgroBench is annotated by expert agronomists. Our AgroBench covers a state-of-the-art range of categories, including 203 crop categories and 682 disease categories, to thoroughly evaluate VLM capabilities. In our evaluation on AgroBench, we reveal that VLMs have room for improvement in fine-grained identification tasks. Notably, in weed identification, most open-source VLMs perform close to random. With our wide range of topics and expert-annotated categories, we analyze the types of errors made by VLMs and suggest potential pathways for future VLM development. Our dataset and code are available at https://dahlian00.github.io/AgroBenchPage/ ."
+    },
+    {
+      "arxiv_id": "2511.23253v3",
+      "title": "AgroCoT: A Chain-of-Thought Benchmark for Evaluating Reasoning in Vision-Language Models for Agriculture",
+      "authors": [
+        "Yibin Wen",
+        "Qingmei Li",
+        "Zi Ye",
+        "Jiarui Zhang",
+        "Xiaoya Fan",
+        "Zurong Mai",
+        "Jing Wu",
+        "Shuohong Lou",
+        "Yuhang Chen",
+        "Henglian Huang",
+        "Yang Zhang",
+        "Defeng Gu",
+        "Lingyuan Zhao",
+        "Yutong Lu",
+        "Haohuan Fu",
+        "Jianxi Huang",
+        "Juepeng Zheng"
+      ],
+      "published": "2025-11-28T15:02:19Z",
+      "doi": null,
+      "summary": "Recent advancements in Vision-Language Models (VLMs) have significantly impacted various industries. In agriculture, these multimodal capabilities hold great promise for applications such as precision farming, crop monitoring, pest detection, and environmental sustainability. However, while several Visual Question Answering (VQA) datasets and benchmarks have been developed to assess VLM performance, they often fail to effectively evaluate the critical reasoning and problem-solving skills needed in complex agricultural contexts. To address this gap, we introduce AgroCoT, a VQA dataset that integrates Chain-of-Thought (CoT) reasoning, specifically designed to evaluate the reasoning capabilities of VLMs. With 4,759 carefully curated samples, AgroCoT provides a comprehensive and robust evaluation of reasoning abilities, particularly in zero-shot scenarios, focusing on the models' ability to engage in logical reasoning and effective problem-solving. Our evaluation of 30 representative VLMs, including both proprietary and open-source models, reveals a gap in their reasoning capabilities, which underscores the importance of incorporating CoT for assessments. Our dataset is available at https://huggingface.co/datasets/AgroCoT/AgroCoT."
+    },
+    {
+      "arxiv_id": "2407.19617v2",
+      "title": "Leveraging Vision Language Models for Specialized Agricultural Tasks",
+      "authors": [
+        "Muhammad Arbab Arshad",
+        "Talukder Zaki Jubery",
+        "Tirtho Roy",
+        "Rim Nassiri",
+        "Asheesh K. Singh",
+        "Arti Singh",
+        "Chinmay Hegde",
+        "Baskar Ganapathysubramanian",
+        "Aditya Balu",
+        "Adarsh Krishnamurthy",
+        "Soumik Sarkar"
+      ],
+      "published": "2024-07-29T00:39:51Z",
+      "doi": null,
+      "summary": "As Vision Language Models (VLMs) become increasingly accessible to farmers and agricultural experts, there is a growing need to evaluate their potential in specialized tasks. We present AgEval, a comprehensive benchmark for assessing VLMs' capabilities in plant stress phenotyping, offering a solution to the challenge of limited annotated data in agriculture. Our study explores how general-purpose VLMs can be leveraged for domain-specific tasks with only a few annotated examples, providing insights into their behavior and adaptability. AgEval encompasses 12 diverse plant stress phenotyping tasks, evaluating zero-shot and few-shot in-context learning performance of state-of-the-art models including Claude, GPT, Gemini, and LLaVA. Our results demonstrate VLMs' rapid adaptability to specialized tasks, with the best-performing model showing an increase in F1 scores from 46.24% to 73.37% in 8-shot identification. To quantify performance disparities across classes, we introduce metrics such as the coefficient of variation (CV), revealing that VLMs' training impacts classes differently, with CV ranging from 26.02% to 58.03%. We also find that strategic example selection enhances model reliability, with exact category examples improving F1 scores by 15.38% on average. AgEval establishes a framework for assessing VLMs in agricultural applications, offering valuable benchmarks for future evaluations. Our findings suggest that VLMs, with minimal few-shot examples, show promise as a viable alternative to traditional specialized models in plant stress phenotyping, while also highlighting areas for further refinement. Results and benchmark details are available at: https://github.com/arbab-ml/AgEval"
+    },
+    {
+      "arxiv_id": "2504.10568v2",
+      "title": "AgMMU: A Comprehensive Agricultural Multimodal Understanding Benchmark",
+      "authors": [
+        "Aruna Gauba",
+        "Irene Pi",
+        "Yunze Man",
+        "Ziqi Pang",
+        "Vikram S. Adve",
+        "Yu-Xiong Wang"
+      ],
+      "published": "2025-04-14T17:59:45Z",
+      "doi": null,
+      "summary": "We present AgMMU, a challenging real-world benchmark for evaluating and advancing vision-language models (VLMs) in the knowledge-intensive domain of agriculture. Unlike prior datasets that rely on crowdsourced prompts, AgMMU is distilled from 116,231 authentic dialogues between everyday growers and USDA-authorized Cooperative Extension experts. Through a three-stage pipeline: automated knowledge extraction, QA generation, and human verification, we construct (i) AgMMU, an evaluation set of 746 multiple-choice questions (MCQs) and 746 open-ended questions (OEQs), and (ii) AgBase, a development corpus of 57,079 multimodal facts covering five high-stakes agricultural topics: insect identification, species identification, disease categorization, symptom description, and management instruction. Benchmarking 12 leading VLMs reveals pronounced gaps in fine-grained perception and factual grounding. Open-sourced models trail after proprietary ones by a wide margin. Simple fine-tuning on AgBase boosts open-sourced model performance on challenging OEQs for up to 11.6% on average, narrowing this gap and also motivating future research to propose better strategies in knowledge extraction and distillation from AgBase. We hope AgMMU stimulates research on domain-specific knowledge integration and trustworthy decision support in agriculture AI development."
+    },
+    {
+      "arxiv_id": "2512.15977v3",
+      "title": "Are vision-language models ready to zero-shot replace supervised classification models in agriculture?",
+      "authors": [
+        "Earl Ranario",
+        "Mason J. Earles"
+      ],
+      "published": "2025-12-17T21:22:44Z",
+      "doi": null,
+      "summary": "Vision-language models (VLMs) are increasingly proposed as general-purpose solutions for visual recognition tasks, yet their reliability for agricultural decision support remains poorly understood. We benchmark a diverse set of open-source and closed-source VLMs on 27 agricultural image classification datasets from the AgML collection (https://github.com/Project-AgML), spanning 162 classes and 248,000 images across plant disease, pest and damage, and plant and weed species identification. Across all tasks, zero-shot VLMs substantially underperform a supervised task-specific baseline (YOLO11), which consistently achieves markedly higher accuracy than any foundation model. Under multiple-choice prompting, the best-performing VLM (Gemini-3 Pro) reaches approximately 62% average accuracy, while open-ended prompting yields much lower performance, with raw accuracies typically below 25%. Applying LLM-based semantic judging increases open-ended accuracy (e.g., from ~21% to ~30% for top models) and alters model rankings, demonstrating that evaluation methodology meaningfully affects reported conclusions. Among open-source models, Qwen-VL-72B performs best, approaching closed-source performance under constrained prompting but still trailing top proprietary systems. Task-level analysis shows that plant and weed species classification is consistently easier than pest and damage identification, which remains the most challenging category across models. Overall, these results indicate that current off-the-shelf VLMs are not yet suitable as standalone agricultural diagnostic systems, but can function as assistive components when paired with constrained interfaces, explicit label ontologies, and domain-aware evaluation strategies."
+    },
+    {
+      "arxiv_id": "2506.20100v2",
+      "title": "MIRAGE: A Benchmark for Multimodal Information-Seeking and Reasoning in Agricultural Expert-Guided Conversations",
+      "authors": [
+        "Vardhan Dongre",
+        "Chi Gui",
+        "Shubham Garg",
+        "Hooshang Nayyeri",
+        "Gokhan Tur",
+        "Dilek Hakkani-Tür",
+        "Vikram S. Adve"
+      ],
+      "published": "2025-06-25T03:07:54Z",
+      "doi": null,
+      "summary": "We introduce MIRAGE, a new benchmark for multimodal expert-level reasoning and decision-making in consultative interaction settings. Designed for the agriculture domain, MIRAGE captures the full complexity of expert consultations by combining natural user queries, expert-authored responses, and image-based context, offering a high-fidelity benchmark for evaluating models on grounded reasoning, clarification strategies, and long-form generation in a real-world, knowledge-intensive domain. Grounded in over 35,000 real user-expert interactions and curated through a carefully designed multi-step pipeline, MIRAGE spans diverse crop health, pest diagnosis, and crop management scenarios. The benchmark includes more than 7,000 unique biological entities, covering plant species, pests, and diseases, making it one of the most taxonomically diverse benchmarks available for vision-language models, grounded in the real world. Unlike existing benchmarks that rely on well-specified user inputs and closed-set taxonomies, MIRAGE features underspecified, context-rich scenarios with open-world settings, requiring models to infer latent knowledge gaps, handle rare entities, and either proactively guide the interaction or respond. Project Page: https://mirage-benchmark.github.io"
+    },
+    {
+      "arxiv_id": "2508.07406v1",
+      "title": "AgriVLN: Vision-and-Language Navigation for Agricultural Robots",
+      "authors": [
+        "Xiaobei Zhao",
+        "Xingqi Lyu",
+        "Xiang Li"
+      ],
+      "published": "2025-08-10T16:07:23Z",
+      "doi": null,
+      "summary": "Agricultural robots have emerged as powerful members in agricultural tasks, nevertheless, still heavily rely on manual operation or untransportable railway for movement, resulting in limited mobility and poor adaptability. Vision-and-Language Navigation (VLN) enables robots to navigate to the target destinations following natural language instructions, demonstrating strong performance on several domains. However, none of the existing benchmarks or methods is specifically designed for agricultural scenes. To bridge this gap, we propose Agriculture to Agriculture (A2A) benchmark, containing 1,560 episodes across six diverse agricultural scenes, in which all realistic RGB videos are captured by front-facing camera on a quadruped robot at a height of 0.38 meters, aligning with the practical deployment conditions. Meanwhile, we propose Vision-and-Language Navigation for Agricultural Robots (AgriVLN) baseline based on Vision-Language Model (VLM) prompted with carefully crafted templates, which can understand both given instructions and agricultural environments to generate appropriate low-level actions for robot control. When evaluated on A2A, AgriVLN performs well on short instructions but struggles with long instructions, because it often fails to track which part of the instruction is currently being executed. To address this, we further propose Subtask List (STL) instruction decomposition module and integrate it into AgriVLN, improving Success Rate (SR) from 0.33 to 0.47. We additionally compare AgriVLN with several existing VLN methods, demonstrating the state-of-the-art performance in the agricultural domain."
+    },
+    {
+      "arxiv_id": "2509.17044v1",
+      "title": "AgriDoctor: A Multimodal Intelligent Assistant for Agriculture",
+      "authors": [
+        "Mingqing Zhang",
+        "Zhuoning Xu",
+        "Peijie Wang",
+        "Rongji Li",
+        "Liang Wang",
+        "Qiang Liu",
+        "Jian Xu",
+        "Xuyao Zhang",
+        "Shu Wu",
+        "Liang Wang"
+      ],
+      "published": "2025-09-21T11:51:57Z",
+      "doi": null,
+      "summary": "Accurate crop disease diagnosis is essential for sustainable agriculture and global food security. Existing methods, which primarily rely on unimodal models such as image-based classifiers and object detectors, are limited in their ability to incorporate domain-specific agricultural knowledge and lack support for interactive, language-based understanding. Recent advances in large language models (LLMs) and large vision-language models (LVLMs) have opened new avenues for multimodal reasoning. However, their performance in agricultural contexts remains limited due to the absence of specialized datasets and insufficient domain adaptation. In this work, we propose AgriDoctor, a modular and extensible multimodal framework designed for intelligent crop disease diagnosis and agricultural knowledge interaction. As a pioneering effort to introduce agent-based multimodal reasoning into the agricultural domain, AgriDoctor offers a novel paradigm for building interactive and domain-adaptive crop health solutions. It integrates five core components: a router, classifier, detector, knowledge retriever and LLMs. To facilitate effective training and evaluation, we construct AgriMM, a comprehensive benchmark comprising 400000 annotated disease images, 831 expert-curated knowledge entries, and 300000 bilingual prompts for intent-driven tool selection. Extensive experiments demonstrate that AgriDoctor, trained on AgriMM, significantly outperforms state-of-the-art LVLMs on fine-grained agricultural tasks, establishing a new paradigm for intelligent and sustainable farming applications."
+    },
+    {
+      "arxiv_id": "2508.17117v3",
+      "title": "PlantExpertVQA: A Visual Question Answering Dataset for Benchmarking Vision-Language Models in Plant Science",
+      "authors": [
+        "Syed Nazmus Sakib",
+        "Nafiul Haque",
+        "Mohammad Zabed Hossain",
+        "Shifat E. Arman"
+      ],
+      "published": "2025-08-23T19:04:57Z",
+      "doi": null,
+      "summary": "Existing plant-disease datasets target classification and detection, leaving vision-language models unable to support interactive, reasoning-based diagnosis. To address this, we present PlantExpertVQA, a large-scale visual question answering (VQA) dataset designed to advance vision-language models for agricultural decision-making. It is compiled from 45 open-source datasets, including the widely used PlantVillage corpus, and comprises 765,186 high-quality question-answer (QA) pairs grounded over 150,841 images spanning 38 crop species and 89 disease conditions. Questions are organized into 3 levels of cognitive complexity and 9 distinct categories. Each was phrased following expert guidance and generated via an automated two-stage pipeline: template-based QA synthesis from image metadata, followed by multi-stage linguistic re-engineering. The dataset was iteratively reviewed by domain experts for scientific accuracy and relevance. We find that current frontier vision-language models, including recent open-source instruction-tuned multimodal LLMs, perform poorly on PlantExpertVQA. However, parameter-efficient fine-tuning of a compact 2B-parameter model on a small fraction of the dataset yields substantial improvements across all question categories, demonstrating its effectiveness for domain adaptation."
+    },
+    {
+      "arxiv_id": "2508.13713v1",
+      "title": "Hierarchical Vision-Language Retrieval of Educational Metaverse Content in Agriculture",
+      "authors": [
+        "Ali Abdari",
+        "Alex Falcon",
+        "Giuseppe Serra"
+      ],
+      "published": "2025-08-19T10:19:31Z",
+      "doi": null,
+      "summary": "Every day, a large amount of educational content is uploaded online across different areas, including agriculture and gardening. When these videos or materials are grouped meaningfully, they can make learning easier and more effective. One promising way to organize and enrich such content is through the Metaverse, which allows users to explore educational experiences in an interactive and immersive environment. However, searching for relevant Metaverse scenarios and finding those matching users' interests remains a challenging task. A first step in this direction has been done recently, but existing datasets are small and not sufficient for training advanced models. In this work, we make two main contributions: first, we introduce a new dataset containing 457 agricultural-themed virtual museums (AgriMuseums), each enriched with textual descriptions; and second, we propose a hierarchical vision-language model to represent and retrieve relevant AgriMuseums using natural language queries. In our experimental setting, the proposed method achieves up to about 62\\% R@1 and 78\\% MRR, confirming its effectiveness, and it also leads to improvements on existing benchmarks by up to 6\\% R@1 and 11\\% MRR. Moreover, an extensive evaluation validates our design choices. Code and dataset are available at https://github.com/aliabdari/Agricultural_Metaverse_Retrieval ."
+    },
+    {
+      "arxiv_id": "2605.03259v1",
+      "title": "CropVLM: A Domain-Adapted Vision-Language Model for Open-Set Crop Analysis",
+      "authors": [
+        "Abderrahmene Boudiaf",
+        "Sajd Javed"
+      ],
+      "published": "2026-05-05T01:17:27Z",
+      "doi": null,
+      "summary": "High-throughput plant phenotyping, the quantitative measurement of observable plant traits, is critical for modern breeding but remains constrained by a \"phenotyping bottleneck,\" where manual data collection is labor-intensive and prone to observer bias. Conventional closed-set computer vision systems fail to address this challenge, as they require extensive species-specific annotation and lack the flexibility to handle diverse breeding populations. To bridge this gap, we present CropVLM, a Vision-Language Model (VLM) adapted for the agricultural domain via Domain-Specific Semantic Alignment (DSSA). Trained on 52,987 manually selected image-caption pairs covering 37 species in natural field conditions, CropVLM effectively maps agronomic terminology to fine-grained visual features. We further introduce the Hybrid Open-Set Localization Network (HOS-Net), an architecture that integrates CropVLM to enable the detection of novel crops solely from natural language descriptions without retraining. By eliminating the reliance on species-specific training data, CropVLM provides a scalable solution for high-throughput phenotyping, accelerating genetic gain and facilitating large-scale biodiversity research essential for sustainable agriculture. The trained model weights and complete pipeline implementation are publicly available at: [https://github.com/boudiafA/CropVLM](https://github.com/boudiafA/CropVLM). In comprehensive evaluations, CropVLM achieves 72.51% zero-shot classification accuracy, outperforming seven CLIP-style baselines. Our detection pipeline demonstrates superior zero-shot generalization to novel species, achieving 49.17 AP50 on our CVTCropDet benchmark and 50.73 AP50 on tropical fruit species, compared to 34.89 and 48.58 for the next-best method, respectively."
+    },
+    {
+      "arxiv_id": "2607.04610v1",
+      "title": "RoboVista: Evaluating Vision Language Models for Diverse Robot Applications",
+      "authors": [
+        "Shuangyu Xie",
+        "Kaiyuan Chen",
+        "Ziyang Chen",
+        "Simeon Adebola",
+        "Yixuan Huang",
+        "Zehan Ma",
+        "Tianshuang Qiu",
+        "Wentao Yuan",
+        "Dhruv Shah",
+        "Pannag R. Sanketi",
+        "Ken Goldberg"
+      ],
+      "published": "2026-07-06T02:34:56Z",
+      "doi": null,
+      "summary": "Diverse applications for robotics, such as industry and agriculture, require robots to operate across various embodiments, changing visual conditions, and complex planning. Vision-Language Models (VLMs) offer a promising foundation for general-purpose and interpretable robotic reasoning. Aligning VLMs with diverse robot applications requires a modular understanding of the individual decision components that underlie robotic behavior. Capturing such structure is challenging for conventional robot benchmarks that are primarily based on teleoperated, end-to-end datasets. We propose Robot Question Answering (RQA), a modular evaluation framework and RoboVista, a benchmark curated from real robotic systems, research papers, and expert annotations. RoboVista contains 474 Visual Question Answering (VQA) instances with human annotated reasoning and covers 39 unique task types in agricultural, industrial, domestic, surgical robotics, autonomous driving, and open robot datasets. Experiments on RoboVista show that state-of-the-art VLMs exhibit substantial gaps. Physical robot experiments suggest strong correlation between RoboVista performance and real-world task execution."
+    },
+    {
+      "arxiv_id": "2608.18116v1",
+      "title": "You Are What You Prompt: Prompt Quality, Domain Shift, and Uncertainty in Agrifood Vision-Language Models",
+      "authors": [
+        "Andrea Morales-Garzón",
+        "Salvador López-Joya",
+        "Miguel López-Pérez",
+        "Maria J. Martin-Bautista"
+      ],
+      "published": "2026-07-01T10:25:24Z",
+      "doi": null,
+      "summary": "Vision-language models enable zero-shot classification through natural language prompts, but performance is sensitive to prompt formulation, especially in specialized domains. Zero-shot Prompt Ensembling (ZPE) addresses this by weighting prompts by discriminative signal, yet its behavior under domain shift remains unexplored. We evaluate ZPE in the agrifood domain using CLIP and SigLIP across four datasets and four prompt pools, spanning in-distribution (ID) food and out-of-distribution agricultural benchmarks. ZPE provides limited benefit under ID conditions but substantially improves performance and calibration under domain shift, where domain-specific pools of 51-52 prompts consistently outperform generic pools of 247-426. Lexical analysis shows that ZPE acts as an unsupervised domain-alignment detector without label access. We further introduce PID (Prompt-based Inconsistency Detection), which repurposes prompt disagreement as epistemic uncertainty, improving failure detection under severe domain shift where standard confidence measures collapse."
+    },
+    {
+      "arxiv_id": "2604.23701v1",
+      "title": "Agri-CPJ: A Training-Free Explainable Framework for Agricultural Pest Diagnosis Using Caption-Prompt-Judge and LLM-as-a-Judge",
+      "authors": [
+        "Wentao Zhang",
+        "Qi Zhang",
+        "Mingkun Xu",
+        "Mu You",
+        "Henghua Shen",
+        "Zhongzhi He",
+        "Keyan Jin",
+        "Derek F. Wong",
+        "Tao Fang"
+      ],
+      "published": "2026-04-26T13:33:45Z",
+      "doi": null,
+      "summary": "Crop disease diagnosis from field photographs faces two recurring problems: models that score well on benchmarks frequently hallucinate species names, and when predictions are correct, the reasoning behind them is typically inaccessible to the practitioner. This paper describes Agri-CPJ (Caption-Prompt-Judge), a training-free few-shot framework in which a large vision-language model first generates a structured morphological caption, iteratively refined through multi-dimensional quality gating, before any diagnostic question is answered. Two candidate responses are then generated from complementary viewpoints, and an LLM judge selects the stronger one based on domain-specific criteria. Caption refinement is the component with the largest individual impact: ablations confirm that skipping it consistently degrades downstream accuracy across both models tested. On CDDMBench, pairing GPT-5-Nano with GPT-5-mini-generated captions yields \\textbf{+22.7} pp in disease classification and \\textbf{+19.5} points in QA score over no-caption baselines. Evaluated without modification on AgMMU-MCQs, GPT-5-Nano reached 77.84\\% and Qwen-VL-Chat reached 64.54\\%, placing them at or above most open-source models of comparable scale despite the format shift from open-ended to multiple-choice. The structured caption and judge rationale together constitute a readable audit trail: a practitioner who disagrees with a diagnosis can identify the specific caption observation that was incorrect. Code and data are publicly available https://github.com/CPJ-Agricultural/CPJ-Agricultural-Diagnosis"
+    },
+    {
+      "arxiv_id": "2406.09105v2",
+      "title": "INS-MMBench: A Comprehensive Benchmark for Evaluating LVLMs' Performance in Insurance",
+      "authors": [
+        "Chenwei Lin",
+        "Hanjia Lyu",
+        "Xian Xu",
+        "Jiebo Luo"
+      ],
+      "published": "2024-06-13T13:31:49Z",
+      "doi": null,
+      "summary": "Large Vision-Language Models (LVLMs) and Multimodal Large Language Models (MLLMs) have demonstrated outstanding performance in various general multimodal applications and have shown increasing promise in specialized domains. However, their potential in the insurance domain-characterized by diverse application scenarios and rich multimodal data-remains largely underexplored. To date, there is no systematic review of multimodal tasks, nor a benchmark specifically designed to assess the capabilities of LVLMs in insurance. This gap hinders the development of LVLMs within the insurance industry. This study systematically reviews and categorizes multimodal tasks for 4 representative types of insurance: auto, property, health, and agricultural. We introduce INS-MMBench, the first hierarchical benchmark tailored for the insurance domain. INS-MMBench encompasses 22 fundamental tasks, 12 meta-tasks and 5 scenario tasks, enabling a comprehensive and progressive assessment from basic capabilities to real-world use cases. We benchmark 11 leading LVLMs, including closed-source models such as GPT-4o and open-source models like LLaVA. Our evaluation validates the effectiveness of INS-MMBench and offers detailed insights into the strengths and limitations of current LVLMs on a variety of insurance-related multimodal tasks. We hope that INS-MMBench will accelerate the integration of LVLMs into the insurance industry and foster interdisciplinary research. Our dataset and evaluation code are available at https://github.com/FDU-INS/INS-MMBench."
+    },
+    {
+      "arxiv_id": "2503.06973v1",
+      "title": "A Multimodal Benchmark Dataset and Model for Crop Disease Diagnosis",
+      "authors": [
+        "Xiang Liu",
+        "Zhaoxiang Liu",
+        "Huan Hu",
+        "Zezhou Chen",
+        "Kohou Wang",
+        "Kai Wang",
+        "Shiguo Lian"
+      ],
+      "published": "2025-03-10T06:37:42Z",
+      "doi": "10.1007/978-3-031-73016-0_10",
+      "summary": "While conversational generative AI has shown considerable potential in enhancing decision-making for agricultural professionals, its exploration has predominantly been anchored in text-based interactions. The evolution of multimodal conversational AI, leveraging vast amounts of image-text data from diverse sources, marks a significant stride forward. However, the application of such advanced vision-language models in the agricultural domain, particularly for crop disease diagnosis, remains underexplored. In this work, we present the crop disease domain multimodal (CDDM) dataset, a pioneering resource designed to advance the field of agricultural research through the application of multimodal learning techniques. The dataset comprises 137,000 images of various crop diseases, accompanied by 1 million question-answer pairs that span a broad spectrum of agricultural knowledge, from disease identification to management practices. By integrating visual and textual data, CDDM facilitates the development of sophisticated question-answering systems capable of providing precise, useful advice to farmers and agricultural professionals. We demonstrate the utility of the dataset by finetuning state-of-the-art multimodal models, showcasing significant improvements in crop disease diagnosis. Specifically, we employed a novel finetuning strategy that utilizes low-rank adaptation (LoRA) to finetune the visual encoder, adapter and language model simultaneously. Our contributions include not only the dataset but also a finetuning strategy and a benchmark to stimulate further research in agricultural technology, aiming to bridge the gap between advanced AI techniques and practical agricultural applications. The dataset is available at https: //github.com/UnicomAI/UnicomBenchmark/tree/main/CDDMBench."
+    },
+    {
+      "arxiv_id": "2608.22637v1",
+      "title": "OmniCAD: A Large-Scale Benchmark for 3D Spatial Reasoning in Robotics Assemblies",
+      "authors": [
+        "Mingjia Wang",
+        "Taiting Lu",
+        "Ziwei Dong",
+        "Sisong Bei",
+        "Jingying Zeng",
+        "Runze Liu",
+        "Kaiyuan Lin",
+        "Hongxing Pan",
+        "Kai Zhang",
+        "Yizheng Hou",
+        "Yangshoudu Zheng",
+        "Chenchen Guo",
+        "Weiyuan Meng",
+        "Shubin Lyu",
+        "Zhijun Zheng",
+        "Dexu Wang",
+        "Xinyu Bai",
+        "Shurui Qian",
+        " Zhangzixin",
+        "Mengyu Pan",
+        "Guoliang Shi",
+        "Ling Ma",
+        "Yifan Yang",
+        "Qi He",
+        "Yi-Chao Chen",
+        "Yincheng Jin",
+        "Sung-Liang Chen",
+        "Mahanth Gowda"
+      ],
+      "published": "2026-08-23T22:42:28Z",
+      "doi": null,
+      "summary": "Recent vision-language models (VLMs) show strong capabilities in robotic perception and spatial reasoning, yet their ability to reason about complex mechanical assemblies remains underexplored. We introduce OmniCAD, a large-scale benchmark for assembly-aware 3D spatial reasoning across diverse industrial systems, including robotic mechanisms, automotive components, aerospace structures, and agricultural machinery. OmniCAD contains 25k mechanical assemblies, with an average of 12 parts per assembly and 21 types of mate relationships. Each assembly includes a human-verified ground-truth 3D model and renderings from 20 viewpoints. The benchmark evaluates three capabilities: (1) component-level 3D spatial reasoning, requiring prediction of part positions and orientations; (2) part-to-part relational reasoning, requiring identification of mating relationships and assembly constraints; and (3) tool-augmented agentic reasoning, where models iteratively select viewpoints, inspect visual evidence, and refine predictions. Experiments show that current VLMs struggle with industrial assembly reasoning, often producing inaccurate poses, invalid mating relationships, part interpenetration, and degraded performance as assembly complexity increases. We will open-source the benchmark, evaluation code, and tool interfaces to support research on accurate, physically valid, and scalable 3D assembly reasoning."
+    },
+    {
+      "arxiv_id": "2602.13662v3",
+      "title": "LeafNet: A Large-Scale Dataset and Comprehensive Benchmark for Foundational Vision-Language Understanding of Plant Diseases",
+      "authors": [
+        "Khang Nguyen Quoc",
+        "Phuong D. Dao",
+        "Luyl-Da Quach"
+      ],
+      "published": "2026-02-14T08:10:27Z",
+      "doi": null,
+      "summary": "Foundation models and vision-language pre-training have significantly advanced Vision-Language Models (VLMs), enabling multimodal processing of visual and linguistic data. However, their application in domain-specific agricultural tasks, such as plant pathology, remains limited due to the lack of large-scale, comprehensive multimodal image--text datasets and benchmarks. To address this gap, we introduce LeafNet, a comprehensive multimodal dataset, and LeafBench, a visual question-answering benchmark developed to systematically evaluate the capabilities of VLMs in understanding plant diseases. The dataset comprises 186,000 leaf digital images spanning 97 disease classes, paired with metadata, generating 13,950 question-answer pairs spanning six critical agricultural tasks. The questions assess various aspects of plant pathology understanding, including visual symptom recognition, taxonomic relationships, and diagnostic reasoning. Benchmarking 12 state-of-the-art VLMs on our LeafBench dataset, we reveal substantial disparity in their disease understanding capabilities. Our study shows performance varies markedly across tasks: binary healthy--diseased classification exceeds 90% accuracy, while fine-grained pathogen and species identification remains below 65%. Direct comparison between vision-only models and VLMs demonstrates the critical advantage of multimodal architectures: fine-tuned VLMs outperform traditional vision models, confirming that integrating linguistic representations significantly enhances diagnostic precision. These findings highlight critical gaps in current VLMs for plant pathology applications and underscore the need for LeafBench as a rigorous framework for methodological advancement and progress evaluation toward reliable AI-assisted plant disease diagnosis. Code is available at https://github.com/EnalisUs/LeafBench."
+    },
+    {
+      "arxiv_id": "2306.15521v3",
+      "title": "What a MESS: Multi-Domain Evaluation of Zero-Shot Semantic Segmentation",
+      "authors": [
+        "Benedikt Blumenstiel",
+        "Johannes Jakubik",
+        "Hilde Kühne",
+        "Michael Vössing"
+      ],
+      "published": "2023-06-27T14:47:43Z",
+      "doi": null,
+      "summary": "While semantic segmentation has seen tremendous improvements in the past, there are still significant labeling efforts necessary and the problem of limited generalization to classes that have not been present during training. To address this problem, zero-shot semantic segmentation makes use of large self-supervised vision-language models, allowing zero-shot transfer to unseen classes. In this work, we build a benchmark for Multi-domain Evaluation of Semantic Segmentation (MESS), which allows a holistic analysis of performance across a wide range of domain-specific datasets such as medicine, engineering, earth monitoring, biology, and agriculture. To do this, we reviewed 120 datasets, developed a taxonomy, and classified the datasets according to the developed taxonomy. We select a representative subset consisting of 22 datasets and propose it as the MESS benchmark. We evaluate eight recently published models on the proposed MESS benchmark and analyze characteristics for the performance of zero-shot transfer models. The toolkit is available at https://github.com/blumenstiel/MESS."
+    },
+    {
+      "arxiv_id": "2601.11906v2",
+      "title": "Visual-Language-Guided Task Planning for Horticultural Robots",
+      "authors": [
+        "Jose Cuaran",
+        "Kendall Koe",
+        "Aditya Potnis",
+        "Naveen Kumar Uppalapati",
+        "Girish Chowdhary"
+      ],
+      "published": "2026-01-17T04:45:31Z",
+      "doi": null,
+      "summary": "Crop monitoring is essential for precision agriculture, but current systems lack high-level reasoning. We introduce a novel, modular framework that uses a Vision Language Model (VLM) to guide robotic task planning by actively querying heterogeneous data sources, including enriched RGB camera feeds and 2D semantic occupancy maps, interleaved with robotic action primitives. We contribute a comprehensive benchmark for short- and long-horizon crop monitoring tasks in monoculture and polyculture environments. Our results show that while zero-shot VLMs perform robustly for short-horizon tasks (achieving 87% success, comparable to human experts), success drops significantly to under 10% for complex long-horizon, multi-target tasks. Despite this decline, task completion rates remain above 76% under noiseless conditions. Critically, the system degrades when relying on noisy semantic maps, demonstrating a key limitation in current VLM context grounding for sustained robotic operations. This work offers a deployable framework and critical insights into VLM capabilities and shortcomings for complex agricultural robotics."
+    },
+    {
+      "arxiv_id": "2606.00548v1",
+      "title": "CAFOSat: A Strongly Annotated Dataset for Infrastructure-Aware CAFO Mapping Using High-Resolution Imagery",
+      "authors": [
+        "Oishee Bintey Hoque",
+        "Nibir Chandra Mandal",
+        "Mandy L Wilson",
+        "Samarth Swarup",
+        "Madhav Marathe",
+        "Abhijin Adiga"
+      ],
+      "published": "2026-05-30T05:47:46Z",
+      "doi": null,
+      "summary": "Concentrated Animal Feeding Operations (CAFOs) play an important role in agricultural production but are also associated with environmental, public health, and disease surveillance concerns. Large-scale mapping of CAFOs from remote sensing imagery remains challenging due to heterogeneous infrastructure layouts, noisy location records, inconsistent annotations, and incomplete inventories. We introduce CAFOSat, a strongly annotated, infrastructure-aware dataset for CAFO mapping across the United States. CAFOSat integrates high-resolution National Agriculture Imagery Program (NAIP) imagery with multi-source CAFO inventories collected across multiple states and transforms weak geolocation records into refined annotations through a human-in-the-loop pipeline combining AI-assisted annotation, GradCAM-based localization, and geometric clustering. To improve dataset quality, we curate challenging negative samples using land-cover-guided sampling with spatial exclusion constraints and provide infrastructure-level annotations, including barns, manure ponds, and grazing-related features, through manual verification. The resulting dataset contains more than 45,000 image patches spanning 20 states and four major CAFO categories. We benchmark a diverse set of convolutional, transformer-based, and vision-language models, demonstrating the value of refined annotations and curated negative samples for CAFO classification and generalization. In addition, we introduce a synthetic augmentation pipeline that generates infrastructure-aware variations to increase training diversity and improve robustness under distribution shifts. CAFOSat provides a large-scale benchmark for advancing infrastructure-aware agricultural monitoring and CAFO mapping from high-resolution remote sensing imagery."
+    },
+    {
+      "arxiv_id": "2210.04936v3",
+      "title": "EarthNets: Empowering AI in Earth Observation",
+      "authors": [
+        "Zhitong Xiong",
+        "Fahong Zhang",
+        "Yi Wang",
+        "Yilei Shi",
+        "Xiao Xiang Zhu"
+      ],
+      "published": "2022-10-10T18:09:35Z",
+      "doi": null,
+      "summary": "Earth observation (EO), aiming at monitoring the state of planet Earth using remote sensing data, is critical for improving our daily lives and living environment. With a growing number of satellites in orbit, an increasing number of datasets with diverse sensors and research domains are being published to facilitate the research of the remote sensing community. This paper presents a comprehensive review of more than 500 publicly published datasets, including research domains like agriculture, land use and land cover, disaster monitoring, scene understanding, vision-language models, foundation models, climate change, and weather forecasting. We systematically analyze these EO datasets from four aspects: volume, resolution distributions, research domains, and the correlation between datasets. Based on the dataset attributes, we propose to measure, rank, and select datasets to build a new benchmark for model evaluation. Furthermore, a new platform for EO, termed EarthNets, is released to achieve a fair and consistent evaluation of deep learning methods on remote sensing data. EarthNets supports standard dataset libraries and cutting-edge deep learning models to bridge the gap between the remote sensing and machine learning communities. Based on this platform, extensive deep-learning methods are evaluated on the new benchmark. The insightful results are beneficial to future research. The platform and dataset collections are publicly available at https://earthnets.github.io."
+    },
+    {
+      "arxiv_id": "2603.08930v1",
+      "title": "Using Vision Language Foundation Models to Generate Plant Simulation Configurations via In-Context Learning",
+      "authors": [
+        "Heesup Yun",
+        "Isaac Kazuo Uyehara",
+        "Earl Ranario",
+        "Lars Lundqvist",
+        "Christine H. Diepenbrock",
+        "Brian N. Bailey",
+        "J. Mason Earles"
+      ],
+      "published": "2026-03-09T20:58:43Z",
+      "doi": null,
+      "summary": "This paper introduces a synthetic benchmark to evaluate the performance of vision language models (VLMs) in generating plant simulation configurations for digital twins. While functional-structural plant models (FSPMs) are useful tools for simulating biophysical processes in agricultural environments, their high complexity and low throughput create bottlenecks for deployment at scale. We propose a novel approach that leverages state-of-the-art open-source VLMs -- Gemma 3 and Qwen3-VL -- to directly generate simulation parameters in JSON format from drone-based remote sensing images. Using a synthetic cowpea plot dataset generated via the Helios 3D procedural plant generation library, we tested five in-context learning methods and evaluated the models across three categories: JSON integrity, geometric evaluations, and biophysical evaluations. Our results show that while VLMs can interpret structural metadata and estimate parameters like plant count and sun azimuth, they often exhibit performance degradation due to contextual bias or rely on dataset means when visual cues are insufficient. Validation on a real-world drone orthophoto dataset and an ablation study using a blind baseline further characterize the models' reasoning capabilities versus their reliance on contextual priors. To the best of our knowledge, this is the first study to utilize VLMs to generate structural JSON configurations for plant simulations, providing a scalable framework for reconstruction 3D plots for digital twin in agriculture."
+    },
+    {
+      "arxiv_id": "2505.07019v1",
+      "title": "A Vision-Language Foundation Model for Leaf Disease Identification",
+      "authors": [
+        "Khang Nguyen Quoc",
+        "Lan Le Thi Thu",
+        "Luyl-Da Quach"
+      ],
+      "published": "2025-05-11T15:30:06Z",
+      "doi": "10.1016/j.eswa.2025.130084",
+      "summary": "Leaf disease identification plays a pivotal role in smart agriculture. However, many existing studies still struggle to integrate image and textual modalities to compensate for each other's limitations. Furthermore, many of these approaches rely on pretraining with constrained datasets such as ImageNet, which lack domain-specific information. We propose SCOLD (Soft-target COntrastive learning for Leaf Disease identification), a context-aware vision-language foundation model tailored to address these challenges for agricultural tasks. SCOLD is developed using a diverse corpus of plant leaf images and corresponding symptom descriptions, comprising over 186,000 image-caption pairs aligned with 97 unique concepts. Through task-agnostic pretraining, SCOLD leverages contextual soft targets to mitigate overconfidence in contrastive learning by smoothing labels, thereby improving model generalization and robustness on fine-grained classification tasks. Experimental results demonstrate that SCOLD outperforms existing vision-language models such as OpenAI-CLIP-L, BioCLIP, and SigLIP2 across several benchmarks, including zero-shot and few-shot classification, image-text retrieval, and image classification, while maintaining a competitive parameter footprint. Ablation studies further highlight SCOLD's effectiveness in contrast to its counterparts. The proposed approach significantly advances the agricultural vision-language foundation model, offering strong performance with minimal or no supervised fine-tuning. This work lays a solid groundwork for future research on models trained with long-form and simplified contexts, tasks involving class ambiguity, and multi-modal systems for intelligent plant disease diagnostics. The code for this study is available at https://huggingface.co/enalis/scold"
+    },
+    {
+      "arxiv_id": "2502.08650v7",
+      "title": "Who is Responsible? The Data, Models, Users or Regulations? A Comprehensive Survey on Responsible Generative AI for a Sustainable Future",
+      "authors": [
+        "Shaina Raza",
+        "Rizwan Qureshi",
+        "Anam Zahid",
+        "Amgad Muneer",
+        "Anas Zafar",
+        "Safiullah Kamawal",
+        "Ferhat Sadak",
+        "Joseph Fioresi",
+        "Muhammaed Saeed",
+        "Ranjan Sapkota",
+        "Aditya Jain",
+        "Muneeb Ul Hassan",
+        "Aizan Zafar",
+        "Hasan Maqbool",
+        "Ashmal Vayani",
+        "Jia Wu",
+        "Maged Shoman"
+      ],
+      "published": "2025-01-15T20:59:42Z",
+      "doi": null,
+      "summary": "Generative AI is rapidly moving from research to deployment, elevating the need for responsible development, evaluation, and governance. We conduct a PRISMA guided review of 232 studies (November 2022 - December 2025), spanning large language models, vision language models, diffusion models, and agentic pipelines. We make four contributions: (1) the first survey bridging governance principles, technical evaluation, and domain deployment across all four system types; (2) a ten-criterion rubric (C1-C10) scoring major AI safety benchmarks on risk-surface coverage, paired with a policy crosswalk mapping benchmarks to regulatory requirements; (3) twelve lifecycle KPIs, explainability guidance for foundation models, and a testbed catalogue; and (4) domain-specific analysis across healthcare, finance, education, arts, agriculture, and defense. Three findings emerge: benchmark coverage is dense for bias and toxicity but sparse for privacy, provenance, deepfakes, and system-level failures in agentic settings; evaluations remain largely static and task local, limiting audit portability; and inconsistent documentation complicates cross-release comparison. We outline a research agenda prioritizing adaptive multimodal evaluation, privacy and provenance testing, deepfake risk assessment, calibration reporting, versioned artifacts, and continuous monitoring. This survey offers a structured path to align generative AI evaluation with governance needs for safe and accountable deployment."
+    }
+  ]
+}

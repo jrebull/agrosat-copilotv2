@@ -1,0 +1,399 @@
+{
+  "front": "F4-copiloto-llm-eo",
+  "source": "arxiv",
+  "query": "all:\"large language model\" AND all:\"remote sensing\" AND all:\"agent\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2403.19646v3",
+      "title": "Change-Agent: Towards Interactive Comprehensive Remote Sensing Change Interpretation and Analysis",
+      "authors": [
+        "Chenyang Liu",
+        "Keyan Chen",
+        "Haotian Zhang",
+        "Zipeng Qi",
+        "Zhengxia Zou",
+        "Zhenwei Shi"
+      ],
+      "published": "2024-03-28T17:55:42Z",
+      "doi": "10.1109/TGRS.2024.3425815",
+      "summary": "Monitoring changes in the Earth's surface is crucial for understanding natural processes and human impacts, necessitating precise and comprehensive interpretation methodologies. Remote sensing satellite imagery offers a unique perspective for monitoring these changes, leading to the emergence of remote sensing image change interpretation (RSICI) as a significant research focus. Current RSICI technology encompasses change detection and change captioning, each with its limitations in providing comprehensive interpretation. To address this, we propose an interactive Change-Agent, which can follow user instructions to achieve comprehensive change interpretation and insightful analysis, such as change detection and change captioning, change object counting, change cause analysis, etc. The Change-Agent integrates a multi-level change interpretation (MCI) model as the eyes and a large language model (LLM) as the brain. The MCI model contains two branches of pixel-level change detection and semantic-level change captioning, in which the BI-temporal Iterative Interaction (BI3) layer is proposed to enhance the model's discriminative feature representation capabilities. To support the training of the MCI model, we build the LEVIR-MCI dataset with a large number of change masks and captions of changes. Experiments demonstrate the SOTA performance of the MCI model in achieving both change detection and change description simultaneously, and highlight the promising application value of our Change-Agent in facilitating comprehensive interpretation of surface changes, which opens up a new avenue for intelligent remote sensing applications. To facilitate future research, we will make our dataset and codebase of the MCI model and Change-Agent publicly available at https://github.com/Chen-Yang-Liu/Change-Agent"
+    },
+    {
+      "arxiv_id": "2401.09083v1",
+      "title": "Remote Sensing ChatGPT: Solving Remote Sensing Tasks with ChatGPT and Visual Models",
+      "authors": [
+        "Haonan Guo",
+        "Xin Su",
+        "Chen Wu",
+        "Bo Du",
+        "Liangpei Zhang",
+        "Deren Li"
+      ],
+      "published": "2024-01-17T09:44:07Z",
+      "doi": null,
+      "summary": "Recently, the flourishing large language models(LLM), especially ChatGPT, have shown exceptional performance in language understanding, reasoning, and interaction, attracting users and researchers from multiple fields and domains. Although LLMs have shown great capacity to perform human-like task accomplishment in natural language and natural image, their potential in handling remote sensing interpretation tasks has not yet been fully explored. Moreover, the lack of automation in remote sensing task planning hinders the accessibility of remote sensing interpretation techniques, especially to non-remote sensing experts from multiple research fields. To this end, we present Remote Sensing ChatGPT, an LLM-powered agent that utilizes ChatGPT to connect various AI-based remote sensing models to solve complicated interpretation tasks. More specifically, given a user request and a remote sensing image, we utilized ChatGPT to understand user requests, perform task planning according to the tasks' functions, execute each subtask iteratively, and generate the final response according to the output of each subtask. Considering that LLM is trained with natural language and is not capable of directly perceiving visual concepts as contained in remote sensing images, we designed visual cues that inject visual information into ChatGPT. With Remote Sensing ChatGPT, users can simply send a remote sensing image with the corresponding request, and get the interpretation results as well as language feedback from Remote Sensing ChatGPT. Experiments and examples show that Remote Sensing ChatGPT can tackle a wide range of remote sensing tasks and can be extended to more tasks with more sophisticated models such as the remote sensing foundation model. The code and demo of Remote Sensing ChatGPT is publicly available at https://github.com/HaonanGuo/Remote-Sensing-ChatGPT ."
+    },
+    {
+      "arxiv_id": "2405.00709v1",
+      "title": "Evaluating Tool-Augmented Agents in Remote Sensing Platforms",
+      "authors": [
+        "Simranjit Singh",
+        "Michael Fore",
+        "Dimitrios Stamoulis"
+      ],
+      "published": "2024-04-23T20:37:24Z",
+      "doi": null,
+      "summary": "Tool-augmented Large Language Models (LLMs) have shown impressive capabilities in remote sensing (RS) applications. However, existing benchmarks assume question-answering input templates over predefined image-text data pairs. These standalone instructions neglect the intricacies of realistic user-grounded tasks. Consider a geospatial analyst: they zoom in a map area, they draw a region over which to collect satellite imagery, and they succinctly ask \"Detect all objects here\". Where is `here`, if it is not explicitly hardcoded in the image-text template, but instead is implied by the system state, e.g., the live map positioning? To bridge this gap, we present GeoLLM-QA, a benchmark designed to capture long sequences of verbal, visual, and click-based actions on a real UI platform. Through in-depth evaluation of state-of-the-art LLMs over a diverse set of 1,000 tasks, we offer insights towards stronger agents for RS applications."
+    },
+    {
+      "arxiv_id": "2406.07089v4",
+      "title": "RS-Agent: Automating Remote Sensing Tasks through Intelligent Agent",
+      "authors": [
+        "Wenjia Xu",
+        "Zijian Yu",
+        "Boyang Mu",
+        "Jiuniu Wang",
+        "Zhiwei Wei",
+        "Mugen Peng"
+      ],
+      "published": "2024-06-11T09:30:02Z",
+      "doi": "10.1007/s11432-026-5026-5",
+      "summary": "Recent advances in Multimodal Large Language Models (MLLMs) have shown promise for remote sensing tasks such as visual question answering and scene understanding. However, existing models remain limited to basic instruction-following and struggle with real-world scenarios that require multi-source data integration, fine-grained spatial reasoning, and domain expertise. To address this gap, we propose RS-Agent, a domain-adapted intelligent agent that connects user intent with professional remote sensing workflows through structured task planning and tool orchestration. RS-Agent consists of four components aligned with typical remote sensing workflows: a Central Controller for intent understanding and process planning, a dynamic toolkit for tool execution, a Solution Space for task-specific expert guidance, and a Knowledge Space for domain knowledge support. We further introduce Task-Aware Retrieval, which improves planning by identifying task types and retrieving expert-defined solutions, and DualRAG, a weighted dual-path retrieval-augmented generation method that enhances the relevance and completeness of retrieved knowledge. RS-Agent natively supports multiple imaging modalities, including optical and SAR imagery, and can automatically organize dedicated SAR processing tools into executable workflows. Experiments on 9 datasets and 18 remote sensing tasks show that RS-Agent significantly outperforms state-of-the-art MLLMs, achieving over 95% task planning accuracy and strong results in scene classification, object counting, and remote sensing visual question answering. These results demonstrate the value of combining LLM reasoning with remote sensing expertise for intelligent geospatial analysis."
+    },
+    {
+      "arxiv_id": "2607.20284v1",
+      "title": "Multimodal Large Language Models for Remote Sensing Image Understanding: Domain-Specific or General-Purpose?",
+      "authors": [
+        "Qiwei Ma",
+        "Chunping Qiu",
+        "Xinjun Cheng",
+        "Xiaoyu Zhang",
+        "Puhong Duan",
+        "Ke Yang",
+        "Xudong Kang",
+        "Shutao Li"
+      ],
+      "published": "2026-07-22T15:30:08Z",
+      "doi": null,
+      "summary": "The rapid development of multimodal large language models (MLLMs) has introduced a flexible paradigm for remote sensing image scene understanding (RSISU), enabling natural-language interaction with remote sensing imagery. However, a systematic understanding of the capability boundaries, cross-task generalization, and task-specific limitations of existing remote sensing MLLMs (RS-MLLMs) is still lacking. This paper presents a systematic survey and diagnostic evaluation of MLLMs for RSISU. We review the technical evolution of RS-MLLMs, focusing on model design, multimodal learning, training data, and downstream capabilities. We further compare RS-MLLMs with general-purpose computer vision MLLMs (CV-MLLMs) across diverse RSISU tasks and benchmarks. RS-MLLMs remain competitive in domain-specific settings, particularly remote sensing visual grounding and high-resolution visual question answering. More notably, general-purpose CV-MLLMs can match or even outperform these specialized models on several RSISU tasks without remote sensing-specific fine-tuning. These findings demonstrate the strong transferability of general-purpose CV-MLLMs and show that current RS-MLLMs do not consistently outperform them across diverse RSISU tasks. Current MLLMs also face limitations in spatial and relational reasoning, fine-grained visual understanding, instruction diversity, and generalization across heterogeneous task formats. Based on these findings, we outline future directions toward reliable evaluation, multimodal and high-resolution reasoning, efficient deployment, and tool-augmented remote sensing agents. This survey provides a systematic reference for developing robust, generalizable, and practical MLLMs for RSISU."
+    },
+    {
+      "arxiv_id": "2505.23752v3",
+      "title": "ThinkGeo: Evaluating Tool-Augmented Agents for Remote Sensing Tasks",
+      "authors": [
+        "Akashah Shabbir",
+        "Muhammad Akhtar Munir",
+        "Akshay Dudhane",
+        "Muhammad Umer Sheikh",
+        "Muhammad Haris Khan",
+        "Paolo Fraccaro",
+        "Juan Bernabe Moreno",
+        "Fahad Shahbaz Khan",
+        "Salman Khan"
+      ],
+      "published": "2025-05-29T17:59:38Z",
+      "doi": null,
+      "summary": "Recent progress in large language models (LLMs) has enabled tool-augmented agents capable of solving complex real-world tasks through step-by-step reasoning. However, existing evaluations often focus on general-purpose or multimodal scenarios, leaving a gap in domain-specific benchmarks that assess tool-use capabilities in complex remote sensing use cases. We present ThinkGeo, an agentic benchmark designed to evaluate LLM-driven agents on remote sensing tasks via structured tool use and multi-step planning. Inspired by tool-interaction paradigms, ThinkGeo includes human-curated queries spanning a wide range of real-world applications such as urban planning, disaster assessment and change analysis, environmental monitoring, transportation analysis, aviation monitoring, recreational infrastructure, and industrial site analysis. Queries are grounded in satellite or aerial imagery, including both optical RGB and SAR data, and require agents to reason through a diverse toolset. We implement a ReAct-style interaction loop and evaluate both open and closed-source LLMs (e.g., GPT-4o, Qwen2.5) on 486 structured agentic tasks with 1,778 expert-verified reasoning steps. The benchmark reports both step-wise execution metrics and final answer correctness. Our analysis reveals notable disparities in tool accuracy and planning consistency across models. ThinkGeo provides the first extensive testbed for evaluating how tool-enabled LLMs handle spatial reasoning in remote sensing."
+    },
+    {
+      "arxiv_id": "2501.16254v1",
+      "title": "Multi-Agent Geospatial Copilots for Remote Sensing Workflows",
+      "authors": [
+        "Chaehong Lee",
+        "Varatheepan Paramanayakam",
+        "Andreas Karatzas",
+        "Yanan Jian",
+        "Michael Fore",
+        "Heming Liao",
+        "Fuxun Yu",
+        "Ruopu Li",
+        "Iraklis Anagnostopoulos",
+        "Dimitrios Stamoulis"
+      ],
+      "published": "2025-01-27T17:54:31Z",
+      "doi": null,
+      "summary": "We present GeoLLM-Squad, a geospatial Copilot that introduces the novel multi-agent paradigm to remote sensing (RS) workflows. Unlike existing single-agent approaches that rely on monolithic large language models (LLM), GeoLLM-Squad separates agentic orchestration from geospatial task-solving, by delegating RS tasks to specialized sub-agents. Built on the open-source AutoGen and GeoLLM-Engine frameworks, our work enables the modular integration of diverse applications, spanning urban monitoring, forestry protection, climate analysis, and agriculture studies. Our results demonstrate that while single-agent systems struggle to scale with increasing RS task complexity, GeoLLM-Squad maintains robust performance, achieving a 17% improvement in agentic correctness over state-of-the-art baselines. Our findings highlight the potential of multi-agent AI in advancing RS workflows."
+    },
+    {
+      "arxiv_id": "2310.04698v1",
+      "title": "Tree-GPT: Modular Large Language Model Expert System for Forest Remote Sensing Image Understanding and Interactive Analysis",
+      "authors": [
+        "Siqi Du",
+        "Shengjun Tang",
+        "Weixi Wang",
+        "Xiaoming Li",
+        "Renzhong Guo"
+      ],
+      "published": "2023-10-07T06:12:39Z",
+      "doi": null,
+      "summary": "This paper introduces a novel framework, Tree-GPT, which incorporates Large Language Models (LLMs) into the forestry remote sensing data workflow, thereby enhancing the efficiency of data analysis. Currently, LLMs are unable to extract or comprehend information from images and may generate inaccurate text due to a lack of domain knowledge, limiting their use in forestry data analysis. To address this issue, we propose a modular LLM expert system, Tree-GPT, that integrates image understanding modules, domain knowledge bases, and toolchains. This empowers LLMs with the ability to comprehend images, acquire accurate knowledge, generate code, and perform data analysis in a local environment. Specifically, the image understanding module extracts structured information from forest remote sensing images by utilizing automatic or interactive generation of prompts to guide the Segment Anything Model (SAM) in generating and selecting optimal tree segmentation results. The system then calculates tree structural parameters based on these results and stores them in a database. Upon receiving a specific natural language instruction, the LLM generates code based on a thought chain to accomplish the analysis task. The code is then executed by an LLM agent in a local environment and . For ecological parameter calculations, the system retrieves the corresponding knowledge from the knowledge base and inputs it into the LLM to guide the generation of accurate code. We tested this system on several tasks, including Search, Visualization, and Machine Learning Analysis. The prototype system performed well, demonstrating the potential for dynamic usage of LLMs in forestry research and environmental sciences."
+    },
+    {
+      "arxiv_id": "2601.02757v1",
+      "title": "LLM Agent Framework for Intelligent Change Analysis in Urban Environment using Remote Sensing Imagery",
+      "authors": [
+        "Zixuan Xiao",
+        "Jun Ma"
+      ],
+      "published": "2026-01-06T06:49:51Z",
+      "doi": "10.1016/j.autcon.2025.106341",
+      "summary": "Existing change detection methods often lack the versatility to handle diverse real-world queries and the intelligence for comprehensive analysis. This paper presents a general agent framework, integrating Large Language Models (LLM) with vision foundation models to form ChangeGPT. A hierarchical structure is employed to mitigate hallucination. The agent was evaluated on a curated dataset of 140 questions categorized by real-world scenarios, encompassing various question types (e.g., Size, Class, Number) and complexities. The evaluation assessed the agent's tool selection ability (Precision/Recall) and overall query accuracy (Match). ChangeGPT, especially with a GPT-4-turbo backend, demonstrated superior performance, achieving a 90.71 % Match rate. Its strength lies particularly in handling change-related queries requiring multi-step reasoning and robust tool selection. Practical effectiveness was further validated through a real-world urban change monitoring case study in Qianhai Bay, Shenzhen. By providing intelligence, adaptability, and multi-type change analysis, ChangeGPT offers a powerful solution for decision-making in remote sensing applications."
+    },
+    {
+      "arxiv_id": "2602.01163v1",
+      "title": "Semantically Aware UAV Landing Site Assessment from Remote Sensing Imagery via Multimodal Large Language Models",
+      "authors": [
+        "Chunliang Hua",
+        "Zeyuan Yang",
+        "Lei Zhang",
+        "Jiayang Sun",
+        "Fengwen Chen",
+        "Chunlan Zeng",
+        "Xiao Hu"
+      ],
+      "published": "2026-02-01T11:30:03Z",
+      "doi": null,
+      "summary": "Safe UAV emergency landing requires more than just identifying flat terrain; it demands understanding complex semantic risks (e.g., crowds, temporary structures) invisible to traditional geometric sensors. In this paper, we propose a novel framework leveraging Remote Sensing (RS) imagery and Multimodal Large Language Models (MLLMs) for global context-aware landing site assessment. Unlike local geometric methods, our approach employs a coarse-to-fine pipeline: first, a lightweight semantic segmentation module efficiently pre-screens candidate areas; second, a vision-language reasoning agent fuses visual features with Point-of-Interest (POI) data to detect subtle hazards. To validate this approach, we construct and release the Emergency Landing Site Selection (ELSS) benchmark. Experiments demonstrate that our framework significantly outperforms geometric baselines in risk identification accuracy. Furthermore, qualitative results confirm its ability to generate human-like, interpretable justifications, enhancing trust in automated decision-making. The benchmark dataset is publicly accessible at https://anonymous.4open.science/r/ELSS-dataset-43D7."
+    },
+    {
+      "arxiv_id": "2608.30672v1",
+      "title": "HiRS-Agent: A Hierarchical Multi-Agent System for Reliable Long-Horizon Remote Sensing Task Solving",
+      "authors": [
+        "Boyang Mu",
+        "Zhiwei Wei",
+        "Mugen Peng",
+        "Wenjia Xu"
+      ],
+      "published": "2026-08-31T12:13:41Z",
+      "doi": null,
+      "summary": "Recent advances in large language models and multimodal models have pushed remote sensing (RS) processing from simple perception models to agentic systems designed to tackle complex, long-horizon RS tasks. However, existing systems often rely on monolithic decision-making frameworks, which fail to accommodate the multi-stage, interdependent nature of RS tasks. This centralized approach leads to challenges such as unstable task execution, incorrect tool usage, and error propagation across stages. To address these issues, we propose HiRS-Agent, a hierarchical multi-agent system for long-horizon RS task solving. HiRS-Agent adopts a two-level collaborative architecture: the Manager Layer handles dynamic routing, step-level verification, replanning, and termination control, while the Specialist Layer organizes domain-specific tools according to the RS workflow and is responsible for subtask reasoning and tool execution. To further enhance the system's capability, we introduce a two-stage supervised tuning strategy and a verification-guided hierarchical reinforcement learning stage to jointly optimize coordination and tool-use policies. Experiments on Earth-Agent Benchmark and ThinkGeo show that HiRS-Agent substantially improves long-horizon tool-use capability and final-task correctness, demonstrating the effectiveness of structured multi-agent collaboration for reliable RS agents. The code is publicly available at https://github.com/IntelliSensing/HiRS-Agent."
+    },
+    {
+      "arxiv_id": "2601.01891v1",
+      "title": "Agentic AI in Remote Sensing: Foundations, Taxonomy, and Emerging Systems",
+      "authors": [
+        "Niloufar Alipour Talemi",
+        "Julia Boone",
+        "Fatemeh Afghah"
+      ],
+      "published": "2026-01-05T08:34:17Z",
+      "doi": null,
+      "summary": "The paradigm of Earth Observation analysis is shifting from static deep learning models to autonomous agentic AI. Although recent vision foundation models and multimodal large language models advance representation learning, they often lack the sequential planning and active tool orchestration required for complex geospatial workflows. This survey presents the first comprehensive review of agentic AI in remote sensing. We introduce a unified taxonomy distinguishing between single-agent copilots and multi-agent systems while analyzing architectural foundations such as planning mechanisms, retrieval-augmented generation, and memory structures. Furthermore, we review emerging benchmarks that move the evaluation from pixel-level accuracy to trajectory-aware reasoning correctness. By critically examining limitations in grounding, safety, and orchestration, this work outlines a strategic roadmap for the development of robust, autonomous geospatial intelligence."
+    },
+    {
+      "arxiv_id": "2512.15231v3",
+      "title": "CangLing-KnowFlow: A Unified Knowledge-and-Flow-fused Agent for Comprehensive Remote Sensing Applications",
+      "authors": [
+        "Zhengchao Chen",
+        "Haoran Wang",
+        "Jing Yao",
+        "Jianshe Zhang",
+        "Pedram Ghamisi",
+        "Jun Zhou",
+        "Peter M. Atkinson",
+        "Bing Zhang"
+      ],
+      "published": "2025-12-17T09:31:57Z",
+      "doi": null,
+      "summary": "The automated and intelligent processing of massive remote sensing (RS) datasets is critical in Earth observation (EO). Existing automated systems are normally task-specific, lacking a unified framework to manage diverse, end-to-end workflows--from data preprocessing to advanced interpretation--across diverse RS applications. To address this gap, this paper introduces CangLing-KnowFlow, a unified intelligent agent framework that integrates a Procedural Knowledge Base (PKB), Dynamic Workflow Adjustment, and an Evolutionary Memory Module. The PKB, comprising 1,008 expert-validated workflow cases across 162 practical RS tasks, guides planning and substantially reduces hallucinations common in general-purpose agents. During runtime failures, the Dynamic Workflow Adjustment autonomously diagnoses and replans recovery strategies, while the Evolutionary Memory Module continuously learns from these events, iteratively enhancing the agent's knowledge and performance. This synergy enables CangLing-KnowFlow to adapt, learn, and operate reliably across diverse, complex tasks. We evaluated CangLing-KnowFlow on the KnowFlow-Bench, a novel benchmark of 324 workflows inspired by real-world applications, testing its performance across 13 top Large Language Model (LLM) backbones, from open-source to commercial. Across all complex tasks, CangLing-KnowFlow surpassed the Reflexion baseline by at least 4% in Task Success Rate. As the first most comprehensive validation along this emerging field, this research demonstrates the great potential of CangLing-KnowFlow as a robust, efficient, and scalable automated solution for complex EO challenges by leveraging expert knowledge (Knowledge) into adaptive and verifiable procedures (Flow)."
+    },
+    {
+      "arxiv_id": "2605.13391v1",
+      "title": "RS-Claw: Progressive Active Tool Exploration via Hierarchical Skill Trees for Remote Sensing Agents",
+      "authors": [
+        "Liangtian Liu",
+        "Zeyuan Wang",
+        "Ziyu Li",
+        "Kai Ouyang",
+        "Zichao Tang",
+        "Chengfu Liu",
+        "Haifeng Li",
+        "Hanwen Yu",
+        "Wentao Yang",
+        "Cheng Yang",
+        "Dongyang Hou"
+      ],
+      "published": "2026-05-13T11:49:18Z",
+      "doi": null,
+      "summary": "The rise of multi-modal large language models (MLLMs) is shifting remote sensing (RS) intelligence from \"see\" to \"action\", as OpenClaw-style frameworks enable agents to autonomously operate massive RS image-processing tools for complex tasks. Existing RS agents adopt a passive selection paradigm for tool invocation, relying on either full tool registration (Flat) or retrieval-augmented generation (RAG). However, in the massive and multi-source heterogeneous RS tool ecosystem, such passive mechanisms struggle to dynamically balance \"context load\" and \"toolset completeness\" throughout task reasoning, thus exhibiting inherent limitations: full tool registration triggers context space deficits during long-horizon tasks, whereas RAG retrieval may omit critical tools in essential steps. To overcome these bottlenecks, this paper redefines tool selection by arguing that the agent should act as an active explorer within the tool space. Based on this perspective, we propose RS-Claw, a novel RS agent architecture. By leveraging Skill encapsulation technology at the tool end, this architecture hierarchically structures tool descriptions, enabling the agent to execute on-demand sequential decision-making: initially selecting relevant skill branches by reading only tool summaries, then dynamically loading detailed descriptions, and ultimately achieving precise invocation. This active paradigm not only significantly liberates the agent's context space but also effectively ensures the accurate hit rate of critical tools during long-horizon reasoning. Systematic experiments on the Earth-Bench benchmark demonstrate that RS-Claw's active exploration mechanism effectively filters semantic noise and substantially frees up reasoning space, achieving an input token compression ratio of up to 86%, and comprehensively outperforming existing Flat and RAG baselines across complex reasoning evaluations."
+    },
+    {
+      "arxiv_id": "2410.13384v1",
+      "title": "RescueADI: Adaptive Disaster Interpretation in Remote Sensing Images with Autonomous Agents",
+      "authors": [
+        "Zhuoran Liu",
+        "Danpei Zhao",
+        "Bo Yuan"
+      ],
+      "published": "2024-10-17T09:36:52Z",
+      "doi": null,
+      "summary": "Current methods for disaster scene interpretation in remote sensing images (RSIs) mostly focus on isolated tasks such as segmentation, detection, or visual question-answering (VQA). However, current interpretation methods often fail at tasks that require the combination of multiple perception methods and specialized tools. To fill this gap, this paper introduces Adaptive Disaster Interpretation (ADI), a novel task designed to solve requests by planning and executing multiple sequentially correlative interpretation tasks to provide a comprehensive analysis of disaster scenes. To facilitate research and application in this area, we present a new dataset named RescueADI, which contains high-resolution RSIs with annotations for three connected aspects: planning, perception, and recognition. The dataset includes 4,044 RSIs, 16,949 semantic masks, 14,483 object bounding boxes, and 13,424 interpretation requests across nine challenging request types. Moreover, we propose a new disaster interpretation method employing autonomous agents driven by large language models (LLMs) for task planning and execution, proving its efficacy in handling complex disaster interpretations. The proposed agent-based method solves various complex interpretation requests such as counting, area calculation, and path-finding without human intervention, which traditional single-task approaches cannot handle effectively. Experimental results on RescueADI demonstrate the feasibility of the proposed task and show that our method achieves an accuracy 9% higher than existing VQA methods, highlighting its advantages over conventional disaster interpretation approaches. The dataset will be publicly available."
+    },
+    {
+      "arxiv_id": "2606.07538v1",
+      "title": "Bidirectional Semantic Complementary Tool Retrieval for Remote Sensing Agents",
+      "authors": [
+        "Zeyuan Wang",
+        "Dongyang Hou",
+        "Cheng Yang",
+        "Xuezhi Cui",
+        "Linrui Xu",
+        "Bo Yu",
+        "Gaozhi Zhou",
+        "Ziyu Li",
+        "Liangtian Liu",
+        "Kai Ouyang",
+        "Wang Guo",
+        "Lili Zhu",
+        "Chao Tao"
+      ],
+      "published": "2026-04-29T14:07:19Z",
+      "doi": null,
+      "summary": "Large language model (LLM)-based agents provide a novel paradigm for the automated processing of remote sensing(RS) data. Their success in complex RS tasks rely on extensive specialized tool libraries. However, tool documentation often exceeds the context window limits of LLMs, making precise tool retrieval essential for agentic workflows. Existing tool retrieval methods face \"semantic asymmetry\" bottleneck: natural language queries typically express macro-level intentions lacking tool-specific semantics, while tool documentation provides fine-grained technical descriptions lacking operational context for workflows. To bridge this semantic gap, this paper proposes a bidirectional semantic complementary tool retrieval method. First, on the query side, we introduce a planning-based query enhancement mechanism that leverages the reasoning capabilities of agents to decompose abstract intentions into logical subtasks, thereby actively supplementing the query with missing functional semantics. Second, on the tool side, addressing the strong coupling characteristics of RS tool chains, we construct a dynamic tool dependency graph with continual learning capabilities. By employing a neighborhood information aggregation mechanism, contextual information from precursor tools is explicitly injected into the current node representation, enriching tool descriptions with contextual semantics. Experimental results on the RS dataset GeoPlan-bench and the general-purpose dataset API- Bank demonstrate that the proposed method not only significantly improves tool retrieval accuracy for complex RS tasks but also exhibits robust extensibility for transfer to general-domain tasks. The source code and dataset are available at https://github.com/geox-lab/BSCTR."
+    },
+    {
+      "arxiv_id": "2602.14201v2",
+      "title": "GeoEyes: On-Demand Visual Focusing for Evidence-Grounded Understanding of Ultra-High-Resolution Remote Sensing Imagery",
+      "authors": [
+        "Fengxiang Wang",
+        "Mingshuo Chen",
+        "Yueying Li",
+        "Yajie Yang",
+        "Yifan Zhang",
+        "Long Lan",
+        "Xue Yang",
+        "Hongda Sun",
+        "Yulin Wang",
+        "Di Wang",
+        "Jun Song",
+        "Jing Zhang",
+        "Bo Du"
+      ],
+      "published": "2026-02-15T15:50:55Z",
+      "doi": null,
+      "summary": "The \"thinking-with-images\" paradigm enables multimodal large language models (MLLMs) to actively explore visual scenes via zoom-in tools. This is essential for ultra-high-resolution (UHR) remote sensing VQA, where task-relevant cues are sparse and tiny. However, we observe a consistent failure mode in existing zoom-enabled MLLMs: Tool Usage Homogenization, where tool calls collapse into task-agnostic patterns, limiting effective evidence acquisition. To address this, we propose GeoEyes, a staged training framework consisting of (1) a cold-start SFT dataset, UHR Chain-of-Zoom (UHR-CoZ), which covers diverse zooming regimes, and (2) an agentic reinforcement learning method, AdaZoom-GRPO, that explicitly rewards evidence gain and answer improvement during zoom interactions. The resulting model learns on-demand zooming with proper stopping behavior and achieves substantial improvements on UHR remote sensing benchmarks, with 54.23% accuracy on XLRS-Bench."
+    },
+    {
+      "arxiv_id": "2604.08896v1",
+      "title": "GeoMMBench and GeoMMAgent: Toward Expert-Level Multimodal Intelligence in Geoscience and Remote Sensing",
+      "authors": [
+        "Aoran Xiao",
+        "Shihao Cheng",
+        "Yonghao Xu",
+        "Yexian Ren",
+        "Hongruixuan Chen",
+        "Naoto Yokoya"
+      ],
+      "published": "2026-04-10T02:59:38Z",
+      "doi": null,
+      "summary": "Recent advances in multimodal large language models (MLLMs) have accelerated progress in domain-oriented AI, yet their development in geoscience and remote sensing (RS) remains constrained by distinctive challenges: wide-ranging disciplinary knowledge, heterogeneous sensor modalities, and a fragmented spectrum of tasks. To bridge these gaps, we introduce GeoMMBench, a comprehensive multimodal question-answering benchmark covering diverse RS disciplines, sensors, and tasks, enabling broader and more rigorous evaluation than prior benchmarks. Using GeoMMBench, we assess 36 open-source and proprietary large language models, uncovering systematic deficiencies in domain knowledge, perceptual grounding, and reasoning--capabilities essential for expert-level geospatial interpretation. Beyond evaluation, we propose GeoMMAgent, a multi-agent framework that strategically integrates retrieval, perception, and reasoning through domain-specific RS models and tools. Extensive experimental results demonstrate that GeoMMAgent significantly outperforms standalone LLMs, underscoring the importance of tool-augmented agents for dynamically tackling complex geoscience and RS challenges."
+    },
+    {
+      "arxiv_id": "2408.15769v1",
+      "title": "A Survey on Evaluation of Multimodal Large Language Models",
+      "authors": [
+        "Jiaxing Huang",
+        "Jingyi Zhang"
+      ],
+      "published": "2024-08-28T13:05:55Z",
+      "doi": null,
+      "summary": "Multimodal Large Language Models (MLLMs) mimic human perception and reasoning system by integrating powerful Large Language Models (LLMs) with various modality encoders (e.g., vision, audio), positioning LLMs as the \"brain\" and various modality encoders as sensory organs. This framework endows MLLMs with human-like capabilities, and suggests a potential pathway towards achieving artificial general intelligence (AGI). With the emergence of all-round MLLMs like GPT-4V and Gemini, a multitude of evaluation methods have been developed to assess their capabilities across different dimensions. This paper presents a systematic and comprehensive review of MLLM evaluation methods, covering the following key aspects: (1) the background of MLLMs and their evaluation; (2) \"what to evaluate\" that reviews and categorizes existing MLLM evaluation tasks based on the capabilities assessed, including general multimodal recognition, perception, reasoning and trustworthiness, and domain-specific applications such as socioeconomic, natural sciences and engineering, medical usage, AI agent, remote sensing, video and audio processing, 3D point cloud analysis, and others; (3) \"where to evaluate\" that summarizes MLLM evaluation benchmarks into general and specific benchmarks; (4) \"how to evaluate\" that reviews and illustrates MLLM evaluation steps and metrics; Our overarching goal is to provide valuable insights for researchers in the field of MLLM evaluation, thereby facilitating the development of more capable and reliable MLLMs. We emphasize that evaluation should be regarded as a critical discipline, essential for advancing the field of MLLMs."
+    },
+    {
+      "arxiv_id": "2504.09848v1",
+      "title": "A Survey of Large Language Model-Powered Spatial Intelligence Across Scales: Advances in Embodied Agents, Smart Cities, and Earth Science",
+      "authors": [
+        "Jie Feng",
+        "Jinwei Zeng",
+        "Qingyue Long",
+        "Hongyi Chen",
+        "Jie Zhao",
+        "Yanxin Xi",
+        "Zhilun Zhou",
+        "Yuan Yuan",
+        "Shengyuan Wang",
+        "Qingbin Zeng",
+        "Songwei Li",
+        "Yunke Zhang",
+        "Yuming Lin",
+        "Tong Li",
+        "Jingtao Ding",
+        "Chen Gao",
+        "Fengli Xu",
+        "Yong Li"
+      ],
+      "published": "2025-04-14T03:38:31Z",
+      "doi": null,
+      "summary": "Over the past year, the development of large language models (LLMs) has brought spatial intelligence into focus, with much attention on vision-based embodied intelligence. However, spatial intelligence spans a broader range of disciplines and scales, from navigation and urban planning to remote sensing and earth science. What are the differences and connections between spatial intelligence across these fields? In this paper, we first review human spatial cognition and its implications for spatial intelligence in LLMs. We then examine spatial memory, knowledge representations, and abstract reasoning in LLMs, highlighting their roles and connections. Finally, we analyze spatial intelligence across scales -- from embodied to urban and global levels -- following a framework that progresses from spatial memory and understanding to spatial reasoning and intelligence. Through this survey, we aim to provide insights into interdisciplinary spatial intelligence research and inspire future studies."
+    },
+    {
+      "arxiv_id": "2607.12497v1",
+      "title": "TerraLogic: A Benchmark for Hierarchical Geospatial Reasoning in Earth Observation",
+      "authors": [
+        "Yuhang Yan",
+        "Linchao Mou",
+        "Bokang Yang",
+        "Qingyu Li"
+      ],
+      "published": "2026-07-14T08:30:45Z",
+      "doi": null,
+      "summary": "Beyond perception, reasoning is essential in remote sensing for advanced interpretation, inference, and decision-making. Recent advances in large language models (LLMs) have enabled tool-augmented agents that leverage external tools to perform complex analytical tasks. However, existing studies in remote sensing primarily focus on perception-oriented tasks, leaving cognitive geospatial reasoning largely underexplored. To address this gap, we introduce TerraLogic, a benchmark for geospatial reasoning. TerraLogic comprises 545 scenario-driven, hierarchy-aware tasks, such as hazard vulnerability assessment, urban heat island analysis, and forest fragmentation dynamics, spanning optical, Synthetic Aperture Radar (SAR), and infrared (IR) imagery. It advances evaluation beyond recognition and monitoring toward cognitive-level geospatial analysis. To facilitate evaluation on TerraLogic, we further propose HieraPlan, a tool-augmented agent that organizes toolkits into functional hierarchies and performs fault-tolerant reasoning. HieraPlan enables structured abstraction, robust recovery from tool failures, and stable long-horizon planning. Extensive experiments demonstrate that current approaches struggle with hierarchical geospatial reasoning, while HieraPlan provides a strong baseline with improved reasoning, cross-modal generalization, and error handling. The dataset and agent code are publicly available at https://github.com/Ireliya/TerraLogic."
+    },
+    {
+      "arxiv_id": "2602.15325v1",
+      "title": "AgriWorld:A World Tools Protocol Framework for Verifiable Agricultural Reasoning with Code-Executing LLM Agents",
+      "authors": [
+        "Zhixing Zhang",
+        "Jesen Zhang",
+        "Hao Liu",
+        "Qinhan Lv",
+        "Jing Yang",
+        "Kaitong Cai",
+        "Keze Wang"
+      ],
+      "published": "2026-02-17T03:12:57Z",
+      "doi": null,
+      "summary": "Foundation models for agriculture are increasingly trained on massive spatiotemporal data (e.g., multi-spectral remote sensing, soil grids, and field-level management logs) and achieve strong performance on forecasting and monitoring. However, these models lack language-based reasoning and interactive capabilities, limiting their usefulness in real-world agronomic workflows. Meanwhile, large language models (LLMs) excel at interpreting and generating text, but cannot directly reason over high-dimensional, heterogeneous agricultural datasets. We bridge this gap with an agentic framework for agricultural science. It provides a Python execution environment, AgriWorld, exposing unified tools for geospatial queries over field parcels, remote-sensing time-series analytics, crop growth simulation, and task-specific predictors (e.g., yield, stress, and disease risk). On top of this environment, we design a multi-turn LLM agent, Agro-Reflective, that iteratively writes code, observes execution results, and refines its analysis via an execute-observe-refine loop. We introduce AgroBench, with scalable data generation for diverse agricultural QA spanning lookups, forecasting, anomaly detection, and counterfactual \"what-if\" analysis. Experiments outperform text-only and direct tool-use baselines, validating execution-driven reflection for reliable agricultural reasoning."
+    },
+    {
+      "arxiv_id": "2604.12306v3",
+      "title": "GCA Framework: A GCC Countries-Grounded Dataset and Agentic Pipeline for Climate Decision Support",
+      "authors": [
+        "Muhammad Umer Sheikh",
+        "Khawar Shehzad",
+        "Salman Khan",
+        "Fahad Shahbaz Khan",
+        "Muhammad Haris Khan"
+      ],
+      "published": "2026-04-14T05:31:40Z",
+      "doi": null,
+      "summary": "Climate decision-making in the GCC states increasingly demands systems that can translate heterogeneous scientific and policy evidence into actionable guidance, yet general-purpose large language models (LLMs) remain weak both in region-specific climate knowledge and grounded interaction with geospatial and forecasting tools. We present the GCA framework, which unifies (i) GCA-DS, a curated multimodal dataset grounded in the GCC states, and (ii) Gulf Climate Agent (GCA), a tool-augmented agent for climate analysis. GCA-DS comprises 200k question--answer pairs spanning governmental policies and adaptation plans, NGO and international frameworks, academic literature, and event-driven reporting on heatwaves, dust storms, and floods, complemented with remote-sensing inputs that couple imagery with textual evidence. Building on this foundation, the GCA agent orchestrates a modular tool pipeline grounded in real-time and historical signals and geospatial processing that produces derived indices and interpretable visualizations. Finally, we benchmark open and proprietary LLMs on climate tasks in the GCC states and show that domain fine-tuning and tool integration substantially improve reliability over general-purpose baselines."
+    },
+    {
+      "arxiv_id": "2601.04497v2",
+      "title": "Vision-Language Agents for Interactive Forest Change Analysis",
+      "authors": [
+        "James Brock",
+        "Ce Zhang",
+        "Nantheera Anantrasirichai"
+      ],
+      "published": "2026-01-08T02:02:36Z",
+      "doi": null,
+      "summary": "Modern forest monitoring workflows increasingly benefit from the growing availability of high-resolution satellite imagery and advances in deep learning. Two persistent challenges in this context are accurate pixel-level change detection and meaningful semantic change captioning for complex forest dynamics. While large language models (LLMs) are being adapted for interactive data exploration, their integration with vision-language models (VLMs) for remote sensing image change interpretation (RSICI) remains underexplored. To address this gap, we introduce an LLM-driven agent for integrated forest change analysis that supports natural language querying across multiple RSICI tasks. The proposed system builds upon a multi-level change interpretation (MCI) vision-language backbone with LLM-based orchestration. To facilitate adaptation and evaluation in forest environments, we further introduce the Forest-Change dataset, which comprises bi-temporal satellite imagery, pixel-level change masks, and multi-granularity semantic change captions generated using a combination of human annotation and rule-based methods. Experimental results show that the proposed system achieves mIoU and BLEU-4 scores of 67.10% and 40.17% on the Forest-Change dataset, and 88.13% and 34.41% on LEVIR-MCI-Trees, a tree-focused subset of LEVIR-MCI benchmark for joint change detection and captioning. These results highlight the potential of interactive, LLM-driven RSICI systems to improve accessibility, interpretability, and efficiency of forest change analysis. All data and code are publicly available at https://github.com/JamesBrockUoB/ForestChat."
+    },
+    {
+      "arxiv_id": "2601.14637v2",
+      "title": "Forest-Chat: Adapting Vision-Language Agents for Interactive Forest Change Analysis",
+      "authors": [
+        "James Brock",
+        "Ce Zhang",
+        "Nantheera Anantrasirichai"
+      ],
+      "published": "2026-01-21T04:23:33Z",
+      "doi": "10.1016/j.ecoinf.2026.103741",
+      "summary": "The increasing availability of high-resolution satellite imagery, together with advances in deep learning, creates new opportunities for forest monitoring workflows. Two central challenges in this domain are pixel-level change detection and semantic change interpretation, particularly for complex forest dynamics. While large language models (LLMs) are increasingly adopted for data exploration, their integration with vision-language models (VLMs) for remote sensing image change interpretation (RSICI) remains underexplored, especially beyond urban environments. This paper introduces Forest-Chat, an LLM-driven agent for forest change analysis, enabling natural language querying across multiple RSICI tasks, including change detection and captioning, object counting, deforestation characterisation, and change reasoning. Forest-Chat builds upon a multi-level change interpretation (MCI) vision-language backbone with LLM-based orchestration, incorporating zero-shot change detection via AnyChange and multimodal LLM-based zero-shot change captioning and refinement. To support adaptation and evaluation in forest environments, we introduce the Forest-Change dataset, comprising bi-temporal satellite imagery, pixel-level change masks, and semantic change captions via human annotation and rule-based methods. Forest-Chat achieves mIoU and BLEU-4 scores of 67.10% and 40.17% on Forest-Change, and 88.13% and 34.41% on LEVIR-MCI-Trees, a tree-focused subset of LEVIR-MCI. In a zero-shot capacity, it achieves 60.15% and 34.00% on Forest-Change, and 47.32% and 18.23% on LEVIR-MCI-Trees. Further experiments demonstrate the value of caption refinement for injecting geographic domain knowledge into supervised captions, and the system's limited label domain transfer onto JL1-CD-Trees. These findings demonstrate that interactive, LLM-driven systems can support accessible and interpretable forest change analysis."
+    }
+  ]
+}

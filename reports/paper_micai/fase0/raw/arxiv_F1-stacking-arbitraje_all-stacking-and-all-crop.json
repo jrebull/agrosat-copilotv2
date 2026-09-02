@@ -1,0 +1,355 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "arxiv",
+  "query": "all:\"stacking\" AND all:\"crop\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2310.01055v3",
+      "title": "Improved Crop and Weed Detection with Diverse Data Ensemble Learning",
+      "authors": [
+        "Muhammad Hamza Asad",
+        "Saeed Anwar",
+        "Abdul Bais"
+      ],
+      "published": "2023-10-02T10:05:30Z",
+      "doi": null,
+      "summary": "Modern agriculture heavily relies on Site-Specific Farm Management practices, necessitating accurate detection, localization, and quantification of crops and weeds in the field, which can be achieved using deep learning techniques. In this regard, crop and weed-specific binary segmentation models have shown promise. However, uncontrolled field conditions limit their performance from one field to the other. To improve semantic model generalization, existing methods augment and synthesize agricultural data to account for uncontrolled field conditions. However, given highly varied field conditions, these methods have limitations. To overcome the challenges of model deterioration in such conditions, we propose utilizing data specific to other crops and weeds for our specific target problem. To achieve this, we propose a novel ensemble framework. Our approach involves utilizing different crop and weed models trained on diverse datasets and employing a teacher-student configuration. By using homogeneous stacking of base models and a trainable meta-architecture to combine their outputs, we achieve significant improvements for Canola crops and Kochia weeds on unseen test data, surpassing the performance of single semantic segmentation models. We identify the UNET meta-architecture as the most effective in this context. Finally, through ablation studies, we demonstrate and validate the effectiveness of our proposed model. We observe that including base models trained on other target crops and weeds can help generalize the model to capture varied field conditions. Lastly, we propose two novel datasets with varied conditions for comparisons."
+    },
+    {
+      "arxiv_id": "2605.00133v1",
+      "title": "Smart Profit-Aware Crop Advisory System: Kisan AI",
+      "authors": [
+        "Debasis Dwibedy",
+        "Avyay Nishtala",
+        "Pranathi Mukku",
+        "D Snehaja"
+      ],
+      "published": "2026-04-30T18:35:23Z",
+      "doi": null,
+      "summary": "Modern crop advisory systems exhibit a critical limitation termed \\textit{economic blindness}. These systems primarily optimize for biological yield, often overlooking market price, which can lead farmers toward agronomically sound yet financially unviable decisions. In this paper, we develop Kisan AI, a smart profit-aware crop advisory system that resolves the above-mentioned limitation through a research-driven, full-stack application. We train the Random Forest(RF) classifier model on a nine-feature benchmark dataset, the standard seven agronomic attributes augmented with a \\textit{market\\_price} variable, and evaluated against eight baseline models, considering the evaluation matrices, such as, accuracy, precision, recall, F1-score, and Log Loss. The RF model achieves the highest accuracy of 99.3\\% and the lowest Log Loss, confirming that the inclusion of market price as a predictive feature is both valid and impactful. We then implement the RF model within a multilingual progressive Web App alongside a Facebook Prophet six-month price forecasting engine and a MobileNetV2 disease detection module. A nine-language AI chatbot powered by the Anthropic Claude API unifies all modules into a single, mobile-installable platform accessible to farmers across India."
+    },
+    {
+      "arxiv_id": "2509.25091v1",
+      "title": "Crop Spirals: Re-thinking the field layout for future robotic agriculture",
+      "authors": [
+        "Lakshan Lavan",
+        "Lanojithan Thiyagarasa",
+        "Udara Muthugala",
+        "Rajitha de Silva"
+      ],
+      "published": "2025-09-29T17:26:54Z",
+      "doi": null,
+      "summary": "Conventional linear crop layouts, optimised for tractors, hinder robotic navigation with tight turns, long travel distances, and perceptual aliasing. We propose a robot-centric square spiral layout with a central tramline, enabling simpler motion and more efficient coverage. To exploit this geometry, we develop a navigation stack combining DH-ResNet18 waypoint regression, pixel-to-odometry mapping, A* planning, and model predictive control (MPC). In simulations, the spiral layout yields up to 28% shorter paths and about 25% faster execution for waypoint-based tasks across 500 waypoints than linear layouts, while full-field coverage performance is comparable to an optimised linear U-turn strategy. Multi-robot studies demonstrate efficient coordination on the spirals rule-constrained graph, with a greedy allocator achieving 33-37% lower batch completion times than a Hungarian assignment under our setup. These results highlight the potential of redesigning field geometry to better suit autonomous agriculture."
+    },
+    {
+      "arxiv_id": "2605.30720v1",
+      "title": "Kalimati Vegetable Price Index Forecasting with a Momentum Corrected Online Stacking Ensemble",
+      "authors": [
+        "Sahaj Raj Malla"
+      ],
+      "published": "2026-05-29T01:25:32Z",
+      "doi": null,
+      "summary": "Forecasting agricultural commodity prices in emerging economies is difficult due to high volatility, frequent supply disruptions, and strong cultural influences on demand. This study introduces the Kalimati Vegetable Price Index (KVPI), a new inverse-volatility weighted composite index that aggregates 135 daily wholesale commodities from Kathmandu over ten years (2013-2023). By creating a stable macro-level signal, the KVPI reduces the noise inherent in modelling individual crops. A rich set of 64 causally valid features was developed, including festival lead-lag effects, rolling statistics, and calendar variables. Fourteen forecasting models spanning statistical, tree-based, deep learning, hybrid, and transformer architectures were rigorously evaluated across short (7-day), medium (14- and 30-day), and long-term (90-day) horizons. Tree-based ensembles proved notably robust, while classical statistical models and complex transformers struggled with the noisy dataset. The proposed Momentum-Corrected Online Stacking Ensemble achieved the strongest performance, yielding a Root Mean Square Error (RMSE) of 1.771, an exceptionally low Mean Absolute Percentage Error (MAPE) of 0.68%, and explaining 84.5% of the variance (R-squared = 0.845) at the 90-day horizon. This open-source pipeline provides policymakers and supply chain actors in Nepal and similar markets with a practical, reliable tool for anticipating price movements and strengthening food security."
+    },
+    {
+      "arxiv_id": "2211.04703v1",
+      "title": "Automated MRI Field of View Prescription from Region of Interest Prediction by Intra-stack Attention Neural Network",
+      "authors": [
+        "Ke Lei",
+        "Ali B. Syed",
+        "Xucheng Zhu",
+        "John M. Pauly",
+        "Shreyas S. Vasanawala"
+      ],
+      "published": "2022-11-09T06:40:18Z",
+      "doi": null,
+      "summary": "Manual prescription of the field of view (FOV) by MRI technologists is variable and prolongs the scanning process. Often, the FOV is too large or crops critical anatomy. We propose a deep-learning framework, trained by radiologists' supervision, for automating FOV prescription. An intra-stack shared feature extraction network and an attention network are used to process a stack of 2D image inputs to generate output scalars defining the location of a rectangular region of interest (ROI). The attention mechanism is used to make the model focus on the small number of informative slices in a stack. Then the smallest FOV that makes the neural network predicted ROI free of aliasing is calculated by an algebraic operation derived from MR sampling theory. We retrospectively collected 595 cases between February 2018 and February 2022. The framework's performance is examined quantitatively with intersection over union (IoU) and pixel error on position, and qualitatively with a reader study. We use the t-test for comparing quantitative results from all models and a radiologist. The proposed model achieves an average IoU of 0.867 and average ROI position error of 9.06 out of 512 pixels on 80 test cases, significantly better (P<0.05) than two baseline models and not significantly different from a radiologist (P>0.12). Finally, the FOV given by the proposed framework achieves an acceptance rate of 92% from an experienced radiologist."
+    },
+    {
+      "arxiv_id": "2504.12992v1",
+      "title": "Enhancing Cocoa Pod Disease Classification via Transfer Learning and Ensemble Methods: Toward Robust Predictive Modeling",
+      "authors": [
+        "Devina Anduyan",
+        "Nyza Cabillo",
+        "Navy Gultiano",
+        "Mark Phil Pacot"
+      ],
+      "published": "2025-04-17T15:02:27Z",
+      "doi": null,
+      "summary": "This study presents an ensemble-based approach for cocoa pod disease classification by integrating transfer learning with three ensemble learning strategies: Bagging, Boosting, and Stacking. Pre-trained convolutional neural networks, including VGG16, VGG19, ResNet50, ResNet101, InceptionV3, and Xception, were fine-tuned and employed as base learners to detect three disease categories: Black Pod Rot, Pod Borer, and Healthy. A balanced dataset of 6,000 cocoa pod images was curated and augmented to ensure robustness against variations in lighting, orientation, and disease severity. The performance of each ensemble method was evaluated using accuracy, precision, recall, and F1-score. Experimental results show that Bagging consistently achieved superior classification performance with a test accuracy of 100%, outperforming Boosting (97%) and Stacking (92%). The findings confirm that combining transfer learning with ensemble techniques improves model generalization and reliability, making it a promising direction for precision agriculture and automated crop disease management."
+    },
+    {
+      "arxiv_id": "2203.16149v1",
+      "title": "Tampered VAE for Improved Satellite Image Time Series Classification",
+      "authors": [
+        "Xin Cai",
+        "Yaxin Bi",
+        "Peter Nicholl"
+      ],
+      "published": "2022-03-30T08:48:06Z",
+      "doi": null,
+      "summary": "The unprecedented availability of spatial and temporal high-resolution satellite image time series (SITS) for crop type mapping is believed to necessitate deep learning architectures to accommodate challenges arising from both dimensions. Recent state-of-the-art deep learning models have shown promising results by stacking spatial and temporal encoders. However, we present a Pyramid Time-Series Transformer (PTST) that operates solely on the temporal dimension, i.e., neglecting the spatial dimension, can produce superior results with a drastic reduction in GPU memory consumption and easy extensibility. Furthermore, we augment it to perform semi-supervised learning by proposing a classification-friendly VAE framework that introduces clustering mechanisms into latent space and can promote linear separability therein. Consequently, a few principal axes of the latent space can explain the majority of variance in raw data. Meanwhile, the VAE framework with proposed tweaks can maintain competitive classification performance as its purely discriminative counterpart when only $40\\%$ of labelled data is used. We hope the proposed framework can serve as a baseline for crop classification with SITS for its modularity and simplicity."
+    },
+    {
+      "arxiv_id": "2302.00828v1",
+      "title": "Analysis of Biomass Sustainability Indicators from a Machine Learning Perspective",
+      "authors": [
+        "Syeda Nyma Ferdous",
+        "Xin Li",
+        "Kamalakanta Sahoo",
+        "Richard Bergman"
+      ],
+      "published": "2023-02-02T02:31:42Z",
+      "doi": null,
+      "summary": "Plant biomass estimation is critical due to the variability of different environmental factors and crop management practices associated with it. The assessment is largely impacted by the accurate prediction of different environmental sustainability indicators. A robust model to predict sustainability indicators is a must for the biomass community. This study proposes a robust model for biomass sustainability prediction by analyzing sustainability indicators using machine learning models. The prospect of ensemble learning was also investigated to analyze the regression problem. All experiments were carried out on a crop residue data from the Ohio state. Ten machine learning models, namely, linear regression, ridge regression, multilayer perceptron, k-nearest neighbors, support vector machine, decision tree, gradient boosting, random forest, stacking and voting, were analyzed to estimate three biomass sustainability indicators, namely soil erosion factor, soil conditioning index, and organic matter factor. The performance of the model was assessed using cross-correlation (R2), root mean squared error and mean absolute error metrics. The results showed that Random Forest was the best performing model to assess sustainability indicators. The analyzed model can now serve as a guide for assessing sustainability indicators in real time."
+    },
+    {
+      "arxiv_id": "2411.15923v1",
+      "title": "Deep Learning for automated multi-scale functional field boundaries extraction using multi-date Sentinel-2 and PlanetScope imagery: Case Study of Netherlands and Pakistan",
+      "authors": [
+        "Saba Zahid",
+        "Sajid Ghuffar",
+        " Obaid-ur-Rehman",
+        "Syed Roshaan Ali Shah"
+      ],
+      "published": "2024-11-24T17:10:36Z",
+      "doi": null,
+      "summary": "This study explores the effectiveness of multi-temporal satellite imagery for better functional field boundary delineation using deep learning semantic segmentation architecture on two distinct geographical and multi-scale farming systems of Netherlands and Pakistan. Multidate images of April, August and October 2022 were acquired for PlanetScope and Sentinel-2 in sub regions of Netherlands and November 2022, February and March 2023 for selected area of Dunyapur in Pakistan. For Netherlands, Basic registration crop parcels (BRP) vector layer was used as labeled training data. while self-crafted field boundary vector data were utilized for Pakistan. Four deep learning models with UNET architecture were evaluated using different combinations of multi-date images and NDVI stacks in the Netherlands subregions. A comparative analysis of IoU scores assessed the effectiveness of the proposed multi-date NDVI stack approach. These findings were then applied for transfer learning, using pre-trained models from the Netherlands on the selected area in Pakistan. Additionally, separate models were trained using self-crafted field boundary data for Pakistan, and combined models were developed using data from both the Netherlands and Pakistan. Results indicate that multi-date NDVI stacks provide additional temporal context, reflecting crop growth over different times of the season. The study underscores the critical role of multi-scale ground information from diverse geographical areas in developing robust and universally applicable models for field boundary delineation. The results also highlight the importance of fine spatial resolution for extraction of field boundaries in regions with small scale framing. The findings can be extended to multi-scale implementations for improved automatic field boundary delineation in heterogeneous agricultural environments."
+    },
+    {
+      "arxiv_id": "2405.04943v1",
+      "title": "Unsupervised Skin Feature Tracking with Deep Neural Networks",
+      "authors": [
+        "Jose Chang",
+        "Torbjörn E. M. Nordling"
+      ],
+      "published": "2024-05-08T10:27:05Z",
+      "doi": null,
+      "summary": "Facial feature tracking is essential in imaging ballistocardiography for accurate heart rate estimation and enables motor degradation quantification in Parkinson's disease through skin feature tracking. While deep convolutional neural networks have shown remarkable accuracy in tracking tasks, they typically require extensive labeled data for supervised training. Our proposed pipeline employs a convolutional stacked autoencoder to match image crops with a reference crop containing the target feature, learning deep feature encodings specific to the object category in an unsupervised manner, thus reducing data requirements. To overcome edge effects making the performance dependent on crop size, we introduced a Gaussian weight on the residual errors of the pixels when calculating the loss function. Training the autoencoder on facial images and validating its performance on manually labeled face and hand videos, our Deep Feature Encodings (DFE) method demonstrated superior tracking accuracy with a mean error ranging from 0.6 to 3.3 pixels, outperforming traditional methods like SIFT, SURF, Lucas Kanade, and the latest transformers like PIPs++ and CoTracker. Overall, our unsupervised learning approach excels in tracking various skin features under significant motion conditions, providing superior feature descriptors for tracking, matching, and image registration compared to both traditional and state-of-the-art supervised learning methods."
+    },
+    {
+      "arxiv_id": "2506.06309v1",
+      "title": "Leveraging Novel Ensemble Learning Techniques and Landsat Multispectral Data for Estimating Olive Yields in Tunisia",
+      "authors": [
+        "Mohamed Kefi",
+        "Tien Dat Pham",
+        "Thin Nguyen",
+        "Mark G. Tjoelker",
+        "Viola Devasirvatham",
+        "Kenichi Kashiwagi"
+      ],
+      "published": "2025-05-26T00:49:19Z",
+      "doi": "10.17632/wg88j5t3jd.1",
+      "summary": "Olive production is an important tree crop in Mediterranean climates. However, olive yield varies significantly due to climate change. Accurately estimating yield using remote sensing and machine learning remains a complex challenge. In this study, we developed a streamlined pipeline for olive yield estimation in the Kairouan and Sousse governorates of Tunisia. We extracted features from multispectral reflectance bands, vegetation indices derived from Landsat-8 OLI and Landsat-9 OLI-2 satellite imagery, along with digital elevation model data. These spatial features were combined with ground-based field survey data to form a structured tabular dataset. We then developed an automated ensemble learning framework, implemented using AutoGluon to train and evaluate multiple machine learning models, select optimal combinations through stacking, and generate robust yield predictions using five-fold cross-validation. The results demonstrate strong predictive performance from both sensors, with Landsat-8 OLI achieving R2 = 0.8635 and RMSE = 1.17 tons per ha, and Landsat-9 OLI-2 achieving R2 = 0.8378 and RMSE = 1.32 tons per ha. This study highlights a scalable, cost-effective, and accurate method for olive yield estimation, with potential applicability across diverse agricultural regions globally."
+    },
+    {
+      "arxiv_id": "2401.11410v3",
+      "title": "Agricultural Recommendation System based on Deep Learning: A Multivariate Weather Forecasting Approach",
+      "authors": [
+        "Md Zubair",
+        "Md. Shahidul Salim",
+        "Mehrab Mustafy Rahman",
+        "Mohammad Jahid Ibna Basher",
+        "Shahin Imran",
+        "Iqbal H. Sarker"
+      ],
+      "published": "2024-01-21T06:33:45Z",
+      "doi": null,
+      "summary": "Agriculture plays a fundamental role in driving economic growth and ensuring food security for populations around the world. Although labor-intensive agriculture has led to steady increases in food grain production in many developing countries, it is frequently challenged by adverse weather conditions, including heavy rainfall, low temperatures, and drought. These factors substantially hinder food production, posing significant risks to global food security. In order to have a profitable, sustainable, and farmer-friendly agricultural practice, this paper proposes a context-based crop recommendation system powered by a weather forecast model. For implementation purposes, we have considered the whole territory of Bangladesh. With extensive evaluation, the multivariate Stacked Bi-LSTM (three Bi-LSTM layers with a time Distributed layer) Network is employed as the weather forecasting model. The proposed weather model can forecast Rainfall, Temperature, Humidity, and Sunshine for any given location in Bangladesh with an average R-Squared value of 0.9824, and the model outperforms other state-of-the-art LSTM models. These predictions guide our system in generating viable farming decisions. Additionally, our full-fledged system is capable of alerting the farmers about extreme weather conditions so that preventive measures can be undertaken to protect the crops. Finally, the system is also adept at making knowledge-based crop suggestions for flood and drought-prone regions."
+    },
+    {
+      "arxiv_id": "2603.01932v2",
+      "title": "BAWSeg: A UAV Multispectral Benchmark for Barley Weed Segmentation",
+      "authors": [
+        "Haitian Wang",
+        "Xinyu Wang",
+        "Muhammad Ibrahim",
+        "Dustin Severtson",
+        "Ajmal Mian"
+      ],
+      "published": "2026-03-02T14:49:05Z",
+      "doi": null,
+      "summary": "Accurate weed mapping in cereal fields requires pixel-level segmentation from UAV imagery that remains reliable across fields, seasons, and illumination. Existing multispectral pipelines often depend on thresholded vegetation indices, which are brittle under radiometric drift and mixed crop--weed pixels, or on single-stream CNN and Transformer backbones that ingest stacked bands and indices, where radiance cues and normalized index cues interfere and reduce sensitivity to small weed clusters embedded in crop canopy. We propose VISA, a two-stream segmentation network that decouples these cues and fuses them at native resolution. The radiance stream learns from calibrated five-band reflectance using local residual convolutions, channel recalibration, spatial gating, and skip-connected decoding, which preserve fine textures, row boundaries, and small weed structures that are often weakened after ratio-based index compression. The index stream operates on vegetation-index maps with windowed self-attention to model local structure efficiently, state-space layers to propagate field-scale context without quadratic attention cost, and Slot Attention to form stable region descriptors that improve discrimination of sparse weeds under canopy mixing. To support supervised training and deployment-oriented evaluation, we introduce BAWSeg, a four-year UAV multispectral dataset collected over commercial barley paddocks in Western Australia, providing radiometrically calibrated blue, green, red, red edge, and near-infrared orthomosaics, derived vegetation indices, and dense crop, weed, and other labels with leakage-free block splits. On BAWSeg, VISA achieves 75.6% mIoU and 63.5% weed IoU with 22.8 M parameters, outperforming a multispectral SegFormer-B1 baseline by 1.2 mIoU and 1.9 weed IoU. Under cross-plot and cross-year protocols, VISA maintains 71.2% and 69.2% mIoU, respectively."
+    },
+    {
+      "arxiv_id": "2101.11172v4",
+      "title": "High accuracy wide field imaging method in radio interferometry",
+      "authors": [
+        "Haoyang Ye",
+        "Steve F. Gull",
+        "Sze M. Tan",
+        "Bojan Nikolic"
+      ],
+      "published": "2021-01-27T02:34:02Z",
+      "doi": "10.1093/mnras/stab3548",
+      "summary": "With the development of modern radio interferometers, wide-field continuum surveys have been planned and undertaken, for which accurate wide-field imaging methods are essential. Based on the widely-used W-stacking method, we propose a new wide-field imaging algorithm that can synthesize visibility data from a model of the sky brightness via degridding, able to construct dirty maps from measured visibility data via gridding. Results carry the smallest approximation error yet achieved relative to the exact calculation involving the direct Fourier transform. In contrast to the original W-stacking method, the new algorithm performs least-misfit optimal gridding (and degridding) in all three directions, and is capable of achieving much higher accuracy than is feasible with the original algorithm. In particular, accuracy at the level of single precision arithmetic is readily achieved by choosing a least-misfit convolution function of width W=7 and an image cropping parameter of x0=0.25. If the accuracy required is only that attained by the original W-stacking method, the computational cost for both the gridding and FFT steps can be substantially reduced using the proposed method by making an appropriate choice of the width and image cropping parameters."
+    },
+    {
+      "arxiv_id": "2112.14159v2",
+      "title": "Skin feature point tracking using deep feature encodings",
+      "authors": [
+        "Jose Ramon Chang",
+        "Torbjörn E. M. Nordling"
+      ],
+      "published": "2021-12-28T14:29:08Z",
+      "doi": null,
+      "summary": "Facial feature tracking is a key component of imaging ballistocardiography (BCG) where accurate quantification of the displacement of facial keypoints is needed for good heart rate estimation. Skin feature tracking enables video-based quantification of motor degradation in Parkinson's disease. Traditional computer vision algorithms include Scale Invariant Feature Transform (SIFT), Speeded-Up Robust Features (SURF), and Lucas-Kanade method (LK). These have long represented the state-of-the-art in efficiency and accuracy but fail when common deformations, like affine local transformations or illumination changes, are present. Over the past five years, deep convolutional neural networks have outperformed traditional methods for most computer vision tasks. We propose a pipeline for feature tracking, that applies a convolutional stacked autoencoder to identify the most similar crop in an image to a reference crop containing the feature of interest. The autoencoder learns to represent image crops into deep feature encodings specific to the object category it is trained on. We train the autoencoder on facial images and validate its ability to track skin features in general using manually labeled face and hand videos. The tracking errors of distinctive skin features (moles) are so small that we cannot exclude that they stem from the manual labelling based on a $χ^2$-test. With a mean error of 0.6-4.2 pixels, our method outperformed the other methods in all but one scenario. More importantly, our method was the only one to not diverge. We conclude that our method creates better feature descriptors for feature tracking, feature matching, and image registration than the traditional algorithms."
+    },
+    {
+      "arxiv_id": "2005.13140v4",
+      "title": "SSM-Net for Plants Disease Identification in Low Data Regime",
+      "authors": [
+        "Shruti Jadon"
+      ],
+      "published": "2020-05-27T03:43:38Z",
+      "doi": "10.1109/AI4G50087.2020.9311073",
+      "summary": "Plant disease detection is an essential factor in increasing agricultural production. Due to the difficulty of disease detection, farmers spray various pesticides on their crops to protect them, causing great harm to crop growth and food standards. Deep learning can offer critical aid in detecting such diseases. However, it is highly inconvenient to collect a large volume of data on all forms of the diseases afflicting a specific plant species. In this paper, we propose a new metrics-based few-shot learning SSM net architecture, which consists of stacked siamese and matching network components to address the problem of disease detection in low data regimes. We demonstrated our experiments on two datasets: mini-leaves diseases and sugarcane diseases dataset. We have showcased that the SSM-Net approach can achieve better decision boundaries with an accuracy of 92.7% on the mini-leaves dataset and 94.3% on the sugarcane dataset. The accuracy increased by ~10% and ~5% respectively, compared to the widely used VGG16 transfer learning approach. Furthermore, we attained F1 score of 0.90 using SSM Net on the sugarcane dataset and 0.91 on the mini-leaves dataset. Our code implementation is available on Github: https://github.com/shruti-jadon/PlantsDiseaseDetection."
+    },
+    {
+      "arxiv_id": "2606.20360v1",
+      "title": "Lightstack: A Python Package for Creating Photometric Data Cubes",
+      "authors": [
+        "Andressa Wille",
+        "Rafael S. de Souza",
+        "Ana L. Chies-Santos",
+        "Thallis Pessi",
+        "Emille E. O. Ishida",
+        "Alberto Krone-Martins"
+      ],
+      "published": "2026-06-18T15:23:19Z",
+      "doi": "10.3847/2515-5172/ae7c78",
+      "summary": "Multi-band photometry traces diverse physical processes across a wide range of wavelengths. In recent decades, this field has been driven by the rapid growth of multi-imaging datasets, from high-resolution observation from Hubble Space Telescope and James Webb Space Telescope to the forthcoming large-scale surveys enabled by the Roman Space Telescope and Rubin Observatory, for example. In this work, we present lightstack, a Python package for combining standalone images into photometric data cubes. The workflow consists of three main steps: cropping a region of interest from a mosaic across all available filters; stacking the images to construct the data cube; and performing PSF matching on the cube. This package is intended for preparing data for studies involving multi-band photometry. The code is released under an MIT license and is available on GitHub together with a Jupyter tutorial notebook. The version used for this publication (v0.2.1) is archived on Zenodo."
+    },
+    {
+      "arxiv_id": "2111.08069v1",
+      "title": "Two-dimensional Deep Regression for Early Yield Prediction of Winter Wheat",
+      "authors": [
+        "Giorgio Morales",
+        "John W. Sheppard"
+      ],
+      "published": "2021-11-15T20:40:15Z",
+      "doi": null,
+      "summary": "Crop yield prediction is one of the tasks of Precision Agriculture that can be automated based on multi-source periodic observations of the fields. We tackle the yield prediction problem using a Convolutional Neural Network (CNN) trained on data that combines radar satellite imagery and on-ground information. We present a CNN architecture called Hyper3DNetReg that takes in a multi-channel input image and outputs a two-dimensional raster, where each pixel represents the predicted yield value of the corresponding input pixel. We utilize radar data acquired from the Sentinel-1 satellites, while the on-ground data correspond to a set of six raster features: nitrogen rate applied, precipitation, slope, elevation, topographic position index (TPI), and aspect. We use data collected during the early stage of the winter wheat growing season (March) to predict yield values during the harvest season (August). We present experiments over four fields of winter wheat and show that our proposed methodology yields better results than five compared methods, including multiple linear regression, an ensemble of feedforward networks using AdaBoost, a stacked autoencoder, and two other CNN architectures."
+    },
+    {
+      "arxiv_id": "2401.02614v1",
+      "title": "Scaling and Masking: A New Paradigm of Data Sampling for Image and Video Quality Assessment",
+      "authors": [
+        "Yongxu Liu",
+        "Yinghui Quan",
+        "Guoyao Xiao",
+        "Aobo Li",
+        "Jinjian Wu"
+      ],
+      "published": "2024-01-05T03:12:03Z",
+      "doi": null,
+      "summary": "Quality assessment of images and videos emphasizes both local details and global semantics, whereas general data sampling methods (e.g., resizing, cropping or grid-based fragment) fail to catch them simultaneously. To address the deficiency, current approaches have to adopt multi-branch models and take as input the multi-resolution data, which burdens the model complexity. In this work, instead of stacking up models, a more elegant data sampling method (named as SAMA, scaling and masking) is explored, which compacts both the local and global content in a regular input size. The basic idea is to scale the data into a pyramid first, and reduce the pyramid into a regular data dimension with a masking strategy. Benefiting from the spatial and temporal redundancy in images and videos, the processed data maintains the multi-scale characteristics with a regular input size, thus can be processed by a single-branch model. We verify the sampling method in image and video quality assessment. Experiments show that our sampling method can improve the performance of current single-branch models significantly, and achieves competitive performance to the multi-branch models without extra model complexity. The source code will be available at https://github.com/Sissuire/SAMA."
+    },
+    {
+      "arxiv_id": "2605.22145v1",
+      "title": "Persistent Homology as a Morphological Signature of Fibrin Networks",
+      "authors": [
+        "Thomas Burnett",
+        "Theresa Reinhold",
+        "Bea Bleile",
+        "Sophie Raynor",
+        "Freya Jensen",
+        "Martin Hermann",
+        "Tua Gyldenholm",
+        "Yossi Bokor Bleile"
+      ],
+      "published": "2026-05-21T08:17:19Z",
+      "doi": null,
+      "summary": "We present an investigation of the applicability of topological data analysis (TDA) to the study of high-resolution confocal microscopy images of fibrin network structures from patients with oesophageal cancer undergoing intended curative surgery. Investigation of clot structure brings new knowledge about blood coagulation, risk of bleeding, and thrombosis in this group of patients. Images of fibrin network formation in the collected blood samples were captured by confocal microscopy and three-dimensional z-stacks were analysed. Each z-stack was cropped to a centre region for analysis, the validity of which is assessed in detail. Overall, we found no significant differences in fibrin network topology across the perioperative period, and no consistent differences in network structure between the standard and intervention groups."
+    },
+    {
+      "arxiv_id": "2107.09219v1",
+      "title": "A Portable Agricultural Robot for Continuous Apparent Soil ElectricalConductivity Measurements to Improve Irrigation Practices",
+      "authors": [
+        "Merrick Campbell",
+        "Keran Ye",
+        "Elia Scudiero",
+        "Konstantinos Karydis"
+      ],
+      "published": "2021-07-20T01:29:15Z",
+      "doi": null,
+      "summary": "Near-ground sensing data, such as geospatial measurements of soil apparent electrical conductivity (ECa), are used in precision agriculture to improve farming practices and increase crop yield. Near-ground sensors provide valuable information, yet, the process of collecting, assessing, and interpreting measurements requires significant human labor. Automating parts of this process via the use of mobile robots can help decrease labor burden, and increase the accuracy and frequency of data collections, and overall increase the adoption and use of ECa measurement technology. This paper introduces a roboticized means to autonomously perform geospatial ECa measurements and map soil moisture content in micro-irrigated orchard systems. We retrofit a small wheeled mobile robot with a small electromagnetic induction sensor by studying and taking into consideration the effect of the robot body to the sensor's readings, and develop a software stack to enable autonomous logging of geo-referenced measurements. The proposed roboticized ECa measurement method is evaluated by mapping a 50m x 30m field against the baseline of human-conducted measurements obtained by walking the sensor in the same field and following the same path. Experimental testing reveals that our approach yields roboticized measurements comparable to human-conducted ones, despite the robot's small form factor."
+    },
+    {
+      "arxiv_id": "2609.00106v1",
+      "title": "Deploying and Evaluating a Smart-Agriculture Agentic Engine for Full-Season Soybean Farm Operations",
+      "authors": [
+        "Ao Qu",
+        "Panagiotis Michelakis",
+        "Linyuan Han",
+        "Yiannis Hadjiyianni",
+        "Kun Ouyang",
+        "Konstantinos Siskos",
+        "Feng Li",
+        "Ran Meng",
+        "Jingchi Jiang",
+        "Dimitrios Stamoulis",
+        "Jie Liu"
+      ],
+      "published": "2026-08-31T17:53:17Z",
+      "doi": null,
+      "summary": "This paper presents FAIRY, a full-stack smart-agriculture agent system developed for and deployed to an operating soybean research farm at Harbin Institute of Technology's smart-agriculture site. We develop FAIRY to execute and evaluate agentic agronomic operations on full-season spatiotemporal workflows that span ridge preparation, planting, irrigation, fertilization, pest and disease treatment, harvest, grain handling, drying, and storage. FAIRY integrates APIs and infrastructure across production-grade machinery, fixed soil and canopy sensors, multispectral and thermal drones, satellite vegetation products, a weather station, calibrated crop-process models, agronomic records, and multi-season yield histories. The system is built around the novel \"everything is an event\" execution paradigm, which represents spatiotemporal world evolution, remote sensing and UAV observations, sensor readings, crop-growth transitions, machinery actions, and management interventions as state-changing events in a shared farm process engine. On top of this event-driven world model, FAIRY implements a complete agentic stack: a knowledge library of atomic agronomic skills; multi-agent controller and orchestration backends; frontier- and edge-model execution; full-path trace logging; and deployment profiling on local nodes. We use FAIRY to evaluate nine state-of-the-art agent controllers across one hundred full-season soybean scenarios that preserve the operational coupling between spatial observations in a 64-ridge field, temporal decision sequences, agronomic constraints, delayed effects, and final yield. We develop an evaluation suite that combines agentic success, full-path spatiotemporal correctness, token cost, and edge-device runtime."
+    },
+    {
+      "arxiv_id": "2510.18004v1",
+      "title": "Attention-Guided Deep Adversarial Temporal Subspace Clustering (A-DATSC) Model for multivariate spatiotemporal data",
+      "authors": [
+        "Francis Ndikum Nji",
+        "Vandana Janeja",
+        "Jianwu Wang"
+      ],
+      "published": "2025-10-20T18:38:26Z",
+      "doi": null,
+      "summary": "Deep subspace clustering models are vital for applications such as snowmelt detection, sea ice tracking, crop health monitoring, infectious disease modeling, network load prediction, and land-use planning, where multivariate spatiotemporal data exhibit complex temporal dependencies and reside on multiple nonlinear manifolds beyond the capability of traditional clustering methods. These models project data into a latent space where samples lie in linear subspaces and exploit the self-expressiveness property to uncover intrinsic relationships. Despite their success, existing methods face major limitations: they use shallow autoencoders that ignore clustering errors, emphasize global features while neglecting local structure, fail to model long-range dependencies and positional information, and are rarely applied to 4D spatiotemporal data. To address these issues, we propose A-DATSC (Attention-Guided Deep Adversarial Temporal Subspace Clustering), a model combining a deep subspace clustering generator and a quality-verifying discriminator. The generator, inspired by U-Net, preserves spatial and temporal integrity through stacked TimeDistributed ConvLSTM2D layers, reducing parameters and enhancing generalization. A graph attention transformer based self-expressive network captures local spatial relationships, global dependencies, and both short- and long-range correlations. Experiments on three real-world multivariate spatiotemporal datasets show that A-DATSC achieves substantially superior clustering performance compared to state-of-the-art deep subspace clustering models."
+    },
+    {
+      "arxiv_id": "2304.07875v1",
+      "title": "The Segment Anything foundation model achieves favorable brain tumor autosegmentation accuracy on MRI to support radiotherapy treatment planning",
+      "authors": [
+        "Florian Putz",
+        "Johanna Grigo",
+        "Thomas Weissmann",
+        "Philipp Schubert",
+        "Daniel Hoefler",
+        "Ahmed Gomaa",
+        "Hassen Ben Tkhayat",
+        "Amr Hagag",
+        "Sebastian Lettmaier",
+        "Benjamin Frey",
+        "Udo S. Gaipl",
+        "Luitpold V. Distel",
+        "Sabine Semrau",
+        "Christoph Bert",
+        "Rainer Fietkau",
+        "Yixing Huang"
+      ],
+      "published": "2023-04-16T19:46:46Z",
+      "doi": null,
+      "summary": "Background: Tumor segmentation in MRI is crucial in radiotherapy (RT) treatment planning for brain tumor patients. Segment anything (SA), a novel promptable foundation model for autosegmentation, has shown high accuracy for multiple segmentation tasks but was not evaluated on medical datasets yet. Methods: SA was evaluated in a point-to-mask task for glioma brain tumor autosegmentation on 16744 transversal slices from 369 MRI datasets (BraTS 2020). Up to 9 point prompts were placed per slice. Tumor core (enhancing tumor + necrotic core) was segmented on contrast-enhanced T1w sequences. Out of the 3 masks predicted by SA, accuracy was evaluated for the mask with the highest calculated IoU (oracle mask) and with highest model predicted IoU (suggested mask). In addition to assessing SA on whole MRI slices, SA was also evaluated on images cropped to the tumor (max. 3D extent + 2 cm). Results: Mean best IoU (mbIoU) using oracle mask on full MRI slices was 0.762 (IQR 0.713-0.917). Best 2D mask was achieved after a mean of 6.6 point prompts (IQR 5-9). Segmentation accuracy was significantly better for high- compared to low-grade glioma cases (mbIoU 0.789 vs. 0.668). Accuracy was worse using MRI slices cropped to the tumor (mbIoU 0.759) and was much worse using suggested mask (full slices 0.572). For all experiments, accuracy was low on peripheral slices with few tumor voxels (mbIoU, <300: 0.537 vs. >=300: 0.841). Stacking best oracle segmentations from full axial MRI slices, mean 3D DSC for tumor core was 0.872, which was improved to 0.919 by combining axial, sagittal and coronal masks. Conclusions: The Segment Anything foundation model, while trained on photos, can achieve high zero-shot accuracy for glioma brain tumor segmentation on MRI slices. The results suggest that Segment Anything can accelerate and facilitate RT treatment planning, when properly integrated in a clinical application."
+    },
+    {
+      "arxiv_id": "2510.05888v2",
+      "title": "BioAutoML-NAS: An End-to-End AutoML Framework for Multimodal Insect Classification via Neural Architecture Search on Large-Scale Biodiversity Data",
+      "authors": [
+        "Arefin Ittesafun Abian",
+        "Debopom Sutradhar",
+        "Md Rafi Ur Rashid",
+        "Reem E. Mohamed",
+        "Md Rafiqul Islam",
+        "Asif Karim",
+        "Kheng Cher Yeo",
+        "Sami Azam"
+      ],
+      "published": "2025-10-07T13:00:12Z",
+      "doi": "10.1109/TBDATA.2026.3705415",
+      "summary": "Insect classification is important for agricultural management and ecological research, as it directly affects crop health and production. However, this task remains challenging due to the complex characteristics of insects, class imbalance, and large-scale datasets. To address these issues, we propose BioAutoML-NAS, the first BioAutoML model using multimodal data, including images, and metadata, which applies neural architecture search (NAS) for images to automatically learn the best operations for each connection within each cell. Multiple cells are stacked to form the full network, each extracting detailed image feature representations. A multimodal fusion module combines image embeddings with metadata, allowing the model to use both visual and categorical biological information to classify insects. An alternating bi-level optimization training strategy jointly updates network weights and architecture parameters, while zero operations remove less important connections, producing sparse, efficient, and high-performing architectures. Extensive evaluation on the BIOSCAN-5M dataset demonstrates that BioAutoML-NAS achieves 96.81% accuracy, 97.46% precision, 96.81% recall, and a 97.05% F1 score, outperforming state-of-the-art transfer learning, transformer, AutoML, and NAS methods by approximately 16%, 10%, and 8% respectively. Further validation on the Insects-1M dataset obtains 93.25% accuracy, 93.71% precision, 92.74% recall, and a 93.22% F1 score. These results demonstrate that BioAutoML-NAS provides accurate, confident insect classification that supports modern sustainable farming."
+    }
+  ]
+}

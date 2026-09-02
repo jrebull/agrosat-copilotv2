@@ -1,0 +1,408 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "openalex",
+  "query": "ensemble crop mapping satellite image time series deep learning",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W2940726923",
+      "title": "Deep learning in remote sensing applications: A meta-analysis and review",
+      "authors": [
+        "Lei Ma",
+        "Yü Liu",
+        "Xueliang Zhang",
+        "Yuanxin Ye",
+        "Gaofei Yin",
+        "Brian Alan Johnson"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.isprsjprs.2019.04.015",
+      "venue": "ISPRS Journal of Photogrammetry and Remote Sensing",
+      "cited_by_count": 2411
+    },
+    {
+      "openalex_id": "W3079760979",
+      "title": "Crop yield prediction using machine learning: A systematic literature review",
+      "authors": [
+        "Thomas van Klompenburg",
+        "Ayalew Kassahun",
+        "Cagatay Catal"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.compag.2020.105709",
+      "venue": "Computers and Electronics in Agriculture",
+      "cited_by_count": 1818
+    },
+    {
+      "openalex_id": "W3022140654",
+      "title": "Remote Sensing Image Scene Classification Meets Deep Learning: Challenges, Methods, Benchmarks, and Opportunities",
+      "authors": [
+        "Gong Cheng",
+        "Xingxing Xie",
+        "Junwei Han",
+        "Lei Guo",
+        "Gui-Song Xia"
+      ],
+      "year": 2020,
+      "doi": "10.1109/jstars.2020.3005403",
+      "venue": "IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing",
+      "cited_by_count": 994
+    },
+    {
+      "openalex_id": "W2946072066",
+      "title": "A cloud detection algorithm for satellite imagery based on deep learning",
+      "authors": [
+        "Jacob Høxbroe Jeppesen",
+        "Rune Hylsberg Jacobsen",
+        "Fadil Inceoglu",
+        "Thomas Skjødeberg Toftegaard"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.rse.2019.03.039",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 404
+    },
+    {
+      "openalex_id": "W4200503226",
+      "title": "Mapping of crop types and crop sequences with combined time series of Sentinel-1, Sentinel-2 and Landsat 8 data for Germany",
+      "authors": [
+        "Lukas Blickensdörfer",
+        "Marcel Schwieder",
+        "Dirk Pflugmacher",
+        "Claas Nendel",
+        "Stefan Erasmi",
+        "Patrick Hostert"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.rse.2021.112831",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 396
+    },
+    {
+      "openalex_id": "W2910096450",
+      "title": "Machine Learning and Deep Learning frameworks and libraries for large-scale data mining: a survey",
+      "authors": [
+        "Giang Nguyen",
+        "Štefan Dlugolinský",
+        "Martin Bobák",
+        "Viet Tran",
+        "Álvaro López García",
+        "Ignacio Heredia",
+        "Peter Malík",
+        "Ladislav Hluchý"
+      ],
+      "year": 2019,
+      "doi": "10.1007/s10462-018-09679-z",
+      "venue": "Artificial Intelligence Review",
+      "cited_by_count": 870
+    },
+    {
+      "openalex_id": "W4366091323",
+      "title": "Deep learning modelling techniques: current progress, applications, advantages, and challenges",
+      "authors": [
+        "Shams Forruque Ahmed",
+        "Md. Sakib Bin Alam",
+        "Maruf Hassan",
+        "Mahtabin Rodela Rozbu",
+        "Taoseef Ishtiak",
+        "Nazifa Rafa",
+        "M. Mofijur",
+        "A. B. M. Shawkat Ali",
+        "Amir H. Gandomi"
+      ],
+      "year": 2023,
+      "doi": "10.1007/s10462-023-10466-8",
+      "venue": "Artificial Intelligence Review",
+      "cited_by_count": 1041
+    },
+    {
+      "openalex_id": "W4224308360",
+      "title": "A Systematic Literature Review on Crop Yield Prediction with Deep Learning and Remote Sensing",
+      "authors": [
+        "Priyanga Muruganantham",
+        "Santoso Wibowo",
+        "Srimannarayana Grandhi",
+        "Nahidul Hoque Samrat",
+        "Nahina Islam"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14091990",
+      "venue": "Remote Sensing",
+      "cited_by_count": 334
+    },
+    {
+      "openalex_id": "W4394591746",
+      "title": "Deep Learning for Satellite Image Time-Series Analysis: A review",
+      "authors": [
+        "Lynn Miller",
+        "Charlotte Pelletier",
+        "Geoffrey I. Webb"
+      ],
+      "year": 2024,
+      "doi": "10.1109/mgrs.2024.3393010",
+      "venue": "IEEE Geoscience and Remote Sensing Magazine",
+      "cited_by_count": 97
+    },
+    {
+      "openalex_id": "W4213124617",
+      "title": "Deep Learning-Based Change Detection in Remote Sensing Images: A Review",
+      "authors": [
+        "Ayesha Shafique",
+        "Guo Cao",
+        "Zia U. Khan",
+        "Muhammad Asad",
+        "Muhammad Aslam"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14040871",
+      "venue": "Remote Sensing",
+      "cited_by_count": 407
+    },
+    {
+      "openalex_id": "W2920767026",
+      "title": "Historical background and current developments for mapping burned area from satellite Earth observation",
+      "authors": [
+        "Emilio Chuvieco",
+        "Florent Mouillot",
+        "Guido R. van der Werf",
+        "Jesús F. San Miguel",
+        "Mihai A. Tanase",
+        "Nikos Koutsias",
+        "Mariano Garcı́a",
+        "Marta Yebra",
+        "Marc Padilla",
+        "Ioannis Z. Gitas",
+        "Angelika Heil",
+        "Todd J. Hawbaker",
+        "Louis Giglio"
+      ],
+      "year": 2019,
+      "doi": "10.1016/j.rse.2019.02.013",
+      "venue": "Remote Sensing of Environment",
+      "cited_by_count": 622
+    },
+    {
+      "openalex_id": "W4293526428",
+      "title": "A Review of Ensemble Learning Algorithms Used in Remote Sensing Applications",
+      "authors": [
+        "Yuzhen Zhang",
+        "Jingjing Liu",
+        "Wenjuan Shen"
+      ],
+      "year": 2022,
+      "doi": "10.3390/app12178654",
+      "venue": "Applied Sciences",
+      "cited_by_count": 375
+    },
+    {
+      "openalex_id": "W3091948139",
+      "title": "Flood susceptibility modelling using advanced ensemble machine learning models",
+      "authors": [
+        "Abu Reza Md. Towfiqul Islam",
+        "Swapan Talukdar",
+        "Susanta Mahato",
+        "Sonali Kundu",
+        "Kutub Uddin Eibek",
+        "Quoc Bao Pham",
+        "Alban Kuriqi",
+        "Nguyễn Thị Thùy Linh"
+      ],
+      "year": 2020,
+      "doi": "10.1016/j.gsf.2020.09.006",
+      "venue": "Geoscience Frontiers",
+      "cited_by_count": 581
+    },
+    {
+      "openalex_id": "W4365504037",
+      "title": "A survey on deep learning tools dealing with data scarcity: definitions, challenges, solutions, tips, and applications",
+      "authors": [
+        "Laith Alzubaidi",
+        "Jinshuai Bai",
+        "Aiman Al-Sabaawi",
+        "José Santamaría",
+        "A. S. Albahri",
+        "Bashar Sami Nayyef Al-dabbagh",
+        "Mohammed A. Fadhel",
+        "Mohamed Manoufali",
+        "Jinglan Zhang",
+        "Ali H. Al‐Timemy",
+        "Ye Duan",
+        "Amjed Abdullah",
+        "Laith Farhan",
+        "Yi Lu",
+        "Ashish Gupta",
+        "Felix Albu",
+        "Amin Abbosh",
+        "Yuantong Gu"
+      ],
+      "year": 2023,
+      "doi": "10.1186/s40537-023-00727-2",
+      "venue": "Journal Of Big Data",
+      "cited_by_count": 876
+    },
+    {
+      "openalex_id": "W3120697286",
+      "title": "Machine Learning Applications for Precision Agriculture: A Comprehensive Review",
+      "authors": [
+        "Abhinav Sharma",
+        "Arpit Jain",
+        "Prateek Gupta",
+        "Vinay Chowdary"
+      ],
+      "year": 2020,
+      "doi": "10.1109/access.2020.3048415",
+      "venue": "IEEE Access",
+      "cited_by_count": 1087
+    },
+    {
+      "openalex_id": "W2993464084",
+      "title": "A Survey on the New Generation of Deep Learning in Image Processing",
+      "authors": [
+        "Licheng Jiao",
+        "Jin Zhao"
+      ],
+      "year": 2019,
+      "doi": "10.1109/access.2019.2956508",
+      "venue": "IEEE Access",
+      "cited_by_count": 294
+    },
+    {
+      "openalex_id": "W3129544296",
+      "title": "Deep Learning-Based Semantic Segmentation of Urban Features in Satellite Images: A Review and Meta-Analysis",
+      "authors": [
+        "Bipul Neupane",
+        "Teerayut Horanont",
+        "Jagannath Aryal"
+      ],
+      "year": 2021,
+      "doi": "10.3390/rs13040808",
+      "venue": "Remote Sensing",
+      "cited_by_count": 246
+    },
+    {
+      "openalex_id": "W4392199044",
+      "title": "Deep Learning for Time Series Classification and Extrinsic Regression: A Current Survey",
+      "authors": [
+        "Navid Mohammadi Foumani",
+        "Lynn Miller",
+        "Chang Wei Tan",
+        "Geoffrey I. Webb",
+        "Germain Forestier",
+        "Mahsa Salehi"
+      ],
+      "year": 2024,
+      "doi": "10.1145/3649448",
+      "venue": "ACM Computing Surveys",
+      "cited_by_count": 243
+    },
+    {
+      "openalex_id": "W3165319944",
+      "title": "Machine Learning in Agriculture: A Comprehensive Updated Review",
+      "authors": [
+        "Lefteris Benos",
+        "Aristotelis C. Tagarakis",
+        "Georgios Dolias",
+        "Remigio Berruto",
+        "Dimitrios Katerıs",
+        "Dionysis Bochtis"
+      ],
+      "year": 2021,
+      "doi": "10.3390/s21113758",
+      "venue": "Sensors",
+      "cited_by_count": 871
+    },
+    {
+      "openalex_id": "W3003452346",
+      "title": "Near Real-Time Wildfire Progression Monitoring with Sentinel-1 SAR Time Series and Deep Learning",
+      "authors": [
+        "Yifang Ban",
+        "Puzhao Zhang",
+        "Andrea Nascetti",
+        "Alexandre Bevington",
+        "Michael A. Wulder"
+      ],
+      "year": 2020,
+      "doi": "10.1038/s41598-019-56967-x",
+      "venue": "Scientific Reports",
+      "cited_by_count": 267
+    },
+    {
+      "openalex_id": "W3047335959",
+      "title": "A comprehensive review of deep learning applications in hydrology and water resources",
+      "authors": [
+        "Muhammed Sit",
+        "Bekir Zahit Demiray",
+        "Zhongrun Xiang",
+        "Gregory J. Ewing",
+        "Yusuf Sermet",
+        "İbrahim Demir"
+      ],
+      "year": 2020,
+      "doi": "10.2166/wst.2020.369",
+      "venue": "Water Science & Technology",
+      "cited_by_count": 614
+    },
+    {
+      "openalex_id": "W4382630561",
+      "title": "Recent Advances in Crop Disease Detection Using UAV and Deep Learning Techniques",
+      "authors": [
+        "Tej Bahadur Shahi",
+        "Cheng‐Yuan Xu",
+        "Arjun Neupane",
+        "William Guo"
+      ],
+      "year": 2023,
+      "doi": "10.3390/rs15092450",
+      "venue": "Remote Sensing",
+      "cited_by_count": 284
+    },
+    {
+      "openalex_id": "W3215900571",
+      "title": "Application of Deep Learning Architectures for Satellite Image Time Series Prediction: A Review",
+      "authors": [
+        "Waytehad Rose Moskolaï",
+        "Wahabou Abdou",
+        "Albert Dipandà",
+        "Kolyang"
+      ],
+      "year": 2021,
+      "doi": "10.3390/rs13234822",
+      "venue": "Remote Sensing",
+      "cited_by_count": 92
+    },
+    {
+      "openalex_id": "W4379229760",
+      "title": "Review of deep learning methods for remote sensing satellite images classification: experimental survey and comparative analysis",
+      "authors": [
+        "Adekanmi Adeyinka Adegun",
+        "Serestina Viriri",
+        "Jules‐Raymond Tapamo"
+      ],
+      "year": 2023,
+      "doi": "10.1186/s40537-023-00772-x",
+      "venue": "Journal Of Big Data",
+      "cited_by_count": 213
+    },
+    {
+      "openalex_id": "W3011560410",
+      "title": "Deep-learning-based information mining from ocean remote-sensing imagery",
+      "authors": [
+        "Xiaofeng Li",
+        "Bin Liu",
+        "Gang Zheng",
+        "Yibin Ren",
+        "Shuangshang Zhang",
+        "Yingjie Liu",
+        "Le Gao",
+        "Yuhai Liu",
+        "Bin Zhang",
+        "Fan Wang"
+      ],
+      "year": 2020,
+      "doi": "10.1093/nsr/nwaa047",
+      "venue": "National Science Review",
+      "cited_by_count": 411
+    }
+  ]
+}

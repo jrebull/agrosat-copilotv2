@@ -1,0 +1,424 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "openalex",
+  "query": "rare crop classes long tail parcel classification",
+  "executed_at": "2026-09-02T20:22:57+00:00",
+  "status": 200,
+  "records": [
+    {
+      "openalex_id": "W3171229070",
+      "title": "A Survey on Semi-, Self- and Unsupervised Learning for Image Classification",
+      "authors": [
+        "Lars Schmarje",
+        "Monty Santarossa",
+        "Simon‐Martin Schröder",
+        "Reinhard Koch"
+      ],
+      "year": 2021,
+      "doi": "10.1109/access.2021.3084358",
+      "venue": "IEEE Access",
+      "cited_by_count": 217
+    },
+    {
+      "openalex_id": "W4410721097",
+      "title": "A Deep Learning-Based Solution to the Class Imbalance Problem in High-Resolution Land Cover Classification",
+      "authors": [
+        "Pengdi Chen",
+        "Yong Liu",
+        "Yuanrui Ren",
+        "Baoan Zhang",
+        "Yuan Zhao"
+      ],
+      "year": 2025,
+      "doi": "10.3390/rs17111845",
+      "venue": "Remote Sensing",
+      "cited_by_count": 14
+    },
+    {
+      "openalex_id": "W4395463956",
+      "title": "Detailed Land Use Classification in a Rare Earth Mining Area Using Hyperspectral Remote Sensing Data for Sustainable Agricultural Development",
+      "authors": [
+        "Chige Li",
+        "Hengkai Li",
+        "Yanbing Zhou",
+        "Xiuli Wang"
+      ],
+      "year": 2024,
+      "doi": "10.3390/su16093582",
+      "venue": "Sustainability",
+      "cited_by_count": 15
+    },
+    {
+      "openalex_id": "W4411607185",
+      "title": "Class-Balanced Random Patch Training to Address Class Imbalance in Tiling-Based Farmland Classification",
+      "authors": [
+        "Yeongung Bae",
+        "Yuseok Ban"
+      ],
+      "year": 2025,
+      "doi": "10.3390/app15137056",
+      "venue": "Applied Sciences",
+      "cited_by_count": 5
+    },
+    {
+      "openalex_id": "W7142841938",
+      "title": "AgriGen-XL: a physics-aware multi-scale generative framework integrating EfficientNet, DeepLabV3+, and YOLOv5 for precision agricultural imaging",
+      "authors": [
+        "Nibedita Deb",
+        "Tawfikur Rahman"
+      ],
+      "year": 2026,
+      "doi": "10.1007/s44163-026-01070-0",
+      "venue": "Discover Artificial Intelligence",
+      "cited_by_count": 2
+    },
+    {
+      "openalex_id": "W4406745494",
+      "title": "Social vulnerability correlates of flood risk to crops and buildings",
+      "authors": [
+        "Sina Razzaghi Asl",
+        "Asif Rahman",
+        "Eric Tate",
+        "William Lehman",
+        "Oliver Wing"
+      ],
+      "year": 2025,
+      "doi": "10.1007/s11069-025-07137-y",
+      "venue": "Natural Hazards",
+      "cited_by_count": 10
+    },
+    {
+      "openalex_id": "W4385900995",
+      "title": "A Comprehensive Review of Recent Research Trends on Unmanned Aerial Vehicles (UAVs)",
+      "authors": [
+        "Khaled Telli",
+        "Okba Kraa",
+        "Yassine Himeur",
+        "Abdelmalik Ouamane",
+        "Mohamed Boumehraz",
+        "Shadi Atalla",
+        "Wathiq Mansoor"
+      ],
+      "year": 2023,
+      "doi": "10.3390/systems11080400",
+      "venue": "Systems",
+      "cited_by_count": 323
+    },
+    {
+      "openalex_id": "W3160697385",
+      "title": "On the nature and types of anomalies: a review of deviations in data",
+      "authors": [
+        "Ralph Foorthuis"
+      ],
+      "year": 2021,
+      "doi": "10.1007/s41060-021-00265-1",
+      "venue": "International Journal of Data Science and Analytics",
+      "cited_by_count": 106
+    },
+    {
+      "openalex_id": "W4224312497",
+      "title": "Identification and Counting of European Souslik Burrows from UAV Images by Pixel-Based Image Analysis and Random Forest Classification: A Simple, Semi-Automated, yet Accurate Method for Estimating Population Size",
+      "authors": [
+        "Csongor Gedeon",
+        "Mátyás Árvai",
+        "Gábor Szatmári",
+        "Eric C. Brevik",
+        "Tünde Takáts",
+        "Zsófia Adrienn Kovács",
+        "János Mészáros"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14092025",
+      "venue": "Remote Sensing",
+      "cited_by_count": 17
+    },
+    {
+      "openalex_id": "W3132640023",
+      "title": "An improved approach to estimate above-ground volume and biomass of desert shrub communities based on UAV RGB images",
+      "authors": [
+        "Peng Mao",
+        "Longjun Qin",
+        "Mengyu Hao",
+        "Wenli Zhao",
+        "Jiechunyi Luo",
+        "Xu Qiu",
+        "Lijie Xu",
+        "Yujiu Xiong",
+        "Yili Ran",
+        "Chunhua Yan",
+        "Guo Yu Qiu"
+      ],
+      "year": 2021,
+      "doi": "10.1016/j.ecolind.2021.107494",
+      "venue": "Ecological Indicators",
+      "cited_by_count": 78
+    },
+    {
+      "openalex_id": "W4382048961",
+      "title": "An adversarial collaboration to critically evaluate theories of consciousness",
+      "authors": [
+        "Oscar Ferrante",
+        "Urszula Górska",
+        "Simon Henin",
+        "Rony Hirschhorn",
+        "Aya Khalaf",
+        "Alex Lepauvre",
+        "Ling Liu",
+        "David Richter",
+        "Yamil Vidal",
+        "Niccolò Bonacchi",
+        "Tanya Brown",
+        "Praveen Sripad",
+        "Marcelo Armendáriz",
+        "Katarina Bendtz",
+        "Tara Ghafari",
+        "Dorottya Hetenyi",
+        "Jay Jeschke",
+        "Csaba Kozma",
+        "David Mazumder",
+        "Stephanie Montenegro",
+        "Alia Seedat",
+        "Abdelrahman Sharafeldin",
+        "S.-n. Yang",
+        "Sylvain Baillet",
+        "David J. Chalmers",
+        "Radoslaw Martin Cichy",
+        "Francis T. Fallon",
+        "Theofanis I. Panagiotaropoulos",
+        "Hal Blumenfeld",
+        "Floris P. de Lange",
+        "Sasha Devore",
+        "Ole Jensen",
+        "Gabriel Kreiman",
+        "Huan Luo",
+        "Mélanie Boly",
+        "Stanislas Dehaene",
+        "Christof Koch",
+        "Giulio Tononi",
+        "Michael Pitts",
+        "Liad Mudrik",
+        "Lucía Melloni"
+      ],
+      "year": 2023,
+      "doi": "10.1101/2023.06.23.546249",
+      "venue": "bioRxiv (Cold Spring Harbor Laboratory)",
+      "cited_by_count": 92
+    },
+    {
+      "openalex_id": "W4404905824",
+      "title": "In-depth review of AI-enabled unmanned aerial vehicles: trends, vision, and challenges",
+      "authors": [
+        "Osim Kumar Pal",
+        "Md Sakib Hossain Shovon",
+        "M. F. Mridha",
+        "Jungpil Shin"
+      ],
+      "year": 2024,
+      "doi": "10.1007/s44163-024-00209-1",
+      "venue": "Discover Artificial Intelligence",
+      "cited_by_count": 68
+    },
+    {
+      "openalex_id": "W4289205119",
+      "title": "Mapping Plant Species in a Former Industrial Site Using Airborne Hyperspectral and Time Series of Sentinel-2 Data Sets",
+      "authors": [
+        "Rollin Gimenez",
+        "Guillaume Lassalle",
+        "Arnaud Elger",
+        "Dominique Dubucq",
+        "Anthony Crédoz",
+        "Sophie Fabre"
+      ],
+      "year": 2022,
+      "doi": "10.3390/rs14153633",
+      "venue": "Remote Sensing",
+      "cited_by_count": 18
+    },
+    {
+      "openalex_id": "W3014927999",
+      "title": "Response of Tomato Rhizosphere Bacteria to Root-Knot Nematodes, Fenamiphos and Sampling Time Shows Differential Effects on Low Level Taxa",
+      "authors": [
+        "Mariantonietta Colagiero",
+        "Laura Cristina Rosso",
+        "Domenico Catalano",
+        "Leonardo Schena",
+        "Aurelio Ciancio"
+      ],
+      "year": 2020,
+      "doi": "10.3389/fmicb.2020.00390",
+      "venue": "Frontiers in Microbiology",
+      "cited_by_count": 8
+    },
+    {
+      "openalex_id": "W4385416051",
+      "title": "Phytomanagement of Zn- and Cd-Contaminated Soil: Helianthus annuus Biomass Production and Metal Remediation Abilities with Plant-Growth-Promoting Microbiota Assistance",
+      "authors": [
+        "Ana M. S. Paulo",
+        "Nídia S. Caetano",
+        "Paula M. L. Castro",
+        "Ana P.G.C. Marques"
+      ],
+      "year": 2023,
+      "doi": "10.3390/soilsystems7030069",
+      "venue": "Soil Systems",
+      "cited_by_count": 16
+    },
+    {
+      "openalex_id": "W4387024308",
+      "title": "Sustainable Grazing by Cattle and Sheep for Semi-Natural Grasslands in Sweden",
+      "authors": [
+        "Anders Glimskär",
+        "Jan Hultgren",
+        "Matthew Hiron",
+        "Rebecka Westin",
+        "E.A.M. Bokkers",
+        "Linda Keeling"
+      ],
+      "year": 2023,
+      "doi": "10.3390/agronomy13102469",
+      "venue": "Agronomy",
+      "cited_by_count": 15
+    },
+    {
+      "openalex_id": "W3187884218",
+      "title": "Designing Ecological Security Patterns Based on the Framework of Ecological Quality and Ecological Sensitivity: A Case Study of Jianghan Plain, China",
+      "authors": [
+        "Xueping Su",
+        "Zhou Yong",
+        "Qing Li"
+      ],
+      "year": 2021,
+      "doi": "10.3390/ijerph18168383",
+      "venue": "International Journal of Environmental Research and Public Health",
+      "cited_by_count": 51
+    },
+    {
+      "openalex_id": "W4392221768",
+      "title": "Influences of sources and weather dynamics on atmospheric deposition of Se species and other trace elements",
+      "authors": [
+        "Esther Breuninger",
+        "Julie Tolu",
+        "Iris Thurnherr",
+        "Franziska Aemisegger",
+        "Aryeh Feinberg",
+        "Sylvain Bouchet",
+        "Jeroen E. Sonke",
+        "Véronique Pont",
+        "Heini Wernli",
+        "Lenny H. E. Winkel"
+      ],
+      "year": 2024,
+      "doi": "10.5194/acp-24-2491-2024",
+      "venue": "Atmospheric chemistry and physics",
+      "cited_by_count": 13
+    },
+    {
+      "openalex_id": "W4387740761",
+      "title": "Leech‐derived iDNA complements traditional surveying methods, enhancing species detections for rapid biodiversity sampling in the tropics",
+      "authors": [
+        "Mai Fahmy",
+        "Dina Andrianoely",
+        "Patricia C. Wright",
+        "Evon Hekkala"
+      ],
+      "year": 2023,
+      "doi": "10.1002/edn3.474",
+      "venue": "Environmental DNA",
+      "cited_by_count": 14
+    },
+    {
+      "openalex_id": "W3027106981",
+      "title": "Biodiversity in intensive and extensive grasslands in Finland: the impacts of spatial and temporal changes of agricultural land use",
+      "authors": [
+        "Juha Tiainen",
+        "Terho Hyvönen",
+        "Marleena Hagner",
+        "Erja Huusela-Veistola",
+        "Pauliina Louhi",
+        "Antti Miettinen",
+        "Tiina M. Nieminen",
+        "Ansa Palojärvi",
+        "Tuomas Seimola",
+        "Pauliina Taimisto",
+        "Perttu Virkajärvi"
+      ],
+      "year": 2020,
+      "doi": "10.23986/afsci.86811",
+      "venue": "Agricultural and Food Science",
+      "cited_by_count": 23
+    },
+    {
+      "openalex_id": "W4413429006",
+      "title": "Agricultural Image Processing: Challenges, Advances, and Future Trends",
+      "authors": [
+        "Xuehua Song",
+        "Letian Yan",
+        "Sihan Liu",
+        "Tong Gao",
+        "Li Han",
+        "Xiaoming Jiang",
+        "Hua Jin",
+        "Yi Zhu"
+      ],
+      "year": 2025,
+      "doi": "10.3390/app15169206",
+      "venue": "Applied Sciences",
+      "cited_by_count": 22
+    },
+    {
+      "openalex_id": "W3005387307",
+      "title": "Northern Conifer Forest Management: Silvicultural, Economic, and Ecological Outcomes From 65 Years of Study",
+      "authors": [
+        "Maren Granstrom"
+      ],
+      "year": 2019,
+      "doi": "",
+      "venue": "DigitalCommons (California Polytechnic State University)",
+      "cited_by_count": 5
+    },
+    {
+      "openalex_id": "W4391151479",
+      "title": "The Duty of Water: Land, Labour, and the Racialisation of Waste in Colonial and Contemporary Punjab",
+      "authors": [
+        "Maira Hayat"
+      ],
+      "year": 2024,
+      "doi": "10.1111/anti.13021",
+      "venue": "Antipode",
+      "cited_by_count": 5
+    },
+    {
+      "openalex_id": "W7165568148",
+      "title": "Fine-grained crop classification from satellite image time series by boosting rare-class representations and enforcing global semantic consistency",
+      "authors": [
+        "Anqi Wang",
+        "Jiacheng Ge",
+        "Zhe Dong",
+        "Junchao Wu",
+        "Wei Guo"
+      ],
+      "year": 2026,
+      "doi": "10.3389/frsen.2026.1822070",
+      "venue": "Frontiers in Remote Sensing",
+      "cited_by_count": 0
+    },
+    {
+      "openalex_id": "W3184984123",
+      "title": "Water, Soil and Air Pollutants’ Interaction on Mangrove Ecosystem and Corresponding Artificial Intelligence Techniques Used in Decision Support Systems - A Review",
+      "authors": [
+        "Wen Yee Wong",
+        "Ayman Al-Ani",
+        "Khairunnisa Hasikin‬",
+        "Anis Salwa Mohd Khairuddin",
+        "Sarah Abdul Razak",
+        "Hanee F. Hizaddin",
+        "Mohd Istajib Mokhtar",
+        "Muhammad Mokhzaini Azizan"
+      ],
+      "year": 2021,
+      "doi": "10.1109/access.2021.3099107",
+      "venue": "IEEE Access",
+      "cited_by_count": 33
+    }
+  ]
+}

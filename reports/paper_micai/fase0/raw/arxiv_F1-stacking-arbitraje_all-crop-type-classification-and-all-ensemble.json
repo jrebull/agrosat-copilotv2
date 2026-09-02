@@ -1,0 +1,21 @@
+{
+  "front": "F1-stacking-arbitraje",
+  "source": "arxiv",
+  "query": "all:\"crop type classification\" AND all:\"ensemble\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2403.16582v2",
+      "title": "In the Search for Optimal Multi-view Learning Models for Crop Classification with Global Remote Sensing Data",
+      "authors": [
+        "Francisco Mena",
+        "Diego Arenas",
+        "Andreas Dengel"
+      ],
+      "published": "2024-03-25T09:49:42Z",
+      "doi": "10.1016/j.jag.2025.104823",
+      "summary": "Studying and analyzing cropland is a difficult task due to its dynamic and heterogeneous growth behavior. Usually, diverse data sources can be collected for its estimation. Although deep learning models have proven to excel in the crop classification task, they face substantial challenges when dealing with multiple inputs, named Multi-View Learning (MVL). The methods used in the MVL scenario can be structured based on the encoder architecture, the fusion strategy, and the optimization technique. The literature has primarily focused on using specific encoder architectures for local regions, lacking a deeper exploration of other components in the MVL methodology. In contrast, we investigate the simultaneous selection of the fusion strategy and encoder architecture, assessing global-scale cropland and crop-type classifications. We use a range of five fusion strategies (Input, Feature, Decision, Ensemble, Hybrid) and five temporal encoders (LSTM, GRU, TempCNN, TAE, L-TAE) as possible configurations in the MVL method. We use the CropHarvest dataset for validation, which provides optical, radar, weather time series, and topographic information as input data. We found that in scenarios with a limited number of labeled samples, a unique configuration is insufficient for all the cases. Instead, a specialized combination should be meticulously sought, including an encoder and fusion strategy. To streamline this search process, we suggest identifying the optimal encoder architecture tailored for a particular fusion strategy, and then determining the most suitable fusion strategy for the classification task. We provide a methodological framework for researchers exploring crop classification through an MVL methodology."
+    }
+  ]
+}

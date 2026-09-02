@@ -1,0 +1,25 @@
+{
+  "front": "F2-cardinalidad-selectiva",
+  "source": "arxiv",
+  "query": "all:\"crop type\" AND all:\"rare classes\"",
+  "executed_at": "2026-09-02T20:23:28+00:00",
+  "status": 200,
+  "records": [
+    {
+      "arxiv_id": "2102.08820v2",
+      "title": "Crop mapping from image time series: deep learning with multi-scale label hierarchies",
+      "authors": [
+        "Mehmet Ozgur Turkoglu",
+        "Stefano D'Aronco",
+        "Gregor Perich",
+        "Frank Liebisch",
+        "Constantin Streit",
+        "Konrad Schindler",
+        "Jan Dirk Wegner"
+      ],
+      "published": "2021-02-17T15:27:49Z",
+      "doi": null,
+      "summary": "The aim of this paper is to map agricultural crops by classifying satellite image time series. Domain experts in agriculture work with crop type labels that are organised in a hierarchical tree structure, where coarse classes (like orchards) are subdivided into finer ones (like apples, pears, vines, etc.). We develop a crop classification method that exploits this expert knowledge and significantly improves the mapping of rare crop types. The three-level label hierarchy is encoded in a convolutional, recurrent neural network (convRNN), such that for each pixel the model predicts three labels at different level of granularity. This end-to-end trainable, hierarchical network architecture allows the model to learn joint feature representations of rare classes (e.g., apples, pears) at a coarser level (e.g., orchard), thereby boosting classification performance at the fine-grained level. Additionally, labelling at different granularity also makes it possible to adjust the output according to the classification scores; as coarser labels with high confidence are sometimes more useful for agricultural practice than fine-grained but very uncertain labels. We validate the proposed method on a new, large dataset that we make public. ZueriCrop covers an area of 50 km x 48 km in the Swiss cantons of Zurich and Thurgau with a total of 116'000 individual fields spanning 48 crop classes, and 28,000 (multi-temporal) image patches from Sentinel-2. We compare our proposed hierarchical convRNN model with several baselines, including methods designed for imbalanced class distributions. The hierarchical approach performs superior by at least 9.9 percentage points in F1-score."
+    }
+  ]
+}
