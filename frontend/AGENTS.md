@@ -2,13 +2,16 @@
 
 > Sub-guía del orquestador. Las reglas NON-NEGOTIABLE viven en [`../CLAUDE.md`](../CLAUDE.md) — aquí no se repiten, solo lo operativo de `frontend/`.
 
-Web app **Nuxt 4 SSR** trilingüe (it/es/en). Mapa MapLibre, chat SSE y switch A/B LLM son el destino del producto, **aún no implementados**.
+Web app **Nuxt 4 SSR** trilingüe (it/es/en). Mapa MapLibre, chat SSE y switch A/B LLM son el destino del producto, **implementados** (EPIC 9, US-057/058).
 
 ## Estado
 
-**SKELETON.** Solo existen archivos reales: `app.vue`, `pages/index.vue`, los 3 locales `i18n/locales/{it,es,en}.json`, `assets/css/main.css` y configs (`nuxt.config.ts`, `tailwind.config.ts`, `tsconfig.json`, `package.json`).
+**IMPLEMENTADO** (EPIC 9). Gates verdes (validacion 2026-06-25): vitest 53/7, typecheck 0 err, i18n parity (it/es/en), eslint limpio, build SSR completo.
 
-`components/`, `composables/`, `stores/`, `plugins/`, `middleware/`, `server/`, `types/` son **directorios `.gitkeep` vacíos** — placeholders, sin código todavía. No asumas que existen `ChatPanel`, `MapView`, `useChat`, `useSSE`, `chatStore`, `clerk.client.ts` ni rutas como `chat/[id].vue`: no están escritos.
+- Componentes reales: `ChatDock.vue` (chat, refactor del legacy `ChatPanel.vue`), `MessageBubble.vue` (markdown via `marked` + `isomorphic-dompurify`), `ToolActivity.vue`, `MapCanvas.vue`, `AppHeader.vue`.
+- Composables reales: `useChat` (SSE + `parseSseFrame`), `useMap`, `useAoi`, `useBasemap`, `useSession`. **NO** existe `useSSE.ts` (el parser vive en `useChat`).
+- Stores Pinia: `chat.ts` (persistido via `pinia-plugin-persistedstate`, pick `llmVariant`+`cropModel`; el transcript vive en Postgres desde US-080, ya NO se persiste), `map.ts`.
+- La validacion E2E en navegador real (Playwright) requiere `backend/.env.local` + sesion sembrada; pendiente de entorno (no de codigo).
 
 ## Comandos
 
@@ -58,13 +61,13 @@ make bootstrap      # poetry install + (cd frontend && pnpm install)
 - `pnpm-lock.yaml` — solo cambia vía `pnpm add`/`pnpm install`.
 - `.nuxt/`, `.output/`, `node_modules/` — generados; nunca editar ni commitear.
 - Nunca agregar una clave i18n a un solo locale: rompe `i18n:check` y bloquea el merge.
-- No referencias `vue-echarts` ni `pinia-plugin-persistedstate`: **no están** en `package.json`; agregarlos requiere `pnpm add` y acuerdo de equipo.
+- `pinia-plugin-persistedstate` SI esta en `package.json` (lo usa `stores/chat.ts`). `vue-echarts` + `echarts` **YA estan** (E12, via `pnpm add`): los usa `components/chat/CropProbabilityChart.vue`, que registra solo los modulos necesarios (BarChart + Grid + Tooltip + Canvas) y monta client-only. Importar otro modulo de echarts = registrarlo ahi, no anadir dependencia.
 
 ## Tests
 
-Andamiaje presente (`vitest`, `@playwright/test` en devDependencies) pero **vacío**: no hay `vitest.config.ts` ni `playwright.config.ts`, ni archivos de test. `pnpm test` / `pnpm test:e2e` corren sin casos.
+**53 tests vitest** en 7 archivos (sse-parser, markdown, chat-store, chat-persist, use-chat-retry, use-map, map-store). `vitest.config.ts` presente. `@playwright/test` instalado para E2E (los flujos en vivo requieren backend + `.env.local` + sesion sembrada). Cobertura objetivo ≥50 % frontend (ver checklist root).
 
-**TODO**: agregar configs y primeros tests al implementar el primer componente real. Cobertura objetivo ≥50 % frontend (ver checklist root).
+`pnpm test` corre los 53 casos; `pnpm test:e2e` queda para la validacion en navegador real cuando la app este levantada.
 
 ## Skills
 

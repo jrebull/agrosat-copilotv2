@@ -17,7 +17,10 @@
 ```bash
 make check            # lint + secrets-scan + i18n-check (OBLIGATORIO antes de PR)
 make lint             # ruff + mypy + pnpm lint
-make test             # pytest backend + ml + vitest frontend
+make test             # pytest backend con cobertura (>=70 %)
+make test-ml          # pytest tests/ml (excluye `slow`)
+make test-frontend    # vitest con cobertura (>=50 %)
+make test-all         # los tres anteriores
 make notebooks-check  # papermill end-to-end (notebooks con outputs preservados)
 make i18n-check       # it/es/en sincronizadas
 

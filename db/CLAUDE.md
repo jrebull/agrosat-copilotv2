@@ -6,16 +6,18 @@ PostgreSQL 15 + PostGIS + pgvector. Migraciones en SQL puro con dbmate (framewor
 
 ## Estado
 
-3 migraciones aplicadas → **4 tablas reales**, nada más:
+10 migraciones aplicadas (`dbmate status`; fuente de verdad: [`docs/STATUS.md`](../docs/STATUS.md)) → **6 tablas reales**:
 
-- `chat_sessions` (UUID, `user_id`, `llm_variant`, timestamps) — clave multi-tenant.
+- `chat_sessions` (UUID, `user_id`, `llm_model` con CHECK para `gemini | qwen-api | qwen-onprem | gemma | qwen-vl`, timestamps) — clave multi-tenant.
+- `chat_messages` (FK `session_id`, rol, contenido, timestamps) — US-080; función `list_chat_sessions(text)`.
 - `aois` (BIGSERIAL, FK `session_id`, `geom GEOMETRY(POLYGON,4326)`, `label`, `area_ha`).
-- `parcels` (FK `session_id`/`aoi_id`, `geom`, `crop_class`, `confidence`, `area_ha`, `year`) — US-015.
+- `parcels` (FK `session_id`/`aoi_id`, `geom`, `crop_class`, `confidence`, `area_ha`, `year`, `canonical_parcel_id`) — US-015 / US-081.
 - `features_parcels` (FK `parcel_id`, `alphaearth_embedding VECTOR(64)` nullable, `ndvi_stats`/`phenology` JSONB, columnas fenológicas escalares) — US-015.
+- `rag_documents` (embeddings pgvector para Spatial-RAG) — US-047.
 
 Extensiones activas: `postgis`, `postgis_topology`, `vector`, `pg_stat_statements`. **`pgstac` NO está instalado** (CREATE EXTENSION comentado, requiere imagen Docker con la extensión).
 
-No existen: STAC, alphaearth_tiles, sentinel2_scenes, rag_documents ni agent_sessions. Multi-tenant es **solo FK + índice** (`*_session_id_idx`); **cero RLS** (ningún `ENABLE ROW LEVEL SECURITY`).
+**RLS aplicada** (US-051, migración `20260620000418_rls_multi_tenant.sql`): `ENABLE` + `FORCE ROW LEVEL SECURITY` y política `tenant_isolation` por `session_id` en `chat_sessions`, `aois`, `parcels`, `features_parcels` y `chat_messages`; rol de aplicación `agrosat_app` (NOLOGIN, solo privilegios). No existen: STAC (`pgstac`), `alphaearth_tiles`, `sentinel2_scenes` ni `agent_sessions`.
 
 ## Comandos
 

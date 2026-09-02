@@ -80,8 +80,13 @@ test-integration:
 test-e2e:  ## Playwright E2E
 	cd frontend && pnpm test:e2e
 
-test-frontend:
-	cd frontend && pnpm test
+test-frontend:  ## vitest con cobertura (umbral 50 % lineas en vitest.config.ts)
+	cd frontend && pnpm test:coverage
+
+test-ml:  ## pytest tests/ml (excluye `slow`; usa -m "" para todo)
+	poetry run pytest tests/ml -q -m "not slow" -p no:cacheprovider
+
+test-all: test test-ml test-frontend  ## backend + ml + frontend (la promesa de CLAUDE.md)
 
 # === DB ===
 db-migrate:  ## dbmate up

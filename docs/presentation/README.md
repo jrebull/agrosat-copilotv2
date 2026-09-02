@@ -1,6 +1,6 @@
 # Presentación AgroSatCopilot (Reveal.js, ES/EN)
 
-Presentación de 65 láminas para la defensa final, bilingüe (español/inglés) con
+Presentación de 78 láminas para la defensa final, bilingüe (español/inglés) con
 **switch de idioma** en vivo, lista para **GitHub Pages**.
 
 ## Arquitectura (contenido separado del HTML)

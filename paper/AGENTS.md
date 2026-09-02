@@ -6,10 +6,10 @@ Scope sub-agente `paper/`. Hereda el orquestador root ([../AGENTS.md](../AGENTS.
 
 MANUSCRITO ESTRUCTURADO (US-071). Paper Track es **opcional** y arranca **post-presentacion** (semanas 10-11). No compromete ningun Avance del curso.
 
-- Manuscrito modular: [`main.tex`](main.tex) (preambulo + `\input{}`), `sections/NN_*.tex` (9 secciones nucleares, prosa en ingles) mas las secciones profundas `sections/method_farslip.tex` (US-072) y `sections/experiments_multiregion.tex` (US-073), y [`bib/refs.bib`](bib/refs.bib) (BibTeX con ids arXiv reales). Compila a 15 paginas con `make paper-pdf` (BibTeX, requiere LaTeX) o `make paper-pdf-docker` (texlive en contenedor, sin LaTeX local).
+- Manuscrito modular: [`main.tex`](main.tex) (preambulo + `\input{}`), `sections/NN_*.tex` (9 secciones nucleares, prosa en ingles) mas las secciones profundas `sections/method_farslip.tex` (US-072), `sections/experiments_multiregion.tex` (US-073) y `sections/experiments_de4.tex` (US-082), y [`bib/refs.bib`](bib/refs.bib) (BibTeX con ids arXiv reales). Compila a 24 paginas con `make paper-pdf` (BibTeX, requiere LaTeX) o `make paper-pdf-docker` (texlive en contenedor, sin LaTeX local).
 - `main.tex` es el espejo en ingles de [docs/final_doc/Avance7_equipo17.tex](../docs/final_doc/Avance7_equipo17.tex) (curso, ES): **derivado, no duplicado**. Corrige los errores factuales del Avance7 — Gemini 2.5-pro (no Flash), FarSLIP `arXiv:2511.14901` (no `2502.xxxxx`), AlphaEarth `SATELLITE_EMBEDDING/V1/ANNUAL` v1.1 (no "v2.1"), sin Swin-UNETR entrenado (AnySat lo sustituye), sin Gemma 4 LoRA, patron Be My Eyes (reasoner frozen).
 - Cada cifra del Results lleva comentario `% src: <artefacto real>`; ninguna a mano sin fuente. Validacion de citas sin LaTeX: `make paper-cite-check` (`scripts/paper_cite_check.py`).
-- Preambulo: `PRIMEarxiv.sty` (copia local) hasta migrar al template MDPI oficial (blocker B-MDPI-TEMPLATE). Usa el paquete `import` para `\subimport` de la seccion US-072 (cuyas rutas `../tables/...` son relativas a `sections/`).
+- Preambulo: `PRIMEarxiv.sty` (copia local). El destino del fork es MICAI 2027 (Springer LNCS/LNAI, `llncs.cls`); la migracion de plantilla es una fase de la hoja de ruta del README raiz, no un blocker MDPI. Usa el paquete `import` para `\subimport` de la seccion US-072 (cuyas rutas `../tables/...` son relativas a `sections/`).
 - Bloqueos (Overleaf, template MDPI, Grammarly, revision Camacho, arXiv, venue, cifras LLM US-069, toolchain LaTeX): [docs/blockers/epic11-notas.md](../docs/blockers/epic11-notas.md).
 - Tabla escrita a mano canonica: [tables/us-023-preview/baseline_v2_comparison.tex](tables/us-023-preview/baseline_v2_comparison.tex). Tablas/figuras reproducibles (US-070): `tables/us-070/`, `figures/us-070/`. Todo lo demas en `figures/` es **generado**, mas `avance1_eda_report.html`.
 
@@ -33,7 +33,7 @@ make paper-figures                     # US-070: regenera + ejecuta (papermill) 
 - `main.tex` une las secciones en orden de paper: Abstract, Introduction, Related Work, Method, Experiments, Results, (US-072 FarSLIP), (US-073 multi-region), Discussion, Conclusion, Appendix + References (`\bibliography{bib/refs}`).
 - `sections/00_abstract.tex` .. `08_appendix.tex`: las 9 secciones nucleares en ingles. Related Work es **nuevo** (el Avance7 no lo tiene).
 - `sections/method_farslip.tex` (US-072) y `sections/experiments_multiregion.tex` (US-073) son secciones profundas auto-contenidas, contribuidas por sus US; `main.tex` las integra (la primera via `\subimport`).
-- `bib/refs.bib`: 20 entradas con atribuciones reales (AlphaEarth, FarSLIP, Be My Eyes `arXiv:2511.19417`, Harvesting AlphaEarth `arXiv:2601.00857`, Phenology Wen 2025, Sen4AgriNet CC-BY-SA-4.0, EuroCropsML CC-BY-SA-4.0, U-TAE/TSViT/SegFormer/AnySat, Gemma/Qwen/Gemini). `paper/bib/farslip_refs.bib` es el subset de US-072 (no lo usa `main.tex`; las 3 citas ya viven en `refs.bib`).
+- `bib/refs.bib`: 22 entradas con atribuciones reales (AlphaEarth, FarSLIP, Be My Eyes `arXiv:2511.19417`, Harvesting AlphaEarth `arXiv:2601.00857`, Phenology Wen 2025, Sen4AgriNet CC-BY-SA-4.0, EuroCropsML CC-BY-SA-4.0, U-TAE/TSViT/SegFormer/AnySat, Gemma/Qwen/Gemini). `paper/bib/farslip_refs.bib` es el subset de US-072 (no lo usa `main.tex`; las 3 citas ya viven en `refs.bib`).
 - Claims defendibles unicamente: NO "VLM supera a Gemini", NO "F1>=0.80 en Mexico", NO "zero-shot fuera de Francia", NO "TSViT 0.75+ mIoU". La tabla de benchmark LLM queda como placeholder honesto pendiente de US-069 (H100).
 
 ## US-070 - Figuras y tablas reproducibles
@@ -58,7 +58,7 @@ make paper-figures                     # US-070: regenera + ejecuta (papermill) 
 - Atribuciones obligatorias en captions: AlphaEarth = `SATELLITE_EMBEDDING/V1/ANNUAL`
   v1.1 CC-BY-4.0 (NO "v2.1"); SegFormer = B0 RGB 3-banda; AnySat sustituye a
   Swin-UNETR (nunca entrenado); Gemini 2.5-pro = reasoner frozen (Be My Eyes);
-  Qwen3.5-35B-A3B = variante on-prem. Sin sobre-claims.
+  Qwen on-prem = `Qwen/Qwen3-30B-A3B-Instruct-2507-GPTQ-Int4` (el id "Qwen3.5-35B-A3B" que aun aparece en varias secciones no existe; ver CLAUDE.md raiz). Sin sobre-claims.
 
 ## Stack local
 

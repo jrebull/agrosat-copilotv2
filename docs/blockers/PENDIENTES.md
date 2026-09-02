@@ -169,13 +169,8 @@ placeholders honestos en las celdas que dependen de la eval LLM.
   los `.dvc`. Aplica a, entre otros: `eurocropsml_alphaearth_fewshot_results.parquet`,
   `worldcereal_*.parquet`, `multiregion_*.parquet`, `pastis_only_*.parquet`.
 
-### 3.2 `method_farslip.tex` esta en espanol
-- **Que es**: `paper/sections/method_farslip.tex` (US-072) tiene la prosa en espanol
-  ("Esta seccion documenta el camino metodologico...").
-- **Por que esta pendiente**: se redacto en espanol; el resto del manuscrito Paper Track
-  es ingles.
-- **Como completar**: traducir a EN para el submission (el cuerpo del paper es ingles).
-  No bloquea la compilacion local.
+### 3.2 `method_farslip.tex` esta en espanol — RESUELTO
+- Traducido a ingles en el upstream (commit `1134c3b`, 2026-06-30). Sin accion pendiente.
 
 ### 3.3 `multiregion_fine_leaf_provenance.parquet` fuera del modulo
 - **Que es**: el parquet de procedencia de hojas finas del modelo multi-region vive en
@@ -192,22 +187,15 @@ placeholders honestos en las celdas que dependen de la eval LLM.
 - **Como completar**: renombrar a un nombre descriptivo y actualizar la referencia en
   `docs/transfer/modelo-multiregion.md`. Cosmetico.
 
-### 3.5 Otras inexactitudes de documentacion ya menores
-- Test obsoleto US-043 (`test_five_member_set_is_three_plus_two_farslip`) espera
-  `tsvit-pheno` cuando el orquestador usa `tsvit-pheno-fullm` — actualizar 1 linea
-  (`epic6-notas.md` B-E6-1).
-- 23 tests de `tests/ml/eval/` PRE-EXISTENTES fallan (regex i18n en espanol contra
-  mensajes en ingles + fixtures JSONL ausentes) — alinear `match=` al mensaje ingles
-  (`epic7-notas.md` B-E7-2).
-- `frontend/CLAUDE.md` dice "SKELETON" desactualizado; comentario fantasma `<ClientOnly>`
-  en `chat.ts:358` (`epic9-notas.md` B-E9-2, B-E9-3).
-- Test de integracion `/chat` flaky por registro Prometheus global de US-059
-  (`Duplicated timeseries`) — usar `CollectorRegistry` dedicado; deuda de US-059
-  (`epic10-notas.md` B9, B-E10-V2).
-- `db/CLAUDE.md` dice "cero RLS" cuando la migracion RLS YA esta aplicada — actualizar
-  en US futura (`epic10-notas.md` B16).
-- `docs/STATUS.md` referenciado por varios AC NO existe; los docs usan las migraciones
-  aplicadas como fuente de verdad (`epic10-notas.md` B15).
+### 3.5 Otras inexactitudes de documentacion ya menores — RESUELTO (fork, 2026-09-02)
+- Test obsoleto US-043: ya alineado con `tsvit-pheno-fullm` (suite `tests/ml/ensemble` verde).
+- Tests de `tests/ml` con regex en espanol contra mensajes en ingles, fixtures y dobles
+  desactualizados: alineados en el commit `45c3f9a` del fork (15 tests).
+- `frontend/CLAUDE.md` ya no dice "SKELETON"; `frontend/AGENTS.md` sincronizado como espejo.
+- Registro Prometheus: `backend/app/middleware/metrics.py` acepta `CollectorRegistry` dedicado;
+  la suite de backend pasa completa (137 tests).
+- `db/CLAUDE.md`: describe la RLS aplicada y las 6 tablas reales.
+- `docs/STATUS.md`: creado con migraciones aplicadas, artefactos y gates como fuente de verdad.
 
 ---
 

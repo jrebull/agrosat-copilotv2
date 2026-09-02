@@ -54,5 +54,12 @@ export default defineConfig({
     exclude: ["**/node_modules/**", "tests/e2e/**"],
     setupFiles: ["tests/setup/nuxt-globals.ts"],
     globals: true,
+    // Gate de cobertura de CLAUDE.md (>= 50 % frontend): solo aplica con
+    // `pnpm test:coverage` (make test-frontend); `pnpm test` sigue siendo rapido.
+    coverage: {
+      provider: "v8",
+      reporter: ["text-summary"],
+      thresholds: { lines: 50, statements: 50, functions: 50 },
+    },
   },
 });

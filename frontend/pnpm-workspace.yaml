@@ -1,0 +1,5 @@
+# pnpm 10 lee esta lista aqui: el campo "pnpm" de package.json ya no se lee.
+onlyBuiltDependencies:
+- "@parcel/watcher"
+- esbuild
+- vue-demi
