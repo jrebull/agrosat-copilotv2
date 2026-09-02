@@ -330,6 +330,30 @@ cd paper && for s in $(git ls-files 'figures/*/*.svg' | grep -v '_es\.svg$'); do
 make paper-pdf
 ```
 
+Acceso a GCP (validado el 2-sep-2026 con la cuenta que autorizó el equipo):
+
+```bash
+# Configuración de gcloud aparte, para no pisar otros proyectos de la misma cuenta
+gcloud config configurations create agrosat --activate
+gcloud auth login                              # cuenta Gmail autorizada en el proyecto
+gcloud config set project agrosat-copilot
+gcloud auth application-default login          # ADC para Python, Earth Engine y DVC (fija el quota project)
+# Verificación (la que pide el equipo)
+gcloud auth application-default print-access-token > /dev/null && gcloud config get-value project   # agrosat-copilot
+poetry run python -c "import ee; ee.Initialize(project='agrosat-copilot'); print(ee.Number(42).getInfo())"  # 42
+dvc status -c                                  # compara con gs://agrosat-dvc-remote
+dvc pull -R data/features ml/eval/oof reports  # artefactos ligeros (< 3 GB) que alimentan tablas y figuras; -R para directorios
+```
+
+- El `.env.local` del equipo apunta a dos JSON de service account bajo `./.env/` que no se
+  distribuyen; en local se comentan esas dos líneas y todo usa ADC. Los secretos viven en
+  Secret Manager del proyecto (8 secretos), pero el rol otorgado no incluye leerlos.
+- En Vertex AI responde `gemini-2.5-pro` (y `gemini-2.5-flash`); `gemini-3.1-pro` devuelve 404.
+  Ajustar `GEMINI_MODEL` en `.env.local` si el archivo compartido trae otro valor.
+- El remoto DVC tiene todo salvo `data/features/alphaearth_italia_2018.parquet` (su `.dvc`
+  existe pero nunca se hizo `dvc push`). Las imágenes crudas de PASTIS-R no están en DVC, solo
+  sus derivados; el dataset completo (53.7 GB) está en EOTDL y solo hace falta para reentrenar.
+
 Limitaciones conocidas en Mac:
 
 - `tree-sitter-python==0.21.0` (grupo `dev`, dependencia de `codebleu`) no publica rueda para
