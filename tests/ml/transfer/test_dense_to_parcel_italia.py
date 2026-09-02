@@ -67,7 +67,8 @@ def _patched_bridge(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(ae, "load_patch_bboxes", lambda _root: bboxes)
     # ALWAYS return the FULL-universe parcels regardless of the bboxes passed,
     # asserting the bridge never re-enumerates seqs over a subset.
-    monkeypatch.setattr(ae, "parcels_in_patches", lambda _b, _n: _full_parcels())
+    # ``**_kw`` absorbs keyword arguments the bridge added later (``region_prefix``).
+    monkeypatch.setattr(ae, "parcels_in_patches", lambda _b, _n, **_kw: _full_parcels())
 
     def _fake_raster(parcels: pd.DataFrame, _bbox, *, patch_px: int = 4):
         """Paint each parcel's surrogate onto a row; deterministic, no rasterio."""

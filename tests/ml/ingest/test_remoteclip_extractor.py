@@ -200,7 +200,7 @@ def test_raises_when_imagery_path_missing(
     missing = tmp_path / "does_not_exist.parquet"
     _patch_clip(monkeypatch)
 
-    with pytest.raises(FileNotFoundError, match="imagery_path no existe"):
+    with pytest.raises(FileNotFoundError, match="imagery_path does not exist"):
         extract_remoteclip_embeddings(
             pastis_eval_subset_path=subset_path,
             imagery_path=missing,

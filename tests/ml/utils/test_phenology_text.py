@@ -92,7 +92,7 @@ def test_materialize_phenology_text_raises_without_credentials(
     """Sin env vars y sin cliente inyectado -> RuntimeError."""
     _clear_credentials(monkeypatch)
     set_llm_client(None)
-    with pytest.raises(RuntimeError, match="Gemini no esta configurado"):
+    with pytest.raises(RuntimeError, match="Gemini is not configured"):
         materialize_phenology_text(
             parcels_parquet,
             output_path=tmp_path / "out.parquet",

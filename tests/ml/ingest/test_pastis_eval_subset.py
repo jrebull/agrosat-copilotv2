@@ -175,7 +175,7 @@ def test_raises_if_pastis_missing(tmp_path: Path) -> None:
         build_pastis_eval_subset(
             output_path=out, pastis_root=missing_root, overwrite=True
         )
-    assert "PASTIS-R no encontrado" in str(excinfo.value)
+    assert "PASTIS-R not found" in str(excinfo.value)
     assert "dvc pull" in str(excinfo.value) or "zenodo" in str(excinfo.value).lower()
 
 

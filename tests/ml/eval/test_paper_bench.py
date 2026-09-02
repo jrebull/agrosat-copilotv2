@@ -398,7 +398,9 @@ def test_export_latex_table_writes_booktabs(tmp_path: Path) -> None:
     assert "\\toprule" in text and "\\bottomrule" in text
     # Attribution + honesty checks (correcciones factuales obligatorias).
     assert "SATELLITE\\_EMBEDDING/V1/ANNUAL" in text
-    assert "Gemini 2.5-pro" in text
+    # The benchmark runs gemini-2.5-flash (see ``PAPER_VARIANTS``); the caption
+    # states it and cites 2.5-pro as the production reasoner.
+    assert "Gemini 2.5-flash" in text and "2.5-pro" in text
     assert "eval-only" in text
     assert "Be My Eyes" in text
     # Pending AgroMind cell renders as italic placeholder, never a number.
@@ -415,6 +417,6 @@ def test_paper_variants_are_the_two_reasoners() -> None:
     names = {v.name for v in PAPER_VARIANTS}
     assert names == {"gemini", "qwen"}
     gemini = next(v for v in PAPER_VARIANTS if v.name == "gemini")
-    assert gemini.model == "gemini-2.5-pro"
+    assert gemini.model == "gemini-2.5-flash"  # benchmark variant, see PAPER_VARIANTS
     qwen = next(v for v in PAPER_VARIANTS if v.name == "qwen")
     assert qwen.multimodal is False

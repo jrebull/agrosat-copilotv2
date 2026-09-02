@@ -236,7 +236,7 @@ def test_html_to_pdf_handles_missing_gtk(tmp_path: Path, figures_dir: Path) -> N
 def test_html_to_pdf_runtime_when_weasyprint_missing(tmp_path: Path) -> None:
     """_html_to_pdf debe lanzar RuntimeError si weasyprint no es importable."""
     with patch.dict("sys.modules", {"weasyprint": None}):
-        with pytest.raises(RuntimeError, match="WeasyPrint no esta instalado"):
+        with pytest.raises(RuntimeError, match="WeasyPrint is not installed"):
             export_pdf._html_to_pdf(
                 html_str="<html></html>",
                 output=tmp_path / "x.pdf",

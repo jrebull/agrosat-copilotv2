@@ -27,7 +27,7 @@ def test_build_unet_forward_shape() -> None:
 
 def test_build_segmentation_model_unknown_raises() -> None:
     """Un modelo no registrado levanta ValueError."""
-    with pytest.raises(ValueError, match="desconocido"):
+    with pytest.raises(ValueError, match="Unknown segmentation model"):
         build_segmentation_model("does-not-exist", 20)
 
 

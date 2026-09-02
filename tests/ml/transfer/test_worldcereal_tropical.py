@@ -76,11 +76,14 @@ def test_tropical_classes_canonical() -> None:
     assert wc.TROPICAL_CLASSES[wc._MAIZE_LABEL] == "maize"
 
 
-def test_sample_points_degraded_without_ee(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_sample_points_degraded_without_ee(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     """Without ``ee`` the sampler returns an empty frame with valid schema."""
     monkeypatch.setattr(wc, "ee", None)
+    # The cache dir must be creatable: a root-level path is read-only on macOS.
     out = wc.sample_worldcereal_points(
-        wc.DEFAULT_REGION, cache_dir=Path("/nonexistent_cache_xyz")
+        wc.DEFAULT_REGION, cache_dir=tmp_path / "nonexistent_cache_xyz"
     )
     assert out.is_empty()
     assert set(out.columns) == {"px_id", "lon", "lat", "label", "class_name"}

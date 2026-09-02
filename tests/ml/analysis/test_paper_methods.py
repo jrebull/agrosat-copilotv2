@@ -262,7 +262,7 @@ def test_confusion_interpretation_labels() -> None:
 
 def test_confusion_symmetry_length_mismatch() -> None:
     """y_true/y_pred de distinta longitud lanzan ValueError."""
-    with pytest.raises(ValueError, match="igual longitud"):
+    with pytest.raises(ValueError, match="must have equal length"):
         confusion_symmetry_analysis(np.array([1, 2]), np.array([1]))
 
 

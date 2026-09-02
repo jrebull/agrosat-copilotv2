@@ -108,8 +108,13 @@ def _write_utae_pastis_ckpt(path: Path, *, seed: int = 6) -> torch.Tensor:
 # _equispaced_indices.
 # --------------------------------------------------------------------------- #
 def test_equispaced_indices_subsamples_and_keeps_all_when_short() -> None:
-    # Asking for more than available keeps every frame in order.
-    np.testing.assert_array_equal(_equispaced_indices(3, 10), np.arange(3))
+    # Asking for more than available keeps every real frame in order and PADS
+    # by repeating the last one, so the length is always exactly ``n_select``
+    # (fixed temporal window, US-082; see the function docstring).
+    short = _equispaced_indices(3, 10)
+    assert len(short) == 10
+    np.testing.assert_array_equal(short[:3], np.arange(3))
+    assert set(short[3:].tolist()) == {2}
     # Subsampling spans the full range, ascending and unique.
     idx = _equispaced_indices(20, 5)
     assert len(idx) == 5
@@ -246,14 +251,25 @@ class _TinyDenseModel(torch.nn.Module):
     Has the warmed head names so ``_is_head_param`` partitions params sensibly.
     """
 
+    #: Must match the ``semantic_dim`` of the phenology branch (384): the training
+    #: loop asks TSViT-like models for ``return_visual_proj=True`` and aligns the
+    #: per-pixel projection with the projected class prototypes.
+    SEMANTIC_DIM = 384
+
     def __init__(self, num_classes: int) -> None:
         super().__init__()
         self.temporal_cls_tokens = torch.nn.Parameter(torch.zeros(1, num_classes, 4))
         self.to_seg = torch.nn.Conv2d(10, num_classes, 1)
+        self.to_proj = torch.nn.Conv2d(10, self.SEMANTIC_DIM, 1)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:  # (B, T, 10, H, W)
+    def forward(
+        self, x: torch.Tensor, *, return_visual_proj: bool = False
+    ) -> torch.Tensor | tuple[torch.Tensor, torch.Tensor]:  # (B, T, 10, H, W)
         mean = x.mean(dim=1)  # (B, 10, H, W)
-        return self.to_seg(mean)  # (B, K, H, W)
+        logits = self.to_seg(mean)  # (B, K, H, W)
+        if return_visual_proj:
+            return logits, self.to_proj(mean)  # (B, semantic_dim, H, W)
+        return logits
 
 
 def test_run_italia_finetune_end_to_end_cpu(

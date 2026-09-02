@@ -26,6 +26,7 @@ from ml.ingest import s2_anchor_sampler
 from ml.ingest.s2_anchor_sampler import (
     DEFAULT_ANCHORS,
     DEFAULT_BANDS,
+    _band_col_name,
     sample_s2_anchors_for_parcels,
 )
 
@@ -164,12 +165,12 @@ def test_schema_and_15_spectral_cols(
     expected_cols = {"parcel_id", "year"}
     for anchor in DEFAULT_ANCHORS:
         for band in DEFAULT_BANDS:
-            expected_cols.add(f"{anchor}_{band.lower()}")
+            expected_cols.add(_band_col_name(anchor, band))
     assert set(df.columns) == expected_cols
     # Cols espectrales son Float64.
     for anchor in DEFAULT_ANCHORS:
         for band in DEFAULT_BANDS:
-            assert df.schema[f"{anchor}_{band.lower()}"] == pl.Float64
+            assert df.schema[_band_col_name(anchor, band)] == pl.Float64
 
 
 def test_determinism_and_stable_order(

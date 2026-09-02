@@ -18,6 +18,7 @@ Spanish; no emojis; full type hints.
 
 from __future__ import annotations
 
+import importlib.util
 import math
 from typing import Any, ClassVar
 
@@ -470,6 +471,13 @@ class TestBuildGeminiJudge:
 # --------------------------------------------------------------------------- #
 
 
+_HAS_TREE_SITTER_PYTHON = importlib.util.find_spec("tree_sitter_python") is not None
+_NO_TS_PY = pytest.mark.skipif(
+    not _HAS_TREE_SITTER_PYTHON,
+    reason="tree-sitter-python has no wheel for this platform; codebleu falls back to 0.0",
+)
+
+
 class TestCodeBleuScore:
     """REAL canonical CodeBLEU (n-gram + weighted n-gram + AST + data-flow).
 
@@ -479,11 +487,13 @@ class TestCodeBleuScore:
     crashing the eval.
     """
 
+    @_NO_TS_PY
     def test_identical_code_scores_near_one(self) -> None:
         code = "def ndvi(red, nir):\n    return (nir - red) / (nir + red)\n"
         score = agent_metrics.codebleu_score(code, code)
         assert score == pytest.approx(1.0, abs=1e-6)
 
+    @_NO_TS_PY
     def test_unrelated_code_scores_lower_than_identical(self) -> None:
         # Real CodeBLEU: two unrelated snippets share almost no n-grams, AST
         # structure or data-flow, so they score far below an identical match.

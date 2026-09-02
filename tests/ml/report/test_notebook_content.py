@@ -213,7 +213,7 @@ def test_extract_png_outputs_raises_on_invalid_json(tmp_path: Path) -> None:
     """Notebook con JSON invalido debe lanzar ValueError."""
     bad = tmp_path / "bad.ipynb"
     bad.write_text("{not json", encoding="utf-8")
-    with pytest.raises(ValueError, match="JSON invalido"):
+    with pytest.raises(ValueError, match="Invalid notebook JSON"):
         extract_png_outputs(bad, tmp_path / "out")
 
 
