@@ -48,9 +48,7 @@ logger = structlog.get_logger(__name__)
 #: Generalized in US-023-preview v2: the previous narrow pattern (exact len
 #: 5 or 6) discarded ``emb_00`` (FarSLIP-style), ``ae_063`` (3 digits) and the
 #: two AlphaEarth years (``ae18_``/``ae19_``) of the winning scenario of 04.
-_AE_COL_PATTERN: Final[re.Pattern[str]] = re.compile(
-    r"^(?:ae|emb|alphaearth|dim)\d{0,4}_\d{2,3}$"
-)
+_AE_COL_PATTERN: Final[re.Pattern[str]] = re.compile(r"^(?:ae|emb|alphaearth|dim)\d{0,4}_\d{2,3}$")
 
 __all__ = [
     "FeatureAblationResult",
@@ -183,14 +181,11 @@ def build_default_feature_sets(
     # canonical pattern `farslip_NNN` (3 digits) and discards `farslip_emb_NNN` to
     # avoid collisions when both prefixes coexist transiently.
     farslip_cols = tuple(
-        c for c in cols
-        if c.startswith("farslip_") and not c.startswith("farslip_emb_")
+        c for c in cols if c.startswith("farslip_") and not c.startswith("farslip_emb_")
     )
     pheno_text_cols = tuple(c for c in cols if c.startswith("pheno_text_"))
     geom_cols = tuple(c for c in cols if c.startswith("geom_"))
-    spectral_signature_cols = tuple(
-        c for c in cols if c.startswith("spectral_signature_")
-    )
+    spectral_signature_cols = tuple(c for c in cols if c.startswith("spectral_signature_"))
 
     sets: dict[str, tuple[str, ...]] = {
         "full": full,

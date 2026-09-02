@@ -166,9 +166,7 @@ def set_llm_client(client: LlmClient | None) -> None:
     _LLM_CLIENT = client
 
 
-def _default_litellm_client(
-    prompt: str, *, model: str, temperature: float
-) -> str:
+def _default_litellm_client(prompt: str, *, model: str, temperature: float) -> str:
     """Gemini 3.5 Flash client via LiteLLM (provider-agnostic fallback).
 
     Lazy import: only needed at runtime and only if there is no client
@@ -238,9 +236,7 @@ def _has_credentials() -> bool:
     return False
 
 
-def _default_google_genai_client(
-    prompt: str, *, model: str, temperature: float
-) -> str:
+def _default_google_genai_client(prompt: str, *, model: str, temperature: float) -> str:
     """Native Gemini 3.5 Flash client via the google-genai SDK.
 
     More efficient than LiteLLM for this case: it supports ``thinking_level``
@@ -281,9 +277,7 @@ def _default_google_genai_client(
     # single stuck socket hangs the worker thread indefinitely (and, with a
     # completion-gated flush, the whole job) -- observed on the 69k run when the
     # API got flaky. On timeout the call raises and the retry loop below kicks in.
-    client = genai.Client(
-        http_options=types.HttpOptions(timeout=_HTTP_TIMEOUT_MS)
-    )
+    client = genai.Client(http_options=types.HttpOptions(timeout=_HTTP_TIMEOUT_MS))
     # `thinking_level` is a Gemini 3.x feature: 3.x accepts "minimal" to cut
     # latency on short descriptions, but 2.x models (e.g. gemini-2.5-flash-lite)
     # reject it with `400 Thinking level is not supported for this model`. Apply
@@ -421,15 +415,11 @@ def generate_phenology_description(
             if ``temperature`` is not 0.0 (R7: enforced to mitigate cost).
     """
     if ndvi_curve.ndim != 1:
-        raise ValueError(
-            f"`ndvi_curve` must be 1D; received shape {ndvi_curve.shape}."
-        )
+        raise ValueError(f"`ndvi_curve` must be 1D; received shape {ndvi_curve.shape}.")
     if ndvi_curve.size == 0:
         raise ValueError("`ndvi_curve` cannot be empty.")
     if temperature != 0.0:
-        raise ValueError(
-            "`temperature` must be 0.0 (R7 — determinism + Gemini cost)."
-        )
+        raise ValueError("`temperature` must be 0.0 (R7 — determinism + Gemini cost).")
 
     if doy is None:
         doy = np.linspace(1.0, 365.0, ndvi_curve.size, dtype=np.float64)
@@ -474,9 +464,7 @@ def generate_phenology_description(
     }
     try:
         cache_file.parent.mkdir(parents=True, exist_ok=True)
-        cache_file.write_text(
-            json.dumps(payload, ensure_ascii=False), encoding="utf-8"
-        )
+        cache_file.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
     except OSError as exc:  # pragma: no cover
         logger.warning(
             "phenology_description_cache_write_failed",
@@ -518,8 +506,7 @@ def encode_descriptions(
         )
     if encoder != "sentence-transformers":
         raise ValueError(
-            f"`encoder` must be 'sentence-transformers' or 'farslip-clip'; "
-            f"received {encoder!r}."
+            f"`encoder` must be 'sentence-transformers' or 'farslip-clip'; received {encoder!r}."
         )
     if not descriptions:
         return np.zeros((0, DEFAULT_TEXT_EMBED_DIM), dtype=np.float32)
@@ -626,11 +613,7 @@ def build_phenology_text_block(
         logger.info("pheno_text_block_subsampled", n=df.height)
 
     parcel_ids = df.get_column(parcel_id_col).to_list()
-    years = (
-        df.get_column(year_col).to_list()
-        if year_col in df.columns
-        else [None] * df.height
-    )
+    years = df.get_column(year_col).to_list() if year_col in df.columns else [None] * df.height
     crop_hints: list[str | None] = (
         df.get_column(crop_hint_col).to_list()
         if crop_hint_col is not None and crop_hint_col in df.columns
@@ -761,9 +744,7 @@ def _hash_curve(parcel_id: object, curve: np.ndarray, model: str) -> str:
     return h.hexdigest()[:16]
 
 
-def _extract_ndvi_curves(
-    df: pl.DataFrame, *, prefix: str
-) -> list[np.ndarray]:
+def _extract_ndvi_curves(df: pl.DataFrame, *, prefix: str) -> list[np.ndarray]:
     """Extract one curve per row from ``{prefix}{i:02d}`` columns.
 
     If those columns are not found, reconstructs from FFT (same helper as

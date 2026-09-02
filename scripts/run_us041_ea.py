@@ -106,9 +106,7 @@ def _build_train_prototype_dataset(
     )
 
 
-def _baseline_tsvit_metrics(
-    head: DualHeadFusionHead, patch_ids: list[str]
-) -> dict[str, float]:
+def _baseline_tsvit_metrics(head: DualHeadFusionHead, patch_ids: list[str]) -> dict[str, float]:
     """Score TSViT-pheno alone on fold-5 (the honest baseline for the ablation).
 
     Reuses the head's loaded OOF index + ground-truth loader: predicts the dense
@@ -137,9 +135,9 @@ def _baseline_tsvit_metrics(
 
 @app.command()
 def run(
-    farslip_checkpoint: Annotated[
-        Path, typer.Option("--farslip-checkpoint")
-    ] = Path(DEFAULT_FARSLIP_CHECKPOINT),
+    farslip_checkpoint: Annotated[Path, typer.Option("--farslip-checkpoint")] = Path(
+        DEFAULT_FARSLIP_CHECKPOINT
+    ),
     oof_dir: Annotated[Path, typer.Option("--oof-dir")] = Path("ml/eval/oof"),
     pastis_root: Annotated[Path, typer.Option("--pastis-root")] = Path("data/PASTIS-R"),
     out_dir: Annotated[Path, typer.Option("--out-dir")] = Path("reports/ensemble"),
@@ -263,9 +261,7 @@ def _persist_fused_parcel_oof(
     for pid in patch_ids:
         fused = head.predict_proba([pid])  # (18,128,128)
         parcel_ids_map = load_pastis_parcel_ids(pid, root)
-        frames.append(
-            head.reduce_pixel_to_parcel(fused, parcel_ids_map, patch_id=pid)
-        )
+        frames.append(head.reduce_pixel_to_parcel(fused, parcel_ids_map, patch_id=pid))
     table = pl.concat(frames, how="vertical") if frames else pl.DataFrame()
     out_path = oof_dir / f"oof_parcel_ea-fusion_fold{_HELD_OUT_FOLD}.parquet"
     table.write_parquet(out_path)

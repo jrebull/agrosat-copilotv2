@@ -213,9 +213,7 @@ def _stacking_pred_by_parcel(
     count: dict[str, int] = {}
     for member in members:
         path = oof_dir / f"oof_parcel_{member}_fold5.parquet"
-        d = pl.read_parquet(path).filter(
-            pl.col("canonical_parcel_id").is_in(canonical_ids)
-        )
+        d = pl.read_parquet(path).filter(pl.col("canonical_parcel_id").is_in(canonical_ids))
         for row in d.select(["canonical_parcel_id", *prob_cols]).iter_rows(named=True):
             cid = row["canonical_parcel_id"]
             vec = np.array([row[c] for c in prob_cols], dtype=float)
@@ -297,8 +295,7 @@ def build_stacking_inference_cards(
     # the two disjoint id namespaces is not 1:1, so the embedding is described at
     # the member level, not per parcel.
     n_alphaearth_dims = sum(
-        1 for c in pl.scan_parquet(features_path).collect_schema().names()
-        if c.startswith("dim_")
+        1 for c in pl.scan_parquet(features_path).collect_schema().names() if c.startswith("dim_")
     )
 
     cards: list[InferenceCard] = []
@@ -332,17 +329,17 @@ def build_stacking_inference_cards(
             ndvi = _parcel_ndvi(s2, mask)
             truth_map[mask] = true_cls
             pred_map[mask] = pred_cls
-            rows.append({
-                "parcela": cid,
-                "clase_real": names.get(true_cls, str(true_cls)),
-                "clase_predicha": names.get(pred_cls, str(pred_cls)),
-                "acierto": bool(pred_cls == true_cls),
-                "area_px": area,
-                "ndvi_pico": (
-                    round(float(np.percentile(ndvi, 90)), 3) if ndvi.size else 0.0
-                ),
-                "fenologia": _describe_phenology(ndvi),
-            })
+            rows.append(
+                {
+                    "parcela": cid,
+                    "clase_real": names.get(true_cls, str(true_cls)),
+                    "clase_predicha": names.get(pred_cls, str(pred_cls)),
+                    "acierto": bool(pred_cls == true_cls),
+                    "area_px": area,
+                    "ndvi_pico": (round(float(np.percentile(ndvi, 90)), 3) if ndvi.size else 0.0),
+                    "fenologia": _describe_phenology(ndvi),
+                }
+            )
 
         if not rows:
             continue
@@ -351,8 +348,9 @@ def build_stacking_inference_cards(
 
         # --- 3-panel figure: RGB / truth / prediction ---
         rgb = _natural_rgb(s2)
-        present = sorted(set(table["clase_real"].to_list()) |
-                         set(table["clase_predicha"].to_list()))
+        present = sorted(
+            set(table["clase_real"].to_list()) | set(table["clase_predicha"].to_list())
+        )
         present_ids = sorted({k for k, v in names.items() if v in present})
         cmap = ListedColormap(plt.cm.tab20(np.linspace(0, 1, max(len(present_ids), 1))))
         id_to_slot = {cid: i for i, cid in enumerate(present_ids)}
@@ -361,42 +359,47 @@ def build_stacking_inference_cards(
 
         # Larger panels + reserved bottom strip for the legend so titles never
         # overlap the images. constrained_layout keeps the three axes balanced.
-        fig, axes = plt.subplots(
-            1, 3, figsize=(21, 7.6), layout="constrained")
+        fig, axes = plt.subplots(1, 3, figsize=(21, 7.6), layout="constrained")
         axes[0].imshow(np.clip(rgb, 0, 1))
         axes[0].set_title(f"RGB real (Patch {pid})", fontsize=13, pad=10)
         axes[0].axis("off")
-        axes[1].imshow(_slot_map(truth_map, id_to_slot), cmap=cmap, norm=norm,
-                       interpolation="nearest")
+        axes[1].imshow(
+            _slot_map(truth_map, id_to_slot), cmap=cmap, norm=norm, interpolation="nearest"
+        )
         axes[1].set_title("Verdad de campo (por parcela)", fontsize=13, pad=10)
         axes[1].axis("off")
-        axes[2].imshow(_slot_map(pred_map, id_to_slot), cmap=cmap, norm=norm,
-                       interpolation="nearest")
+        axes[2].imshow(
+            _slot_map(pred_map, id_to_slot), cmap=cmap, norm=norm, interpolation="nearest"
+        )
         axes[2].set_title(
             f"Prediccion {ensemble_label}: {n_correct}/{len(rows)} correctas",
-            fontsize=13, pad=10,
+            fontsize=13,
+            pad=10,
         )
         axes[2].axis("off")
-        handles = [Patch(color=cmap(id_to_slot[c]), label=names.get(c, str(c)))
-                   for c in present_ids]
+        handles = [
+            Patch(color=cmap(id_to_slot[c]), label=names.get(c, str(c))) for c in present_ids
+        ]
         fig.legend(
-            handles=handles, loc="outside lower center",
-            ncol=min(6, len(handles)), fontsize=11, frameon=False,
+            handles=handles,
+            loc="outside lower center",
+            ncol=min(6, len(handles)),
+            fontsize=11,
+            frameon=False,
         )
-        slug = "".join(
-            ch if ch.isalnum() else "-" for ch in ensemble_label.lower()
-        ).strip("-")
+        slug = "".join(ch if ch.isalnum() else "-" for ch in ensemble_label.lower()).strip("-")
         fig_path = out_dir / f"inference_{slug}_{pid}.png"
         fig.savefig(fig_path, dpi=130, bbox_inches="tight")
         plt.close(fig)
 
-        cards.append(InferenceCard(
-            pid, fig_path, table, len(rows), n_correct, n_alphaearth_dims
-        ))
+        cards.append(InferenceCard(pid, fig_path, table, len(rows), n_correct, n_alphaearth_dims))
         logger.info(
             "ensemble_inference_card",
-            ensemble=ensemble_label, patch_id=pid, n_parcels=len(rows),
-            n_correct=n_correct, figure=str(fig_path),
+            ensemble=ensemble_label,
+            patch_id=pid,
+            n_parcels=len(rows),
+            n_correct=n_correct,
+            figure=str(fig_path),
         )
 
     return cards

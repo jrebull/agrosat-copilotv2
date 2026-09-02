@@ -74,6 +74,7 @@ def _tool_docs() -> list[_ToolDoc]:
         )
     return docs
 
+
 # Repository root: this file lives in ``<root>/scripts/gen_tools_doc.py``.
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _OUTPUT_PATH = _REPO_ROOT / "docs" / "agent" / "tools.md"
@@ -162,8 +163,7 @@ def render_document() -> str:
             "> cambio se sobrescribe al regenerar. Los esquemas provienen de los",
             "> modelos Pydantic v2 (`model_json_schema()`) de `ml/agent/schemas.py`.",
             "",
-            f"Total de tools: **{len(docs)}** "
-            f"({n_sync} sincronas, {n_deferred} diferidas).",
+            f"Total de tools: **{len(docs)}** ({n_sync} sincronas, {n_deferred} diferidas).",
             "",
             "## Resumen",
             "",

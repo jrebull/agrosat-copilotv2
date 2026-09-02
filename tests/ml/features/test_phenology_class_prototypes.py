@@ -51,8 +51,24 @@ _REAL_PARQUET = _DEFAULT_OUTPUT
 
 #: Golden lens verificadas en disco (recon US-033), una por clase 1..18.
 _GOLDEN_DESC_LENS = [
-    807, 586, 686, 870, 717, 733, 671, 646, 726,
-    766, 636, 584, 651, 810, 799, 666, 723, 594,
+    807,
+    586,
+    686,
+    870,
+    717,
+    733,
+    671,
+    646,
+    726,
+    766,
+    636,
+    584,
+    651,
+    810,
+    799,
+    666,
+    723,
+    594,
 ]
 
 
@@ -142,9 +158,7 @@ def test_generate_class_prototypes_deterministic_two_runs(
     _install_mocks(monkeypatch, synthetic_curves, call_count)
     cache_dir = tmp_path / "cache"
     cache_dir.mkdir()
-    monkeypatch.setattr(
-        pd_mod, "default_cache_dir", lambda: cache_dir
-    )
+    monkeypatch.setattr(pd_mod, "default_cache_dir", lambda: cache_dir)
 
     out1 = tmp_path / "run1.parquet"
     out2 = tmp_path / "run2.parquet"
@@ -181,9 +195,7 @@ def test_generate_class_prototypes_schema(
     """El parquet sintetico tiene 18 filas y el esquema canonico (18, 388)."""
     call_count = {"count": 0}
     _install_mocks(monkeypatch, synthetic_curves, call_count)
-    monkeypatch.setattr(
-        pd_mod, "default_cache_dir", lambda: tmp_path / "cache"
-    )
+    monkeypatch.setattr(pd_mod, "default_cache_dir", lambda: tmp_path / "cache")
     (tmp_path / "cache").mkdir()
 
     out = tmp_path / "proto.parquet"
@@ -216,9 +228,7 @@ def test_delegates_to_generate_phenology_description(
     monkeypatch.setattr(
         proto_mod,
         "_encode_descriptions",
-        lambda descriptions: np.ones(
-            (len(descriptions), _EMB_DIM), dtype=np.float32
-        ),
+        lambda descriptions: np.ones((len(descriptions), _EMB_DIM), dtype=np.float32),
     )
 
     seen: list[dict[str, object]] = []
@@ -265,6 +275,7 @@ def test_encode_descriptions_shape_dtype(
     para no descargar ``all-MiniLM-L6-v2`` en CI, conservando el contrato real
     (``normalize_embeddings=True`` -> filas L2-norm).
     """
+
     class _FakeEncoder:
         def __init__(self, model_name: str) -> None:
             self._model_name = model_name
@@ -282,9 +293,7 @@ def test_encode_descriptions_shape_dtype(
                 emb /= np.linalg.norm(emb, axis=1, keepdims=True) + 1e-12
             return emb
 
-    monkeypatch.setattr(
-        "sentence_transformers.SentenceTransformer", _FakeEncoder
-    )
+    monkeypatch.setattr("sentence_transformers.SentenceTransformer", _FakeEncoder)
 
     out = _encode_descriptions(["cultivo a", "cultivo b"])
     assert out.shape == (2, _EMB_DIM)

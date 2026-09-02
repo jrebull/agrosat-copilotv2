@@ -43,12 +43,20 @@ def test_patch_ground_resolution_unknown_patch_falls_back(tmp_path: Path) -> Non
 def test_paper_inference_map_accuracy() -> None:
     """parcel_accuracy is n_correct / n_parcels, 0 when there are no parcels."""
     m = PaperInferenceMap(
-        patch_id="40175", path=Path("x.png"), n_correct=73, n_parcels=76,
-        n_out_of_scope=2, ground_resolution_m=10.74,
+        patch_id="40175",
+        path=Path("x.png"),
+        n_correct=73,
+        n_parcels=76,
+        n_out_of_scope=2,
+        ground_resolution_m=10.74,
     )
     assert abs(m.parcel_accuracy - 73 / 76) < 1e-9
     empty = PaperInferenceMap(
-        patch_id="0", path=Path("x.png"), n_correct=0, n_parcels=0,
-        n_out_of_scope=0, ground_resolution_m=10.0,
+        patch_id="0",
+        path=Path("x.png"),
+        n_correct=0,
+        n_parcels=0,
+        n_out_of_scope=0,
+        ground_resolution_m=10.0,
     )
     assert empty.parcel_accuracy == 0.0

@@ -57,8 +57,7 @@ def _load_sweep_csv(path: Path) -> pl.DataFrame:
     missing = [c for c in _REQUIRED_COLS if c not in df.columns]
     if missing:
         raise ValueError(
-            f"sweep CSV {path} is missing required columns {missing}; "
-            f"got {df.columns}."
+            f"sweep CSV {path} is missing required columns {missing}; got {df.columns}."
         )
     return df.sort("n_classes")
 
@@ -110,13 +109,9 @@ def build_dominance_comparison(
     )
     merged = left.join(right, on="n_classes", how="inner").sort("n_classes")
     if merged.height == 0:
-        raise ValueError(
-            "no shared n_classes between the two sweep curves; cannot compare."
-        )
+        raise ValueError("no shared n_classes between the two sweep curves; cannot compare.")
     merged = merged.with_columns(
-        (pl.col("macro_f1_dom3") - pl.col("macro_f1_no_filter"))
-        .round(4)
-        .alias("delta_macro_f1")
+        (pl.col("macro_f1_dom3") - pl.col("macro_f1_no_filter")).round(4).alias("delta_macro_f1")
     )
     logger.info(
         "dominance_comparison_built",
@@ -150,12 +145,17 @@ def dominance_curves_figure(
     n = comparison["n_classes"].to_list()
     fig, ax = plt.subplots(figsize=(7.0, 4.5))
     ax.plot(
-        n, comparison["macro_f1_no_filter"].to_list(),
-        marker="o", label="sin filtro 3:1 (grano-parcela)",
+        n,
+        comparison["macro_f1_no_filter"].to_list(),
+        marker="o",
+        label="sin filtro 3:1 (grano-parcela)",
     )
     ax.plot(
-        n, comparison["macro_f1_dom3"].to_list(),
-        marker="s", linestyle="--", label="con filtro 3:1 (Meadow por-patch)",
+        n,
+        comparison["macro_f1_dom3"].to_list(),
+        marker="s",
+        linestyle="--",
+        label="con filtro 3:1 (Meadow por-patch)",
     )
     ax.set_xlabel("Numero de clases (N)")
     ax.set_ylabel("macro-F1 (por parcela)")

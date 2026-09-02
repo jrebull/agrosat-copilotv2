@@ -340,9 +340,7 @@ class BlendingEnsemble(EnsembleModel):
         self._member_probs = member_probs
         labels = self._labels_for(parcel_ids, y_true)
 
-        train_idx, val_idx = self._spatial_holdout(
-            parcel_ids, parcel_geoms, buffer_km=buffer_km
-        )
+        train_idx, val_idx = self._spatial_holdout(parcel_ids, parcel_geoms, buffer_km=buffer_km)
 
         probs_train = member_probs[:, train_idx, :]
         probs_val = member_probs[:, val_idx, :]
@@ -355,10 +353,7 @@ class BlendingEnsemble(EnsembleModel):
 
         def objective(trial: optuna.trial.Trial) -> float:
             raw = np.asarray(
-                [
-                    trial.suggest_float(f"w_{i}", 0.0, 1.0)
-                    for i in range(len(self.base_members))
-                ],
+                [trial.suggest_float(f"w_{i}", 0.0, 1.0) for i in range(len(self.base_members))],
                 dtype=np.float64,
             )
             weights = self._project_simplex(raw)
@@ -384,9 +379,7 @@ class BlendingEnsemble(EnsembleModel):
             n_trials=len(study.trials),
             best_value=round(float(study.best_value), 4),
             f1_val=round(float(study.best_trial.user_attrs.get("f1_val", float("nan"))), 4),
-            f1_train=round(
-                float(study.best_trial.user_attrs.get("f1_train", float("nan"))), 4
-            ),
+            f1_train=round(float(study.best_trial.user_attrs.get("f1_train", float("nan"))), 4),
             weights=[round(float(w), 4) for w in self._weights],
             n_train=int(train_idx.size),
             n_val=int(val_idx.size),
@@ -464,14 +457,10 @@ class BlendingEnsemble(EnsembleModel):
                 "non-empty to optimize the blending weights without leakage."
             )
         # Anti-leakage: train and val parcels must be disjoint by construction.
-        self.assert_oof_only(
-            train_arr.tolist(), val_arr.tolist(), context="blending holdout"
-        )
+        self.assert_oof_only(train_arr.tolist(), val_arr.tolist(), context="blending holdout")
         return train_arr, val_arr
 
-    def _f1_of(
-        self, probs: np.ndarray, labels: np.ndarray, weights: np.ndarray
-    ) -> float:
+    def _f1_of(self, probs: np.ndarray, labels: np.ndarray, weights: np.ndarray) -> float:
         """Blend ``probs`` with ``weights`` and return the F1-macro vs ``labels``.
 
         Args:
@@ -491,9 +480,7 @@ class BlendingEnsemble(EnsembleModel):
     # Predict (weighted combination of post-softmax member probabilities).
     # ------------------------------------------------------------------
 
-    def predict_proba(
-        self, df_parcels: Sequence[pl.DataFrame] | None = None
-    ) -> np.ndarray:
+    def predict_proba(self, df_parcels: Sequence[pl.DataFrame] | None = None) -> np.ndarray:
         """Return the blended per-parcel post-softmax probabilities.
 
         With no argument the cached fold-5 member probabilities aligned during

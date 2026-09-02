@@ -167,9 +167,7 @@ def _render_eval_table(
     Returns:
         The ``<table>`` HTML fragment as a string.
     """
-    header = (
-        "<tr><th>Variante</th><th>Metrica</th><th>Media +- Desv.</th></tr>"
-    )
+    header = "<tr><th>Variante</th><th>Metrica</th><th>Media +- Desv.</th></tr>"
     rows: list[str] = []
     for variant in variants:
         for metric in metrics:
@@ -184,9 +182,7 @@ def _render_eval_table(
     return f"<table>{header}{''.join(rows)}</table>"
 
 
-def _render_headline_chart(
-    results: Mapping[str, Any], variants: Sequence[str]
-) -> str:
+def _render_headline_chart(results: Mapping[str, Any], variants: Sequence[str]) -> str:
     """Render the grouped headline bar chart as a base64 PNG data URI.
 
     One bar group per headline metric (tool-selection accuracy, crop-match

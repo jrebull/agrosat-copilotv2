@@ -133,9 +133,7 @@ def build(
     fused.write_parquet(out)
     md5 = _md5_of_file(out)
     expected_cols = (
-        EXPECTED_COL_COUNT_WITH_FARSLIP
-        if include_farslip
-        else EXPECTED_COL_COUNT_NO_FARSLIP
+        EXPECTED_COL_COUNT_WITH_FARSLIP if include_farslip else EXPECTED_COL_COUNT_NO_FARSLIP
     )
     feature_count = fused.width - 2  # excluye parcel_id + year
     logger.info(
@@ -176,7 +174,12 @@ def build(
         h3_res=h3_res,
         buffer_km=buffer_km,
         fold_sizes=[
-            {"fold": f.fold_id, "train": len(f.train_ids), "val": len(f.val_ids), "test": len(f.test_ids)}
+            {
+                "fold": f.fold_id,
+                "train": len(f.train_ids),
+                "val": len(f.val_ids),
+                "test": len(f.test_ids),
+            }
             for f in folds
         ],
     )
@@ -245,13 +248,9 @@ def _load_parcels(path: Path) -> gpd.GeoDataFrame:
     elif path.suffix in (".geojson", ".json"):
         gdf = gpd.read_file(path)
     else:
-        raise typer.BadParameter(
-            f"Unsupported format: {path.suffix}. Use .parquet or .geojson."
-        )
+        raise typer.BadParameter(f"Unsupported format: {path.suffix}. Use .parquet or .geojson.")
     if "parcel_id" not in gdf.columns:
-        raise typer.BadParameter(
-            f"Parcels in {path} does not contain the `parcel_id` column."
-        )
+        raise typer.BadParameter(f"Parcels in {path} does not contain the `parcel_id` column.")
     return gdf
 
 

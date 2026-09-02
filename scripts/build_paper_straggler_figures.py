@@ -11,6 +11,7 @@ Usage::
 
     poetry run python -m scripts.build_paper_straggler_figures
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -19,9 +20,9 @@ from typing import Literal
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import polars as pl  # noqa: E402
-import structlog  # noqa: E402
+import matplotlib.pyplot as plt
+import polars as pl
+import structlog
 
 logger = structlog.get_logger(__name__)
 
@@ -90,7 +91,9 @@ def build_cardinality(lang: Lang) -> list[str]:
     # holds ["new"] rows [k, cumulative_macro_f1, cumulative_secondary, class_name].
     import json
 
-    data = json.loads((_ROOT / "reports" / "voting_new" / "cardinalidad.json").read_text(encoding="utf-8"))
+    data = json.loads(
+        (_ROOT / "reports" / "voting_new" / "cardinalidad.json").read_text(encoding="utf-8")
+    )
     rows = data["new"]
     k = [int(r[0]) for r in rows]
     f1 = [float(r[1]) for r in rows]
@@ -107,8 +110,10 @@ def build_cardinality(lang: Lang) -> list[str]:
     ax.axvline(12, color=_AMBER, ls="--", lw=1.2)
     ax.annotate(
         s["annot"].format(f1=f1_12),
-        xy=(12, f1_12), xytext=(9.3, f1_12 - 0.045),
-        color=_AMBER, fontsize=9,
+        xy=(12, f1_12),
+        xytext=(9.3, f1_12 - 0.045),
+        color=_AMBER,
+        fontsize=9,
     )
     ax.set_title(s["title"])
     ax.annotate(s["attrib"], xy=(0.0, -0.16), xycoords="axes fraction", fontsize=7, color="#888")

@@ -84,9 +84,6 @@ def show_model_figs(figures_dir: Path, model: str) -> bool:
             shown = True
     if not shown:
         display(
-            Markdown(
-                f"_Aun no hay figuras para `{model}` "
-                "(correr su notebook de entrenamiento)._"
-            )
+            Markdown(f"_Aun no hay figuras para `{model}` (correr su notebook de entrenamiento)._")
         )
     return shown

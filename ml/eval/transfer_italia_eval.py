@@ -208,9 +208,7 @@ def evaluate_dense_predictions(
     return result
 
 
-def per_class_f1(
-    confusion: np.ndarray, *, ignore_index: int | None = None
-) -> dict[int, float]:
+def per_class_f1(confusion: np.ndarray, *, ignore_index: int | None = None) -> dict[int, float]:
     """Compute per-class F1 from a ``(C, C)`` confusion matrix.
 
     Args:
@@ -265,6 +263,7 @@ def discard_curve(result: DenseEvalResult) -> list[dict[str, object]]:
         A list of ``{"n_classes", "macro_f1", "classes"}`` rows, ``n`` from 1 to
         the number of classes with support, macro F1 over the top-``n``.
     """
+
     def _f1(row: dict[str, object]) -> float:
         return float(cast("float", row["f1"]))
 
@@ -297,17 +296,13 @@ def best_subset_over_threshold(
         or the singleton best class if none reaches the threshold.
     """
     curve = discard_curve(result)
-    qualifying = [
-        row for row in curve if float(cast("float", row["macro_f1"])) >= threshold
-    ]
+    qualifying = [row for row in curve if float(cast("float", row["macro_f1"])) >= threshold]
     if qualifying:
         return max(qualifying, key=lambda r: int(cast("int", r["n_classes"])))
     return curve[0] if curve else {"n_classes": 0, "macro_f1": 0.0, "classes": []}
 
 
-def transfer_delta(
-    finetuned: DenseEvalResult, zero_shot: DenseEvalResult
-) -> dict[str, float]:
+def transfer_delta(finetuned: DenseEvalResult, zero_shot: DenseEvalResult) -> dict[str, float]:
     """Quantify the fine-tune gain over the zero-shot French champion.
 
     Args:
@@ -337,10 +332,7 @@ def probs_to_class_map(probs_by_patch: dict[int, np.ndarray]) -> dict[int, np.nd
     Returns:
         ``{patch_id: (H, W)}`` int64 class maps.
     """
-    return {
-        pid: probs.argmax(axis=0).astype(np.int64)
-        for pid, probs in probs_by_patch.items()
-    }
+    return {pid: probs.argmax(axis=0).astype(np.int64) for pid, probs in probs_by_patch.items()}
 
 
 def project_parcel_vote_to_dense(

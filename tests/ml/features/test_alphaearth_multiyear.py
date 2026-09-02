@@ -164,6 +164,4 @@ def test_build_avg_features_rejects_fused_without_keys(tmp_path: Path) -> None:
     bad_path = tmp_path / "bad_fused.parquet"
     bad_fused.write_parquet(bad_path)
     with pytest.raises(ValueError, match="missing key/label columns"):
-        build_avg_features_for_xgb(
-            [p19], bad_path, out_path=tmp_path / "out.parquet"
-        )
+        build_avg_features_for_xgb([p19], bad_path, out_path=tmp_path / "out.parquet")

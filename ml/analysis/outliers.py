@@ -49,10 +49,9 @@ def detect_outliers_iqr(
     joined = df.join(stats, on=band_col)
     out_counts = (
         joined.with_columns(
-            (
-                (pl.col(value_col) < pl.col("lower"))
-                | (pl.col(value_col) > pl.col("upper"))
-            ).alias("is_outlier")
+            ((pl.col(value_col) < pl.col("lower")) | (pl.col(value_col) > pl.col("upper"))).alias(
+                "is_outlier"
+            )
         )
         .group_by(band_col)
         .agg(
@@ -105,9 +104,7 @@ def detect_outliers_isoforest(
         DataFrame with columns `band, n, n_outliers, pct_outliers,
         contamination_target`. If there is not enough data, returns an empty DataFrame.
     """
-    pixel_id_cols = pixel_id_cols or [
-        c for c in ("patch_id", "t", "y", "x") if c in df.columns
-    ]
+    pixel_id_cols = pixel_id_cols or [c for c in ("patch_id", "t", "y", "x") if c in df.columns]
     if not pixel_id_cols:
         return pl.DataFrame()
 
@@ -125,9 +122,7 @@ def detect_outliers_isoforest(
     if arr.shape[0] < 10:
         return pl.DataFrame()
 
-    iso = IsolationForest(
-        contamination=contamination, random_state=seed, n_jobs=-1
-    )
+    iso = IsolationForest(contamination=contamination, random_state=seed, n_jobs=-1)
     preds = iso.fit_predict(arr)
     is_out = preds == -1
 
@@ -142,9 +137,7 @@ def detect_outliers_isoforest(
                 "n": int(col_vals.size),
                 "n_outliers": int(out_vals.size),
                 "pct_outliers": (
-                    float(out_vals.size) / col_vals.size * 100.0
-                    if col_vals.size
-                    else 0.0
+                    float(out_vals.size) / col_vals.size * 100.0 if col_vals.size else 0.0
                 ),
                 "contamination_target": contamination * 100.0,
             }
@@ -155,7 +148,5 @@ def detect_outliers_isoforest(
         r["n_outliers"] = total_out
         r["pct_outliers"] = float(total_out) / arr.shape[0] * 100.0 if arr.shape[0] else 0.0
         band_pos = band_cols.index(r["band"])
-        r["band_mean_outliers"] = (
-            float(np.mean(arr[is_out, band_pos])) if total_out else 0.0
-        )
+        r["band_mean_outliers"] = float(np.mean(arr[is_out, band_pos])) if total_out else 0.0
     return pl.DataFrame(rows).sort("band")

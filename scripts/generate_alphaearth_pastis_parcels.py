@@ -47,9 +47,7 @@ def main(
         help="Carpeta de salida del cache AlphaEarth",
     ),
     year: int = typer.Option(2019, "--year", help="Año del embedding"),
-    batch_size: int = typer.Option(
-        100, "--batch-size", help="Parcelas por request GEE"
-    ),
+    batch_size: int = typer.Option(100, "--batch-size", help="Parcelas por request GEE"),
     cache_key: str = typer.Option(
         "pastis_fr_parcels",
         "--cache-key",
@@ -103,8 +101,14 @@ def main(
 
     # Join con metadata de parcelas (patch_id, class_id, class_name, fold, area_m2, n_pixels).
     meta_cols = [
-        "parcel_id", "patch_id", "instance_id", "class_id",
-        "class_name", "fold", "area_m2", "n_pixels",
+        "parcel_id",
+        "patch_id",
+        "instance_id",
+        "class_id",
+        "class_name",
+        "fold",
+        "area_m2",
+        "n_pixels",
     ]
     meta_df = pl.from_pandas(gdf[meta_cols].copy())
     df_enriched = df_ae.join(meta_df, on="parcel_id", how="inner")

@@ -54,22 +54,10 @@ from ml.train.baseline import (
 logger = structlog.get_logger(__name__)
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
-_FIXTURE = (
-    _REPO_ROOT / "data" / "test_fixtures" / "feature_selection_parcels_subset.parquet"
-)
-_AE18 = (
-    _REPO_ROOT
-    / "data"
-    / "cache"
-    / "gee"
-    / "alphaearth_parcels_parcels_2018_85951.parquet"
-)
+_FIXTURE = _REPO_ROOT / "data" / "test_fixtures" / "feature_selection_parcels_subset.parquet"
+_AE18 = _REPO_ROOT / "data" / "cache" / "gee" / "alphaearth_parcels_parcels_2018_85951.parquet"
 _AE19 = (
-    _REPO_ROOT
-    / "data"
-    / "cache"
-    / "gee"
-    / "alphaearth_parcels_pastis_parcels_2019_85951.parquet"
+    _REPO_ROOT / "data" / "cache" / "gee" / "alphaearth_parcels_pastis_parcels_2019_85951.parquet"
 )
 _OUT_DIR = _REPO_ROOT / "reports" / "baseline" / "grouped_vs_flat"
 
@@ -123,9 +111,7 @@ def _load_features(max_samples: int | None) -> pl.DataFrame:
         {c: f"ae19_{c.removeprefix('dim_')}" for c in ae19.columns if c != "parcel_id"}
     )
 
-    merged = base.join(ae18, on="parcel_id", how="left").join(
-        ae19, on="parcel_id", how="left"
-    )
+    merged = base.join(ae18, on="parcel_id", how="left").join(ae19, on="parcel_id", how="left")
     n_ae18 = sum(c.startswith("ae18_") for c in merged.columns)
     n_ae19 = sum(c.startswith("ae19_") for c in merged.columns)
     logger.info(
@@ -162,9 +148,7 @@ def _remap_to_hcat(df: pl.DataFrame) -> pl.DataFrame:
     name_to_id = {name: i + 1 for i, name in enumerate(group_names)}
     class_to_group_id = {cid: name_to_id[grp] for cid, grp in grouping.items()}
 
-    return df.with_columns(
-        pl.col("class_id").replace_strict(class_to_group_id).alias("class_id")
-    )
+    return df.with_columns(pl.col("class_id").replace_strict(class_to_group_id).alias("class_id"))
 
 
 def _group_id_to_name() -> dict[int, str]:
@@ -216,9 +200,7 @@ def _run_scheme(
     labels = list(range(len(encoder.classes_)))
     metrics = compute_baseline_metrics(y_true_oof, y_pred_oof, labels=labels)
 
-    f1_per = f1_score(
-        y_true_oof, y_pred_oof, labels=labels, average=None, zero_division=0
-    )
+    f1_per = f1_score(y_true_oof, y_pred_oof, labels=labels, average=None, zero_division=0)
     support = np.bincount(y_true_oof.astype(np.int64), minlength=len(labels))
 
     if scheme == "flat18":
@@ -314,12 +296,8 @@ def main() -> None:
             f"miou={row['miou']:.4f} accuracy={row['accuracy']:.4f} "
             f"cohen_kappa={row['cohen_kappa']:.4f}"
         )
-    _print_per_class(
-        "F1 por clase (18 clases planas, peor a mejor):", per_class_18
-    )
-    _print_per_class(
-        "F1 por grupo HCAT L1 (6 grupos):", per_class_6.sort("label_id")
-    )
+    _print_per_class("F1 por clase (18 clases planas, peor a mejor):", per_class_18)
+    _print_per_class("F1 por grupo HCAT L1 (6 grupos):", per_class_6.sort("label_id"))
     print("\nCodigos HCAT de cada grupo:")
     for name, code in _HCAT_CODES.items():
         print(f"  {name:16s} {code}")

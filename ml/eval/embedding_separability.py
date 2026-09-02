@@ -102,9 +102,7 @@ def build_balanced_eval_set(
     if class_names is not None:
         balanced = balanced.with_columns(
             pl.col("class_id")
-            .map_elements(
-                lambda c: class_names.get(int(c), f"c{int(c)}"), return_dtype=pl.Utf8
-            )
+            .map_elements(lambda c: class_names.get(int(c), f"c{int(c)}"), return_dtype=pl.Utf8)
             .alias("class_name")
         )
     return balanced, dropped

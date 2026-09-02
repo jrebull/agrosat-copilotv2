@@ -248,24 +248,16 @@ def evaluate(
 
     n = len(y_true)
     if n == 0:
-        raise ValueError(
-            f"no {label_space.name} parcels with both GT and a {champion} posterior."
-        )
+        raise ValueError(f"no {label_space.name} parcels with both GT and a {champion} posterior.")
 
     champ_acc = sum(1 for t, p in zip(y_true, pred_champion, strict=True) if t == p) / n
     base_acc = sum(1 for t, p in zip(y_true, pred_baseline, strict=True) if t == p) / n
-    agreement = sum(
-        1 for a, b in zip(pred_champion, pred_baseline, strict=True) if a == b
-    ) / n
+    agreement = sum(1 for a, b in zip(pred_champion, pred_baseline, strict=True) if a == b) / n
     champion_fixes = sum(
-        1
-        for t, c, b in zip(y_true, pred_champion, pred_baseline, strict=True)
-        if c == t and b != t
+        1 for t, c, b in zip(y_true, pred_champion, pred_baseline, strict=True) if c == t and b != t
     )
     champion_breaks = sum(
-        1
-        for t, c, b in zip(y_true, pred_champion, pred_baseline, strict=True)
-        if c != t and b == t
+        1 for t, c, b in zip(y_true, pred_champion, pred_baseline, strict=True) if c != t and b == t
     )
 
     summary = {
@@ -297,9 +289,7 @@ def evaluate(
 
     if out_path is not None:
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(
-            json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
+        out_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
         logger.info("perceiver_champion_eval_written", path=str(out_path))
     return summary
 
@@ -350,8 +340,7 @@ def evaluate_v2_report(out_path: Path | None = None) -> dict[str, Any]:
                 4,
             ),
             "v2_france12_minus_france9_accuracy": round(
-                v2_f12["champion_voting3"]["accuracy"]
-                - v2_f9["champion_voting3"]["accuracy"],
+                v2_f12["champion_voting3"]["accuracy"] - v2_f9["champion_voting3"]["accuracy"],
                 4,
             ),
         },
@@ -365,9 +354,7 @@ def evaluate_v2_report(out_path: Path | None = None) -> dict[str, Any]:
 
     if out_path is not None:
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(
-            json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
+        out_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
         logger.info("perceiver_champion_eval_v2_report_written", path=str(out_path))
     return report
 

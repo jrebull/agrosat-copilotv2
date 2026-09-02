@@ -68,8 +68,10 @@ def _build_dataarray(*, parcel_id: int, year: int, seed: int) -> xr.DataArray:
         dtype="datetime64[ns]",
     )
 
-    doys = np.array([(t - np.datetime64(f"{year}-01-01", "ns")) / np.timedelta64(1, "D") + 1
-                     for t in times], dtype=np.float64)
+    doys = np.array(
+        [(t - np.datetime64(f"{year}-01-01", "ns")) / np.timedelta64(1, "D") + 1 for t in times],
+        dtype=np.float64,
+    )
 
     # Canonical NDVI: gaussian DOY 180, peak 0.85, sigma 30 days + noise.
     ndvi = 0.85 * np.exp(-0.5 * ((doys - 180) / 30.0) ** 2)

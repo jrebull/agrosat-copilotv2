@@ -160,18 +160,14 @@ def test_logit_scale_changes_sharpness_not_sum() -> None:
     dataset = _StubParcelDataset(n=4)
     bank = build_text_class_bank(extractor, SEMANTIC18_CROP_NAMES)
     soft, _i, _c = zeroshot_parcel_proba(extractor, dataset, bank, logit_scale=1.0)
-    sharp, _i2, _c2 = zeroshot_parcel_proba(
-        extractor, dataset, bank, logit_scale=50.0
-    )
+    sharp, _i2, _c2 = zeroshot_parcel_proba(extractor, dataset, bank, logit_scale=50.0)
     assert np.allclose(soft.sum(axis=1), 1.0, atol=1e-5)
     assert np.allclose(sharp.sum(axis=1), 1.0, atol=1e-5)
     # Sharper temperature -> higher peak probability per row.
     assert (sharp.max(axis=1) >= soft.max(axis=1) - 1e-6).all()
 
 
-def test_materialize_writes_molde_schema(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_materialize_writes_molde_schema(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """The parquet has the EXACT molde schema and post-softmax probabilities."""
     extractor = _StubExtractor()
     dataset = _StubParcelDataset(n=6)
@@ -180,9 +176,7 @@ def test_materialize_writes_molde_schema(
     def _fake_map(patch: str, _root: Path) -> dict[int, int]:
         return {i: i * 1000 for i in range(1, 50)}
 
-    monkeypatch.setattr(
-        "ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map
-    )
+    monkeypatch.setattr("ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map)
 
     out = tmp_path / "oof_parcel_farslip-zeroshot_fold5.parquet"
     materialize_zeroshot_oof(
@@ -210,9 +204,7 @@ def test_materialize_writes_molde_schema(
     assert df["canonical_parcel_id"].to_list()[0].endswith("000")
 
 
-def test_canonical_keys_translated_not_raw(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_canonical_keys_translated_not_raw(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Materialized keys use the ParcelIDs space, never the raw instance space."""
     extractor = _StubExtractor()
     dataset = _StubParcelDataset(n=3)
@@ -220,9 +212,7 @@ def test_canonical_keys_translated_not_raw(
     def _fake_map(patch: str, _root: Path) -> dict[int, int]:
         return {i: i * 1000 for i in range(1, 50)}
 
-    monkeypatch.setattr(
-        "ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map
-    )
+    monkeypatch.setattr("ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map)
     out = tmp_path / "oof.parquet"
     materialize_zeroshot_oof(
         out_path=out, pastis_root=tmp_path, extractor=extractor, dataset=dataset
@@ -233,9 +223,7 @@ def test_canonical_keys_translated_not_raw(
     assert "10000_1000" in keys
 
 
-def test_zeroshot_trains_nothing(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_zeroshot_trains_nothing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """No fit/train hook is ever called: zero-shot is a pure forward pass."""
     extractor = _StubExtractor()
     dataset = _StubParcelDataset(n=4)
@@ -243,9 +231,7 @@ def test_zeroshot_trains_nothing(
     def _fake_map(patch: str, _root: Path) -> dict[int, int]:
         return {i: i * 1000 for i in range(1, 50)}
 
-    monkeypatch.setattr(
-        "ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map
-    )
+    monkeypatch.setattr("ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map)
     materialize_zeroshot_oof(
         out_path=tmp_path / "oof.parquet",
         pastis_root=tmp_path,
@@ -278,9 +264,7 @@ def test_active_subset_scatters_to_18(monkeypatch: pytest.MonkeyPatch) -> None:
     def _fake_map(patch: str, _root: Path) -> dict[int, int]:
         return {i: i * 1000 for i in range(1, 50)}
 
-    monkeypatch.setattr(
-        "ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map
-    )
+    monkeypatch.setattr("ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map)
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmp:

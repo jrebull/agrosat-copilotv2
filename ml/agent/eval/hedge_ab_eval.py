@@ -578,9 +578,7 @@ async def _run_side(
                 _drive_for_text(backend, prompt), timeout=_ITEM_TIMEOUT_S
             )
         except Exception as exc:  # noqa: BLE001 - one case must not crash the run
-            logger.warning(
-                "hedge_case_failed", case=case.id, grounded=grounded, error=str(exc)
-            )
+            logger.warning("hedge_case_failed", case=case.id, grounded=grounded, error=str(exc))
             analysis = ""
         sample = {
             "analysis": analysis,
@@ -691,9 +689,7 @@ async def run_hedge_ab(
         backend, cases, grounded=True, judge=active_judge, resolved_crops=resolved_crops
     )
     delta = (
-        quality_a - quality_b
-        if not (math.isnan(quality_a) or math.isnan(quality_b))
-        else math.nan
+        quality_a - quality_b if not (math.isnan(quality_a) or math.isnan(quality_b)) else math.nan
     )
     result = HedgeABResult(
         hedge_quality_ungrounded=quality_b,

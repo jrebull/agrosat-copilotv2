@@ -76,8 +76,14 @@ def render_parcel_sweep_figures(
     ax1.plot(n, f1, marker="o", color="#1f77b4", label="macro-F1")
     ax1.plot(n, iou, marker="s", linestyle="--", color="#ff7f0e", label="macro-IoU")
     for xi, yi in zip(n, f1, strict=True):
-        ax1.annotate(f"{yi:.3f}", (xi, yi), textcoords="offset points",
-                     xytext=(0, 8), ha="center", fontsize=8)
+        ax1.annotate(
+            f"{yi:.3f}",
+            (xi, yi),
+            textcoords="offset points",
+            xytext=(0, 8),
+            ha="center",
+            fontsize=8,
+        )
     ax1.set_xlabel("Numero de clases (N, ordenadas por frecuencia)")
     ax1.set_ylabel("Metrica (por parcela, fold de validacion)")
     ax1.set_title("FarSLIP por-parcela: techo real por cardinalidad")
@@ -95,15 +101,23 @@ def render_parcel_sweep_figures(
     best_n = n[f1.index(best_f1)]
     fig2, ax2 = plt.subplots(figsize=(6.0, 4.4))
     bars = ax2.bar(
-        ["FarSLIP por-patch\n(US-037, 18 clases)",
-         f"FarSLIP por-parcela\n(N={best_n}, sweet spot)"],
+        [
+            "FarSLIP por-patch\n(US-037, 18 clases)",
+            f"FarSLIP por-parcela\n(N={best_n}, sweet spot)",
+        ],
         [patch_level_macro_f1, best_f1],
         color=["#d62728", "#2ca02c"],
     )
     for b, v in zip(bars, [patch_level_macro_f1, best_f1], strict=True):
-        ax2.annotate(f"{v:.3f}", (b.get_x() + b.get_width() / 2, v),
-                     textcoords="offset points", xytext=(0, 6), ha="center",
-                     fontsize=11, fontweight="bold")
+        ax2.annotate(
+            f"{v:.3f}",
+            (b.get_x() + b.get_width() / 2, v),
+            textcoords="offset points",
+            xytext=(0, 6),
+            ha="center",
+            fontsize=11,
+            fontweight="bold",
+        )
     factor = best_f1 / patch_level_macro_f1 if patch_level_macro_f1 else float("nan")
     ax2.set_ylabel("macro-F1")
     ax2.set_title(f"El grano-parcela rompe el techo: x{factor:.1f} en macro-F1")
@@ -116,7 +130,10 @@ def render_parcel_sweep_figures(
 
     logger.info(
         "parcel_sweep_figures_rendered",
-        curve=str(curve_path), parcel_vs_patch=str(pvp_path),
-        best_n=best_n, best_f1=round(best_f1, 4), factor=round(factor, 2),
+        curve=str(curve_path),
+        parcel_vs_patch=str(pvp_path),
+        best_n=best_n,
+        best_f1=round(best_f1, 4),
+        factor=round(factor, 2),
     )
     return {"curve": curve_path, "parcel_vs_patch": pvp_path}

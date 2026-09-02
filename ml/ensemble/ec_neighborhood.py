@@ -364,9 +364,7 @@ def _knn_indices(coords: np.ndarray, k_max: int) -> np.ndarray:
     """
     n = coords.shape[0]
     if n <= k_max:
-        raise ValueError(
-            f"need more than k_max={k_max} parcels to find neighbours; got {n}."
-        )
+        raise ValueError(f"need more than k_max={k_max} parcels to find neighbours; got {n}.")
     try:
         from sklearn.neighbors import NearestNeighbors
     except ImportError:  # pragma: no cover - numpy fallback when sklearn absent
@@ -376,9 +374,7 @@ def _knn_indices(coords: np.ndarray, k_max: int) -> np.ndarray:
         for start in range(0, n, chunk):
             stop = min(start + chunk, n)
             block = coords[start:stop]
-            d2 = (
-                (block[:, None, :] - coords[None, :, :]) ** 2
-            ).sum(axis=2)
+            d2 = ((block[:, None, :] - coords[None, :, :]) ** 2).sum(axis=2)
             order = np.argpartition(d2, kth=k_max, axis=1)[:, : k_max + 1]
             for r, gi in enumerate(range(start, stop)):
                 row = order[r]
@@ -399,9 +395,7 @@ def _knn_indices(coords: np.ndarray, k_max: int) -> np.ndarray:
 # ----------------------------------------------------------------------
 
 
-def _refine(
-    posteriors: np.ndarray, neighbor_idx: np.ndarray, k: int, alpha: float
-) -> np.ndarray:
+def _refine(posteriors: np.ndarray, neighbor_idx: np.ndarray, k: int, alpha: float) -> np.ndarray:
     """Blend each posterior with the mean posterior of its ``k`` neighbours.
 
     ``refined = (1 - alpha) * champion + alpha * mean(champion over k neighbours)``.
@@ -464,9 +458,7 @@ def _f1_macro_france9(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return float(np.mean(f1_scores)) if f1_scores else float("nan")
 
 
-def _evaluate(
-    y_true: np.ndarray, refined: np.ndarray
-) -> tuple[float, float, float]:
+def _evaluate(y_true: np.ndarray, refined: np.ndarray) -> tuple[float, float, float]:
     """Score a refined posterior over 18 classes and over france-9 (fold-5).
 
     Args:
@@ -597,14 +589,11 @@ def run_ec_neighborhood(
     # win for the product, which serves france-9.
     best_both = max(
         refined_points,
-        key=lambda e: min(
-            float(e["delta_f1_macro_18"]), float(e["delta_f1_macro_france9"])
-        ),
+        key=lambda e: min(float(e["delta_f1_macro_18"]), float(e["delta_f1_macro_france9"])),
     )
     improves_18 = bool(best["f1_macro_18"] > champ_f1_18)
     improves_both = bool(
-        best_both["delta_f1_macro_18"] > 0.0
-        and best_both["delta_f1_macro_france9"] > 0.0
+        best_both["delta_f1_macro_18"] > 0.0 and best_both["delta_f1_macro_france9"] > 0.0
     )
     # A MATERIAL improvement must clear the fold-5 noise floor on BOTH axes.
     material_both = bool(
@@ -737,9 +726,7 @@ def main() -> None:
     verdict to stdout (so it survives over SSH even if the file is not pulled).
     """
     report = run_ec_neighborhood()
-    out_path = (
-        _REPO_ROOT / "reports" / "ensemble" / "metrics" / "ec_neighborhood_result.json"
-    )
+    out_path = _REPO_ROOT / "reports" / "ensemble" / "metrics" / "ec_neighborhood_result.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
     logger.info("ec_neighborhood_written", path=str(out_path))

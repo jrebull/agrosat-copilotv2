@@ -72,7 +72,10 @@ def _parse_log(path: Path) -> tuple[dict[str, str], list[dict[str, float]]]:
             kv = _parse_kv(line, ("epoch", *_METRIC_KEYS))
             if "epoch" in kv:
                 epochs.append(
-                    {"epoch": int(kv["epoch"]), **{m: float(kv[m]) for m in _METRIC_KEYS if m in kv}}
+                    {
+                        "epoch": int(kv["epoch"]),
+                        **{m: float(kv[m]) for m in _METRIC_KEYS if m in kv},
+                    }
                 )
     epochs.sort(key=lambda e: e["epoch"])
     return config, epochs

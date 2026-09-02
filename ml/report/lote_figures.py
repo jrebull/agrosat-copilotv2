@@ -228,14 +228,8 @@ def build_segmenter_triptychs(
     for idx in valid:
         x, y = dataset[idx]
         x_np = x.numpy()
-        rgb = (
-            rgb_from_patch(np.median(x_np, axis=0))
-            if x_np.ndim == 4
-            else rgb_from_patch(x_np)
-        )
-        pred = _predict_18class_map(
-            model, x, spec, dataset=dataset, idx=idx, device=torch_device
-        )
+        rgb = rgb_from_patch(np.median(x_np, axis=0)) if x_np.ndim == 4 else rgb_from_patch(x_np)
+        pred = _predict_18class_map(model, x, spec, dataset=dataset, idx=idx, device=torch_device)
         figs.append(
             prediction_figure(
                 rgb,
@@ -300,9 +294,7 @@ def build_segmenter_confusion(
             pred_18 = _predict_18class_map(
                 model, x, spec, dataset=dataset, idx=idx, device=torch_device
             )
-            cm += dense_confusion_matrix(
-                pred_18, y.numpy(), n_classes=18, ignore_index=255
-            )
+            cm += dense_confusion_matrix(pred_18, y.numpy(), n_classes=18, ignore_index=255)
     metrics = dense_metrics_from_cm(cm)
     if _torch.cuda.is_available():
         _torch.cuda.empty_cache()
@@ -521,8 +513,7 @@ def build_farslip_prediction_figures(
 
     captions_lf = pl.read_parquet(captions_parquet)
     caption_of: dict[str, str] = {
-        str(r["patch_id"]): str(r["caption_glo"])
-        for r in captions_lf.iter_rows(named=True)
+        str(r["patch_id"]): str(r["caption_glo"]) for r in captions_lf.iter_rows(named=True)
     }
 
     # Deterministic example selection: spread across the dataset, prefer a mix of
@@ -562,9 +553,7 @@ def build_farslip_prediction_figures(
         region_cat_map = _region_category_map(instance, regions)
         # The single FarSLIP prediction painted over EVERY parcel of the patch
         # (the model gives one label for the whole patch -> all parcels share it).
-        pred_map = _region_category_map(
-            instance, [(inst, pred_cat) for inst, _c in regions]
-        )
+        pred_map = _region_category_map(instance, [(inst, pred_cat) for inst, _c in regions])
 
         # Per-parcel honesty: against how many parcels would the single patch
         # prediction be correct? (a parcel "matches" if its true crop == pred_cat)
@@ -592,12 +581,15 @@ def build_farslip_prediction_figures(
         axes[1].axis("off")
         # Legend with the real crop names present in this patch.
         handles = [
-            Patch(color=cmap(norm(c)), label=PASTIS_R_CLASSES.get(c, str(c)))
-            for c in cats_present
+            Patch(color=cmap(norm(c)), label=PASTIS_R_CLASSES.get(c, str(c))) for c in cats_present
         ]
         axes[1].legend(
-            handles=handles, loc="upper left", bbox_to_anchor=(0.0, -0.02),
-            fontsize=6.5, ncol=2, frameon=False,
+            handles=handles,
+            loc="upper left",
+            bbox_to_anchor=(0.0, -0.02),
+            fontsize=6.5,
+            ncol=2,
+            frameon=False,
         )
 
         # Panel 3: the single FarSLIP prediction applied to all parcels.
@@ -612,8 +604,11 @@ def build_farslip_prediction_figures(
         axes[2].axis("off")
         handles_p = [Patch(color=cmap(norm(pred_cat)), label=pred_name)]
         axes[2].legend(
-            handles=handles_p, loc="upper left", bbox_to_anchor=(0.0, -0.02),
-            fontsize=6.5, frameon=False,
+            handles=handles_p,
+            loc="upper left",
+            bbox_to_anchor=(0.0, -0.02),
+            fontsize=6.5,
+            frameon=False,
         )
         fig.tight_layout()
 
@@ -659,9 +654,7 @@ def _rgb_from_peak_ndvi(img4: np.ndarray) -> np.ndarray:
     return np.clip((rgb - lo) / (hi - lo), 0.0, 1.0)
 
 
-def _region_category_map(
-    instance: np.ndarray, regions: list[tuple[int, int]]
-) -> np.ndarray:
+def _region_category_map(instance: np.ndarray, regions: list[tuple[int, int]]) -> np.ndarray:
     """Map each parcel instance to its category id for a colored region map.
 
     Pixels with no region (or a region outside ``regions``) become NaN (drawn
@@ -713,17 +706,13 @@ def build_ensemble_comparison_figure(
     chosen = df["chosen"].to_list() if "chosen" in df.columns else [False] * len(models)
 
     fig, ax = plt.subplots(figsize=(9, 4.5))
-    bar_colors = [
-        "#2a9d8f" if str(c).lower() in ("true", "1") else "#9bbbd4" for c in chosen
-    ]
+    bar_colors = ["#2a9d8f" if str(c).lower() in ("true", "1") else "#9bbbd4" for c in chosen]
     ax.barh(range(len(models)), f1, color=bar_colors)
     ax.set_yticks(range(len(models)))
     ax.set_yticklabels(models, fontsize=9)
     ax.invert_yaxis()
     ax.set_xlabel("F1-macro (fold-5 held-out)")
-    ax.set_title(
-        "Comparativa de ensambles US-040 (verde = elegido: Stacking heterogeneo)"
-    )
+    ax.set_title("Comparativa de ensambles US-040 (verde = elegido: Stacking heterogeneo)")
     for i, v in enumerate(f1):
         ax.text(float(v) + 0.005, i, f"{float(v):.3f}", va="center", fontsize=8)
     ax.set_xlim(0, max(f1) * 1.15)
@@ -945,10 +934,22 @@ def build_us034_fix_figure(
     cos_real = _offdiag_cos(real)
     cos_rand = _offdiag_cos(rand)
     fig, ax = plt.subplots(figsize=(9, 4.2))
-    ax.hist(cos_rand, bins=30, alpha=0.6, label="Prototipos aleatorios (bug torch.randn)",
-            color="#c1666b", density=True)
-    ax.hist(cos_real, bins=30, alpha=0.6, label="Prototipos fenologicos reales (fix)",
-            color="#2a9d8f", density=True)
+    ax.hist(
+        cos_rand,
+        bins=30,
+        alpha=0.6,
+        label="Prototipos aleatorios (bug torch.randn)",
+        color="#c1666b",
+        density=True,
+    )
+    ax.hist(
+        cos_real,
+        bins=30,
+        alpha=0.6,
+        label="Prototipos fenologicos reales (fix)",
+        color="#2a9d8f",
+        density=True,
+    )
     ax.set_xlabel("Similitud coseno entre pares de clases (fuera de la diagonal)")
     ax.set_ylabel("Densidad")
     ax.set_title(
@@ -968,9 +969,7 @@ def build_us034_fix_figure(
     return fig, summary
 
 
-def build_us035_bands_figure(
-    *, logs_dir: Path = DEFAULT_BAND_LOGS
-) -> tuple[Figure, pl.DataFrame]:
+def build_us035_bands_figure(*, logs_dir: Path = DEFAULT_BAND_LOGS) -> tuple[Figure, pl.DataFrame]:
     """US-035: band-ablation table from the three real H100 training logs.
 
     Parses the final ``training done`` line of each band variant log
@@ -1022,10 +1021,8 @@ def build_us035_bands_figure(
     labels = df["variante"].to_list()
     x = np.arange(len(labels))
     width = 0.35
-    ax.bar(x - width / 2, df["loss_cls"].to_list(), width, label="loss_cls",
-           color="#2a6f97")
-    ax.bar(x + width / 2, df["loss_total"].to_list(), width, label="loss_total",
-           color="#89c2d9")
+    ax.bar(x - width / 2, df["loss_cls"].to_list(), width, label="loss_cls", color="#2a6f97")
+    ax.bar(x + width / 2, df["loss_total"].to_list(), width, label="loss_total", color="#89c2d9")
     ax.set_xticks(x)
     ax.set_xticklabels(labels, fontsize=9)
     ax.set_ylabel("Loss (final del entrenamiento)")

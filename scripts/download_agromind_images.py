@@ -293,9 +293,7 @@ def main(argv: list[str] | None = None) -> int:
 
     token = os.environ.get("HUGGINGFACE_TOKEN") or os.environ.get("HF_TOKEN")
     try:
-        per_zip = download_subset_images(
-            args.subset, args.dest, repo_id=args.repo_id, token=token
-        )
+        per_zip = download_subset_images(args.subset, args.dest, repo_id=args.repo_id, token=token)
     except Exception as exc:  # noqa: BLE001 - surface the real cause to the operator
         logger.error("agromind_image_download_failed", error=str(exc))
         return 1

@@ -75,9 +75,7 @@ def _one_step_grad_norms(
     t._optim.zero_grad(set_to_none=True)
     losses = t.step(imgs, region_ids, cat_ids)
     losses["loss_total"].backward()
-    grad_norm = torch.nn.utils.clip_grad_norm_(
-        t.student.parameters(), max_norm=1e9
-    ).item()
+    grad_norm = torch.nn.utils.clip_grad_norm_(t.student.parameters(), max_norm=1e9).item()
     t._optim.step()
     state = {k: v.detach().cpu().clone() for k, v in t.student.state_dict().items()}
     return grad_norm, state
@@ -97,9 +95,7 @@ def test_two_steps_same_seed_bit_exact_state_dict(
 
     grad_b, state_b = _one_step_grad_norms(trainer, seed=123)
 
-    assert abs(grad_a - grad_b) < 1e-6, (
-        f"grad-norm difiere entre runs: {grad_a} vs {grad_b}"
-    )
+    assert abs(grad_a - grad_b) < 1e-6, f"grad-norm difiere entre runs: {grad_a} vs {grad_b}"
     assert set(state_a.keys()) == set(state_b.keys())
     mismatches = []
     for k in state_a:

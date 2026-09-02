@@ -98,9 +98,7 @@ def _stratified_sample(
     if not parts:
         return df.clear()
     combined = pl.concat(parts, how="vertical_relaxed")
-    return combined.sample(
-        fraction=1.0, seed=seed, with_replacement=False, shuffle=True
-    )
+    return combined.sample(fraction=1.0, seed=seed, with_replacement=False, shuffle=True)
 
 
 def materialize_phenology_text(
@@ -174,9 +172,7 @@ def materialize_phenology_text(
 
     parcels_path = Path(parcels_features_path)
     if not parcels_path.exists():
-        raise FileNotFoundError(
-            f"parcels_features_path does not exist: {parcels_path}"
-        )
+        raise FileNotFoundError(f"parcels_features_path does not exist: {parcels_path}")
 
     output_path = Path(output_path)
     if output_path.exists() and not overwrite:
@@ -210,9 +206,7 @@ def materialize_phenology_text(
                 f"balanced_by_class=True requires the {class_col!r} column. "
                 f"Available columns: {df.columns}"
             )
-        sample = _stratified_sample(
-            df, class_col=class_col, min_per_class=min_per_class, seed=seed
-        )
+        sample = _stratified_sample(df, class_col=class_col, min_per_class=min_per_class, seed=seed)
         logger.info(
             "phenology_text_balanced_sample",
             n_after_balance=sample.height,
@@ -220,9 +214,7 @@ def materialize_phenology_text(
         )
 
     if max_parcels is not None and max_parcels > 0 and sample.height > max_parcels:
-        sample = sample.sample(
-            n=max_parcels, seed=seed, with_replacement=False
-        )
+        sample = sample.sample(n=max_parcels, seed=seed, with_replacement=False)
         logger.info("phenology_text_subsampled", n=sample.height)
 
     n_total = sample.height

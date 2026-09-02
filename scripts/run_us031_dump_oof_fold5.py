@@ -37,9 +37,7 @@ def main() -> int:
         write_parcel=True,
     )
 
-    total_mb = sum(
-        p.stat().st_size for p in _OOF_DIR.glob("*.parquet")
-    ) / (1024 * 1024)
+    total_mb = sum(p.stat().st_size for p in _OOF_DIR.glob("*.parquet")) / (1024 * 1024)
     n_ok = sum(1 for m in manifest.get("models", {}).values() if m.get("status") == "ok")
     logger.info(
         "us031_dump_done",

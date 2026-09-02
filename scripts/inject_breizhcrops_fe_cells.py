@@ -211,9 +211,7 @@ def main() -> None:
     cells = nb["cells"]
 
     already = any(
-        MARKER in "".join(c.get("source", []))
-        for c in cells
-        if c.get("cell_type") == "code"
+        MARKER in "".join(c.get("source", [])) for c in cells if c.get("cell_type") == "code"
     )
     if already:
         print("marcador ya presente — no se reinserta (idempotente)")

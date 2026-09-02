@@ -82,9 +82,7 @@ def test_learning_curve_returns_result_and_figure() -> None:
     """``plot_learning_curve`` devuelve un ``LearningCurveResult`` y una ``Figure``."""
     df = make_curve_dataset(n=240, n_classes=4, n_features=12, separability="clean")
     splits = make_cv_splits(df.height, k=4)
-    result, figure = plot_learning_curve(
-        _rf(), df, splits, train_sizes=[0.3, 0.6, 1.0]
-    )
+    result, figure = plot_learning_curve(_rf(), df, splits, train_sizes=[0.3, 0.6, 1.0])
     assert isinstance(result, LearningCurveResult)
     assert isinstance(figure, Figure)
     assert result.scoring == "accuracy"
@@ -97,9 +95,7 @@ def test_learning_curve_train_sizes_monotonic() -> None:
     """Los tamanos absolutos de la curva crecen de forma monotona."""
     df = make_curve_dataset(n=300, n_classes=4, n_features=10, separability="clean")
     splits = make_cv_splits(df.height, k=5)
-    result, _ = plot_learning_curve(
-        _rf(), df, splits, train_sizes=[0.1, 0.4, 0.7, 1.0]
-    )
+    result, _ = plot_learning_curve(_rf(), df, splits, train_sizes=[0.1, 0.4, 0.7, 1.0])
     diffs = np.diff(result.train_sizes_abs)
     assert np.all(diffs > 0)
 
@@ -117,9 +113,7 @@ def test_learning_curve_respects_max_samples() -> None:
     """``max_samples`` recorta el dataset usado por la curva (decision D7)."""
     df = make_curve_dataset(n=600, n_classes=4, n_features=10, separability="clean")
     splits = make_cv_splits(df.height, k=5)
-    result, _ = plot_learning_curve(
-        _rf(), df, splits, train_sizes=[0.5, 1.0], max_samples=200
-    )
+    result, _ = plot_learning_curve(_rf(), df, splits, train_sizes=[0.5, 1.0], max_samples=200)
     # El tamano de train mas grande no puede exceder el subset de 200 muestras.
     assert int(result.train_sizes_abs.max()) <= 200
 
@@ -136,9 +130,7 @@ def test_learning_curve_works_with_xgb() -> None:
     """La curva de aprendizaje tambien funciona con un estimador XGBoost."""
     df = make_curve_dataset(n=240, n_classes=3, n_features=10, separability="clean")
     splits = make_cv_splits(df.height, k=4)
-    result, figure = plot_learning_curve(
-        _xgb(), df, splits, train_sizes=[0.5, 1.0]
-    )
+    result, figure = plot_learning_curve(_xgb(), df, splits, train_sizes=[0.5, 1.0])
     assert isinstance(result, LearningCurveResult)
     assert isinstance(figure, Figure)
 
@@ -152,9 +144,7 @@ def test_validation_curve_rf_max_depth() -> None:
     """Curva de validacion de RF sobre ``max_depth`` con ``None`` en el rango."""
     df = make_curve_dataset(n=240, n_classes=4, n_features=12, separability="clean")
     splits = make_cv_splits(df.height, k=4)
-    result, figure = plot_validation_curve(
-        _rf(), df, "max_depth", [3, 5, 10, None], splits
-    )
+    result, figure = plot_validation_curve(_rf(), df, "max_depth", [3, 5, 10, None], splits)
     assert isinstance(result, ValidationCurveResult)
     assert isinstance(figure, Figure)
     assert result.param_name == "max_depth"
@@ -166,9 +156,7 @@ def test_validation_curve_xgb_n_estimators() -> None:
     """Curva de validacion de XGB sobre ``n_estimators``."""
     df = make_curve_dataset(n=240, n_classes=3, n_features=10, separability="clean")
     splits = make_cv_splits(df.height, k=4)
-    result, _ = plot_validation_curve(
-        _xgb(), df, "n_estimators", [20, 40, 80], splits
-    )
+    result, _ = plot_validation_curve(_xgb(), df, "n_estimators", [20, 40, 80], splits)
     assert result.param_name == "n_estimators"
     assert result.val_scores_mean.shape == (3,)
 
@@ -177,9 +165,7 @@ def test_validation_curve_xgb_learning_rate() -> None:
     """Curva de validacion de XGB sobre ``learning_rate``."""
     df = make_curve_dataset(n=240, n_classes=3, n_features=10, separability="clean")
     splits = make_cv_splits(df.height, k=4)
-    result, _ = plot_validation_curve(
-        _xgb(), df, "learning_rate", [0.05, 0.1, 0.3], splits
-    )
+    result, _ = plot_validation_curve(_xgb(), df, "learning_rate", [0.05, 0.1, 0.3], splits)
     assert result.param_name == "learning_rate"
     assert result.train_scores_mean.shape == (3,)
 
@@ -300,13 +286,9 @@ def test_diagnose_fit_underfit_end_to_end() -> None:
 
 def test_diagnose_fit_overfit_end_to_end() -> None:
     """Un RF sin poda sobre pocas muestras y muchas features se diagnostica ``overfit``."""
-    df = make_curve_dataset(
-        n=120, n_classes=4, n_features=40, separability="memorizable"
-    )
+    df = make_curve_dataset(n=120, n_classes=4, n_features=40, separability="memorizable")
     splits = make_cv_splits(df.height, k=5)
-    result, _ = plot_learning_curve(
-        _rf(max_depth=None), df, splits, train_sizes=[0.3, 0.6, 1.0]
-    )
+    result, _ = plot_learning_curve(_rf(max_depth=None), df, splits, train_sizes=[0.3, 0.6, 1.0])
     assert diagnose_fit(result).verdict == "overfit"
 
 
@@ -380,9 +362,7 @@ def test_learning_curve_subsample_remaps_cv_splits() -> None:
     df = make_curve_dataset(n=500, n_classes=4, n_features=10, separability="clean")
     splits = make_cv_splits(df.height, k=5)
     # No debe lanzar IndexError pese a que los splits indexan hasta 499.
-    result, _ = plot_learning_curve(
-        _rf(), df, splits, train_sizes=[0.5, 1.0], max_samples=150
-    )
+    result, _ = plot_learning_curve(_rf(), df, splits, train_sizes=[0.5, 1.0], max_samples=150)
     assert int(result.train_sizes_abs.max()) <= 150
 
 
@@ -435,9 +415,7 @@ def test_notebook_has_section_5b() -> None:
     if not nb_path.exists():
         pytest.skip("notebooks/04_baseline.ipynb aun no generado.")
     nb = json.loads(nb_path.read_text(encoding="utf-8"))
-    text = "\n".join(
-        "".join(cell.get("source", [])) for cell in nb.get("cells", [])
-    )
+    text = "\n".join("".join(cell.get("source", [])) for cell in nb.get("cells", []))
     assert "5b" in text
     assert "Curvas de aprendizaje" in text
     # No debe quedar el placeholder de US-021 sin reemplazar.
@@ -450,9 +428,7 @@ def test_notebook_5b_has_fit_diagnosis() -> None:
     if not nb_path.exists():
         pytest.skip("notebooks/04_baseline.ipynb aun no generado.")
     nb = json.loads(nb_path.read_text(encoding="utf-8"))
-    text = "\n".join(
-        "".join(cell.get("source", [])) for cell in nb.get("cells", [])
-    )
+    text = "\n".join("".join(cell.get("source", [])) for cell in nb.get("cells", []))
     assert "diagnose_fit" in text
     assert "plot_learning_curve" in text
     assert "plot_validation_curve" in text
@@ -498,9 +474,7 @@ def _make_fake_mlflow_client(
     """
     train_keys = [f"fold{i}_train_loss" for i in range(len(train_per_fold))]
     val_keys = (
-        [f"fold{i}_val_loss" for i in range(len(val_per_fold))]
-        if val_per_fold is not None
-        else []
+        [f"fold{i}_val_loss" for i in range(len(val_per_fold))] if val_per_fold is not None else []
     )
     metric_summary = {k: 0.0 for k in train_keys + val_keys}
     history_map: dict[str, list[_FakeMetric]] = {}
@@ -579,9 +553,7 @@ def test_fetch_loss_history_raises_when_no_train_loss(
         train_per_fold=[],
         val_per_fold=None,
     )
-    monkeypatch.setattr(
-        "mlflow.tracking.MlflowClient", fake_client, raising=False
-    )
+    monkeypatch.setattr("mlflow.tracking.MlflowClient", fake_client, raising=False)
 
     import mlflow
 

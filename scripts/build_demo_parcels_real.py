@@ -52,9 +52,7 @@ _SOURCE_EPSG = 2154
 def _patch_bounds_utm(geometry: dict) -> tuple[float, float, float, float]:
     """Return (minx, miny, maxx, maxy) UTM bounds of a patch footprint."""
     coords = list(
-        itertools.chain.from_iterable(
-            itertools.chain.from_iterable(geometry["coordinates"])
-        )
+        itertools.chain.from_iterable(itertools.chain.from_iterable(geometry["coordinates"]))
     )
     xs = [c[0] for c in coords]
     ys = [c[1] for c in coords]
@@ -97,9 +95,7 @@ def _vectorize_patch(patch_id: int, geometry: dict, tile: str) -> list[dict]:
         if cls in _SKIP_CLASSES:
             continue
         crop = PASTIS_CLASS_NAMES.get(cls, "Unknown")
-        for geom, _value in rasterio.features.shapes(
-            parcel_ids, mask=mask, transform=transform
-        ):
+        for geom, _value in rasterio.features.shapes(parcel_ids, mask=mask, transform=transform):
             rings = [_reproject_ring(r, transformer) for r in geom["coordinates"]]
             features.append(
                 {
@@ -130,9 +126,7 @@ def _select_patches(n_patches: int) -> list[dict]:
         crops = {int(c) for c in np.unique(semantic)} - _SKIP_CLASSES
         if len(crops) < 3:
             continue
-        chosen.append(
-            {"id": pid, "geometry": feat["geometry"], "tile": str(props["TILE"])}
-        )
+        chosen.append({"id": pid, "geometry": feat["geometry"], "tile": str(props["TILE"])})
         if len(chosen) >= n_patches:
             break
     return chosen
@@ -151,9 +145,7 @@ def main(n_patches: int = typer.Option(3, help="Number of PASTIS patches to vect
         log.info("patch_vectorized", patch=p["id"], tile=p["tile"], parcels=len(feats))
 
     # Overall WGS84 bbox for the frontend fly-to.
-    all_pts = [
-        pt for f in features for ring in f["geometry"]["coordinates"] for pt in ring
-    ]
+    all_pts = [pt for f in features for ring in f["geometry"]["coordinates"] for pt in ring]
     lons = [pt[0] for pt in all_pts]
     lats = [pt[1] for pt in all_pts]
     bbox = [min(lons), min(lats), max(lons), max(lats)]

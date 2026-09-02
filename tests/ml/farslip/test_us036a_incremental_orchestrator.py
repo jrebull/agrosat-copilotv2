@@ -312,9 +312,7 @@ class _SpyStudent:
     def __init__(self) -> None:
         self.load_calls: list[tuple[Any, bool]] = []
 
-    def load_state_dict(
-        self, state_dict: dict[str, torch.Tensor], strict: bool = True
-    ) -> Any:
+    def load_state_dict(self, state_dict: dict[str, torch.Tensor], strict: bool = True) -> Any:
         self.load_calls.append((state_dict, strict))
 
         class _Incompatible:
@@ -402,9 +400,7 @@ def _wire_orchestrator_mocks(
         prototypes: torch.Tensor,
         **_kwargs: Any,
     ) -> StepMetrics:
-        f1_map = (per_step_f1 or {}).get(
-            len(class_ids), {c: 0.70 for c in class_ids}
-        )
+        f1_map = (per_step_f1 or {}).get(len(class_ids), {c: 0.70 for c in class_ids})
         return _metrics(class_ids, {c: f1_map.get(c, 0.70) for c in class_ids})
 
     def _fake_load_state_dict(_ckpt: Path) -> dict[str, torch.Tensor]:
@@ -419,9 +415,7 @@ def _wire_orchestrator_mocks(
     monkeypatch.setattr(orch, "propagate_seed", lambda _seed: None)
 
 
-def test_step0_inits_from_teacher(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_step0_inits_from_teacher(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Step 0 does NOT warm-start (teacher CLIP default); step 1 does."""
     _wire_orchestrator_mocks(monkeypatch)
     results = orch.run_incremental_curriculum(
@@ -443,9 +437,7 @@ def test_step0_inits_from_teacher(
     assert strict is False, "chained init must use strict=False"
 
 
-def test_stepk_inits_from_prev_best(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_stepk_inits_from_prev_best(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """Each step k>0 warm-starts from the previous step's best checkpoint."""
     _wire_orchestrator_mocks(monkeypatch)
     results = orch.run_incremental_curriculum(
@@ -466,9 +458,7 @@ def test_stepk_inits_from_prev_best(
     assert (tmp_path / "08cls" / "best.safetensors").exists()
 
 
-def test_run_n_regions_is_one(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_run_n_regions_is_one(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """The per-step trainer cfg uses n_regions=1 and n_categories=N_k."""
     _wire_orchestrator_mocks(monkeypatch)
     orch.run_incremental_curriculum(
@@ -513,9 +503,7 @@ def test_run_stops_on_unacceptable_new_classes(
     assert results[-1].stop_reason == "new_classes_unacceptable"
 
 
-def test_run_budget_exhausted(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_run_budget_exhausted(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """A zero wall-clock budget stops after the first step (budget_exhausted)."""
     _wire_orchestrator_mocks(monkeypatch)
     results = orch.run_incremental_curriculum(
@@ -547,9 +535,7 @@ def test_select_winner_empty() -> None:
     assert orch._select_winner([]) is None
 
 
-def test_run_selects_winner(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_run_selects_winner(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """The winner is the step with the most well-resolved classes."""
     _wire_orchestrator_mocks(
         monkeypatch,

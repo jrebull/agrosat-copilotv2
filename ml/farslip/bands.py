@@ -87,9 +87,7 @@ def _validate_selection(sel: str) -> None:
         ValueError: if ``sel`` is not one of ``rgb``/``nir_rgb``/``4band``.
     """
     if sel not in _SELECTIONS:
-        raise ValueError(
-            f"invalid band_selection {sel!r}; expected one of {sorted(_SELECTIONS)}"
-        )
+        raise ValueError(f"invalid band_selection {sel!r}; expected one of {sorted(_SELECTIONS)}")
 
 
 def n_in_channels_for(sel: BandSelection) -> int:
@@ -144,9 +142,7 @@ def select_and_reorder_bands(img: torch.Tensor, sel: BandSelection) -> torch.Ten
     """
     _validate_selection(sel)
     if img.dim() < 3:
-        raise ValueError(
-            f"img must be at least 3-D (C, H, W); got shape {tuple(img.shape)}"
-        )
+        raise ValueError(f"img must be at least 3-D (C, H, W); got shape {tuple(img.shape)}")
     channel_dim = img.dim() - 3
     n_channels = img.shape[channel_dim]
     if n_channels < _MIN_CROP_CHANNELS:

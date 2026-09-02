@@ -72,9 +72,7 @@ def test_inference_mode_no_grad(extractor: Any) -> None:
     assert out.grad_fn is None
 
 
-def test_gcs_fallback_to_cache_on_offline(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_gcs_fallback_to_cache_on_offline(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Si GCS no responde y hay cache local valido, lo usa."""
     if not _hf_available():
         pytest.skip("transformers no disponible")
@@ -92,13 +90,9 @@ def test_gcs_fallback_to_cache_on_offline(
     def _fail_download(self: Any, _: str) -> Path:
         raise RuntimeError("GCS offline simulado")
 
-    monkeypatch.setattr(
-        FarSLIPExtractor, "_download_from_gcs", _fail_download
-    )
+    monkeypatch.setattr(FarSLIPExtractor, "_download_from_gcs", _fail_download)
     try:
-        ex = FarSLIPExtractor(
-            weights_uri=uri, device="cpu", cache_dir=cache_dir
-        )
+        ex = FarSLIPExtractor(weights_uri=uri, device="cpu", cache_dir=cache_dir)
     except (OSError, RuntimeError, ValueError) as exc:
         pytest.skip(f"no se pudo instanciar extractor degradado: {exc}")
     # Aun asi debe extraer embeddings (modo teacher fallback)
@@ -138,14 +132,11 @@ def test_load_local_weights_from_directory(tmp_path: Path) -> None:
     except (OSError, RuntimeError, ValueError) as exc:
         pytest.skip(f"no se pudo instanciar: {exc}")
     state = {
-        k: v.detach().contiguous().cpu()
-        for k, v in ex_base.model.vision_model.state_dict().items()
+        k: v.detach().contiguous().cpu() for k, v in ex_base.model.vision_model.state_dict().items()
     }
     save_file(state, str(weights_dir / "student.safetensors"))
 
-    ex = FarSLIPExtractor(
-        weights_uri=str(weights_dir), device="cpu", cache_dir=tmp_path / "cache"
-    )
+    ex = FarSLIPExtractor(weights_uri=str(weights_dir), device="cpu", cache_dir=tmp_path / "cache")
     crops = torch.rand(1, 4, 224, 224)
     out = ex.extract_embeddings(crops)
     assert out.shape == (1, 512)
@@ -165,14 +156,11 @@ def test_load_local_weights_from_file_path(tmp_path: Path) -> None:
     except (OSError, RuntimeError, ValueError) as exc:
         pytest.skip(f"no se pudo instanciar: {exc}")
     state = {
-        k: v.detach().contiguous().cpu()
-        for k, v in ex_base.model.vision_model.state_dict().items()
+        k: v.detach().contiguous().cpu() for k, v in ex_base.model.vision_model.state_dict().items()
     }
     save_file(state, str(weights_path))
 
-    ex = FarSLIPExtractor(
-        weights_uri=str(weights_path), device="cpu", cache_dir=tmp_path / "cache"
-    )
+    ex = FarSLIPExtractor(weights_uri=str(weights_path), device="cpu", cache_dir=tmp_path / "cache")
     crops = torch.rand(1, 4, 224, 224)
     out = ex.extract_embeddings(crops)
     assert out.shape == (1, 512)
@@ -265,9 +253,7 @@ def test_gcs_auth_error_degrades_to_teacher_mode(
     assert out.shape == (1, 512)
 
 
-def test_non_gcs_error_still_propagates(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_non_gcs_error_still_propagates(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Bugs reales (AttributeError, KeyError) no deben enmascararse como GCS.
 
     Garantiza que el bloque ``except Exception`` agregado para Forbidden no

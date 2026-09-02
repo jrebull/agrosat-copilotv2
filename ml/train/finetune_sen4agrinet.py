@@ -288,9 +288,7 @@ def evaluate_zero_shot(
     )
 
     lut = torch.as_tensor(SEMANTIC18_TO_MACRO, device=device)
-    acc = DenseConfusionAccumulator(
-        N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device)
-    )
+    acc = DenseConfusionAccumulator(N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device))
     for i in val_idx:
         x, y = val_ds[i]  # type: ignore[index]
         pred_18 = predict_patch_for_kind(model, x, model_kind="tsvit-pheno")
@@ -322,9 +320,7 @@ def evaluate_few_shot(
         Metric dict ``{"miou", "f1_macro", "pixel_accuracy"}``.
     """
     model.eval()
-    acc = DenseConfusionAccumulator(
-        N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device)
-    )
+    acc = DenseConfusionAccumulator(N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device))
     for i in val_idx:
         x, y = val_ds[i]  # type: ignore[index]
         pred = predict_patch_for_kind(model, x, model_kind="tsvit-pheno")
@@ -367,11 +363,7 @@ def build_macro_model_from_fr(
     # Drop class-count-dependent params so load_state_dict(strict=False) keeps the
     # fresh macro init for the head instead of warning on every shape mismatch.
     macro_sd = model.state_dict()
-    transfer = {
-        k: v
-        for k, v in state.items()
-        if k in macro_sd and v.shape == macro_sd[k].shape
-    }
+    transfer = {k: v for k, v in state.items() if k in macro_sd and v.shape == macro_sd[k].shape}
     missing = [k for k in macro_sd if k not in transfer]
     model.load_state_dict(transfer, strict=False)
     logger.info(
@@ -445,9 +437,7 @@ def run_transfer(
         countries=("ES",),
         precache_all=True,  # decode the ~30 ES patches once (shuffle-safe, ~9x).
     )
-    train_idx, val_idx, train_patches, val_patches = _patch_level_split(
-        cat_ds, k=k, seed=seed
-    )
+    train_idx, val_idx, train_patches, val_patches = _patch_level_split(cat_ds, k=k, seed=seed)
     logger.info(
         "transfer_split",
         n_train_patches=len(train_patches),
@@ -478,28 +468,20 @@ def run_transfer(
     # --- Step 2: few-shot finetune (macro head + France encoder) --------------
     from torch.utils.data import Subset
 
-    model = build_macro_model_from_fr(
-        Path(fr_ckpt), linear_probe=linear_probe, device=dev
-    )
+    model = build_macro_model_from_fr(Path(fr_ckpt), linear_probe=linear_probe, device=dev)
     # Two LR groups: low for the transferred encoder, normal for the new head.
     # The head params are exactly the ones reinitialized (not loaded from FR).
     fr_state = torch.load(Path(fr_ckpt), map_location="cpu", weights_only=False)
     fr_sd = fr_state["model_state"] if "model_state" in fr_state else fr_state
     macro_sd = model.state_dict()
     head_param_names = {
-        n
-        for n in macro_sd
-        if n not in fr_sd or fr_sd[n].shape != macro_sd[n].shape
+        n for n in macro_sd if n not in fr_sd or fr_sd[n].shape != macro_sd[n].shape
     }
     encoder_params = [
-        p
-        for n, p in model.named_parameters()
-        if p.requires_grad and n not in head_param_names
+        p for n, p in model.named_parameters() if p.requires_grad and n not in head_param_names
     ]
     head_params = [
-        p
-        for n, p in model.named_parameters()
-        if p.requires_grad and n in head_param_names
+        p for n, p in model.named_parameters() if p.requires_grad and n in head_param_names
     ]
     logger.info(
         "transfer_param_groups",
@@ -622,9 +604,7 @@ def _train_two_group(
         param_groups.append({"params": head_params, "lr": head_lr})
     optimizer = torch.optim.AdamW(param_groups)
 
-    criterion = build_dice_ce_loss(
-        ignore_index=IGNORE_INDEX, n_classes=N_MACRO_CLASSES
-    ).to(device)
+    criterion = build_dice_ce_loss(ignore_index=IGNORE_INDEX, n_classes=N_MACRO_CLASSES).to(device)
     amp_enabled = device.type == "cuda"
     scaler = torch.cuda.amp.GradScaler(enabled=amp_enabled) if amp_enabled else None
 
@@ -709,7 +689,10 @@ def _train_two_group(
             train_loss = epoch_loss / max(1, n_batches)
 
             val_metrics = evaluate_few_shot(
-                model, val_ds, list(range(len(val_ds))), device=device  # type: ignore[arg-type]
+                model,
+                val_ds,
+                list(range(len(val_ds))),
+                device=device,  # type: ignore[arg-type]
             )
             current_lr = optimizer.param_groups[-1]["lr"]
             mlflow.log_metric("train_loss", train_loss, step=epoch)
@@ -827,9 +810,7 @@ def main(argv: list[str] | None = None) -> None:
         miou_few_shot=(
             round(result.miou_few_shot, 4) if result.miou_few_shot is not None else None
         ),
-        delta_miou=(
-            round(result.delta_miou, 4) if result.delta_miou is not None else None
-        ),
+        delta_miou=(round(result.delta_miou, 4) if result.delta_miou is not None else None),
         n_val_patches=result.n_val_patches,
         n_train_patches=result.n_train_patches,
     )

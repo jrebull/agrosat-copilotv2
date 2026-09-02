@@ -262,11 +262,7 @@ def _embed_dataset(
             chunks.append(embeds.cpu().numpy().astype(np.float32))
             parcel_ids.extend(batch["parcel_ids"])
             class_ids.extend(int(c) for c in batch["class_ids"].tolist())
-    matrix = (
-        np.concatenate(chunks, axis=0)
-        if chunks
-        else np.zeros((0, 512), dtype=np.float32)
-    )
+    matrix = np.concatenate(chunks, axis=0) if chunks else np.zeros((0, 512), dtype=np.float32)
     return parcel_ids, class_ids, matrix
 
 
@@ -277,9 +273,7 @@ def _softmax_rows(logits: np.ndarray) -> np.ndarray:
     return exp / exp.sum(axis=1, keepdims=True)
 
 
-def _scatter_to_18(
-    proba_curriculum: np.ndarray, curriculum_ids: Sequence[int]
-) -> np.ndarray:
+def _scatter_to_18(proba_curriculum: np.ndarray, curriculum_ids: Sequence[int]) -> np.ndarray:
     """Scatter a per-parcel softmax over curriculum classes to the 18-class space.
 
     The FarSLIP heads emit a distribution over the active curriculum classes (the
@@ -351,9 +345,7 @@ def _write_parcel_oof(
     for c, name in enumerate(PROB_COLUMNS):
         data[name] = kept[:, c].astype(np.float32)
     data["pred_class"] = (
-        kept.argmax(axis=1).astype(np.int64)
-        if kept.shape[0]
-        else np.zeros(0, dtype=np.int64)
+        kept.argmax(axis=1).astype(np.int64) if kept.shape[0] else np.zeros(0, dtype=np.int64)
     )
     data["n_pixels"] = np.full(kept.shape[0], -1, dtype=np.int64)
     frame = canonical_parcel_id(pl.DataFrame(data), col=_KEY).sort(_KEY)
@@ -618,9 +610,9 @@ def _blending_metrics(
 
 @app.command()
 def run(
-    farslip_checkpoint: Annotated[
-        Path, typer.Option("--farslip-checkpoint")
-    ] = Path("checkpoints/farslip/parcel/18cls/best.safetensors"),
+    farslip_checkpoint: Annotated[Path, typer.Option("--farslip-checkpoint")] = Path(
+        "checkpoints/farslip/parcel/18cls/best.safetensors"
+    ),
     oof_dir: Annotated[Path, typer.Option("--oof-dir")] = Path("ml/eval/oof"),
     pastis_root: Annotated[Path, typer.Option("--pastis-root")] = Path("data/PASTIS-R"),
     out_dir: Annotated[Path, typer.Option("--out-dir")] = Path("reports/ensemble"),
@@ -628,9 +620,7 @@ def run(
     n_spatial_folds: Annotated[int, typer.Option("--n-spatial-folds")] = 5,
     n_trials_blending: Annotated[int, typer.Option("--n-trials-blending")] = 50,
     device: Annotated[str, typer.Option("--device")] = "auto",
-    materialize: Annotated[
-        bool, typer.Option("--materialize/--no-materialize")
-    ] = True,
+    materialize: Annotated[bool, typer.Option("--materialize/--no-materialize")] = True,
     use_mlflow: Annotated[bool, typer.Option("--use-mlflow/--no-mlflow")] = True,
     random_state: Annotated[int, typer.Option("--random-state")] = 42,
 ) -> None:
@@ -675,22 +665,38 @@ def run(
 
     # Fase 3: Stacking-5 / Blending-5 vs the 3-member references (same parcels).
     stack5 = _stacking_metrics(
-        _BASE_MEMBERS_5, parcel_geoms=parcel_geoms, parcel_gt=parcel_gt,
-        oof_dir=oof_dir, n_spatial_folds=n_spatial_folds,
-        random_state=random_state, meta=meta,
+        _BASE_MEMBERS_5,
+        parcel_geoms=parcel_geoms,
+        parcel_gt=parcel_gt,
+        oof_dir=oof_dir,
+        n_spatial_folds=n_spatial_folds,
+        random_state=random_state,
+        meta=meta,
     )
     stack3 = _stacking_metrics(
-        _BASE_MEMBERS_3, parcel_geoms=parcel_geoms, parcel_gt=parcel_gt,
-        oof_dir=oof_dir, n_spatial_folds=n_spatial_folds,
-        random_state=random_state, meta=meta,
+        _BASE_MEMBERS_3,
+        parcel_geoms=parcel_geoms,
+        parcel_gt=parcel_gt,
+        oof_dir=oof_dir,
+        n_spatial_folds=n_spatial_folds,
+        random_state=random_state,
+        meta=meta,
     )
     blend5 = _blending_metrics(
-        _BASE_MEMBERS_5, parcel_geoms=parcel_geoms, parcel_gt=parcel_gt,
-        oof_dir=oof_dir, n_trials=n_trials_blending, random_state=random_state,
+        _BASE_MEMBERS_5,
+        parcel_geoms=parcel_geoms,
+        parcel_gt=parcel_gt,
+        oof_dir=oof_dir,
+        n_trials=n_trials_blending,
+        random_state=random_state,
     )
     blend3 = _blending_metrics(
-        _BASE_MEMBERS_3, parcel_geoms=parcel_geoms, parcel_gt=parcel_gt,
-        oof_dir=oof_dir, n_trials=n_trials_blending, random_state=random_state,
+        _BASE_MEMBERS_3,
+        parcel_geoms=parcel_geoms,
+        parcel_gt=parcel_gt,
+        oof_dir=oof_dir,
+        n_trials=n_trials_blending,
+        random_state=random_state,
     )
 
     stack_delta = stack5.get("f1_macro", 0.0) - stack3.get("f1_macro", 0.0)
@@ -720,7 +726,10 @@ def run(
                 blend5.get("accuracy", float("nan")),
             ],
             "delta_f1_vs_3": [
-                0.0, stack_delta, 0.0, blend_delta,
+                0.0,
+                stack_delta,
+                0.0,
+                blend_delta,
             ],
             "nota": [
                 "referencia 3 miembros (espacio semantic18, fold-5)",

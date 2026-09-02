@@ -90,9 +90,7 @@ def test_detect_outliers_isoforest_detects_injected_outliers(
     df_with_known_outliers: pl.DataFrame,
 ) -> None:
     """Con outliers inyectados extremos (loc=50), pct supera el contamination objetivo."""
-    out = detect_outliers_isoforest(
-        df_with_known_outliers, contamination=0.05, seed=42
-    )
+    out = detect_outliers_isoforest(df_with_known_outliers, contamination=0.05, seed=42)
     assert not out.is_empty()
     pct = out["pct_outliers"][0]
     # Los 10/1010 = ~0.99% outliers inyectados son detectados por IsoForest

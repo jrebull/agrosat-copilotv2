@@ -94,8 +94,7 @@ CELLS: list[nbf.NotebookNode] = [
         "6. Conclusiones\n"
     ),
     _code(
-        "n_pastis_patches = 4\n"
-        "seed = 42\n",
+        "n_pastis_patches = 4\nseed = 42\n",
         tags=["parameters"],
     ),
     _md("## 0. Preparación del entorno e introducción"),
@@ -165,7 +164,7 @@ CELLS: list[nbf.NotebookNode] = [
     _code(
         "# Fixture sintetica reutilizable: patch PASTIS-like con 2 parcelas + fondo.\n"
         "def make_synthetic_patch(size: int = 32, n_timesteps: int = 6, seed_: int = 42) -> dict:\n"
-        "    \"\"\"Construye un patch PASTIS-like determinista para el modo degradado.\"\"\"\n"
+        '    """Construye un patch PASTIS-like determinista para el modo degradado."""\n'
         "    rng = np.random.default_rng(seed_)\n"
         "    half = size // 2\n"
         "    semantic = np.zeros((size, size), dtype=np.uint8)\n"
@@ -656,7 +655,7 @@ CELLS: list[nbf.NotebookNode] = [
         "robust_indices = tuple(b for b in ('NDVI', 'NDWI', 'EVI') if b in available_bands)\n"
         "\n"
         "def extractor(ts: xr.DataArray) -> pl.DataFrame:\n"
-        "    \"\"\"Wrapper de extract_temporal_features sobre los indices disponibles.\"\"\"\n"
+        '    """Wrapper de extract_temporal_features sobre los indices disponibles."""\n'
         "    return extract_temporal_features(\n"
         "        ts, indices=robust_indices, fft_indices=robust_indices\n"
         "    )\n"

@@ -111,9 +111,9 @@ def test_mode_method_majority_vote() -> None:
     # renormalize to a valid distribution per pixel
     probs = probs / probs.sum(axis=0, keepdims=True)
 
-    df = pixel_to_parcel_probs(
-        probs, parcel_ids, patch_id="40000", method="mode"
-    ).filter(pl.col("canonical_parcel_id") == "40000_101")
+    df = pixel_to_parcel_probs(probs, parcel_ids, patch_id="40000", method="mode").filter(
+        pl.col("canonical_parcel_id") == "40000_101"
+    )
     # Majority of parcel 101 pixels argmax to class 4 despite the outlier.
     assert df["pred_class"].item() == 4
 

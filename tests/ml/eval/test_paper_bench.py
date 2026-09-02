@@ -263,12 +263,22 @@ def test_eval_geobench2_text_only_skips_image_items() -> None:
 
     items = [
         GeoBenchItem(
-            task_id="t", item_id="i1", image_path="tile.png", question="q?",
-            label_space=["a", "b"], gold_label="a", requires_image=True,
+            task_id="t",
+            item_id="i1",
+            image_path="tile.png",
+            question="q?",
+            label_space=["a", "b"],
+            gold_label="a",
+            requires_image=True,
         ),
         GeoBenchItem(
-            task_id="t", item_id="i2", image_path="", question="q?",
-            label_space=["a", "b"], gold_label="b", requires_image=False,
+            task_id="t",
+            item_id="i2",
+            image_path="",
+            question="q?",
+            label_space=["a", "b"],
+            gold_label="b",
+            requires_image=False,
         ),
     ]
     backend = CyclingBackend(cycle=["Respuesta: b"])
@@ -288,9 +298,7 @@ def test_eval_agromind_itses_perfect_with_judge() -> None:
     answers = [f"Respuesta: {it.answer}" for it in items]
     backend = AnswerBackend(answers=answers)
     judge = FakeJudge(score_value=0.0)
-    result = asyncio.run(
-        eval_agromind_itses(GEMINI, items, backend=backend, judge=judge, seed=0)
-    )
+    result = asyncio.run(eval_agromind_itses(GEMINI, items, backend=backend, judge=judge, seed=0))
     assert result["exact_match"] == pytest.approx(1.0)
     assert result["exact_match_it"] == pytest.approx(1.0)
     assert result["exact_match_es"] == pytest.approx(1.0)

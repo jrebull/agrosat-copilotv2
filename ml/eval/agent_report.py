@@ -163,9 +163,7 @@ def _get_cell(
     return mean, std
 
 
-def _render_headline_chart(
-    results: Mapping[str, Any], variants: Sequence[str]
-) -> str:
+def _render_headline_chart(results: Mapping[str, Any], variants: Sequence[str]) -> str:
     """Render the grouped headline bar chart with error bars as a base64 PNG.
 
     One bar group per benchmark, one bar per variant, using the rubric headline
@@ -198,9 +196,7 @@ def _render_headline_chart(
         ax.bar(offsets, means, width=width, yerr=errs, capsize=4, label=variant)
 
     ax.set_xticks(x_positions)
-    ax.set_xticklabels(
-        [f"{b}\n({_HEADLINE_METRIC[b]})" for b in benchmarks]
-    )
+    ax.set_xticklabels([f"{b}\n({_HEADLINE_METRIC[b]})" for b in benchmarks])
     ax.set_ylim(0.0, 1.0)
     ax.set_ylabel("Puntuacion (media sobre seeds)")
     ax.set_title("Comparativa por variante con barras de error")
@@ -290,8 +286,7 @@ def _render_answer_type_table(
     if not rows:
         return "<p>Sin traza por item para desglosar.</p>"
     header = (
-        "<tr><th>Variante</th><th>Tipo de respuesta</th>"
-        "<th>N</th><th>Exact-match (media)</th></tr>"
+        "<tr><th>Variante</th><th>Tipo de respuesta</th><th>N</th><th>Exact-match (media)</th></tr>"
     )
     return f"<table>{header}{''.join(rows)}</table>"
 
@@ -318,9 +313,7 @@ def _render_examples(
             records = per_benchmark.get(benchmark, [])
             if not records:
                 continue
-            blocks.append(
-                f"<h3>{html.escape(variant)} - {html.escape(benchmark)}</h3>"
-            )
+            blocks.append(f"<h3>{html.escape(variant)} - {html.escape(benchmark)}</h3>")
             if benchmark == "GeoAnalystBench":
                 header = (
                     "<tr><th>Pregunta</th><th>Gold</th><th>Prediccion</th>"
@@ -435,8 +428,7 @@ def build_report_html(
         )
     if examples is not None:
         trace_sections += (
-            "<h2>Ejemplos de inferencia (aciertos y fallos)</h2>"
-            f"{_render_examples(examples)}"
+            f"<h2>Ejemplos de inferencia (aciertos y fallos)</h2>{_render_examples(examples)}"
         )
         logger.info("agent_report_examples_rendered", variants=sorted(examples))
 

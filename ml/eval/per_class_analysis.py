@@ -232,13 +232,9 @@ def per_class_report(
 
     columns: dict[str, object] = {
         "class_id": list(range(num_classes)),
-        "name": [
-            class_names.get(c + 1, f"class_{c}") for c in range(num_classes)
-        ],
+        "name": [class_names.get(c + 1, f"class_{c}") for c in range(num_classes)],
         "support": per_class["support"].tolist(),
-        "precision": [
-            None if np.isnan(v) else float(v) for v in per_class["precision"]
-        ],
+        "precision": [None if np.isnan(v) else float(v) for v in per_class["precision"]],
         "recall": [None if np.isnan(v) else float(v) for v in per_class["recall"]],
         "f1": [None if np.isnan(v) else float(v) for v in per_class["f1"]],
         "iou": [None if np.isnan(v) else float(v) for v in per_class["iou"]],
@@ -247,14 +243,10 @@ def per_class_report(
     if proba is not None:
         proba_arr = np.asarray(proba, dtype=np.float64)
         if proba_arr.ndim != 2 or proba_arr.shape[1] != num_classes:
-            raise ValueError(
-                f"`proba` must have shape (N, {num_classes}); "
-                f"got {proba_arr.shape}."
-            )
+            raise ValueError(f"`proba` must have shape (N, {num_classes}); got {proba_arr.shape}.")
         if proba_arr.shape[0] != true.size:
             raise ValueError(
-                f"`proba` rows ({proba_arr.shape[0]}) must match `y_true` "
-                f"elements ({true.size})."
+                f"`proba` rows ({proba_arr.shape[0]}) must match `y_true` elements ({true.size})."
             )
         ap = _average_precision_per_class(
             true, proba_arr, num_classes=num_classes, ignore_index=ignore_index
@@ -324,9 +316,8 @@ def cardinality_cutoff_curve(
     """
     del y_pred  # Accepted for symmetry; the curve is driven by report_df F1.
 
-    present = (
-        report_df.filter(pl.col("f1").is_not_null())
-        .sort("f1", descending=True, nulls_last=True)
+    present = report_df.filter(pl.col("f1").is_not_null()).sort(
+        "f1", descending=True, nulls_last=True
     )
     n_present = present.height
     if n_present == 0:
@@ -347,9 +338,7 @@ def cardinality_cutoff_curve(
     valid = (true != ignore_index) & (true >= 0) & (true < num_classes)
     true_valid = true[valid]
     total_valid = int(true_valid.size)
-    per_class_support = {
-        c: int((true_valid == c).sum()) for c in ranked_ids
-    }
+    per_class_support = {c: int((true_valid == c).sum()) for c in ranked_ids}
 
     rows: list[dict[str, object]] = []
     cumulative_support = 0
@@ -357,9 +346,7 @@ def cardinality_cutoff_curve(
         kept = ranked_ids[:k]
         macro_f1_topk = float(np.mean(ranked_f1[:k]))
         cumulative_support += per_class_support[ranked_ids[k - 1]]
-        support_share = (
-            0.0 if total_valid == 0 else cumulative_support / total_valid
-        )
+        support_share = 0.0 if total_valid == 0 else cumulative_support / total_valid
         rows.append(
             {
                 "k": k,
@@ -443,9 +430,7 @@ def recommend_classes_to_drop(
         (pl.col("f1").is_null() | (pl.col("f1") < f1_threshold)).alias("below_f1"),
         pl.col("support_band").is_in(bands).fill_null(False).alias("low_support"),
     )
-    crossed = crossed.with_columns(
-        (pl.col("below_f1") & pl.col("low_support")).alias("drop")
-    )
+    crossed = crossed.with_columns((pl.col("below_f1") & pl.col("low_support")).alias("drop"))
 
     logger.info(
         "recommend_classes_to_drop",
@@ -455,9 +440,7 @@ def recommend_classes_to_drop(
         n_total=crossed.height,
     )
     # Dropped classes first, then ascending F1 (worst-defined first; null last).
-    return crossed.sort(
-        ["drop", "f1"], descending=[True, False], nulls_last=True
-    )
+    return crossed.sort(["drop", "f1"], descending=[True, False], nulls_last=True)
 
 
 def _macro_f1_on_retained(
@@ -492,9 +475,7 @@ def _macro_f1_on_retained(
     retained_set = set(int(c) for c in retained)
     true = np.asarray(y_true).reshape(-1).astype(np.int64)
     pred = np.asarray(y_pred).reshape(-1).astype(np.int64)
-    keep = np.array(
-        [t in retained_set and t != ignore_index for t in true], dtype=bool
-    )
+    keep = np.array([t in retained_set and t != ignore_index for t in true], dtype=bool)
     true_k = true[keep]
     pred_k = pred[keep]
     if true_k.size == 0:
@@ -582,9 +563,7 @@ def honest_class_dropout_curve(
             {
                 "k": k_eff,
                 "retained_class_ids": retained,
-                "dropped_names": [
-                    class_names.get(c + 1, f"class_{c}") for c in dropped
-                ],
+                "dropped_names": [class_names.get(c + 1, f"class_{c}") for c in dropped],
                 "macro_f1_fold5": macro_f1,
                 "accuracy_fold5": accuracy,
                 "n_parcels_fold5": n_kept,

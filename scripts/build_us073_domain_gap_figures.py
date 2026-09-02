@@ -122,14 +122,11 @@ _STRINGS: dict[str, dict[str, str]] = {
         "umap_panel_es": "Catalonia (Sen4AgriNet, tile 31TCG, lat ~41.7N)",
         "umap_xlabel": "UMAP-1",
         "umap_ylabel": "UMAP-2",
-        "umap_suptitle": (
-            "Domain gap France<->Catalonia: AlphaEarth (joint UMAP, 64-dim)"
-        ),
+        "umap_suptitle": ("Domain gap France<->Catalonia: AlphaEarth (joint UMAP, 64-dim)"),
         "ndvi_ylabel": "Zonal-mean NDVI",
         "ndvi_xlabel": "Day of year (DOY)",
         "ndvi_suptitle": (
-            "Phenological offset France vs Catalonia: "
-            "Sentinel-2 NDVI per macro-class (2019)"
+            "Phenological offset France vs Catalonia: Sentinel-2 NDVI per macro-class (2019)"
         ),
     },
     "es": {
@@ -143,8 +140,7 @@ _STRINGS: dict[str, dict[str, str]] = {
         "ndvi_ylabel": "NDVI medio zonal",
         "ndvi_xlabel": "Dia del anio (DOY)",
         "ndvi_suptitle": (
-            "Desfase fenologico Francia vs Cataluna: "
-            "NDVI Sentinel-2 por macro-clase (2019)"
+            "Desfase fenologico Francia vs Cataluna: NDVI Sentinel-2 por macro-clase (2019)"
         ),
     },
 }
@@ -172,9 +168,7 @@ def _set_style() -> None:
     )
 
 
-def _save(
-    fig: plt.Figure, stem: str, *, lang: str, out_dir: Path, dpi: int
-) -> dict[str, Path]:
+def _save(fig: plt.Figure, stem: str, *, lang: str, out_dir: Path, dpi: int) -> dict[str, Path]:
     """Save a figure as PNG + SVG (language-suffixed) and close it.
 
     The English variant is the canonical base file (``<stem>.png``); every other
@@ -257,9 +251,7 @@ def _render_umap_figure(
     return _save(fig, "domain_gap_umap", lang=lang, out_dir=out_dir, dpi=dpi)
 
 
-def build_umap_figure(
-    *, out_dir: Path, dpi: int, max_per_class: int
-) -> dict[str, dict[str, Path]]:
+def build_umap_figure(*, out_dir: Path, dpi: int, max_per_class: int) -> dict[str, dict[str, Path]]:
     """Materialize FR+ES AlphaEarth and render the joint-UMAP gap figure per language.
 
     The data is materialized once and rendered in every :data:`LANGS` language; the
@@ -286,10 +278,7 @@ def build_umap_figure(
         max_per_class=max_per_class,
     )
     joint = dg.compute_joint_umap(fr, es)
-    return {
-        lang: _render_umap_figure(joint, lang=lang, out_dir=out_dir, dpi=dpi)
-        for lang in LANGS
-    }
+    return {lang: _render_umap_figure(joint, lang=lang, out_dir=out_dir, dpi=dpi) for lang in LANGS}
 
 
 def _gather_region_ndvi(
@@ -307,18 +296,14 @@ def _gather_region_ndvi(
     Returns:
         Mapping ``macro -> NDVI frame`` (only non-empty series are included).
     """
-    points = dg.collect_centroids(
-        patch_glob=patch_glob, region=region, max_per_class=max_per_class
-    )
+    points = dg.collect_centroids(patch_glob=patch_glob, region=region, max_per_class=max_per_class)
     out: dict[str, pl.DataFrame] = {}
     for macro in macros:
         bbox = dg.macro_aoi_bbox(points, macro)
         if bbox is None:
             logger.warning("ndvi_macro_absent", region=region, macro=macro)
             continue
-        series = dg.extract_bbox_ndvi_series(
-            bbox, year, cache_key=f"{region.lower()}_{macro}"
-        )
+        series = dg.extract_bbox_ndvi_series(bbox, year, cache_key=f"{region.lower()}_{macro}")
         if series.is_empty():
             logger.warning("ndvi_series_empty", region=region, macro=macro)
             continue
@@ -354,9 +339,7 @@ def _render_ndvi_figure(
     n = len(present)
     ncols = 2
     nrows = int(np.ceil(n / ncols))
-    fig, axes = plt.subplots(
-        nrows, ncols, figsize=(8.6, 3.0 * nrows), sharex=True, squeeze=False
-    )
+    fig, axes = plt.subplots(nrows, ncols, figsize=(8.6, 3.0 * nrows), sharex=True, squeeze=False)
     flat = axes.ravel()
     for i, macro in enumerate(present):
         ax = flat[i]
@@ -410,21 +393,15 @@ def build_ndvi_figure(
         series was retrieved for any class (degraded, never fabricated).
     """
     macros = ["cereals", "oilseed_industrial", "vineyard", "legumes_fodder"]
-    fr_ndvi = _gather_region_ndvi(
-        "FR", dg.FR_PATCH_GLOB, macros, year, max_per_class=max_per_class
-    )
-    es_ndvi = _gather_region_ndvi(
-        "ES", dg.ES_PATCH_GLOB, macros, year, max_per_class=max_per_class
-    )
+    fr_ndvi = _gather_region_ndvi("FR", dg.FR_PATCH_GLOB, macros, year, max_per_class=max_per_class)
+    es_ndvi = _gather_region_ndvi("ES", dg.ES_PATCH_GLOB, macros, year, max_per_class=max_per_class)
     present = [m for m in macros if m in fr_ndvi and m in es_ndvi]
     if not present:
         logger.warning("ndvi_figure_no_paired_series")
         return None
 
     return {
-        lang: _render_ndvi_figure(
-            present, fr_ndvi, es_ndvi, lang=lang, out_dir=out_dir, dpi=dpi
-        )
+        lang: _render_ndvi_figure(present, fr_ndvi, es_ndvi, lang=lang, out_dir=out_dir, dpi=dpi)
         for lang in LANGS
     }
 

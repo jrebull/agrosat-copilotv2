@@ -44,18 +44,13 @@ logger = structlog.get_logger(__name__)
 app = typer.Typer(add_completion=False, help=__doc__)
 
 
-def _parcel_to_dataarray(
-    s2_patch: np.ndarray, mask: np.ndarray, dates: list[int]
-) -> xr.DataArray:
+def _parcel_to_dataarray(s2_patch: np.ndarray, mask: np.ndarray, dates: list[int]) -> xr.DataArray:
     """Convert the masked pixels of a patch to a DataArray (time, band)."""
     # s2_patch shape (T, 10, H, W). mask shape (H, W).
     # Spatial mean over the masked pixels.
     masked_pixels = s2_patch[:, :, mask].mean(axis=2).astype(np.float32) / 10_000.0
     times = np.array(
-        [
-            np.datetime64(f"{str(d)[:4]}-{str(d)[4:6]}-{str(d)[6:8]}", "ns")
-            for d in dates
-        ],
+        [np.datetime64(f"{str(d)[:4]}-{str(d)[4:6]}-{str(d)[6:8]}", "ns") for d in dates],
         dtype="datetime64[ns]",
     )
     return xr.DataArray(
@@ -65,9 +60,7 @@ def _parcel_to_dataarray(
     )
 
 
-def _enrich_with_indices(
-    s2_da: xr.DataArray, indices: tuple[str, ...]
-) -> xr.DataArray:
+def _enrich_with_indices(s2_da: xr.DataArray, indices: tuple[str, ...]) -> xr.DataArray:
     """Add spectral index bands to the DataArray of Sentinel-2 bands."""
     arr = s2_da.expand_dims(y=1, x=1)
     new_bands: list[np.ndarray] = []
@@ -90,9 +83,7 @@ def _enrich_with_indices(
     )
 
 
-def _process_patch(
-    patch: dict, min_pixels: int, indices_to_compute: tuple[str, ...]
-) -> list[dict]:
+def _process_patch(patch: dict, min_pixels: int, indices_to_compute: tuple[str, ...]) -> list[dict]:
     """Process an entire patch: iterate per parcel, aggregate + extract features.
 
     Returns a list of dicts (one per valid parcel).
@@ -134,9 +125,7 @@ def _process_patch(
             indices_da = _enrich_with_indices(s2_da, indices_to_compute)
             indices_da.attrs["parcel_id"] = iid
             indices_da.attrs["year"] = year
-            features_df = extract_temporal_features(
-                indices_da, indices=indices_to_compute
-            )
+            features_df = extract_temporal_features(indices_da, indices=indices_to_compute)
         except Exception as exc:  # noqa: BLE001
             logger.warning(
                 "parcel_skipped",
@@ -180,9 +169,7 @@ def main(
         "--out",
         help="Parquet de salida (~50 MB para 85k parcelas)",
     ),
-    min_pixels: int = typer.Option(
-        10, "--min-pixels", help="Mínimo de píxeles por parcela"
-    ),
+    min_pixels: int = typer.Option(10, "--min-pixels", help="Mínimo de píxeles por parcela"),
     n_jobs: int = typer.Option(
         -1,
         "--n-jobs",
@@ -224,8 +211,7 @@ def main(
     t0 = time.time()
     # Parallelize per patch. Each patch produces ~35 parcels on average.
     results = Parallel(n_jobs=n_jobs, backend="loky", verbose=5)(
-        delayed(_process_patch_id)(pid, root, min_pixels, indices_to_compute)
-        for pid in patch_ids
+        delayed(_process_patch_id)(pid, root, min_pixels, indices_to_compute) for pid in patch_ids
     )
     elapsed = time.time() - t0
 
@@ -259,10 +245,7 @@ def main(
     print(f"N parcelas: {df.height}")
     print(f"N features: {df.width}")
     print(f"Folds: {dict(Counter(r['fold'] for r in all_rows))}")
-    print(
-        f"Top 5 clases: "
-        f"{dict(sorted(per_class.items(), key=lambda kv: -kv[1])[:5])}"
-    )
+    print(f"Top 5 clases: {dict(sorted(per_class.items(), key=lambda kv: -kv[1])[:5])}")
     print(f"Output: {out} ({file_size_mb:.1f} MB)")
 
 

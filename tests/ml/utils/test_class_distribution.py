@@ -46,13 +46,10 @@ def test_class_distribution_report_assigns_support_bands(
     synthetic_df: pl.DataFrame,
 ) -> None:
     report = class_distribution_report(synthetic_df)
-    bands = {
-        row["class_id"]: row["support_band"]
-        for row in report.iter_rows(named=True)
-    }
+    bands = {row["class_id"]: row["support_band"] for row in report.iter_rows(named=True)}
     assert bands[1] == "high"  # 30000 >= 1000
     assert bands[4] == "high"  # 1500 >= 1000
-    assert bands[7] == "med"   # 500 >= 200
+    assert bands[7] == "med"  # 500 >= 200
     assert bands[14] == "low"  # 30 >= 30 pero < 200
 
 

@@ -111,11 +111,7 @@ _REPO_ROOT: Path = Path(__file__).resolve().parents[1]
 _DEFAULT_PASTIS_ROOT: Path = _REPO_ROOT / "data" / "PASTIS-R"
 _DEFAULT_OUTPUT: Path = _REPO_ROOT / "data" / "farslip" / "embeddings_pheno_pastis.parquet"
 _DEFAULT_ALPHAEARTH: Path = (
-    _REPO_ROOT
-    / "data"
-    / "cache"
-    / "gee"
-    / "alphaearth_at_pastis_fr_full_2019_2433.parquet"
+    _REPO_ROOT / "data" / "cache" / "gee" / "alphaearth_at_pastis_fr_full_2019_2433.parquet"
 )
 
 #: Forbidden checkpoint / data roots (US-034/035 Italian + official + synthetic).
@@ -226,10 +222,7 @@ def _validate_pastis_root(pastis_root: Path) -> None:
         ValueError: if the path is the forbidden Italian/synthetic root.
     """
     parts = {p.lower() for p in pastis_root.parts}
-    if (
-        _FORBIDDEN_ROOT_NAME in pastis_root.name.lower()
-        or _FORBIDDEN_ROOT_NAME in parts
-    ):
+    if _FORBIDDEN_ROOT_NAME in pastis_root.name.lower() or _FORBIDDEN_ROOT_NAME in parts:
         raise ValueError(
             f"pastis_root {pastis_root!s} points at the Italian/synthetic "
             f"'{_FORBIDDEN_ROOT_NAME}' data (US-034/035, discarded). US-037 is "
@@ -279,14 +272,9 @@ def silhouette_per_class(
     mat = np.asarray(matrix, dtype=np.float64)
     lab = np.asarray(labels)
     if mat.shape[0] != lab.shape[0]:
-        raise ValueError(
-            f"matrix rows ({mat.shape[0]}) must equal labels length "
-            f"({lab.shape[0]})."
-        )
+        raise ValueError(f"matrix rows ({mat.shape[0]}) must equal labels length ({lab.shape[0]}).")
     if len(set(lab.tolist())) < 2:
-        raise ValueError(
-            "silhouette is undefined for fewer than two distinct classes."
-        )
+        raise ValueError("silhouette is undefined for fewer than two distinct classes.")
 
     if mat.shape[0] > sample_size:
         rng = np.random.default_rng(random_state)
@@ -313,9 +301,7 @@ def silhouette_per_class(
     return out
 
 
-def attach_class_names(
-    per_class: pl.DataFrame, class_names: dict[int, str]
-) -> pl.DataFrame:
+def attach_class_names(per_class: pl.DataFrame, class_names: dict[int, str]) -> pl.DataFrame:
     """Add a ``class_name`` column to a per-class silhouette table.
 
     Args:
@@ -327,9 +313,7 @@ def attach_class_names(
     """
     return per_class.with_columns(
         pl.col("class_id")
-        .map_elements(
-            lambda c: class_names.get(int(c), f"c{int(c)}"), return_dtype=pl.Utf8
-        )
+        .map_elements(lambda c: class_names.get(int(c), f"c{int(c)}"), return_dtype=pl.Utf8)
         .alias("class_name")
     ).select(["class_id", "class_name", "silhouette_class", "n"])
 
@@ -508,15 +492,12 @@ def extract_pheno_embeddings(
         else np.empty((0, n_dims), dtype=np.float32)
     )
     if embeddings.shape[0] != len(patch_ids):  # pragma: no cover - defensive
-        raise RuntimeError(
-            f"embedding rows ({embeddings.shape[0]}) != patches "
-            f"({len(patch_ids)})."
-        )
+        raise RuntimeError(f"embedding rows ({embeddings.shape[0]}) != patches ({len(patch_ids)}).")
 
     cols = _emb_columns(n_dims)
-    out_df = pl.DataFrame(
-        {"parcel_id": patch_ids, "class_id": class_ids}
-    ).hstack(pl.DataFrame(embeddings, schema=cols))
+    out_df = pl.DataFrame({"parcel_id": patch_ids, "class_id": class_ids}).hstack(
+        pl.DataFrame(embeddings, schema=cols)
+    )
     out_df = canonical_parcel_id(out_df)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -602,9 +583,7 @@ def load_alphaearth_for_eval(path: str | Path) -> pl.DataFrame:
     if _AE_PXID_COL in raw.columns:
         # Real PASTIS-aligned schema: px_id IS the patch_id (ID_PATCH). Rename it
         # to parcel_id and keep only the dims; tile/fold/lon/lat are dropped.
-        out = raw.select([_AE_PXID_COL, *dim_cols]).rename(
-            {_AE_PXID_COL: "parcel_id"}
-        )
+        out = raw.select([_AE_PXID_COL, *dim_cols]).rename({_AE_PXID_COL: "parcel_id"})
         return canonical_parcel_id(out)
     raise ValueError(
         f"AlphaEarth parquet {path!s} carries neither 'parcel_id' nor "
@@ -641,9 +620,7 @@ def aggregate_alphaearth_to_patch(
     """
     df = canonical_parcel_id(alphaearth_df)
     dim_cols = sorted(c for c in df.columns if c.startswith(_AE_PREFIX))
-    df = df.with_columns(
-        pl.col("parcel_id").str.split("_").list.first().alias("__patch")
-    )
+    df = df.with_columns(pl.col("parcel_id").str.split("_").list.first().alias("__patch"))
     aggregated = (
         df.group_by("__patch")
         .agg(*(pl.col(c).mean().alias(c) for c in dim_cols))
@@ -657,9 +634,7 @@ def aggregate_alphaearth_to_patch(
 # ---------------------------------------------------------------------------
 
 
-def _build_verdict(
-    pheno: SeparabilityResult, alphaearth: SeparabilityResult
-) -> str:
+def _build_verdict(pheno: SeparabilityResult, alphaearth: SeparabilityResult) -> str:
     """Build the honest one-line verdict (R-NOGAIN / R-CLAIM).
 
     Args:
@@ -683,10 +658,7 @@ def _build_verdict(
     ae_clause = (
         f"se acerca a AlphaEarth-aqui ({alphaearth.silhouette:.3f})"
         if approaches
-        else (
-            f"no alcanza AlphaEarth-aqui ({alphaearth.silhouette:.3f}; "
-            f"brecha {gap_here:.3f})"
-        )
+        else (f"no alcanza AlphaEarth-aqui ({alphaearth.silhouette:.3f}; brecha {gap_here:.3f})")
     )
     return (
         f"FarSLIP-pheno {prev_clause}; {ae_clause}. "
@@ -799,7 +771,10 @@ def compare_to_alphaearth(
     for space_key, cols in prefixed_cols.items():
         matrix = space_matrix(merged, cols)
         results[space_key] = eval_space(
-            matrix, labels, label=space_key, n_splits=n_splits,
+            matrix,
+            labels,
+            label=space_key,
+            n_splits=n_splits,
             random_state=random_state,
         )
         table = silhouette_per_class(matrix, labels, random_state=random_state)
@@ -929,8 +904,7 @@ def _log_space_run(
                     "n_dims": float(result.n_dims),
                     "n_classes": float(result.n_classes),
                     "delta_vs_0163": result.silhouette - PREV_FARSLIP_SILHOUETTE,
-                    "delta_vs_alphaearth_here": result.silhouette
-                    - ae_result.silhouette,
+                    "delta_vs_alphaearth_here": result.silhouette - ae_result.silhouette,
                 }
             )
             with tempfile.TemporaryDirectory() as tmp:
@@ -1080,9 +1054,7 @@ def eval_command(
             )
         ),
     ],
-    n_classes: Annotated[
-        int, typer.Option(help="Cardinalidad del escalon ganador de US-036-a")
-    ],
+    n_classes: Annotated[int, typer.Option(help="Cardinalidad del escalon ganador de US-036-a")],
     pastis_root: Annotated[
         Path, typer.Option(help="Raiz PASTIS-R (frances real)")
     ] = _DEFAULT_PASTIS_ROOT,
@@ -1113,9 +1085,7 @@ def eval_command(
         int, typer.Option(help="Minimo de patches por clase para conservarla")
     ] = 50,
     batch_size: Annotated[int, typer.Option(help="Batch del forward del student")] = 64,
-    device: Annotated[
-        str, typer.Option(help="Device: auto | cuda | cpu")
-    ] = "auto",
+    device: Annotated[str, typer.Option(help="Device: auto | cuda | cpu")] = "auto",
     seed: Annotated[int, typer.Option(help="Semilla determinismo")] = 42,
     mlflow_uri: Annotated[
         str, typer.Option(help="MLflow tracking URI (Docker :5010)")
@@ -1151,8 +1121,7 @@ def eval_command(
     """
     if embedding_space not in _SPACE_DIM:
         raise typer.BadParameter(
-            f"embedding_space must be one of {sorted(_SPACE_DIM)}; "
-            f"got {embedding_space!r}."
+            f"embedding_space must be one of {sorted(_SPACE_DIM)}; got {embedding_space!r}."
         )
     report = run_eval(
         checkpoint_path=checkpoint_path,

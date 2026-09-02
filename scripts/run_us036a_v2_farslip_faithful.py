@@ -179,9 +179,7 @@ def _require_captions_for_dataset(
     Raises:
         ValueError: listing the patch_ids without a caption.
     """
-    missing = [
-        pid for pid, _regions in dataset._samples if pid not in captions
-    ]
+    missing = [pid for pid, _regions in dataset._samples if pid not in captions]
     if missing:
         raise ValueError(
             f"{len(missing)} {split} patches have no caption in the parquet "
@@ -393,9 +391,7 @@ def eval_per_class_v2(
         per_class_iou[cid] = float(tp[idx] / denom_iou) if denom_iou > 0 else 0.0
 
     macro_f1 = float(np.mean([per_class_f1[c] for c in class_ids])) if class_ids else 0.0
-    macro_iou = (
-        float(np.mean([per_class_iou[c] for c in class_ids])) if class_ids else 0.0
-    )
+    macro_iou = float(np.mean([per_class_iou[c] for c in class_ids])) if class_ids else 0.0
     n_well = sum(1 for c in class_ids if per_class_f1[c] >= f1_well_resolved)
 
     _log.info(
@@ -521,9 +517,7 @@ def eval_per_parcel(
         per_class_iou[cid] = float(tp[idx] / denom_iou) if denom_iou > 0 else 0.0
 
     macro_f1 = float(np.mean([per_class_f1[c] for c in class_ids])) if class_ids else 0.0
-    macro_iou = (
-        float(np.mean([per_class_iou[c] for c in class_ids])) if class_ids else 0.0
-    )
+    macro_iou = float(np.mean([per_class_iou[c] for c in class_ids])) if class_ids else 0.0
     n_well = sum(1 for c in class_ids if per_class_f1[c] >= f1_well_resolved)
 
     _log.info(
@@ -569,9 +563,7 @@ def _v1_vs_v2_table_rows(
     rows: list[dict[str, Any]] = []
     for cid in result.class_ids:
         f1_v2 = result.per_class_f1.get(cid, 0.0)
-        f1_v1 = (
-            float(v1_per_class_f1.get(cid, 0.0)) if v1_per_class_f1 is not None else None
-        )
+        f1_v1 = float(v1_per_class_f1.get(cid, 0.0)) if v1_per_class_f1 is not None else None
         rows.append(
             {
                 "class_id": int(cid),
@@ -640,10 +632,7 @@ def _log_faithful_run(
 
     import polars as pl
 
-    data_version = (
-        f"{dvc_data_version(str(pastis_root))}|"
-        f"{dvc_data_version(str(captions_path))}"
-    )
+    data_version = f"{dvc_data_version(str(pastis_root))}|{dvc_data_version(str(captions_path))}"
     try:
         mlflow.set_tracking_uri(mlflow_uri)
         mlflow.set_experiment("farslip")
@@ -866,9 +855,7 @@ def run_faithful_v2(
     # ``caption_cls`` and ``L_glo`` (image-text InfoNCE, eq. 1-2) is active. Without
     # this the batch has no ``caption_cls`` and the trainer only runs MPCL (L_loc).
     if use_global_caption_loss:
-        caption_embeddings = encode_captions_minilm(
-            captions, device=trainer.device.type
-        )
+        caption_embeddings = encode_captions_minilm(captions, device=trainer.device.type)
         collate_fn = make_caption_collate(collate_region_batch, caption_embeddings)
     else:
         collate_fn = collate_region_batch
@@ -983,9 +970,7 @@ def _parse_class_ids(class_ids: str) -> tuple[int, ...]:
     try:
         parsed = tuple(int(tok) for tok in class_ids.split(",") if tok.strip() != "")
     except ValueError as exc:
-        raise typer.BadParameter(
-            f"class_ids must be comma-separated ints: {class_ids!r}"
-        ) from exc
+        raise typer.BadParameter(f"class_ids must be comma-separated ints: {class_ids!r}") from exc
     if not parsed:
         raise typer.BadParameter(f"class_ids is empty: {class_ids!r}")
     bad = [c for c in parsed if not 1 <= c <= 18]
@@ -1009,9 +994,7 @@ def _main() -> None:
 
 @app.command()
 def train(
-    run_name: Annotated[
-        str, typer.Option(help="Nombre del run MLflow")
-    ] = "farslip-faithful-v2",
+    run_name: Annotated[str, typer.Option(help="Nombre del run MLflow")] = "farslip-faithful-v2",
     supervision: Annotated[
         str,
         typer.Option(help="faithful_v2 (MPCL + L_glo, default) o dominant_v1 (ablacion)"),
@@ -1026,12 +1009,8 @@ def train(
     batch_size: Annotated[int, typer.Option(help="Batch size (en patches)")] = 64,
     lr: Annotated[float, typer.Option(help="Learning rate AdamW")] = 1e-5,
     seed: Annotated[int, typer.Option(help="Semilla determinismo")] = 42,
-    folds: Annotated[
-        str, typer.Option(help="Folds de train PASTIS, coma-separados")
-    ] = "1,2,3",
-    val_folds: Annotated[
-        str, typer.Option(help="Folds de validacion (disjuntos de train)")
-    ] = "4",
+    folds: Annotated[str, typer.Option(help="Folds de train PASTIS, coma-separados")] = "1,2,3",
+    val_folds: Annotated[str, typer.Option(help="Folds de validacion (disjuntos de train)")] = "4",
     active_class_ids: Annotated[
         str, typer.Option(help="Clases PASTIS activas, coma-separadas (1..18)")
     ] = ",".join(str(c) for c in _ALL_ACTIVE_CLASS_IDS),
@@ -1050,18 +1029,16 @@ def train(
             help="Pondera L_loc (MPCL) por frecuencia inversa de clase (anti-desbalance)",
         ),
     ] = False,
-    pastis_root: Annotated[
-        Path, typer.Option(help="Raiz PASTIS-R (frances real)")
-    ] = Path("data/PASTIS-R"),
+    pastis_root: Annotated[Path, typer.Option(help="Raiz PASTIS-R (frances real)")] = Path(
+        "data/PASTIS-R"
+    ),
     captions_path: Annotated[
         Path, typer.Option(help="Parquet de captions cacheadas (Fase A)")
     ] = Path("data/farslip/pastis_captions.parquet"),
-    output_dir: Annotated[
-        Path, typer.Option(help="Dir checkpoints (cae en F: en la VM)")
-    ] = Path("checkpoints/farslip/faithful_v2"),
-    time_cap_hours: Annotated[
-        float, typer.Option(help="Hard cap horas")
-    ] = 8.0,
+    output_dir: Annotated[Path, typer.Option(help="Dir checkpoints (cae en F: en la VM)")] = Path(
+        "checkpoints/farslip/faithful_v2"
+    ),
+    time_cap_hours: Annotated[float, typer.Option(help="Hard cap horas")] = 8.0,
     prototype_path: Annotated[
         Path | None,
         typer.Option(help="Override del parquet US-033 (solo LEER/FILTRAR)"),
@@ -1069,9 +1046,7 @@ def train(
     caption_model: Annotated[
         str, typer.Option(help="Tag del modelo Ollama de las captions")
     ] = "gemma4:31b-it-q8_0",
-    prompt_version: Annotated[
-        str, typer.Option(help="Version del prompt de captions")
-    ] = "v2",
+    prompt_version: Annotated[str, typer.Option(help="Version del prompt de captions")] = "v2",
     mlflow_uri: Annotated[
         str,
         typer.Option(help="MLflow tracking URI (Docker :5010; SQLite file:// CI)"),

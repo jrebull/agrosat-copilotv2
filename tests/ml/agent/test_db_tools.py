@@ -68,9 +68,7 @@ async def test_list_parcels_with_aoi_passes_geojson(monkeypatch, make_ctx) -> No
     conn = FakeConn(fetch_rows=[FakeRecord(id=5, crop_class=None, confidence=None)])
     monkeypatch.setattr(parcels_mod, "session_scoped_conn", fake_session_scoped_conn(conn))
 
-    out = await parcels_mod.run(
-        ListParcelsInput(session_id=SESSION_A, aoi=_POLYGON), make_ctx()
-    )
+    out = await parcels_mod.run(ListParcelsInput(session_id=SESSION_A, aoi=_POLYGON), make_ctx())
 
     assert out.count == 1
     assert out.parcels[0].crop_class is None

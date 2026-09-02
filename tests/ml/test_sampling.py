@@ -22,11 +22,7 @@ def imbalanced_df() -> pl.DataFrame:
 def test_stratified_sample_preserves_proportions(imbalanced_df: pl.DataFrame) -> None:
     """Las proporciones del sample deben aproximar las originales ±1 punto."""
     sampled = stratified_sample(imbalanced_df, by=["stratum"], n=100, seed=42)
-    counts = (
-        sampled.group_by("stratum")
-        .agg(pl.len().alias("n"))
-        .sort("stratum")
-    )
+    counts = sampled.group_by("stratum").agg(pl.len().alias("n")).sort("stratum")
     counts_dict = {r["stratum"]: r["n"] for r in counts.iter_rows(named=True)}
     # Proporcional: a=70, b=20, c=10 (+/- 1)
     assert abs(counts_dict["a"] - 70) <= 2

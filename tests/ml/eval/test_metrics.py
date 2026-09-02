@@ -77,8 +77,6 @@ def test_classification_report_text_includes_class_names() -> None:
     """El reporte usa los nombres de clase suministrados."""
     y_true = np.array([0, 1, 0, 1])
     y_pred = np.array([0, 1, 1, 1])
-    report = classification_report_text(
-        y_true, y_pred, class_names={0: "trigo", 1: "maiz"}
-    )
+    report = classification_report_text(y_true, y_pred, class_names={0: "trigo", 1: "maiz"})
     assert "trigo" in report
     assert "maiz" in report

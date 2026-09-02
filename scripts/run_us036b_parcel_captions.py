@@ -43,9 +43,7 @@ def _parse_ints(s: str) -> tuple[int, ...]:
     return tuple(int(x.strip()) for x in s.split(",") if x.strip())
 
 
-def _balanced_subsample(
-    curves: dict[str, tuple], max_per_class: int
-) -> dict[str, tuple]:
+def _balanced_subsample(curves: dict[str, tuple], max_per_class: int) -> dict[str, tuple]:
     """Keep at most ``max_per_class`` parcels per class (deterministic).
 
     Groups parcels by ``class_id`` (the 3rd tuple element) and keeps the first

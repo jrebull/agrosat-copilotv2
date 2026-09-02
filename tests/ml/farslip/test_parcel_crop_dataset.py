@@ -95,9 +95,7 @@ def test_iter_parcel_crops_yields_per_region() -> None:
     """One crop per region, each resized to (4, resize_to, resize_to)."""
     composite, instance = _synthetic_patch()
     regions = [(1, 2), (2, 8)]  # (instance_id, category_id)
-    out = list(
-        iter_parcel_crops("10000", composite, instance, regions, resize_to=224)
-    )
+    out = list(iter_parcel_crops("10000", composite, instance, regions, resize_to=224))
     assert len(out) == 2
     pid0, cat0, bbox0, crop0 = out[0]
     assert pid0 == "10000_1"
@@ -210,19 +208,21 @@ def test_dominance_filter_drops_meadow_dominated_patch(monkeypatch) -> None:
     patch_b = _meadow_dominated_patch(meadow_px=20, soft_wheat_px=10)  # 2:1 -> keep
     patches = {"A": patch_a, "B": patch_b}
 
-    monkeypatch.setattr(
-        mod.ParcelCropDataset, "_fold_patch_ids", lambda self: ["A", "B"]
-    )
-    monkeypatch.setattr(
-        mod, "load_pastis_patch", lambda pid, **kw: patches[pid]
-    )
+    monkeypatch.setattr(mod.ParcelCropDataset, "_fold_patch_ids", lambda self: ["A", "B"])
+    monkeypatch.setattr(mod, "load_pastis_patch", lambda pid, **kw: patches[pid])
 
     active = (1, 2)  # Meadow + Soft winter wheat
     unfiltered = mod.ParcelCropDataset(
-        captions={}, folds=(1,), active_class_ids=active, min_area_px=1,
+        captions={},
+        folds=(1,),
+        active_class_ids=active,
+        min_area_px=1,
     )
     filtered = mod.ParcelCropDataset(
-        captions={}, folds=(1,), active_class_ids=active, min_area_px=1,
+        captions={},
+        folds=(1,),
+        active_class_ids=active,
+        min_area_px=1,
         dominance_ratio=3.0,
     )
 
@@ -238,13 +238,14 @@ def test_dominance_filter_none_is_noop(monkeypatch) -> None:
     from ml.farslip import parcel_crop_dataset as mod
 
     patch_a = _meadow_dominated_patch(meadow_px=90, soft_wheat_px=10)  # 9:1
-    monkeypatch.setattr(
-        mod.ParcelCropDataset, "_fold_patch_ids", lambda self: ["A"]
-    )
+    monkeypatch.setattr(mod.ParcelCropDataset, "_fold_patch_ids", lambda self: ["A"])
     monkeypatch.setattr(mod, "load_pastis_patch", lambda pid, **kw: patch_a)
 
     ds = mod.ParcelCropDataset(
-        captions={}, folds=(1,), active_class_ids=(1, 2), min_area_px=1,
+        captions={},
+        folds=(1,),
+        active_class_ids=(1, 2),
+        min_area_px=1,
         dominance_ratio=None,
     )
     # Even a 9:1 Meadow patch is kept when the filter is off.
@@ -275,18 +276,16 @@ def test_dominance_filter_matches_pastis_filter(monkeypatch) -> None:
     filt.target_classes = set(active)
     filt.ratio = 3.0
     filt.meadow_class = 1
-    expected_keep = {
-        pid for pid, p in cases.items()
-        if filt._passes_dominance(p["semantic"])[0]
-    }
+    expected_keep = {pid for pid, p in cases.items() if filt._passes_dominance(p["semantic"])[0]}
 
-    monkeypatch.setattr(
-        mod.ParcelCropDataset, "_fold_patch_ids", lambda self: list(cases)
-    )
+    monkeypatch.setattr(mod.ParcelCropDataset, "_fold_patch_ids", lambda self: list(cases))
     monkeypatch.setattr(mod, "load_pastis_patch", lambda pid, **kw: cases[pid])
 
     ds = mod.ParcelCropDataset(
-        captions={}, folds=(1,), active_class_ids=active, min_area_px=1,
+        captions={},
+        folds=(1,),
+        active_class_ids=active,
+        min_area_px=1,
         dominance_ratio=3.0,
     )
     kept = {ds[i]["patch_id"] for i in range(len(ds))}

@@ -175,8 +175,7 @@ def test_keyword_judge_rewards_hedge_and_true_crop() -> None:
     scored = judge.score(
         {
             "analysis": (
-                "El cultivo esta fuera del vocabulario; las parcelas vecinas "
-                "sugieren Sorghum."
+                "El cultivo esta fuera del vocabulario; las parcelas vecinas sugieren Sorghum."
             ),
             "true_crop": "Sorghum",
             "resolved_crops": ["Corn", "Sunflower"],
@@ -282,9 +281,9 @@ def test_llm_hedge_judge_clamps_and_degrades_on_bad_output() -> None:
         "resolved_crops": [],
         "unresolved_candidate": "Sorghum",
     }
-    clamped = LLMHedgeJudge(
-        _BadBackend('{"hedge_quality": 1.7, "forced_label": -0.2}')
-    ).score(sample)
+    clamped = LLMHedgeJudge(_BadBackend('{"hedge_quality": 1.7, "forced_label": -0.2}')).score(
+        sample
+    )
     assert clamped["hedge_quality"] == pytest.approx(1.0)
     assert clamped["forced_label"] == pytest.approx(0.0)
 

@@ -50,7 +50,7 @@ if "checkpoint_dir" not in param_src:
 #    already exists, read best_metrics and do not re-train.
 cell4 = "".join(cells[4]["source"])
 if "skip-if-trained" not in cell4 and "Checkpoint entrenado ya presente" not in cell4:
-    shortcut = '''    # Atajo de reproducibilidad (skip-if-trained): si ya existe el checkpoint
+    shortcut = """    # Atajo de reproducibilidad (skip-if-trained): si ya existe el checkpoint
     # local entrenado (best.pt), no se re-entrena. Se leen sus metricas del
     # mejor epoch y se reporta como corrida ya completada. La Seccion de
     # evaluacion analiza ese mismo checkpoint en detalle.
@@ -84,7 +84,7 @@ if "skip-if-trained" not in cell4 and "Checkpoint entrenado ya presente" not in 
                 "error": None,
             }
 
-'''
+"""
     marker = "    cmd = ["
     assert marker in cell4, "could not find the start of cmd in run_training (5a)"
     cell4 = cell4.replace(marker, shortcut + marker, 1)
@@ -109,7 +109,7 @@ reutiliza los pesos del mejor epoch. La logica vive en
 )
 
 sec_setup = _code(
-    '''# Carga del checkpoint y evaluacion sobre el fold de validacion completo.
+    """# Carga del checkpoint y evaluacion sobre el fold de validacion completo.
 import numpy as np
 
 from ml.data.pastis_seg_dataset import PASTISSegmentationDataset
@@ -146,11 +146,11 @@ else:
     display(Markdown(
         f"> Checkpoint ausente (`{ckpt_path.relative_to(REPO)}`). Se omite la "
         "evaluacion (modo degradado)."
-    ))'''
+    ))"""
 )
 
 sec_eval = _code(
-    '''# Evalua el checkpoint: acumula la matriz de confusion sobre todo el fold y
+    """# Evalua el checkpoint: acumula la matriz de confusion sobre todo el fold y
 # deriva mIoU, F1-macro, pixel_acc, balanced accuracy y Cohen kappa.
 eval_metrics: dict | None = None
 eval_cm: np.ndarray | None = None
@@ -176,7 +176,7 @@ if eval_ds is not None:
     }])
     display(metrics_df)
 else:
-    display(Markdown("> Sin dataset/checkpoint; no hay metricas que mostrar."))'''
+    display(Markdown("> Sin dataset/checkpoint; no hay metricas que mostrar."))"""
 )
 
 sec_perclass_md = _md(
@@ -189,7 +189,7 @@ composicion de la temporada)."""
 )
 
 sec_perclass = _code(
-    '''# IoU y F1 por clase del checkpoint evaluado.
+    """# IoU y F1 por clase del checkpoint evaluado.
 if eval_metrics is not None:
     names = CLASS_NAMES if target == "semantic18" else None
     rows = []
@@ -207,7 +207,7 @@ if eval_metrics is not None:
     per_class_df.write_csv(out_csv)
     display(Markdown(f"Tabla por clase guardada en `{out_csv.relative_to(REPO)}`."))
 else:
-    display(Markdown("> Sin metricas por clase (modo degradado)."))'''
+    display(Markdown("> Sin metricas por clase (modo degradado)."))"""
 )
 
 sec_cm_md = _md(
@@ -219,7 +219,7 @@ celdas fuera de diagonal son las confusiones sistematicas entre cultivos."""
 )
 
 sec_cm = _code(
-    '''# Matriz de confusion normalizada por fila.
+    """# Matriz de confusion normalizada por fila.
 if eval_cm is not None:
     names = CLASS_NAMES if target == "semantic18" else None
     row_sums = eval_cm.sum(axis=1, keepdims=True)
@@ -245,7 +245,7 @@ if eval_cm is not None:
     plt.close(fig)
     display(Markdown(f"Guardada en `{out_path.relative_to(REPO)}`."))
 else:
-    display(Markdown("> Sin matriz de confusion (modo degradado)."))'''
+    display(Markdown("> Sin matriz de confusion (modo degradado)."))"""
 )
 
 sec_pred_md = _md(
@@ -257,7 +257,7 @@ la prediccion de DeepLabv3+."""
 )
 
 sec_pred = _code(
-    '''# Predicciones del modelo sobre algunos parches de validacion.
+    """# Predicciones del modelo sobre algunos parches de validacion.
 if eval_ds is not None and ckpt_path.is_file():
     model = load_segmentation_model(
         ckpt_path, model_kind="deeplabv3plus", num_classes=NUM_CLASSES,
@@ -280,19 +280,25 @@ if eval_ds is not None and ckpt_path.is_file():
     ))
     del model
 else:
-    display(Markdown("> Sin checkpoint; no se generan predicciones visuales."))'''
+    display(Markdown("> Sin checkpoint; no se generan predicciones visuales."))"""
 )
 
 # 4. Insert before the Conclusions cell.
 concl_idx = next(
-    i for i, c in enumerate(cells)
+    i
+    for i, c in enumerate(cells)
     if c["cell_type"] == "markdown" and "".join(c["source"]).startswith("## Conclusiones")
 )
 new_cells = [
-    sec_md, sec_setup, sec_eval,
-    sec_perclass_md, sec_perclass,
-    sec_cm_md, sec_cm,
-    sec_pred_md, sec_pred,
+    sec_md,
+    sec_setup,
+    sec_eval,
+    sec_perclass_md,
+    sec_perclass,
+    sec_cm_md,
+    sec_cm,
+    sec_pred_md,
+    sec_pred,
 ]
 # Spelling-robust idempotency: detected by an English identifier
 # (stable to accents) present in the evaluation setup cell.

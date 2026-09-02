@@ -101,9 +101,7 @@ def init_ee(
             `interactive_auth=False`.
     """
     if ee is None:
-        raise ImportError(
-            "earthengine-api is not installed. Run `poetry install --with ml,geo`."
-        )
+        raise ImportError("earthengine-api is not installed. Run `poetry install --with ml,geo`.")
     sa_path = Path(service_account_json) if service_account_json is not None else None
     if sa_path is not None and sa_path.is_file():
         creds = ee.ServiceAccountCredentials(  # type: ignore[attr-defined]

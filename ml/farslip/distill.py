@@ -149,8 +149,7 @@ class PatchDistillationLoss(nn.Module):
         if patch_mask is not None:
             if patch_mask.shape != student.shape[:2]:
                 raise ValueError(
-                    f"mask shape mismatch mask={patch_mask.shape} "
-                    f"feats={student.shape[:2]}"
+                    f"mask shape mismatch mask={patch_mask.shape} feats={student.shape[:2]}"
                 )
             mask = patch_mask.unsqueeze(-1).to(student.dtype)
             n_valid = mask.sum().clamp(min=1.0)
@@ -248,9 +247,7 @@ class RegionCategoryAlignmentLoss(nn.Module):
         if student_cls.dim() != 2:
             raise ValueError(f"student_cls must be (B,D); got {student_cls.shape}")
         if text_prototypes.dim() != 2:
-            raise ValueError(
-                f"text_prototypes must be (R*C,D); got {text_prototypes.shape}"
-            )
+            raise ValueError(f"text_prototypes must be (R*C,D); got {text_prototypes.shape}")
         expected_protos = self.n_regions * self.n_categories
         if text_prototypes.shape[0] != expected_protos:
             raise ValueError(
@@ -370,9 +367,7 @@ def _resolve_device(device: str) -> torch.device:
     return torch.device(device)
 
 
-def adapt_patch_embed_to_n_channels(
-    vision_model: nn.Module, target_channels: int
-) -> None:
+def adapt_patch_embed_to_n_channels(vision_model: nn.Module, target_channels: int) -> None:
     """Adapts the ``patch_embedding`` of a CLIP vision model to ``target_channels``.
 
     Supports both :class:`CLIPVisionModel` (transformers 5.x, flat: it has
@@ -396,9 +391,7 @@ def adapt_patch_embed_to_n_channels(
     if old_proj.in_channels == target_channels:
         return
     if old_proj.in_channels != 3:
-        raise ValueError(
-            f"expected patch_embed with 3 input channels, got {old_proj.in_channels}"
-        )
+        raise ValueError(f"expected patch_embed with 3 input channels, got {old_proj.in_channels}")
     out_ch = old_proj.out_channels
     # Conv2d.kernel_size/stride/padding are tuple[int, int] at runtime although
     # the type-stub publishes tuple[int, ...]. Explicit cast for mypy.
@@ -471,9 +464,7 @@ class FarSLIPDistillationTrainer:
         # v2 (region_category) faithful losses. Always constructed (cheap, pure
         # nn.Modules) so the trainer can switch modes without re-instantiation;
         # they are only consumed when ``config.supervision == "region_category"``.
-        self._mpcl_loss = MultiPositiveRegionCategoryLoss(
-            temperature=config.temperature
-        )
+        self._mpcl_loss = MultiPositiveRegionCategoryLoss(temperature=config.temperature)
         self._global_loss = GlobalImageTextLoss(temperature=config.temperature)
         # v2 category prototype bank ``(C, D)`` and the PASTIS-id -> [0, C) map,
         # both injected via :meth:`set_category_prototypes`. None until set.
@@ -528,9 +519,7 @@ class FarSLIPDistillationTrainer:
         def _lr_lambda(step: int) -> float:
             if step < warmup_steps:
                 return float(step) / float(max(1, warmup_steps))
-            progress = float(step - warmup_steps) / float(
-                max(1, total_steps - warmup_steps)
-            )
+            progress = float(step - warmup_steps) / float(max(1, total_steps - warmup_steps))
             return 0.5 * (1.0 + math.cos(math.pi * progress))
 
         return torch.optim.lr_scheduler.LambdaLR(self._optim, _lr_lambda)
@@ -566,9 +555,7 @@ class FarSLIPDistillationTrainer:
                 does not equal ``teacher.config.hidden_size``.
         """
         if prototypes.dim() != 2:
-            raise ValueError(
-                f"text_prototypes must be 2-D (R*C, D); got {tuple(prototypes.shape)}"
-            )
+            raise ValueError(f"text_prototypes must be 2-D (R*C, D); got {tuple(prototypes.shape)}")
         hidden_size = int(self.teacher.config.hidden_size)
         d_in = prototypes.shape[1]
         if d_in == hidden_size:
@@ -719,8 +706,7 @@ class FarSLIPDistillationTrainer:
             )
         if bank.shape[1] != hidden_size:  # defensive
             raise ValueError(
-                f"category prototypes final dim={bank.shape[1]} != student CLS "
-                f"dim {hidden_size}."
+                f"category prototypes final dim={bank.shape[1]} != student CLS dim {hidden_size}."
             )
         self._category_prototypes = bank.detach().to(self.device)
         self._pastis_to_category = {cid: idx for idx, cid in enumerate(ids)}
@@ -750,9 +736,7 @@ class FarSLIPDistillationTrainer:
             ValueError: if the prototype bank is unset or the length disagrees.
         """
         if self._category_prototypes is None:
-            raise ValueError(
-                "set_category_prototypes() must be called before set_class_weights()."
-            )
+            raise ValueError("set_category_prototypes() must be called before set_class_weights().")
         n_categories = int(self._category_prototypes.shape[0])
         if class_weights.dim() != 1 or class_weights.shape[0] != n_categories:
             raise ValueError(
@@ -807,9 +791,7 @@ class FarSLIPDistillationTrainer:
             ValueError: if ``caption_cls`` is not 2-D or ``D_in`` is unsupported.
         """
         if caption_cls.dim() != 2:
-            raise ValueError(
-                f"caption_cls must be 2-D (B, D); got {tuple(caption_cls.shape)}"
-            )
+            raise ValueError(f"caption_cls must be 2-D (B, D); got {tuple(caption_cls.shape)}")
         hidden_size = int(self.teacher.config.hidden_size)
         d_in = caption_cls.shape[1]
         if d_in == hidden_size:
@@ -914,9 +896,7 @@ class FarSLIPDistillationTrainer:
         # L_loc (MPCL): regions share their patch CLS; ids mapped to [0, C).
         region_visual = student_cls[region_to_patch]  # (R, D)
         mapped_ids = self._map_region_cat_ids(region_cat_ids)
-        loss_loc = self._mpcl_loss(
-            region_visual, self._category_prototypes, mapped_ids
-        )
+        loss_loc = self._mpcl_loss(region_visual, self._category_prototypes, mapped_ids)
 
         # L_glo (InfoNCE image-caption): caption CLS lifted to the visual space.
         if self.config.use_global_caption_loss and caption_cls is not None:
@@ -945,9 +925,7 @@ class FarSLIPDistillationTrainer:
         under the hood).
         """
         if self._text_prototypes is None:
-            raise RuntimeError(
-                "text_prototypes not initialized. Call set_text_prototypes()."
-            )
+            raise RuntimeError("text_prototypes not initialized. Call set_text_prototypes().")
         images = images.to(self.device)
         region_ids = region_ids.to(self.device)
         category_ids = category_ids.to(self.device)
@@ -958,9 +936,7 @@ class FarSLIPDistillationTrainer:
         # to map 4 bands to the same semantics the teacher sees in 3.
         teacher_input = images[:, :3, :, :]
         with torch.no_grad():
-            teacher_out = self.teacher(
-                pixel_values=teacher_input, output_hidden_states=False
-            )
+            teacher_out = self.teacher(pixel_values=teacher_input, output_hidden_states=False)
 
         # CLIPVisionModel last_hidden_state shape: (B, 1+P, D) with CLS at pos 0.
         student_hidden = student_out.last_hidden_state
@@ -971,16 +947,17 @@ class FarSLIPDistillationTrainer:
         teacher_patches = teacher_hidden[:, 1:, :]
 
         loss_patch = self._patch_loss(student_patches, teacher_patches)
-        loss_cls = self._cls_loss(
-            student_cls, self._text_prototypes, region_ids, category_ids
-        )
+        loss_cls = self._cls_loss(student_cls, self._text_prototypes, region_ids, category_ids)
         # auxiliary contrastive image-text-batch: aligns student CLS with teacher CLS
         # (lightweight placeholder for gamma; stabilizes the training)
-        cos_aux = 1.0 - F.cosine_similarity(
-            F.normalize(student_cls, dim=-1),
-            F.normalize(teacher_cls.detach(), dim=-1),
-            dim=-1,
-        ).mean()
+        cos_aux = (
+            1.0
+            - F.cosine_similarity(
+                F.normalize(student_cls, dim=-1),
+                F.normalize(teacher_cls.detach(), dim=-1),
+                dim=-1,
+            ).mean()
+        )
 
         w = self.config.loss_weights
         total = w["alpha"] * loss_patch + w["beta"] * loss_cls + w["gamma"] * cos_aux
@@ -1017,9 +994,7 @@ class FarSLIPDistillationTrainer:
                 batch["region_to_patch"],
                 caption_cls=batch.get("caption_cls"),
             )
-        return self.step(
-            batch["image"], batch["region_id"], batch["category_id"]
-        )
+        return self.step(batch["image"], batch["region_id"], batch["category_id"])
 
     def train(self, dataloader: DataLoader | None = None) -> dict[str, float]:
         """Runs ``n_epochs`` complete with MLflow autolog.
@@ -1065,9 +1040,7 @@ class FarSLIPDistillationTrainer:
                         # data_version = hash of the .dvc file (not local path).
                         # If the dataset is not yet DVC-tracked, returns
                         # ``"<path>@untracked"`` and it is documented in the run.
-                        "data_version": dvc_data_version(
-                            str(self.config.dataset_root)
-                        ),
+                        "data_version": dvc_data_version(str(self.config.dataset_root)),
                         "us": "US-017",
                         "us_alias": "US-016b",
                     }
@@ -1096,9 +1069,7 @@ class FarSLIPDistillationTrainer:
                             "supervision": self.config.supervision,
                             "lambda_loc": self.config.lambda_loc,
                             "temperature": self.config.temperature,
-                            "use_global_caption_loss": (
-                                self.config.use_global_caption_loss
-                            ),
+                            "use_global_caption_loss": (self.config.use_global_caption_loss),
                             "n_categories": self.config.n_categories,
                         }
                     )
@@ -1135,18 +1106,13 @@ class FarSLIPDistillationTrainer:
                     if run_ctx is not None and _mlflow is not None:
                         try:
                             _mlflow.log_metrics(
-                                {
-                                    k: float(v.detach().cpu().item())
-                                    for k, v in losses.items()
-                                },
+                                {k: float(v.detach().cpu().item()) for k, v in losses.items()},
                                 step=global_step,
                             )
                         except RuntimeError as exc:  # pragma: no cover
                             _log.debug("mlflow log_metrics fallo", error=str(exc))
 
-                    last_metrics = {
-                        k: float(v.detach().cpu().item()) for k, v in losses.items()
-                    }
+                    last_metrics = {k: float(v.detach().cpu().item()) for k, v in losses.items()}
                     global_step += 1
 
                 _log.info("epoch done", epoch=epoch, **last_metrics)
@@ -1188,9 +1154,7 @@ class FarSLIPDistillationTrainer:
         # a future iteration introduces a composite wrapper.
         raw_state = self.student.state_dict()
         state_dict = {
-            k: v
-            for k, v in raw_state.items()
-            if not k.startswith(("text_", "logit_scale"))
+            k: v for k, v in raw_state.items() if not k.startswith(("text_", "logit_scale"))
         }
         if format == "safetensors":
             from safetensors.torch import save_file

@@ -72,9 +72,7 @@ _TOP_K_PROBS = 6
 def _patch_bounds_utm(geometry: dict) -> tuple[float, float, float, float]:
     """Return the ``(minx, miny, maxx, maxy)`` bounds of a patch polygon (metres)."""
     coords = list(
-        itertools.chain.from_iterable(
-            itertools.chain.from_iterable(geometry["coordinates"])
-        )
+        itertools.chain.from_iterable(itertools.chain.from_iterable(geometry["coordinates"]))
     )
     xs = [c[0] for c in coords]
     ys = [c[1] for c in coords]
@@ -226,9 +224,7 @@ def main() -> None:
             continue
         pred_name = max(named, key=lambda k: named[k])
         confidence = float(named[pred_name])
-        top_probs = dict(
-            sorted(named.items(), key=lambda kv: kv[1], reverse=True)[:_TOP_K_PROBS]
-        )
+        top_probs = dict(sorted(named.items(), key=lambda kv: kv[1], reverse=True)[:_TOP_K_PROBS])
 
         gt_label = gt_by_id.get(canonical_id)
         true_name = (

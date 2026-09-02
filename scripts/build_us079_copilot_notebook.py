@@ -99,7 +99,7 @@ def _build_cells(report_dir: str, data_dir: str) -> list:
     cells.append(
         md(
             "# US-079 - El copiloto: modelo ORIGINAL (PASTIS) vs TRANSFER (Italia)\n\n"
-            "### Patron \"Be My Eyes\": los modelos del equipo *ven*, un LLM *razona*\n\n"
+            '### Patron "Be My Eyes": los modelos del equipo *ven*, un LLM *razona*\n\n'
             "**Equipo 17** - AgroSatCopilot - Transfer learning mediterraneo (EPIC 12)\n\n"
             "---\n\n"
             "Este cuaderno **accede a los modelos densos a traves del copiloto** (el agente "
@@ -733,10 +733,7 @@ def _build_cells(report_dir: str, data_dir: str) -> list:
 
     # ---------------------------------------------------- Cierre del pool ------
     cells.append(
-        md(
-            "### Cierre\n\n"
-            "Cerramos el *pool* de conexiones de forma ordenada al terminar."
-        )
+        md("### Cierre\n\nCerramos el *pool* de conexiones de forma ordenada al terminar.")
     )
     cells.append(
         code(
@@ -777,9 +774,7 @@ def build(
         data_dir: Repo-relative path to the Italian homologue dataset (US-078).
     """
     nb = nbf.v4.new_notebook()
-    nb.cells = _build_cells(
-        str(report_dir).replace("\\", "/"), str(data_dir).replace("\\", "/")
-    )
+    nb.cells = _build_cells(str(report_dir).replace("\\", "/"), str(data_dir).replace("\\", "/"))
     nb.metadata = {
         "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
         "language_info": {"name": "python", "version": "3.12"},

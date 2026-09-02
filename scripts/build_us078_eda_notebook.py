@@ -280,7 +280,7 @@ def _build_cells(data_dir: str) -> list:
             "mean_cov = float(meta['pct_cubierto'].mean())\n"
             "mean_dates = float(meta['n_fechas'].mean())\n"
             "print(f'Cobertura media: {mean_cov:.1%} (objetivo > 70%)')\n"
-            "print(f'Fechas por patch: media {mean_dates:.1f}, min {meta[\"n_fechas\"].min()}, max {meta[\"n_fechas\"].max()}')\n"
+            'print(f\'Fechas por patch: media {mean_dates:.1f}, min {meta["n_fechas"].min()}, max {meta["n_fechas"].max()}\')\n'
             "print(f\"Folds espaciales presentes: {sorted(meta['fold_espacial'].unique().to_list())}\")\n"
         )
     )

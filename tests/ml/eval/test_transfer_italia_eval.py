@@ -36,10 +36,10 @@ from ml.transfer.italia_label_space import ItaliaLabelSpace
 # Toy label space: bg + 2 conserved (PASTIS parents) + 2 new (agronomic groups).
 _LEAVES = (
     "__background__",
-    "common_soft_wheat",   # conserved -> "Soft winter wheat"
+    "common_soft_wheat",  # conserved -> "Soft winter wheat"
     "maize_corn_popcorn",  # conserved -> "Corn"
-    "olive",               # new -> "Permanent woody crop"
-    "tree_wood_forest",    # new -> "Forest"
+    "olive",  # new -> "Permanent woody crop"
+    "tree_wood_forest",  # new -> "Forest"
 )
 
 

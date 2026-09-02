@@ -311,8 +311,7 @@ class Agent:
         )
         yield ErrorEvent(
             message=(
-                f"el agente no produjo una respuesta final tras {MAX_TURNS} turnos "
-                "de herramientas"
+                f"el agente no produjo una respuesta final tras {MAX_TURNS} turnos de herramientas"
             )
         )
 
@@ -347,9 +346,7 @@ class Agent:
             message = f"el modelo pidio una herramienta desconocida: {call.name!r}"
             logger.warning("agent_unknown_tool", session_id=str(session_id), tool=call.name)
             response_parts.append(
-                types.Part.from_function_response(
-                    name=call.name, response={"error": message}
-                )
+                types.Part.from_function_response(name=call.name, response={"error": message})
             )
             yield ErrorEvent(message=message)
             return
@@ -373,9 +370,7 @@ class Agent:
                 errors=exc.error_count(),
             )
             response_parts.append(
-                types.Part.from_function_response(
-                    name=call.name, response={"error": message}
-                )
+                types.Part.from_function_response(name=call.name, response={"error": message})
             )
             yield ErrorEvent(message=message)
             return
@@ -516,9 +511,7 @@ class Agent:
                 # rebuilt model turn can echo it back (required for multi-turn
                 # tool calls). Absent on non-Gemini backends -> None.
                 sig = getattr(call_obj, "thought_signature", None)
-                call = _ToolCall(
-                    name=name, args=dict(args), call_id=call_id, thought_signature=sig
-                )
+                call = _ToolCall(name=name, args=dict(args), call_id=call_id, thought_signature=sig)
         return (text if text else None), call
 
     @staticmethod

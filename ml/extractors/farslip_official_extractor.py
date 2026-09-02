@@ -72,7 +72,7 @@ class FarSLIPOfficialExtractor:
         ckpt = torch.load(self.checkpoint_path, map_location="cpu", weights_only=False)
         state = ckpt.get("state_dict", ckpt) if isinstance(ckpt, dict) else ckpt
         visual_sd = {
-            k.replace("module.", "")[len("visual."):]: v
+            k.replace("module.", "")[len("visual.") :]: v
             for k, v in state.items()
             if k.replace("module.", "").startswith("visual.")
         }

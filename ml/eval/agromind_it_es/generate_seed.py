@@ -82,30 +82,16 @@ FAMILY_INTENTS: dict[QuestionFamily, str] = {
     QuestionFamily.QUANTIFICATION: (
         "estimate an area or a count of parcels / a crop class in the scene"
     ),
-    QuestionFamily.VIGOR: (
-        "assess vegetation vigour using NDVI / EVI from the imagery"
-    ),
-    QuestionFamily.WATER_STRESS: (
-        "assess water stress / moisture using NDWI from the imagery"
-    ),
-    QuestionFamily.PHENOLOGY: (
-        "reason about the phenological stage of the crop in the scene"
-    ),
-    QuestionFamily.COMPARISON: (
-        "compare two parcels (or two model outputs) shown in the scene"
-    ),
-    QuestionFamily.ANOMALY: (
-        "spot a temporal or spatial anomaly / outlier in the parcel"
-    ),
+    QuestionFamily.VIGOR: ("assess vegetation vigour using NDVI / EVI from the imagery"),
+    QuestionFamily.WATER_STRESS: ("assess water stress / moisture using NDWI from the imagery"),
+    QuestionFamily.PHENOLOGY: ("reason about the phenological stage of the crop in the scene"),
+    QuestionFamily.COMPARISON: ("compare two parcels (or two model outputs) shown in the scene"),
+    QuestionFamily.ANOMALY: ("spot a temporal or spatial anomaly / outlier in the parcel"),
     QuestionFamily.METADATA: (
         "read a parcel attribute or acquisition metadata from the scene context"
     ),
-    QuestionFamily.INTERSECTION: (
-        "reason about spatial neighbourhood / intersection of parcels"
-    ),
-    QuestionFamily.EXPLAINABILITY: (
-        "explain why a crop prediction was made for the parcel"
-    ),
+    QuestionFamily.INTERSECTION: ("reason about spatial neighbourhood / intersection of parcels"),
+    QuestionFamily.EXPLAINABILITY: ("explain why a crop prediction was made for the parcel"),
 }
 
 #: Per-language framing of the generation instruction. Visible prose is in the

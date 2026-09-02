@@ -161,9 +161,7 @@ def boundary_pixel_mask(
     if arr.ndim != 2:
         raise ValueError(f"semantic must be 2D (H, W); got ndim={arr.ndim}")
     if neighbourhood < 3 or neighbourhood % 2 == 0:
-        raise ValueError(
-            f"neighbourhood must be odd and >= 3; got {neighbourhood}"
-        )
+        raise ValueError(f"neighbourhood must be odd and >= 3; got {neighbourhood}")
 
     h, w = arr.shape
     radius = neighbourhood // 2
@@ -247,14 +245,10 @@ def boundary_interior_stats(
 
     s2_arr = np.asarray(s2, dtype=np.float64)
     if s2_arr.ndim != 4:
-        raise ValueError(
-            f"patch['s2'] must be 4D (T, bands, H, W); got ndim={s2_arr.ndim}"
-        )
+        raise ValueError(f"patch['s2'] must be 4D (T, bands, H, W); got ndim={s2_arr.ndim}")
     n_bands = s2_arr.shape[1]
     if not 0 <= band_index < n_bands:
-        raise ValueError(
-            f"band_index={band_index} out of range [0, {n_bands - 1}]"
-        )
+        raise ValueError(f"band_index={band_index} out of range [0, {n_bands - 1}]")
 
     semantic_arr = np.asarray(semantic)
     # Temporal average of the chosen band -> 2D map (H, W).
@@ -506,9 +500,7 @@ def confusion_symmetry_analysis(
     yt = _to_numpy(y_true).astype(np.int64).ravel()
     yp = _to_numpy(y_pred).astype(np.int64).ravel()
     if yt.size != yp.size:
-        raise ValueError(
-            f"y_true and y_pred must have equal length; {yt.size} != {yp.size}"
-        )
+        raise ValueError(f"y_true and y_pred must have equal length; {yt.size} != {yp.size}")
     if yt.size == 0:
         return pl.DataFrame(schema=schema)
 
@@ -533,11 +525,7 @@ def confusion_symmetry_analysis(
                 continue
             symmetric = min(cij, cji)
             asymmetric = abs(cij - cji)
-            interpretation = (
-                "spectral_similarity"
-                if symmetric >= asymmetric
-                else "external_factor"
-            )
+            interpretation = "spectral_similarity" if symmetric >= asymmetric else "external_factor"
             rows.append(
                 {
                     "class_a": _label(classes[i]),
@@ -551,9 +539,11 @@ def confusion_symmetry_analysis(
     if not rows:
         return pl.DataFrame(schema=schema)
     df = pl.DataFrame(rows, schema=schema)
-    df = df.with_columns(
-        (pl.col("symmetric") + pl.col("asymmetric")).alias("__total")
-    ).sort("__total", descending=True).drop("__total")
+    df = (
+        df.with_columns((pl.col("symmetric") + pl.col("asymmetric")).alias("__total"))
+        .sort("__total", descending=True)
+        .drop("__total")
+    )
 
     logger.info(
         "confusion_symmetry_analysis_computed",
@@ -616,8 +606,7 @@ def aggregate_rare_classes(
 
     original = y.to_list()
     remapped = [
-        other_label if (v is not None and int(v) in aggregated_set) else v
-        for v in original
+        other_label if (v is not None and int(v) in aggregated_set) else v for v in original
     ]
     remapped_series = pl.Series(y.name or "class", remapped, dtype=pl.Int64)
 
@@ -822,8 +811,7 @@ def cloud_gap_robustness(
         numeric_cols = [
             c
             for c in features.columns
-            if c not in ("parcel_id", "year")
-            and features.schema[c].is_numeric()
+            if c not in ("parcel_id", "year") and features.schema[c].is_numeric()
         ]
         if features.height == 0:
             continue

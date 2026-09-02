@@ -86,16 +86,28 @@ async def test_spatial_rag_ranks_by_weighted_fusion(monkeypatch, make_ctx) -> No
     """
     candidates = [
         FakeRecord(
-            id=1, content="doc A", source="phenology_caption",
-            parcel_id="10000_1", embedding=_vec(0.1), distance_m=0.0,
+            id=1,
+            content="doc A",
+            source="phenology_caption",
+            parcel_id="10000_1",
+            embedding=_vec(0.1),
+            distance_m=0.0,
         ),
         FakeRecord(
-            id=2, content="doc B", source="phenology_caption",
-            parcel_id="10000_2", embedding=_vec(0.2), distance_m=100.0,
+            id=2,
+            content="doc B",
+            source="phenology_caption",
+            parcel_id="10000_2",
+            embedding=_vec(0.2),
+            distance_m=100.0,
         ),
         FakeRecord(
-            id=3, content="doc C", source="phenology_caption",
-            parcel_id="10000_3", embedding=_vec(0.3), distance_m=900.0,
+            id=3,
+            content="doc C",
+            source="phenology_caption",
+            parcel_id="10000_3",
+            embedding=_vec(0.3),
+            distance_m=900.0,
         ),
     ]
     cosine_rows = [
@@ -126,8 +138,12 @@ async def test_spatial_rag_respects_top_k(monkeypatch, make_ctx) -> None:
     """Only ``top_k`` documents are returned even with more candidates."""
     candidates = [
         FakeRecord(
-            id=i, content=f"doc {i}", source="phenology_caption",
-            parcel_id=f"10000_{i}", embedding=_vec(0.1 * i), distance_m=float(i * 10),
+            id=i,
+            content=f"doc {i}",
+            source="phenology_caption",
+            parcel_id=f"10000_{i}",
+            embedding=_vec(0.1 * i),
+            distance_m=float(i * 10),
         )
         for i in range(1, 6)
     ]
@@ -148,12 +164,20 @@ async def test_spatial_rag_degrades_to_spatial_only(monkeypatch, make_ctx) -> No
     """
     candidates = [
         FakeRecord(
-            id=10, content="near", source="phenology_caption",
-            parcel_id="10000_1", embedding=None, distance_m=50.0,
+            id=10,
+            content="near",
+            source="phenology_caption",
+            parcel_id="10000_1",
+            embedding=None,
+            distance_m=50.0,
         ),
         FakeRecord(
-            id=11, content="far", source="phenology_caption",
-            parcel_id="10000_2", embedding=None, distance_m=800.0,
+            id=11,
+            content="far",
+            source="phenology_caption",
+            parcel_id="10000_2",
+            embedding=None,
+            distance_m=800.0,
         ),
     ]
     # No second fetch should be needed; script an empty cosine result as backstop.
@@ -250,8 +274,12 @@ async def test_spatial_rag_clamps_opposite_hemisphere_cosine(monkeypatch, make_c
     """
     candidates = [
         FakeRecord(
-            id=1, content="opp", source="phenology_caption",
-            parcel_id="10000_1", embedding=_vec(0.1), distance_m=900.0,
+            id=1,
+            content="opp",
+            source="phenology_caption",
+            parcel_id="10000_1",
+            embedding=_vec(0.1),
+            distance_m=900.0,
         ),
     ]
     cosine_rows = [FakeRecord(id=1, cosine_distance=1.9)]

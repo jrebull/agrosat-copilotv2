@@ -84,10 +84,7 @@ class _FakeSegDataset:
         n = len(self.patch_ids)
         # Targets in the contiguous 18-class space with a few ignore pixels.
         self._targets = [
-            torch.from_numpy(
-                rng.integers(0, 18, size=(8, 8)).astype(np.int64)
-            )
-            for _ in range(n)
+            torch.from_numpy(rng.integers(0, 18, size=(8, 8)).astype(np.int64)) for _ in range(n)
         ]
 
     def __len__(self) -> int:
@@ -234,9 +231,7 @@ def test_rescore_norm_uses_train_only(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(dense_metrics, "_apply_train_norm", _spy_apply)
 
     spec = _spec("unet", 20)
-    dense_metrics.rescore_all_checkpoints(
-        {"unet": spec}, fold=5, device="cpu", skip_missing=False
-    )
+    dense_metrics.rescore_all_checkpoints({"unet": spec}, fold=5, device="cpu", skip_missing=False)
 
     ds = captured["ds"]
     assert isinstance(ds, fake_ds_cls)
@@ -258,9 +253,7 @@ def test_rescore_norm_uses_train_only(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_train_norm_stats_default_folds_excludes_5() -> None:
     """``_train_norm_stats`` por defecto promedia (1, 2, 3) y nunca el fold-5."""
     assert dense_metrics._TRAIN_NORM_FOLDS == (1, 2, 3)
-    raw = {
-        f: (np.full(10, float(f)), np.full(10, float(f))) for f in (1, 2, 3, 4, 5)
-    }
+    raw = {f: (np.full(10, float(f)), np.full(10, float(f))) for f in (1, 2, 3, 4, 5)}
     mean, std = dense_metrics._train_norm_stats(raw)  # type: ignore[misc]
     # (1 + 2 + 3) / 3 == 2.0; fold-4 and fold-5 are excluded.
     np.testing.assert_allclose(mean, np.full(10, 2.0))
@@ -344,9 +337,7 @@ def test_build_model_for_kind_utae_20_classes_keys_intact() -> None:
     keys = list(model.state_dict().keys())
     assert any(k.startswith("out_conv") for k in keys), keys[:8]
     # The final out_conv layer must output exactly the native 20 classes.
-    out_weights = [
-        v for k, v in model.state_dict().items() if k.startswith("out_conv")
-    ]
+    out_weights = [v for k, v in model.state_dict().items() if k.startswith("out_conv")]
     final = out_weights[-1]
     assert final.shape[0] == 20, final.shape
     # The canonical encoder/decoder keys are present (load_state_dict won't break).

@@ -168,7 +168,9 @@ def _build_upsert_sql(*, on_conflict: Literal["update", "skip", "raise"]) -> str
     # S608: column names come from internal constants
     # (`_SCALAR_PHENOLOGY_COLS`), not from external input. The values are bound
     # via named `:param` parameters.
-    base = f"INSERT INTO features_parcels ({col_list}, updated_at) VALUES ({placeholder_list}, now())"  # noqa: S608, E501
+    base = (
+        f"INSERT INTO features_parcels ({col_list}, updated_at) VALUES ({placeholder_list}, now())"  # noqa: S608
+    )
 
     if on_conflict == "raise":
         return base
@@ -184,10 +186,7 @@ def _build_upsert_sql(*, on_conflict: Literal["update", "skip", "raise"]) -> str
     )
     set_clause = ", ".join(f"{c} = EXCLUDED.{c}" for c in update_targets)
     return (
-        base
-        + " ON CONFLICT (parcel_id, year) DO UPDATE SET "
-        + set_clause
-        + ", updated_at = now()"
+        base + " ON CONFLICT (parcel_id, year) DO UPDATE SET " + set_clause + ", updated_at = now()"
     )
 
 

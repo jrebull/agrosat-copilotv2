@@ -114,9 +114,7 @@ def _alphaearth_columns(df: pl.DataFrame) -> tuple[str, ...]:
         ValueError: if no AlphaEarth column is present.
     """
     cols = tuple(
-        c
-        for c in df.columns
-        if c.startswith(ALPHAEARTH_PREFIX) and df.schema[c].is_numeric()
+        c for c in df.columns if c.startswith(ALPHAEARTH_PREFIX) and df.schema[c].is_numeric()
     )
     if not cols:
         raise ValueError(
@@ -365,9 +363,7 @@ def train_xgb_alphaearth_italia(
     )
     accuracy = float(accuracy_score(y_kept, preds_kept))
 
-    prob_cols = {
-        f"prob_{i:03d}": oof_proba_kept[:, i].astype(np.float32) for i in range(n_classes)
-    }
+    prob_cols = {f"prob_{i:03d}": oof_proba_kept[:, i].astype(np.float32) for i in range(n_classes)}
     oof_df = pl.DataFrame(
         {
             "canonical_parcel_id": [str(x) for x in kept_ids],

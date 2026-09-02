@@ -64,9 +64,7 @@ def test_select_winning_promotes_farslip(
     ablation_table_promotes_farslip_only: pl.DataFrame,
     available_cols: list[str],
 ) -> None:
-    winning = select_winning_features(
-        ablation_table_promotes_farslip_only, available_cols
-    )
+    winning = select_winning_features(ablation_table_promotes_farslip_only, available_cols)
     assert winning.decisions["farslip"] is True
     assert winning.decisions["pheno_text"] is False
     assert winning.decisions["spectral_signature"] is False
@@ -80,9 +78,7 @@ def test_select_winning_discards_geom_by_default(
     ablation_table_promotes_farslip_only: pl.DataFrame,
     available_cols: list[str],
 ) -> None:
-    winning = select_winning_features(
-        ablation_table_promotes_farslip_only, available_cols
-    )
+    winning = select_winning_features(ablation_table_promotes_farslip_only, available_cols)
     assert winning.decisions["geom"] is False
     assert "geom_area_ha" not in winning.feature_cols
 
@@ -91,9 +87,7 @@ def test_select_winning_includes_alphaearth_and_phenology(
     ablation_table_promotes_farslip_only: pl.DataFrame,
     available_cols: list[str],
 ) -> None:
-    winning = select_winning_features(
-        ablation_table_promotes_farslip_only, available_cols
-    )
+    winning = select_winning_features(ablation_table_promotes_farslip_only, available_cols)
     assert "ae_00" in winning.feature_cols
     assert "sog_doy" in winning.feature_cols
     assert "NDVI_fft_amp_0" in winning.feature_cols
@@ -103,9 +97,7 @@ def test_select_winning_includes_era5_and_srtm(
     ablation_table_promotes_farslip_only: pl.DataFrame,
     available_cols: list[str],
 ) -> None:
-    winning = select_winning_features(
-        ablation_table_promotes_farslip_only, available_cols
-    )
+    winning = select_winning_features(ablation_table_promotes_farslip_only, available_cols)
     assert "era5_tmean_m01" in winning.feature_cols
     assert "srtm_elev_mean" in winning.feature_cols
 
@@ -115,9 +107,7 @@ def test_persist_winning_features_creates_manifest(
     available_cols: list[str],
     tmp_path: Path,
 ) -> None:
-    winning = select_winning_features(
-        ablation_table_promotes_farslip_only, available_cols
-    )
+    winning = select_winning_features(ablation_table_promotes_farslip_only, available_cols)
     fused = pl.DataFrame(
         {
             "parcel_id": ["1_0", "1_1", "2_0"],

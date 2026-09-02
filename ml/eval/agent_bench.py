@@ -177,6 +177,7 @@ def _is_transient_error(exc: BaseException) -> bool:
     message = str(exc).lower()
     return any(marker in message for marker in _TRANSIENT_ERROR_MARKERS)
 
+
 #: How often to emit a per-item progress log so a long phase is observable
 #: instead of a silent black box (US-049 hardening).
 _PROGRESS_EVERY: int = 20
@@ -218,9 +219,7 @@ _BBOX_RE: re.Pattern[str] = re.compile(
 _NUMBER_RE: re.Pattern[str] = re.compile(r"^[+-]?\d+(?:\.\d+)?$")
 
 #: Gold values (case-insensitive) treated as a yes/no answer.
-_YES_NO_VALUES: frozenset[str] = frozenset(
-    {"yes", "no", "si", "sí", "true", "false"}
-)
+_YES_NO_VALUES: frozenset[str] = frozenset({"yes", "no", "si", "sí", "true", "false"})
 
 
 def _classify_answer_type(item: AgroMindItem) -> str:
@@ -751,8 +750,7 @@ def _build_open_numeric_prompt(item: AgroMindItem) -> str:
             "",
             f"Pregunta: {item.question}",
             "",
-            "Razona paso a paso de forma breve y termina con "
-            "'Respuesta: <numero o [x,y,x,y]>'.",
+            "Razona paso a paso de forma breve y termina con 'Respuesta: <numero o [x,y,x,y]>'.",
         ]
     )
 
@@ -782,8 +780,7 @@ def _build_yes_no_prompt(item: AgroMindItem) -> str:
             "",
             f"Pregunta: {item.question}",
             "",
-            "Razona paso a paso de forma breve y termina con 'Respuesta: Si' o "
-            "'Respuesta: No'.",
+            "Razona paso a paso de forma breve y termina con 'Respuesta: Si' o 'Respuesta: No'.",
         ]
     )
 
@@ -814,8 +811,7 @@ def _build_open_text_prompt(item: AgroMindItem) -> str:
             "",
             f"Pregunta: {item.question}",
             "",
-            "Razona paso a paso de forma breve y termina con "
-            "'Respuesta: <respuesta concisa>'.",
+            "Razona paso a paso de forma breve y termina con 'Respuesta: <respuesta concisa>'.",
         ]
     )
 
@@ -869,9 +865,7 @@ def _extract_final_answer(answer: str) -> str:
     return answer[matches[-1].end() :].strip()
 
 
-def _resolve_choice_to_letter(
-    final_answer: str, options: dict[str, str]
-) -> str:
+def _resolve_choice_to_letter(final_answer: str, options: dict[str, str]) -> str:
     """Resolve a multiple-choice prediction back to its option letter.
 
     Defense-in-depth for the AgroMind multiple-choice contract: the prompt asks

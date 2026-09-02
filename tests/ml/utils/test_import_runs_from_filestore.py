@@ -33,9 +33,7 @@ def _write_run_dir(base: Path, run_id: str, run_name: str) -> Path:
     (run_dir / "params" / "epochs").write_text("30", encoding="utf-8")
     (run_dir / "params" / "batch_size").write_text("16", encoding="utf-8")
     # best metric (single point) + serie por epoch (3 puntos), con linea vacia final.
-    (run_dir / "metrics" / "best_val_miou").write_text(
-        "1780286907592 0.6253 0\n", encoding="utf-8"
-    )
+    (run_dir / "metrics" / "best_val_miou").write_text("1780286907592 0.6253 0\n", encoding="utf-8")
     (run_dir / "metrics" / "val_miou").write_text(
         "1780283135349 0.026 0\n1780283198773 0.082 1\n1780283261321 0.155 2\n\n",
         encoding="utf-8",

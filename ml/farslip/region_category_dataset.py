@@ -138,9 +138,7 @@ def extract_regions(
     parcels = np.asarray(parcel_ids)
     sem = np.asarray(semantic)
     if parcels.shape != sem.shape:
-        raise ValueError(
-            f"parcel_ids {parcels.shape} and semantic {sem.shape} must match."
-        )
+        raise ValueError(f"parcel_ids {parcels.shape} and semantic {sem.shape} must match.")
 
     active = set(int(c) for c in active_class_ids)
     parcels_flat = parcels.ravel().astype(np.int64)
@@ -216,9 +214,7 @@ class RegionCategoryPairDataset(Dataset):
         self.folds = tuple(int(f) for f in folds)
         self.active_class_ids = tuple(int(c) for c in active_class_ids)
         self.min_area_px = int(min_area_px)
-        self.dominance_ratio = (
-            float(dominance_ratio) if dominance_ratio is not None else None
-        )
+        self.dominance_ratio = float(dominance_ratio) if dominance_ratio is not None else None
         self.resize_to = int(resize_to)
         self.seed = int(seed)
 
@@ -226,9 +222,7 @@ class RegionCategoryPairDataset(Dataset):
         # validates the [1, 18] range so a misconfigured set fails fast.
         for cid in self.active_class_ids:
             if not 1 <= cid <= _N_PASTIS_CROPS:
-                raise ValueError(
-                    f"active_class_ids must be in [1, {_N_PASTIS_CROPS}], got {cid}."
-                )
+                raise ValueError(f"active_class_ids must be in [1, {_N_PASTIS_CROPS}], got {cid}.")
 
         candidate_ids = self._fold_patch_ids()
 
@@ -255,9 +249,7 @@ class RegionCategoryPairDataset(Dataset):
             n_total_regions += len(regions)
 
         n_patches = len(self._samples)
-        self._mean_regions_per_patch = (
-            n_total_regions / n_patches if n_patches else 0.0
-        )
+        self._mean_regions_per_patch = n_total_regions / n_patches if n_patches else 0.0
 
         logger.info(
             "region_category_dataset_init",
@@ -370,9 +362,7 @@ class RegionCategoryPairDataset(Dataset):
         patch = load_pastis_patch(pid, root=self.root, load_annotations=False)
         composite = peak_ndvi_composite(np.asarray(patch["s2"]))  # (4, H, W)
         image = self._resize_composite(composite)
-        region_cat_ids = torch.tensor(
-            [cat for _, cat in regions], dtype=torch.long
-        )  # (N,)
+        region_cat_ids = torch.tensor([cat for _, cat in regions], dtype=torch.long)  # (N,)
         return {
             "image": image,
             "patch_id": pid,
@@ -422,9 +412,7 @@ def collate_region_batch(items: list[dict[str, Any]]) -> dict[str, Any]:
         if n_regions == 0:
             continue
         region_cat_chunks.append(cat_ids.to(torch.long))
-        region_to_patch_chunks.append(
-            torch.full((n_regions,), patch_index, dtype=torch.long)
-        )
+        region_to_patch_chunks.append(torch.full((n_regions,), patch_index, dtype=torch.long))
 
     if region_cat_chunks:
         region_cat_ids = torch.cat(region_cat_chunks, dim=0)

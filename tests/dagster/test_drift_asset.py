@@ -47,9 +47,7 @@ def _context() -> object:
     """Construye un context con mocks de ``mlflow`` y ``drift_notifier``."""
     notifier = MagicMock()
     notifier.send.return_value = False
-    return build_asset_context(
-        resources={"mlflow": MagicMock(), "drift_notifier": notifier}
-    )
+    return build_asset_context(resources={"mlflow": MagicMock(), "drift_notifier": notifier})
 
 
 def test_drift_check_materializes_with_fixtures(
@@ -97,9 +95,7 @@ def test_drift_check_alert_triggers_notifier(
     monkeypatch.chdir(cwd)
     notifier = MagicMock()
     notifier.send.return_value = False
-    context = build_asset_context(
-        resources={"mlflow": MagicMock(), "drift_notifier": notifier}
-    )
+    context = build_asset_context(resources={"mlflow": MagicMock(), "drift_notifier": notifier})
     result = drift_check(context)
 
     metadata = result.metadata or {}

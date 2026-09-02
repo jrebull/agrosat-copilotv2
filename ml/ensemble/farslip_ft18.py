@@ -172,9 +172,7 @@ def _embed_dataset(
         emb = extractor.extract_embeddings(batch["images"])
         emb_np = np.asarray(emb.detach().cpu().numpy(), dtype=np.float64)
         if emb_np.ndim != 2 or emb_np.shape[1] != _EMBED_DIM:
-            raise ValueError(
-                f"extractor must return (B, {_EMBED_DIM}); got {emb_np.shape}."
-            )
+            raise ValueError(f"extractor must return (B, {_EMBED_DIM}); got {emb_np.shape}.")
         feats.append(emb_np)
         labels.extend(int(c) for c in batch["class_ids"].tolist())
         n_done += emb_np.shape[0]
@@ -305,12 +303,18 @@ def materialize_ft18_oof(
 
     pin = num_workers > 0
     x_train, y_raw_pastis, _ = _embed_dataset(
-        train_ds, extractor, batch_size=batch_size,
-        num_workers=num_workers, pin_memory=pin,
+        train_ds,
+        extractor,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        pin_memory=pin,
     )
     x_test, _, test_keys = _embed_dataset(
-        test_ds, extractor, batch_size=batch_size,
-        num_workers=num_workers, pin_memory=pin,
+        test_ds,
+        extractor,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        pin_memory=pin,
     )
     if x_test.shape[0] == 0:
         raise ValueError("fold-5 has no parcels in the parcel dataset.")

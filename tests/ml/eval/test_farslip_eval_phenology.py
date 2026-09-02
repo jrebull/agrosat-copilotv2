@@ -112,9 +112,7 @@ def test_silhouette_per_class_consistent_with_global() -> None:
         n_per_class=50, n_dims=8, centers=[0.0, 5.0, 10.0], scale=0.3, seed=3
     )
     table = ev.silhouette_per_class(matrix, labels)
-    weighted = (
-        (table["silhouette_class"] * table["n"]).sum() / table["n"].sum()
-    )
+    weighted = (table["silhouette_class"] * table["n"]).sum() / table["n"].sum()
     global_sil = eval_space(matrix, labels, label="toy", n_splits=5).silhouette
     assert abs(weighted - global_sil) < 0.02
 
@@ -164,9 +162,7 @@ def test_aligned_spaces_same_rows_and_labels() -> None:
     pheno_m, labels = _gaussian_clusters(
         n_per_class=80, n_dims=12, centers=[0.0, 6.0], scale=0.3, seed=7
     )
-    ae_m, _ = _gaussian_clusters(
-        n_per_class=80, n_dims=8, centers=[0.0, 5.0], scale=0.5, seed=8
-    )
+    ae_m, _ = _gaussian_clusters(n_per_class=80, n_dims=8, centers=[0.0, 5.0], scale=0.5, seed=8)
     pheno_df = _emb_frame(pheno_m, labels, prefix="emb_")
     ae_df = _emb_frame(ae_m, labels, prefix="dim_").drop("class_id")
     report = ev.compare_to_alphaearth(
@@ -188,9 +184,7 @@ def test_comparative_table_has_deltas() -> None:
     pheno_m, labels = _gaussian_clusters(
         n_per_class=80, n_dims=12, centers=[0.0, 8.0], scale=0.1, seed=9
     )
-    ae_m, _ = _gaussian_clusters(
-        n_per_class=80, n_dims=8, centers=[0.0, 0.1], scale=3.0, seed=10
-    )
+    ae_m, _ = _gaussian_clusters(n_per_class=80, n_dims=8, centers=[0.0, 0.1], scale=3.0, seed=10)
     pheno_df = _emb_frame(pheno_m, labels, prefix="emb_")
     ae_df = _emb_frame(ae_m, labels, prefix="dim_").drop("class_id")
     report = ev.compare_to_alphaearth(
@@ -215,9 +209,7 @@ def test_compare_empty_join_raises() -> None:
         n_per_class=30, n_dims=6, centers=[0.0, 5.0], scale=0.2, seed=11
     )
     pheno_df = _emb_frame(pheno_m, labels, prefix="emb_", id_prefix="pheno")
-    ae_m, _ = _gaussian_clusters(
-        n_per_class=30, n_dims=6, centers=[0.0, 5.0], scale=0.2, seed=12
-    )
+    ae_m, _ = _gaussian_clusters(n_per_class=30, n_dims=6, centers=[0.0, 5.0], scale=0.2, seed=12)
     ae_df = _emb_frame(ae_m, labels, prefix="dim_", id_prefix="other").drop("class_id")
     with pytest.raises(ValueError, match="no shared patches"):
         ev.compare_to_alphaearth(
@@ -234,9 +226,7 @@ def test_verdict_is_honest_does_not_overclaim() -> None:
     pheno_m, labels = _gaussian_clusters(
         n_per_class=80, n_dims=12, centers=[0.0, 0.1], scale=3.0, seed=13
     )
-    ae_m, _ = _gaussian_clusters(
-        n_per_class=80, n_dims=8, centers=[0.0, 8.0], scale=0.1, seed=14
-    )
+    ae_m, _ = _gaussian_clusters(n_per_class=80, n_dims=8, centers=[0.0, 8.0], scale=0.1, seed=14)
     pheno_df = _emb_frame(pheno_m, labels, prefix="emb_")
     ae_df = _emb_frame(ae_m, labels, prefix="dim_").drop("class_id")
     report = ev.compare_to_alphaearth(
@@ -259,9 +249,7 @@ def test_compare_missing_columns_raise() -> None:
     pheno_df = _emb_frame(matrix, labels, prefix="emb_")
     ae_df = _emb_frame(matrix, labels, prefix="dim_").drop("class_id")
     with pytest.raises(ValueError, match="class_id"):
-        ev.compare_to_alphaearth(
-            pheno_df=pheno_df.drop("class_id"), alphaearth_df=ae_df
-        )
+        ev.compare_to_alphaearth(pheno_df=pheno_df.drop("class_id"), alphaearth_df=ae_df)
     with pytest.raises(ValueError, match="emb_"):
         ev.compare_to_alphaearth(
             pheno_df=pheno_df.select(["parcel_id", "class_id"]),
@@ -395,18 +383,14 @@ def test_rejects_italian_checkpoint() -> None:
 def test_rejects_official_and_synthetic_checkpoints() -> None:
     """The official published and the synthetic checkpoints are also rejected."""
     with pytest.raises(ValueError, match=r"farslip2_vit-b-16|forbidden"):
-        ev._validate_checkpoint(
-            Path("data/farslip/checkpoints/FarSLIP2_ViT-B-16.pt")
-        )
+        ev._validate_checkpoint(Path("data/farslip/checkpoints/FarSLIP2_ViT-B-16.pt"))
     with pytest.raises(ValueError, match=r"farslip_pairs|forbidden"):
         ev._validate_checkpoint(Path("data/farslip_pairs/student.safetensors"))
 
 
 def test_accepts_incremental_us036a_checkpoint() -> None:
     """The US-036-a incremental checkpoint passes the guard."""
-    ev._validate_checkpoint(
-        Path("checkpoints/farslip/incremental/08cls/best.safetensors")
-    )
+    ev._validate_checkpoint(Path("checkpoints/farslip/incremental/08cls/best.safetensors"))
 
 
 def test_rejects_farslip_pairs_root() -> None:
@@ -445,14 +429,9 @@ class _FakeDataset:
         import torch
 
         rng = np.random.default_rng(0)
-        self._samples = [
-            (f"patch{r}", int(rng.integers(0, n_classes))) for r in range(n)
-        ]
+        self._samples = [(f"patch{r}", int(rng.integers(0, n_classes))) for r in range(n)]
         self._images = [
-            torch.from_numpy(
-                rng.normal(size=(4, 224, 224)).astype(np.float32)
-            )
-            for _ in range(n)
+            torch.from_numpy(rng.normal(size=(4, 224, 224)).astype(np.float32)) for _ in range(n)
         ]
 
     def __len__(self) -> int:

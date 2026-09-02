@@ -56,9 +56,7 @@ def _noisy_map(label_map: np.ndarray, *, seed: int) -> np.ndarray:
     return (exp / exp.sum(axis=0, keepdims=True)).astype(np.float32)
 
 
-def _toy_problem(seed: int = 0) -> tuple[
-    dict[int, np.ndarray], dict[int, int], list[np.ndarray]
-]:
+def _toy_problem(seed: int = 0) -> tuple[dict[int, np.ndarray], dict[int, int], list[np.ndarray]]:
     """Build 4 patches over 2 spatial folds with crop-only ground-truth masks."""
     rng = np.random.default_rng(seed)
     masks: dict[int, np.ndarray] = {}
@@ -73,9 +71,7 @@ def _toy_problem(seed: int = 0) -> tuple[
     return masks, folds, label_maps
 
 
-def _members(
-    label_maps: list[np.ndarray], *, strong: bool
-) -> dict[str, DenseMemberPreds]:
+def _members(label_maps: list[np.ndarray], *, strong: bool) -> dict[str, DenseMemberPreds]:
     """Build 3 dense members; if ``strong``, the first is near-perfect."""
     m_a, m_b, m_c = {}, {}, {}
     for pid, lm in enumerate(label_maps):
@@ -195,9 +191,9 @@ def test_fit_predict_oof_is_leak_free(monkeypatch: pytest.MonkeyPatch) -> None:
         return original(train_ids, test_ids, context=context)
 
     monkeypatch.setattr(EnsembleModel, "assert_oof_only", staticmethod(_spy))
-    ItaliaPixelVotingEnsemble(
-        ("tsvit-pheno", "utae"), num_classes=_K, n_restarts=3
-    ).fit_predict(members, masks, folds)
+    ItaliaPixelVotingEnsemble(("tsvit-pheno", "utae"), num_classes=_K, n_restarts=3).fit_predict(
+        members, masks, folds
+    )
 
     assert len(seen) == 2  # one OOF split per spatial fold
     for train_set, test_set in seen:

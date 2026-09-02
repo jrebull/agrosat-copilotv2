@@ -49,8 +49,7 @@ try:
     from google.cloud import pubsub_v1
 except ImportError as exc:  # pragma: no cover
     sys.stderr.write(
-        f"FATAL: dependencias missing ({exc}). "
-        "Run pip install google-cloud-pubsub structlog\n"
+        f"FATAL: dependencias missing ({exc}). Run pip install google-cloud-pubsub structlog\n"
     )
     sys.exit(1)
 
@@ -153,6 +152,7 @@ def _make_callback(state: DaemonState):
                 state.job_running = False
                 state.last_message_at = time.monotonic()
             message.ack()
+
     return callback
 
 

@@ -707,8 +707,13 @@ def main(
     out_path = Path(out) if out else _OUT_BY_MODEL[model]
     nb = nbf.v4.new_notebook()
     nb["cells"] = _build_cells(
-        model, num_workers=num_workers, batch=batch, epochs=epochs,
-        target_size=target_size, subset=subset, suffix=suffix
+        model,
+        num_workers=num_workers,
+        batch=batch,
+        epochs=epochs,
+        target_size=target_size,
+        subset=subset,
+        suffix=suffix,
     )
     nb["metadata"] = {
         "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},

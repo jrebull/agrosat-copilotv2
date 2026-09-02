@@ -7,8 +7,6 @@ real con PostGIS + pgvector.
 from __future__ import annotations
 
 import hashlib
-import json
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -65,7 +63,11 @@ def _open_demo_da() -> xr.DataArray:
 def flujo_1() -> None:
     da = _open_demo_da()
     df = extract_temporal_features(da)
-    _record("Flujo 1", f"1.4 shape == (1, 187): got {df.shape}", "PASS" if df.shape == (1, 187) else "FAIL")
+    _record(
+        "Flujo 1",
+        f"1.4 shape == (1, 187): got {df.shape}",
+        "PASS" if df.shape == (1, 187) else "FAIL",
+    )
 
     row = df.select("peak_doy", "peak_value", "sog_doy", "senescence_doy").row(0, named=True)
     # Fixture con ruido + grilla cada 12 días: tolerancia [150,210]; sin ruido el unitario asserta [178,182].
@@ -87,7 +89,9 @@ def flujo_1() -> None:
     )
 
     slopes = df.select("ndvi_slope_pre_peak", "ndvi_slope_post_peak").row(0, named=True)
-    slope_signs_ok = (slopes["ndvi_slope_pre_peak"] or 0) > 0 > (slopes["ndvi_slope_post_peak"] or 0)
+    slope_signs_ok = (
+        (slopes["ndvi_slope_pre_peak"] or 0) > 0 > (slopes["ndvi_slope_post_peak"] or 0)
+    )
     _record(
         "Flujo 1",
         f"1.7 slope_pre>0>slope_post (pre={slopes['ndvi_slope_pre_peak']:.5f}, post={slopes['ndvi_slope_post_peak']:.5f})",
@@ -108,10 +112,12 @@ def flujo_1() -> None:
 # -----------------------------------------------------------------------------
 def flujo_2(engine) -> None:
     with engine.begin() as conn:
-        rows = conn.execute(text(
-            "SELECT column_name, data_type FROM information_schema.columns "
-            "WHERE table_name = 'parcels' ORDER BY ordinal_position"
-        )).all()
+        rows = conn.execute(
+            text(
+                "SELECT column_name, data_type FROM information_schema.columns "
+                "WHERE table_name = 'parcels' ORDER BY ordinal_position"
+            )
+        ).all()
     cols = {r[0]: r[1] for r in rows}
     expected = {
         "id": "bigint",
@@ -126,19 +132,37 @@ def flujo_2(engine) -> None:
         "updated_at": "timestamp with time zone",
     }
     ok = all(cols.get(k) == v for k, v in expected.items()) and len(cols) == 10
-    _record("Flujo 2", f"2.3 \\d parcels: 10 cols con tipos correctos ({len(cols)} found)", "PASS" if ok else "FAIL")
+    _record(
+        "Flujo 2",
+        f"2.3 \\d parcels: 10 cols con tipos correctos ({len(cols)} found)",
+        "PASS" if ok else "FAIL",
+    )
 
     with engine.begin() as conn:
-        rows = conn.execute(text(
-            "SELECT column_name, data_type, udt_name FROM information_schema.columns "
-            "WHERE table_name = 'features_parcels' ORDER BY ordinal_position"
-        )).all()
+        rows = conn.execute(
+            text(
+                "SELECT column_name, data_type, udt_name FROM information_schema.columns "
+                "WHERE table_name = 'features_parcels' ORDER BY ordinal_position"
+            )
+        ).all()
     cols_fp = {r[0]: (r[1], r[2]) for r in rows}
     expected_fp = {
-        "id", "parcel_id", "year", "alphaearth_embedding", "ndvi_stats", "phenology",
-        "sog_doy", "peak_doy", "peak_value", "senescence_doy", "ndvi_auc",
-        "ndvi_slope_pre_peak", "ndvi_slope_post_peak", "maturity_duration_days",
-        "created_at", "updated_at",
+        "id",
+        "parcel_id",
+        "year",
+        "alphaearth_embedding",
+        "ndvi_stats",
+        "phenology",
+        "sog_doy",
+        "peak_doy",
+        "peak_value",
+        "senescence_doy",
+        "ndvi_auc",
+        "ndvi_slope_pre_peak",
+        "ndvi_slope_post_peak",
+        "maturity_duration_days",
+        "created_at",
+        "updated_at",
     }
     has_vector = cols_fp.get("alphaearth_embedding", (None, None))[1] == "vector"
     all_cols = expected_fp.issubset(set(cols_fp.keys()))
@@ -149,18 +173,26 @@ def flujo_2(engine) -> None:
     )
 
     with engine.begin() as conn:
-        u = conn.execute(text(
-            "SELECT constraint_name FROM information_schema.table_constraints "
-            "WHERE table_name='features_parcels' AND constraint_type='UNIQUE'"
-        )).all()
+        u = conn.execute(
+            text(
+                "SELECT constraint_name FROM information_schema.table_constraints "
+                "WHERE table_name='features_parcels' AND constraint_type='UNIQUE'"
+            )
+        ).all()
     unique_ok = any("parcel_year" in r[0] for r in u)
-    _record("Flujo 2", f"2.4b UNIQUE constraint presente: {[r[0] for r in u]}", "PASS" if unique_ok else "FAIL")
+    _record(
+        "Flujo 2",
+        f"2.4b UNIQUE constraint presente: {[r[0] for r in u]}",
+        "PASS" if unique_ok else "FAIL",
+    )
 
     with engine.begin() as conn:
-        idx = conn.execute(text(
-            "SELECT indexname, indexdef FROM pg_indexes "
-            "WHERE tablename IN ('parcels', 'features_parcels')"
-        )).all()
+        idx = conn.execute(
+            text(
+                "SELECT indexname, indexdef FROM pg_indexes "
+                "WHERE tablename IN ('parcels', 'features_parcels')"
+            )
+        ).all()
     gist_ok = any(("using gist" in i[1].lower()) and ("geom" in i[1].lower()) for i in idx)
     btree_year = any("parcels_year_idx" in i[0] for i in idx)
     btree_fp = any("features_parcels_parcel_id_idx" in i[0] for i in idx)
@@ -171,35 +203,49 @@ def flujo_2(engine) -> None:
     )
 
     with engine.begin() as conn:
-        sess_id = conn.execute(text(
-            "INSERT INTO chat_sessions (user_id) VALUES ('qa-test') RETURNING id"
-        )).scalar()
-        parcel_id = conn.execute(text(
-            "INSERT INTO parcels (session_id, geom, year) "
-            "VALUES (:sid, ST_GeomFromText('POLYGON((0 0,1 0,1 1,0 1,0 0))', 4326), 2024) "
-            "RETURNING id"
-        ), {"sid": str(sess_id)}).scalar()
-        conn.execute(text(
-            "INSERT INTO features_parcels (parcel_id, year) VALUES (:p, 2024)"
-        ), {"p": parcel_id})
+        sess_id = conn.execute(
+            text("INSERT INTO chat_sessions (user_id) VALUES ('qa-test') RETURNING id")
+        ).scalar()
+        parcel_id = conn.execute(
+            text(
+                "INSERT INTO parcels (session_id, geom, year) "
+                "VALUES (:sid, ST_GeomFromText('POLYGON((0 0,1 0,1 1,0 1,0 0))', 4326), 2024) "
+                "RETURNING id"
+            ),
+            {"sid": str(sess_id)},
+        ).scalar()
+        conn.execute(
+            text("INSERT INTO features_parcels (parcel_id, year) VALUES (:p, 2024)"),
+            {"p": parcel_id},
+        )
 
     from sqlalchemy.exc import IntegrityError
+
     unique_raised = False
     try:
         with engine.begin() as conn:
-            conn.execute(text(
-                "INSERT INTO features_parcels (parcel_id, year) VALUES (:p, 2024)"
-            ), {"p": parcel_id})
+            conn.execute(
+                text("INSERT INTO features_parcels (parcel_id, year) VALUES (:p, 2024)"),
+                {"p": parcel_id},
+            )
     except IntegrityError:
         unique_raised = True
-    _record("Flujo 2", "2.6 UNIQUE viola al duplicar (parcel_id, year)", "PASS" if unique_raised else "FAIL")
+    _record(
+        "Flujo 2",
+        "2.6 UNIQUE viola al duplicar (parcel_id, year)",
+        "PASS" if unique_raised else "FAIL",
+    )
 
     with engine.begin() as conn:
         conn.execute(text("DELETE FROM parcels WHERE id = :p"), {"p": parcel_id})
-        remaining = conn.execute(text(
-            "SELECT COUNT(*) FROM features_parcels WHERE parcel_id = :p"
-        ), {"p": parcel_id}).scalar()
-    _record("Flujo 2", f"2.7 FK CASCADE: features borrado al borrar parcel ({remaining} restantes)", "PASS" if remaining == 0 else "FAIL")
+        remaining = conn.execute(
+            text("SELECT COUNT(*) FROM features_parcels WHERE parcel_id = :p"), {"p": parcel_id}
+        ).scalar()
+    _record(
+        "Flujo 2",
+        f"2.7 FK CASCADE: features borrado al borrar parcel ({remaining} restantes)",
+        "PASS" if remaining == 0 else "FAIL",
+    )
 
     with engine.begin() as conn:
         conn.execute(text("DELETE FROM chat_sessions WHERE id = :s"), {"s": str(sess_id)})
@@ -210,46 +256,61 @@ def flujo_2(engine) -> None:
 # -----------------------------------------------------------------------------
 def flujo_3(engine) -> None:
     with engine.begin() as conn:
-        sess_id = conn.execute(text(
-            "INSERT INTO chat_sessions (user_id) VALUES ('qa-test-upsert') RETURNING id"
-        )).scalar()
-        parcel_id = conn.execute(text(
-            "INSERT INTO parcels (session_id, geom, year) "
-            "VALUES (:sid, ST_GeomFromText('POLYGON((0 0,1 0,1 1,0 1,0 0))', 4326), 2024) "
-            "RETURNING id"
-        ), {"sid": str(sess_id)}).scalar()
+        sess_id = conn.execute(
+            text("INSERT INTO chat_sessions (user_id) VALUES ('qa-test-upsert') RETURNING id")
+        ).scalar()
+        parcel_id = conn.execute(
+            text(
+                "INSERT INTO parcels (session_id, geom, year) "
+                "VALUES (:sid, ST_GeomFromText('POLYGON((0 0,1 0,1 1,0 1,0 0))', 4326), 2024) "
+                "RETURNING id"
+            ),
+            {"sid": str(sess_id)},
+        ).scalar()
 
-    df = pl.DataFrame({
-        "parcel_id": [int(parcel_id)],
-        "year": [2024],
-        "sog_doy": [120],
-        "peak_doy": [180],
-        "peak_value": [0.85],
-        "senescence_doy": [240],
-        "ndvi_auc": [50.0],
-        "ndvi_slope_pre_peak": [0.005],
-        "ndvi_slope_post_peak": [-0.005],
-        "maturity_duration_days": [40],
-        "NDVI_mean": [0.5],
-        "NDVI_fft_amp_0": [0.5],
-    })
+    df = pl.DataFrame(
+        {
+            "parcel_id": [int(parcel_id)],
+            "year": [2024],
+            "sog_doy": [120],
+            "peak_doy": [180],
+            "peak_value": [0.85],
+            "senescence_doy": [240],
+            "ndvi_auc": [50.0],
+            "ndvi_slope_pre_peak": [0.005],
+            "ndvi_slope_post_peak": [-0.005],
+            "maturity_duration_days": [40],
+            "NDVI_mean": [0.5],
+            "NDVI_fft_amp_0": [0.5],
+        }
+    )
 
     n = load_features_parcels(df, engine)
-    _record("Flujo 3", f"3.4 insert: load_features_parcels devuelve {n} (esperado 1)", "PASS" if n == 1 else "FAIL")
+    _record(
+        "Flujo 3",
+        f"3.4 insert: load_features_parcels devuelve {n} (esperado 1)",
+        "PASS" if n == 1 else "FAIL",
+    )
 
     with engine.begin() as conn:
-        pv = conn.execute(text(
-            "SELECT peak_value, updated_at FROM features_parcels WHERE parcel_id=:p"
-        ), {"p": parcel_id}).one()
+        pv = conn.execute(
+            text("SELECT peak_value, updated_at FROM features_parcels WHERE parcel_id=:p"),
+            {"p": parcel_id},
+        ).one()
     first_updated = pv[1]
-    _record("Flujo 3", f"3.4b peak_value persistido = {pv[0]}", "PASS" if abs(pv[0] - 0.85) < 1e-5 else "FAIL")
+    _record(
+        "Flujo 3",
+        f"3.4b peak_value persistido = {pv[0]}",
+        "PASS" if abs(pv[0] - 0.85) < 1e-5 else "FAIL",
+    )
 
     df2 = df.with_columns(pl.lit(0.90).alias("peak_value"))
     n2 = load_features_parcels(df2, engine, on_conflict="update")
     with engine.begin() as conn:
-        pv2 = conn.execute(text(
-            "SELECT peak_value, updated_at FROM features_parcels WHERE parcel_id=:p"
-        ), {"p": parcel_id}).one()
+        pv2 = conn.execute(
+            text("SELECT peak_value, updated_at FROM features_parcels WHERE parcel_id=:p"),
+            {"p": parcel_id},
+        ).one()
     updated_changed = pv2[1] > first_updated
     _record(
         "Flujo 3",
@@ -261,16 +322,21 @@ def flujo_3(engine) -> None:
     _record("Flujo 3", f"3.6 skip: devuelve {n3} (esperado 0)", "PASS" if n3 == 0 else "FAIL")
 
     from sqlalchemy.exc import IntegrityError
+
     raised = False
     try:
         load_features_parcels(df2, engine, on_conflict="raise")
     except IntegrityError:
         raised = True
-    _record("Flujo 3", f"3.7 raise: IntegrityError propagado ({raised})", "PASS" if raised else "FAIL")
+    _record(
+        "Flujo 3", f"3.7 raise: IntegrityError propagado ({raised})", "PASS" if raised else "FAIL"
+    )
 
     empty = pl.DataFrame(schema={"parcel_id": pl.Int64, "year": pl.Int64})
     n4 = load_features_parcels(empty, engine)
-    _record("Flujo 3", f"3.8 empty frame: devuelve {n4} (esperado 0)", "PASS" if n4 == 0 else "FAIL")
+    _record(
+        "Flujo 3", f"3.8 empty frame: devuelve {n4} (esperado 0)", "PASS" if n4 == 0 else "FAIL"
+    )
 
     with engine.begin() as conn:
         conn.execute(text("DELETE FROM chat_sessions WHERE id = :s"), {"s": str(sess_id)})
@@ -286,7 +352,9 @@ def flujo_4() -> None:
 
     r = subprocess.run(
         ["poetry", "run", "python", "scripts/generate_demo_parcel_ts.py", "--output", str(FIXTURE)],
-        cwd=str(REPO), capture_output=True, text=True,
+        cwd=str(REPO),
+        capture_output=True,
+        text=True,
     )
     regen_ok = r.returncode == 0
     _record("Flujo 4", f"4.2 regenera fixture: rc={r.returncode}", "PASS" if regen_ok else "FAIL")
@@ -295,12 +363,18 @@ def flujo_4() -> None:
     _record("Flujo 4", f"4.3 size {size} bytes < 100000", "PASS" if size < 100_000 else "FAIL")
 
     h_after = hashlib.md5(FIXTURE.read_bytes()).hexdigest()
-    _record("Flujo 4", f"4.4 hash bit-exact ({h_before[:8]} vs {h_after[:8]})", "PASS" if h_before == h_after else "FAIL")
+    _record(
+        "Flujo 4",
+        f"4.4 hash bit-exact ({h_before[:8]} vs {h_after[:8]})",
+        "PASS" if h_before == h_after else "FAIL",
+    )
     backup.unlink()
 
     da = _open_demo_da()
     df = extract_temporal_features(da)
-    _record("Flujo 4", f"4.5 re-extract shape={df.shape}", "PASS" if df.shape == (1, 187) else "FAIL")
+    _record(
+        "Flujo 4", f"4.5 re-extract shape={df.shape}", "PASS" if df.shape == (1, 187) else "FAIL"
+    )
 
 
 # -----------------------------------------------------------------------------
@@ -309,10 +383,16 @@ def flujo_4() -> None:
 def flujo_5() -> None:
     spec = (REPO / "docs" / "spectral_indices.md").read_text(encoding="utf-8")
     has_section = ("Temporal aggregation" in spec) or ("Agregación temporal" in spec)
-    _record("Flujo 5", "5.2 sección 'Temporal aggregation' presente", "PASS" if has_section else "FAIL")
+    _record(
+        "Flujo 5", "5.2 sección 'Temporal aggregation' presente", "PASS" if has_section else "FAIL"
+    )
 
     refs_spec = sum(r in spec for r in ["White", "Reed", "Jönsson", "Eklundh", "TIMESAT"])
-    _record("Flujo 5", f"5.3 refs académicas en spec ({refs_spec}/5 keywords)", "PASS" if refs_spec >= 3 else "FAIL")
+    _record(
+        "Flujo 5",
+        f"5.3 refs académicas en spec ({refs_spec}/5 keywords)",
+        "PASS" if refs_spec >= 3 else "FAIL",
+    )
 
     src = (REPO / "ml" / "features" / "temporal_features.py").read_text(encoding="utf-8")
     refs_src = sum(r in src for r in ["White", "Reed", "Jönsson", "Eklundh", "TIMESAT"])

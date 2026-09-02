@@ -210,10 +210,7 @@ _STR_BENCHMARK: dict[Lang, dict[str, str]] = {
 
 
 def fig_benchmark_barplot(
-    metrics_csv: Path = REPORTS_DIR
-    / "segmentation"
-    / "metrics"
-    / "model_comparison_fold5.csv",
+    metrics_csv: Path = REPORTS_DIR / "segmentation" / "metrics" / "model_comparison_fold5.csv",
     *,
     out_dir: Path = FIGURES_DIR,
     lang: Lang = "en",
@@ -383,13 +380,9 @@ _STR_FARSLIP_ABLATION: dict[Lang, dict[str, str]] = {
         "title_f1": "Supervised separability",
         "ylabel_sil": "Silhouette (unsupervised)",
         "title_sil": "Cluster cohesion",
-        "suptitle": (
-            "FarSLIP-faithful vs AlphaEarth ablation "
-            "(3 band variants pending, B-070-5)"
-        ),
+        "suptitle": ("FarSLIP-faithful vs AlphaEarth ablation (3 band variants pending, B-070-5)"),
         "source": (
-            "AlphaEarth SATELLITE_EMBEDDING/V1/ANNUAL v1.1 (CC-BY-4.0) | FarSLIP "
-            "arXiv:2511.14901"
+            "AlphaEarth SATELLITE_EMBEDDING/V1/ANNUAL v1.1 (CC-BY-4.0) | FarSLIP arXiv:2511.14901"
         ),
     },
     "es": {
@@ -398,12 +391,10 @@ _STR_FARSLIP_ABLATION: dict[Lang, dict[str, str]] = {
         "ylabel_sil": "Silhouette (no supervisada)",
         "title_sil": "Cohesion de clusters",
         "suptitle": (
-            "Ablacion FarSLIP fiel vs AlphaEarth "
-            "(3 variantes de banda pendientes, B-070-5)"
+            "Ablacion FarSLIP fiel vs AlphaEarth (3 variantes de banda pendientes, B-070-5)"
         ),
         "source": (
-            "AlphaEarth SATELLITE_EMBEDDING/V1/ANNUAL v1.1 (CC-BY-4.0) | FarSLIP "
-            "arXiv:2511.14901"
+            "AlphaEarth SATELLITE_EMBEDDING/V1/ANNUAL v1.1 (CC-BY-4.0) | FarSLIP arXiv:2511.14901"
         ),
     },
 }
@@ -473,26 +464,18 @@ _STR_TSVIT_DELTA: dict[Lang, dict[str, str]] = {
     "en": {
         "ylabel": "Score (fold-5)",
         "title": "TSViT full-config (full-M): base vs phenology branch",
-        "note": (
-            "Phenology delta ~0 in the supervised regime (saturation, plan v8), "
-            "valid."
-        ),
+        "note": ("Phenology delta ~0 in the supervised regime (saturation, plan v8), valid."),
     },
     "es": {
         "ylabel": "Puntaje (fold-5)",
         "title": "TSViT full-config (full-M): base vs rama fenologica",
-        "note": (
-            "Delta fenologico ~0 en supervisado (saturacion, plan v8), valido."
-        ),
+        "note": ("Delta fenologico ~0 en supervisado (saturacion, plan v8), valido."),
     },
 }
 
 
 def fig_tsvit_full_config_delta(
-    delta_csv: Path = REPORTS_DIR
-    / "segmentation"
-    / "metrics"
-    / "tsvit_pheno_vs_base_fold5.csv",
+    delta_csv: Path = REPORTS_DIR / "segmentation" / "metrics" / "tsvit_pheno_vs_base_fold5.csv",
     *,
     out_dir: Path = FIGURES_DIR,
     lang: Lang = "en",
@@ -647,14 +630,8 @@ PROMOTED_FIGURES: dict[str, Path] = {
     "curves_tsvit": REPORTS_DIR / "segmentation" / "figures" / "curves_tsvit.png",
     "confusion_tsvit": REPORTS_DIR / "segmentation" / "figures" / "confusion_tsvit.png",
     "confusion_stacking": REPORTS_DIR / "ensemble" / "figures" / "confusion_stacking.png",
-    "spatial_residuals": REPORTS_DIR
-    / "ensemble"
-    / "figures"
-    / "spatial_residuals_blending.png",
-    "per_class_iou_tsvit": REPORTS_DIR
-    / "segmentation"
-    / "figures"
-    / "per_class_iou_tsvit.png",
+    "spatial_residuals": REPORTS_DIR / "ensemble" / "figures" / "spatial_residuals_blending.png",
+    "per_class_iou_tsvit": REPORTS_DIR / "segmentation" / "figures" / "per_class_iou_tsvit.png",
 }
 
 
@@ -749,8 +726,8 @@ def build_all_figures(
         results[stem_for_lang("farslip_band_ablation", lang)] = fig_farslip_band_ablation(
             out_dir=out_dir, lang=lang
         )
-        results[stem_for_lang("tsvit_full_config_delta", lang)] = (
-            fig_tsvit_full_config_delta(out_dir=out_dir, lang=lang)
+        results[stem_for_lang("tsvit_full_config_delta", lang)] = fig_tsvit_full_config_delta(
+            out_dir=out_dir, lang=lang
         )
         results[stem_for_lang("transfer_fr_catalonia", lang)] = fig_transfer_catalonia(
             out_dir=out_dir, lang=lang

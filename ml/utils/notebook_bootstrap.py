@@ -141,9 +141,7 @@ def setup_notebook(
     else:
         gee_project = os.environ.get("GEE_PROJECT_ID") or None
         gee_sa_env = os.environ.get("GEE_SERVICE_ACCOUNT_PATH")
-        gee_sa_path = (
-            Path(gee_sa_env) if gee_sa_env and Path(gee_sa_env).is_file() else None
-        )
+        gee_sa_path = Path(gee_sa_env) if gee_sa_env and Path(gee_sa_env).is_file() else None
 
     figures_dir = repo / "paper" / "figures" / figures_subdir
     reports_dir = repo / "reports" / reports_subdir

@@ -245,13 +245,27 @@ def test_anova_f_top3_contains_ndvi_or_fft() -> None:
     # Cualquier indice vegetativo del set DEFAULT_INDICES o componente FFT
     # cumple la hipotesis "senial espectro-temporal domina".
     veg_prefixes = (
-        "NDVI", "NDWI", "EVI", "NDMI", "NBR", "MSAVI", "NDRE", "MCARI",
-        "CCCI", "GCVI", "PSRI", "NDCI", "FAPAR", "LAI", "RENDVI", "SAVI", "TSAVI",
+        "NDVI",
+        "NDWI",
+        "EVI",
+        "NDMI",
+        "NBR",
+        "MSAVI",
+        "NDRE",
+        "MCARI",
+        "CCCI",
+        "GCVI",
+        "PSRI",
+        "NDCI",
+        "FAPAR",
+        "LAI",
+        "RENDVI",
+        "SAVI",
+        "TSAVI",
     )
-    assert any(
-        any(name.startswith(p) for p in veg_prefixes) or "fft" in name
-        for name in top3
-    ), f"top3 sin indices ni FFT: {top3}"
+    assert any(any(name.startswith(p) for p in veg_prefixes) or "fft" in name for name in top3), (
+        f"top3 sin indices ni FFT: {top3}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -412,9 +426,7 @@ def test_compare_before_after_uses_pastis_folds_not_random() -> None:
     aleatoriamente: si se cambia el orden del vector ``folds`` permutando
     asignaciones, los scores deben cambiar (prueba la dependencia).
     """
-    X, y, folds = make_pastis_subset_synthetic(
-        n_samples=300, n_features=20, n_classes=10, seed=42
-    )
+    X, y, folds = make_pastis_subset_synthetic(n_samples=300, n_features=20, n_classes=10, seed=42)
     table1 = compare_before_after(X, X, y, folds, n_estimators=20)
     # Permutamos folds y volvemos a evaluar: scores deben ser DISTINTOS.
     rng = np.random.default_rng(1)
@@ -429,9 +441,7 @@ def test_compare_before_after_uses_pastis_folds_not_random() -> None:
 
 @pytest.mark.slow
 def test_compare_before_after_returns_4_strategies() -> None:
-    X, y, folds = make_pastis_subset_synthetic(
-        n_samples=200, n_features=20, n_classes=10, seed=42
-    )
+    X, y, folds = make_pastis_subset_synthetic(n_samples=200, n_features=20, n_classes=10, seed=42)
     extra = {
         "pca_0.95": X.select(["parcel_id", "year", *X.columns[2:12]]),
         "selected+pca": X.select(["parcel_id", "year", *X.columns[2:8]]),
@@ -447,9 +457,7 @@ def test_compare_before_after_returns_4_strategies() -> None:
 
 def test_compare_before_after_writes_csv_md(tmp_path: Path) -> None:
     """El caller puede serializar el DataFrame a CSV + MD sin errores."""
-    X, y, folds = make_pastis_subset_synthetic(
-        n_samples=150, n_features=15, n_classes=5, seed=42
-    )
+    X, y, folds = make_pastis_subset_synthetic(n_samples=150, n_features=15, n_classes=5, seed=42)
     table = compare_before_after(X, X, y, folds, n_estimators=10)
     csv_path = tmp_path / "before_after.csv"
     md_path = tmp_path / "before_after.md"
@@ -579,18 +587,14 @@ def test_reports_directory_structure() -> None:
 
 
 def test_to_numpy_excludes_index_cols() -> None:
-    df = pl.DataFrame(
-        {"parcel_id": [1, 2], "year": [2024, 2024], "a": [1.0, 2.0], "b": [3.0, 4.0]}
-    )
+    df = pl.DataFrame({"parcel_id": [1, 2], "year": [2024, 2024], "a": [1.0, 2.0], "b": [3.0, 4.0]})
     matrix, names = sel._to_numpy(df)
     assert matrix.shape == (2, 2)
     assert names == ["a", "b"]
 
 
 def test_compare_before_after_smoke_no_extra() -> None:
-    X, y, folds = make_pastis_subset_synthetic(
-        n_samples=100, n_features=10, n_classes=5, seed=42
-    )
+    X, y, folds = make_pastis_subset_synthetic(n_samples=100, n_features=10, n_classes=5, seed=42)
     table = compare_before_after(X, X, y, folds, n_estimators=10)
     assert table.height == 2
 
@@ -698,9 +702,7 @@ def test_discretize_kmeans_deterministic() -> None:
 
 
 def test_discretize_domain_requires_bin_edges() -> None:
-    df = pl.DataFrame(
-        {"parcel_id": [1, 2], "year": [2024, 2024], "NDVI_mean": [0.1, 0.5]}
-    )
+    df = pl.DataFrame({"parcel_id": [1, 2], "year": [2024, 2024], "NDVI_mean": [0.1, 0.5]})
     with pytest.raises(ValueError):
         discretize_features(df, columns=["NDVI_mean"], strategy="domain", n_bins=3)
 

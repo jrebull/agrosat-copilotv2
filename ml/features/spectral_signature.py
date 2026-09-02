@@ -136,9 +136,7 @@ def compute_rep(
     arrays = (reflectance_b04, reflectance_b05, reflectance_b06, reflectance_b07)
     shapes = {a.shape for a in arrays}
     if len(shapes) != 1:
-        raise ValueError(
-            f"The 4 bands must have the same shape; got {shapes!r}."
-        )
+        raise ValueError(f"The 4 bands must have the same shape; got {shapes!r}.")
     b04 = reflectance_b04.astype(np.float64, copy=False)
     b05 = reflectance_b05.astype(np.float64, copy=False)
     b06 = reflectance_b06.astype(np.float64, copy=False)
@@ -220,8 +218,7 @@ class SpectralSignatureFeatures(BaseEstimator, TransformerMixin):
         """
         if self.descriptor not in ("rep", "sam", "redge_moments"):
             raise ValueError(
-                f"`descriptor` must be 'rep', 'sam' or 'redge_moments'; "
-                f"got {self.descriptor!r}."
+                f"`descriptor` must be 'rep', 'sam' or 'redge_moments'; got {self.descriptor!r}."
             )
 
         self.centroid_: np.ndarray | None = None
@@ -294,9 +291,7 @@ class SpectralSignatureFeatures(BaseEstimator, TransformerMixin):
     def _validate_input(self, X: pl.DataFrame) -> None:
         """Validate that the DataFrame carries the minimum columns."""
         if not isinstance(X, pl.DataFrame):
-            raise TypeError(
-                f"`X` must be a polars.DataFrame; got {type(X)!r}."
-            )
+            raise TypeError(f"`X` must be a polars.DataFrame; got {type(X)!r}.")
         missing = [c for c in (self.parcel_id_col, self.year_col) if c not in X.columns]
         if missing:
             raise ValueError(
@@ -435,15 +430,9 @@ class SpectralSignatureFeatures(BaseEstimator, TransformerMixin):
                 class_col=self.class_col,
                 hint="SAM degrada a coseno vs vector de unos",
             )
-            return np.ones(
-                len(self.phenology_anchors) * len(self.bands), dtype=np.float64
-            )
+            return np.ones(len(self.phenology_anchors) * len(self.bands), dtype=np.float64)
 
-        class_counts = (
-            X.group_by(self.class_col)
-            .len()
-            .sort("len", descending=True)
-        )
+        class_counts = X.group_by(self.class_col).len().sort("len", descending=True)
         majority_class = class_counts.row(0, named=True)[self.class_col]
         subset = X.filter(pl.col(self.class_col) == majority_class)
         signatures = self._stack_signatures(subset)

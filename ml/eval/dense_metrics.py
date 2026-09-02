@@ -498,12 +498,8 @@ def _rescore_one(
             return _missing_row("model_load_failed", str(exc))
         raise
 
-    resolved_device = next(
-        (p.device for p in model.parameters()), torch.device("cpu")
-    )
-    acc = DenseConfusionAccumulator(
-        HARNESS_NUM_CLASSES, ignore_index=HARNESS_IGNORE_INDEX
-    )
+    resolved_device = next((p.device for p in model.parameters()), torch.device("cpu"))
+    acc = DenseConfusionAccumulator(HARNESS_NUM_CLASSES, ignore_index=HARNESS_IGNORE_INDEX)
 
     n_total = len(dataset)
     if max_patches is not None:
@@ -519,9 +515,7 @@ def _rescore_one(
                     model, pid, root=dataset.root, device=resolved_device
                 )
             else:
-                pred_native = predict_patch_for_kind(
-                    model, x, model_kind=spec.model_kind
-                )
+                pred_native = predict_patch_for_kind(model, x, model_kind=spec.model_kind)
                 if spec.needs_resize:
                     pred_native = resample_mask_128_nearest(pred_native)
                 pred_18 = (

@@ -300,9 +300,7 @@ def _stratified_sample(
         selected_indices = new_selection
 
     selected_indices = sorted(set(selected_indices))
-    return parcels_with_idx.filter(pl.col("_row_idx").is_in(selected_indices)).drop(
-        "_row_idx"
-    )
+    return parcels_with_idx.filter(pl.col("_row_idx").is_in(selected_indices)).drop("_row_idx")
 
 
 def _build_imagery_blob(
@@ -463,9 +461,7 @@ def build_pastis_eval_subset(
     patch_ids = index_df["patch_id"].to_list()
     parcels_raw = _enumerate_parcels(root, patch_ids)
     if parcels_raw.is_empty():
-        raise ValueError(
-            f"No valid instances found in {root / 'ANNOTATIONS'}."
-        )
+        raise ValueError(f"No valid instances found in {root / 'ANNOTATIONS'}.")
 
     # Enrich with tile, fold, lon, lat
     parcels_enriched = parcels_raw.join(
@@ -492,8 +488,9 @@ def build_pastis_eval_subset(
     # Build the canonical Utf8 parcel_id + class_name
     class_name_map = {int(k): v for k, v in PASTIS_R_CLASSES.items()}
     sampled = sampled.with_columns(
-        (pl.col("patch_id").cast(pl.Utf8) + pl.lit("_") + pl.col("instance_id").cast(pl.Utf8))
-        .alias("parcel_id"),
+        (
+            pl.col("patch_id").cast(pl.Utf8) + pl.lit("_") + pl.col("instance_id").cast(pl.Utf8)
+        ).alias("parcel_id"),
         pl.col("class_id")
         .cast(pl.Int64)
         .replace_strict(class_name_map, default="unknown")
@@ -565,9 +562,7 @@ def _build_cli() -> argparse.ArgumentParser:
         default=_DEFAULT_OUTPUT,
         help="Ruta destino del parquet (default: data/test_fixtures/pastis_eval_subset.parquet).",
     )
-    parser.add_argument(
-        "--n-samples", type=int, default=1024, help="Numero objetivo de parcelas."
-    )
+    parser.add_argument("--n-samples", type=int, default=1024, help="Numero objetivo de parcelas.")
     parser.add_argument("--seed", type=int, default=42, help="Semilla numpy.")
     parser.add_argument(
         "--stratify-by",

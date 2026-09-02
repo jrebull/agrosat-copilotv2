@@ -118,12 +118,12 @@ def _make_s1_fake_ee(payload_per_pol: dict[str, list[dict[str, Any]]]) -> MagicM
 def _make_srtm_fake_ee(features_payload: list[dict[str, Any]]) -> MagicMock:
     """Mock SRTM compatible con la chain del sampler:
 
-        dem = ee.Image(SRTM).select("elevation")
-        slope = ee.Terrain.slope(dem)
-        aspect = ee.Terrain.aspect(dem)
-        composite = dem.addBands(slope.rename("slope")).addBands(aspect.rename("aspect"))
-        reduced = composite.reduceRegions(...)
-        info = reduced.getInfo()
+    dem = ee.Image(SRTM).select("elevation")
+    slope = ee.Terrain.slope(dem)
+    aspect = ee.Terrain.aspect(dem)
+    composite = dem.addBands(slope.rename("slope")).addBands(aspect.rename("aspect"))
+    reduced = composite.reduceRegions(...)
+    info = reduced.getInfo()
     """
     fake = MagicMock(name="ee")
     fake_reduced = MagicMock()
@@ -468,8 +468,7 @@ def test_era5_reads_band_name_property_not_only_mean(
     payloads = []
     for m in range(1, 13):
         t_feats = [
-            {"properties": {"parcel_id": pid, "temperature_2m": 288.15 + m}}
-            for pid in [1, 2, 3]
+            {"properties": {"parcel_id": pid, "temperature_2m": 288.15 + m}} for pid in [1, 2, 3]
         ]
         p_feats = [
             {"properties": {"parcel_id": pid, "total_precipitation_sum": 0.030}}

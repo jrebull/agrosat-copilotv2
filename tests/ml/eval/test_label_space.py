@@ -272,6 +272,4 @@ def test_register_rejects_empty_kept_ids() -> None:
 def test_register_rejects_out_of_range_id() -> None:
     """A kept id outside the semantic18 range ``[0, 18)`` is rejected."""
     with pytest.raises(ValueError, match="outside the semantic18 range"):
-        register_label_space(
-            LabelSpace("bad-id", (18,), (), {18: "x"}, "x"), overwrite=True
-        )
+        register_label_space(LabelSpace("bad-id", (18,), (), {18: "x"}, "x"), overwrite=True)

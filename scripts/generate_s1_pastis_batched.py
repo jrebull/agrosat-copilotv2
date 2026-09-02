@@ -56,9 +56,7 @@ def _extract_pastis_geometries(metadata_geojson: Path, year: int) -> gpd.GeoData
         pid = (feat.get("properties") or {}).get("ID_PATCH")
         if pid is None:
             continue
-        records.append(
-            {"parcel_id": int(pid), "year": year, "geometry": g_4326}
-        )
+        records.append({"parcel_id": int(pid), "year": year, "geometry": g_4326})
     return gpd.GeoDataFrame(records, crs="EPSG:4326")
 
 

@@ -376,11 +376,15 @@ def test_compute_index_ee_raises_if_eemont_unavailable() -> None:
             raise RuntimeError("ee not initialized")
         return real_import(name, *args, **kwargs)
 
-    with patch("builtins.__import__", side_effect=lambda name, *a, **k: (
-        fake_import(name, *a, **k) if name == "eemont" else real_import(name)
-    )):
+    with patch(
+        "builtins.__import__",
+        side_effect=lambda name, *a, **k: (
+            fake_import(name, *a, **k) if name == "eemont" else real_import(name)
+        ),
+    ):
         # Asegurar que eemont no quede pre-cargado en sys.modules
         import sys
+
         sys.modules.pop("eemont", None)
         with pytest.raises(ImportError, match="eemont"):
             compute_index_ee(fake_ee_image, "NDVI")
@@ -437,7 +441,10 @@ def test_compute_index_cached_redis_error_falls_back_to_compute() -> None:
             raise RuntimeError("connection lost")
 
     result = compute_index_cached(
-        da, "NDVI", scene_id="patch_x", redis_client=BrokenRedis()  # type: ignore[arg-type]
+        da,
+        "NDVI",
+        scene_id="patch_x",
+        redis_client=BrokenRedis(),  # type: ignore[arg-type]
     )
     assert float(result.mean()) == pytest.approx(0.80, abs=1e-4)
 
@@ -447,16 +454,12 @@ def test_compute_index_cached_redis_error_falls_back_to_compute() -> None:
 # ---------------------------------------------------------------------------
 
 
-_PASTIS_ROOT = (
-    Path(__file__).resolve().parents[3] / "data" / "PASTIS-R"
-)
+_PASTIS_ROOT = Path(__file__).resolve().parents[3] / "data" / "PASTIS-R"
 
 
 def _have_pastis_subset() -> bool:
     """Verifica que al menos un patch S2 está en disco."""
-    return (_PASTIS_ROOT / "DATA_S2").is_dir() and any(
-        (_PASTIS_ROOT / "DATA_S2").glob("S2_*.npy")
-    )
+    return (_PASTIS_ROOT / "DATA_S2").is_dir() and any((_PASTIS_ROOT / "DATA_S2").glob("S2_*.npy"))
 
 
 @pytest.mark.skipif(

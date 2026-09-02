@@ -58,9 +58,7 @@ def test_parcel_features_fused_materializes(
     assert df.width == 2 + 189
 
 
-def test_parcel_splits_materializes(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_parcel_splits_materializes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """`parcel_splits_spatial_kfold` materializa los 5 folds en parquet."""
     pytest.importorskip("h3", reason="US-016 spatial split requiere h3.")
     from dagster_project.assets.features import parcel_splits_spatial_kfold

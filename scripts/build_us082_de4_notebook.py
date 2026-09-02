@@ -393,7 +393,9 @@ def main(
     out: Annotated[Path, typer.Option(help="Output .ipynb path.")] = _DEFAULT_OUT,
     report: Annotated[Path, typer.Option(help="DE4 Voting-3 report.json.")] = _DEFAULT_REPORT,
     data_dir: Annotated[Path, typer.Option(help="DE4 PASTIS-homologue dataset.")] = _DEFAULT_DATA,
-    parcels: Annotated[Path, typer.Option(help="DE4 EuroCrops parcels parquet.")] = _DEFAULT_PARCELS,
+    parcels: Annotated[
+        Path, typer.Option(help="DE4 EuroCrops parcels parquet.")
+    ] = _DEFAULT_PARCELS,
     mapping: Annotated[Path, typer.Option(help="EuroCrops crosswalk CSV.")] = _DEFAULT_MAPPING,
 ) -> None:
     """Write the US-082 DE4 notebook to ``out`` (structure; cells populate on run)."""

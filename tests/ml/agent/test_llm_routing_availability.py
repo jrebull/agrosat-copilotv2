@@ -104,7 +104,9 @@ def test_make_backend_falls_back_to_gemini_backend() -> None:
     """The backend builder returns a GeminiBackend when on-prem is unreachable."""
     settings = _Settings()
     backend, decision = make_backend_for_variant_available(
-        "qwen-onprem", settings, probe=_always(False)  # type: ignore[arg-type]
+        "qwen-onprem",
+        settings,
+        probe=_always(False),  # type: ignore[arg-type]
     )
     assert isinstance(backend, GeminiBackend)
     assert decision.fell_back is True
@@ -114,7 +116,9 @@ def test_make_backend_keeps_vllm_when_reachable() -> None:
     """The backend builder returns a vLLM backend when on-prem is reachable."""
     settings = _Settings()
     backend, decision = make_backend_for_variant_available(
-        "qwen-onprem", settings, probe=_always(True)  # type: ignore[arg-type]
+        "qwen-onprem",
+        settings,
+        probe=_always(True),  # type: ignore[arg-type]
     )
     assert isinstance(backend, VLLMOpenAIBackend)
     assert backend.model == "qwen35"

@@ -199,7 +199,7 @@ def _build_cells(
             "\n"
             "\n"
             "def load_json(path):\n"
-            "    \"\"\"Load a JSON artifact, returning None when it is absent (pending).\"\"\"\n"
+            '    """Load a JSON artifact, returning None when it is absent (pending)."""\n'
             "    p = Path(path)\n"
             "    if p is None or not Path(p).is_file():\n"
             "        return None\n"
@@ -207,11 +207,11 @@ def _build_cells(
             "\n"
             "\n"
             "def resolve_ablation(spec):\n"
-            "    \"\"\"Resolve the A/B ablation summary path: a direct file or a repo-relative glob.\n"
+            '    """Resolve the A/B ablation summary path: a direct file or a repo-relative glob.\n'
             "\n"
             "    The real artifact is the single named file ``reports/us079_figs/ablation_compare.json``;\n"
             "    a glob spec is still honoured (newest match) for backward compatibility.\n"
-            "    \"\"\"\n"
+            '    """\n'
             "    direct = _root / spec\n"
             "    if direct.is_file():\n"
             "        return str(direct)\n"
@@ -220,12 +220,12 @@ def _build_cells(
             "\n"
             "\n"
             "def pending(msg):\n"
-            "    \"\"\"Render an explicit pending-state banner (no fabricated numbers).\"\"\"\n"
+            '    """Render an explicit pending-state banner (no fabricated numbers)."""\n'
             "    display(Markdown(f'> **PENDIENTE del entrenamiento** -- {msg}'))\n"
             "\n"
             "\n"
             "def show_fig(path, caption=None):\n"
-            "    \"\"\"Display a PNG if it exists; otherwise a 'figura pendiente' note.\"\"\"\n"
+            '    """Display a PNG if it exists; otherwise a \'figura pendiente\' note."""\n'
             "    p = Path(path)\n"
             "    if not p.is_file():\n"
             "        display(Markdown(f'> _Figura pendiente: falta `{p.name}` (la genera el runner)._'))\n"
@@ -243,7 +243,7 @@ def _build_cells(
             "\n"
             "if HAS_REPORT:\n"
             "    print(f'Reporte Voting US-079 encontrado: run={report.get(\"run\")}, '\n"
-            "          f'fold de test={report.get(\"test_fold\")}, miembros={report.get(\"members\")}')\n"
+            '          f\'fold de test={report.get("test_fold")}, miembros={report.get("members")}\')\n'
             "else:\n"
             "    print('AVISO: no hay report.json del Voting todavia. El ensamble final en la '\n"
             "          'H100 esta condicionado al dataset completo (1438 patches); las celdas que '\n"
@@ -485,7 +485,7 @@ def _build_cells(
             "    over = curve.filter(pl.col('macro_f1') >= f1_threshold).sort('n_classes', descending=True)\n"
             "    if over.height:\n"
             "        row = over.row(0, named=True)\n"
-            "        print(f\"Mayor subconjunto con F1-macro >= {f1_threshold}: \"\n"
+            '        print(f"Mayor subconjunto con F1-macro >= {f1_threshold}: "\n'
             "              f\"{row['n_classes']} clases, F1 {row['macro_f1']:.4f}\")\n"
             "        print('Clases:', ', '.join(map(str, row.get('classes', []))))\n"
             "    else:\n"
@@ -550,7 +550,7 @@ def _build_cells(
             "    fvs = ablation.get('fine_verdict_summary', {})\n"
             "    print(f\"Resumen FINO (fine_verdict_summary): brazo A {fvs.get('mean_f1_warmstart')} \"\n"
             "          f\"vs brazo B {fvs.get('mean_f1_nowarmstart')} en {fvs.get('n_conserved_compared')} \"\n"
-            "          f\"clases conservadas.\")\n"
+            '          f"clases conservadas.")\n'
         )
     )
     cells.append(
@@ -561,7 +561,7 @@ def _build_cells(
             "    pending('delta y veredicto por nivel del JSON de la ablacion A/B.')\n"
             "else:\n"
             "    def _verdict_word(hurts):\n"
-            "        \"\"\"Map the boolean hurts-flag to the human verdict word used in prose.\"\"\"\n"
+            '        """Map the boolean hurts-flag to the human verdict word used in prose."""\n'
             "        return 'ESTORBA' if hurts else 'AYUDA'\n"
             "\n"
             "    lines = []\n"
@@ -571,7 +571,7 @@ def _build_cells(
             "            continue\n"
             "        word = _verdict_word(v.get('warm_start_hurts_conserved'))\n"
             "        lines.append(\n"
-            "            f\"- **Nivel {label}**: el warm-start **{word}** a las conservadas. \"\n"
+            '            f"- **Nivel {label}**: el warm-start **{word}** a las conservadas. "\n'
             "            f\"F1-macro brazo A (warm-start) = {v.get('mean_f1_warmstart')}, \"\n"
             "            f\"brazo B (sin warm-start) = {v.get('mean_f1_nowarmstart')} \"\n"
             "            f\"(delta medio B-A = {v.get('mean_delta_b_minus_a')}). \"\n"
@@ -584,13 +584,13 @@ def _build_cells(
             "    # Texto plano del veredicto (contiene 0.132, 'warm-start' y la palabra del veredicto).\n"
             "    vf = AB_LEVELS.get('fine', {}).get('warm_start_verdict', {})\n"
             "    word_f = _verdict_word(vf.get('warm_start_hurts_conserved'))\n"
-            "    print(f\"VEREDICTO FINO: el warm-start {word_f} en las conservadas \"\n"
+            '    print(f"VEREDICTO FINO: el warm-start {word_f} en las conservadas "\n'
             "          f\"(F1-macro {vf.get('mean_f1_warmstart')} con warm-start vs \"\n"
             "          f\"{vf.get('mean_f1_nowarmstart')} sin warm-start; \"\n"
             "          f\"hurts={vf.get('warm_start_hurts_conserved')}).\")\n"
             "    vc = AB_LEVELS.get('coarse', {}).get('warm_start_verdict', {})\n"
             "    word_c = _verdict_word(vc.get('warm_start_hurts_conserved'))\n"
-            "    print(f\"VEREDICTO COARSE: el warm-start {word_c} en las conservadas \"\n"
+            '    print(f"VEREDICTO COARSE: el warm-start {word_c} en las conservadas "\n'
             "          f\"(F1-macro {vc.get('mean_f1_warmstart')} con warm-start vs \"\n"
             "          f\"{vc.get('mean_f1_nowarmstart')} sin warm-start; \"\n"
             "          f\"hurts={vc.get('warm_start_hurts_conserved')}).\")\n"

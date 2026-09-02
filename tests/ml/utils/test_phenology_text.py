@@ -57,9 +57,8 @@ def parcels_parquet(tmp_path: Path) -> Path:
 @pytest.fixture
 def mock_encoder(monkeypatch: pytest.MonkeyPatch):
     """Mock global de ``encode_descriptions`` para no descargar st-models."""
-    def fake_encode(
-        descriptions, *, encoder="sentence-transformers", model_name=None
-    ):
+
+    def fake_encode(descriptions, *, encoder="sentence-transformers", model_name=None):
         return np.ones((len(descriptions), 8), dtype=np.float32)
 
     monkeypatch.setattr(pd_mod, "encode_descriptions", fake_encode)

@@ -78,9 +78,7 @@ def test_per_class_report_ignore_index() -> None:
     """Los pixeles con target == ignore_index no afectan el reporte."""
     y_true = np.array([0, 1, 255, 255])
     y_pred = np.array([0, 1, 0, 1])
-    report = per_class_report(
-        y_true, y_pred, num_classes=2, ignore_index=255
-    )
+    report = per_class_report(y_true, y_pred, num_classes=2, ignore_index=255)
     by_id = {row["class_id"]: row for row in report.iter_rows(named=True)}
     # Solo cuentan los dos primeros, ambos correctos.
     assert by_id[0]["support"] == 1
@@ -93,9 +91,7 @@ def test_per_class_report_with_proba_adds_ap() -> None:
     y_true = np.array([0, 0, 1, 1])
     y_pred = np.array([0, 0, 1, 1])
     # Probabilidades perfectas -> AP = 1 en ambas clases.
-    proba = np.array(
-        [[0.9, 0.1], [0.8, 0.2], [0.1, 0.9], [0.2, 0.8]], dtype=np.float64
-    )
+    proba = np.array([[0.9, 0.1], [0.8, 0.2], [0.1, 0.9], [0.2, 0.8]], dtype=np.float64)
     report = per_class_report(y_true, y_pred, proba, num_classes=2)
     assert "ap" in report.columns
     aps = [v for v in report["ap"].to_list() if v is not None]
@@ -122,12 +118,8 @@ def _three_class_report() -> tuple[pl.DataFrame, np.ndarray, np.ndarray]:
 
     Clase 0 perfecta, clase 1 buena, clase 2 mala -> f1(0) > f1(1) > f1(2).
     """
-    y_true = np.array(
-        [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2], dtype=np.int64
-    )
-    y_pred = np.array(
-        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 2], dtype=np.int64
-    )
+    y_true = np.array([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2], dtype=np.int64)
+    y_pred = np.array([0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 2], dtype=np.int64)
     report = per_class_report(y_true, y_pred, num_classes=3)
     return report, y_true, y_pred
 
@@ -185,9 +177,7 @@ def test_cardinality_curve_empty_when_no_f1() -> None:
     y_true = np.array([255, 255])
     y_pred = np.array([0, 1])
     report = per_class_report(y_true, y_pred, num_classes=3, ignore_index=255)
-    curve = cardinality_cutoff_curve(
-        report, y_true, y_pred, num_classes=3, ignore_index=255
-    )
+    curve = cardinality_cutoff_curve(report, y_true, y_pred, num_classes=3, ignore_index=255)
     assert curve.height == 0
     assert "macro_f1_topk" in curve.columns
 
@@ -300,9 +290,7 @@ def test_recommend_drop_dropped_first() -> None:
             "iou": [0.8, 0.02],
         }
     )
-    dist = _dist_report(
-        bands={1: "high", 2: "very_low"}, n_parcels={1: 5000, 2: 10}
-    )
+    dist = _dist_report(bands={1: "high", 2: "very_low"}, n_parcels={1: 5000, 2: 10})
     rec = recommend_classes_to_drop(report, dist, f1_threshold=0.30)
     # La primera fila debe ser la descartada (drop=True).
     assert rec.row(0, named=True)["drop"] is True
@@ -321,9 +309,7 @@ def test_honest_dropout_keeps_best_oof_classes() -> None:
     # fold-5 cualquiera (mismo espacio de 3 clases).
     y_f5 = np.array([0, 0, 1, 1, 2, 2], dtype=np.int64)
     p_f5 = np.array([0, 0, 1, 1, 2, 0], dtype=np.int64)
-    curve = honest_class_dropout_curve(
-        y_oof, p_oof, y_f5, p_f5, k_values=(3, 2, 1), num_classes=3
-    )
+    curve = honest_class_dropout_curve(y_oof, p_oof, y_f5, p_f5, k_values=(3, 2, 1), num_classes=3)
     assert curve["k"].to_list() == [3, 2, 1]
     # K=2 retiene las 2 mejores OOF (0 y 1); la peor OOF (2) se descarta primero.
     k2 = curve.filter(pl.col("k") == 2).row(0, named=True)
@@ -340,9 +326,7 @@ def test_honest_dropout_excludes_dropped_parcels() -> None:
     # fold-5: 2 parcelas por clase. La clase 2 (descartada a K=2) no debe contar.
     y_f5 = np.array([0, 0, 1, 1, 2, 2], dtype=np.int64)
     p_f5 = np.array([0, 0, 1, 1, 2, 2], dtype=np.int64)
-    curve = honest_class_dropout_curve(
-        y_oof, p_oof, y_f5, p_f5, k_values=(3, 2), num_classes=3
-    )
+    curve = honest_class_dropout_curve(y_oof, p_oof, y_f5, p_f5, k_values=(3, 2), num_classes=3)
     k3 = curve.filter(pl.col("k") == 3).row(0, named=True)
     k2 = curve.filter(pl.col("k") == 2).row(0, named=True)
     assert k3["n_parcels_fold5"] == 6  # todas
@@ -358,9 +342,7 @@ def test_honest_dropout_ranking_uses_oof_not_fold5() -> None:
     # fold-5 retendria la 0; como mira OOF, a K=1 debe retener la 1, no la 0.
     y_f5 = np.array([0, 0, 1, 1], dtype=np.int64)
     p_f5 = np.array([0, 0, 1, 1], dtype=np.int64)
-    curve = honest_class_dropout_curve(
-        y_oof, p_oof, y_f5, p_f5, k_values=(2, 1), num_classes=2
-    )
+    curve = honest_class_dropout_curve(y_oof, p_oof, y_f5, p_f5, k_values=(2, 1), num_classes=2)
     k1 = curve.filter(pl.col("k") == 1).row(0, named=True)
     # Retiene la clase 1 (mejor OOF), aunque la 0 fuese perfecta en fold-5.
     assert k1["retained_class_ids"] == [1]
@@ -373,9 +355,7 @@ def test_honest_dropout_k_clamped_to_available() -> None:
     y_f5 = np.array([0, 1], dtype=np.int64)
     p_f5 = np.array([0, 1], dtype=np.int64)
     # Pedimos K=18 sobre un espacio donde solo 2 clases tienen soporte.
-    curve = honest_class_dropout_curve(
-        y_oof, p_oof, y_f5, p_f5, k_values=(18,), num_classes=18
-    )
+    curve = honest_class_dropout_curve(y_oof, p_oof, y_f5, p_f5, k_values=(18,), num_classes=18)
     row = curve.row(0, named=True)
     # K se recorta a las 18 del ranking (incluye ausentes); las 2 presentes
     # cuentan y el F1 es 1.0 (prediccion perfecta en fold-5).

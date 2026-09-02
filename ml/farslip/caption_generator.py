@@ -119,9 +119,7 @@ def composite_to_png896(composite4: np.ndarray, side: int = _DEFAULT_SIDE) -> by
         ValueError: if ``composite4`` is not a 4-band ``(4, H, W)`` array.
     """
     if composite4.ndim != 3 or composite4.shape[0] < 3:
-        raise ValueError(
-            f"composite4 must be (>=3, H, W), received shape {composite4.shape}."
-        )
+        raise ValueError(f"composite4 must be (>=3, H, W), received shape {composite4.shape}.")
     comp = composite4.astype(np.float32)
     # RGB order: R=B04 (idx2), G=B03 (idx1), B=B02 (idx0).
     rgb = np.stack(

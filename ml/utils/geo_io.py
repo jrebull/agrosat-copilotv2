@@ -85,9 +85,7 @@ def read_crop_tiff(path: Path, n_expected_bands: int | None = None) -> np.ndarra
     with rasterio.open(path) as src:
         arr: np.ndarray = src.read()
     if n_expected_bands is not None and arr.shape[0] != n_expected_bands:
-        raise ValueError(
-            f"TIFF {path} has {arr.shape[0]} bands; expected {n_expected_bands}"
-        )
+        raise ValueError(f"TIFF {path} has {arr.shape[0]} bands; expected {n_expected_bands}")
     return np.asarray(arr)
 
 

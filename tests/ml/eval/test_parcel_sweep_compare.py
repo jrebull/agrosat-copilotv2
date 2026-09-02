@@ -25,14 +25,20 @@ def test_build_comparison_joins_and_deltas(tmp_path) -> None:
     """The join keeps shared N and computes ``dom3 - no_filter`` per row."""
     base = tmp_path / "sweep.csv"
     dom = tmp_path / "sweep_dom3.csv"
-    _write_csv(base, [
-        {"n_classes": 4, "macro_f1": 0.70, "n_eval_parcels": 16640, "dominance_ratio": -1.0},
-        {"n_classes": 6, "macro_f1": 0.46, "n_eval_parcels": 17000, "dominance_ratio": -1.0},
-    ])
-    _write_csv(dom, [
-        {"n_classes": 4, "macro_f1": 0.66, "n_eval_parcels": 9000, "dominance_ratio": 3.0},
-        {"n_classes": 6, "macro_f1": 0.50, "n_eval_parcels": 9500, "dominance_ratio": 3.0},
-    ])
+    _write_csv(
+        base,
+        [
+            {"n_classes": 4, "macro_f1": 0.70, "n_eval_parcels": 16640, "dominance_ratio": -1.0},
+            {"n_classes": 6, "macro_f1": 0.46, "n_eval_parcels": 17000, "dominance_ratio": -1.0},
+        ],
+    )
+    _write_csv(
+        dom,
+        [
+            {"n_classes": 4, "macro_f1": 0.66, "n_eval_parcels": 9000, "dominance_ratio": 3.0},
+            {"n_classes": 6, "macro_f1": 0.50, "n_eval_parcels": 9500, "dominance_ratio": 3.0},
+        ],
+    )
 
     out = build_dominance_comparison(base, dom)
     assert out["n_classes"].to_list() == [4, 6]
@@ -49,14 +55,20 @@ def test_build_comparison_inner_join_only_shared_n(tmp_path) -> None:
     """N present in only one curve is dropped (inner join)."""
     base = tmp_path / "sweep.csv"
     dom = tmp_path / "sweep_dom3.csv"
-    _write_csv(base, [
-        {"n_classes": 4, "macro_f1": 0.70},
-        {"n_classes": 8, "macro_f1": 0.40},
-    ])
-    _write_csv(dom, [
-        {"n_classes": 4, "macro_f1": 0.66},
-        {"n_classes": 12, "macro_f1": 0.33},
-    ])
+    _write_csv(
+        base,
+        [
+            {"n_classes": 4, "macro_f1": 0.70},
+            {"n_classes": 8, "macro_f1": 0.40},
+        ],
+    )
+    _write_csv(
+        dom,
+        [
+            {"n_classes": 4, "macro_f1": 0.66},
+            {"n_classes": 12, "macro_f1": 0.33},
+        ],
+    )
     out = build_dominance_comparison(base, dom)
     assert out["n_classes"].to_list() == [4]  # only N=4 shared
 
@@ -104,14 +116,20 @@ def test_figure_builds(tmp_path) -> None:
     """The overlay figure builds with two lines over the shared N axis."""
     base = tmp_path / "sweep.csv"
     dom = tmp_path / "sweep_dom3.csv"
-    _write_csv(base, [
-        {"n_classes": 4, "macro_f1": 0.70},
-        {"n_classes": 6, "macro_f1": 0.46},
-    ])
-    _write_csv(dom, [
-        {"n_classes": 4, "macro_f1": 0.66},
-        {"n_classes": 6, "macro_f1": 0.50},
-    ])
+    _write_csv(
+        base,
+        [
+            {"n_classes": 4, "macro_f1": 0.70},
+            {"n_classes": 6, "macro_f1": 0.46},
+        ],
+    )
+    _write_csv(
+        dom,
+        [
+            {"n_classes": 4, "macro_f1": 0.66},
+            {"n_classes": 6, "macro_f1": 0.50},
+        ],
+    )
     out = build_dominance_comparison(base, dom)
     fig = dominance_curves_figure(out)
     ax = fig.axes[0]

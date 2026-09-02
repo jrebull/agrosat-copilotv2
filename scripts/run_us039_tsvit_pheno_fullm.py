@@ -95,11 +95,7 @@ _HELDOUT_FOLD = 5
 
 #: Default delta-table path (small derived report -> Git, not DVC; AC-6).
 _DEFAULT_DELTA_CSV = (
-    _REPO_ROOT
-    / "reports"
-    / "segmentation"
-    / "metrics"
-    / "tsvit_pheno_vs_base_fold5.csv"
+    _REPO_ROOT / "reports" / "segmentation" / "metrics" / "tsvit_pheno_vs_base_fold5.csv"
 )
 
 #: The honest framing note that travels with the delta table AND the handoff (R1).
@@ -154,10 +150,7 @@ def _validate_data_root(data_root: Path | None) -> None:
     if data_root is None:
         return
     parts = {p.lower() for p in data_root.parts}
-    if (
-        _FORBIDDEN_ROOT_NAME in data_root.name.lower()
-        or _FORBIDDEN_ROOT_NAME in parts
-    ):
+    if _FORBIDDEN_ROOT_NAME in data_root.name.lower() or _FORBIDDEN_ROOT_NAME in parts:
         raise ValueError(
             f"data_root {data_root!s} points at the Italian/synthetic "
             f"'{_FORBIDDEN_ROOT_NAME}' data (US-034/035, discarded). US-039 is "
@@ -417,9 +410,7 @@ def run_tsvit_pheno_full(
                 "fold5_base_miou": scored["base_miou"],
                 "fold5_pheno_miou": scored["pheno_miou"],
                 "delta_miou": scored["pheno_miou"] - scored["base_miou"],
-                "delta_f1_macro": (
-                    scored["pheno_f1_macro"] - scored["base_f1_macro"]
-                ),
+                "delta_f1_macro": (scored["pheno_f1_macro"] - scored["base_f1_macro"]),
             }
         )
 
@@ -432,9 +423,7 @@ app = typer.Typer(add_completion=False, no_args_is_help=True)
 
 @app.command()
 def run(
-    device: Annotated[
-        str, typer.Option(help="auto | cuda | cpu")
-    ] = "auto",
+    device: Annotated[str, typer.Option(help="auto | cuda | cpu")] = "auto",
     num_workers: Annotated[
         int, typer.Option(help="Workers del DataLoader (10-12 en la H100).")
     ] = 0,

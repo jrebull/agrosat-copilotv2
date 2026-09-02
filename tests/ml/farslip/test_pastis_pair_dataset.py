@@ -251,12 +251,8 @@ def test_filter_3to1_applied(monkeypatch: pytest.MonkeyPatch) -> None:
 
     from ml.data.pastis_filter import PastisFilter
 
-    monkeypatch.setattr(
-        PastisFilter, "_load_mask", lambda self, pid: masks[pid].astype(np.int32)
-    )
-    monkeypatch.setattr(
-        PastisFilter, "__init__", lambda self, **kw: _init_real_filter(self, **kw)
-    )
+    monkeypatch.setattr(PastisFilter, "_load_mask", lambda self, pid: masks[pid].astype(np.int32))
+    monkeypatch.setattr(PastisFilter, "__init__", lambda self, **kw: _init_real_filter(self, **kw))
 
     patches = {100: (s2_ok, sem_ok), 200: (s2_bad, sem_bad)}
 
@@ -312,9 +308,10 @@ def test_create_incremental_dataset_shapes(monkeypatch: pytest.MonkeyPatch) -> N
 
     # One synthetic patch per active class so the dataset is non-empty.
     s2 = _make_s2([0.7])
-    patches = {pid: (s2, _make_semantic({cid: 40, 1: 5})) for pid, cid in zip(
-        range(1000, 1018), INCREMENTAL_CURRICULUM, strict=True
-    )}
+    patches = {
+        pid: (s2, _make_semantic({cid: 40, 1: 5}))
+        for pid, cid in zip(range(1000, 1018), INCREMENTAL_CURRICULUM, strict=True)
+    }
     # Avoid Meadow-as-dominant for the Meadow class itself: give it many Meadow.
     patches[1000] = (s2, _make_semantic({1: 50}))
     _patch_construction(monkeypatch, patches=patches, kept_ids=list(patches))

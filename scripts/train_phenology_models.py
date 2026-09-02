@@ -5,6 +5,7 @@ US-022b-C — Train TempCNN + InceptionTime phenology models with spatial CV.
 Usage:
     poetry run python scripts/train_phenology_models.py [--n-parcels N] [--device DEVICE]
 """
+
 import json
 import sys
 from pathlib import Path

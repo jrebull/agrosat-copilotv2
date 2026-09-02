@@ -122,8 +122,7 @@ _STRINGS: dict[str, FigureStrings] = {
             "applied to the tropics (only shared class: maize)"
         ),
         suptitle=(
-            "Experiment 3 -- Multi-region transfer to the tropics "
-            "(ESA WorldCereal, CC-BY-4.0)"
+            "Experiment 3 -- Multi-region transfer to the tropics (ESA WorldCereal, CC-BY-4.0)"
         ),
     ),
     "es": FigureStrings(
@@ -141,8 +140,7 @@ _STRINGS: dict[str, FigureStrings] = {
             "aplicado al tropico (unica clase compartida: maiz)"
         ),
         suptitle=(
-            "Experimento 3 -- Transfer multi-region a zona tropical "
-            "(ESA WorldCereal, CC-BY-4.0)"
+            "Experimento 3 -- Transfer multi-region a zona tropical (ESA WorldCereal, CC-BY-4.0)"
         ),
     ),
 }
@@ -295,9 +293,7 @@ def _render_figure(
     return png, svg
 
 
-def build_figure(
-    *, repo_root: Path | None = None, dpi: int = 150
-) -> dict[str, tuple[Path, Path]]:
+def build_figure(*, repo_root: Path | None = None, dpi: int = 150) -> dict[str, tuple[Path, Path]]:
     """Render the two-panel figure in English (base) and Spanish (``_es``).
 
     Args:
@@ -317,9 +313,7 @@ def build_figure(
 
     outputs: dict[str, tuple[Path, Path]] = {}
     for lang in ("en", "es"):
-        outputs[lang] = _render_figure(
-            lang, _STRINGS[lang], transfer_dir, out_dir, dpi=dpi
-        )
+        outputs[lang] = _render_figure(lang, _STRINGS[lang], transfer_dir, out_dir, dpi=dpi)
     return outputs
 
 
@@ -331,8 +325,7 @@ def _parse_args() -> argparse.Namespace:
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Build the WorldCereal tropical transfer figure in English "
-            "(base) and Spanish (_es)."
+            "Build the WorldCereal tropical transfer figure in English (base) and Spanish (_es)."
         )
     )
     parser.add_argument(

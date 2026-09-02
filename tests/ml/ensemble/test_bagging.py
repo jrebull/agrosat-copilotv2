@@ -252,9 +252,7 @@ def test_optuna_uses_spatial_cv_params(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = fake_spatial_cv_factory()
     monkeypatch.setattr("ml.ensemble.bagging.evaluate_with_spatial_cv", fake)
 
-    ens = BaggingEnsemble(
-        n_bags=2, n_trials=2, n_spatial_folds=4, buffer_km=2.0, random_state=0
-    )
+    ens = BaggingEnsemble(n_bags=2, n_trials=2, n_spatial_folds=4, buffer_km=2.0, random_state=0)
     ens.fit(df)
 
     assert fake.calls  # type: ignore[attr-defined]
@@ -291,12 +289,8 @@ def test_tune_calls_real_spatial_kfold(monkeypatch: pytest.MonkeyPatch) -> None:
     # Patch where baseline._build_cv_splits looks it up.
     monkeypatch.setattr("ml.train.baseline.build_spatial_kfold", fake_kfold)
     # Avoid the disk cache short-circuiting the spatial build.
-    monkeypatch.setattr(
-        "ml.train.baseline._load_cached_cv_splits", lambda path: None
-    )
-    monkeypatch.setattr(
-        "ml.train.baseline._save_cached_cv_splits", lambda path, splits: None
-    )
+    monkeypatch.setattr("ml.train.baseline._load_cached_cv_splits", lambda path: None)
+    monkeypatch.setattr("ml.train.baseline._save_cached_cv_splits", lambda path, splits: None)
 
     ens.tune(pool)
     assert calls, "build_spatial_kfold was never reached: CV is not spatial."
@@ -379,9 +373,7 @@ def test_fit_requires_class_id() -> None:
 
 def test_alphaearth_columns_required() -> None:
     """A pool without dim_* columns raises a descriptive error."""
-    df = pl.DataFrame(
-        {"parcel_id": ["a", "b"], "class_id": [1, 2], "fold": [1, 2]}
-    )
+    df = pl.DataFrame({"parcel_id": ["a", "b"], "class_id": [1, 2], "fold": [1, 2]})
     ens = BaggingEnsemble(n_bags=2, n_trials=1)
     with pytest.raises(ValueError, match="AlphaEarth"):
         ens._alphaearth_columns(df)
@@ -455,8 +447,6 @@ def test_evaluate_on_fold5_after_fit(monkeypatch: pytest.MonkeyPatch) -> None:
     # Base evaluate must reject fold-4 (anti-leakage) and accept fold-5.
     with pytest.raises(ValueError, match="fold-5-only"):
         ens.evaluate(y_true=fold5.get_column("class_id").to_numpy() - 1, proba=proba, fold=4)
-    metrics = ens.evaluate(
-        y_true=fold5.get_column("class_id").to_numpy() - 1, proba=proba, fold=5
-    )
+    metrics = ens.evaluate(y_true=fold5.get_column("class_id").to_numpy() - 1, proba=proba, fold=5)
     assert 0.0 <= metrics["f1_macro"] <= 1.0
     assert 0.0 <= metrics["accuracy"] <= 1.0

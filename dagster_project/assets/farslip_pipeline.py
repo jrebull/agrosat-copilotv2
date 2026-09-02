@@ -114,9 +114,7 @@ farslip_pairs_italy_spec = AssetSpec(
     group_name="farslip",
     metadata={
         "data_version": MetadataValue.text(PAIRS_TAG),
-        "expected_path": MetadataValue.path(
-            str(DATA_FARSLIP_PAIRS_DIR.resolve())
-        ),
+        "expected_path": MetadataValue.path(str(DATA_FARSLIP_PAIRS_DIR.resolve())),
         "alias_of": MetadataValue.text("sentinel2_crops_256"),
         "us": MetadataValue.text("US-022b-B"),
     },
@@ -302,9 +300,7 @@ def farslip_embeddings_consolidated(
     # int cast without losing rows — fallback to hash if not numeric.
     if "crop_id" in consolidated.columns and "parcel_id" not in consolidated.columns:
         consolidated = consolidated.with_columns(
-            pl.col("crop_id")
-            .cast(pl.Int64, strict=False)
-            .alias("parcel_id"),
+            pl.col("crop_id").cast(pl.Int64, strict=False).alias("parcel_id"),
         )
 
     consolidated.write_parquet(output_path, compression="zstd")
@@ -332,8 +328,7 @@ def farslip_embeddings_consolidated(
         mlflow_client.set_tag("pipeline", "farslip")
     except Exception as exc:  # noqa: BLE001 — MLflow offline must not break the materialization
         context.log.warning(
-            "farslip_embeddings_consolidated: MLflow logging failed (offline?) "
-            "%s: %s",
+            "farslip_embeddings_consolidated: MLflow logging failed (offline?) %s: %s",
             type(exc).__name__,
             exc,
         )
@@ -343,9 +338,7 @@ def farslip_embeddings_consolidated(
             "rows": MetadataValue.int(n_rows),
             "embedding_dim": MetadataValue.int(EMBEDDING_DIM),
             "rois": MetadataValue.text(",".join(sorted(rois_seen))),
-            "years": MetadataValue.text(
-                ",".join(str(y) for y in sorted(years_seen))
-            ),
+            "years": MetadataValue.text(",".join(str(y) for y in sorted(years_seen))),
             "n_partitions_in": MetadataValue.int(len(partitions)),
             "output_path": MetadataValue.path(str(output_path.resolve())),
             "data_version": MetadataValue.text(EMBEDDINGS_TAG),

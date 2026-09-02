@@ -92,9 +92,7 @@ def fit_scaler_on_train(
     train_id_series = pl.Series("parcel_id", sorted(train_set)).cast(df.schema["parcel_id"])
     train_df = df.filter(pl.col("parcel_id").is_in(train_id_series.to_list())).select(numeric_cols)
     if train_df.height == 0:
-        raise ValueError(
-            "After filtering by `train_ids` the frame is empty. IDs in another fold?"
-        )
+        raise ValueError("After filtering by `train_ids` the frame is empty. IDs in another fold?")
 
     # writable=True: polars >= 1.3x may otherwise hand back a read-only zero-copy
     # array, and the NaN imputation below writes in place.
@@ -134,9 +132,7 @@ def fit_scaler_on_train(
         )
         numeric_cols = [c for c, drop in zip(numeric_cols, all_nan_mask, strict=True) if not drop]
         if not numeric_cols:
-            raise ValueError(
-                "All numeric columns were all-NaN. Frame without GEE populated?"
-            )
+            raise ValueError("All numeric columns were all-NaN. Frame without GEE populated?")
         matrix = matrix[:, ~all_nan_mask]
     # Replace remaining NaN with the column mean (StandardScaler
     # does not accept NaN). We already guaranteed that no column is all-NaN, so
@@ -188,9 +184,7 @@ def load_scaler(path: Path | str) -> StandardScaler:
         raise FileNotFoundError(f"Scaler not found at {p}.")
     obj = joblib.load(p)
     if not isinstance(obj, StandardScaler):
-        raise ValueError(
-            f"The file at {p} is not a StandardScaler (type={type(obj).__name__})."
-        )
+        raise ValueError(f"The file at {p} is not a StandardScaler (type={type(obj).__name__}).")
     return cast(StandardScaler, obj)
 
 

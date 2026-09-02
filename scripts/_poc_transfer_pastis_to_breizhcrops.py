@@ -81,9 +81,7 @@ from ml.train.baseline import build_estimator
 logger = structlog.get_logger(__name__)
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
-_PASTIS_SUBSET = (
-    _REPO_ROOT / "data" / "test_fixtures" / "feature_selection_parcels_subset.parquet"
-)
+_PASTIS_SUBSET = _REPO_ROOT / "data" / "test_fixtures" / "feature_selection_parcels_subset.parquet"
 _OUTPUT = _REPO_ROOT / "reports" / "transfer" / "pastis_to_breizhcrops.parquet"
 
 # ---------------------------------------------------------------------------
@@ -147,9 +145,7 @@ def _load_pastis_common(subset_path: Path) -> tuple[pl.DataFrame, list[str]]:
     df = pl.read_parquet(subset_path)
     df = df.filter(pl.col("class_id").is_in(list(PASTIS_ID_TO_COMMON.keys())))
     df = df.with_columns(
-        pl.col("class_id")
-        .replace_strict(PASTIS_ID_TO_COMMON, default=None)
-        .alias("common_class")
+        pl.col("class_id").replace_strict(PASTIS_ID_TO_COMMON, default=None).alias("common_class")
     )
     feature_cols = _feature_columns(df)
     logger.info(
@@ -267,9 +263,7 @@ def _extract_breizhcrops_features(
     for region, sub in sampled_index.group_by("region"):
         region_name = region[0] if isinstance(region, tuple) else region
         wanted_ids = set(sub.get_column("parcel_id").to_list())
-        common_map = {
-            row["parcel_id"]: row["common_class"] for row in sub.iter_rows(named=True)
-        }
+        common_map = {row["parcel_id"]: row["common_class"] for row in sub.iter_rows(named=True)}
         logger.info(
             "breizhcrops_extracting_region",
             region=region_name,
@@ -287,9 +281,7 @@ def _extract_breizhcrops_features(
         if feats.height == 0:
             continue
         feats = feats.with_columns(
-            pl.col("parcel_id")
-            .replace_strict(common_map, default=None)
-            .alias("common_class")
+            pl.col("parcel_id").replace_strict(common_map, default=None).alias("common_class")
         )
         feature_frames.append(feats)
 
@@ -305,9 +297,7 @@ def _extract_breizhcrops_features(
 # ---------------------------------------------------------------------------
 
 
-def _align_features(
-    pastis_cols: list[str], breiz_cols: list[str]
-) -> list[str]:
+def _align_features(pastis_cols: list[str], breiz_cols: list[str]) -> list[str]:
     """Returns the features present in BOTH datasets, in stable order."""
     breiz_set = set(breiz_cols)
     shared = [c for c in pastis_cols if c in breiz_set]
@@ -367,8 +357,7 @@ def run_direct_transfer(
     # sample_weight inverse to frequency (highly imbalanced classes in PASTIS).
     classes, counts = np.unique(y_train, return_counts=True)
     w_per_class = {
-        int(c): y_train.size / (classes.size * cnt)
-        for c, cnt in zip(classes, counts, strict=True)
+        int(c): y_train.size / (classes.size * cnt) for c, cnt in zip(classes, counts, strict=True)
     }
     sample_weight = np.array([w_per_class[int(c)] for c in y_train], dtype=np.float64)
     model.fit(x_train, y_train, sample_weight=sample_weight)
@@ -377,9 +366,7 @@ def run_direct_transfer(
 
     labels = list(range(len(encoder.classes_)))
     f1_per = f1_score(y_test, y_pred, labels=labels, average=None, zero_division=0)
-    per_class_f1 = {
-        encoder.classes_[i]: float(f1_per[i]) for i in range(len(encoder.classes_))
-    }
+    per_class_f1 = {encoder.classes_[i]: float(f1_per[i]) for i in range(len(encoder.classes_))}
     f1_macro = float(f1_score(y_test, y_pred, labels=labels, average="macro", zero_division=0))
     accuracy = float((y_pred == y_test).mean())
 

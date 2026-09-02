@@ -32,9 +32,7 @@ def _toy_universe(n_per_class: dict[int, int]) -> pl.DataFrame:
 
 def test_build_balanced_eval_set_caps_and_drops() -> None:
     universe = _toy_universe({1: 100, 2: 100, 3: 10})  # class 3 is rare
-    balanced, dropped = build_balanced_eval_set(
-        universe, per_class_cap=50, min_class_samples=20
-    )
+    balanced, dropped = build_balanced_eval_set(universe, per_class_cap=50, min_class_samples=20)
     counts = dict(balanced.group_by("class_id").len().iter_rows())
     assert dropped == [3]
     assert counts == {1: 50, 2: 50}
@@ -79,9 +77,7 @@ def test_align_spaces_inner_join_and_prefixes() -> None:
 
 
 def test_combine_year_embeddings_concatenates_dims() -> None:
-    e2018 = pl.DataFrame(
-        {"parcel_id": ["p1", "p2"], "class_id": [1, 2], "dim_00_2018": [1.0, 2.0]}
-    )
+    e2018 = pl.DataFrame({"parcel_id": ["p1", "p2"], "class_id": [1, 2], "dim_00_2018": [1.0, 2.0]})
     e2019 = pl.DataFrame({"parcel_id": ["p1", "p2"], "dim_00_2019": [3.0, 4.0]})
     combined = combine_year_embeddings(e2018, e2019)
     assert combined.height == 2

@@ -89,9 +89,7 @@ EUROCROPS_MAPPING_CSV: Path = (
 DEFAULT_DATASET_DIR: Path = _REPO_ROOT / "data" / "pastis_italia_2018"
 
 #: Materialized per-parcel feature parquet (DVC-tracked at close).
-DEFAULT_FEATURES_PATH: Path = (
-    _REPO_ROOT / "data" / "features" / "alphaearth_italia_2018.parquet"
-)
+DEFAULT_FEATURES_PATH: Path = _REPO_ROOT / "data" / "features" / "alphaearth_italia_2018.parquet"
 
 #: Year of the homologue patches; the AlphaEarth annual image must match it.
 ITALIA_YEAR: int = 2018
@@ -136,8 +134,7 @@ def load_italia_label_space(
     with mapping_path.open(encoding="utf-8") as handle:
         mapping = json.load(handle)
     name_to_id: dict[str, int] = {
-        str(entry["hcat4_name"]): int(entry["class_id"])
-        for entry in mapping.get("classes", [])
+        str(entry["hcat4_name"]): int(entry["class_id"]) for entry in mapping.get("classes", [])
     }
     logger.info(
         "italia_label_space_loaded",
@@ -231,16 +228,12 @@ def _label_parcels(
     if n_dropped:
         logger.info("italia_polygons_empty_dropped", n=n_dropped)
 
-    crosswalk = _load_region_code_to_hcat(
-        mapping_csv, region_prefix=region_prefix
-    ).to_pandas()
+    crosswalk = _load_region_code_to_hcat(mapping_csv, region_prefix=region_prefix).to_pandas()
     gdf["original_code"] = gdf["original_code"].astype(str)
     gdf = gdf.merge(crosswalk, on="original_code", how="left")
 
     # Map HCAT name -> canonical class_id; unknown / unmapped -> background (0).
-    gdf["class_id"] = (
-        gdf["hcat4_name"].map(name_to_id).fillna(ITALIA_BACKGROUND_ID).astype("int64")
-    )
+    gdf["class_id"] = gdf["hcat4_name"].map(name_to_id).fillna(ITALIA_BACKGROUND_ID).astype("int64")
 
     # Projected centroid (metric, no geographic warning) for the bbox binning.
     centroids = gdf.geometry.centroid
@@ -293,9 +286,7 @@ def parcels_in_patches(
     """
     import numpy as np
 
-    gdf = _label_parcels(
-        parcels_parquet, mapping_csv, name_to_id, region_prefix=region_prefix
-    )
+    gdf = _label_parcels(parcels_parquet, mapping_csv, name_to_id, region_prefix=region_prefix)
     # Drop background parcels (no crop label) before the spatial join.
     gdf = gdf[gdf["class_id"] != ITALIA_BACKGROUND_ID].reset_index(drop=True)
 
@@ -465,9 +456,7 @@ def build_alphaearth_italia_features(
         ValueError: if no parcel falls in any patch bbox.
     """
     name_to_id = load_italia_label_space(dataset_dir)
-    metadata_dir = (
-        patches_metadata.parent if patches_metadata is not None else dataset_dir
-    )
+    metadata_dir = patches_metadata.parent if patches_metadata is not None else dataset_dir
     bboxes = load_patch_bboxes(metadata_dir)
     parcels = parcels_in_patches(
         bboxes,

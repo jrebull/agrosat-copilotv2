@@ -149,17 +149,12 @@ def load_run_masks(
     from ml.transfer.finetune_italia import load_italia_patches
 
     patches = load_italia_patches(italia_root=dataset_root, n_timesteps=n_timesteps)
-    masks = {
-        pid: patches.masks[i].astype(np.int64)
-        for i, pid in enumerate(patches.patch_ids)
-    }
+    masks = {pid: patches.masks[i].astype(np.int64) for i, pid in enumerate(patches.patch_ids)}
     logger.info("us079_run_masks_loaded", n_masks=len(masks), root=str(dataset_root))
     return masks
 
 
-def _collapse_to_coarse(
-    arr: np.ndarray, lut: np.ndarray
-) -> np.ndarray:
+def _collapse_to_coarse(arr: np.ndarray, lut: np.ndarray) -> np.ndarray:
     """Map a fine-id array onto its coarse ids through ``lut``.
 
     Args:
@@ -251,9 +246,7 @@ def per_class_scores_from_softmax(
     return scores, id_to_name, len(shared)
 
 
-def _scores_from_confusion(
-    confusion: np.ndarray, *, ignore_index: int | None
-) -> PerClassScores:
+def _scores_from_confusion(confusion: np.ndarray, *, ignore_index: int | None) -> PerClassScores:
     """Derive per-class F1 / precision / recall / support from a confusion matrix.
 
     Rows = ground truth, cols = prediction. F1 reuses
@@ -271,9 +264,7 @@ def _scores_from_confusion(
     diag = np.diag(confusion)
     row_sum = confusion.sum(axis=1)  # ground-truth support per class
     col_sum = confusion.sum(axis=0)  # predictions per class
-    precision_all = np.divide(
-        diag, col_sum, out=np.zeros_like(diag), where=col_sum > 0
-    )
+    precision_all = np.divide(diag, col_sum, out=np.zeros_like(diag), where=col_sum > 0)
     recall_all = np.divide(diag, row_sum, out=np.zeros_like(diag), where=row_sum > 0)
 
     f1 = per_class_f1(confusion, ignore_index=ignore_index)
@@ -420,9 +411,7 @@ def _build_comparison_table(
         }
         for alias, run in scored.items():
             row[f"f1_{alias}"] = round(float(run.scores.f1.get(cid, 0.0)), 4)
-            row[f"precision_{alias}"] = round(
-                float(run.scores.precision.get(cid, 0.0)), 4
-            )
+            row[f"precision_{alias}"] = round(float(run.scores.precision.get(cid, 0.0)), 4)
             row[f"recall_{alias}"] = round(float(run.scores.recall.get(cid, 0.0)), 4)
         rows.append(row)
 
@@ -431,9 +420,7 @@ def _build_comparison_table(
     return table.sort("support", descending=True)
 
 
-def _add_delta_columns(
-    table: pl.DataFrame, scored: Mapping[str, RunPerClass]
-) -> pl.DataFrame:
+def _add_delta_columns(table: pl.DataFrame, scored: Mapping[str, RunPerClass]) -> pl.DataFrame:
     """Add the A/B and vs-original delta columns when both arms are present.
 
     Args:
@@ -556,9 +543,7 @@ def warm_start_ablation_verdict(
     per_conserved = conserved.select(
         ["class_id", "class_name", "support", "f1_A_warmstart", "f1_B_nowarmstart"]
     ).with_columns(
-        (pl.col("f1_B_nowarmstart") - pl.col("f1_A_warmstart")).round(4).alias(
-            "delta_b_minus_a"
-        )
+        (pl.col("f1_B_nowarmstart") - pl.col("f1_A_warmstart")).round(4).alias("delta_b_minus_a")
     )
     result = {
         "available": True,
@@ -604,9 +589,7 @@ def discard_curve_compare(
     """
     curves: dict[str, list[dict[str, object]]] = {}
     for alias, run in scored.items():
-        ranked = sorted(
-            run.scores.f1.items(), key=lambda kv: kv[1], reverse=True
-        )
+        ranked = sorted(run.scores.f1.items(), key=lambda kv: kv[1], reverse=True)
         curve: list[dict[str, object]] = []
         for n in range(1, len(ranked) + 1):
             top = ranked[:n]

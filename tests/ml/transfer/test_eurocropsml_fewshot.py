@@ -173,9 +173,7 @@ def test_missing_data_raises_typed_error(tmp_path: Path) -> None:
 
 
 def test_train_xgb_kshot_runs(fake_dataset: Path) -> None:
-    split = build_fewshot_splits(
-        fake_dataset, source=["latvia"], target="estonia", k=5, seed=0
-    )
+    split = build_fewshot_splits(fake_dataset, source=["latvia"], target="estonia", k=5, seed=0)
     metrics = train_xgb_kshot(
         split.x_target_train,
         split.y_target_train,
@@ -188,9 +186,7 @@ def test_train_xgb_kshot_runs(fake_dataset: Path) -> None:
 
 def test_train_xgb_kshot_empty_support_raises() -> None:
     with pytest.raises(ValueError):
-        train_xgb_kshot(
-            np.empty((0, 5)), np.array([]), np.ones((2, 5)), np.array(["a", "b"])
-        )
+        train_xgb_kshot(np.empty((0, 5)), np.array([]), np.ones((2, 5)), np.array(["a", "b"]))
 
 
 def test_run_fewshot_curve_schema(fake_dataset: Path) -> None:

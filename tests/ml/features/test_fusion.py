@@ -931,10 +931,7 @@ def test_spectral_signature_block_optional_inyectado(
 
     parcels = parcels_fixture_3regions
     n = len(parcels)
-    spec_cols = {
-        f"spectral_signature_{i:03d}": [720.0 + i * 0.5] * n
-        for i in range(3)
-    }
+    spec_cols = {f"spectral_signature_{i:03d}": [720.0 + i * 0.5] * n for i in range(3)}
     schema = {"parcel_id": pl.Int64, "year": pl.Int16}
     schema.update({c: pl.Float32 for c in spec_cols})
     spec_df = pl.DataFrame(

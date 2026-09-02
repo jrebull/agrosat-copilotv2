@@ -139,9 +139,7 @@ def aoi_geometry(aoi: MexicoAOI) -> Any:
         ImportError: if ``earthengine-api`` is not installed.
     """
     if ee is None:  # pragma: no cover - exercised only without the SDK
-        raise ImportError(
-            "earthengine-api is not installed. Run `poetry install --with ml,geo`."
-        )
+        raise ImportError("earthengine-api is not installed. Run `poetry install --with ml,geo`.")
     return ee.Geometry.Point([aoi.lon, aoi.lat]).buffer(aoi.buffer_m)
 
 
@@ -232,9 +230,7 @@ def extract_alphaearth_zonal(
 
 def _ndvi_empty_frame() -> pl.DataFrame:
     """Empty NDVI series frame with the canonical schema."""
-    return pl.DataFrame(
-        schema={"date": pl.Utf8, "doy": pl.Int64, "ndvi": pl.Float64}
-    )
+    return pl.DataFrame(schema={"date": pl.Utf8, "doy": pl.Int64, "ndvi": pl.Float64})
 
 
 def _mask_s2_clouds_and_add_ndvi(image: Any) -> Any:
@@ -253,9 +249,7 @@ def _mask_s2_clouds_and_add_ndvi(image: Any) -> Any:
     qa = image.select("QA60")
     cloud_bit = 1 << 10
     cirrus_bit = 1 << 11
-    mask = (
-        qa.bitwiseAnd(cloud_bit).eq(0).And(qa.bitwiseAnd(cirrus_bit).eq(0))
-    )
+    mask = qa.bitwiseAnd(cloud_bit).eq(0).And(qa.bitwiseAnd(cirrus_bit).eq(0))
     ndvi = image.normalizedDifference(["B8", "B4"]).rename("NDVI")
     return image.addBands(ndvi).updateMask(mask)
 
@@ -290,9 +284,7 @@ def extract_s2_ndvi_series(
     """
     cache_root = cache_dir or DEFAULT_CACHE_DIR
     cache_root.mkdir(parents=True, exist_ok=True)
-    cache_file = (
-        cache_root / f"mexico_ndvi_{aoi.name}_{year}_{cloud_pct_max}_{scale}.parquet"
-    )
+    cache_file = cache_root / f"mexico_ndvi_{aoi.name}_{year}_{cloud_pct_max}_{scale}.parquet"
     if cache_file.exists():
         return pl.read_parquet(cache_file)
 
@@ -344,11 +336,7 @@ def extract_s2_ndvi_series(
     frame = (
         pl.DataFrame(rows)
         .with_columns(
-            pl.col("date")
-            .str.to_date("%Y-%m-%d")
-            .dt.ordinal_day()
-            .cast(pl.Int64)
-            .alias("doy")
+            pl.col("date").str.to_date("%Y-%m-%d").dt.ordinal_day().cast(pl.Int64).alias("doy")
         )
         .select("date", "doy", "ndvi")
         .sort("date")

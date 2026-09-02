@@ -213,9 +213,7 @@ def test_build_finetune_utae_warmstarts_out_conv(tmp_path: Path) -> None:
         )
     # Background row (id 0) is not warmed -> not equal to PASTIS bg row by copy.
     new_row = space.index["tree_wood_forest"]
-    assert not np.allclose(
-        head2[new_row], pastis_rows.detach().cpu().numpy()[1]
-    )
+    assert not np.allclose(head2[new_row], pastis_rows.detach().cpu().numpy()[1])
 
 
 def test_build_finetune_unsupported_kind_raises(tmp_path: Path) -> None:
@@ -225,9 +223,7 @@ def test_build_finetune_unsupported_kind_raises(tmp_path: Path) -> None:
     ckpt = tmp_path / "ckpt.pt"
     torch.save({"model_state": {}}, ckpt)
     with pytest.raises(ValueError, match="unsupported model_kind"):
-        build_italia_finetune_model(
-            space, model_kind="nope", pastis_checkpoint=ckpt, device="cpu"
-        )
+        build_italia_finetune_model(space, model_kind="nope", pastis_checkpoint=ckpt, device="cpu")
 
 
 def test_build_finetune_missing_checkpoint_raises(tmp_path: Path) -> None:

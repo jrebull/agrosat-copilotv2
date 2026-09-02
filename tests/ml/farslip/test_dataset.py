@@ -33,9 +33,7 @@ def small_parcels() -> pl.DataFrame:
     rois = ["pianura_padana", "toscana", "puglia"]
     out = []
     for r in rois:
-        df = _generate_synthetic_parcels(
-            roi=r, n=3, rng=rng, cap_classes=["mais", "vite", "olivo"]
-        )
+        df = _generate_synthetic_parcels(roi=r, n=3, rng=rng, cap_classes=["mais", "vite", "olivo"])
         df = df.with_columns(pl.lit(0.05).alias("cloud_prob"))
         out.append(df)
     return pl.concat(out, how="vertical")
@@ -88,17 +86,11 @@ def test_build_pairs_three_languages_present(
         assert isinstance(r["text_en"], str) and len(r["text_en"]) > 0
 
 
-def test_build_pairs_qa_filters_cloudy(
-    tmp_path: Path, vocab_path: Path
-) -> None:
+def test_build_pairs_qa_filters_cloudy(tmp_path: Path, vocab_path: Path) -> None:
     """Records con cloud_prob > threshold no se incluyen."""
     rng = np.random.default_rng(7)
-    df = _generate_synthetic_parcels(
-        roi="toscana", n=10, rng=rng, cap_classes=["mais"]
-    )
-    df = df.with_columns(
-        pl.Series("cloud_prob", [0.05] * 5 + [0.9] * 5)
-    )
+    df = _generate_synthetic_parcels(roi="toscana", n=10, rng=rng, cap_classes=["mais"])
+    df = df.with_columns(pl.Series("cloud_prob", [0.05] * 5 + [0.9] * 5))
     out = build_farslip_pairs(
         rois=("toscana",),
         output_root=tmp_path,

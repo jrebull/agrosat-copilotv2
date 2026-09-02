@@ -260,14 +260,11 @@ def farslip_cosine_map(
     """
     proto = np.asarray(prototypes, dtype=np.float32)
     if proto.ndim != 2 or proto.shape[1] != _EMBED_DIM:
-        raise ValueError(
-            f"prototypes must be (C, {_EMBED_DIM}); got {proto.shape}."
-        )
+        raise ValueError(f"prototypes must be (C, {_EMBED_DIM}); got {proto.shape}.")
     n_bank = proto.shape[0]
     if class_ids is not None and len(class_ids) != n_bank:
         raise ValueError(
-            f"class_ids length ({len(class_ids)}) must match prototype rows "
-            f"({n_bank})."
+            f"class_ids length ({len(class_ids)}) must match prototype rows ({n_bank})."
         )
     # Row index in the bank -> 18-class slot. Identity when the bank is already
     # 18-wide and no class_ids given; otherwise scatter by PASTIS id (class-1).
@@ -281,9 +278,7 @@ def farslip_cosine_map(
     else:
         slots = [int(c) - 1 for c in class_ids]
         if any(not 0 <= s < _NUM_CLASSES for s in slots):
-            raise ValueError(
-                f"class_ids must be in [1, {_NUM_CLASSES}]; got {list(class_ids)}."
-            )
+            raise ValueError(f"class_ids must be in [1, {_NUM_CLASSES}]; got {list(class_ids)}.")
 
     dev = _resolve_device(device)
     proto_t = torch.from_numpy(proto).to(dev)
@@ -310,9 +305,7 @@ def farslip_cosine_map(
         else:
             full = uniform
         out[:, mask] = full[:, None]
-    return EnsembleModel.validate_probs(
-        out, class_axis=_CLASS_AXIS, name=f"farslip_cosine:{pid}"
-    )
+    return EnsembleModel.validate_probs(out, class_axis=_CLASS_AXIS, name=f"farslip_cosine:{pid}")
 
 
 def _embed_patch_parcels(
@@ -460,8 +453,7 @@ class DualHeadFusionHead(EnsembleModel):
         proto = np.asarray(prototypes, dtype=np.float32)
         if proto.shape != (self.n_classes, _EMBED_DIM):
             raise ValueError(
-                f"prototypes must be ({self.n_classes}, {_EMBED_DIM}); "
-                f"got {proto.shape}."
+                f"prototypes must be ({self.n_classes}, {_EMBED_DIM}); got {proto.shape}."
             )
         self._prototypes = proto
         return self
@@ -470,9 +462,7 @@ class DualHeadFusionHead(EnsembleModel):
     # Per-patch dense maps for each head.
     # ------------------------------------------------------------------
 
-    def _tsvit_map(
-        self, patch_id: str, tsvit_index: dict[str, np.ndarray]
-    ) -> np.ndarray:
+    def _tsvit_map(self, patch_id: str, tsvit_index: dict[str, np.ndarray]) -> np.ndarray:
         """Return the TSViT-pheno post-softmax ``(18, 128, 128)`` for a patch."""
         sm = tsvit_index.get(patch_id)
         if sm is None:
@@ -482,7 +472,9 @@ class DualHeadFusionHead(EnsembleModel):
             )
         arr = np.asarray(sm, dtype=np.float64)
         self.validate_probs(
-            arr, class_axis=_CLASS_AXIS, name=f"{self.tsvit_member}:{patch_id}",
+            arr,
+            class_axis=_CLASS_AXIS,
+            name=f"{self.tsvit_member}:{patch_id}",
             tol=_FLOAT16_SUM_TOL,
         )
         return _renormalize(arr)
@@ -533,9 +525,7 @@ class DualHeadFusionHead(EnsembleModel):
     def _fuse(self, p_tsvit: np.ndarray, p_farslip: np.ndarray, alpha: float) -> np.ndarray:
         """Convex per-pixel fusion ``alpha*P_tsvit + (1-alpha)*P_farslip``."""
         fused = alpha * p_tsvit + (1.0 - alpha) * p_farslip
-        return self.validate_probs(
-            _renormalize(fused), class_axis=_CLASS_AXIS, name="fused"
-        )
+        return self.validate_probs(_renormalize(fused), class_axis=_CLASS_AXIS, name="fused")
 
     # ------------------------------------------------------------------
     # fit: learn alpha via OOF spatial sub-folds (anti-leakage).
@@ -630,12 +620,8 @@ class DualHeadFusionHead(EnsembleModel):
                 for x in (set(fa.train_ids) | set(fa.val_ids))
                 if int(x) in surrogate_to_canonical
             }
-            self.assert_oof_only(
-                list(train_ids), list(held_ids), context="alpha-subfold"
-            )
-            best_alpha, best_f1 = self._search_alpha(
-                ids, p_tsvit, p_farslip, held_ids, grid
-            )
+            self.assert_oof_only(list(train_ids), list(held_ids), context="alpha-subfold")
+            best_alpha, best_f1 = self._search_alpha(ids, p_tsvit, p_farslip, held_ids, grid)
             per_fold_alpha.append(best_alpha)
             logger.info(
                 "dual_head_subfold_alpha",
@@ -680,9 +666,7 @@ class DualHeadFusionHead(EnsembleModel):
 
         gt = {pid: self._ground_truth_patch(pid) for pid in held_patches}
         root = self._resolved_root()
-        pid_maps = {
-            pid: load_pastis_parcel_ids(pid, root) for pid in held_patches
-        }
+        pid_maps = {pid: load_pastis_parcel_ids(pid, root) for pid in held_patches}
         local_held: dict[str, set[int]] = {}
         for parcel in held_parcel_ids:
             base, _, lid = parcel.rpartition("_")
@@ -703,7 +687,8 @@ class DualHeadFusionHead(EnsembleModel):
             if not yt_all:
                 continue
             metrics = self.compute_metrics(
-                np.concatenate(yt_all), np.concatenate(yp_all),
+                np.concatenate(yt_all),
+                np.concatenate(yp_all),
                 num_classes=self.n_classes,
             )
             if metrics["f1_macro"] > best_f1:
@@ -732,15 +717,15 @@ class DualHeadFusionHead(EnsembleModel):
         alpha = self.alpha  # raises if unfitted
         tsvit_index = self._load_tsvit_index()
         fused = [
-            self._fuse(
-                self._tsvit_map(pid, tsvit_index), self._farslip_map(pid), alpha
-            )
+            self._fuse(self._tsvit_map(pid, tsvit_index), self._farslip_map(pid), alpha)
             for pid in ids
         ]
         stacked = np.stack(fused, axis=0)
         logger.info(
             "dual_head_predict_proba",
-            alpha=round(alpha, 4), n_patches=len(ids), shape=tuple(stacked.shape),
+            alpha=round(alpha, 4),
+            n_patches=len(ids),
+            shape=tuple(stacked.shape),
         )
         return stacked[0] if stacked.shape[0] == 1 else stacked
 
@@ -796,9 +781,7 @@ class DualHeadFusionHead(EnsembleModel):
                 f"and 'softmax'; got {df.columns}."
             )
         index: dict[str, np.ndarray] = {}
-        for pid, sm in zip(
-            df["patch_id"].to_list(), df["softmax"].to_list(), strict=True
-        ):
+        for pid, sm in zip(df["patch_id"].to_list(), df["softmax"].to_list(), strict=True):
             if sm is not None:
                 index[str(pid)] = np.asarray(sm)
         return index
@@ -819,9 +802,7 @@ class DualHeadFusionHead(EnsembleModel):
         pos_of = {pid: i for i, pid in enumerate(dataset.patch_ids)}
         pos = pos_of.get(str(patch_id))
         if pos is None:
-            raise ValueError(
-                f"patch_id {patch_id!r} not in fold-{self.HELD_OUT_FOLD} split."
-            )
+            raise ValueError(f"patch_id {patch_id!r} not in fold-{self.HELD_OUT_FOLD} split.")
         _x, y = dataset[pos]
         return np.asarray(y, dtype=np.int64)
 

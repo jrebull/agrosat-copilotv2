@@ -188,15 +188,11 @@ class ParcelCropDataset(Dataset):
         self.resize_to = int(resize_to)
         self.seed = int(seed)
         self.require_caption = bool(require_caption)
-        self.dominance_ratio = (
-            float(dominance_ratio) if dominance_ratio is not None else None
-        )
+        self.dominance_ratio = float(dominance_ratio) if dominance_ratio is not None else None
 
         for cid in self.active_class_ids:
             if not 1 <= cid <= _N_PASTIS_CROPS:
-                raise ValueError(
-                    f"active_class_ids must be in [1, {_N_PASTIS_CROPS}], got {cid}."
-                )
+                raise ValueError(f"active_class_ids must be in [1, {_N_PASTIS_CROPS}], got {cid}.")
 
         candidate_ids = self._fold_patch_ids()
         if max_patches is not None:
@@ -237,9 +233,7 @@ class ParcelCropDataset(Dataset):
                 if float(crop.max()) <= _MIN_CROP_SIGNAL:
                     n_empty += 1
                     continue
-                self._samples.append(
-                    (parcel_id, str(pid), int(inst_id), int(cat_id))
-                )
+                self._samples.append((parcel_id, str(pid), int(inst_id), int(cat_id)))
 
         logger.info(
             "parcel_crop_dataset_init",
@@ -253,9 +247,7 @@ class ParcelCropDataset(Dataset):
             require_caption=self.require_caption,
             n_active_classes=len(self.active_class_ids),
             folds=list(self.folds),
-            with_captions=sum(
-                1 for s in self._samples if s[0] in self.captions
-            ),
+            with_captions=sum(1 for s in self._samples if s[0] in self.captions),
         )
 
     def _apply_dominance_filter(self, candidate_ids: list[str]) -> list[str]:

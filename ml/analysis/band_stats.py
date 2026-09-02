@@ -29,9 +29,7 @@ def summarize_bands(
         ValueError: If `df` does not contain the required columns.
     """
     if band_col not in df.columns or value_col not in df.columns:
-        raise ValueError(
-            f"Required columns not found: {band_col}, {value_col}"
-        )
+        raise ValueError(f"Required columns not found: {band_col}, {value_col}")
 
     return (
         df.group_by(band_col)
@@ -86,8 +84,7 @@ def ndvi_temporal(
 
     pivoted = pivoted.with_columns(
         (
-            (pl.col(nir_band) - pl.col(red_band))
-            / (pl.col(nir_band) + pl.col(red_band) + 1e-6)
+            (pl.col(nir_band) - pl.col(red_band)) / (pl.col(nir_band) + pl.col(red_band) + 1e-6)
         ).alias("ndvi")
     )
 

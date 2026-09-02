@@ -85,8 +85,7 @@ def canonical_parcel_id(df: pl.DataFrame, col: str = "parcel_id") -> pl.DataFram
     """
     if col not in df.columns:
         raise KeyError(
-            f"Column '{col}' is not present in the DataFrame. "
-            f"Available columns: {df.columns}"
+            f"Column '{col}' is not present in the DataFrame. Available columns: {df.columns}"
         )
     dtype = df.schema[col]
     if dtype == pl.Utf8:

@@ -111,9 +111,7 @@ def build_model_for_kind(
     if kind == "deeplabv3plus":
         from ml.models.deeplabv3plus import build_deeplabv3plus_mobilenet
 
-        return build_deeplabv3plus_mobilenet(
-            in_channels=spec.in_channels, classes=classes
-        )
+        return build_deeplabv3plus_mobilenet(in_channels=spec.in_channels, classes=classes)
     if kind in ("tsvit", "tsvit-pheno", "tsvit-pheno-fullm"):
         from ml.models.tsvit_wrapper import build_tsvit
 
@@ -216,9 +214,7 @@ def load_checkpoint_model(
     if spec.model_kind == "segformer":
         from transformers import SegformerForSemanticSegmentation
 
-        model: torch.nn.Module = SegformerForSemanticSegmentation.from_pretrained(
-            str(spec.path)
-        )
+        model: torch.nn.Module = SegformerForSemanticSegmentation.from_pretrained(str(spec.path))
         model.to(resolved_device).eval()
         logger.info(
             "segmentation_model_loaded",
@@ -230,9 +226,7 @@ def load_checkpoint_model(
         )
         return model
 
-    model = build_model_for_kind(
-        spec, n_timesteps=n_timesteps, device=resolved_device
-    )
+    model = build_model_for_kind(spec, n_timesteps=n_timesteps, device=resolved_device)
     loaded = torch.load(spec.path, map_location=resolved_device, weights_only=False)
     state = resolve_state_dict(loaded, spec)
     missing, unexpected = model.load_state_dict(state, strict=False)
@@ -274,9 +268,7 @@ def load_segmentation_model(
 
     resolved_device = _resolve_inference_device(device)
     if model_kind == "deeplabv3plus":
-        model: torch.nn.Module = build_deeplabv3plus_mobilenet(
-            in_channels=10, classes=num_classes
-        )
+        model: torch.nn.Module = build_deeplabv3plus_mobilenet(in_channels=10, classes=num_classes)
     else:
         model = build_tsvit(
             num_classes=num_classes,

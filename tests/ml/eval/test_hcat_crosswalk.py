@@ -37,9 +37,7 @@ def test_crosswalk_has_18_rows(crosswalk: pl.DataFrame) -> None:
 
 def test_all_leaf_codes_exist_in_eurocrops(crosswalk: pl.DataFrame) -> None:
     """Every HCAT leaf code appears verbatim in eurocrops_hcat3.csv (no invented codes)."""
-    ref = pl.read_csv(
-        EUROCROPS_HCAT3_CSV, schema_overrides={"HCAT3_code": pl.Utf8}
-    )
+    ref = pl.read_csv(EUROCROPS_HCAT3_CSV, schema_overrides={"HCAT3_code": pl.Utf8})
     valid = set(ref["HCAT3_code"].to_list())
     for code in crosswalk["hcat_leaf_code"].to_list():
         assert code in valid, f"leaf code {code} absent from eurocrops_hcat3.csv"
@@ -47,9 +45,7 @@ def test_all_leaf_codes_exist_in_eurocrops(crosswalk: pl.DataFrame) -> None:
 
 def test_semantic18_id_is_pastis_minus_one(crosswalk: pl.DataFrame) -> None:
     """semantic18_id is the contiguous pastis_id - 1 for every row."""
-    bad = crosswalk.filter(
-        pl.col("semantic18_id") != pl.col("pastis_id") - 1
-    )
+    bad = crosswalk.filter(pl.col("semantic18_id") != pl.col("pastis_id") - 1)
     assert bad.height == 0
 
 

@@ -42,12 +42,8 @@ def _parse_folds(folds: str) -> tuple[int, ...]:
 
 @app.command()
 def run(
-    pastis_root: Annotated[
-        Path, typer.Option("--pastis-root")
-    ] = Path("data/PASTIS-R"),
-    out: Annotated[Path, typer.Option("--out")] = Path(
-        "data/farslip/pastis_captions.parquet"
-    ),
+    pastis_root: Annotated[Path, typer.Option("--pastis-root")] = Path("data/PASTIS-R"),
+    out: Annotated[Path, typer.Option("--out")] = Path("data/farslip/pastis_captions.parquet"),
     folds: Annotated[str, typer.Option("--folds")] = "1,2,3,4,5",
     flush_every: Annotated[int, typer.Option("--flush-every")] = 25,
     base_url: Annotated[str, typer.Option("--base-url")] = "http://127.0.0.1:11434",

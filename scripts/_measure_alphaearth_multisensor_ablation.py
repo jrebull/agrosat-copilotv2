@@ -42,7 +42,16 @@ SRTM = REPO_ROOT / "data/cache/gee/srtm_pastis_fr_full.parquet"
 S1 = REPO_ROOT / "data/cache/gee/s1_pastis_fr_full_2019_both_lee_7x7_dB_enriched.parquet"
 
 #: Metadata to NOT carry over from the patch-level blocks (avoids leakage / duplicates).
-_META_DROP = ("year", "patch_id", "class_id", "class_name", "fold", "n_pixels", "instance_id", "area_m2")
+_META_DROP = (
+    "year",
+    "patch_id",
+    "class_id",
+    "class_name",
+    "fold",
+    "n_pixels",
+    "instance_id",
+    "area_m2",
+)
 
 
 def _ae_block(path: Path, prefix: str) -> pl.DataFrame:
@@ -78,33 +87,49 @@ def main(max_samples: int | None) -> int:
     era5 = _patch_block(ERA5, ("era5",))
     srtm = _patch_block(SRTM, ("srtm",))
     s1 = _patch_block(S1, ("s1_",))
-    df = df.join(era5, on="patch_id", how="left").join(srtm, on="patch_id", how="left").join(s1, on="patch_id", how="left")
+    df = (
+        df.join(era5, on="patch_id", how="left")
+        .join(srtm, on="patch_id", how="left")
+        .join(s1, on="patch_id", how="left")
+    )
     era5_cols = [c for c in df.columns if c.startswith("era5")]
     srtm_cols = [c for c in df.columns if c.startswith("srtm")]
     s1_cols = [c for c in df.columns if c.startswith("s1_")]
 
     log.info(
         "blocks_joined",
-        ae19=len(ae19_cols), ae18=len(ae18_cols),
-        era5=len(era5_cols), srtm=len(srtm_cols), s1=len(s1_cols),
+        ae19=len(ae19_cols),
+        ae18=len(ae18_cols),
+        era5=len(era5_cols),
+        srtm=len(srtm_cols),
+        s1=len(s1_cols),
         s1_null_parcels=int(df.select(pl.col(s1_cols[0]).is_null().sum()).item()) if s1_cols else 0,
         total_cols=df.width,
     )
 
     # --- incremental feature_sets (each MUST include the 185 base except the baseline) ---
     feature_sets = {
-        "full": tuple(base_feats),                                    # 0.4094 expected (replica)
+        "full": tuple(base_feats),  # 0.4094 expected (replica)
         "base_plus_ae19": tuple(base_feats + ae19_cols),
         "base_plus_ae18": tuple(base_feats + ae18_cols),
         "base_plus_ae18_ae19": tuple(base_feats + ae19_cols + ae18_cols),
         "base_plus_ae19_era5_srtm": tuple(base_feats + ae19_cols + era5_cols + srtm_cols),
-        "base_plus_all": tuple(base_feats + ae19_cols + ae18_cols + era5_cols + srtm_cols + s1_cols),
+        "base_plus_all": tuple(
+            base_feats + ae19_cols + ae18_cols + era5_cols + srtm_cols + s1_cols
+        ),
         "ae19_only": tuple(ae19_cols),
         "ae18_only": tuple(ae18_cols),
     }
 
-    log.info("running_ablation", n_sets=len(feature_sets), cv="spatial 5-fold buffer 1km", max_samples=max_samples)
-    results = run_feature_ablation(df=df, feature_sets=feature_sets, models=("xgb",), max_samples=max_samples)
+    log.info(
+        "running_ablation",
+        n_sets=len(feature_sets),
+        cv="spatial 5-fold buffer 1km",
+        max_samples=max_samples,
+    )
+    results = run_feature_ablation(
+        df=df, feature_sets=feature_sets, models=("xgb",), max_samples=max_samples
+    )
 
     print("\n=== ABLATION AlphaEarth + multisensor (XGB, spatial CV 5-fold buffer 1km) ===")
     print(f"{'feature_set':28s} {'n_feat':>7s} {'f1_macro':>9s} {'delta_vs_full':>14s}")

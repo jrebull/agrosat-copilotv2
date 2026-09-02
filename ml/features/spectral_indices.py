@@ -547,8 +547,7 @@ def compute_index_timeseries(
         return full
     if "time" not in full.dims:
         raise ValueError(
-            f"reduce='{reduce}' requiere dimensión 'time' en el input; "
-            f"dims actuales: {full.dims}"
+            f"reduce='{reduce}' requiere dimensión 'time' en el input; dims actuales: {full.dims}"
         )
     if reduce in ("mean", "median", "max", "min"):
         return cast(xr.DataArray, getattr(full, reduce)(dim="time").astype(np.float32))
@@ -640,9 +639,7 @@ def compute_index_ee(ee_image: ee.Image, index: str) -> ee.Image:
         ValueError: if ``index`` is not in :data:`INDEX_NAMES`.
     """
     if index not in _INDEX_REGISTRY:
-        raise ValueError(
-            f"Índice desconocido '{index}'. Disponibles: {INDEX_NAMES}."
-        )
+        raise ValueError(f"Índice desconocido '{index}'. Disponibles: {INDEX_NAMES}.")
     try:
         import eemont  # noqa: F401  # registers .spectralIndices() on ee.Image
     except Exception as exc:

@@ -110,9 +110,7 @@ MACRO_COLORS: dict[str, str] = {
 ALPHAEARTH_DIM_COLS: list[str] = [f"dim_{i:02d}" for i in range(64)]
 
 
-def _read_es_patch_centroids(
-    nc_path: Path, *, max_per_class: int = 60
-) -> list[dict[str, Any]]:
+def _read_es_patch_centroids(nc_path: Path, *, max_per_class: int = 60) -> list[dict[str, Any]]:
     """Sample per-macro-class pixel centroids of one ES Sen4AgriNet patch.
 
     Reads the HDF5 (NetCDF4) ``labels`` group with :mod:`h5py`, decodes the
@@ -158,9 +156,7 @@ def _read_es_patch_centroids(
     return records
 
 
-def collect_centroids(
-    *, patch_glob: str, region: str, max_per_class: int = 60
-) -> pl.DataFrame:
+def collect_centroids(*, patch_glob: str, region: str, max_per_class: int = 60) -> pl.DataFrame:
     """Collect per-class centroids across the Sen4AgriNet patches of one region.
 
     Reads every patch matched by ``patch_glob``, samples per-class centroids, and
@@ -247,9 +243,7 @@ def build_region_alphaearth(
     from ml.ingest.gee_sampler import init_ee, sample_alphaearth_at_coords
 
     init_ee(project="agrosat-copilot")
-    centroids = collect_centroids(
-        patch_glob=patch_glob, region=region, max_per_class=max_per_class
-    )
+    centroids = collect_centroids(patch_glob=patch_glob, region=region, max_per_class=max_per_class)
     sampled = sample_alphaearth_at_coords(
         centroids.select("px_id", "lon", "lat"),
         year=year,
@@ -304,9 +298,7 @@ def compute_joint_umap(
     es_x = es.select(ALPHAEARTH_DIM_COLS).to_numpy()
     stacked = np.vstack([fr_x, es_x])
     regions = np.array(["FR"] * fr.height + ["ES"] * es.height)
-    macros = np.concatenate(
-        [fr.get_column("macro").to_numpy(), es.get_column("macro").to_numpy()]
-    )
+    macros = np.concatenate([fr.get_column("macro").to_numpy(), es.get_column("macro").to_numpy()])
     scaled = StandardScaler().fit_transform(stacked)
     reducer = umap.UMAP(
         n_neighbors=n_neighbors,
@@ -351,9 +343,7 @@ def macro_aoi_bbox(
 
 def _ndvi_empty_frame() -> pl.DataFrame:
     """Empty zonal-NDVI series frame with the canonical schema."""
-    return pl.DataFrame(
-        schema={"date": pl.Utf8, "doy": pl.Int64, "ndvi": pl.Float64}
-    )
+    return pl.DataFrame(schema={"date": pl.Utf8, "doy": pl.Int64, "ndvi": pl.Float64})
 
 
 def extract_bbox_ndvi_series(
@@ -395,9 +385,7 @@ def extract_bbox_ndvi_series(
 
     cache_root = cache_dir or DEFAULT_CACHE_DIR
     cache_root.mkdir(parents=True, exist_ok=True)
-    cache_file = (
-        cache_root / f"sen4_ndvi_{cache_key}_{year}_{cloud_pct_max}_{scale}.parquet"
-    )
+    cache_file = cache_root / f"sen4_ndvi_{cache_key}_{year}_{cloud_pct_max}_{scale}.parquet"
     if cache_file.exists():
         return pl.read_parquet(cache_file)
 
@@ -444,9 +432,7 @@ def extract_bbox_ndvi_series(
 
     frame = (
         pl.DataFrame(rows)
-        .with_columns(
-            pl.col("date").str.to_date("%Y-%m-%d").dt.ordinal_day().alias("doy")
-        )
+        .with_columns(pl.col("date").str.to_date("%Y-%m-%d").dt.ordinal_day().alias("doy"))
         .select("date", "doy", "ndvi")
         .sort("date")
     )

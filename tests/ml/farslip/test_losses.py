@@ -234,9 +234,7 @@ def test_losses_combine_finite_grad() -> None:
     region_ids = torch.tensor([0, 1, 1, 0])
     cat_ids = torch.tensor([0, 2, 1, 2])
 
-    total = loss_patch(s_patches, t_patches) + 0.5 * loss_cls(
-        s_cls, protos, region_ids, cat_ids
-    )
+    total = loss_patch(s_patches, t_patches) + 0.5 * loss_cls(s_cls, protos, region_ids, cat_ids)
     total.backward()
     assert s_patches.grad is not None and torch.isfinite(s_patches.grad).all()
     assert s_cls.grad is not None and torch.isfinite(s_cls.grad).all()

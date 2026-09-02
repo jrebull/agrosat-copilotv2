@@ -81,7 +81,7 @@ CELLS: list[nbf.NotebookNode] = [
         "\n"
         "Si el gate **falla**, es aceptable (R2 del plan): se documenta el "
         "resultado negativo honesto en `docs/us-resolved/us-022-c.md` "
-        "§\"Resultado FarSLIP gate B-3\" y FarSLIP queda como base learner "
+        '§"Resultado FarSLIP gate B-3" y FarSLIP queda como base learner '
         "opcional del stacking ensemble (EPIC 6).\n"
         "\n"
         "## Pre-flight\n"

@@ -54,9 +54,7 @@ def _resolve_winner_set(ablation_csv: Path) -> str:
         print(f"[winner] reporte {ablation_csv} no existe; fallback 'no_geom'")
         return "no_geom"
     abl = pl.read_csv(ablation_csv)
-    abl_sorted = abl.filter(pl.col("f1_macro").is_finite()).sort(
-        "f1_macro", descending=True
-    )
+    abl_sorted = abl.filter(pl.col("f1_macro").is_finite()).sort("f1_macro", descending=True)
     if abl_sorted.height == 0:
         print(f"[winner] reporte sin F1-macro finito; fallback 'no_geom'")
         return "no_geom"
@@ -100,7 +98,9 @@ def main() -> int:
     print("=== US-023-preview P8: baseline v2 standalone ===")
     print(f"Dataset: {FEATURES_PATH}")
     print(f"Spatial CV: k={V2_K_FOLDS}, buffer={V2_BUFFER_KM} km")
-    print(f"Temporal: epochs={V2_TEMPORAL_EPOCHS}, batch={V2_TEMPORAL_BATCH_SIZE}, device={V2_DEVICE}")
+    print(
+        f"Temporal: epochs={V2_TEMPORAL_EPOCHS}, batch={V2_TEMPORAL_BATCH_SIZE}, device={V2_DEVICE}"
+    )
 
     # --- 1. Load + filter ------------------------------------------------
     df_raw = _load_baseline_dataset(FEATURES_PATH)
@@ -169,10 +169,7 @@ def main() -> int:
         "mlflow_run_id": xgb_run_id,
         "source": source_str,
     }
-    print(
-        f"[XGB] F1-macro={xgb_metrics['f1_macro']:.4f}  "
-        f"t={xgb_time:.1f}s  run={xgb_run_id[:8]}"
-    )
+    print(f"[XGB] F1-macro={xgb_metrics['f1_macro']:.4f}  t={xgb_time:.1f}s  run={xgb_run_id[:8]}")
 
     # --- 4. TempCNN + InceptionTime --------------------------------------
     for kind in ("tempcnn", "inceptiontime"):
@@ -224,8 +221,7 @@ def main() -> int:
             "source": source_str,
         }
         print(
-            f"[{kind}] F1-macro={tk_metrics['f1_macro']:.4f}  "
-            f"t={tk_time:.1f}s  run={tk_run_id[:8]}"
+            f"[{kind}] F1-macro={tk_metrics['f1_macro']:.4f}  t={tk_time:.1f}s  run={tk_run_id[:8]}"
         )
 
     wall = time.time() - t0

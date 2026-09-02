@@ -42,9 +42,7 @@ logger = structlog.get_logger(__name__)
 app = typer.Typer(add_completion=False, help=__doc__)
 
 
-def _extract_pastis_geodataframe(
-    metadata_geojson: Path, year: int
-) -> gpd.GeoDataFrame:
+def _extract_pastis_geodataframe(metadata_geojson: Path, year: int) -> gpd.GeoDataFrame:
     """Extract all PASTIS geometries (Polygon + MultiPolygon) reprojected to EPSG:4326.
 
     Returns a GeoDataFrame with columns `parcel_id`, `year`, `geometry`.

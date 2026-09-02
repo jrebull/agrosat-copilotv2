@@ -97,14 +97,10 @@ def test_evaluate_fold4_raises(dummy: _DummyEnsemble) -> None:
 
 
 @pytest.mark.parametrize("bad_fold", [0, 1, 2, 3, 4, 6, 10])
-def test_evaluate_rejects_every_non_held_out_fold(
-    dummy: _DummyEnsemble, bad_fold: int
-) -> None:
+def test_evaluate_rejects_every_non_held_out_fold(dummy: _DummyEnsemble, bad_fold: int) -> None:
     """Only fold-5 is valid; every other fold raises."""
     with pytest.raises(ValueError):
-        dummy.evaluate(
-            y_true=np.array([0, 1]), y_pred=np.array([0, 1]), fold=bad_fold
-        )
+        dummy.evaluate(y_true=np.array([0, 1]), y_pred=np.array([0, 1]), fold=bad_fold)
 
 
 def test_evaluate_fold5_ok_perfect(dummy: _DummyEnsemble) -> None:
@@ -142,9 +138,7 @@ def test_evaluate_requires_pred_or_proba(dummy: _DummyEnsemble) -> None:
 
 def test_evaluate_accepts_label_dataframe(dummy: _DummyEnsemble) -> None:
     """y_true may be a parcel DataFrame carrying a `label` column."""
-    y_true = pl.DataFrame(
-        {"canonical_parcel_id": ["a", "b", "c"], "label": [1, 2, 3]}
-    )
+    y_true = pl.DataFrame({"canonical_parcel_id": ["a", "b", "c"], "label": [1, 2, 3]})
     metrics = dummy.evaluate(y_true=y_true, y_pred=np.array([1, 2, 3]), fold=5)
     assert metrics["accuracy"] == pytest.approx(1.0)
 

@@ -257,9 +257,7 @@ async def test_use_stacking_serves_meta_posterior(monkeypatch, make_ctx) -> None
     monkeypatch.setattr(
         classify_mod,
         "_load_classifier",
-        lambda: _FakeClassifier(
-            np.full(18, np.nan), {i: f"class_{i}" for i in range(18)}
-        ),
+        lambda: _FakeClassifier(np.full(18, np.nan), {i: f"class_{i}" for i in range(18)}),
     )
 
     out = await classify_mod.run(

@@ -100,9 +100,7 @@ ALLOWED_LANGUAGES: frozenset[str] = frozenset({"it", "es"})
 #: call, ``human-edited`` is the post-review benchmark record (the only one that
 #: belongs in the published 500-pair set), and ``fixture`` tags the tiny
 #: repo-committed example set used by tests (never the benchmark).
-ALLOWED_SOURCES: frozenset[str] = frozenset(
-    {"gemini-seed", "dry-run", "human-edited", "fixture"}
-)
+ALLOWED_SOURCES: frozenset[str] = frozenset({"gemini-seed", "dry-run", "human-edited", "fixture"})
 
 #: JSON keys that, if present with a train value, mark a record as a training
 #: example. The benchmark is eval-only, so :func:`validate_record` rejects them.

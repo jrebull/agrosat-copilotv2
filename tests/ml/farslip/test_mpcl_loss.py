@@ -178,9 +178,7 @@ def test_mpcl_symmetric_directions_present() -> None:
     region_visual = torch.randn(6, dim)
     category_text = torch.randn(2, dim)
     region_cat_ids = torch.tensor([0, 0, 0, 1, 1, 1])
-    total = MultiPositiveRegionCategoryLoss()(
-        region_visual, category_text, region_cat_ids
-    )
+    total = MultiPositiveRegionCategoryLoss()(region_visual, category_text, region_cat_ids)
     # Reconstruimos las dos direcciones manualmente y verificamos la media.
     rn = F.normalize(region_visual, p=2, dim=-1)
     cn = F.normalize(category_text, p=2, dim=-1)
@@ -218,9 +216,7 @@ def test_mpcl_single_category_no_other_positive_no_nan() -> None:
     region_visual = torch.randn(3, dim, requires_grad=True)
     category_text = torch.randn(n_categories, dim)
     region_cat_ids = torch.tensor([0, 2, 4])
-    loss = MultiPositiveRegionCategoryLoss()(
-        region_visual, category_text, region_cat_ids
-    )
+    loss = MultiPositiveRegionCategoryLoss()(region_visual, category_text, region_cat_ids)
     assert torch.isfinite(loss), f"loss no finita: {loss}"
     loss.backward()
     assert region_visual.grad is not None
@@ -317,9 +313,7 @@ def test_global_image_text_loss_symmetric_value() -> None:
     caption_n = F.normalize(caption_cls, p=2, dim=-1)
     logits = image_n @ caption_n.t() / DEFAULT_TEMPERATURE
     targets = torch.arange(5)
-    expected = 0.5 * (
-        F.cross_entropy(logits, targets) + F.cross_entropy(logits.t(), targets)
-    )
+    expected = 0.5 * (F.cross_entropy(logits, targets) + F.cross_entropy(logits.t(), targets))
     assert torch.allclose(loss, expected, atol=1e-6)
 
 
@@ -355,9 +349,7 @@ def test_global_image_text_loss_invalid_shapes_raise() -> None:
 
 
 def test_global_image_text_loss_empty_batch_returns_zero() -> None:
-    loss = GlobalImageTextLoss()(
-        torch.randn(0, 16, requires_grad=True), torch.randn(0, 16)
-    )
+    loss = GlobalImageTextLoss()(torch.randn(0, 16, requires_grad=True), torch.randn(0, 16))
     assert loss.item() == 0.0
 
 
@@ -417,9 +409,7 @@ def test_combine_losses_end_to_end_with_real_losses() -> None:
     category_text = torch.randn(3, dim)
     region_cat_ids = torch.tensor([0, 0, 1, 1, 2, 2])
     l_glo = GlobalImageTextLoss()(image_cls, caption_cls)
-    l_loc = MultiPositiveRegionCategoryLoss()(
-        region_visual, category_text, region_cat_ids
-    )
+    l_loc = MultiPositiveRegionCategoryLoss()(region_visual, category_text, region_cat_ids)
     total = combine_losses(l_glo, l_loc, lambda_loc=1.0)
     total.backward()
     assert torch.isfinite(total)
@@ -434,9 +424,7 @@ def test_mpcl_uniform_weights_equal_unweighted() -> None:
     region_visual = torch.randn(6, dim, requires_grad=True)
     category_text = torch.randn(3, dim)
     region_cat_ids = torch.tensor([0, 0, 1, 1, 2, 2])
-    base = MultiPositiveRegionCategoryLoss()(
-        region_visual, category_text, region_cat_ids
-    )
+    base = MultiPositiveRegionCategoryLoss()(region_visual, category_text, region_cat_ids)
     weighted = MultiPositiveRegionCategoryLoss(class_weights=torch.ones(3))(
         region_visual, category_text, region_cat_ids
     )
@@ -451,12 +439,10 @@ def test_mpcl_class_weights_upweight_rare_class() -> None:
     category_text = torch.randn(3, dim)
     # clase 2 es rara (1 region) vs clases 0,1 frecuentes.
     region_cat_ids = torch.tensor([0, 0, 1, 1, 1, 2])
-    plain = MultiPositiveRegionCategoryLoss()(
+    plain = MultiPositiveRegionCategoryLoss()(region_visual, category_text, region_cat_ids)
+    rare_up = MultiPositiveRegionCategoryLoss(class_weights=torch.tensor([1.0, 1.0, 10.0]))(
         region_visual, category_text, region_cat_ids
     )
-    rare_up = MultiPositiveRegionCategoryLoss(
-        class_weights=torch.tensor([1.0, 1.0, 10.0])
-    )(region_visual, category_text, region_cat_ids)
     assert not torch.allclose(plain, rare_up, atol=1e-4)
     rare_up.backward()
     assert region_visual.grad is not None and torch.isfinite(region_visual.grad).all()

@@ -42,11 +42,38 @@ _PARQUET = _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis
 
 # The 32 CAP classes in cap_vocabulary.yaml declaration order (category_id 0..31).
 _CAP_CLASSES_32 = [
-    "mais", "frumento", "vite", "olivo", "riso", "foraggio", "ortaggi",
-    "girasole", "soia", "colza", "orzo", "sorgo", "pomodoro", "patata",
-    "barbabietola", "tabacco", "lino", "canapa", "agrumi", "melo", "pero",
-    "pesco", "mandorlo", "noce", "prato_permanente", "pascolo", "set_aside",
-    "serra", "vivai", "floricoltura", "leguminose", "altro",
+    "mais",
+    "frumento",
+    "vite",
+    "olivo",
+    "riso",
+    "foraggio",
+    "ortaggi",
+    "girasole",
+    "soia",
+    "colza",
+    "orzo",
+    "sorgo",
+    "pomodoro",
+    "patata",
+    "barbabietola",
+    "tabacco",
+    "lino",
+    "canapa",
+    "agrumi",
+    "melo",
+    "pero",
+    "pesco",
+    "mandorlo",
+    "noce",
+    "prato_permanente",
+    "pascolo",
+    "set_aside",
+    "serra",
+    "vivai",
+    "floricoltura",
+    "leguminose",
+    "altro",
 ]
 
 
@@ -344,9 +371,7 @@ def test_loss_cls_decreases_with_real_prototypes() -> None:
     trainer = _FakeTrainer(hidden_size=64, seed=42)
     proto_4 = torch.eye(4, 32)  # (4, 32) one-hot per class in MiniLM-like space
     proto_64 = trainer._proto_to_clip_proj(proto_4)  # (4, 64) frozen ortho lift
-    loss_fn = RegionCategoryAlignmentLoss(
-        temperature=0.07, n_regions=1, n_categories=4
-    )
+    loss_fn = RegionCategoryAlignmentLoss(temperature=0.07, n_regions=1, n_categories=4)
     student = (torch.randn(16, 64) * 0.1).requires_grad_(True)
     region_ids = torch.zeros(16, dtype=torch.long)
     cat_ids = torch.repeat_interleave(torch.arange(4), 4)
@@ -384,9 +409,7 @@ def test_real_parquet_18x384_expands_to_96x768() -> None:
 
     proto_18, class_ids = load_class_prototype_embeddings(_PARQUET)
     assert proto_18.shape == (18, 384)
-    proto_cap = expand_to_cap(
-        proto_18, _CAP_CLASSES_32, pastis_class_ids=class_ids
-    )
+    proto_cap = expand_to_cap(proto_18, _CAP_CLASSES_32, pastis_class_ids=class_ids)
     tiled = np.tile(proto_cap, (3, 1))
     assert tiled.shape == (96, 384)
     trainer = _FakeTrainer(hidden_size=768, seed=42)

@@ -106,9 +106,7 @@ def aggregate_patch_bands(
         return []
 
     if s2.ndim != 4 or s2.shape[1] != len(PASTIS_S2_BANDS):
-        logger.warning(
-            "patch_s2_unexpected_shape", patch_id=patch_id, shape=tuple(s2.shape)
-        )
+        logger.warning("patch_s2_unexpected_shape", patch_id=patch_id, shape=tuple(s2.shape))
         return []
     if target.ndim != 3 or target.shape[0] < 2:
         logger.warning(
@@ -208,9 +206,7 @@ def main(
         "--out",
         help="Parquet de salida con las 10 bandas medias por parcela.",
     ),
-    n_jobs: int = typer.Option(
-        -1, "--n-jobs", help="Paralelismo joblib (-1 = todos los nucleos)."
-    ),
+    n_jobs: int = typer.Option(-1, "--n-jobs", help="Paralelismo joblib (-1 = todos los nucleos)."),
     limit_patches: int = typer.Option(
         0,
         "--limit-patches",
@@ -279,9 +275,7 @@ def main(
         file_size_mb=round(file_size_mb, 2),
     )
 
-    fold_counts = (
-        df.group_by("fold").len().sort("fold").to_dicts() if df.height else []
-    )
+    fold_counts = df.group_by("fold").len().sort("fold").to_dicts() if df.height else []
     n_classes = df.get_column("class_id").n_unique()
     typer.echo(
         f"S2 raw parcels: {df.height} parcelas, {len(_BAND_MEAN_COLS)} bandas, "

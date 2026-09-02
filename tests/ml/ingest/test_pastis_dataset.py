@@ -64,9 +64,7 @@ def _write_mini_pastis(root: Path, patch_folds: dict[int, int]) -> None:
     (root / "metadata.geojson").write_text(
         json.dumps({"type": "FeatureCollection", "features": features}), encoding="utf-8"
     )
-    norm = {
-        f"Fold_{k}": {"mean": [1000.0] * 10, "std": [500.0] * 10} for k in range(1, 6)
-    }
+    norm = {f"Fold_{k}": {"mean": [1000.0] * 10, "std": [500.0] * 10} for k in range(1, 6)}
     (root / "NORM_S2_patch.json").write_text(json.dumps(norm), encoding="utf-8")
 
 
@@ -89,9 +87,7 @@ def test_load_norm_stats_averages_folds(mini_pastis: Path) -> None:
 
 def test_fold_split_is_disjoint(mini_pastis: Path) -> None:
     """El split por folds asigna cada patch a un unico conjunto."""
-    split = pastis_fold_split(
-        mini_pastis, train_folds=(1,), val_folds=(4,), test_folds=(5,)
-    )
+    split = pastis_fold_split(mini_pastis, train_folds=(1,), val_folds=(4,), test_folds=(5,))
     assert split["train"] == ["1"]
     assert split["val"] == ["2"]
     assert split["test"] == ["3"]

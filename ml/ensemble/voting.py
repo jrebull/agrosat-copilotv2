@@ -174,8 +174,7 @@ class VotingEnsemble(EnsembleModel):
 
         loaded = self.load_oof_members(self.members, space="pixel")
         per_member_maps = {
-            member: self._patch_softmax_index(member, df)
-            for member, df in loaded.items()
+            member: self._patch_softmax_index(member, df) for member, df in loaded.items()
         }
 
         per_patch_means: list[np.ndarray] = [
@@ -290,9 +289,7 @@ class VotingEnsemble(EnsembleModel):
                 f"'softmax' columns; got {df.columns}."
             )
         index: dict[str, np.ndarray] = {}
-        for pid, sm in zip(
-            df["patch_id"].to_list(), df["softmax"].to_list(), strict=True
-        ):
+        for pid, sm in zip(df["patch_id"].to_list(), df["softmax"].to_list(), strict=True):
             if sm is None:
                 continue
             index[str(pid)] = np.asarray(sm)

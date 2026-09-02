@@ -178,9 +178,7 @@ def test_pixel_accuracy_known_fraction() -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skipif(
-    not _CLASS_MAP.exists(), reason="pastis_class_mapping.json no presente."
-)
+@pytest.mark.skipif(not _CLASS_MAP.exists(), reason="pastis_class_mapping.json no presente.")
 def test_load_class_names() -> None:
     """``load_class_names`` mapea los 18 cultivos a nombres legibles."""
     names = load_class_names()

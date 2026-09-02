@@ -68,9 +68,7 @@ def test_kshot_table_matches_parquet(built: Path) -> None:
     tex = (built / b.KSHOT_TABLE).read_text(encoding="utf-8")
     # Spot-check three real cells against the recomputed summary (no hardcoding).
     for scenario, k in (("LV->EE", 500), ("sin-pretrain->EE", 1), ("LV+PT->EE", 100)):
-        row = summary.filter(
-            (pl.col("scenario") == scenario) & (pl.col("k") == k)
-        )
+        row = summary.filter((pl.col("scenario") == scenario) & (pl.col("k") == k))
         mean = float(row.get_column("f1_mean")[0])
         std = float(row.get_column("f1_std")[0])
         assert f"${mean:.3f} \\pm {std:.3f}$" in tex

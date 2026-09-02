@@ -83,7 +83,10 @@ class _DummyAnySatEncoder(nn.Module):
         return base * self.proj.view(1, -1, 1, 1)
 
 
-@pytest.mark.skipif(not _PASTIS_ROOT.exists(), reason="PASTIS-R local no disponible")
+@pytest.mark.skipif(
+    not (_PASTIS_ROOT / "metadata.geojson").exists(),
+    reason="PASTIS-R local no disponible (falta metadata.geojson)",
+)
 def test_cache_encoder_features_smoke() -> None:
     """Cachea features de unos pocos patches reales con un encoder inyectado y tunea la cabeza."""
     from ml.ingest.pastis_dataset import load_norm_stats, pastis_fold_split

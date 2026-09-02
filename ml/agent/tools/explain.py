@@ -202,9 +202,7 @@ async def _fetch_parcel(ctx: ToolContext, parcel_id: int) -> dict[str, Any]:
         row = await conn.fetchrow(query, parcel_id, ctx.session_id)
 
     if row is None:
-        raise _ParcelNotFoundError(
-            f"parcel {parcel_id} not found for the current session."
-        )
+        raise _ParcelNotFoundError(f"parcel {parcel_id} not found for the current session.")
     return dict(row)
 
 

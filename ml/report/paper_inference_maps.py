@@ -49,9 +49,24 @@ _DEFAULT_MIN_AREA_PX: int = 32
 #: Colour-blind-safe palette (Paul Tol "muted" + Okabe-Ito), indexed by the
 #: PASTIS semantic id minus one. Eighteen distinct, print-safe hues.
 _CB_PALETTE: tuple[str, ...] = (
-    "#4477AA", "#EE6677", "#228833", "#CCBB44", "#66CCEE", "#AA3377",
-    "#BBBBBB", "#000000", "#882255", "#44AA99", "#999933", "#DDCC77",
-    "#CC6677", "#117733", "#332288", "#AA4499", "#88CCEE", "#999999",
+    "#4477AA",
+    "#EE6677",
+    "#228833",
+    "#CCBB44",
+    "#66CCEE",
+    "#AA3377",
+    "#BBBBBB",
+    "#000000",
+    "#882255",
+    "#44AA99",
+    "#999933",
+    "#DDCC77",
+    "#CC6677",
+    "#117733",
+    "#332288",
+    "#AA4499",
+    "#88CCEE",
+    "#999999",
 )
 
 _INK = "#1a1a2e"
@@ -252,8 +267,7 @@ def build_paper_inference_maps(
             continue
 
         present = sorted(
-            set(np.unique(truth[truth > 0]).tolist())
-            | set(np.unique(pred[pred > 0]).tolist())
+            set(np.unique(truth[truth > 0]).tolist()) | set(np.unique(pred[pred > 0]).tolist())
         )
         cmap = ListedColormap([_CB_PALETTE[c - 1] for c in present])
         norm = BoundaryNorm(range(len(present) + 1), cmap.N)
@@ -296,12 +310,20 @@ def build_paper_inference_maps(
         sb_px = scale_bar_m / mpp
         x0, y0 = 8, 120
         axes[0].plot(
-            [x0, x0 + sb_px], [y0, y0], color="white", lw=4,
+            [x0, x0 + sb_px],
+            [y0, y0],
+            color="white",
+            lw=4,
             path_effects=[pe.withStroke(linewidth=6, foreground="black")],
         )
         axes[0].text(
-            x0 + sb_px / 2, y0 - 6, f"{int(scale_bar_m)} m", color="white",
-            fontsize=10, ha="center", fontweight="bold",
+            x0 + sb_px / 2,
+            y0 - 6,
+            f"{int(scale_bar_m)} m",
+            color="white",
+            fontsize=10,
+            ha="center",
+            fontweight="bold",
             path_effects=[pe.withStroke(linewidth=2.5, foreground="black")],
         )
 
@@ -319,9 +341,14 @@ def build_paper_inference_maps(
             else "Cultivos"
         )
         fig.legend(
-            handles=crop_handles, loc="lower center", ncol=min(7, len(crop_handles)),
-            fontsize=9.5, frameon=False, bbox_to_anchor=(0.40, -0.06),
-            title=crop_title, title_fontsize=10,
+            handles=crop_handles,
+            loc="lower center",
+            ncol=min(7, len(crop_handles)),
+            fontsize=9.5,
+            frameon=False,
+            bbox_to_anchor=(0.40, -0.06),
+            title=crop_title,
+            title_fontsize=10,
         )
         err_handles = [
             Patch(facecolor=_OK_GREEN, label="Acierto"),
@@ -330,15 +357,22 @@ def build_paper_inference_maps(
         if n_oos:
             err_handles.append(Patch(facecolor=_OOS_GREY, label="Fuera de alcance"))
         fig.legend(
-            handles=err_handles, loc="lower center", ncol=len(err_handles), fontsize=9.5,
-            frameon=False, bbox_to_anchor=(0.88, -0.06),
+            handles=err_handles,
+            loc="lower center",
+            ncol=len(err_handles),
+            fontsize=9.5,
+            frameon=False,
+            bbox_to_anchor=(0.88, -0.06),
         )
         acc = n_ok / n_tot if n_tot else 0.0
         oos_note = f"  -  {n_oos} fuera de alcance" if n_oos else ""
         fig.suptitle(
             f"Escena {pid} - {model_label}: {n_ok}/{n_tot} parcelas correctas "
             f"({acc:.0%}){oos_note}  -  {mpp:.1f} m/px",
-            fontsize=14.5, fontweight="bold", color=_INK, y=1.01,
+            fontsize=14.5,
+            fontweight="bold",
+            color=_INK,
+            y=1.01,
         )
         path = out_dir / f"paper_inference_{pid}.png"
         fig.savefig(path, dpi=dpi, bbox_inches="tight")

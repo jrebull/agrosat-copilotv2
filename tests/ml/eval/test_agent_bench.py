@@ -137,9 +137,7 @@ class TestLoaders:
         items = agent_bench.load_agromind_subset(_AGROMIND_PATH)
         # Items whose options are image paths expose them via the property; the
         # property is a subset of options keyed by label.
-        multi_opt = next(
-            (it for it in items if it.option_image_paths), None
-        )
+        multi_opt = next((it for it in items if it.option_image_paths), None)
         if multi_opt is not None:
             assert set(multi_opt.option_image_paths).issubset(multi_opt.options)
 
@@ -195,9 +193,7 @@ class TestBuildAgromindPrompt:
     def test_multiple_choice_lists_the_real_letter_set(self) -> None:
         # B-6: the instruction must reflect the labels actually present, not a
         # hardcoded "A, B, C o D".
-        item = _make_item(
-            options={"A": "maiz", "B": "trigo", "C": "arroz"}, answer="B"
-        )
+        item = _make_item(options={"A": "maiz", "B": "trigo", "C": "arroz"}, answer="B")
         prompt = agent_bench._build_agromind_prompt(item, with_images=False)
         assert "A, B o C" in prompt
         assert " o D" not in prompt
@@ -228,9 +224,7 @@ class TestBuildAgromindPromptCoT:
     def test_multiple_choice_prompt_is_few_shot_and_cot(self) -> None:
         # A multiple-choice item ships exactly one worked example and the
         # ``Respuesta: <letra>`` contract so the model reasons before committing.
-        item = _make_item(
-            options={"A": "maiz", "B": "trigo", "C": "arroz"}, answer="B"
-        )
+        item = _make_item(options={"A": "maiz", "B": "trigo", "C": "arroz"}, answer="B")
         prompt = agent_bench._build_agromind_prompt(item, with_images=False)
         assert "Ejemplo:" in prompt
         assert "Razonemos:" in prompt
@@ -351,15 +345,11 @@ class TestSplitWorkflowAndCode:
 class TestEvalAgromind:
     """AgroMind evaluation with a mock backend."""
 
-    async def test_multimodal_variant_scores_all_items(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_multimodal_variant_scores_all_items(self, fake_sentence_model: None) -> None:
         _require_data()
         items = agent_bench.load_agromind_subset(_AGROMIND_PATH)
         gold = items[0].answer
-        variant = agent_bench.ReasonerVariant(
-            name="gemini", model="mock", multimodal=True
-        )
+        variant = agent_bench.ReasonerVariant(name="gemini", model="mock", multimodal=True)
         backend = _FixedBackend(answer=gold)
         result = await agent_bench.eval_agromind(
             variant,
@@ -380,14 +370,10 @@ class TestEvalAgromind:
         n_gold = sum(1 for it in items if it.answer == gold)
         assert result["exact_match"] >= n_gold / 500 - 1e-9
 
-    async def test_text_only_variant_skips_multimodal(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_text_only_variant_skips_multimodal(self, fake_sentence_model: None) -> None:
         _require_data()
         items = agent_bench.load_agromind_subset(_AGROMIND_PATH)
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         backend = _FixedBackend(answer="A")
         result = await agent_bench.eval_agromind(
             variant, items, backend=backend, judge=None, seed=0
@@ -407,9 +393,7 @@ class TestEvalAgromind:
         # 1 so this single-item scoring unit test is not NaN'd by it.
         monkeypatch.setattr(agent_bench, "_MIN_AGROMIND_N", 1)
         item = _make_item(options={}, answer="10", question="Cuantas?")
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         result = await agent_bench.eval_agromind(
             variant, [item], backend=_FixedBackend(answer="10"), judge=None, seed=0
         )
@@ -423,18 +407,18 @@ class TestEvalAgromind:
         # extract the final line and score it, not the chain-of-thought. Floor
         # patched to 1 so the single-item score is not NaN'd by the coverage gate.
         monkeypatch.setattr(agent_bench, "_MIN_AGROMIND_N", 1)
-        item = _make_item(
-            options={"A": "maiz", "B": "trigo", "C": "arroz"}, answer="B"
-        )
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        item = _make_item(options={"A": "maiz", "B": "trigo", "C": "arroz"}, answer="B")
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         backend = _FixedBackend(
             answer="Razonemos: el patron de NDVI corresponde a trigo.\nRespuesta: B"
         )
         records: list[dict[str, Any]] = []
         result = await agent_bench.eval_agromind(
-            variant, [item], backend=backend, judge=None, seed=0,
+            variant,
+            [item],
+            backend=backend,
+            judge=None,
+            seed=0,
             trace_sink=records.append,
         )
         assert result["exact_match"] == pytest.approx(1.0, abs=1e-9)
@@ -451,14 +435,16 @@ class TestEvalAgromind:
         monkeypatch.setattr(agent_bench, "_MIN_AGROMIND_N", 1)
         item = _make_item(
             options={
-                "A": "uno", "B": "dos", "C": "tres",
-                "D": "cuatro", "E": "cinco", "F": "seis",
+                "A": "uno",
+                "B": "dos",
+                "C": "tres",
+                "D": "cuatro",
+                "E": "cinco",
+                "F": "seis",
             },
             answer="F",
         )
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         result = await agent_bench.eval_agromind(
             variant,
             [item],
@@ -468,14 +454,10 @@ class TestEvalAgromind:
         )
         assert result["exact_match"] == pytest.approx(1.0, abs=1e-9)
 
-    async def test_hallucination_is_nan_without_judge(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_hallucination_is_nan_without_judge(self, fake_sentence_model: None) -> None:
         _require_data()
         items = agent_bench.load_agromind_subset(_AGROMIND_PATH)[:5]
-        variant = agent_bench.ReasonerVariant(
-            name="gemini", model="mock", multimodal=True
-        )
+        variant = agent_bench.ReasonerVariant(name="gemini", model="mock", multimodal=True)
         result = await agent_bench.eval_agromind(
             variant,
             items,
@@ -498,9 +480,7 @@ class TestEvalAgromind:
             def score(self, sample: dict[str, Any]) -> float:
                 return 0.1
 
-        variant = agent_bench.ReasonerVariant(
-            name="gemini", model="mock", multimodal=True
-        )
+        variant = agent_bench.ReasonerVariant(name="gemini", model="mock", multimodal=True)
         result = await agent_bench.eval_agromind(
             variant,
             items,
@@ -520,42 +500,27 @@ class TestEvalAgromind:
 class TestEvalGeoanalyst:
     """GeoAnalystBench evaluation with a mock backend."""
 
-    async def test_pass_rate_high_when_workflow_matches(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_pass_rate_high_when_workflow_matches(self, fake_sentence_model: None) -> None:
         _require_data()
         tasks = agent_bench.load_geoanalystbench(_GEO_PATH)[:5]
-        variant = agent_bench.ReasonerVariant(
-            name="gemini", model="mock", multimodal=True
-        )
+        variant = agent_bench.ReasonerVariant(name="gemini", model="mock", multimodal=True)
         # The mock echoes each task's own gold workflow + code, so the fake
         # encoder embeds identical text (cosine 1.0) -> every task passes.
         first = tasks[0]
-        answer = (
-            f"WORKFLOW:\n{first.human_workflow}\n"
-            f"CODE:\n```python\n{first.code_string}\n```"
-        )
+        answer = f"WORKFLOW:\n{first.human_workflow}\nCODE:\n```python\n{first.code_string}\n```"
         backend = _FixedBackend(answer=answer)
-        result = await agent_bench.eval_geoanalyst(
-            variant, [first], backend=backend, seed=0
-        )
+        result = await agent_bench.eval_geoanalyst(variant, [first], backend=backend, seed=0)
         assert result["n"] == 1
         assert result["pass_rate"] == pytest.approx(1.0, abs=1e-9)
         assert result["mean_semantic_sim"] == pytest.approx(1.0, abs=1e-6)
         assert 0.0 <= result["mean_codebleu"] <= 1.0
 
-    async def test_full_taskset_runs_for_text_only_variant(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_full_taskset_runs_for_text_only_variant(self, fake_sentence_model: None) -> None:
         _require_data()
         tasks = agent_bench.load_geoanalystbench(_GEO_PATH)
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         backend = _FixedBackend(answer="WORKFLOW:\n1. do nothing\nCODE:\n```python\npass\n```")
-        result = await agent_bench.eval_geoanalyst(
-            variant, tasks, backend=backend, seed=0
-        )
+        result = await agent_bench.eval_geoanalyst(variant, tasks, backend=backend, seed=0)
         # GeoAnalystBench is 100% text: every variant runs the full task set.
         assert result["n"] == 50
         assert backend.calls == 50
@@ -616,16 +581,12 @@ class TestRunBenchmark:
         # evaluates only the 6 textual items (< the coverage floor), so its
         # AgroMind exact_match is NaN by design -- the honest "not evaluable"
         # verdict, not a fabricated comparable score.
-        assert results["gemini"]["AgroMind"]["exact_match"]["std"] == pytest.approx(
-            0.0, abs=1e-9
-        )
+        assert results["gemini"]["AgroMind"]["exact_match"]["std"] == pytest.approx(0.0, abs=1e-9)
         assert not math.isnan(results["gemini"]["AgroMind"]["exact_match"]["mean"])
         assert math.isnan(results["qwen"]["AgroMind"]["exact_match"]["mean"])
 
         # The text-only Qwen carries the n_skipped signal in its AgroMind table.
-        assert results["qwen"]["AgroMind"]["n_skipped"]["mean"] == pytest.approx(
-            494.0, abs=1e-9
-        )
+        assert results["qwen"]["AgroMind"]["n_skipped"]["mean"] == pytest.approx(494.0, abs=1e-9)
 
         # The HTML report was written.
         assert report_path.exists()
@@ -721,9 +682,7 @@ class TestRunBenchmark:
                 yield _Chunk("A")  # pragma: no cover - unreachable
 
         items = agent_bench.load_agromind_subset(_AGROMIND_PATH)[:3]
-        variant = agent_bench.ReasonerVariant(
-            name="gemini", model="mock", multimodal=True
-        )
+        variant = agent_bench.ReasonerVariant(name="gemini", model="mock", multimodal=True)
         # Without the wait_for this hangs forever; the test completing at all proves
         # the timeout fires and each item is recorded as a failure (empty answer).
         result = asyncio.run(
@@ -779,18 +738,14 @@ class TestClassifyAnswerType:
 class TestTraceSink:
     """The eval runners emit one trace record per scored item to the sink."""
 
-    async def test_eval_agromind_invokes_trace_sink(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_eval_agromind_invokes_trace_sink(self, fake_sentence_model: None) -> None:
         # Two purely-textual items (no options) so a text-only variant scores both
         # and the sink receives exactly one record each, with the documented keys.
         items = [
             _make_item(options={}, answer="10", question="Cuantas parcelas?"),
             _make_item(options={}, answer="20", question="Cuantos lotes?"),
         ]
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         records: list[dict[str, Any]] = []
         result = await agent_bench.eval_agromind(
             variant,
@@ -824,9 +779,7 @@ class TestTraceSink:
         # (a skipped item has no prediction to score).
         _require_data()
         items = agent_bench.load_agromind_subset(_AGROMIND_PATH)
-        variant = agent_bench.ReasonerVariant(
-            name="qwen", model="mock", multimodal=False
-        )
+        variant = agent_bench.ReasonerVariant(name="qwen", model="mock", multimodal=False)
         records: list[dict[str, Any]] = []
         result = await agent_bench.eval_agromind(
             variant,
@@ -839,14 +792,10 @@ class TestTraceSink:
         # Exactly the evaluated items reach the sink; the 494 skipped do not.
         assert len(records) == result["n_evaluated"] == 6
 
-    async def test_eval_geoanalyst_invokes_trace_sink(
-        self, fake_sentence_model: None
-    ) -> None:
+    async def test_eval_geoanalyst_invokes_trace_sink(self, fake_sentence_model: None) -> None:
         _require_data()
         tasks = agent_bench.load_geoanalystbench(_GEO_PATH)[:3]
-        variant = agent_bench.ReasonerVariant(
-            name="gemini", model="mock", multimodal=True
-        )
+        variant = agent_bench.ReasonerVariant(name="gemini", model="mock", multimodal=True)
         records: list[dict[str, Any]] = []
         result = await agent_bench.eval_geoanalyst(
             variant,
@@ -910,9 +859,7 @@ class TestRunBenchmarkDumpJsonl:
         ]
         for path in expected:
             assert path.exists(), f"missing trace file: {path}"
-            lines = [
-                ln for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()
-            ]
+            lines = [ln for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
             assert lines, f"empty trace file: {path}"
             # Every line is a valid JSON object carrying its variant tag.
             for line in lines:
@@ -922,9 +869,7 @@ class TestRunBenchmarkDumpJsonl:
                 assert "benchmark" in record
 
         # Gemini (multimodal) scores the full subset; Qwen only the 6 textual.
-        gemini_agro = (dump_dir / "trace_gemini_AgroMind.jsonl").read_text(
-            encoding="utf-8"
-        )
+        gemini_agro = (dump_dir / "trace_gemini_AgroMind.jsonl").read_text(encoding="utf-8")
         assert len([ln for ln in gemini_agro.splitlines() if ln.strip()]) == 500
         qwen_agro = (dump_dir / "trace_qwen_AgroMind.jsonl").read_text(encoding="utf-8")
         assert len([ln for ln in qwen_agro.splitlines() if ln.strip()]) == 6
@@ -951,9 +896,7 @@ class TestBuildReportHtmlExamples:
             }
         }
 
-    def test_build_report_html_with_examples_renders_sections(
-        self, tmp_path: Path
-    ) -> None:
+    def test_build_report_html_with_examples_renders_sections(self, tmp_path: Path) -> None:
         results = self._results()
         breakdown = {
             "gemini": {
@@ -1000,9 +943,7 @@ class TestBuildReportHtmlExamples:
         assert "open_number" in content
         assert "Calcula NDVI" in content
 
-    def test_build_report_html_without_sections_is_byte_identical(
-        self, tmp_path: Path
-    ) -> None:
+    def test_build_report_html_without_sections_is_byte_identical(self, tmp_path: Path) -> None:
         # Back-compat: calling WITHOUT the new kwargs must produce the exact same
         # bytes as the previous two-argument behaviour (no trace sections, not
         # even empty placeholders).

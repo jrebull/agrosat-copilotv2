@@ -28,9 +28,7 @@ from unittest.mock import MagicMock
 import pytest
 
 
-def _write_fake_partition(
-    embeddings_root: Path, roi: str, year: int, n_rows: int = 5
-) -> Path:
+def _write_fake_partition(embeddings_root: Path, roi: str, year: int, n_rows: int = 5) -> Path:
     """Escribe un parquet de embeddings sintetico en el layout del asset upstream.
 
     Args:
@@ -113,8 +111,7 @@ def test_farslip_embeddings_consolidated_writes_canonical_parquet(
     # El parquet consolidado debe existir en la ruta canonica consumida por
     # ml/features/fusion.py (B-4).
     assert DATA_FARSLIP_CONSOLIDATED_PATH.exists(), (
-        f"esperado parquet en {DATA_FARSLIP_CONSOLIDATED_PATH}, "
-        f"cwd={Path.cwd()}"
+        f"esperado parquet en {DATA_FARSLIP_CONSOLIDATED_PATH}, cwd={Path.cwd()}"
     )
 
     df = pl.read_parquet(DATA_FARSLIP_CONSOLIDATED_PATH)
@@ -154,8 +151,7 @@ def test_farslip_embeddings_italy_declares_model_dep() -> None:
 
     deps = set(farslip_embeddings_italy.dependency_keys)
     assert AssetKey(["farslip_clip_italy_v1"]) in deps, (
-        f"esperado AssetKey('farslip_clip_italy_v1') en deps, "
-        f"encontrado: {deps}"
+        f"esperado AssetKey('farslip_clip_italy_v1') en deps, encontrado: {deps}"
     )
 
 

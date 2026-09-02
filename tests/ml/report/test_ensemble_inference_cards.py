@@ -67,11 +67,12 @@ def test_stacking_pred_argmax_from_three_oof(tmp_path) -> None:
 
     # p1 present in all 3 (class 5 wins); p2 only in 2 -> dropped.
     _frame(["10_1", "10_2"], peak_class=4).write_parquet(
-        tmp_path / "oof_parcel_tsvit-pheno_fold5.parquet")
-    _frame(["10_1", "10_2"], peak_class=4).write_parquet(
-        tmp_path / "oof_parcel_utae_fold5.parquet")
+        tmp_path / "oof_parcel_tsvit-pheno_fold5.parquet"
+    )
+    _frame(["10_1", "10_2"], peak_class=4).write_parquet(tmp_path / "oof_parcel_utae_fold5.parquet")
     _frame(["10_1"], peak_class=4).write_parquet(
-        tmp_path / "oof_parcel_xgb-alphaearth_fold5.parquet")
+        tmp_path / "oof_parcel_xgb-alphaearth_fold5.parquet"
+    )
 
     preds = _stacking_pred_by_parcel(["10_1", "10_2"], tmp_path)
     assert preds == {"10_1": 5}  # prob_004 -> class 5; p2 dropped (not in all 3)
@@ -88,10 +89,10 @@ def test_consensus_respects_custom_members(tmp_path) -> None:
         return pl.DataFrame(data)
 
     # Only two members exist; p1 in both -> kept when members=(a, b).
+    _frame(["10_1"], peak_class=6).write_parquet(tmp_path / "oof_parcel_farslip-ft18_fold5.parquet")
     _frame(["10_1"], peak_class=6).write_parquet(
-        tmp_path / "oof_parcel_farslip-ft18_fold5.parquet")
-    _frame(["10_1"], peak_class=6).write_parquet(
-        tmp_path / "oof_parcel_farslip-zeroshot_fold5.parquet")
+        tmp_path / "oof_parcel_farslip-zeroshot_fold5.parquet"
+    )
 
     preds = _stacking_pred_by_parcel(
         ["10_1"], tmp_path, members=("farslip-ft18", "farslip-zeroshot")
@@ -111,7 +112,8 @@ def test_build_cards_end_to_end_on_real_pastis(tmp_path) -> None:
     if not (oof_dir / "oof_parcel_tsvit-pheno_fold5.parquet").exists():
         pytest.skip("parcel OOF not pulled from DVC")
     oof = pl.read_parquet(oof_dir / "oof_parcel_tsvit-pheno_fold5.parquet").filter(
-        pl.col("held_out"))
+        pl.col("held_out")
+    )
     pid = oof.group_by("patch_id").len().sort("len", descending=True)["patch_id"][0]
 
     cards = build_stacking_inference_cards(
@@ -127,4 +129,9 @@ def test_build_cards_end_to_end_on_real_pastis(tmp_path) -> None:
     assert card.n_parcels > 0
     assert 0 <= card.n_correct <= card.n_parcels
     assert set(card.table.columns) >= {
-        "parcela", "clase_real", "clase_predicha", "acierto", "fenologia"}
+        "parcela",
+        "clase_real",
+        "clase_predicha",
+        "acierto",
+        "fenologia",
+    }

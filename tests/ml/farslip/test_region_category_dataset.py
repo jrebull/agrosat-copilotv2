@@ -156,9 +156,7 @@ def _patch_construction(
 
 def test_extract_regions_multi_object() -> None:
     # 3 parcels of 2 distinct classes -> 3 region-category entries (NOT 1).
-    parcels, semantic = _make_panoptic(
-        {1: (3, 40), 2: (8, 30), 3: (3, 20)}
-    )
+    parcels, semantic = _make_panoptic({1: (3, 40), 2: (8, 30), 3: (3, 20)})
     regions = extract_regions(parcels, semantic)
     assert len(regions) == 3
     cats = sorted(cat for _, cat in regions)
@@ -181,9 +179,7 @@ def test_region_category_uses_majority_class() -> None:
 
 def test_extract_regions_drops_background_and_void() -> None:
     # An instance whose majority class is Background (0) or Void (19) is dropped.
-    parcels, semantic = _make_panoptic(
-        {1: (0, 40), 2: (19, 30), 3: (6, 25)}
-    )
+    parcels, semantic = _make_panoptic({1: (0, 40), 2: (19, 30), 3: (6, 25)})
     regions = extract_regions(parcels, semantic)
     assert regions == [(3, 6)]
 
@@ -237,9 +233,7 @@ def test_dataset_mean_regions_per_patch_above_one(
     p100, s100 = _make_panoptic({1: (3, 40), 2: (8, 30), 3: (3, 20)})
     p200, s200 = _make_panoptic({1: (5, 40), 2: (6, 30)})
     patches = {100: (s2, p100, s100), 200: (s2, p200, s200)}
-    _patch_construction(
-        monkeypatch, patches=patches, fold_map={1: [100, 200]}
-    )
+    _patch_construction(monkeypatch, patches=patches, fold_map={1: [100, 200]})
 
     ds = RegionCategoryPairDataset(
         captions={"100": "escena", "200": "escena"},
@@ -260,9 +254,7 @@ def test_dataset_drops_patch_with_no_valid_region(
     # pid 300: only background / tiny slivers -> zero valid regions -> dropped.
     p_bad, s_bad = _make_panoptic({1: (0, 40), 2: (3, 4)})
     patches = {100: (s2, p_ok, s_ok), 300: (s2, p_bad, s_bad)}
-    _patch_construction(
-        monkeypatch, patches=patches, fold_map={1: [100, 300]}
-    )
+    _patch_construction(monkeypatch, patches=patches, fold_map={1: [100, 300]})
 
     ds = RegionCategoryPairDataset(
         captions={"100": "escena", "300": "escena"},
@@ -306,9 +298,7 @@ def test_dataset_skips_patch_without_masks(
 
     monkeypatch.setattr("ml.data.pastis_filter.PastisFilter", _FakeFilter)
 
-    ds = RegionCategoryPairDataset(
-        captions={"100": "escena"}, root=Path("unused"), folds=(1,)
-    )
+    ds = RegionCategoryPairDataset(captions={"100": "escena"}, root=Path("unused"), folds=(1,))
     assert {pid for pid, _ in ds._samples} == {"100"}
 
 
@@ -347,9 +337,7 @@ def test_getitem_negative_and_out_of_range(monkeypatch: pytest.MonkeyPatch) -> N
     patches = {100: (s2, p100, s100)}
     _patch_construction(monkeypatch, patches=patches, fold_map={1: [100]})
 
-    ds = RegionCategoryPairDataset(
-        captions={"100": "escena"}, root=Path("unused"), folds=(1,)
-    )
+    ds = RegionCategoryPairDataset(captions={"100": "escena"}, root=Path("unused"), folds=(1,))
     assert ds[-1]["patch_id"] == "100"
     with pytest.raises(IndexError, match="idx out of range"):
         _ = ds[5]
@@ -363,9 +351,7 @@ def test_getitem_requires_caption(monkeypatch: pytest.MonkeyPatch) -> None:
     patches = {100: (s2, p100, s100)}
     _patch_construction(monkeypatch, patches=patches, fold_map={1: [100]})
 
-    ds = RegionCategoryPairDataset(
-        captions={"999": "otra"}, root=Path("unused"), folds=(1,)
-    )
+    ds = RegionCategoryPairDataset(captions={"999": "otra"}, root=Path("unused"), folds=(1,))
     with pytest.raises(KeyError, match="no caption for patch_id 100"):
         _ = ds[0]
 
@@ -420,9 +406,7 @@ def test_collate_shared_category_is_cross_patch() -> None:
     }
     batch = collate_region_batch([item_a, item_b])
     cat3_positions = (batch["region_cat_ids"] == 3).nonzero().flatten().tolist()
-    patches_of_cat3 = {
-        int(batch["region_to_patch"][p]) for p in cat3_positions
-    }
+    patches_of_cat3 = {int(batch["region_to_patch"][p]) for p in cat3_positions}
     assert patches_of_cat3 == {0, 1}
 
 

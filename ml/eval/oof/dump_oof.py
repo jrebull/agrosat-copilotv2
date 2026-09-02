@@ -167,9 +167,7 @@ def _softmax_for_patch(
     )
 
     if spec.model_kind == "segformer":
-        probs_native = softmax_logits_segformer(
-            model, pid, root=root, device=device
-        )
+        probs_native = softmax_logits_segformer(model, pid, root=root, device=device)
     else:
         probs_native = softmax_patch_for_kind(model, x, model_kind=spec.model_kind)
     return _unify_to_18_at_128(probs_native, spec)
@@ -276,9 +274,7 @@ def _dump_one(
         dataset = PASTISSegmentationDataset(**ds_kwargs)  # type: ignore[arg-type]
     except FileNotFoundError as exc:
         if skip_missing:
-            return _missing_entry(
-                spec, fold=fold, reason="dataset_absent", detail=str(exc)
-            )
+            return _missing_entry(spec, fold=fold, reason="dataset_absent", detail=str(exc))
         raise
     _apply_train_norm(dataset)
 
@@ -286,14 +282,10 @@ def _dump_one(
         model = load_checkpoint_model(spec, device=device)
     except (FileNotFoundError, RuntimeError, OSError, ImportError) as exc:
         if skip_missing:
-            return _missing_entry(
-                spec, fold=fold, reason="model_load_failed", detail=str(exc)
-            )
+            return _missing_entry(spec, fold=fold, reason="model_load_failed", detail=str(exc))
         raise
 
-    resolved_device = next(
-        (p.device for p in model.parameters()), torch.device("cpu")
-    )
+    resolved_device = next((p.device for p in model.parameters()), torch.device("cpu"))
 
     n_total = len(dataset)
     if max_patches is not None:
@@ -357,9 +349,7 @@ def _dump_one(
         import polars as pl
 
         parcel_path = out_dir / f"oof_parcel_{spec.name}_fold{fold}.parquet"
-        pl.concat(parcel_frames, how="vertical").write_parquet(
-            parcel_path, compression="zstd"
-        )
+        pl.concat(parcel_frames, how="vertical").write_parquet(parcel_path, compression="zstd")
 
     logger.info(
         "oof_checkpoint_done",
@@ -524,9 +514,7 @@ def dump_oof(
         "models": models,
     }
     manifest_path = resolved_out / "manifest.json"
-    manifest_path.write_text(
-        json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     logger.info(
         "oof_dump_done",
         fold=fold,
@@ -552,9 +540,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--data-root", type=str, default=None, help="PASTIS-R root (default dataset)."
     )
-    parser.add_argument(
-        "--device", type=str, default="auto", help="auto | cuda | cpu."
-    )
+    parser.add_argument("--device", type=str, default="auto", help="auto | cuda | cpu.")
     parser.add_argument(
         "--dtype",
         type=str,

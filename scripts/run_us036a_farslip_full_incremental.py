@@ -213,8 +213,7 @@ def eval_per_class(
     n_classes = len(class_ids)
     if prototypes.shape[0] != n_classes:
         raise ValueError(
-            f"prototypes rows ({prototypes.shape[0]}) must equal len(class_ids) "
-            f"({n_classes})."
+            f"prototypes rows ({prototypes.shape[0]}) must equal len(class_ids) ({n_classes})."
         )
     if device is None:
         device = next(student.parameters()).device
@@ -265,9 +264,7 @@ def eval_per_class(
         per_class_iou[cid] = float(tp[idx] / denom_iou) if denom_iou > 0 else 0.0
 
     macro_f1 = float(np.mean([per_class_f1[c] for c in class_ids])) if class_ids else 0.0
-    macro_iou = (
-        float(np.mean([per_class_iou[c] for c in class_ids])) if class_ids else 0.0
-    )
+    macro_iou = float(np.mean([per_class_iou[c] for c in class_ids])) if class_ids else 0.0
 
     metrics = StepMetrics(
         n_classes=n_classes,
@@ -521,9 +518,7 @@ def run_incremental_curriculum(
     curriculum_start = time.monotonic()
 
     for k in range(total_steps):
-        class_ids = class_ids_for_step(
-            k, step_size=step_size, base=base_classes, ranking=ranking
-        )
+        class_ids = class_ids_for_step(k, step_size=step_size, base=base_classes, ranking=ranking)
         n = len(class_ids)
         step_dir = output_root / f"{n:02d}cls"
         step_dir.mkdir(parents=True, exist_ok=True)
@@ -642,9 +637,7 @@ def run_incremental_curriculum(
             batch_size=batch_size,
         )
 
-        stop, reason = stop_criterion(
-            metrics, metrics_prev, max_classes=max_classes
-        )
+        stop, reason = stop_criterion(metrics, metrics_prev, max_classes=max_classes)
         _log_step_run(
             mlflow_uri=mlflow_uri,
             run_name=f"{run_name}-{n:02d}cls",
@@ -698,9 +691,7 @@ def run_incremental_curriculum(
         winner_n_classes=winner.n_classes if winner else None,
         winner_best_ckpt=str(winner.best_ckpt) if winner else None,
         winner_macro_f1=round(winner.metrics.macro_f1, 4) if winner else None,
-        dvc_add_hint=(
-            f"dvc add {winner.best_ckpt} && dvc push" if winner else None
-        ),
+        dvc_add_hint=(f"dvc add {winner.best_ckpt} && dvc push" if winner else None),
         elapsed_hours=round((time.monotonic() - curriculum_start) / 3600.0, 4),
     )
     return results
@@ -735,9 +726,7 @@ app = typer.Typer(add_completion=False, no_args_is_help=True)
 
 @app.command()
 def run(
-    run_name: Annotated[
-        str, typer.Option(help="Nombre base del run MLflow")
-    ] = "farslip-full-incr",
+    run_name: Annotated[str, typer.Option(help="Nombre base del run MLflow")] = "farslip-full-incr",
     step_size: Annotated[int, typer.Option(help="Clases anadidas por escalon")] = 2,
     base_classes: Annotated[int, typer.Option(help="Clases en el escalon 0")] = 4,
     max_classes: Annotated[int, typer.Option(help="Tope del curriculum")] = 18,
@@ -747,19 +736,15 @@ def run(
     batch_size: Annotated[int, typer.Option(help="Batch size")] = 64,
     lr: Annotated[float, typer.Option(help="Learning rate AdamW")] = 1e-5,
     seed: Annotated[int, typer.Option(help="Semilla determinismo")] = 42,
-    folds: Annotated[
-        str, typer.Option(help="Folds de train PASTIS, coma-separados")
-    ] = "1,2,3",
-    val_folds: Annotated[
-        str, typer.Option(help="Folds de validacion (disjuntos de train)")
-    ] = "4",
+    folds: Annotated[str, typer.Option(help="Folds de train PASTIS, coma-separados")] = "1,2,3",
+    val_folds: Annotated[str, typer.Option(help="Folds de validacion (disjuntos de train)")] = "4",
     ratio: Annotated[float, typer.Option(help="Ratio filtro 3:1 Meadow")] = 3.0,
-    pastis_root: Annotated[
-        Path, typer.Option(help="Raiz PASTIS-R (frances real)")
-    ] = Path("data/PASTIS-R"),
-    output_dir: Annotated[
-        Path, typer.Option(help="Dir checkpoints (cae en F: en la VM)")
-    ] = Path("checkpoints/farslip/incremental"),
+    pastis_root: Annotated[Path, typer.Option(help="Raiz PASTIS-R (frances real)")] = Path(
+        "data/PASTIS-R"
+    ),
+    output_dir: Annotated[Path, typer.Option(help="Dir checkpoints (cae en F: en la VM)")] = Path(
+        "checkpoints/farslip/incremental"
+    ),
     time_cap_hours: Annotated[
         float, typer.Option(help="Hard cap horas por escalon y presupuesto total")
     ] = 8.0,

@@ -162,18 +162,12 @@ def run_ensemble_tl_pilot(
     # Build the aligned (annual + temporal + leaf + lon/lat) view per region. The
     # builder caps and reads the npz; pooling both regions here would lose the
     # region tag, so build each separately and tag.
-    ds_src = build_aligned_dataset(
-        regions=(source,), max_parcels=max_parcels_per_region
-    )
-    ds_tgt = build_aligned_dataset(
-        regions=(target,), max_parcels=max_parcels_per_region
-    )
+    ds_src = build_aligned_dataset(regions=(source,), max_parcels=max_parcels_per_region)
+    ds_tgt = build_aligned_dataset(regions=(target,), max_parcels=max_parcels_per_region)
 
     shared = sorted(set(ds_src.leaf.tolist()) & set(ds_tgt.leaf.tolist()))
     if not shared:
-        raise ValueError(
-            f"source={source!r} and target={target!r} share no leaf class."
-        )
+        raise ValueError(f"source={source!r} and target={target!r} share no leaf class.")
     class_to_id = {c: i for i, c in enumerate(shared)}
     keep = set(shared)
 
@@ -189,15 +183,9 @@ def run_ensemble_tl_pilot(
     fus_src = np.concatenate([a_src, t_src], axis=1)
     fus_tgt = np.concatenate([a_tgt, t_tgt], axis=1)
 
-    f1_annual, sup, macro_annual = _fit_score(
-        a_src, a_tgt, y_src, y_tgt, n_classes, seed
-    )
-    f1_temporal, _, macro_temporal = _fit_score(
-        t_src, t_tgt, y_src, y_tgt, n_classes, seed
-    )
-    f1_fusion, _, macro_fusion = _fit_score(
-        fus_src, fus_tgt, y_src, y_tgt, n_classes, seed
-    )
+    f1_annual, sup, macro_annual = _fit_score(a_src, a_tgt, y_src, y_tgt, n_classes, seed)
+    f1_temporal, _, macro_temporal = _fit_score(t_src, t_tgt, y_src, y_tgt, n_classes, seed)
+    f1_fusion, _, macro_fusion = _fit_score(fus_src, fus_tgt, y_src, y_tgt, n_classes, seed)
 
     per_class = pl.DataFrame(
         {

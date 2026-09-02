@@ -95,9 +95,7 @@ def _band_col_name(anchor: str, band: str) -> str:
     return f"{anchor}_b{int(digits):02d}"
 
 
-def _build_schema(
-    anchors: tuple[str, ...], bands: tuple[str, ...]
-) -> dict[str, Any]:
+def _build_schema(anchors: tuple[str, ...], bands: tuple[str, ...]) -> dict[str, Any]:
     """Build the Polars schema of the output (stable order)."""
     schema: dict[str, Any] = {
         "parcel_id": pl.Utf8,

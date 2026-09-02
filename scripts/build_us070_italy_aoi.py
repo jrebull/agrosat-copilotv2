@@ -88,9 +88,7 @@ STRINGS: dict[Lang, dict[str, str]] = {
         "title_line1": (
             "Italian agricultural AOI (Pianura Padana, Po valley) over AlphaEarth v1.1"
         ),
-        "title_line2": (
-            "{n} real 2024 AlphaEarth pixels, coloured by their 64-dim embedding"
-        ),
+        "title_line2": ("{n} real 2024 AlphaEarth pixels, coloured by their 64-dim embedding"),
         "attrib": (
             "AlphaEarth GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL v1.1 (CC-BY-4.0), real "
             "2024 pixels | basemap (c) OpenStreetMap contributors (ODbL)"
@@ -100,9 +98,7 @@ STRINGS: dict[Lang, dict[str, str]] = {
         "folium_popup": "Pianura Padana AOI ({n} px AlphaEarth v1.1, 2024)",
     },
     "es": {
-        "title_line1": (
-            "AOI agricola Italia (Pianura Padana, valle del Po) sobre AlphaEarth v1.1"
-        ),
+        "title_line1": ("AOI agricola Italia (Pianura Padana, valle del Po) sobre AlphaEarth v1.1"),
         "title_line2": (
             "{n} pixeles reales 2024 de AlphaEarth, coloreados por su embedding 64-dim"
         ),
@@ -165,9 +161,7 @@ def _load_alphaearth_aoi(*, n_pixels: int) -> pl.DataFrame:
             PO_VALLEY_BBOX["max_lat"],
         ]
     )
-    df = sample_alphaearth_roi(
-        roi, year=AOI_YEAR, n_pixels=n_pixels, roi_name="pianura_padana"
-    )
+    df = sample_alphaearth_roi(roi, year=AOI_YEAR, n_pixels=n_pixels, roi_name="pianura_padana")
     if df.is_empty():
         raise RuntimeError(
             "AlphaEarth returned no pixel for the Po-valley AOI (check GEE auth / "
@@ -318,9 +312,7 @@ def _add_osm_basemap(ax: plt.Axes, bbox: list[float]) -> bool:
     return True
 
 
-def build_static_map(
-    df: pl.DataFrame, *, out_dir: Path, dpi: int, lang: Lang
-) -> dict[str, Path]:
+def build_static_map(df: pl.DataFrame, *, out_dir: Path, dpi: int, lang: Lang) -> dict[str, Path]:
     """Render the static Italy AOI map (PCA-RGB pixels over OSM basemap) in one language.
 
     Only the visible strings (title, footer attribution) depend on ``lang``; the
@@ -341,9 +333,7 @@ def build_static_map(
 
     rgb = _pca_rgb(df)
     transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
-    mx, my = transformer.transform(
-        df.get_column("lon").to_numpy(), df.get_column("lat").to_numpy()
-    )
+    mx, my = transformer.transform(df.get_column("lon").to_numpy(), df.get_column("lat").to_numpy())
     bbox = [
         float(df.get_column("lon").min()),  # type: ignore[arg-type]
         float(df.get_column("lat").min()),  # type: ignore[arg-type]
@@ -352,9 +342,7 @@ def build_static_map(
     ]
 
     np.random.seed(17)
-    plt.rcParams.update(
-        {"font.family": "serif", "figure.dpi": 300, "savefig.dpi": 300}
-    )
+    plt.rcParams.update({"font.family": "serif", "figure.dpi": 300, "savefig.dpi": 300})
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
     has_base = _add_osm_basemap(ax, bbox)
     ax.scatter(mx, my, c=rgb, s=10, alpha=0.9, edgecolors="none", zorder=2)
@@ -362,13 +350,9 @@ def build_static_map(
     ax.set_ylim(min(my), max(my))
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.set_title(
-        f"{txt['title_line1']}\n{txt['title_line2'].format(n=df.height)}"
-    )
+    ax.set_title(f"{txt['title_line1']}\n{txt['title_line2'].format(n=df.height)}")
     base_note = txt["basemap_on"] if has_base else txt["basemap_off"]
-    fig.text(
-        0.5, 0.005, f"{txt['attrib']} | {base_note}", ha="center", fontsize=6, color="0.35"
-    )
+    fig.text(0.5, 0.005, f"{txt['attrib']} | {base_note}", ha="center", fontsize=6, color="0.35")
     fig.tight_layout()
     out_dir.mkdir(parents=True, exist_ok=True)
     stem = _stem("aoi_italy", lang)
@@ -377,9 +361,7 @@ def build_static_map(
     fig.savefig(png, dpi=dpi, bbox_inches="tight")
     fig.savefig(svg, bbox_inches="tight")
     plt.close(fig)
-    logger.info(
-        "aoi_static_map_saved", lang=lang, png=str(png), svg=str(svg), basemap=has_base
-    )
+    logger.info("aoi_static_map_saved", lang=lang, png=str(png), svg=str(svg), basemap=has_base)
     return {"png": png, "svg": svg}
 
 

@@ -131,7 +131,9 @@ def main() -> None:
 
         if (i + 1) % 50 == 0:
             dt = time.time() - api_t0
-            log(f"  pheno {i + 1}/{n_total} (api={n_api_calls}, cache={n_cache_hits}, dt={dt:.0f}s)")
+            log(
+                f"  pheno {i + 1}/{n_total} (api={n_api_calls}, cache={n_cache_hits}, dt={dt:.0f}s)"
+            )
 
     api_dt = time.time() - api_t0
     log(f"descripciones listas: api={n_api_calls}, cache={n_cache_hits}, dt={api_dt:.0f}s")
@@ -142,7 +144,9 @@ def main() -> None:
     cost_in = tokens_in / 1_000_000 * GEMINI_INPUT_USD_PER_1M
     cost_out = tokens_out / 1_000_000 * GEMINI_OUTPUT_USD_PER_1M
     cost_total = cost_in + cost_out
-    log(f"costo Gemini estimado: in={tokens_in} tok (${cost_in:.4f}), out={tokens_out} tok (${cost_out:.4f}), total=${cost_total:.4f}")
+    log(
+        f"costo Gemini estimado: in={tokens_in} tok (${cost_in:.4f}), out={tokens_out} tok (${cost_out:.4f}), total=${cost_total:.4f}"
+    )
     if cost_total > 5.0:
         raise SystemExit(f"AC-P4-4 violated: ${cost_total:.4f} > $5.0")
 
@@ -181,16 +185,21 @@ def main() -> None:
     # 7) Build feature_sets for the 3 sets.
     cols = fused.columns
     drop_meta = {
-        "parcel_id", "year", "patch_id", "instance_id", "class_id",
-        "class_name", "fold", "n_pixels",
+        "parcel_id",
+        "year",
+        "patch_id",
+        "instance_id",
+        "class_id",
+        "class_name",
+        "fold",
+        "n_pixels",
     }
     geom_cols = {c for c in cols if c.startswith("geom_")}
     pheno_text_cols = tuple(c for c in cols if c.startswith("pheno_text_"))
     base_full_cols = tuple(
-        c for c in cols
-        if c not in drop_meta
-        and c not in geom_cols
-        and not c.startswith("pheno_text_")
+        c
+        for c in cols
+        if c not in drop_meta and c not in geom_cols and not c.startswith("pheno_text_")
     )
     feature_sets = {
         "full": base_full_cols,
@@ -223,9 +232,7 @@ def main() -> None:
             "f1_macro": float(r.f1_macro),
             "f1_weighted": float(r.f1_weighted),
             "miou": float(r.miou),
-            "delta_vs_full": (
-                float(r.delta_vs_full) if not np.isnan(r.delta_vs_full) else None
-            ),
+            "delta_vs_full": (float(r.delta_vs_full) if not np.isnan(r.delta_vs_full) else None),
         }
         for r in results
     ]
@@ -300,23 +307,27 @@ def main() -> None:
             mlflow.set_tag("bloque", "P4")
             mlflow.set_tag("code_version", git_sha)
             mlflow.set_tag("data_version", "phenology-text-italy-v1")
-            mlflow.log_params({
-                "n_parcels": n_total,
-                "n_classes_balanced": summary["n_classes_balanced"],
-                "gemini_model": MODEL_NAME,
-                "gemini_n_requests": n_api_calls,
-                "gemini_cost_usd": round(cost_total, 6),
-                "target_per_class": TARGET_PER_CLASS,
-                "k_folds": 5,
-                "buffer_km": 1.0,
-            })
-            mlflow.log_metrics({
-                "f1_macro_full": f1_full,
-                "f1_macro_with_pheno_text": f1_with,
-                "f1_macro_pheno_text_only": f1_only,
-                "delta_pheno_text_vs_full": delta_with,
-                "delta_pheno_text_only_vs_full": delta_only,
-            })
+            mlflow.log_params(
+                {
+                    "n_parcels": n_total,
+                    "n_classes_balanced": summary["n_classes_balanced"],
+                    "gemini_model": MODEL_NAME,
+                    "gemini_n_requests": n_api_calls,
+                    "gemini_cost_usd": round(cost_total, 6),
+                    "target_per_class": TARGET_PER_CLASS,
+                    "k_folds": 5,
+                    "buffer_km": 1.0,
+                }
+            )
+            mlflow.log_metrics(
+                {
+                    "f1_macro_full": f1_full,
+                    "f1_macro_with_pheno_text": f1_with,
+                    "f1_macro_pheno_text_only": f1_only,
+                    "delta_pheno_text_vs_full": delta_with,
+                    "delta_pheno_text_only_vs_full": delta_only,
+                }
+            )
             mlflow.log_artifact(str(ABLATION_OUT))
             mlflow.log_artifact(str(summary_path))
             log(f"mlflow run id: {run.info.run_id}")

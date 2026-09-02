@@ -228,21 +228,35 @@ def run_training_or_load(
 
     # 2. Launch the training CLI.
     cmd = [
-        py, "-m", "ml.train.train_segmentation",
-        "--model", model_kind,
-        "--epochs", str(n_epochs),
-        "--batch-size", str(batch_size),
-        "--target", target,
-        "--device", device,
-        "--run-name", run_name,
+        py,
+        "-m",
+        "ml.train.train_segmentation",
+        "--model",
+        model_kind,
+        "--epochs",
+        str(n_epochs),
+        "--batch-size",
+        str(batch_size),
+        "--target",
+        target,
+        "--device",
+        device,
+        "--run-name",
+        run_name,
     ]
     if model_kind in _TEMPORAL_KINDS:
         cmd += ["--n-timesteps", str(n_timesteps)]
     _emit(f"`{' '.join(cmd)}`")
 
     miss = TrainingResult(
-        model=model_kind, miou=None, f1_macro=None, pixel_acc=None,
-        returncode=None, error=None, from_checkpoint=False, best_epoch=None,
+        model=model_kind,
+        miou=None,
+        f1_macro=None,
+        pixel_acc=None,
+        returncode=None,
+        error=None,
+        from_checkpoint=False,
+        best_epoch=None,
         cli_command=cli_doc,
     )
     try:
@@ -404,6 +418,7 @@ def segmentation_eval_table(
         DataFrame with ``label_col, mIoU, F1_macro, pixel_acc, balanced_acc,
         cohen_kappa``.
     """
+
     def _f(m: dict[str, object], key: str) -> float:
         return float(cast("SupportsFloat", m[key]))
 

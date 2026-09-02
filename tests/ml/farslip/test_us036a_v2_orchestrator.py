@@ -165,9 +165,7 @@ def test_step_faithful_v2_finite_positive_losses(
     assert torch.isfinite(losses["loss_total"])
     # Backward flows to the student.
     losses["loss_total"].backward()
-    grads = [
-        p.grad for p in trainer.student.parameters() if p.requires_grad and p.grad is not None
-    ]
+    grads = [p.grad for p in trainer.student.parameters() if p.requires_grad and p.grad is not None]
     assert grads, "no student gradient produced by step_faithful_v2"
     assert all(torch.isfinite(g).all() for g in grads)
 
@@ -263,9 +261,7 @@ def test_set_category_prototypes_validates_ids(
 # ---------------------------------------------------------------------------
 
 
-def test_region_gather_shares_patch_cls(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_region_gather_shares_patch_cls(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """All regions of a patch get that patch's CLS (gather by region_to_patch).
 
     Captures the MPCL ``region_visual`` argument via a spy and checks it equals
@@ -286,9 +282,7 @@ def test_region_gather_shares_patch_cls(
 
     images = torch.rand(2, 4, 32, 32)
     region_to_patch = torch.tensor([0, 0, 1], dtype=torch.long)
-    trainer.step_faithful_v2(
-        images, torch.tensor([1, 3, 2]), region_to_patch, caption_cls=None
-    )
+    trainer.step_faithful_v2(images, torch.tensor([1, 3, 2]), region_to_patch, caption_cls=None)
 
     # Recompute the expected gather from the same deterministic student.
     with torch.no_grad():
@@ -321,9 +315,7 @@ def test_step_faithful_v2_requires_category_bank(
     """Calling the v2 step without the category bank raises explicitly."""
     trainer = _build_stub_trainer(tmp_path, monkeypatch)
     with pytest.raises(RuntimeError, match="category prototypes not initialized"):
-        trainer.step_faithful_v2(
-            torch.rand(1, 4, 32, 32), torch.tensor([1]), torch.tensor([0])
-        )
+        trainer.step_faithful_v2(torch.rand(1, 4, 32, 32), torch.tensor([1]), torch.tensor([0]))
 
 
 # ---------------------------------------------------------------------------
@@ -333,9 +325,7 @@ def test_step_faithful_v2_requires_category_bank(
 
 def test_v1_path_still_works(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """supervision='dominant' (v1) keeps step() + the dominant batch contract."""
-    trainer = _build_stub_trainer(
-        tmp_path, monkeypatch, supervision="dominant", n_categories=3
-    )
+    trainer = _build_stub_trainer(tmp_path, monkeypatch, supervision="dominant", n_categories=3)
     trainer._cls_loss.n_regions = 1
     trainer._cls_loss.n_categories = 3
     trainer.set_text_prototypes(torch.randn(3, _HIDDEN))
@@ -349,9 +339,7 @@ def test_v1_path_still_works(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) ->
     out["loss_total"].backward()
 
 
-def test_forward_batch_dispatches_by_mode(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_forward_batch_dispatches_by_mode(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """_forward_batch routes the collated batch to the right forward per mode."""
     # v2 batch -> step_faithful_v2 keys.
     trainer_v2 = _build_stub_trainer(tmp_path / "v2", monkeypatch)
@@ -456,9 +444,7 @@ class _SpyFaithfulTrainer:
         self.set_category_called = False
         type(self).instances.append(self)
 
-    def set_category_prototypes(
-        self, prototypes: torch.Tensor, pastis_class_ids: Any
-    ) -> None:
+    def set_category_prototypes(self, prototypes: torch.Tensor, pastis_class_ids: Any) -> None:
         self.set_category_called = True
         self._category_prototypes = torch.randn(prototypes.shape[0], 32)
 
@@ -679,9 +665,7 @@ def test_eval_per_class_v2_rejects_proto_mismatch() -> None:
     """A bank with the wrong row count is rejected."""
     student = _DeterministicStudent(torch.zeros(1, 16))
     with pytest.raises(ValueError, match="must equal"):
-        orch.eval_per_class_v2(
-            student, _MockRegionDataset([]), torch.eye(2, 16), [1, 3, 2]
-        )
+        orch.eval_per_class_v2(student, _MockRegionDataset([]), torch.eye(2, 16), [1, 3, 2])
 
 
 def test_patch_majority_category_tie_break() -> None:

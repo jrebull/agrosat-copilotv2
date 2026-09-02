@@ -470,11 +470,11 @@ def build_06b() -> nbf.NotebookNode:
             "**{info['pred']}** [{estado}]\"))\n"
             "    show_saved_png(FIG_DIR / info['figure'])\n"
             "    display(Markdown(\n"
-            "        f\"Este patch contiene **{n_cat} cultivos** distribuidos en "
+            '        f"Este patch contiene **{n_cat} cultivos** distribuidos en '
             "{nreg} parcelas reales ({cats}). Como FarSLIP asigna una sola clase al "
             "patch ({info['pred']}), esa prediccion coincide con **{matched} de "
             "{nreg} parcelas**. Para recuperar las demas haria falta segmentacion "
-            "densa (por pixel), no clasificacion por patch.\"))\n"
+            'densa (por pixel), no clasificacion por patch."))\n'
         )
     )
 

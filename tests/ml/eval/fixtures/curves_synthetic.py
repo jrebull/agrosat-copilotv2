@@ -91,8 +91,7 @@ def make_curve_dataset(
     """
     if separability not in ("clean", "low", "memorizable"):
         raise ValueError(
-            f"`separability` debe ser 'clean', 'low' o 'memorizable'; "
-            f"recibido {separability!r}."
+            f"`separability` debe ser 'clean', 'low' o 'memorizable'; recibido {separability!r}."
         )
 
     if separability == "clean":
@@ -165,8 +164,8 @@ def make_cv_splits(
     splits: list[tuple[np.ndarray, np.ndarray]] = []
     for fold_idx in range(k):
         test_idx = np.sort(blocks[fold_idx]).astype(np.int64)
-        train_idx = np.sort(
-            np.concatenate([blocks[j] for j in range(k) if j != fold_idx])
-        ).astype(np.int64)
+        train_idx = np.sort(np.concatenate([blocks[j] for j in range(k) if j != fold_idx])).astype(
+            np.int64
+        )
         splits.append((train_idx, test_idx))
     return splits

@@ -134,19 +134,13 @@ class TestExactMatch:
         assert agent_metrics.exact_match("C", "C", valid_letters=valid) == 1.0
         assert agent_metrics.exact_match("D", "C", valid_letters=valid) == 0.0
         # An in-set letter still scores even when wrapped in prose.
-        assert (
-            agent_metrics.exact_match("The answer is B", "B", valid_letters=valid)
-            == 1.0
-        )
+        assert agent_metrics.exact_match("The answer is B", "B", valid_letters=valid) == 1.0
 
     def test_valid_letters_skips_out_of_set_capital_in_prose(self) -> None:
         # "GIS" leads with an out-of-set capital G; with valid_letters={A,B}, the
         # parser must not grab G and must reach the real in-set letter A.
         valid = frozenset("AB")
-        assert (
-            agent_metrics.exact_match("GIS, option A", "A", valid_letters=valid)
-            == 1.0
-        )
+        assert agent_metrics.exact_match("GIS, option A", "A", valid_letters=valid) == 1.0
 
 
 # --------------------------------------------------------------------------- #
@@ -228,9 +222,7 @@ class TestToolCallAccuracy:
         assert score == pytest.approx(0.5, abs=1e-9)
 
     def test_case_insensitive_and_dedup(self) -> None:
-        score = agent_metrics.tool_call_accuracy(
-            ["GET_NDVI", "get_ndvi"], ["get_ndvi"]
-        )
+        score = agent_metrics.tool_call_accuracy(["GET_NDVI", "get_ndvi"], ["get_ndvi"])
         assert score == 1.0
 
     def test_no_gold_is_vacuously_satisfied(self) -> None:
@@ -352,9 +344,7 @@ def _patch_deepeval_metric(
 class TestDeepEvalHallucinationJudge:
     """The concrete DeepEval-backed judge, with DeepEval fully stubbed."""
 
-    def test_score_returns_metric_score(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_score_returns_metric_score(self, monkeypatch: pytest.MonkeyPatch) -> None:
         metric = _FakeHallucinationMetric(score=0.42)
         _patch_deepeval_metric(monkeypatch, metric)
 
@@ -373,17 +363,13 @@ class TestDeepEvalHallucinationJudge:
         assert test_case.actual_output == sample["actual_output"]
         assert test_case.context == sample["context"]
 
-    def test_satisfies_judge_protocol(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_satisfies_judge_protocol(self, monkeypatch: pytest.MonkeyPatch) -> None:
         metric = _FakeHallucinationMetric(score=0.1)
         _patch_deepeval_metric(monkeypatch, metric)
         judge = agent_metrics.DeepEvalHallucinationJudge(model="stub-model")
         assert isinstance(judge, agent_metrics.HallucinationJudge)
 
-    def test_score_returns_nan_when_metric_raises(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_score_returns_nan_when_metric_raises(self, monkeypatch: pytest.MonkeyPatch) -> None:
         metric = _FakeHallucinationMetric(score=0.9, raise_on_measure=True)
         _patch_deepeval_metric(monkeypatch, metric)
 
@@ -393,9 +379,7 @@ class TestDeepEvalHallucinationJudge:
         result = judge.score(sample)
         assert math.isnan(result)
 
-    def test_integrates_with_hallucination_rate(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_integrates_with_hallucination_rate(self, monkeypatch: pytest.MonkeyPatch) -> None:
         # The stubbed judge plugs into the aggregate metric just like a real one.
         metric = _FakeHallucinationMetric(score=0.3)
         _patch_deepeval_metric(monkeypatch, metric)
@@ -428,9 +412,7 @@ class TestBuildGeminiJudge:
         settings = _FakeSettings(gemini_api_key="", google_api_key="")
         assert agent_metrics.build_gemini_judge(settings=settings) is None
 
-    def test_builds_judge_when_key_present(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_builds_judge_when_key_present(self, monkeypatch: pytest.MonkeyPatch) -> None:
         captured: dict[str, Any] = {}
 
         class _FakeGeminiModel:
@@ -443,18 +425,14 @@ class TestBuildGeminiJudge:
         _patch_deepeval_metric(monkeypatch, _FakeHallucinationMetric(score=0.0))
 
         settings = _FakeSettings(gemini_api_key="test-key-not-a-secret")
-        judge = agent_metrics.build_gemini_judge(
-            model="gemini-3.5-flash", settings=settings
-        )
+        judge = agent_metrics.build_gemini_judge(model="gemini-3.5-flash", settings=settings)
 
         assert isinstance(judge, agent_metrics.DeepEvalHallucinationJudge)
         # The key flowed into the GeminiModel exactly once, no env lookup.
         assert captured["api_key"] == "test-key-not-a-secret"
         assert captured["model"] == "gemini-3.5-flash"
 
-    def test_returns_none_when_model_build_fails(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_returns_none_when_model_build_fails(self, monkeypatch: pytest.MonkeyPatch) -> None:
         class _BoomModel:
             def __init__(self, **_kwargs: Any) -> None:
                 raise RuntimeError("gemini wiring failed")
@@ -523,9 +501,7 @@ class TestCodeBleuScore:
             base, abs=1e-12
         )
 
-    def test_unparseable_pred_falls_back_to_zero(
-        self, monkeypatch: pytest.MonkeyPatch
-    ) -> None:
+    def test_unparseable_pred_falls_back_to_zero(self, monkeypatch: pytest.MonkeyPatch) -> None:
         # If calc_codebleu raises on a pathological prediction, the metric must
         # swallow the error and return 0.0 (one bad task never crashes the run).
         import codebleu

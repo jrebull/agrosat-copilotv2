@@ -25,7 +25,6 @@ from ml.ingest.remoteclip_extractor import (
     extract_remoteclip_embeddings,
 )
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -85,7 +84,7 @@ def _patch_clip(
     Returns:
         dict con los mocks para assertions.
     """
-    import transformers  # noqa: PLC0415
+    import transformers
 
     # Mock model: get_image_features devuelve (B, 512) determinista.
     fake_model = MagicMock(name="CLIPModel")
@@ -99,7 +98,9 @@ def _patch_clip(
     fake_model.get_image_features = MagicMock(side_effect=_fake_get_features)
 
     # Processor mock: devuelve dict con pixel_values (B, 3, 224, 224).
-    def _fake_processor_call(images: list[np.ndarray], return_tensors: str = "pt") -> dict[str, torch.Tensor]:
+    def _fake_processor_call(
+        images: list[np.ndarray], return_tensors: str = "pt"
+    ) -> dict[str, torch.Tensor]:
         b = len(images)
         return {"pixel_values": torch.zeros((b, 3, 224, 224), dtype=torch.float32)}
 
@@ -132,9 +133,7 @@ def _patch_clip(
 # ---------------------------------------------------------------------------
 
 
-def test_output_schema_has_512_cols(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_output_schema_has_512_cols(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Parquet final tiene parcel_id Utf8 + year Int16 + 512 cols Float32."""
     subset_path = tmp_path / "subset.parquet"
     imagery_path = tmp_path / "imagery.parquet"
@@ -165,9 +164,7 @@ def test_output_schema_has_512_cols(
     assert embed_cols == [f"remoteclip_{i:03d}" for i in range(EMBED_DIM)]
 
 
-def test_rgb_preprocessing_stretch_uint8(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_rgb_preprocessing_stretch_uint8(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """``_stretch_percentile_uint8`` produce uint8 ``[0, 255]`` por banda."""
     # Test directo del preprocessor (no requiere model patching).
     rng = np.random.default_rng(0)
@@ -191,9 +188,7 @@ def test_rgb_preprocessing_stretch_uint8(
     np.testing.assert_array_equal(rgb_sel[0, 2], arr_4d[0, 0])  # B = B02 idx 0
 
 
-def test_raises_when_imagery_path_missing(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_raises_when_imagery_path_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Si ``imagery_path`` no existe lanza ``FileNotFoundError`` claro."""
     subset_path = tmp_path / "subset.parquet"
     _make_subset_parquet(subset_path, n=2)

@@ -38,12 +38,19 @@ import polars as pl
 # Integrator schema (mirror of Aaron's run_training).
 _SCHEMA = {
     "model": pl.Utf8,
-    "miou": pl.Float64, "f1_macro": pl.Float64, "pixel_accuracy": pl.Float64,
-    "miou_grouped": pl.Float64, "f1_macro_grouped": pl.Float64,
+    "miou": pl.Float64,
+    "f1_macro": pl.Float64,
+    "pixel_accuracy": pl.Float64,
+    "miou_grouped": pl.Float64,
+    "f1_macro_grouped": pl.Float64,
     "pixel_accuracy_grouped": pl.Float64,
-    "train_time_s": pl.Float64, "epochs": pl.Int64,
-    "n_train": pl.Int64, "n_val": pl.Int64, "n_trainable_params": pl.Int64,
-    "target_size": pl.Int64, "device": pl.Utf8,
+    "train_time_s": pl.Float64,
+    "epochs": pl.Int64,
+    "n_train": pl.Int64,
+    "n_val": pl.Int64,
+    "n_trainable_params": pl.Int64,
+    "target_size": pl.Int64,
+    "device": pl.Utf8,
 }
 
 #: Models with parquet+figures already in integrator format (just copy).
@@ -78,9 +85,7 @@ def _row_from_results(model: str, res: dict) -> dict:
         ``hcat_group_iou`` (mIoU over the 6 HCAT groups).
     """
     grouped = res.get("hcat_group_iou") or {}
-    miou_grouped = (
-        round(sum(grouped.values()) / len(grouped), 4) if grouped else None
-    )
+    miou_grouped = round(sum(grouped.values()) / len(grouped), 4) if grouped else None
     return {
         "model": model,
         "miou": res.get("test_miou"),
@@ -91,8 +96,11 @@ def _row_from_results(model: str, res: dict) -> dict:
         "pixel_accuracy_grouped": None,
         "train_time_s": None,
         "epochs": res.get("epochs"),
-        "n_train": None, "n_val": None, "n_trainable_params": None,
-        "target_size": None, "device": None,
+        "n_train": None,
+        "n_val": None,
+        "n_trainable_params": None,
+        "target_size": None,
+        "device": None,
     }
 
 
@@ -100,9 +108,7 @@ def main(argv: list[str] | None = None) -> int:
     """CLI entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--src", required=True, help="Carpeta local con la estructura del Drive.")
-    parser.add_argument(
-        "--dest", default=".", help="Raiz del repo (default: CWD)."
-    )
+    parser.add_argument("--dest", default=".", help="Raiz del repo (default: CWD).")
     args = parser.parse_args(argv)
 
     src = Path(args.src)

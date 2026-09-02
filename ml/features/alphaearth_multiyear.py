@@ -86,12 +86,8 @@ def average_alphaearth_years(
     mean_exprs = []
     for d in dims:
         cols = [d] + [f"{d}_y{j}" for j in range(1, n_years)]
-        mean_exprs.append(
-            (sum(pl.col(c) for c in cols) / float(n_years)).alias(d)
-        )
-    out = merged.select([id_col, *mean_exprs]).with_columns(
-        pl.lit(n_years).alias("n_years")
-    )
+        mean_exprs.append((sum(pl.col(c) for c in cols) / float(n_years)).alias(d))
+    out = merged.select([id_col, *mean_exprs]).with_columns(pl.lit(n_years).alias("n_years"))
     logger.info(
         "alphaearth_years_averaged",
         n_years=n_years,
@@ -136,9 +132,7 @@ def build_averaged_alphaearth(
         frames.append(pl.read_parquet(path))
         used.append(str(path))
     if not frames:
-        raise FileNotFoundError(
-            f"none of the AlphaEarth year parquets exist: {list(year_paths)}."
-        )
+        raise FileNotFoundError(f"none of the AlphaEarth year parquets exist: {list(year_paths)}.")
     averaged = average_alphaearth_years(frames, id_col=id_col)
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -198,27 +192,19 @@ def build_avg_features_for_xgb(
         else:
             logger.warning("alphaearth_year_missing", path=str(path))
     if not avg_frames:
-        raise FileNotFoundError(
-            f"none of the AlphaEarth year parquets exist: {list(year_paths)}."
-        )
+        raise FileNotFoundError(f"none of the AlphaEarth year parquets exist: {list(year_paths)}.")
     dims = alphaearth_dim_columns()
-    averaged = average_alphaearth_years(avg_frames, id_col=id_col).select(
-        [id_col, *dims]
-    )
+    averaged = average_alphaearth_years(avg_frames, id_col=id_col).select([id_col, *dims])
 
     fused = pl.read_parquet(fused_path)
     required = (id_col, "patch_id", "instance_id", "class_id", "fold")
     missing = [c for c in required if c not in fused.columns]
     if missing:
-        raise ValueError(
-            f"fused features parquet is missing key/label columns: {missing}."
-        )
+        raise ValueError(f"fused features parquet is missing key/label columns: {missing}.")
     # Keep ONLY the metadata columns from the fused parquet (drop its single-year
     # dims), then inner-join the averaged dims so the XGBoost member trains on the
     # 2018+2019 mean while keeping the leak-free fold/class/key pipeline.
-    metadata = fused.select(
-        [c for c in fused.columns if c not in set(dims)]
-    )
+    metadata = fused.select([c for c in fused.columns if c not in set(dims)])
     merged = metadata.join(averaged, on=id_col, how="inner")
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)

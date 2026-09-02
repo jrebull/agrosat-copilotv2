@@ -64,9 +64,7 @@ class _StubParcelDataset:
 
     def __init__(self, patch_id: str, parcels: list[tuple[int, int]]) -> None:
         # parcels: list of (local_id, class_id).
-        self._samples = [
-            (f"{patch_id}_{lid}", patch_id, lid, cid) for lid, cid in parcels
-        ]
+        self._samples = [(f"{patch_id}_{lid}", patch_id, lid, cid) for lid, cid in parcels]
         self._patch_id = patch_id
 
     def __len__(self) -> int:
@@ -174,8 +172,12 @@ def test_farslip_cosine_map_is_post_softmax_and_broadcasts() -> None:
     parcel_ids_map[:64, :] = 1  # parcel 1 top half
     parcel_ids_map[64:, :] = 2  # parcel 2 bottom half
     cmap = farslip_cosine_map(
-        student, bank, patch_id="10000", dataset=ds,
-        parcel_ids_map=parcel_ids_map, device="cpu",
+        student,
+        bank,
+        patch_id="10000",
+        dataset=ds,
+        parcel_ids_map=parcel_ids_map,
+        device="cpu",
     )
     assert cmap.shape == (_N_CLASSES, _SIDE, _SIDE)
     assert np.allclose(cmap.sum(axis=0), 1.0, atol=1e-5)
@@ -196,8 +198,12 @@ def test_farslip_cosine_map_background_is_uniform() -> None:
     parcel_ids_map = np.zeros((_SIDE, _SIDE), dtype=np.int64)
     parcel_ids_map[:32, :32] = 1
     cmap = farslip_cosine_map(
-        student, bank, patch_id="10000", dataset=ds,
-        parcel_ids_map=parcel_ids_map, device="cpu",
+        student,
+        bank,
+        patch_id="10000",
+        dataset=ds,
+        parcel_ids_map=parcel_ids_map,
+        device="cpu",
     )
     bg = cmap[:, 100, 100]
     assert np.allclose(bg, 1.0 / _N_CLASSES, atol=1e-6)
@@ -210,8 +216,12 @@ def test_farslip_cosine_map_rejects_wrong_proto_dim() -> None:
     bad = np.zeros((_N_CLASSES, 512), dtype=np.float32)  # 512, not 768
     with pytest.raises(ValueError, match="prototypes must be"):
         farslip_cosine_map(
-            student, bad, patch_id="10000", dataset=ds,
-            parcel_ids_map=np.zeros((_SIDE, _SIDE), dtype=np.int64), device="cpu",
+            student,
+            bad,
+            patch_id="10000",
+            dataset=ds,
+            parcel_ids_map=np.zeros((_SIDE, _SIDE), dtype=np.int64),
+            device="cpu",
         )
 
 
@@ -232,8 +242,13 @@ def test_farslip_cosine_map_scatters_n4_bank_into_18_space() -> None:
     parcel_ids_map[:64, :] = 1
     parcel_ids_map[64:, :] = 2
     cmap = farslip_cosine_map(
-        student, bank, patch_id="10000", dataset=ds,
-        parcel_ids_map=parcel_ids_map, class_ids=active, device="cpu",
+        student,
+        bank,
+        patch_id="10000",
+        dataset=ds,
+        parcel_ids_map=parcel_ids_map,
+        class_ids=active,
+        device="cpu",
     )
     # Always 18-wide -> fusible with TSViT.
     assert cmap.shape == (_N_CLASSES, _SIDE, _SIDE)
@@ -253,8 +268,12 @@ def test_farslip_cosine_map_no_class_ids_needs_18_bank() -> None:
     bank = _proto_bank(n_classes=4)  # 4 rows, no class_ids -> ambiguous
     with pytest.raises(ValueError, match="no class_ids"):
         farslip_cosine_map(
-            student, bank, patch_id="10000", dataset=ds,
-            parcel_ids_map=np.zeros((_SIDE, _SIDE), dtype=np.int64), device="cpu",
+            student,
+            bank,
+            patch_id="10000",
+            dataset=ds,
+            parcel_ids_map=np.zeros((_SIDE, _SIDE), dtype=np.int64),
+            device="cpu",
         )
 
 

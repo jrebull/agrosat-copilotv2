@@ -60,7 +60,7 @@ def _build_cells() -> list:
     cells.append(
         md(
             "# US-080 - Refinador FarSLIP-fenologia: el copiloto afina el Voting-3\n\n"
-            "### Segunda etapa \"Be My Eyes\": el LLM describe, FarSLIP re-rankea\n\n"
+            '### Segunda etapa "Be My Eyes": el LLM describe, FarSLIP re-rankea\n\n'
             "**Equipo 17** - AgroSatCopilot - EPIC 12\n\n"
             "---\n\n"
             "El campeon del copiloto es el **Voting-3** (US-079). Esta US anade una **segunda "
@@ -70,7 +70,7 @@ def _build_cells() -> list:
             "modelos densos estan inseguros** (margen bajo, miembros en desacuerdo) o ante una "
             "**clase abierta/nueva**. En el caso facil el campeon **no se toca** -- nunca empeora "
             "donde ya acierta.\n\n"
-            "Metodo respaldado por *\"Phenology description is all you need!\"* (ISPRS J. P&RS "
+            'Metodo respaldado por *"Phenology description is all you need!"* (ISPRS J. P&RS '
             "2025/26) y la linea LLM-descripcion -> CLIP (CuPL 2022, Saha 2024, Concept-Guided "
             "Bayesian 2026).\n\n"
             "> **Solo valores reales.** Los posteriores Voting-3, la verdad de campo y los prompts "
@@ -315,11 +315,7 @@ def _build_cells() -> list:
         )
     )
     cells.append(
-        code(
-            "from ml.agent.db import close_pool\n\n"
-            "await close_pool()\n"
-            "print('pool cerrado.')"
-        )
+        code("from ml.agent.db import close_pool\n\nawait close_pool()\nprint('pool cerrado.')")
     )
 
     return cells

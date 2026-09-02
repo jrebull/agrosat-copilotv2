@@ -54,9 +54,7 @@ def _canonical_ids(n_parcels: int, patch_id: str = "10000") -> list[str]:
     return [f"{patch_id}_{i + 1:03d}" for i in range(n_parcels)]
 
 
-def _write_aligned_members(
-    oof_dir: Path, members: tuple[str, ...], *, n_parcels: int
-) -> list[str]:
+def _write_aligned_members(oof_dir: Path, members: tuple[str, ...], *, n_parcels: int) -> list[str]:
     """Write parcel OOF for every member over the SAME parcel id set.
 
     Each member gets a distinct seed (decorrelated probabilities) but the same
@@ -95,9 +93,7 @@ def _ground_truth(parcel_ids: list[str], *, seed: int = 7) -> pl.DataFrame:
     """Build a per-parcel GT frame (separate from the OOF; never in the dump)."""
     rng = np.random.default_rng(seed)
     labels = rng.integers(0, NUM_CLASSES, size=len(parcel_ids)).astype(np.int64)
-    return pl.DataFrame(
-        {"canonical_parcel_id": parcel_ids, "label": labels.tolist()}
-    )
+    return pl.DataFrame({"canonical_parcel_id": parcel_ids, "label": labels.tolist()})
 
 
 @pytest.fixture
@@ -260,9 +256,7 @@ def test_holdout_spatially_disjoint(
     """The spatial holdout yields disjoint, non-empty train/val index sets."""
     ens, parcel_ids, _ = fitted
     geoms = _parcel_geoms(parcel_ids)
-    train_idx, val_idx = ens._spatial_holdout(
-        tuple(parcel_ids), geoms, buffer_km=1.0
-    )
+    train_idx, val_idx = ens._spatial_holdout(tuple(parcel_ids), geoms, buffer_km=1.0)
     assert train_idx.size > 0
     assert val_idx.size > 0
     # Disjoint by construction (no parcel in both train and val).
@@ -305,9 +299,7 @@ def test_holdout_groups_match_clusters(
     """
     ens, parcel_ids, _ = fitted
     geoms = _parcel_geoms(parcel_ids)
-    train_idx, val_idx = ens._spatial_holdout(
-        tuple(parcel_ids), geoms, buffer_km=1.0
-    )
+    train_idx, val_idx = ens._spatial_holdout(tuple(parcel_ids), geoms, buffer_km=1.0)
     union = set(train_idx.tolist()) | set(val_idx.tolist())
     assert union.issubset(set(range(len(parcel_ids))))
 
@@ -355,8 +347,7 @@ def test_predict_proba_with_explicit_frames(
     """predict_proba accepts explicit per-member frames over a new parcel set."""
     ens, _, _ = fitted
     frames = [
-        make_parcel_frame(member, n_parcels=4, seed=900 + i)
-        for i, member in enumerate(_MEMBERS)
+        make_parcel_frame(member, n_parcels=4, seed=900 + i) for i, member in enumerate(_MEMBERS)
     ]
     proba = ens.predict_proba(frames)
     assert proba.shape == (4, NUM_CLASSES)

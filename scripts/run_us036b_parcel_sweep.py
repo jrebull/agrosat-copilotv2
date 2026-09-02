@@ -106,20 +106,34 @@ def run_one_n(
     run_name = f"farslip-parcel-n{n_classes}"
 
     train_ds = ParcelCropDataset(
-        captions, root=pastis_root, folds=train_folds,
-        active_class_ids=active, min_area_px=min_area_px, max_patches=max_patches,
-        seed=seed, require_caption=require_caption,
+        captions,
+        root=pastis_root,
+        folds=train_folds,
+        active_class_ids=active,
+        min_area_px=min_area_px,
+        max_patches=max_patches,
+        seed=seed,
+        require_caption=require_caption,
         dominance_ratio=dominance_ratio,
     )
     val_ds = ParcelCropDataset(
-        captions, root=pastis_root, folds=val_folds,
-        active_class_ids=active, min_area_px=min_area_px, max_patches=max_patches,
-        seed=seed, require_caption=require_caption,
+        captions,
+        root=pastis_root,
+        folds=val_folds,
+        active_class_ids=active,
+        min_area_px=min_area_px,
+        max_patches=max_patches,
+        seed=seed,
+        require_caption=require_caption,
         dominance_ratio=dominance_ratio,
     )
     logger.info(
-        "parcel_sweep_n_start", n_classes=n_classes, active=list(active),
-        n_train=len(train_ds), n_val=len(val_ds), run_name=run_name,
+        "parcel_sweep_n_start",
+        n_classes=n_classes,
+        active=list(active),
+        n_train=len(train_ds),
+        n_val=len(val_ds),
+        run_name=run_name,
     )
 
     cfg = FarSLIPTrainerConfig(
@@ -140,9 +154,7 @@ def run_one_n(
             "grain": "parcel",
             "n_classes": n_classes,
             "dataset": "pastis_r_real",
-            "dominance_ratio": (
-                "off" if dominance_ratio is None else f"{dominance_ratio:g}"
-            ),
+            "dominance_ratio": ("off" if dominance_ratio is None else f"{dominance_ratio:g}"),
         },
     )
     trainer = FarSLIPDistillationTrainer(cfg, dataset=train_ds)
@@ -150,9 +162,7 @@ def run_one_n(
     trainer.set_category_prototypes(bank, class_ids)
 
     if use_global_caption_loss:
-        caption_embeddings = encode_captions_minilm(
-            captions, device=trainer.device.type
-        )
+        caption_embeddings = encode_captions_minilm(captions, device=trainer.device.type)
         collate_fn = make_caption_collate(
             collate_parcel_batch, caption_embeddings, id_key="parcel_ids"
         )
@@ -179,8 +189,12 @@ def run_one_n(
 
     proto_eval = trainer._category_prototypes
     result = faithful.eval_per_parcel(
-        trainer.student, val_ds, proto_eval, class_ids,
-        device=trainer.device, batch_size=batch_size,
+        trainer.student,
+        val_ds,
+        proto_eval,
+        class_ids,
+        device=trainer.device,
+        batch_size=batch_size,
     )
     result.best_ckpt = best_ckpt
     result.train_metrics = train_metrics
@@ -243,8 +257,7 @@ def run_parcel_sweep(
     captions = load_parcel_captions(captions_path)
     if not captions:
         raise ValueError(
-            f"no per-parcel captions in {captions_path}; run the caption "
-            "generation phase first."
+            f"no per-parcel captions in {captions_path}; run the caption generation phase first."
         )
     results = []
     rows = []
@@ -275,9 +288,7 @@ def run_parcel_sweep(
                 "macro_iou": round(result.macro_iou, 4),
                 "n_well_resolved": result.n_classes_well_resolved,
                 "n_eval_parcels": result.n_eval,
-                "dominance_ratio": (
-                    -1.0 if dominance_ratio is None else float(dominance_ratio)
-                ),
+                "dominance_ratio": (-1.0 if dominance_ratio is None else float(dominance_ratio)),
                 "best_ckpt": str(result.best_ckpt),
             }
         )
@@ -314,9 +325,7 @@ def run(
     lr: Annotated[float, typer.Option("--lr")] = 1e-5,
     seed: Annotated[int, typer.Option("--seed")] = 42,
     min_area_px: Annotated[int, typer.Option("--min-area-px")] = 16,
-    no_global_caption_loss: Annotated[
-        bool, typer.Option("--no-global-caption-loss")
-    ] = False,
+    no_global_caption_loss: Annotated[bool, typer.Option("--no-global-caption-loss")] = False,
     time_cap_hours: Annotated[float, typer.Option("--time-cap-hours")] = 8.0,
     max_patches: Annotated[int, typer.Option("--max-patches")] = 0,
     metrics_out: Annotated[Path, typer.Option("--metrics-out")] = Path(

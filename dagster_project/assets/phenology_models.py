@@ -216,9 +216,7 @@ def temporal_models_comparison(
                 "cohen_kappa": round(metrics["cohen_kappa"], 4),  # type: ignore[arg-type]
                 "train_time_s": round(metrics["train_time_s"], 2),  # type: ignore[arg-type]
                 "n_parcels": metrics["n_parcels"],
-                "delta_vs_baseline": round(
-                    float(metrics["f1_macro"]) - 0.32, 4
-                ),
+                "delta_vs_baseline": round(float(metrics["f1_macro"]) - 0.32, 4),
             }
         )
 

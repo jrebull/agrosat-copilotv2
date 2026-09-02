@@ -181,9 +181,7 @@ def _build_student() -> torch.nn.Module | None:
     ("band_selection", "expected_in"),
     [("rgb", 3), ("nir_rgb", 3), ("4band", 4)],
 )
-def test_patch_embed_channels_match_variant(
-    band_selection: str, expected_in: int
-) -> None:
+def test_patch_embed_channels_match_variant(band_selection: str, expected_in: int) -> None:
     from ml.farslip.distill import adapt_patch_embed_to_n_channels
 
     student = _build_student()

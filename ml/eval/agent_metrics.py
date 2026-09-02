@@ -243,9 +243,7 @@ def build_gemini_judge(
             logger.warning("gemini_judge_no_settings", error=str(exc))
             return None
 
-    api_key = getattr(settings, "gemini_api_key", "") or getattr(
-        settings, "google_api_key", ""
-    )
+    api_key = getattr(settings, "gemini_api_key", "") or getattr(settings, "google_api_key", "")
     if not api_key:
         logger.warning("gemini_judge_no_api_key", reason="key_not_configured")
         return None
@@ -278,9 +276,7 @@ def _normalize_text(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _extract_choice_letter(
-    text: str, valid_letters: frozenset[str] | None = None
-) -> str | None:
+def _extract_choice_letter(text: str, valid_letters: frozenset[str] | None = None) -> str | None:
     """Extract a single choice letter (``A``-``Z``) from a model answer.
 
     Tries, in order: an isolated bare letter (``"B"`` / ``"(C)"``), a labelled
@@ -331,9 +327,7 @@ def _extract_choice_letter(
     return None
 
 
-def exact_match(
-    pred: str, gold: str, valid_letters: frozenset[str] | None = None
-) -> float:
+def exact_match(pred: str, gold: str, valid_letters: frozenset[str] | None = None) -> float:
     """Exact-match score for an AgroMind multiple-choice answer.
 
     AgroMind golds are mostly a choice letter (``A``-``J`` in the real subset),
@@ -461,9 +455,7 @@ def bertscore_f1(preds: Sequence[str], golds: Sequence[str]) -> float:
     if not preds or not golds:
         return 0.0
     if len(preds) != len(golds):
-        logger.warning(
-            "bertscore_length_mismatch", n_preds=len(preds), n_golds=len(golds)
-        )
+        logger.warning("bertscore_length_mismatch", n_preds=len(preds), n_golds=len(golds))
         return 0.0
 
     model = _get_sentence_model()
@@ -473,9 +465,7 @@ def bertscore_f1(preds: Sequence[str], golds: Sequence[str]) -> float:
     return sum(scores) / len(scores) if scores else 0.0
 
 
-def tool_call_accuracy(
-    pred_calls: Sequence[str], gold_calls: Sequence[str]
-) -> float:
+def tool_call_accuracy(pred_calls: Sequence[str], gold_calls: Sequence[str]) -> float:
     """Fraction of expected tool calls present in the prediction.
 
     For copilot plan-and-react queries: measures recall of the gold tool-call
@@ -536,9 +526,7 @@ def hallucination_rate(
     return sum(scores) / len(scores)
 
 
-def codebleu_score(
-    pred_code: str, ref_code: str, *, bleu_weight: float = 0.5
-) -> float:
+def codebleu_score(pred_code: str, ref_code: str, *, bleu_weight: float = 0.5) -> float:
     """REAL CodeBLEU between predicted and reference Python code.
 
     Computes the canonical CodeBLEU via the ``codebleu`` package

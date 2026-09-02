@@ -34,18 +34,12 @@ def smoke(
     ] = None,
     n_patches: Annotated[int, typer.Option(help="Numero de patches sinteticos")] = 10,
     device: Annotated[str, typer.Option(help="Device cuda|cpu|auto")] = "auto",
-    cache_dir: Annotated[
-        Path | None, typer.Option(help="Cache dir local")
-    ] = None,
+    cache_dir: Annotated[Path | None, typer.Option(help="Cache dir local")] = None,
 ) -> None:
     """Download weights + run extract_embeddings + report diagnostics."""
-    _log.info(
-        "starting farslip smoke eval", weights_uri=weights_uri, n_patches=n_patches
-    )
+    _log.info("starting farslip smoke eval", weights_uri=weights_uri, n_patches=n_patches)
     t0 = time.monotonic()
-    extractor = FarSLIPExtractor(
-        weights_uri=weights_uri, device=device, cache_dir=cache_dir
-    )
+    extractor = FarSLIPExtractor(weights_uri=weights_uri, device=device, cache_dir=cache_dir)
     t_load = time.monotonic() - t0
 
     torch.manual_seed(42)

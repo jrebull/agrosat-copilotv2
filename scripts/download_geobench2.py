@@ -300,9 +300,7 @@ def build_task(
         if not _save_thumbnail(image_path, spec.rgb_bands, root / rel_png):
             n_skipped_thumb += 1
             continue
-        items.append(
-            {"item_id": item_id, "image_path": rel_png, "gold_label": spec.classes[dom]}
-        )
+        items.append({"item_id": item_id, "image_path": rel_png, "gold_label": spec.classes[dom]})
     logger.info(
         "geobench2_task_built",
         task=spec.task_id,
@@ -367,9 +365,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--root", default="data/geobench2", help="Directorio de salida.")
     parser.add_argument("--split", default="test", help="Split a materializar (test).")
-    parser.add_argument(
-        "--max-per-task", type=int, default=60, help="Maximo de tiles por task."
-    )
+    parser.add_argument("--max-per-task", type=int, default=60, help="Maximo de tiles por task.")
     parser.add_argument(
         "--tasks", nargs="*", default=None, help="Allow-list de task ids (default: las 3)."
     )
@@ -393,8 +389,7 @@ def main(argv: list[str] | None = None) -> int:
         n_items=n_total,
     )
     print(
-        f"GEO-Bench-2 subset escrito en {out}: "
-        f"{len(manifest['tasks'])} tasks, {n_total} tiles."  # type: ignore[arg-type]
+        f"GEO-Bench-2 subset escrito en {out}: {len(manifest['tasks'])} tasks, {n_total} tiles."  # type: ignore[arg-type]
     )
     return 0
 

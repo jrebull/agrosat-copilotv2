@@ -71,8 +71,7 @@ def class_distribution_report(
         raise ValueError(f"`df` no contiene la columna `{class_col}`.")
 
     filtered = df.filter(
-        pl.col(class_col).is_not_null()
-        & ~pl.col(class_col).is_in(list(drop_class_ids))
+        pl.col(class_col).is_not_null() & ~pl.col(class_col).is_in(list(drop_class_ids))
     )
     counts = (
         filtered.group_by(class_col)
@@ -109,9 +108,7 @@ def class_distribution_report(
 
     enriched = counts.with_columns(
         (pl.col("n_parcels") / total).alias("share"),
-        pl.col("n_parcels")
-        .map_elements(_band, return_dtype=pl.Utf8)
-        .alias("support_band"),
+        pl.col("n_parcels").map_elements(_band, return_dtype=pl.Utf8).alias("support_band"),
         pl.col("class_id")
         .map_elements(
             lambda cid: class_names.get(int(cid), f"class_{int(cid)}"),

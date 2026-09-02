@@ -54,9 +54,7 @@ _AE_2019 = "data/cache/gee/alphaearth_parcels_pastis_parcels_2019_85951.parquet"
 _EB_MEMBERS: tuple[str, ...] = ("ea-fusion", "xgb-alphaearth")
 
 
-def _reduce_ea_sidecar_to_parcel(
-    *, oof_dir: Path, pastis_root: Path
-) -> Path:
+def _reduce_ea_sidecar_to_parcel(*, oof_dir: Path, pastis_root: Path) -> Path:
     """Reduce the E-a dense fusion OOF to parcel-level (``oof_parcel_ea-fusion``).
 
     US-041 writes the dense fusion OOF ``oof_ea_fusion_fold5.parquet`` (pixel
@@ -90,22 +88,16 @@ def _reduce_ea_sidecar_to_parcel(
         )
     frame = read_softmax_parquet(dense_path)
     rows: list[pl.DataFrame] = []
-    for pid, sm in zip(
-        frame["patch_id"].to_list(), frame["softmax"].to_list(), strict=True
-    ):
+    for pid, sm in zip(frame["patch_id"].to_list(), frame["softmax"].to_list(), strict=True):
         if sm is None:
             continue
         parcel_ids_map = load_pastis_parcel_ids(str(pid), pastis_root)
         rows.append(
-            pixel_to_parcel_probs(
-                np.asarray(sm), parcel_ids_map, patch_id=str(pid), method="mean"
-            )
+            pixel_to_parcel_probs(np.asarray(sm), parcel_ids_map, patch_id=str(pid), method="mean")
         )
     table = pl.concat(rows, how="vertical") if rows else pl.DataFrame()
     table.write_parquet(parcel_path)
-    logger.info(
-        "ea_parcel_sidecar_written", path=str(parcel_path), n_parcels=table.height
-    )
+    logger.info("ea_parcel_sidecar_written", path=str(parcel_path), n_parcels=table.height)
     return parcel_path
 
 
@@ -119,9 +111,7 @@ def run(
     out_dir: Annotated[Path, typer.Option("--out-dir")] = Path("reports/ensemble"),
     meta: Annotated[str, typer.Option("--meta", help="logreg | xgb")] = "logreg",
     n_spatial_folds: Annotated[int, typer.Option("--n-spatial-folds")] = 5,
-    materialize_xgb: Annotated[
-        bool, typer.Option("--materialize-xgb/--no-materialize-xgb")
-    ] = True,
+    materialize_xgb: Annotated[bool, typer.Option("--materialize-xgb/--no-materialize-xgb")] = True,
     use_mlflow: Annotated[bool, typer.Option("--use-mlflow/--no-mlflow")] = True,
     random_state: Annotated[int, typer.Option("--random-state")] = 42,
 ) -> None:
@@ -170,8 +160,11 @@ def run(
 
     # Honest comparison vs E-a alone (the parcel-reduced E-a OOF, single member).
     ea_metrics = _ea_alone_metrics(
-        oof_dir=oof_dir, parcel_geoms=parcel_geoms, parcel_gt=parcel_gt,
-        n_spatial_folds=n_spatial_folds, random_state=random_state,
+        oof_dir=oof_dir,
+        parcel_geoms=parcel_geoms,
+        parcel_gt=parcel_gt,
+        n_spatial_folds=n_spatial_folds,
+        random_state=random_state,
     )
     gain = eb_metrics.get("f1_macro", 0.0) - ea_metrics.get("f1_macro", 0.0)
 

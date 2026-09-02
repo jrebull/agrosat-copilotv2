@@ -196,16 +196,8 @@ def _aggregate_dense_to_parcel_oof(
     preds = load_member_softmax(member, Path(str(summary["softmax_path"])))
     test_pids = set(preds.probs_by_patch)
     patches = load_italia_patches(italia_root=italia_root, n_timesteps=n_timesteps)
-    masks = {
-        pid: patches.masks[i]
-        for i, pid in enumerate(patches.patch_ids)
-        if pid in test_pids
-    }
-    folds = {
-        pid: patches.folds[i]
-        for i, pid in enumerate(patches.patch_ids)
-        if pid in test_pids
-    }
+    masks = {pid: patches.masks[i] for i, pid in enumerate(patches.patch_ids) if pid in test_pids}
+    folds = {pid: patches.folds[i] for i, pid in enumerate(patches.patch_ids) if pid in test_pids}
     aggregation = aggregate_dense_member_to_parcel(
         member,
         preds.probs_by_patch,
@@ -532,8 +524,7 @@ def _run_pixel_vote(args: argparse.Namespace) -> None:
     )
     label_space = build_italia_label_space(italia_root=args.italia_root)
     member_preds = {
-        m: load_member_softmax(m, Path(str(s["softmax_path"])))
-        for m, s in member_summaries.items()
+        m: load_member_softmax(m, Path(str(s["softmax_path"]))) for m, s in member_summaries.items()
     }
     vote = ItaliaPixelVotingEnsemble(
         members=tuple(members),

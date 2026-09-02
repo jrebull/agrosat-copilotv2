@@ -137,9 +137,7 @@ def build_spatial_kfold(
     if "parcel_id" not in parcels.columns:
         raise ValueError("`parcels` must contain the `parcel_id` column.")
     if parcels.geometry.name not in parcels.columns:
-        raise ValueError(
-            "`parcels` must have an active geometry (parcels.set_geometry('geom'))."
-        )
+        raise ValueError("`parcels` must have an active geometry (parcels.set_geometry('geom')).")
     if parcels.crs is None:
         logger.warning("spatial_kfold_crs_missing", note="Asumiendo EPSG:4326")
         parcels = parcels.set_crs("EPSG:4326")
@@ -265,9 +263,7 @@ def _assign_h3_cell(centroid: Point, h3_res: int) -> str:
     elif hasattr(h3, "geo_to_h3"):  # h3-py 3.x fallback
         fn = h3.geo_to_h3
     else:  # pragma: no cover
-        raise ImportError(
-            "h3-py exposes an unknown API; neither `latlng_to_cell` nor `geo_to_h3`."
-        )
+        raise ImportError("h3-py exposes an unknown API; neither `latlng_to_cell` nor `geo_to_h3`.")
     return str(fn(lat, lng, h3_res))
 
 
@@ -335,8 +331,7 @@ def _apply_buffer_exclusion(
         if cross_fold.any():
             # Real metric distance with equirectangular.
             dist_km = np.sqrt(
-                (dlon[cross_fold] / deg_per_km_lon) ** 2
-                + (dlat[cross_fold] / deg_per_km_lat) ** 2
+                (dlon[cross_fold] / deg_per_km_lon) ** 2 + (dlat[cross_fold] / deg_per_km_lat) ** 2
             )
             if (dist_km < buffer_km).any():
                 # Exclude the current parcel and its neighbors within the buffer.

@@ -488,7 +488,7 @@ def _build_cells() -> list:
             "F1-macro promedio reteniendo los K cultivos mejor resueltos.",
             "**Interpretación**: el modelo resuelve **muy bien ~8 cultivos** (F1-macro 0,90, "
             "cubriendo el 80 % de las parcelas) y **bien hasta ~12** (F1-macro 0,86, 90 % de las "
-            "parcelas). El \"codo\" indica que el grueso del valor de negocio se captura con los "
+            'parcelas). El "codo" indica que el grueso del valor de negocio se captura con los '
             "12 cultivos principales; las últimas seis clases raras son las que bajan el promedio "
             "global a 0,749.",
         ),
@@ -563,9 +563,7 @@ def _build_cells() -> list:
         )
     )
 
-    cells.append(
-        md("### Blending-3 (subcampeón) en acción")
-    )
+    cells.append(md("### Blending-3 (subcampeón) en acción"))
     cells.append(
         code(
             "for _pid in ['40039', '40005', '40175']:\n"
@@ -585,9 +583,7 @@ def _build_cells() -> list:
         )
     )
 
-    cells.append(
-        md("### Stacking-5/fullm (no ganador) en acción")
-    )
+    cells.append(md("### Stacking-5/fullm (no ganador) en acción"))
     cells.append(
         code(
             "for _pid in ['40039', '40005', '40175']:\n"

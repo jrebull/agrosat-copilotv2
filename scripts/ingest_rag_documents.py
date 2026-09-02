@@ -160,9 +160,7 @@ def _build_documents(
     if "description" not in captions.columns:
         raise ValueError("captions parquet is missing the `description` column.")
 
-    feature_cols = [
-        f"{_ALPHAEARTH_PREFIX}{i:02d}" for i in range(_EMBED_DIM)
-    ]
+    feature_cols = [f"{_ALPHAEARTH_PREFIX}{i:02d}" for i in range(_EMBED_DIM)]
     features = pl.read_parquet(_FEATURES_PATH)
     missing = [c for c in (*feature_cols, "parcel_id", "fold") if c not in features.columns]
     if missing:
@@ -170,9 +168,8 @@ def _build_documents(
 
     # Keep one embedding row per parcel_id (the corpus is per-parcel; a parcel may
     # appear once per year, so collapse to the first occurrence deterministically).
-    features = (
-        features.select(["parcel_id", "fold", *feature_cols])
-        .unique(subset=["parcel_id"], keep="first")
+    features = features.select(["parcel_id", "fold", *feature_cols]).unique(
+        subset=["parcel_id"], keep="first"
     )
 
     # Left join keeps every captioned parcel; embeddings are attached where present.
@@ -201,9 +198,7 @@ def _build_documents(
         geom_geojson = geom_by_patch.get(patch_id) if patch_id is not None else None
         if geom_geojson is None:
             skipped_no_geom += 1
-            logger.warning(
-                "ingest_rag_skip_no_geom", parcel_id=parcel_id, patch_id=patch_id
-            )
+            logger.warning("ingest_rag_skip_no_geom", parcel_id=parcel_id, patch_id=patch_id)
             continue
 
         documents.append(

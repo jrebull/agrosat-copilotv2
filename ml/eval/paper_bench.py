@@ -596,9 +596,7 @@ def _cost_per_query(
         The estimated USD cost per query, or NaN when it cannot be derived.
     """
     price = _TOKEN_PRICE_USD_PER_M.get(variant.model)
-    if price is not None and not (
-        _is_nan(mean_prompt_tokens) or _is_nan(mean_completion_tokens)
-    ):
+    if price is not None and not (_is_nan(mean_prompt_tokens) or _is_nan(mean_completion_tokens)):
         in_usd, out_usd = price
         return (mean_prompt_tokens * in_usd + mean_completion_tokens * out_usd) / 1_000_000.0
     # On-prem variant: amortised GPU-hour cost scaled by wall-clock latency.
@@ -786,9 +784,7 @@ async def eval_geobench2(
     exact = (sum(em_scores) / n) if (n and not too_few) else math.nan
     f1 = macro_f1(pred_classes, gold_classes, label_union) if (n and not too_few) else math.nan
     bert = (
-        agent_metrics.bertscore_f1(pred_classes, gold_classes)
-        if (n and not too_few)
-        else math.nan
+        agent_metrics.bertscore_f1(pred_classes, gold_classes) if (n and not too_few) else math.nan
     )
     p50, p95 = _percentiles(latencies_ms)
     logger.info(
@@ -1073,13 +1069,21 @@ def _run_one(
     if benchmark == "AgroMind":
         return asyncio.run(
             eval_agromind(
-                variant, agromind_items, backend=backend, judge=judge, seed=seed,
+                variant,
+                agromind_items,
+                backend=backend,
+                judge=judge,
+                seed=seed,
                 image_root=image_root,
             )
         )
     return asyncio.run(
         eval_agromind_itses(
-            variant, itses_items, backend=backend, judge=judge, seed=seed,
+            variant,
+            itses_items,
+            backend=backend,
+            judge=judge,
+            seed=seed,
             image_root=itses_image_root,
         )
     )
@@ -1162,12 +1166,8 @@ def run_paper_benchmark(
         "pending": [benchmark, ...], "targets": {...}}``.
     """
     backends = backends or {}
-    geobench_items = load_geobench2(
-        geobench_root, tasks=geobench_tasks, max_per_task=max_per_task
-    )
-    agromind_items = (
-        load_agromind_subset(agromind_path) if Path(agromind_path).exists() else []
-    )
+    geobench_items = load_geobench2(geobench_root, tasks=geobench_tasks, max_per_task=max_per_task)
+    agromind_items = load_agromind_subset(agromind_path) if Path(agromind_path).exists() else []
     itses_items = load_agromind_itses(itses_path)
 
     # Optional REAL subset cap (US-069): when running all 3 seeds end-to-end the
@@ -1423,9 +1423,7 @@ def export_latex_table(out: dict[str, Any], path: Path) -> Path:
         for b in BENCHMARKS
     )
     pending_clause = (
-        f" Benchmarks pendientes (sin datos a la fecha): {', '.join(pending)}."
-        if pending
-        else ""
+        f" Benchmarks pendientes (sin datos a la fecha): {', '.join(pending)}." if pending else ""
     )
     caption = (
         "Comparativa multi-benchmark de los dos reasoners frozen del copiloto "
@@ -1616,35 +1614,52 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="Variantes a evaluar (por defecto gemini y qwen).",
     )
     parser.add_argument(
-        "--seeds", nargs="+", type=int, default=[0, 1, 2],
+        "--seeds",
+        nargs="+",
+        type=int,
+        default=[0, 1, 2],
         help="Seeds de evaluacion para las barras de error (por defecto 0 1 2).",
     )
     parser.add_argument(
-        "--geobench-root", type=Path, default=DEFAULT_GEOBENCH_ROOT,
+        "--geobench-root",
+        type=Path,
+        default=DEFAULT_GEOBENCH_ROOT,
         help="Raiz del subset agricola de GEO-Bench-2 (con manifest.json).",
     )
     parser.add_argument(
-        "--agromind-path", type=Path, default=DEFAULT_AGROMIND_PATH,
+        "--agromind-path",
+        type=Path,
+        default=DEFAULT_AGROMIND_PATH,
         help="Ruta al subset JSON de AgroMind.",
     )
     parser.add_argument(
-        "--itses-path", type=Path, default=DEFAULT_ITSES_PATH,
+        "--itses-path",
+        type=Path,
+        default=DEFAULT_ITSES_PATH,
         help="Ruta al JSONL de AgroMind-IT/ES (US-068).",
     )
     parser.add_argument(
-        "--itses-image-root", type=Path, default=DEFAULT_ITSES_IMAGE_ROOT,
+        "--itses-image-root",
+        type=Path,
+        default=DEFAULT_ITSES_IMAGE_ROOT,
         help="Carpeta base de los tiles de AgroMind-IT/ES (por defecto data/s2_italia).",
     )
     parser.add_argument(
-        "--geobench-tasks", nargs="+", default=None,
+        "--geobench-tasks",
+        nargs="+",
+        default=None,
         help="Allow-list de tasks agricolas de GEO-Bench-2 (>=3).",
     )
     parser.add_argument(
-        "--max-per-task", type=int, default=0,
+        "--max-per-task",
+        type=int,
+        default=0,
         help="Limite de items por task de GEO-Bench-2 (0 = todos).",
     )
     parser.add_argument(
-        "--max-items", type=int, default=0,
+        "--max-items",
+        type=int,
+        default=0,
         help=(
             "Limite de items de AgroMind / AgroMind-IT/ES para una corrida subset "
             "REAL acotada (0 = corpus completo). Las metricas siguen siendo reales "
@@ -1652,12 +1667,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
-        "--out-latex", type=Path,
+        "--out-latex",
+        type=Path,
         default=Path("paper/tables/us-069/benchmark_comparison.tex"),
         help="Ruta de salida de la tabla LaTeX.",
     )
     parser.add_argument(
-        "--checkpoint", type=Path, default=None,
+        "--checkpoint",
+        type=Path,
+        default=None,
         help="Ruta del checkpoint JSON; cada variante se persiste al terminar.",
     )
     parser.add_argument("--resume", action="store_true", help="Reanudar desde el checkpoint.")

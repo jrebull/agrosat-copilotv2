@@ -73,13 +73,15 @@ def _extract_all_centroids(metadata_geojson: Path) -> pl.DataFrame:
         pid = props.get("ID_PATCH") or feat.get("id")
         if pid is None:
             continue
-        rows.append({
-            "px_id": str(pid),
-            "lon": float(lon),
-            "lat": float(lat),
-            "tile": str(props.get("TILE", "")),
-            "fold": int(props.get("Fold", 0) or 0),
-        })
+        rows.append(
+            {
+                "px_id": str(pid),
+                "lon": float(lon),
+                "lat": float(lat),
+                "tile": str(props.get("TILE", "")),
+                "fold": int(props.get("Fold", 0) or 0),
+            }
+        )
 
     return pl.DataFrame(rows)
 

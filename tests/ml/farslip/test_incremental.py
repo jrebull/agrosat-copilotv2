@@ -123,9 +123,7 @@ def test_strict_false_transfers_encoder(
             p.add_(torch.randn_like(p) * 0.01)
 
     stage1_trainer.config.output_dir = tmp_path
-    ckpt_path = Path(
-        stage1_trainer.save_student(format="safetensors", suffix="best")
-    )
+    ckpt_path = Path(stage1_trainer.save_student(format="safetensors", suffix="best"))
 
     saved_state = _load_student_state_dict(ckpt_path)
     # The text prototypes live OUTSIDE the student state_dict (plain attribute),
@@ -139,9 +137,7 @@ def test_strict_false_transfers_encoder(
     pe_key = "embeddings.patch_embedding.weight"
     block_key = "encoder.layers.0.self_attn.q_proj.weight"
     assert pe_key in saved_state and block_key in saved_state
-    assert not torch.allclose(
-        stage2_trainer.student.state_dict()[pe_key], saved_state[pe_key]
-    )
+    assert not torch.allclose(stage2_trainer.student.state_dict()[pe_key], saved_state[pe_key])
 
     incompatible = stage2_trainer.student.load_state_dict(saved_state, strict=False)
     assert list(incompatible.missing_keys) == [], (
@@ -242,9 +238,7 @@ class _SpyTrainer:
         self.train_called = False
         self.student = self  # so trainer.student.load_state_dict resolves here
 
-    def load_state_dict(
-        self, state_dict: dict[str, torch.Tensor], strict: bool = True
-    ) -> Any:
+    def load_state_dict(self, state_dict: dict[str, torch.Tensor], strict: bool = True) -> Any:
         self.load_called = True
 
         class _Incompatible:
@@ -265,9 +259,7 @@ class _SpyTrainer:
 
 
 @pytest.fixture()
-def patched_run_stage(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> dict[str, Any]:
+def patched_run_stage(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> dict[str, Any]:
     """Patches ``create_incremental_dataset`` + the trainer in train_incremental.
 
     Returns a holder that captures the constructed ``_SpyTrainer`` so tests can
@@ -308,9 +300,7 @@ def patched_run_stage(
     return captured
 
 
-def test_from_scratch_skips_warmstart(
-    patched_run_stage: dict[str, Any], tmp_path: Path
-) -> None:
+def test_from_scratch_skips_warmstart(patched_run_stage: dict[str, Any], tmp_path: Path) -> None:
     """``from_scratch=True`` must NOT call ``load_state_dict`` on the ckpt."""
     stage_dir = tmp_path / "stage2"
     stage_dir.mkdir()
@@ -463,9 +453,7 @@ class _CkptSpyTrainer(_SpyTrainer):
         return super().train()
 
 
-def test_train_runs_both_stages(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_train_runs_both_stages(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     """``train()`` orchestrates Stage-1 (4) -> warm-start -> Stage-2 (18).
 
     Mocks ``create_incremental_dataset`` and the trainer so the command exercises
@@ -480,9 +468,7 @@ def test_train_runs_both_stages(
 
     proto = torch.randn(18, 384)
 
-    def _fake_create(
-        n_classes: int, **_kwargs: Any
-    ) -> tuple[Any, int, int, torch.Tensor]:
+    def _fake_create(n_classes: int, **_kwargs: Any) -> tuple[Any, int, int, torch.Tensor]:
         ds = [
             {
                 "image": torch.rand(4, 224, 224),
@@ -537,9 +523,7 @@ def test_train_from_scratch_skips_stage2_warmstart(
 
     proto = torch.randn(18, 384)
 
-    def _fake_create(
-        n_classes: int, **_kwargs: Any
-    ) -> tuple[Any, int, int, torch.Tensor]:
+    def _fake_create(n_classes: int, **_kwargs: Any) -> tuple[Any, int, int, torch.Tensor]:
         ds = [
             {
                 "image": torch.rand(4, 224, 224),

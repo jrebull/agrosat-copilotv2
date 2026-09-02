@@ -166,6 +166,7 @@ def resolve_xgb_device() -> str:
         return "cuda"
     return "cpu"
 
+
 # Light tuning grids (criterion AC-4): 8 combinations per model.
 # `max_depth` and `min_samples_leaf` bounded: avoids the ~700 MB RF and the
 # overfitting of unpruned trees (see _RF_BASE_PARAMS).
@@ -583,9 +584,7 @@ def evaluate_with_spatial_cv(
         )
         # `fit_scaler_on_train` may drop all-NaN columns: we align the
         # matrix to the columns the scaler knows before `transform`.
-        col_idx = np.array(
-            [feature_cols.index(c) for c in scaler_cols], dtype=np.int64
-        )
+        col_idx = np.array([feature_cols.index(c) for c in scaler_cols], dtype=np.int64)
         raw_train = matrix[np.ix_(train_idx, col_idx)]
         raw_test = matrix[np.ix_(test_idx, col_idx)]
         # Anti-leakage imputation: the medians are computed only over train.
@@ -606,9 +605,7 @@ def evaluate_with_spatial_cv(
             estimator.fit(x_train, y_train)
         y_pred = estimator.predict(x_test)
 
-        fold_metrics = compute_baseline_metrics(
-            y_test, y_pred, labels=list(range(n_classes))
-        )
+        fold_metrics = compute_baseline_metrics(y_test, y_pred, labels=list(range(n_classes)))
         per_fold.append(fold_metrics)
         y_true_chunks.append(y_test)
         y_pred_chunks.append(np.asarray(y_pred))
@@ -619,12 +616,8 @@ def evaluate_with_spatial_cv(
         )
 
     cv_metrics = _aggregate_fold_metrics(per_fold)
-    y_true_oof = (
-        np.concatenate(y_true_chunks) if y_true_chunks else np.array([], dtype=np.int64)
-    )
-    y_pred_oof = (
-        np.concatenate(y_pred_chunks) if y_pred_chunks else np.array([], dtype=np.int64)
-    )
+    y_true_oof = np.concatenate(y_true_chunks) if y_true_chunks else np.array([], dtype=np.int64)
+    y_pred_oof = np.concatenate(y_pred_chunks) if y_pred_chunks else np.array([], dtype=np.int64)
     return cv_metrics, y_true_oof, y_pred_oof
 
 
@@ -677,13 +670,10 @@ def _prepare_dataframe(df: pl.DataFrame) -> pl.DataFrame:
             raise ValueError(f"`df` debe contener la columna obligatoria `{col}`.")
 
     clean = df.filter(
-        pl.col("class_id").is_not_null()
-        & ~pl.col("class_id").is_in(list(_DROP_CLASS_IDS))
+        pl.col("class_id").is_not_null() & ~pl.col("class_id").is_in(list(_DROP_CLASS_IDS))
     )
     if clean.height == 0:
-        raise ValueError(
-            "Tras descartar las clases no agronomicas el DataFrame quedo vacio."
-        )
+        raise ValueError("Tras descartar las clases no agronomicas el DataFrame quedo vacio.")
 
     # The real dataset carries +/-inf in some spectral slopes/ratios;
     # we normalize them to null so the scaler (which only handles NaN) and the
@@ -691,10 +681,7 @@ def _prepare_dataframe(df: pl.DataFrame) -> pl.DataFrame:
     float_cols = [c for c in clean.columns if clean.schema[c] in (pl.Float32, pl.Float64)]
     if float_cols:
         clean = clean.with_columns(
-            pl.when(pl.col(c).is_infinite())
-            .then(None)
-            .otherwise(pl.col(c))
-            .alias(c)
+            pl.when(pl.col(c).is_infinite()).then(None).otherwise(pl.col(c)).alias(c)
             for c in float_cols
         )
     return clean
@@ -717,9 +704,7 @@ def _feature_columns(df: pl.DataFrame) -> tuple[str, ...]:
     cols = [
         c
         for c in df.columns
-        if c not in _META_COLS
-        and not c.endswith(_META_SUFFIXES)
-        and df.schema[c].is_numeric()
+        if c not in _META_COLS and not c.endswith(_META_SUFFIXES) and df.schema[c].is_numeric()
     ]
     if not cols:
         raise ValueError("No se encontraron columnas numericas de feature en `df`.")
@@ -778,9 +763,7 @@ def _default_grid(model: ModelKind) -> dict[str, list]:
     elif model == "lgbm":
         grid = _LGBM_PARAM_GRID
     else:
-        raise ValueError(
-            f"`model` debe ser 'rf', 'xgb' o 'lgbm'; recibido {model!r}."
-        )
+        raise ValueError(f"`model` debe ser 'rf', 'xgb' o 'lgbm'; recibido {model!r}.")
     return {k: list(v) for k, v in grid.items()}
 
 
@@ -887,10 +870,7 @@ def _spatial_folds_cache_path(
     any change invalidates the cache and forces a recompute.
     """
     buffer_tag = f"{buffer_km:g}".replace(".", "p")
-    name = (
-        f"baseline_spatial_folds_n{n_rows}_k{k_folds}"
-        f"_b{buffer_tag}_s{random_state}.parquet"
-    )
+    name = f"baseline_spatial_folds_n{n_rows}_k{k_folds}_b{buffer_tag}_s{random_state}.parquet"
     return _SPATIAL_FOLDS_CACHE_DIR / name
 
 
@@ -908,16 +888,12 @@ def _load_cached_cv_splits(path: Path) -> list[tuple[np.ndarray, np.ndarray]] | 
         fold_df = cached.filter(pl.col("fold") == fold_idx)
         train_idx = fold_df.filter(pl.col("split") == "train")["idx"].to_numpy()
         test_idx = fold_df.filter(pl.col("split") == "test")["idx"].to_numpy()
-        splits.append(
-            (train_idx.astype(np.int64), test_idx.astype(np.int64))
-        )
+        splits.append((train_idx.astype(np.int64), test_idx.astype(np.int64)))
     logger.info("spatial_folds_cache_hit", path=str(path), n_folds=len(splits))
     return splits
 
 
-def _save_cached_cv_splits(
-    path: Path, splits: list[tuple[np.ndarray, np.ndarray]]
-) -> None:
+def _save_cached_cv_splits(path: Path, splits: list[tuple[np.ndarray, np.ndarray]]) -> None:
     """Persist the spatial splits to parquet for future runs."""
     rows: list[dict[str, object]] = []
     for fold_idx, (train_idx, test_idx) in enumerate(splits):
@@ -959,9 +935,7 @@ def _build_cv_splits(
         List of tuples ``(train_idx, test_idx)`` of positional index
         arrays, one per fold with samples on both sides.
     """
-    cache_path = _spatial_folds_cache_path(
-        df.height, k_folds, buffer_km, random_state
-    )
+    cache_path = _spatial_folds_cache_path(df.height, k_folds, buffer_km, random_state)
     if use_cache:
         cached = _load_cached_cv_splits(cache_path)
         if cached is not None:
@@ -988,9 +962,7 @@ def _build_cv_splits(
     for fold in folds:
         # train_ids of the FoldAssignment already equal positional indices
         # because the GeoDataFrame uses the position as a synthetic `parcel_id`.
-        train_pool = np.array(
-            sorted(fold.train_ids) + sorted(fold.val_ids), dtype=np.int64
-        )
+        train_pool = np.array(sorted(fold.train_ids) + sorted(fold.val_ids), dtype=np.int64)
         test_idx = np.array(sorted(fold.test_ids), dtype=np.int64)
         if train_pool.size == 0 or test_idx.size == 0:
             continue
@@ -1052,19 +1024,13 @@ def _build_parcels_geodataframe(df: pl.DataFrame):  # type: ignore[no-untyped-de
             n_missing=int(missing.sum()),
             note="metadata.geojson ausente o incompleto; rejilla determinista por patch.",
         )
-        key = (
-            df.get_column("patch_id").to_numpy()
-            if "patch_id" in df.columns
-            else positions
-        )
+        key = df.get_column("patch_id").to_numpy() if "patch_id" in df.columns else positions
         rng = np.random.default_rng(20240519)
         # Centroids in a box over continental France (PASTIS-R).
         grid = rng.uniform(low=[-1.0, 43.0], high=[7.0, 49.0], size=(n_rows, 2))
         # Ensure that parcels from the same patch share a centroid.
         unique_keys, inverse = np.unique(key, return_inverse=True)
-        per_key = rng.uniform(
-            low=[-1.0, 43.0], high=[7.0, 49.0], size=(unique_keys.size, 2)
-        )
+        per_key = rng.uniform(low=[-1.0, 43.0], high=[7.0, 49.0], size=(unique_keys.size, 2))
         grid = per_key[inverse]
         coords[missing] = grid[missing]
 

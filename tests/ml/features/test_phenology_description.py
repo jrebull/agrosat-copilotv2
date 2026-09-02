@@ -85,12 +85,8 @@ def test_generate_description_uses_cache_on_second_call(
         return "Descripcion cacheable."
 
     set_llm_client(mock_client)
-    desc1 = generate_phenology_description(
-        synthetic_ndvi_curve, parcel_id=99, cache_dir=tmp_path
-    )
-    desc2 = generate_phenology_description(
-        synthetic_ndvi_curve, parcel_id=99, cache_dir=tmp_path
-    )
+    desc1 = generate_phenology_description(synthetic_ndvi_curve, parcel_id=99, cache_dir=tmp_path)
+    desc2 = generate_phenology_description(synthetic_ndvi_curve, parcel_id=99, cache_dir=tmp_path)
     assert desc1 == desc2
     assert n_calls["count"] == 1  # segundo call: cache hit, no llamada LLM.
 
@@ -100,9 +96,7 @@ def test_generate_description_temperature_nonzero_raises(
 ) -> None:
     set_llm_client(lambda p, **_: "no debe llegar aqui")
     with pytest.raises(ValueError, match="temperature"):
-        generate_phenology_description(
-            synthetic_ndvi_curve, temperature=0.7, cache_dir=tmp_path
-        )
+        generate_phenology_description(synthetic_ndvi_curve, temperature=0.7, cache_dir=tmp_path)
 
 
 def test_generate_description_empty_curve_raises(tmp_path: Path) -> None:
@@ -114,9 +108,7 @@ def test_generate_description_empty_curve_raises(tmp_path: Path) -> None:
 def test_generate_description_nd_curve_raises(tmp_path: Path) -> None:
     set_llm_client(lambda p, **_: "")
     with pytest.raises(ValueError, match="1D"):
-        generate_phenology_description(
-            np.zeros((10, 10), dtype=np.float64), cache_dir=tmp_path
-        )
+        generate_phenology_description(np.zeros((10, 10), dtype=np.float64), cache_dir=tmp_path)
 
 
 def test_generate_description_handles_nan_in_curve(tmp_path: Path) -> None:
@@ -303,9 +295,7 @@ def test_build_phenology_text_block_calls_llm_per_row(tmp_path: Path) -> None:
                 "parcel_id": list(range(n)),
                 "year": [2019] * n,
                 **{f"NDVI_fft_amp_{k}": rng.normal(size=n).tolist() for k in range(4)},
-                **{
-                    f"NDVI_fft_phase_{k}": rng.normal(size=n).tolist() for k in range(4)
-                },
+                **{f"NDVI_fft_phase_{k}": rng.normal(size=n).tolist() for k in range(4)},
             }
         )
         block = build_phenology_text_block(

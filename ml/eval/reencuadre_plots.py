@@ -88,9 +88,7 @@ def plot_ablation_bars(
     # Group by model keeping the stable order of appearance.
     by_model: dict[str, list[tuple[str, float]]] = {}
     for r in results:
-        by_model.setdefault(r.model_kind, []).append(
-            (r.feature_set, float(getattr(r, metric)))
-        )
+        by_model.setdefault(r.model_kind, []).append((r.feature_set, float(getattr(r, metric))))
 
     fig, ax = plt.subplots(figsize=figsize, dpi=110)
 
@@ -127,9 +125,7 @@ def plot_ablation_bars(
                 fontsize=9,
             )
         ax.set_xlabel(metric.replace("_", "-"))
-        ax.set_title(
-            title or f"{metric.replace('_', '-')} por conjunto de features ({model_kind})"
-        )
+        ax.set_title(title or f"{metric.replace('_', '-')} por conjunto de features ({model_kind})")
     else:
         # Several models: bars grouped vertically.
         feature_sets: list[str] = []
@@ -277,9 +273,7 @@ def plot_class_support_bars(
         Matplotlib figure.
     """
     if class_col not in class_counts.columns or count_col not in class_counts.columns:
-        raise ValueError(
-            f"`class_counts` must contain `{class_col}` and `{count_col}`."
-        )
+        raise ValueError(f"`class_counts` must contain `{class_col}` and `{count_col}`.")
 
     ordered = class_counts.sort(count_col, descending=False)
     labels = [str(v) for v in ordered[class_col].to_list()]
@@ -353,10 +347,7 @@ def plot_per_class_f1(
         zero_division=0,
     )
     ordered = sorted(zip(labels_list, per_class, strict=True), key=lambda kv: kv[1])
-    y_labels = [
-        (class_names.get(cid, str(cid)) if class_names else str(cid))
-        for cid, _ in ordered
-    ]
+    y_labels = [(class_names.get(cid, str(cid)) if class_names else str(cid)) for cid, _ in ordered]
     values = [float(v) for _, v in ordered]
     colors = ["#C44E52" if v < weak_threshold else "#55A868" for v in values]
 
@@ -404,9 +395,7 @@ def plot_umap_clusters(
     if emb.ndim != 2 or emb.shape[1] != 2:
         raise ValueError(f"`embedding` must be (N, 2), got {emb.shape}.")
     if emb.shape[0] != labels.shape[0]:
-        raise ValueError(
-            f"Shape mismatch: embedding={emb.shape}, labels={labels.shape}."
-        )
+        raise ValueError(f"Shape mismatch: embedding={emb.shape}, labels={labels.shape}.")
 
     fig, ax = plt.subplots(figsize=figsize, dpi=110)
     n_clusters = int(labels.max()) + 1 if labels.size > 0 else 1
@@ -474,9 +463,7 @@ def plot_cluster_ndvi_curves(
 
     if fft_cols is None:
         cols = [
-            c
-            for c in df.columns
-            if c.startswith("NDVI_fft_amp") or c.startswith("NDVI_fft_phase")
+            c for c in df.columns if c.startswith("NDVI_fft_amp") or c.startswith("NDVI_fft_phase")
         ]
         fft_cols = tuple(sorted(cols))
 
@@ -764,10 +751,7 @@ def plot_confusion_matrix_heatmap(
         normalize=cm_norm,  # type: ignore[arg-type]
     )
 
-    names = [
-        (class_names.get(cid, str(cid)) if class_names else str(cid))
-        for cid in labels_list
-    ]
+    names = [(class_names.get(cid, str(cid)) if class_names else str(cid)) for cid in labels_list]
 
     fig, ax = plt.subplots(figsize=figsize, dpi=110)
     im = ax.imshow(cm, cmap=cmap, aspect="auto")
@@ -833,8 +817,7 @@ def plot_model_comparison_v2_with_v1_overlay(
     models = list(v2_metrics)
     values_v2 = [float(v2_metrics[m]) for m in models]
     values_v1 = [
-        float(v1_metrics[m]) if v1_metrics is not None and m in v1_metrics else None
-        for m in models
+        float(v1_metrics[m]) if v1_metrics is not None and m in v1_metrics else None for m in models
     ]
 
     fig, ax = plt.subplots(figsize=figsize, dpi=110)

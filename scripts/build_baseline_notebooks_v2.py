@@ -1259,7 +1259,7 @@ def build_04_baseline() -> dict[str, Any]:
             "    csv_path = env.reports_dir / f'feature_importance_{kind}.csv'\n"
             "    table.write_csv(csv_path)\n"
             "    display(Markdown(\n"
-            "        f'**Importancia nativa `{kind}`** ({\"Gini\" if kind == \"rf\" else \"gain\"}). '\n"
+            '        f\'**Importancia nativa `{kind}`** ({"Gini" if kind == "rf" else "gain"}). \'\n'
             "        f'Guardada en `{csv_path.relative_to(env.repo)}`.'\n"
             "    ))\n"
             "    display(table.head(TOP_FEATURES_DISPLAY))\n"
@@ -2241,11 +2241,7 @@ def build_04_farslip_eval_pastis() -> dict[str, Any]:
         )
     )
 
-    cells.append(
-        _md(
-            "## Separabilidad lineal con regresión logística sobre cada espacio"
-        )
-    )
+    cells.append(_md("## Separabilidad lineal con regresión logística sobre cada espacio"))
 
     cells.append(
         _code(
@@ -2503,10 +2499,10 @@ def build_05_reencuadre() -> dict[str, Any]:
             'PARCELS_GEOPARQUET = "data/processed/pastis_parcels_full.geoparquet"\n'
             'FUSED_PATH = "data/features/features_fused_pastis.parquet"\n'
             'PHENO_TEXT_PATH = "data/features/phenology_text_pastis.parquet"\n'
-            '# Output paths renombrados a _pastis_2019 en US-023-preview v2: los\n'
-            '# parquets viejos (_italy) eran cache vacio (NaN al 100%) por el\n'
-            '# bug B04 vs B4 en GEE y fallback DOY estatico. Los nuevos usan\n'
-            '# bandas correctas + anclas calendario por parcela.\n'
+            "# Output paths renombrados a _pastis_2019 en US-023-preview v2: los\n"
+            "# parquets viejos (_italy) eran cache vacio (NaN al 100%) por el\n"
+            "# bug B04 vs B4 en GEE y fallback DOY estatico. Los nuevos usan\n"
+            "# bandas correctas + anclas calendario por parcela.\n"
             'S2_ANCHORS_PATH = "data/features/s2_anchors_pastis_2019.parquet"\n'
             'SPECTRAL_SIGNATURE_PATH = "data/features/spectral_signature_pastis_2019.parquet"\n'
             'FARSLIP_PATH = "data/farslip/embeddings_pastis.parquet"\n'
@@ -2621,7 +2617,9 @@ def build_05_reencuadre() -> dict[str, Any]:
         )
     )
 
-    cells.append(_md("## Materialización del bloque `pheno_text` (Gemini sobre el dataset completo)"))
+    cells.append(
+        _md("## Materialización del bloque `pheno_text` (Gemini sobre el dataset completo)")
+    )
 
     cells.append(
         _code(
@@ -2645,10 +2643,7 @@ def build_05_reencuadre() -> dict[str, Any]:
     )
 
     cells.append(
-        _md(
-            "## Materialización de anclas Sentinel-2 y firma espectral REP "
-            "(Frampton 2013)"
-        )
+        _md("## Materialización de anclas Sentinel-2 y firma espectral REP (Frampton 2013)")
     )
 
     cells.append(
@@ -2840,7 +2835,9 @@ def build_05_reencuadre() -> dict[str, Any]:
         )
     )
 
-    cells.append(_md("### 3.1 Gráficos: ablación completa, fuga geométrica y aporte de bloques opcionales"))
+    cells.append(
+        _md("### 3.1 Gráficos: ablación completa, fuga geométrica y aporte de bloques opcionales")
+    )
 
     cells.append(
         _code(
@@ -3670,7 +3667,7 @@ def build_avance3() -> dict[str, Any]:
             "    best_row = comparison_temporal.row(0, named=True)\n"
             "    display(Markdown(\n"
             "        f'**Modelo ganador del Avance 3**: `{best_row[\"model\"]}` '\n"
-            "        f'(familia: `{best_row[\"family\"]}`) con F1-macro = `{best_row[\"f1_macro\"]:.4f}`.'\n"
+            '        f\'(familia: `{best_row["family"]}`) con F1-macro = `{best_row["f1_macro"]:.4f}`.\'\n'
             "    ))\n"
         )
     )

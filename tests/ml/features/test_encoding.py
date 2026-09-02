@@ -261,8 +261,14 @@ def test_derive_crop_group_hcat_codes_are_valid() -> None:
     from ml.features.encoding import _HCAT_GROUP_CODES
 
     expected_groups = {
-        "cereal", "legume", "root_tuber", "industrial_nonfood",
-        "vegetable", "grassland", "orchard", "vineyard",
+        "cereal",
+        "legume",
+        "root_tuber",
+        "industrial_nonfood",
+        "vegetable",
+        "grassland",
+        "orchard",
+        "vineyard",
     }
     assert expected_groups.issubset(_HCAT_GROUP_CODES.keys())
     # Los codigos productivos HCAT3 arrancan con 33 (rama crop_type).

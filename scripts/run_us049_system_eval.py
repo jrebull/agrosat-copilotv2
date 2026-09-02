@@ -87,9 +87,7 @@ def _build_live_backends(variant_names: Sequence[str]) -> dict[str, object]:
     return backends
 
 
-def run_france12_offline(
-    crop_path: Path, out_path: Path, *, seed: int = 0
-) -> dict[str, object]:
+def run_france12_offline(crop_path: Path, out_path: Path, *, seed: int = 0) -> dict[str, object]:
     """Run the grounded-crop eval under ``france-12`` with a deterministic oracle.
 
     US-081 AC2/AC3. Re-runs ONLY :func:`ml.eval.agent_system_eval.eval_grounded_crop`
@@ -169,14 +167,11 @@ def run_france12_offline(
             index = self._turn
             self._turn += 1
             if index == 0:
-                yield _Chunk(
-                    function_call=_FC(name="classify_new_parcel", args={"aoi": self.aoi})
-                )
+                yield _Chunk(function_call=_FC(name="classify_new_parcel", args={"aoi": self.aoi}))
             else:
                 yield _Chunk(
                     text=(
-                        f"Segun la clasificacion, el cultivo de la parcela es "
-                        f"{self.answer_crop}."
+                        f"Segun la clasificacion, el cultivo de la parcela es {self.answer_crop}."
                     )
                 )
 
@@ -363,9 +358,7 @@ def main(argv: list[str] | None = None) -> int:
         if out == Path("reports/agent_bench/us049_system_eval.json"):
             out = Path("reports/agent_bench/us081_grounded_crop_france12.json")
         scorecard = run_france12_offline(args.crop_cases, out, seed=args.seeds[0])
-        structlog.get_logger("run_us049_system_eval").info(
-            "france12_offline_done", out=str(out)
-        )
+        structlog.get_logger("run_us049_system_eval").info("france12_offline_done", out=str(out))
         print(json.dumps(scorecard, ensure_ascii=False, indent=2))
         return 0
 

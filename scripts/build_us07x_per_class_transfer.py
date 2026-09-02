@@ -206,7 +206,7 @@ SEN4_STRINGS: dict[str, dict[str, str]] = {
 }
 
 
-def _save_fig(fig: "plt.Figure", out_stem: Path, *, dpi: int = 150) -> list[Path]:
+def _save_fig(fig: plt.Figure, out_stem: Path, *, dpi: int = 150) -> list[Path]:
     """Save a figure as both PNG and SVG under ``out_stem`` and close it.
 
     Args:
@@ -237,6 +237,7 @@ def _lang_stem(base_stem: Path, lang: str) -> Path:
         ``base_stem`` for English, ``base_stem`` + ``_es`` for Spanish.
     """
     return base_stem if lang == "en" else base_stem.with_name(f"{base_stem.name}_es")
+
 
 # --- EuroCropsML config (matches the existing _feature_cache parquets) ---------
 _EC_ROOT = _REPO / "data" / "transfer" / "eurocropsml"
@@ -297,8 +298,12 @@ def build_eurocropsml_per_class() -> pl.DataFrame:
         for k in _EC_K_SHOTS:
             for seed in _EC_SEEDS:
                 split = build_fewshot_splits(
-                    _EC_ROOT, source=_EC_SOURCE, target=_EC_TARGET, k=int(k),
-                    seed=int(seed), max_parcels=_EC_MAX_PARCELS,
+                    _EC_ROOT,
+                    source=_EC_SOURCE,
+                    target=_EC_TARGET,
+                    k=int(k),
+                    seed=int(seed),
+                    max_parcels=_EC_MAX_PARCELS,
                 )
                 if use_pretrain:
                     x_fit = np.vstack([split.x_source, split.x_target_train])
@@ -312,15 +317,27 @@ def build_eurocropsml_per_class() -> pl.DataFrame:
                     y_true, y_pred, labels=classes, average=None, zero_division=0
                 )
                 for cls, pc, rc, fc, sc in zip(classes, p, r, f1, support, strict=True):
-                    rows.append({
-                        "scenario": "LV->EE" if use_pretrain else "sin-pretrain->EE",
-                        "use_pretrain": bool(use_pretrain),
-                        "k": int(k), "seed": int(seed), "macro_group": str(cls),
-                        "precision": float(pc), "recall": float(rc),
-                        "f1": float(fc), "support": int(sc),
-                    })
-                logger.info("ec_point", use_pretrain=use_pretrain, k=k, seed=seed,
-                            n_classes=len(classes), n_test=len(y_true))
+                    rows.append(
+                        {
+                            "scenario": "LV->EE" if use_pretrain else "sin-pretrain->EE",
+                            "use_pretrain": bool(use_pretrain),
+                            "k": int(k),
+                            "seed": int(seed),
+                            "macro_group": str(cls),
+                            "precision": float(pc),
+                            "recall": float(rc),
+                            "f1": float(fc),
+                            "support": int(sc),
+                        }
+                    )
+                logger.info(
+                    "ec_point",
+                    use_pretrain=use_pretrain,
+                    k=k,
+                    seed=seed,
+                    n_classes=len(classes),
+                    n_test=len(y_true),
+                )
 
     raw = pl.DataFrame(rows)
     raw.write_parquet(_REPO / "data" / "transfer" / "eurocropsml_per_class_raw.parquet")
@@ -376,8 +393,11 @@ def _plot_eurocropsml_lang(agg: pl.DataFrame, base_stem: Path, lang: str) -> lis
     txt = EC_STRINGS[lang]
     df = agg.filter(pl.col("use_pretrain"))
     classes = (
-        df.group_by("macro_group").agg(pl.col("support_mean").mean().alias("sup"))
-        .sort("sup", descending=True).get_column("macro_group").to_list()
+        df.group_by("macro_group")
+        .agg(pl.col("support_mean").mean().alias("sup"))
+        .sort("sup", descending=True)
+        .get_column("macro_group")
+        .to_list()
     )
     fig, ax = plt.subplots(figsize=(8.5, 5.5))
     for cls in classes:
@@ -387,8 +407,12 @@ def _plot_eurocropsml_lang(agg: pl.DataFrame, base_stem: Path, lang: str) -> lis
             continue
         n_test = int(sub.get_column("support_mean").mean())
         ax.errorbar(
-            ks, sub.get_column("f1_mean").to_list(),
-            yerr=sub.get_column("f1_std").to_list(), marker="o", capsize=3, lw=2,
+            ks,
+            sub.get_column("f1_mean").to_list(),
+            yerr=sub.get_column("f1_std").to_list(),
+            marker="o",
+            capsize=3,
+            lw=2,
             color=MACRO_COLORS.get(cls, "#777777"),
             label=f"{_macro_label(cls, lang)} ({txt['legend_n_test']}~{n_test})",
         )
@@ -429,11 +453,17 @@ def _sen4_confusion_to_per_class(acc, n_classes: int, id_to_macro: dict[int, str
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
         f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
         iou = tp / (tp + fp + fn) if (tp + fp + fn) > 0 else 0.0
-        rows.append({
-            "macro_id": c, "macro_group": id_to_macro[c], "support_px": support,
-            "precision": float(precision), "recall": float(recall),
-            "f1": float(f1), "iou": float(iou),
-        })
+        rows.append(
+            {
+                "macro_id": c,
+                "macro_group": id_to_macro[c],
+                "support_px": support,
+                "precision": float(precision),
+                "recall": float(recall),
+                "f1": float(f1),
+                "iou": float(iou),
+            }
+        )
     return rows
 
 
@@ -449,14 +479,21 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
     import torch
 
     from ml.data.sen4agrinet_adapter import (
-        IGNORE_INDEX, MACRO_GROUP_TO_ID, N_MACRO_CLASSES, Sen4AgriNetDataset,
+        IGNORE_INDEX,
+        MACRO_GROUP_TO_ID,
+        N_MACRO_CLASSES,
+        Sen4AgriNetDataset,
     )
     from ml.eval.dense_metrics import DenseConfusionAccumulator
     from ml.eval.segmentation_inference import predict_patch_for_kind
     from ml.models.tsvit_wrapper import build_tsvit
     from ml.train.finetune_sen4agrinet import (
-        SEMANTIC18_TO_MACRO, _FR_N_TIMESTEPS, _FR_NUM_CLASSES, _TILE_SIZE,
-        _patch_level_split, build_macro_model_from_fr,
+        _FR_N_TIMESTEPS,
+        _FR_NUM_CLASSES,
+        _TILE_SIZE,
+        SEMANTIC18_TO_MACRO,
+        _patch_level_split,
+        build_macro_model_from_fr,
     )
 
     if not _SEN4_FR_CKPT.exists():
@@ -466,8 +503,11 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
     logger.info("sen4_start", device=str(device), epochs=epochs)
 
     cat_ds = Sen4AgriNetDataset(
-        root=_SEN4_ROOT, n_timesteps=_FR_N_TIMESTEPS, tile_size=_TILE_SIZE,
-        countries=("ES",), precache_all=True,
+        root=_SEN4_ROOT,
+        n_timesteps=_FR_N_TIMESTEPS,
+        tile_size=_TILE_SIZE,
+        countries=("ES",),
+        precache_all=True,
     )
     train_idx, val_idx, train_patches, val_patches = _patch_level_split(
         cat_ds, k=_SEN4_K, seed=_SEN4_SEED
@@ -475,13 +515,20 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
 
     @torch.no_grad()
     def _eval_zero_shot() -> DenseConfusionAccumulator:
-        model = build_tsvit(num_classes=_FR_NUM_CLASSES, n_timesteps=_FR_N_TIMESTEPS,
-                            img_size=_TILE_SIZE, in_channels=10, semantic_dim=384)
+        model = build_tsvit(
+            num_classes=_FR_NUM_CLASSES,
+            n_timesteps=_FR_N_TIMESTEPS,
+            img_size=_TILE_SIZE,
+            in_channels=10,
+            semantic_dim=384,
+        )
         ck = torch.load(_SEN4_FR_CKPT, map_location=device, weights_only=False)
         model.load_state_dict(ck.get("model_state", ck), strict=False)
         model.to(device).eval()
         lut = torch.as_tensor(SEMANTIC18_TO_MACRO, device=device)
-        acc = DenseConfusionAccumulator(N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device))
+        acc = DenseConfusionAccumulator(
+            N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device)
+        )
         for i in val_idx:
             x, y = cat_ds[i]
             p18 = predict_patch_for_kind(model, x, model_kind="tsvit-pheno")
@@ -491,7 +538,9 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
     @torch.no_grad()
     def _eval_model(model) -> DenseConfusionAccumulator:
         model.eval()
-        acc = DenseConfusionAccumulator(N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device))
+        acc = DenseConfusionAccumulator(
+            N_MACRO_CLASSES, ignore_index=IGNORE_INDEX, device=str(device)
+        )
         for i in val_idx:
             x, y = cat_ds[i]
             pred = predict_patch_for_kind(model, x, model_kind="tsvit-pheno")
@@ -521,15 +570,20 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
     sched = torch.optim.lr_scheduler.SequentialLR(
         opt,
         schedulers=[
-            torch.optim.lr_scheduler.LinearLR(opt, start_factor=1e-3, end_factor=1.0, total_iters=warmup),
-            torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=max(1, epochs - warmup), eta_min=5e-6),
+            torch.optim.lr_scheduler.LinearLR(
+                opt, start_factor=1e-3, end_factor=1.0, total_iters=warmup
+            ),
+            torch.optim.lr_scheduler.CosineAnnealingLR(
+                opt, T_max=max(1, epochs - warmup), eta_min=5e-6
+            ),
         ],
         milestones=[warmup],
     )
     amp = device.type == "cuda"
     scaler = torch.amp.GradScaler("cuda", enabled=amp) if amp else None
-    loader = DataLoader(Subset(cat_ds, train_idx), batch_size=8, shuffle=True,
-                        num_workers=0, pin_memory=amp)
+    loader = DataLoader(
+        Subset(cat_ds, train_idx), batch_size=8, shuffle=True, num_workers=0, pin_memory=amp
+    )
     best_miou, best_state = -1.0, None
     t0 = time.perf_counter()
     for ep in range(epochs):
@@ -563,8 +617,11 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
     fs_acc = _eval_model(model)
     fs_agg = fs_acc.compute()
     fs_pc = _sen4_confusion_to_per_class(fs_acc, N_MACRO_CLASSES, id_to_macro)
-    logger.info("sen4_few_shot_done", train_time_s=round(time.perf_counter() - t0, 1),
-                **{f"fs_{k}": round(v, 4) for k, v in fs_agg.items()})
+    logger.info(
+        "sen4_few_shot_done",
+        train_time_s=round(time.perf_counter() - t0, 1),
+        **{f"fs_{k}": round(v, 4) for k, v in fs_agg.items()},
+    )
 
     rows: list[dict] = []
     for stage, pc in (("zero_shot", zs_pc), ("few_shot", fs_pc)):
@@ -577,11 +634,17 @@ def build_sen4agrinet_per_class(epochs: int = 40) -> pl.DataFrame:
         "scenario": "FR(PASTIS-R 18cls) -> ES(Catalonia macro-HCAT) dense transfer",
         "fr_ckpt": str(_SEN4_FR_CKPT),
         "fewshot_ckpt_origin": "recomputed locally (VM best.pt tsvit-pheno-sen4agri-cat-ft-v1 not on this host)",
-        "k_few_shot": _SEN4_K, "epochs": epochs, "seed": _SEN4_SEED,
-        "n_val_patches": len(val_patches), "n_val_tiles": len(val_idx),
-        "n_train_patches": len(train_patches), "n_train_tiles": len(train_idx),
-        "zero_shot_agg": zs_agg, "few_shot_agg": fs_agg,
-        "zero_shot_per_class": zs_pc, "few_shot_per_class": fs_pc,
+        "k_few_shot": _SEN4_K,
+        "epochs": epochs,
+        "seed": _SEN4_SEED,
+        "n_val_patches": len(val_patches),
+        "n_val_tiles": len(val_idx),
+        "n_train_patches": len(train_patches),
+        "n_train_tiles": len(train_idx),
+        "zero_shot_agg": zs_agg,
+        "few_shot_agg": fs_agg,
+        "zero_shot_per_class": zs_pc,
+        "few_shot_per_class": fs_pc,
     }
     out_json = _REPO / "reports" / "segmentation" / "sen4agrinet_transfer_per_class.json"
     out_json.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -634,21 +697,31 @@ def _plot_sen4agrinet_lang(df: pl.DataFrame, base_stem: Path, lang: str) -> list
     fig, axes = plt.subplots(1, 2, figsize=(13, 5.5))
     x = np.arange(len(order))
     w = 0.38
-    for ax, metric, title in ((axes[0], "iou", txt["iou_title"]),
-                              (axes[1], "f1", txt["f1_title"])):
-        ax.bar(x - w / 2, vals(zs, metric), w, label=txt["zero_shot_label"],
-               color="#bdbdbd", edgecolor="#555")
+    for ax, metric, title in ((axes[0], "iou", txt["iou_title"]), (axes[1], "f1", txt["f1_title"])):
+        ax.bar(
+            x - w / 2,
+            vals(zs, metric),
+            w,
+            label=txt["zero_shot_label"],
+            color="#bdbdbd",
+            edgecolor="#555",
+        )
         fs_v = vals(fs, metric)
-        ax.bar(x + w / 2, fs_v, w, label=txt["few_shot_label"],
-               color="#2c7fb8", edgecolor="#1a4f73")
+        ax.bar(
+            x + w / 2, fs_v, w, label=txt["few_shot_label"], color="#2c7fb8", edgecolor="#1a4f73"
+        )
         for xi, v in zip(x, fs_v):
             if v > 0.01:
                 ax.text(xi + w / 2, v + 0.01, f"{v:.2f}", ha="center", va="bottom", fontsize=8)
         ax.set_xticks(x)
         ax.set_xticklabels(
-            [f"{_macro_label(g, lang)}\n({txt['px_prefix']}~{support.get(g, 0) // 1000}k)"
-             for g in order],
-            rotation=30, ha="right", fontsize=8,
+            [
+                f"{_macro_label(g, lang)}\n({txt['px_prefix']}~{support.get(g, 0) // 1000}k)"
+                for g in order
+            ],
+            rotation=30,
+            ha="right",
+            fontsize=8,
         )
         ax.set_ylabel(metric.upper())
         ax.set_ylim(0, 1.0)
@@ -702,14 +775,20 @@ def _replot_from_parquet(repo_root: Path, *, eurocrops: bool, sen4: bool) -> lis
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--repo-root", type=Path, default=_REPO,
-                   help="Repository root (inputs and outputs resolved against it).")
+    p.add_argument(
+        "--repo-root",
+        type=Path,
+        default=_REPO,
+        help="Repository root (inputs and outputs resolved against it).",
+    )
     p.add_argument("--eurocrops", action="store_true", help="Build EuroCropsML per-class.")
     p.add_argument("--sen4", action="store_true", help="Build Sen4AgriNet per-class.")
     p.add_argument("--sen4-epochs", type=int, default=40)
-    p.add_argument("--plot-only", action="store_true",
-                   help="Only re-render bilingual figures from existing parquets "
-                        "(no recompute, no GPU).")
+    p.add_argument(
+        "--plot-only",
+        action="store_true",
+        help="Only re-render bilingual figures from existing parquets (no recompute, no GPU).",
+    )
     return p.parse_args(argv)
 
 
@@ -718,8 +797,7 @@ def main(argv: list[str] | None = None) -> None:
     if not (args.eurocrops or args.sen4):
         args.eurocrops = args.sen4 = True
     if args.plot_only:
-        _replot_from_parquet(args.repo_root.resolve(),
-                             eurocrops=args.eurocrops, sen4=args.sen4)
+        _replot_from_parquet(args.repo_root.resolve(), eurocrops=args.eurocrops, sen4=args.sen4)
         return
     if args.eurocrops:
         build_eurocropsml_per_class()

@@ -90,9 +90,7 @@ def compute_parcel_ndvi_curves(
     from ml.ingest.pastis_dataset import pastis_fold_split
     from ml.ingest.pastis_loader import load_pastis_patch
 
-    split = pastis_fold_split(
-        pastis_root, train_folds=tuple(folds), val_folds=(), test_folds=()
-    )
+    split = pastis_fold_split(pastis_root, train_folds=tuple(folds), val_folds=(), test_folds=())
     pids = sorted(split["train"], key=lambda p: int(p))
     if max_patches is not None:
         pids = pids[: int(max_patches)]
@@ -276,9 +274,7 @@ def generate_parcel_phenology_captions(
         for row in results_iter:
             new_rows.append(row)
             if len(new_rows) >= flush_every:
-                existing_rows = _flush_parcel_captions(
-                    existing_rows, new_rows, output_path
-                )
+                existing_rows = _flush_parcel_captions(existing_rows, new_rows, output_path)
                 new_rows = []
     finally:
         if max_workers > 1:
@@ -309,10 +305,7 @@ def _flush_parcel_captions(
 def load_parcel_captions(path: Path) -> dict[str, str]:
     """Load ``{parcel_id: description}`` from the per-parcel captions parquet."""
     df = pl.read_parquet(path)
-    return {
-        str(r["parcel_id"]): str(r["description"])
-        for r in df.iter_rows(named=True)
-    }
+    return {str(r["parcel_id"]): str(r["description"]) for r in df.iter_rows(named=True)}
 
 
 __all__ = [

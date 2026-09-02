@@ -150,7 +150,7 @@ def mini_pastis_root(tmp_path: Path) -> Path:
     patch_id = 1
     for cls in range(1, 19):
         for rep in range(2):
-            tile = f"T31TFM" if rep == 0 else "T31TFL"
+            tile = "T31TFM" if rep == 0 else "T31TFL"
             fold = ((cls + rep) % 5) + 1
             features.append(_make_feature(patch_id, tile, fold))
             target = _build_target(cls, instance_id=cls, h=8, w=8)
@@ -172,9 +172,7 @@ def test_raises_if_pastis_missing(tmp_path: Path) -> None:
     missing_root = tmp_path / "nope"
     out = tmp_path / "subset.parquet"
     with pytest.raises(FileNotFoundError) as excinfo:
-        build_pastis_eval_subset(
-            output_path=out, pastis_root=missing_root, overwrite=True
-        )
+        build_pastis_eval_subset(output_path=out, pastis_root=missing_root, overwrite=True)
     assert "PASTIS-R not found" in str(excinfo.value)
     assert "dvc pull" in str(excinfo.value) or "zenodo" in str(excinfo.value).lower()
 
@@ -344,7 +342,9 @@ def test_imagery_blob_emitted(mini_pastis_root: Path, tmp_path: Path) -> None:
     assert img.height == parcels.height * 2
 
 
-def test_cli_main(mini_pastis_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_cli_main(
+    mini_pastis_root: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     """El CLI imprime un JSON con output + md5 y exit code 0."""
     out = tmp_path / "subset.parquet"
     rc = pastis_eval_subset.main(

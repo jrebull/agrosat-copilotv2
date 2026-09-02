@@ -101,9 +101,7 @@ def test_contrastive_loss_backward_produces_grad() -> None:
     labels = _make_labels(num_classes)
     proj = _visual_proj_from_labels(labels, protos, noise=1.0).requires_grad_(True)
     gen = torch.Generator().manual_seed(7)
-    loss = phenology_contrastive_loss(
-        proj, labels.unsqueeze(0), protos, generator=gen
-    )
+    loss = phenology_contrastive_loss(proj, labels.unsqueeze(0), protos, generator=gen)
     loss.backward()
     assert proj.grad is not None
     assert torch.isfinite(proj.grad).all()
@@ -138,9 +136,7 @@ def test_contrastive_loss_ignores_padding() -> None:
     protos = _orthonormal_prototypes(num_classes)
     labels = _make_labels(num_classes)
     labels[:4, :] = _IGNORE_INDEX  # mitad superior ignorada
-    proj = _visual_proj_from_labels(
-        torch.clamp(labels, 0, num_classes - 1), protos, noise=1.0
-    )
+    proj = _visual_proj_from_labels(torch.clamp(labels, 0, num_classes - 1), protos, noise=1.0)
     gen = torch.Generator().manual_seed(7)
     loss = phenology_contrastive_loss(
         proj, labels.unsqueeze(0), protos, ignore_index=_IGNORE_INDEX, generator=gen

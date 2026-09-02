@@ -67,11 +67,11 @@ __all__ = [
 PASTIS_CLASS_TO_HCAT_L1: dict[int, str] = {
     # CEREALS: eight winter and spring cereals. The wheat-with-wheat /
     # cereal-with-cereal confusion is intra-group and disappears here.
-    2: "CEREALS",   # Soft winter wheat
+    2: "CEREALS",  # Soft winter wheat
     11: "CEREALS",  # Winter durum wheat
-    4: "CEREALS",   # Winter barley
-    6: "CEREALS",   # Spring barley
-    3: "CEREALS",   # Corn (maize)
+    4: "CEREALS",  # Winter barley
+    6: "CEREALS",  # Spring barley
+    3: "CEREALS",  # Corn (maize)
     10: "CEREALS",  # Winter triticale
     17: "CEREALS",  # Mixed cereal
     18: "CEREALS",  # Sorghum
@@ -79,16 +79,16 @@ PASTIS_CLASS_TO_HCAT_L1: dict[int, str] = {
     5: "OILSEEDS",  # Winter rapeseed
     7: "OILSEEDS",  # Sunflower
     # ROOT_CROPS: tubers and roots.
-    9: "ROOT_CROPS",   # Beet
+    9: "ROOT_CROPS",  # Beet
     13: "ROOT_CROPS",  # Potatoes
     # LEGUMES: leguminous crops.
     14: "LEGUMES",  # Leguminous fodder
     15: "LEGUMES",  # Soybeans
     # PERMANENT_WOODY: permanent woody crops.
-    8: "PERMANENT_WOODY",   # Grapevine
+    8: "PERMANENT_WOODY",  # Grapevine
     16: "PERMANENT_WOODY",  # Orchard
     # OTHER: meadow and mix of fruits/vegetables/flowers.
-    1: "OTHER",   # Meadow
+    1: "OTHER",  # Meadow
     12: "OTHER",  # Fruits, vegetables, flowers
 }
 
@@ -96,12 +96,12 @@ PASTIS_CLASS_TO_HCAT_L1: dict[int, str] = {
 #: of the grouping against the course rubric). The codes are the HCAT
 #: taxonomy nodes under which the merged PASTIS classes fall.
 HCAT_L1_GROUP_CODES: dict[str, str] = {
-    "CEREALS": "3301000000",          # HCAT cereals
-    "OILSEEDS": "3303000000",         # HCAT oilseed crops
-    "ROOT_CROPS": "3304000000",       # HCAT root/tuber crops
-    "LEGUMES": "3302000000",          # HCAT leguminous crops
+    "CEREALS": "3301000000",  # HCAT cereals
+    "OILSEEDS": "3303000000",  # HCAT oilseed crops
+    "ROOT_CROPS": "3304000000",  # HCAT root/tuber crops
+    "LEGUMES": "3302000000",  # HCAT leguminous crops
     "PERMANENT_WOODY": "3306000000",  # HCAT permanent woody crops
-    "OTHER": "3300000000",            # HCAT arable/other (grassland + mixed horticulture)
+    "OTHER": "3300000000",  # HCAT arable/other (grassland + mixed horticulture)
 }
 
 #: Canonical (stable) order of the 6 groups -> contiguous id ``[0, 6)``.
@@ -237,13 +237,9 @@ def per_label_f1_table(
     y_true_arr = np.asarray(y_true).ravel()
     y_pred_arr = np.asarray(y_pred).ravel()
     labels = sorted(label_names)
-    f1_vals = f1_score(
-        y_true_arr, y_pred_arr, labels=labels, average=None, zero_division=0
-    )
+    f1_vals = f1_score(y_true_arr, y_pred_arr, labels=labels, average=None, zero_division=0)
     uniq_vals, uniq_counts = np.unique(y_true_arr, return_counts=True)
-    support = {
-        int(v): int(c) for v, c in zip(uniq_vals, uniq_counts, strict=True)
-    }
+    support = {int(v): int(c) for v, c in zip(uniq_vals, uniq_counts, strict=True)}
     return pl.DataFrame(
         {
             "label_id": labels,
@@ -364,9 +360,7 @@ def evaluate_flat_vs_grouped(
         i: PASTIS_R_CLASSES.get(int(c), f"c{int(c)}")
         for i, c in enumerate(flat_result.label_classes)
     }
-    flat_per_class = per_label_f1_table(
-        flat_true, flat_pred, label_names=flat_label_names
-    )
+    flat_per_class = per_label_f1_table(flat_true, flat_pred, label_names=flat_label_names)
 
     # --- Grouped 6-group HCAT L1 scheme -----------------------------------
     # We remap `class_id` to the HCAT group id. The baseline pipeline treats
@@ -393,8 +387,7 @@ def evaluate_flat_vs_grouped(
     )
     id_to_group = {idx: group for group, idx in hcat_group_id_map().items()}
     grouped_label_names = {
-        i: id_to_group.get(int(c), f"g{int(c)}")
-        for i, c in enumerate(grouped_result.label_classes)
+        i: id_to_group.get(int(c), f"g{int(c)}") for i, c in enumerate(grouped_result.label_classes)
     }
     grouped_per_group = per_label_f1_table(
         grouped_true, grouped_pred, label_names=grouped_label_names

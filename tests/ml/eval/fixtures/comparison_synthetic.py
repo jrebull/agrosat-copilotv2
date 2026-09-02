@@ -70,9 +70,7 @@ def make_three_scenarios(
     n_patches = max(2, n // 8)
     patch_ids = rng.integers(0, n_patches, size=n, dtype=np.int64)
     instance_ids = np.arange(1, n + 1, dtype=np.int64)
-    parcel_ids = [
-        f"{int(p)}_{int(i)}" for p, i in zip(patch_ids, instance_ids, strict=True)
-    ]
+    parcel_ids = [f"{int(p)}_{int(i)}" for p, i in zip(patch_ids, instance_ids, strict=True)]
     folds = (instance_ids % 5 + 1).astype(np.int64)
 
     # Problema base compartido: las tres vistas describen las mismas

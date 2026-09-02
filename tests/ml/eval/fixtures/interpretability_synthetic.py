@@ -148,9 +148,7 @@ def make_trained_tree_model(
         )
         model.fit(matrix, labels)
 
-    X = pl.DataFrame(
-        {name: matrix[:, idx] for idx, name in enumerate(feature_cols)}
-    )
+    X = pl.DataFrame({name: matrix[:, idx] for idx, name in enumerate(feature_cols)})
     y = pl.Series("class_id", labels.astype(np.int64))
     return SyntheticModel(
         model=model,

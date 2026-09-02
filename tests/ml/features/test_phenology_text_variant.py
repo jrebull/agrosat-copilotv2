@@ -149,9 +149,7 @@ def test_per_parcel_distinct_descriptions_distinct_embeddings(
     df = _ndvi_df(["p1", "p2", "p3"])
     block = build_phenology_text_block(df, skip_llm=False, cache_dir=tmp_path)
 
-    emb = block.select(
-        [c for c in block.columns if c.startswith("pheno_text_")]
-    ).to_numpy()
+    emb = block.select([c for c in block.columns if c.startswith("pheno_text_")]).to_numpy()
     # Al menos dos filas deben diferir (no todas iguales).
     assert not np.allclose(emb[0], emb[1])
 

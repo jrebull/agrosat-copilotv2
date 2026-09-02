@@ -210,9 +210,7 @@ def test_on_conflict_raise(pg_engine: Engine, parcel_id: int) -> None:
         load_features_parcels(_build_df(parcel_id), pg_engine, on_conflict="raise")
 
 
-def test_unique_violation_on_duplicate_with_raise_mode(
-    pg_engine: Engine, parcel_id: int
-) -> None:
+def test_unique_violation_on_duplicate_with_raise_mode(pg_engine: Engine, parcel_id: int) -> None:
     load_features_parcels(_build_df(parcel_id, year=2023), pg_engine, on_conflict="raise")
     # Re-insertar con mismo (parcel_id, year) debe violar UNIQUE.
     with pytest.raises(IntegrityError):

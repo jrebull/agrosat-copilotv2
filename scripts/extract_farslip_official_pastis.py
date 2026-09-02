@@ -144,9 +144,7 @@ def main(
     _flush("final")
 
     full = (
-        pl.concat([pl.read_parquet(p) for p in parts], how="vertical")
-        if parts
-        else pl.DataFrame()
+        pl.concat([pl.read_parquet(p) for p in parts], how="vertical") if parts else pl.DataFrame()
     )
     full.write_parquet(out_path)
     for p in parts:

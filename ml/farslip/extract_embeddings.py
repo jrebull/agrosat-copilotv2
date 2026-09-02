@@ -166,9 +166,7 @@ def _load_student(
     if ckpt_path.is_dir():
         cands = list(ckpt_path.glob("*.safetensors")) + list(ckpt_path.glob("*.pt"))
         if not cands:
-            raise FileNotFoundError(
-                f"no checkpoints (*.safetensors|*.pt) in {ckpt_path}"
-            )
+            raise FileNotFoundError(f"no checkpoints (*.safetensors|*.pt) in {ckpt_path}")
         ckpt_path = cands[0]
     if ckpt_path.suffix == ".safetensors":
         from safetensors.torch import load_file
@@ -193,9 +191,7 @@ def _embed_columns() -> list[str]:
     return [f"{EMBED_COL_PREFIX}{i:03d}" for i in range(EMBED_DIM)]
 
 
-def _load_parcels_filtered(
-    parcels_parquet: Path, rois: RoiPreset
-) -> pl.DataFrame:
+def _load_parcels_filtered(parcels_parquet: Path, rois: RoiPreset) -> pl.DataFrame:
     """Load parcels and filter by ROI(s) if the column exists.
 
     The parquet must expose at least ``parcel_id`` and ``year``. If it has a
@@ -383,19 +379,13 @@ def extract_farslip_embeddings(
             seed=seed,
         )
     cols = _embed_columns()
-    embed_dict = {
-        cols[i]: embeddings[:, i].numpy() for i in range(EMBED_DIM)
-    }
+    embed_dict = {cols[i]: embeddings[:, i].numpy() for i in range(EMBED_DIM)}
     out_df = parcels.select(
         pl.col("parcel_id").cast(pl.Int64),
         pl.col("year").cast(pl.Int32),
-    ).with_columns(
-        [pl.Series(name=cols[i], values=embed_dict[cols[i]]) for i in range(EMBED_DIM)]
-    )
+    ).with_columns([pl.Series(name=cols[i], values=embed_dict[cols[i]]) for i in range(EMBED_DIM)])
     if out_df.width != TOTAL_COLS:
-        raise RuntimeError(
-            f"unexpected output width: {out_df.width} != {TOTAL_COLS}"
-        )
+        raise RuntimeError(f"unexpected output width: {out_df.width} != {TOTAL_COLS}")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     out_df.write_parquet(output_path)
     code_version = git_sha(short=True)
@@ -427,10 +417,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--student-checkpoint",
         required=True,
-        help=(
-            "Ruta local al checkpoint .safetensors/.pt o URI "
-            "'mlflow://Models/<name>@<stage>'."
-        ),
+        help=("Ruta local al checkpoint .safetensors/.pt o URI 'mlflow://Models/<name>@<stage>'."),
     )
     parser.add_argument(
         "--parcels-parquet",
@@ -441,10 +428,7 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--rois",
         default="italy",
-        help=(
-            "Comma-separated. Alias soportados: 'italy' "
-            "(pianura_padana,toscana,puglia)."
-        ),
+        help=("Comma-separated. Alias soportados: 'italy' (pianura_padana,toscana,puglia)."),
     )
     parser.add_argument(
         "--output",

@@ -224,10 +224,7 @@ def build_fm_comparison_table(
 # T2 -- EPIC 5 individual models re-scored fold-5
 # --------------------------------------------------------------------------- #
 def build_segmentation_table(
-    metrics_csv: Path = REPORTS_DIR
-    / "segmentation"
-    / "metrics"
-    / "model_comparison_fold5.csv",
+    metrics_csv: Path = REPORTS_DIR / "segmentation" / "metrics" / "model_comparison_fold5.csv",
 ) -> str:
     """Build T2: EPIC 5 individual models re-scored with the US-030 harness.
 
@@ -285,10 +282,7 @@ def build_ensemble_table(
     *,
     us040_csv: Path = REPORTS_DIR / "ensemble" / "metrics" / "comparison_us040.csv",
     ea_eb_csv: Path = REPORTS_DIR / "ensemble" / "metrics" / "us041_042_ea_eb_results.csv",
-    farslip_grid_csv: Path = REPORTS_DIR
-    / "ensemble"
-    / "metrics"
-    / "us043_farslip_grid.csv",
+    farslip_grid_csv: Path = REPORTS_DIR / "ensemble" / "metrics" / "us043_farslip_grid.csv",
 ) -> str:
     """Build T3: EPIC 6 ensembles (rubric 4 + E-a/E-b + FarSLIP grid).
 
@@ -547,9 +541,7 @@ def build_farslip_band_ablation_table(
         "Las 3 variantes de banda completas (rgb/nir-rgb/4band-pheno) requieren "
         "re-extraccion en H100 (B-070-5). Cifras leidas de reports/farslip/."
     )
-    return render_latex_table(
-        header, rows, caption=caption, label="tab:farslip_band_ablation"
-    )
+    return render_latex_table(header, rows, caption=caption, label="tab:farslip_band_ablation")
 
 
 # --------------------------------------------------------------------------- #

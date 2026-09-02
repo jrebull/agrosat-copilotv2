@@ -143,9 +143,7 @@ def n_steps(
         raise ValueError("step_size and base must be >= 1.")
     cap = min(int(max_classes), _N_PASTIS_CROPS)
     if cap < base:
-        raise ValueError(
-            f"max_classes ({max_classes}) must be >= base ({base})."
-        )
+        raise ValueError(f"max_classes ({max_classes}) must be >= base ({base}).")
     remaining = cap - base
     extra_steps = (remaining + step_size - 1) // step_size
     return 1 + extra_steps
@@ -183,24 +181,19 @@ def select_step_prototypes(
     """
     matrix = np.asarray(proto_18, dtype=np.float32)
     if matrix.ndim != 2:
-        raise ValueError(
-            f"proto_18 must be 2-D (N, 384); received shape {matrix.shape}."
-        )
+        raise ValueError(f"proto_18 must be 2-D (N, 384); received shape {matrix.shape}.")
     if matrix.shape[0] != len(class_ids_all):
         raise ValueError(
             f"proto_18 rows ({matrix.shape[0]}) must equal len(class_ids_all) "
             f"({len(class_ids_all)})."
         )
     if matrix.shape[1] != _MINILM_DIM:
-        raise ValueError(
-            f"proto_18 dim ({matrix.shape[1]}) must be {_MINILM_DIM} (MiniLM)."
-        )
+        raise ValueError(f"proto_18 dim ({matrix.shape[1]}) must be {_MINILM_DIM} (MiniLM).")
     row_of: dict[int, int] = {int(cid): row for row, cid in enumerate(class_ids_all)}
     missing = [c for c in class_ids_step if c not in row_of]
     if missing:
         raise ValueError(
-            f"prototype matrix is missing step class_ids {missing}; "
-            f"available={sorted(row_of)}."
+            f"prototype matrix is missing step class_ids {missing}; available={sorted(row_of)}."
         )
     rows = [row_of[c] for c in class_ids_step]
     selected = np.ascontiguousarray(matrix[rows], dtype=np.float32)
@@ -243,9 +236,7 @@ class StepMetrics:
     def n_classes_well_resolved(self) -> int:
         """Number of step classes with ``F1 >= f1_well_resolved``."""
         return sum(
-            1
-            for cid in self.class_ids
-            if self.per_class_f1.get(cid, 0.0) >= self.f1_well_resolved
+            1 for cid in self.class_ids if self.per_class_f1.get(cid, 0.0) >= self.f1_well_resolved
         )
 
     def new_class_ids(self, prev: StepMetrics | None) -> list[int]:
@@ -269,9 +260,7 @@ class StepMetrics:
         return float(np.mean(scores)) if scores else 0.0
 
 
-def compute_macro(
-    per_class: dict[int, float], class_ids: list[int]
-) -> float:
+def compute_macro(per_class: dict[int, float], class_ids: list[int]) -> float:
     """Return the mean of ``per_class`` over ``class_ids`` (0.0 if empty)."""
     scores = [per_class.get(c, 0.0) for c in class_ids]
     return float(np.mean(scores)) if scores else 0.0
@@ -324,9 +313,7 @@ def stop_criterion(
     new_ids = metrics_curr.new_class_ids(metrics_prev)
     # (1) New classes unacceptable: not a single new crop reaches the floor.
     if new_ids:
-        best_new_f1 = max(
-            metrics_curr.per_class_f1.get(c, 0.0) for c in new_ids
-        )
+        best_new_f1 = max(metrics_curr.per_class_f1.get(c, 0.0) for c in new_ids)
         if best_new_f1 < f1_new_unacceptable:
             logger.info(
                 "stop_criterion_triggered",

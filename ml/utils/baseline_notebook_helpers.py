@@ -67,9 +67,7 @@ _DEFAULT_SUBSET_PATH = Path("data/test_fixtures/feature_selection_parcels_subset
 _DEFAULT_PARCELS_PATH = Path("data/processed/pastis_parcels_full.geoparquet")
 _DEFAULT_FUSED_PATH = Path("data/features/features_fused_pastis.parquet")
 _DEFAULT_AE18_PATH = Path("data/cache/gee/alphaearth_parcels_parcels_2018_85951.parquet")
-_DEFAULT_AE19_PATH = Path(
-    "data/cache/gee/alphaearth_parcels_pastis_parcels_2019_85951.parquet"
-)
+_DEFAULT_AE19_PATH = Path("data/cache/gee/alphaearth_parcels_pastis_parcels_2019_85951.parquet")
 
 
 def load_features_dataset_with_meta(
@@ -105,8 +103,7 @@ def load_features_dataset_with_meta(
         )
     if not parcels_path.exists():
         raise FileNotFoundError(
-            f"Parcels geoparquet not found at {parcels_path}. "
-            "Run `make build-parcels-geoparquet`."
+            f"Parcels geoparquet not found at {parcels_path}. Run `make build-parcels-geoparquet`."
         )
 
     import geopandas as gpd
@@ -116,7 +113,13 @@ def load_features_dataset_with_meta(
 
     parcels_gdf = gpd.read_parquet(parcels_path)
     _candidate_meta = (
-        "parcel_id", "patch_id", "instance_id", "class_name", "fold", "area_m2", "n_pixels"
+        "parcel_id",
+        "patch_id",
+        "instance_id",
+        "class_name",
+        "fold",
+        "area_m2",
+        "n_pixels",
     )
     meta_cols = [c for c in _candidate_meta if c in parcels_gdf.columns]
     parcels_meta = pl.from_pandas(parcels_gdf[meta_cols])
@@ -195,9 +198,7 @@ def load_base_plus_alphaearth_2018_2019(
     ae18 = _load_alphaearth(alphaearth_2018_path, "ae18")
     ae19 = _load_alphaearth(alphaearth_2019_path, "ae19")
 
-    enriched = base.join(ae18, on="parcel_id", how="left").join(
-        ae19, on="parcel_id", how="left"
-    )
+    enriched = base.join(ae18, on="parcel_id", how="left").join(ae19, on="parcel_id", how="left")
     n_ae18 = sum(1 for c in enriched.columns if c.startswith("ae18_"))
     n_ae19 = sum(1 for c in enriched.columns if c.startswith("ae19_"))
     n_null_ae18 = int(enriched.select(pl.col("ae18_00").is_null().sum()).item())
@@ -262,9 +263,7 @@ def load_or_build_fused_features(
 
     parcels_path = Path(parcels_geoparquet)
     if not parcels_path.exists():
-        raise FileNotFoundError(
-            f"Parcels geoparquet not found at {parcels_path}."
-        )
+        raise FileNotFoundError(f"Parcels geoparquet not found at {parcels_path}.")
 
     import geopandas as gpd
 
@@ -608,8 +607,7 @@ def materialize_spectral_signature_if_missing(
     anchors_path = resolve_dataset_path(s2_anchors_path)
     if not anchors_path.exists():
         raise FileNotFoundError(
-            f"S2 anchors not found at {anchors_path}. Run "
-            "materialize_s2_anchors_if_missing first."
+            f"S2 anchors not found at {anchors_path}. Run materialize_s2_anchors_if_missing first."
         )
 
     from ml.features.spectral_signature import SpectralSignatureFeatures
@@ -656,12 +654,8 @@ def materialize_pastis_eval_subset_if_missing(
 
 def materialize_remoteclip_if_missing(
     *,
-    pastis_eval_subset_path: Path | str = Path(
-        "data/test_fixtures/pastis_eval_subset.parquet"
-    ),
-    imagery_path: Path | str = Path(
-        "data/test_fixtures/pastis_eval_subset.imagery.parquet"
-    ),
+    pastis_eval_subset_path: Path | str = Path("data/test_fixtures/pastis_eval_subset.parquet"),
+    imagery_path: Path | str = Path("data/test_fixtures/pastis_eval_subset.imagery.parquet"),
     output_path: Path | str = Path("data/farslip/remoteclip_embeddings_pastis.parquet"),
 ) -> Path:
     """Materialize RemoteCLIP embeddings over the PASTIS subset if they do not exist."""

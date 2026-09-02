@@ -172,6 +172,7 @@ async def test_search_stac_cdse_empty_catalogue(monkeypatch, make_ctx) -> None:
 
 async def test_search_stac_degrades_to_pgstac_without_credentials(monkeypatch, make_ctx) -> None:
     """Empty CDSE credentials degrade cleanly to pgstac (no crash, no CDSE call)."""
+
     # CDSE must never be touched when credentials are absent.
     def _boom(self, *args, **kwargs):
         raise AssertionError("CDSE must not be called without credentials")

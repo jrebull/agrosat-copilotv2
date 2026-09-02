@@ -159,9 +159,7 @@ def _evaluate_head(
     acc = DenseConfusionAccumulator(
         PASTIS_NUM_CLASSES, ignore_index=PASTIS_IGNORE_INDEX, device=str(device)
     )
-    acc_grouped = DenseConfusionAccumulator(
-        _GROUPED_CLASSES, ignore_index=255, device=str(device)
-    )
+    acc_grouped = DenseConfusionAccumulator(_GROUPED_CLASSES, ignore_index=255, device=str(device))
     lut_target, lut_pred = _build_group_luts(device)
     n = len(cached)
     with torch.no_grad():

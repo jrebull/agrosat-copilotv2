@@ -119,9 +119,7 @@ def _resolve_device(device: str | None) -> torch.device:
     return torch.device(device)
 
 
-def _load_model(
-    model_name: str, device: torch.device
-) -> tuple[CLIPModel, CLIPProcessor, str]:
+def _load_model(model_name: str, device: torch.device) -> tuple[CLIPModel, CLIPProcessor, str]:
     """Load ``CLIPModel`` + ``CLIPProcessor`` with fallback to OpenAI CLIP.
 
     Args:
@@ -207,8 +205,7 @@ def _row_to_array(row: dict[str, Any]) -> np.ndarray:
         arr = arr[np.newaxis, ...]
     elif arr.ndim != 4:
         raise ValueError(
-            f"unexpected imagery shape for parcel_id={row.get('parcel_id')!r}: "
-            f"{arr.shape}"
+            f"unexpected imagery shape for parcel_id={row.get('parcel_id')!r}: {arr.shape}"
         )
     return arr
 
@@ -362,9 +359,7 @@ def extract_remoteclip_embeddings(
         subset = subset.with_columns(pl.lit(2019).cast(pl.Int64).alias("year"))
 
     # Stable-order join: imagery merge over subset order.
-    joined = subset.select(["parcel_id", "year"]).join(
-        imagery, on="parcel_id", how="left"
-    )
+    joined = subset.select(["parcel_id", "year"]).join(imagery, on="parcel_id", how="left")
 
     torch_device = _resolve_device(device)
     model, processor, model_used = _load_model(model_name, torch_device)

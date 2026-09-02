@@ -273,9 +273,7 @@ def train_temporal_model(
             ``model_kind`` is not supported.
     """
     if model_kind not in ("tempcnn", "inceptiontime"):
-        raise ValueError(
-            f"`model_kind` must be 'tempcnn' or 'inceptiontime'; got {model_kind!r}."
-        )
+        raise ValueError(f"`model_kind` must be 'tempcnn' or 'inceptiontime'; got {model_kind!r}.")
     if df is None:
         if features_path is None:
             raise ValueError("You must pass `features_path` or `df`.")

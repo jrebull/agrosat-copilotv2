@@ -80,9 +80,7 @@ def _load_vocabulary(path: Path) -> dict[str, Any]:
     return raw
 
 
-def _render_template(
-    template: str, *, phenology: str, region: str
-) -> str:
+def _render_template(template: str, *, phenology: str, region: str) -> str:
     """Format a template with {phenology}/{region} markers; ignores extras."""
     return template.format(phenology=phenology, region=region)
 
@@ -190,9 +188,7 @@ def build_farslip_pairs(
 
         # QA filter: cloud_prob <= threshold (assumes the column is present)
         if "cloud_prob" in roi_records.columns:
-            roi_records = roi_records.filter(
-                pl.col("cloud_prob") <= qa_cloud_threshold
-            )
+            roi_records = roi_records.filter(pl.col("cloud_prob") <= qa_cloud_threshold)
 
         rows: list[dict[str, Any]] = []
         for record in roi_records.iter_rows(named=True):
@@ -364,12 +360,8 @@ class FarSLIPDataset(Dataset):
             "image": img,
             "input_ids": input_ids,
             "attention_mask": attention_mask,
-            "region_id": torch.tensor(
-                self._region_to_idx.get(region, 0), dtype=torch.long
-            ),
-            "category_id": torch.tensor(
-                self._cap_to_idx.get(cap_class, 0), dtype=torch.long
-            ),
+            "region_id": torch.tensor(self._region_to_idx.get(region, 0), dtype=torch.long),
+            "category_id": torch.tensor(self._cap_to_idx.get(cap_class, 0), dtype=torch.long),
             "cap_class": cap_class,
             "text": text,
         }

@@ -259,9 +259,7 @@ def resolve_state_dict(loaded: object, spec: CheckpointSpec) -> dict:
     for key in spec.state_key_candidates:
         inner = loaded.get(key)
         if isinstance(inner, dict):
-            logger.debug(
-                "state_dict_resolved", model=spec.name, key=key, convention="wrapped"
-            )
+            logger.debug("state_dict_resolved", model=spec.name, key=key, convention="wrapped")
             return inner
 
     # No wrapper key matched -> `loaded` is already a pure state_dict.

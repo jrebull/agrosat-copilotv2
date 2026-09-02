@@ -164,9 +164,7 @@ def main(
         "--out",
         help="GeoParquet de salida",
     ),
-    min_pixels: int = typer.Option(
-        10, "--min-pixels", help="Filtro mínimo de píxeles por parcela"
-    ),
+    min_pixels: int = typer.Option(10, "--min-pixels", help="Filtro mínimo de píxeles por parcela"),
     limit_patches: int = typer.Option(
         0,
         "--limit-patches",

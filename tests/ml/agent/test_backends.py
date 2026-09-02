@@ -532,9 +532,7 @@ async def test_vllm_backend_requests_include_usage() -> None:
     Without it, vLLM never emits the ``usage`` chunk and the FinOps observability
     of US-065 logs ``None`` tokens for Qwen (B6).
     """
-    client = FakeOpenAIClient(
-        [_OAChunk(choices=[_OAChoice(delta=_OADelta(content="hola"))])]
-    )
+    client = FakeOpenAIClient([_OAChunk(choices=[_OAChoice(delta=_OADelta(content="hola"))])])
     backend = _vllm_backend_with_client(client)
 
     await _drain_vllm(backend)
@@ -585,9 +583,7 @@ async def test_vllm_backend_usage_on_tool_call_chunk() -> None:
                                 _OAToolCall(
                                     index=0,
                                     id="call_1",
-                                    function=_OAFunction(
-                                        name="list_parcels", arguments="{}"
-                                    ),
+                                    function=_OAFunction(name="list_parcels", arguments="{}"),
                                 )
                             ]
                         )

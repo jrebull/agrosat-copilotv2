@@ -166,9 +166,7 @@ class BaggingEnsemble(EnsembleModel):
             ValueError: if no AlphaEarth column is present.
         """
         cols = tuple(
-            c
-            for c in df.columns
-            if c.startswith(self.feature_prefix) and df.schema[c].is_numeric()
+            c for c in df.columns if c.startswith(self.feature_prefix) and df.schema[c].is_numeric()
         )
         if not cols:
             raise ValueError(

@@ -239,9 +239,7 @@ def build_parcel_geometries(
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     # PASTIS-R metadata.geojson is in EPSG:2154 (Lambert-93, metres); H3 / the
     # spatial split need lon/lat (EPSG:4326), so reproject every patch centroid.
-    crs_name = (
-        meta.get("crs", {}).get("properties", {}).get("name", "EPSG:2154")
-    )
+    crs_name = meta.get("crs", {}).get("properties", {}).get("name", "EPSG:2154")
     transformer = Transformer.from_crs(crs_name, "EPSG:4326", always_xy=True)
     centroid_by_patch: dict[str, tuple[float, float]] = {}
     for feature in meta["features"]:

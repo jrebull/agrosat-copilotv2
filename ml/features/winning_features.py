@@ -104,15 +104,10 @@ def select_winning_features(
 
     rationale_lines = [
         f"Conjunto ganador: `{name}` con {len(selected)} columnas.",
-        (
-            "Bloque base: AlphaEarth, indices espectrales x stats, fenologia "
-            "y FFT NDVI."
-        ),
+        ("Bloque base: AlphaEarth, indices espectrales x stats, fenologia y FFT NDVI."),
     ]
     if discard_geom:
-        rationale_lines.append(
-            "`geom_*` descartado (leakage espacial confirmado en US-022-b)."
-        )
+        rationale_lines.append("`geom_*` descartado (leakage espacial confirmado en US-022-b).")
     for block, promoted in decisions.items():
         if block == "geom":
             continue
@@ -146,9 +141,7 @@ def persist_winning_features(
     winning: WinningFeatureSet,
     fused_df: pl.DataFrame,
     *,
-    output_path: Path | str = Path(
-        "data/features/features_fused_winning_pastis.parquet"
-    ),
+    output_path: Path | str = Path("data/features/features_fused_winning_pastis.parquet"),
     overwrite: bool = False,
 ) -> Path:
     """Persist the subset of winning features from the fused dataset.
@@ -171,8 +164,7 @@ def persist_winning_features(
         return output
 
     meta_cols = [
-        c for c in ("parcel_id", "year", "class_id", "patch_id", "fold")
-        if c in fused_df.columns
+        c for c in ("parcel_id", "year", "class_id", "patch_id", "fold") if c in fused_df.columns
     ]
     feature_cols_present = [c for c in winning.feature_cols if c in fused_df.columns]
     keep = meta_cols + feature_cols_present
@@ -223,9 +215,7 @@ def _read_deltas(ablation_table: pl.DataFrame) -> dict[str, float]:
     if "model" in ablation_table.columns:
         full_rows = ablation_table.filter(pl.col("feature_set") == "full")
         if full_rows.height > 0:
-            ref_model = (
-                full_rows.sort("f1_macro", descending=True).select("model").row(0)[0]
-            )
+            ref_model = full_rows.sort("f1_macro", descending=True).select("model").row(0)[0]
     filtered = ablation_table
     if ref_model is not None:
         filtered = filtered.filter(pl.col("model") == ref_model)

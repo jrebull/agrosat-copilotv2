@@ -131,9 +131,7 @@ class ParcelAggregation:
     num_classes: int
 
 
-def blob_parcels_for_patch(
-    mask: np.ndarray, *, background_id: int = 0
-) -> np.ndarray:
+def blob_parcels_for_patch(mask: np.ndarray, *, background_id: int = 0) -> np.ndarray:
     """Label per-class connected components of a dense mask as pseudo-parcels.
 
     Each contiguous blob of a single crop class is one approximate parcel. Two
@@ -226,9 +224,7 @@ def eurocrops_parcel_id_raster(
     # Contiguous int surrogate per parcel (rasterize needs one int per geometry);
     # the inverse map recovers the Utf8 canonical_parcel_id at join time.
     shapes = [
-        (geom, i + 1)
-        for i, geom in enumerate(geoms)
-        if geom is not None and not geom.is_empty
+        (geom, i + 1) for i, geom in enumerate(geoms) if geom is not None and not geom.is_empty
     ]
     if not shapes:
         return np.zeros((patch_px, patch_px), dtype=np.int64), {}
@@ -487,9 +483,7 @@ def write_parcel_oof(
     """
     bg = 0
     if crop_class_ids is None:
-        crop_class_ids = tuple(
-            c for c in range(aggregation.num_classes) if c != bg
-        )
+        crop_class_ids = tuple(c for c in range(aggregation.num_classes) if c != bg)
     # Scatter the dense (K,) distributions onto the crop-only column space.
     col_of = {cid: i for i, cid in enumerate(crop_class_ids)}
     n_cols = len(crop_class_ids)
@@ -503,9 +497,7 @@ def write_parcel_oof(
     scattered = scattered / row_sums
 
     pred_global = np.asarray(crop_class_ids, dtype=np.int64)[scattered.argmax(axis=1)]
-    prob_cols = {
-        f"prob_{i:03d}": scattered[:, i].astype(np.float32) for i in range(n_cols)
-    }
+    prob_cols = {f"prob_{i:03d}": scattered[:, i].astype(np.float32) for i in range(n_cols)}
     oof_df = pl.DataFrame(
         {
             "canonical_parcel_id": [str(x) for x in aggregation.canonical_parcel_ids],

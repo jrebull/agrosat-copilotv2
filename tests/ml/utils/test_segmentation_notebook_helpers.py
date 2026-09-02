@@ -27,8 +27,14 @@ from ml.utils.segmentation_notebook_helpers import (
 
 def _result(model: str, miou: float | None) -> TrainingResult:
     return TrainingResult(
-        model=model, miou=miou, f1_macro=miou, pixel_acc=miou,
-        returncode=0, error=None, from_checkpoint=True, best_epoch=1,
+        model=model,
+        miou=miou,
+        f1_macro=miou,
+        pixel_acc=miou,
+        returncode=0,
+        error=None,
+        from_checkpoint=True,
+        best_epoch=1,
         cli_command="cmd",
     )
 
@@ -36,8 +42,11 @@ def _result(model: str, miou: float | None) -> TrainingResult:
 def _metrics(num_classes: int = 18) -> dict[str, object]:
     rng = np.linspace(0.1, 0.9, num_classes)
     return {
-        "miou": 0.5, "f1_macro": 0.6, "pixel_acc": 0.8,
-        "balanced_acc": 0.55, "cohen_kappa": 0.7,
+        "miou": 0.5,
+        "f1_macro": 0.6,
+        "pixel_acc": 0.8,
+        "balanced_acc": 0.55,
+        "cohen_kappa": 0.7,
         "per_class_iou": rng.tolist(),
         "per_class_f1": (rng + 0.05).tolist(),
     }
@@ -53,7 +62,9 @@ def test_parse_cli_done_extracts_metrics() -> None:
 def test_parse_cli_done_degraded_when_absent() -> None:
     """Sin linea cli_done, devuelve None en las tres metricas."""
     assert _parse_cli_done("sin nada relevante") == {
-        "miou": None, "f1_macro": None, "pixel_acc": None
+        "miou": None,
+        "f1_macro": None,
+        "pixel_acc": None,
     }
 
 
@@ -79,16 +90,19 @@ def test_build_variant_comparison_degraded_on_missing_model() -> None:
 
 def test_build_variant_comparison_degraded_on_none_metric() -> None:
     """Una metrica None -> None (modo degradado)."""
-    assert build_variant_comparison(
-        [_result("tsvit", None), _result("tsvit-pheno", 0.6)]
-    ) is None
+    assert build_variant_comparison([_result("tsvit", None), _result("tsvit-pheno", 0.6)]) is None
 
 
 def test_segmentation_eval_table_columns() -> None:
     """segmentation_eval_table expone las cinco metricas."""
     df = segmentation_eval_table({"tsvit": _metrics(), "tsvit-pheno": _metrics()})
     assert set(df.columns) == {
-        "variante", "mIoU", "F1_macro", "pixel_acc", "balanced_acc", "cohen_kappa"
+        "variante",
+        "mIoU",
+        "F1_macro",
+        "pixel_acc",
+        "balanced_acc",
+        "cohen_kappa",
     }
     assert df.height == 2
 

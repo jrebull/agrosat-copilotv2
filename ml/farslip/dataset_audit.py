@@ -99,9 +99,9 @@ def audit_dataset(
 
 @app.command()
 def main(
-    dataset_root: Annotated[
-        Path, typer.Option(help="Raiz del dataset farslip_pairs")
-    ] = Path("data/farslip_pairs"),
+    dataset_root: Annotated[Path, typer.Option(help="Raiz del dataset farslip_pairs")] = Path(
+        "data/farslip_pairs"
+    ),
     min_hard: Annotated[int, typer.Option(help="Umbral hard exit 1")] = MIN_HARD,
     min_ok: Annotated[int, typer.Option(help="Umbral warning")] = MIN_OK,
     balance_threshold: Annotated[

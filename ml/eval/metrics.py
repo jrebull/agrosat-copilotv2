@@ -85,16 +85,13 @@ def compute_baseline_metrics(
     y_pred = np.asarray(y_pred).ravel()
     if y_true.shape != y_pred.shape:
         raise ValueError(
-            f"`y_true` and `y_pred` must have the same shape; "
-            f"got {y_true.shape} vs {y_pred.shape}."
+            f"`y_true` and `y_pred` must have the same shape; got {y_true.shape} vs {y_pred.shape}."
         )
     if y_true.size == 0:
         raise ValueError("`y_true` and `y_pred` cannot be empty.")
 
     if labels is None:
-        resolved_labels: list[int] = sorted(
-            int(c) for c in np.union1d(y_true, y_pred)
-        )
+        resolved_labels: list[int] = sorted(int(c) for c in np.union1d(y_true, y_pred))
     else:
         resolved_labels = [int(c) for c in labels]
 
@@ -167,8 +164,7 @@ def confusion_matrix_figure(
     y_pred = np.asarray(y_pred).ravel()
     if y_true.shape != y_pred.shape:
         raise ValueError(
-            f"`y_true` and `y_pred` must have the same shape; "
-            f"got {y_true.shape} vs {y_pred.shape}."
+            f"`y_true` and `y_pred` must have the same shape; got {y_true.shape} vs {y_pred.shape}."
         )
 
     labels = sorted(int(c) for c in np.union1d(y_true, y_pred))
@@ -180,9 +176,7 @@ def confusion_matrix_figure(
         row_sums[row_sums == 0.0] = 1.0
         display_matrix = display_matrix / row_sums
 
-    tick_labels = [
-        (class_names.get(c, str(c)) if class_names else str(c)) for c in labels
-    ]
+    tick_labels = [(class_names.get(c, str(c)) if class_names else str(c)) for c in labels]
 
     fig, ax = plt.subplots(figsize=(max(6.0, len(labels) * 0.6),) * 2)
     image = ax.imshow(display_matrix, cmap="Blues", vmin=0.0, vmax=display_matrix.max() or 1.0)
@@ -193,9 +187,7 @@ def confusion_matrix_figure(
     ax.set_yticklabels(tick_labels, fontsize=8)
     ax.set_xlabel("Prediccion")
     ax.set_ylabel("Verdadero")
-    ax.set_title(
-        "Matriz de confusion " + ("normalizada (recall)" if normalize else "(conteos)")
-    )
+    ax.set_title("Matriz de confusion " + ("normalizada (recall)" if normalize else "(conteos)"))
 
     text_fmt = "{:.2f}" if normalize else "{:.0f}"
     threshold = display_matrix.max() / 2.0 if display_matrix.size else 0.0
@@ -241,14 +233,11 @@ def classification_report_text(
     y_pred = np.asarray(y_pred).ravel()
     if y_true.shape != y_pred.shape:
         raise ValueError(
-            f"`y_true` and `y_pred` must have the same shape; "
-            f"got {y_true.shape} vs {y_pred.shape}."
+            f"`y_true` and `y_pred` must have the same shape; got {y_true.shape} vs {y_pred.shape}."
         )
 
     labels = sorted(int(c) for c in np.union1d(y_true, y_pred))
-    target_names = [
-        (class_names.get(c, str(c)) if class_names else str(c)) for c in labels
-    ]
+    target_names = [(class_names.get(c, str(c)) if class_names else str(c)) for c in labels]
     return classification_report(
         y_true,
         y_pred,
@@ -402,9 +391,7 @@ def dense_miou(
         mIoU in ``[0, 1]``. Returns ``0.0`` if there is no valid class
         (all pixels were ``ignore_index``).
     """
-    cm = dense_confusion_matrix(
-        y_pred, y_true, n_classes=n_classes, ignore_index=ignore_index
-    )
+    cm = dense_confusion_matrix(y_pred, y_true, n_classes=n_classes, ignore_index=ignore_index)
     iou = _per_class_iou_from_cm(cm)
     if np.all(np.isnan(iou)):
         return 0.0
@@ -466,9 +453,7 @@ def dense_pixel_accuracy(
     Returns:
         Accuracy in ``[0, 1]``. Returns ``0.0`` if there are no valid pixels.
     """
-    cm = dense_confusion_matrix(
-        y_pred, y_true, n_classes=n_classes, ignore_index=ignore_index
-    )
+    cm = dense_confusion_matrix(y_pred, y_true, n_classes=n_classes, ignore_index=ignore_index)
     total = int(cm.sum())
     if total == 0:
         return 0.0
@@ -504,9 +489,7 @@ def segmentation_metrics_report(
         * ``per_class_iou`` (``list[float | None]``): per-class IoU from ``0``
           to ``n_classes - 1``; ``None`` for classes absent from the union.
     """
-    cm = dense_confusion_matrix(
-        y_pred, y_true, n_classes=n_classes, ignore_index=ignore_index
-    )
+    cm = dense_confusion_matrix(y_pred, y_true, n_classes=n_classes, ignore_index=ignore_index)
     cm_f = cm.astype(np.float64)
 
     iou = _per_class_iou_from_cm(cm)
@@ -584,9 +567,7 @@ def dense_metrics_from_cm(cm: np.ndarray) -> dict[str, Any]:
     with np.errstate(divide="ignore", invalid="ignore"):
         recall = np.where(support > 0.0, tp / support, np.nan)
     has_support = support > 0.0
-    balanced_acc = (
-        0.0 if not np.any(has_support) else float(np.nanmean(recall[has_support]))
-    )
+    balanced_acc = 0.0 if not np.any(has_support) else float(np.nanmean(recall[has_support]))
 
     # Cohen kappa from the confusion matrix (direct formula).
     p_o = pixel_acc
@@ -594,12 +575,9 @@ def dense_metrics_from_cm(cm: np.ndarray) -> dict[str, Any]:
     p_e = 0.0 if total == 0.0 else expected / (total * total)
     cohen_kappa = 0.0 if (1.0 - p_e) == 0.0 else float((p_o - p_e) / (1.0 - p_e))
 
-    per_class_iou: list[float | None] = [
-        (None if np.isnan(v) else float(v)) for v in iou
-    ]
+    per_class_iou: list[float | None] = [(None if np.isnan(v) else float(v)) for v in iou]
     per_class_f1: list[float | None] = [
-        (None if (i >= n_classes or np.isnan(f1[i])) else float(f1[i]))
-        for i in range(n_classes)
+        (None if (i >= n_classes or np.isnan(f1[i])) else float(f1[i])) for i in range(n_classes)
     ]
 
     return {

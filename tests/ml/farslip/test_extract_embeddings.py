@@ -137,9 +137,7 @@ def test_extract_embeddings_smoke_with_mocked_student(
     mock_student_loader.assert_called_once()
 
 
-def test_output_parquet_schema_is_stable(
-    tmp_path: Path, mock_student_loader: MagicMock
-) -> None:
+def test_output_parquet_schema_is_stable(tmp_path: Path, mock_student_loader: MagicMock) -> None:
     """Schema: parcel_id Int64 + year Int32 + 512 float32 cols = 514 cols."""
     parcels = _make_parcels_parquet(tmp_path / "parcels.parquet", n_rows=6)
     output = tmp_path / "embeddings.parquet"
@@ -182,9 +180,7 @@ def test_cli_argparse_parses_required_and_default_flags(tmp_path: Path) -> None:
             str(tmp_path / "out.parquet"),
         ]
     )
-    assert args.student_checkpoint == (
-        "mlflow://Models/farslip-clip-italy-v1@Production"
-    )
+    assert args.student_checkpoint == ("mlflow://Models/farslip-clip-italy-v1@Production")
     assert args.parcels_parquet == tmp_path / "p.parquet"
     assert args.output == tmp_path / "out.parquet"
     assert args.rois == "italy"  # default
@@ -215,9 +211,7 @@ def test_resolve_checkpoint_mlflow_uri_delegates_to_mlflow_artifacts() -> None:
         )
         assert local == Path("/tmp/fake/student.safetensors")
         assert data_version == "mlflow://Models/farslip-clip-italy-v1@Production"
-        mock_resolve.assert_called_once_with(
-            "mlflow://Models/farslip-clip-italy-v1@Production"
-        )
+        mock_resolve.assert_called_once_with("mlflow://Models/farslip-clip-italy-v1@Production")
 
 
 def test_resolve_checkpoint_local_path_passes_through() -> None:

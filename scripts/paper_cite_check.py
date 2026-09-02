@@ -89,9 +89,7 @@ def main() -> int:
         print(f"ERROR: bibliography not found: {_BIB_PATH}")
         return 1
 
-    tex_files = sorted(_PAPER_DIR.glob("*.tex")) + sorted(
-        (_PAPER_DIR / "sections").glob("*.tex")
-    )
+    tex_files = sorted(_PAPER_DIR.glob("*.tex")) + sorted((_PAPER_DIR / "sections").glob("*.tex"))
     if not tex_files:
         print(f"ERROR: no .tex files found under {_PAPER_DIR}")
         return 1
@@ -102,12 +100,12 @@ def main() -> int:
     missing = sorted(key for key in used if key not in defined)
     unused = sorted(defined - set(used))
 
-    print(f"Scanned {len(tex_files)} LaTeX files; "
-          f"{len(used)} cited keys; {len(defined)} bib entries.")
+    print(
+        f"Scanned {len(tex_files)} LaTeX files; {len(used)} cited keys; {len(defined)} bib entries."
+    )
 
     if unused:
-        print("INFO: bib entries not yet cited (allowed): "
-              + ", ".join(unused))
+        print("INFO: bib entries not yet cited (allowed): " + ", ".join(unused))
 
     if missing:
         print("ERROR: citations without a refs.bib entry:")

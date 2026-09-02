@@ -294,9 +294,7 @@ def test_plot_geom_leakage_comparison_renders_three_bars():
     ]
     fig = plot_geom_leakage_comparison(results)
     assert isinstance(fig, matplotlib.figure.Figure)
-    bars = [
-        p for p in fig.axes[0].patches if isinstance(p, matplotlib.patches.Rectangle)
-    ]
+    bars = [p for p in fig.axes[0].patches if isinstance(p, matplotlib.patches.Rectangle)]
     assert len(bars) == 3
 
 
@@ -321,9 +319,7 @@ def test_plot_optional_blocks_ablation_renders_deltas():
     ]
     fig = plot_optional_blocks_ablation(results)
     assert isinstance(fig, matplotlib.figure.Figure)
-    bars = [
-        p for p in fig.axes[0].patches if isinstance(p, matplotlib.patches.Rectangle)
-    ]
+    bars = [p for p in fig.axes[0].patches if isinstance(p, matplotlib.patches.Rectangle)]
     # 3 sets opcionales (full no cuenta, NaN no cuenta)
     assert len(bars) == 3
 
@@ -376,9 +372,7 @@ def test_plot_model_comparison_v2_with_v1_overlay_renders_both():
     fig = plot_model_comparison_v2_with_v1_overlay(v2, v1_metrics=v1)
     assert isinstance(fig, matplotlib.figure.Figure)
     # Buscamos al menos las 3 barras v2 + 2 barras v1.
-    bars = [
-        p for p in fig.axes[0].patches if isinstance(p, matplotlib.patches.Rectangle)
-    ]
+    bars = [p for p in fig.axes[0].patches if isinstance(p, matplotlib.patches.Rectangle)]
     assert len(bars) >= 5
 
 

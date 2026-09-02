@@ -183,9 +183,7 @@ def farslip_embeddings_italy(context: AssetExecutionContext) -> MaterializeResul
         )
     except Exception as exc:
         if is_gcs_auth_error(exc):
-            return _skipped_result(
-                context, f"GCS auth failed: {type(exc).__name__}", roi
-            )
+            return _skipped_result(context, f"GCS auth failed: {type(exc).__name__}", roi)
         # Real AttributeError, KeyError, ValueError bubble up — they are bugs.
         raise
 
@@ -197,9 +195,7 @@ def farslip_embeddings_italy(context: AssetExecutionContext) -> MaterializeResul
         years_present = sorted(set(int(y) for y in manifest["crop_year"].to_list()))
     else:
         years_present = [FALLBACK_YEAR]
-        context.log.warning(
-            "manifest sin crop_year; usando FALLBACK_YEAR=%d", FALLBACK_YEAR
-        )
+        context.log.warning("manifest sin crop_year; usando FALLBACK_YEAR=%d", FALLBACK_YEAR)
 
     # Bulk extraction in batches. Q9 fix: we accumulate embedding tensors
     # in a single columnar structure (np.ndarray + list[str/int]) and at the end
@@ -211,13 +207,9 @@ def farslip_embeddings_italy(context: AssetExecutionContext) -> MaterializeResul
     output_paths_by_year: dict[int, Path] = {}
 
     crop_paths = manifest["crop_path"].to_list()
-    crop_doys = (
-        manifest["crop_doy"].to_list() if "crop_doy" in manifest.columns else [0] * n_crops
-    )
+    crop_doys = manifest["crop_doy"].to_list() if "crop_doy" in manifest.columns else [0] * n_crops
     cap_classes = (
-        manifest["cap_class"].to_list()
-        if "cap_class" in manifest.columns
-        else [""] * n_crops
+        manifest["cap_class"].to_list() if "cap_class" in manifest.columns else [""] * n_crops
     )
     crop_years = (
         [int(y) for y in manifest["crop_year"].to_list()]
@@ -253,9 +245,7 @@ def farslip_embeddings_italy(context: AssetExecutionContext) -> MaterializeResul
         for offset in range(end - start):
             global_idx = start + offset
             valid_indices.append(global_idx)
-            indices_by_year.setdefault(crop_years[global_idx], []).append(
-                len(valid_indices) - 1
-            )
+            indices_by_year.setdefault(crop_years[global_idx], []).append(len(valid_indices) - 1)
 
     if not embeddings_buffer:
         return _skipped_result(context, "todos los batches fallaron", roi)
@@ -274,12 +264,8 @@ def farslip_embeddings_italy(context: AssetExecutionContext) -> MaterializeResul
         manifest_idxs = [valid_indices[li] for li in local_idxs]
         year_df = pl.DataFrame(
             {
-                "crop_id": [
-                    Path(str(crop_paths[mi])).stem for mi in manifest_idxs
-                ],
-                "embedding": [
-                    all_embeddings[li].tolist() for li in local_idxs
-                ],
+                "crop_id": [Path(str(crop_paths[mi])).stem for mi in manifest_idxs],
+                "embedding": [all_embeddings[li].tolist() for li in local_idxs],
                 "crop_doy": [int(crop_doys[mi]) for mi in manifest_idxs],
                 "cap_class": [str(cap_classes[mi]) for mi in manifest_idxs],
             }

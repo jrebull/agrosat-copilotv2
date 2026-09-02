@@ -69,9 +69,7 @@ def _parse_season(season: str) -> tuple[str, str]:
     return start, end
 
 
-def _summarise(
-    results: list[tuple[PatchPlan, PatchResult]], n_requests: int
-) -> dict[str, object]:
+def _summarise(results: list[tuple[PatchPlan, PatchResult]], n_requests: int) -> dict[str, object]:
     """Aggregate the per-patch results into the pilot GATE report.
 
     Args:
@@ -270,9 +268,11 @@ def main(argv: list[str] | None = None) -> int:
         mlflow.log_dict(summary, "pilot_summary.json")
         run_id = run_ctx.info.run_id
 
-    logger.info("build_italia_pastis_done", run_id=run_id, **{
-        k: v for k, v in summary.items() if not isinstance(v, dict)
-    })
+    logger.info(
+        "build_italia_pastis_done",
+        run_id=run_id,
+        **{k: v for k, v in summary.items() if not isinstance(v, dict)},
+    )
     print(json.dumps({"mlflow_run_id": run_id, **summary}, indent=2, ensure_ascii=False))
     return 0
 

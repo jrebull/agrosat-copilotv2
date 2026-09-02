@@ -316,9 +316,7 @@ def build_fused_features(
 def _validate_parcels(parcels: gpd.GeoDataFrame, *, year: int) -> None:
     """Validate that the parcels GeoDataFrame has the minimum columns."""
     if not isinstance(parcels, gpd.GeoDataFrame):  # pragma: no cover - guard
-        raise ValueError(
-            f"`parcels` must be a geopandas.GeoDataFrame; received {type(parcels)!r}"
-        )
+        raise ValueError(f"`parcels` must be a geopandas.GeoDataFrame; received {type(parcels)!r}")
     missing = [c for c in ("parcel_id", "year") if c not in parcels.columns]
     if missing:
         raise ValueError(
@@ -611,11 +609,7 @@ def _build_farslip_block(
       and returns ``None`` (the block is omitted without failing).
     """
     explicit_path = farslip_path is not None
-    resolved = (
-        Path(farslip_path)
-        if explicit_path
-        else resolve_dataset_path(_DEFAULT_FARSLIP_PATH)
-    )
+    resolved = Path(farslip_path) if explicit_path else resolve_dataset_path(_DEFAULT_FARSLIP_PATH)
 
     if not resolved.exists():
         if explicit_path:
@@ -775,15 +769,12 @@ def _build_spectral_signature_block_lf(
         df = pl.read_parquet(resolved)
 
     if "parcel_id" not in df.columns:
-        raise ValueError(
-            "spectral_signature block does not contain `parcel_id` for the join."
-        )
+        raise ValueError("spectral_signature block does not contain `parcel_id` for the join.")
     df = canonical_parcel_id(df)
     spec_cols = tuple(c for c in df.columns if c.startswith("spectral_signature_"))
     if not spec_cols:
         raise ValueError(
-            "spectral_signature block does not contain columns with prefix "
-            "`spectral_signature_`."
+            "spectral_signature block does not contain columns with prefix `spectral_signature_`."
         )
     if "year" not in df.columns:
         year_val = int(parcels["year"].iloc[0]) if len(parcels) else 0

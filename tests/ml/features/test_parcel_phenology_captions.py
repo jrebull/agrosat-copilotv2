@@ -54,9 +54,7 @@ def _patch_pastis(monkeypatch):
     }
     doy = np.array([60, 150, 240, 330], dtype=np.int32)
 
-    monkeypatch.setattr(
-        ppc, "_patch_dates_doy", lambda _p: {10000: doy, 10001: doy}
-    )
+    monkeypatch.setattr(ppc, "_patch_dates_doy", lambda _p: {10000: doy, 10001: doy})
 
     def _fake_split(_root, *, train_folds, val_folds, test_folds):
         return {"train": list(patches.keys()), "val": [], "test": []}
@@ -65,9 +63,7 @@ def _patch_pastis(monkeypatch):
     import ml.ingest.pastis_loader as pl_loader
 
     monkeypatch.setattr(pds, "pastis_fold_split", _fake_split)
-    monkeypatch.setattr(
-        pl_loader, "load_pastis_patch", lambda pid, **_kw: patches[str(pid)]
-    )
+    monkeypatch.setattr(pl_loader, "load_pastis_patch", lambda pid, **_kw: patches[str(pid)])
     return patches
 
 
@@ -145,15 +141,24 @@ def test_generate_captions_resume_skips_done(_patch_pastis, tmp_path) -> None:
         )
         out = tmp_path / "parcel_captions.parquet"
         generate_parcel_phenology_captions(
-            curves, class_names={1: "Meadow", 3: "Corn"}, output_path=out,
-            model="m", cache_dir=tmp_path / "c1", flush_every=10
+            curves,
+            class_names={1: "Meadow", 3: "Corn"},
+            output_path=out,
+            model="m",
+            cache_dir=tmp_path / "c1",
+            flush_every=10,
         )
         first = n["calls"]
         # Second run with resume should skip all (cache_dir differs to force the
         # resume path, not the SHA cache, to do the skipping).
         generate_parcel_phenology_captions(
-            curves, class_names={1: "Meadow", 3: "Corn"}, output_path=out,
-            model="m", cache_dir=tmp_path / "c2", flush_every=10, resume=True
+            curves,
+            class_names={1: "Meadow", 3: "Corn"},
+            output_path=out,
+            model="m",
+            cache_dir=tmp_path / "c2",
+            flush_every=10,
+            resume=True,
         )
         assert n["calls"] == first  # no new generations
     finally:

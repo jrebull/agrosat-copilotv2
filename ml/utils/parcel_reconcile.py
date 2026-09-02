@@ -162,9 +162,7 @@ def pixel_to_parcel_probs(
 
     probs = np.ascontiguousarray(probs_18).astype(np.float32)
     if probs.ndim != 3 or probs.shape[0] != _NUM_CLASSES:
-        raise ValueError(
-            f"probs_18 must be (18, H, W); received shape {probs.shape}."
-        )
+        raise ValueError(f"probs_18 must be (18, H, W); received shape {probs.shape}.")
     pids = np.ascontiguousarray(parcel_ids).astype(np.int64)
     if pids.shape != probs.shape[1:]:
         raise ValueError(
@@ -264,8 +262,7 @@ def instance_to_parcel_id_map(
     target = np.load(target_path)
     if target.ndim != 3 or target.shape[0] < 2:
         raise FileNotFoundError(
-            f"PASTIS-R TARGET_{pid}.npy lacks the instance channel "
-            f"(shape {target.shape})."
+            f"PASTIS-R TARGET_{pid}.npy lacks the instance channel (shape {target.shape})."
         )
     instance = target[1]
     parcel_raster = load_pastis_parcel_ids(pid, root)

@@ -109,9 +109,7 @@ def write_softmax_parquet(
         else:
             arr = np.asarray(softmax)
             if arr.shape != expected_softmax:
-                raise ValueError(
-                    f"softmax shape {arr.shape} != expected {expected_softmax}."
-                )
+                raise ValueError(f"softmax shape {arr.shape} != expected {expected_softmax}.")
             record[_SOFTMAX_COL] = arr.astype(np_dtype).reshape(-1).tolist()
 
         if pred is None:
@@ -119,9 +117,7 @@ def write_softmax_parquet(
         else:
             parr = np.asarray(pred)
             if parr.shape != expected_pred:
-                raise ValueError(
-                    f"pred shape {parr.shape} != expected {expected_pred}."
-                )
+                raise ValueError(f"pred shape {parr.shape} != expected {expected_pred}.")
             record[_PRED_COL] = parr.astype(np.int8).reshape(-1).tolist()
 
         out_rows.append(record)
@@ -169,8 +165,7 @@ def read_softmax_parquet(path: Path | str) -> pl.DataFrame:
     meta = table.schema.metadata or {}
     if META_NUM_CLASSES not in meta or META_SIZE not in meta:
         raise ValueError(
-            f"{in_path} lacks OOF shape metadata; was it written by "
-            "write_softmax_parquet?"
+            f"{in_path} lacks OOF shape metadata; was it written by write_softmax_parquet?"
         )
     num_classes = int(meta[META_NUM_CLASSES])
     size = int(meta[META_SIZE])
@@ -182,13 +177,9 @@ def read_softmax_parquet(path: Path | str) -> pl.DataFrame:
 
     softmax_arrays: list[np.ndarray | None] = []
     pred_arrays: list[np.ndarray | None] = []
-    for sm, pr in zip(
-        frame[_SOFTMAX_COL].to_list(), frame[_PRED_COL].to_list(), strict=True
-    ):
+    for sm, pr in zip(frame[_SOFTMAX_COL].to_list(), frame[_PRED_COL].to_list(), strict=True):
         if sm:
-            softmax_arrays.append(
-                np.asarray(sm, dtype=np_dtype).reshape(num_classes, size, size)
-            )
+            softmax_arrays.append(np.asarray(sm, dtype=np_dtype).reshape(num_classes, size, size))
         else:
             softmax_arrays.append(None)
         if pr:

@@ -90,9 +90,7 @@ def xgb_shap(xgb_model):
 
 def test_feature_importance_rf_returns_ranked_df(rf_model):
     """RF: ``feature_importance_table`` devuelve ``(feature, importance, rank)``."""
-    table = feature_importance_table(
-        rf_model.model, "rf", rf_model.feature_cols
-    )
+    table = feature_importance_table(rf_model.model, "rf", rf_model.feature_cols)
     assert isinstance(table, pl.DataFrame)
     assert table.columns == ["feature", "importance", "rank"]
     assert table.height == len(rf_model.feature_cols)
@@ -102,9 +100,7 @@ def test_feature_importance_rf_returns_ranked_df(rf_model):
 
 def test_feature_importance_xgb_uses_gain(xgb_model):
     """XGB: la importancia *gain* es no negativa y alineada a feature_cols."""
-    table = feature_importance_table(
-        xgb_model.model, "xgb", xgb_model.feature_cols
-    )
+    table = feature_importance_table(xgb_model.model, "xgb", xgb_model.feature_cols)
     assert table.height == len(xgb_model.feature_cols)
     assert (table["importance"] >= 0.0).all()
     # Al menos un feature debe tener gain positivo (el modelo aprendio senal).
@@ -113,9 +109,7 @@ def test_feature_importance_xgb_uses_gain(xgb_model):
 
 def test_importance_table_sorted_descending(rf_model):
     """La tabla de importancia queda ordenada de mayor a menor."""
-    table = feature_importance_table(
-        rf_model.model, "rf", rf_model.feature_cols
-    )
+    table = feature_importance_table(rf_model.model, "rf", rf_model.feature_cols)
     importances = table["importance"].to_list()
     assert importances == sorted(importances, reverse=True)
 
@@ -129,9 +123,7 @@ def test_feature_importance_rejects_bad_model_kind(rf_model):
 def test_feature_importance_rejects_mismatched_feature_cols(rf_model):
     """Un ``feature_cols`` de largo distinto al del modelo RF lanza error."""
     with pytest.raises(ValueError, match="features"):
-        feature_importance_table(
-            rf_model.model, "rf", rf_model.feature_cols[:-1]
-        )
+        feature_importance_table(rf_model.model, "rf", rf_model.feature_cols[:-1])
 
 
 # ===========================================================================
@@ -167,22 +159,16 @@ def test_shap_handles_multiclass_output():
     per_class = [rng.standard_normal((n_samples, n_features)) for _ in range(n_classes)]
 
     # Forma 1: lista por clase.
-    from_list = _normalize_shap_multiclass(
-        per_class, n_samples=n_samples, n_features=n_features
-    )
+    from_list = _normalize_shap_multiclass(per_class, n_samples=n_samples, n_features=n_features)
     assert from_list.shape == (n_samples, n_features, n_classes)
 
     # Forma 2: array 3D ya canonico.
     array_3d = np.stack(per_class, axis=-1)
-    from_3d = _normalize_shap_multiclass(
-        array_3d, n_samples=n_samples, n_features=n_features
-    )
+    from_3d = _normalize_shap_multiclass(array_3d, n_samples=n_samples, n_features=n_features)
     np.testing.assert_allclose(from_list, from_3d)
 
     # Forma 3: array 2D (binario/regresion) -> se expande a 3 ejes.
-    from_2d = _normalize_shap_multiclass(
-        per_class[0], n_samples=n_samples, n_features=n_features
-    )
+    from_2d = _normalize_shap_multiclass(per_class[0], n_samples=n_samples, n_features=n_features)
     assert from_2d.shape == (n_samples, n_features, 1)
 
 
@@ -191,18 +177,14 @@ def test_shap_normalize_handles_class_first_layout():
     n_samples, n_features, n_classes = 5, 4, 3
     rng = np.random.default_rng(1)
     class_first = rng.standard_normal((n_classes, n_samples, n_features))
-    out = _normalize_shap_multiclass(
-        class_first, n_samples=n_samples, n_features=n_features
-    )
+    out = _normalize_shap_multiclass(class_first, n_samples=n_samples, n_features=n_features)
     assert out.shape == (n_samples, n_features, n_classes)
 
 
 def test_shap_normalize_rejects_unknown_shape():
     """Una forma de SHAP no reconocida (4D) lanza ``ValueError``."""
     with pytest.raises(ValueError, match="Unrecognized SHAP shape"):
-        _normalize_shap_multiclass(
-            np.zeros((2, 2, 2, 2)), n_samples=2, n_features=2
-        )
+        _normalize_shap_multiclass(np.zeros((2, 2, 2, 2)), n_samples=2, n_features=2)
 
 
 def test_shap_global_importance_is_mean_abs(rf_shap):
@@ -233,9 +215,7 @@ def test_compute_shap_subsamples_large_input(rf_model):
         sample_size=30,
     )
     assert result.values.shape[0] == 30
-    matrix, row_index = _to_numpy_sample(
-        rf_model.X, rf_model.feature_cols, sample_size=30
-    )
+    matrix, row_index = _to_numpy_sample(rf_model.X, rf_model.feature_cols, sample_size=30)
     assert matrix.shape[0] == 30
     assert row_index.size == 30
 
@@ -280,9 +260,7 @@ def test_shap_dependence_generates_five_plots(xgb_shap, xgb_model):
 
 def test_shap_dependence_uses_top5_by_importance(rf_shap, rf_model):
     """Los dependence plots usan las top-N features por importancia SHAP global."""
-    expected = (
-        rf_shap.global_importance.sort("rank").head(5)["feature"].to_list()
-    )
+    expected = rf_shap.global_importance.sort("rank").head(5)["feature"].to_list()
     plots = shap_dependence_plots(rf_shap, rf_model.X, top_features=5)
     assert [name for name, _ in plots] == expected
 
@@ -386,9 +364,7 @@ def test_alphaearth_dominance_counts_top20():
 
 def test_alphaearth_dominance_accepts_native_importance(rf_model):
     """La dominancia opera sobre la importancia nativa (columna ``importance``)."""
-    native = feature_importance_table(
-        rf_model.model, "rf", rf_model.feature_cols
-    )
+    native = feature_importance_table(rf_model.model, "rf", rf_model.feature_cols)
     table = alphaearth_dominance_table(native, top_n=6)
     assert table.height == 6
     assert "family" in table.columns
@@ -397,17 +373,13 @@ def test_alphaearth_dominance_accepts_native_importance(rf_model):
 def test_alphaearth_dominance_rejects_missing_feature_column():
     """Una tabla sin columna ``feature`` lanza ``ValueError``."""
     with pytest.raises(ValueError, match="feature"):
-        alphaearth_dominance_table(
-            pl.DataFrame({"importance": [1.0], "rank": [1]})
-        )
+        alphaearth_dominance_table(pl.DataFrame({"importance": [1.0], "rank": [1]}))
 
 
 def test_alphaearth_dominance_rejects_missing_importance_column():
     """Una tabla sin columna de importancia reconocible lanza ``ValueError``."""
     with pytest.raises(ValueError, match="importance column"):
-        alphaearth_dominance_table(
-            pl.DataFrame({"feature": ["dim_00"], "rank": [1]})
-        )
+        alphaearth_dominance_table(pl.DataFrame({"feature": ["dim_00"], "rank": [1]}))
 
 
 # ===========================================================================
@@ -422,9 +394,7 @@ def test_notebook_has_sections_3_4_5():
         pytest.skip("notebooks/04_baseline.ipynb aun no generado")
     nb = json.loads(_NOTEBOOK_PATH.read_text(encoding="utf-8"))
     markdown = "\n".join(
-        "".join(cell.get("source", []))
-        for cell in nb["cells"]
-        if cell["cell_type"] == "markdown"
+        "".join(cell.get("source", [])) for cell in nb["cells"] if cell["cell_type"] == "markdown"
     )
     assert "## 3. Importancia de features nativa" in markdown
     assert "## 4. Analisis SHAP" in markdown
@@ -440,9 +410,7 @@ def test_notebook_has_shap_waterfall_cell():
         pytest.skip("notebooks/04_baseline.ipynb aun no generado")
     nb = json.loads(_NOTEBOOK_PATH.read_text(encoding="utf-8"))
     code = "\n".join(
-        "".join(cell.get("source", []))
-        for cell in nb["cells"]
-        if cell["cell_type"] == "code"
+        "".join(cell.get("source", [])) for cell in nb["cells"] if cell["cell_type"] == "code"
     )
     assert "shap_waterfall_plot" in code
 
@@ -453,10 +421,7 @@ def test_notebook_has_fe_validation_section():
     if not _NOTEBOOK_PATH.exists():
         pytest.skip("notebooks/04_baseline.ipynb aun no generado")
     nb = json.loads(_NOTEBOOK_PATH.read_text(encoding="utf-8"))
-    text = "\n".join(
-        "".join(cell.get("source", []))
-        for cell in nb["cells"]
-    )
+    text = "\n".join("".join(cell.get("source", [])) for cell in nb["cells"])
     assert "## 5. Conclusiones de feature engineering" in text
     assert "feature_selection" in text
 
@@ -468,8 +433,6 @@ def test_notebook_quantifies_alphaearth_dominance():
         pytest.skip("notebooks/04_baseline.ipynb aun no generado")
     nb = json.loads(_NOTEBOOK_PATH.read_text(encoding="utf-8"))
     code = "\n".join(
-        "".join(cell.get("source", []))
-        for cell in nb["cells"]
-        if cell["cell_type"] == "code"
+        "".join(cell.get("source", [])) for cell in nb["cells"] if cell["cell_type"] == "code"
     )
     assert "alphaearth_dominance_table" in code

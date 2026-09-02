@@ -51,9 +51,7 @@ class _TrainSpy:
         return self.calls[-1][0]
 
 
-def _fake_rescore(
-    *, base_miou: float = 0.659, pheno_miou: float = 0.661
-) -> Any:
+def _fake_rescore(*, base_miou: float = 0.659, pheno_miou: float = 0.661) -> Any:
     """Factory of a stub ``rescore_all_checkpoints`` (returns a Polars frame)."""
 
     def _stub(*, fold: int, device: str, skip_missing: bool) -> pl.DataFrame:
@@ -181,9 +179,7 @@ def test_rejects_cfg_smuggling_lambda() -> None:
     bad_cfg = dict(CFG_FULL_TSVIT)
     bad_cfg["lambda_contrast"] = 0.9
     with pytest.raises(ValueError, match="lambda_contrast"):
-        run_tsvit_pheno_full(
-            train_fn=spy, cfg_full=bad_cfg, rescore_fold5=False, mlflow_uri=None
-        )
+        run_tsvit_pheno_full(train_fn=spy, cfg_full=bad_cfg, rescore_fold5=False, mlflow_uri=None)
 
 
 # ---------------------------------------------------------------------------

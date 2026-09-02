@@ -213,9 +213,7 @@ def test_generator_dry_run_no_api() -> None:
 def test_generator_full_plan_covers_grid() -> None:
     """The plan covers the full family x language grid with the target count."""
     generator = SeedGenerator(client=None)
-    items = generator.generate_plan(
-        list(QuestionFamily), ["it", "es"], 2, dry_run=True
-    )
+    items = generator.generate_plan(list(QuestionFamily), ["it", "es"], 2, dry_run=True)
     # 10 families * 2 languages * 2 per cell.
     assert len(items) == 40
     families_seen = {it.category for it in items}
@@ -251,9 +249,7 @@ class _FakeGeminiClient:
 def test_generator_real_path_with_mocked_client() -> None:
     """The real path parses a mocked Gemini JSON answer into a QAItem."""
     generator = SeedGenerator(client=_FakeGeminiClient())
-    items = generator.generate(
-        QuestionFamily.CLASSIFICATION, "it", 1, dry_run=False
-    )
+    items = generator.generate(QuestionFamily.CLASSIFICATION, "it", 1, dry_run=False)
     assert len(items) == 1
     item = items[0]
     assert item.source == "gemini-seed"

@@ -188,9 +188,7 @@ def _materialize_cv_splits(
             )
         materialized.append((train_arr, test_arr))
     if not materialized:
-        raise ValueError(
-            "`cv_splits` is empty; the curves require at least one split."
-        )
+        raise ValueError("`cv_splits` is empty; the curves require at least one split.")
     return materialized
 
 
@@ -296,8 +294,7 @@ def _remap_cv_splits(
         remapped.append((new_train, new_test))
     if not remapped:
         raise ValueError(
-            "The subsample left all spatial folds without samples; "
-            "increase `max_samples`."
+            "The subsample left all spatial folds without samples; increase `max_samples`."
         )
     return remapped
 
@@ -746,9 +743,7 @@ def fetch_loss_history_from_mlflow(
             if not history:
                 continue
             history_sorted = sorted(history, key=lambda m: m.step)
-            arr = np.asarray(
-                [m.value for m in history_sorted], dtype=np.float64
-            )
+            arr = np.asarray([m.value for m in history_sorted], dtype=np.float64)
             per_fold.append(arr)
             max_epochs = max(max_epochs, arr.size)
         if not per_fold:
@@ -764,10 +759,14 @@ def fetch_loss_history_from_mlflow(
         return epochs, mean, std
 
     epochs, train_mean, train_std = _collect(train_keys)
-    _, val_mean, val_std = _collect(val_keys) if val_keys else (
-        epochs,
-        np.array([], dtype=np.float64),
-        np.array([], dtype=np.float64),
+    _, val_mean, val_std = (
+        _collect(val_keys)
+        if val_keys
+        else (
+            epochs,
+            np.array([], dtype=np.float64),
+            np.array([], dtype=np.float64),
+        )
     )
 
     return TemporalLossHistory(
@@ -807,9 +806,7 @@ def plot_loss_history_from_mlflow(
     import matplotlib.pyplot as plt
 
     if history.epochs.size == 0:
-        raise ValueError(
-            f"The history of run {history.run_id} is empty; there is nothing to plot."
-        )
+        raise ValueError(f"The history of run {history.run_id} is empty; there is nothing to plot.")
 
     if title is None:
         title = (

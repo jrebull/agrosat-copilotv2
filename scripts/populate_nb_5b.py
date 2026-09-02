@@ -61,7 +61,7 @@ las invoca."""
 )
 
 sec5_setup = _code(
-    '''# Carga de checkpoints y evaluacion sobre el fold de validacion completo.
+    """# Carga de checkpoints y evaluacion sobre el fold de validacion completo.
 # Los best.pt fueron entrenados 30 epochs en la GPU L4 (registro MLflow
 # alt-tsvit-v1 / alt-tsvit-pheno-v1) y traidos a checkpoint_dir.
 import numpy as np
@@ -106,11 +106,11 @@ else:
         "> Checkpoints ausentes: "
         + ", ".join(f"`{p}`" for p in faltan)
         + ". Se omite la evaluacion (modo degradado)."
-    ))'''
+    ))"""
 )
 
 sec5_eval = _code(
-    '''# Evalua cada variante: acumula la matriz de confusion sobre todo el fold y
+    """# Evalua cada variante: acumula la matriz de confusion sobre todo el fold y
 # deriva mIoU, F1-macro, pixel_acc, balanced accuracy y Cohen kappa.
 NUM_CLASSES = 18 if target == "semantic18" else 6
 eval_results: dict[str, dict] = {}
@@ -148,7 +148,7 @@ if eval_ds is not None:
         "comparable, y la rama fenologica lo supera."
     ))
 else:
-    display(Markdown("> Sin dataset/checkpoints; no hay metricas que mostrar."))'''
+    display(Markdown("> Sin dataset/checkpoints; no hay metricas que mostrar."))"""
 )
 
 sec5_perclass_md = _md(
@@ -161,7 +161,7 @@ espectral sola es ambigua pero cuya descripcion fenologica las separa."""
 )
 
 sec5_perclass = _code(
-    '''# IoU y F1 por clase de ambas variantes, lado a lado, con el delta del pheno.
+    """# IoU y F1 por clase de ambas variantes, lado a lado, con el delta del pheno.
 if eval_results:
     names = CLASS_NAMES if target == "semantic18" else None
     rows = []
@@ -186,7 +186,7 @@ if eval_results:
     per_class_df.write_csv(out_csv)
     display(Markdown(f"Tabla por clase guardada en `{out_csv.relative_to(REPO)}`."))
 else:
-    display(Markdown("> Sin metricas por clase (modo degradado)."))'''
+    display(Markdown("> Sin metricas por clase (modo degradado)."))"""
 )
 
 sec5_cm_md = _md(
@@ -199,7 +199,7 @@ cultivos de aspecto espectral parecido."""
 )
 
 sec5_cm = _code(
-    '''# Matriz de confusion normalizada por fila, una por variante.
+    """# Matriz de confusion normalizada por fila, una por variante.
 if cms:
     names = CLASS_NAMES if target == "semantic18" else None
     for kind, cm in cms.items():
@@ -224,7 +224,7 @@ if cms:
         plt.close(fig)
         display(Markdown(f"Guardada en `{out_path.relative_to(REPO)}`."))
 else:
-    display(Markdown("> Sin matrices de confusion (modo degradado)."))'''
+    display(Markdown("> Sin matrices de confusion (modo degradado)."))"""
 )
 
 sec5_pred_md = _md(
@@ -236,7 +236,7 @@ la prediccion del modelo. Usamos la variante con fenologia (la de mejor mIoU).""
 )
 
 sec5_pred = _code(
-    '''# Predicciones de la mejor variante sobre algunos parches de validacion.
+    """# Predicciones de la mejor variante sobre algunos parches de validacion.
 if eval_ds is not None and (CKPT / "tsvit-pheno-v1" / "best.pt").is_file():
     best_kind = "tsvit-pheno"
     model = load_segmentation_model(
@@ -262,20 +262,26 @@ if eval_ds is not None and (CKPT / "tsvit-pheno-v1" / "best.pt").is_file():
     ))
     del model
 else:
-    display(Markdown("> Sin checkpoint pheno; no se generan predicciones visuales."))'''
+    display(Markdown("> Sin checkpoint pheno; no se generan predicciones visuales."))"""
 )
 
 # 3. Insert the Section 5 cells before the Conclusions cell
 #    (last markdown cell that starts with "## Conclusiones").
 concl_idx = next(
-    i for i, c in enumerate(cells)
+    i
+    for i, c in enumerate(cells)
     if c["cell_type"] == "markdown" and "".join(c["source"]).startswith("## Conclusiones")
 )
 sec5_cells = [
-    sec5_md, sec5_setup, sec5_eval,
-    sec5_perclass_md, sec5_perclass,
-    sec5_cm_md, sec5_cm,
-    sec5_pred_md, sec5_pred,
+    sec5_md,
+    sec5_setup,
+    sec5_eval,
+    sec5_perclass_md,
+    sec5_perclass,
+    sec5_cm_md,
+    sec5_cm,
+    sec5_pred_md,
+    sec5_pred,
 ]
 # Spelling-robust idempotence: detected via an English identifier
 # (stable to accents) present in the Section 5 setup cell.

@@ -134,9 +134,7 @@ class LoopingBackend:
     ) -> AsyncIterator[FakeChunk]:
         """Always yield a single function-call chunk for ``tool_name``."""
         self.generate_count += 1
-        yield FakeChunk(
-            function_call=FakeFunctionCall(name=self.tool_name, args={}, id=None)
-        )
+        yield FakeChunk(function_call=FakeFunctionCall(name=self.tool_name, args={}, id=None))
 
 
 def _list_parcels_spec() -> ToolSpec:
@@ -155,9 +153,7 @@ def _agent_with_list_parcels(backend: Any) -> Agent:
 
 def _patch_db(monkeypatch: pytest.MonkeyPatch, conn: FakeConn) -> None:
     """Point the ``list_parcels`` tool at the in-memory :class:`FakeConn`."""
-    monkeypatch.setattr(
-        parcels_mod, "session_scoped_conn", fake_session_scoped_conn(conn)
-    )
+    monkeypatch.setattr(parcels_mod, "session_scoped_conn", fake_session_scoped_conn(conn))
 
 
 async def _collect(agent: Agent, messages: list[dict], ctx) -> list:
@@ -360,9 +356,7 @@ async def test_grounding_system_turn_folds_into_contents(make_ctx) -> None:
 # ---------------------------------------------------------------------------
 # stream_response: multi-tool turn
 # ---------------------------------------------------------------------------
-async def test_two_tool_calls_in_one_turn(
-    monkeypatch: pytest.MonkeyPatch, make_ctx
-) -> None:
+async def test_two_tool_calls_in_one_turn(monkeypatch: pytest.MonkeyPatch, make_ctx) -> None:
     """Two function calls in a single turn -> two call/result pairs, then text."""
     conn = FakeConn(fetch_rows=[{"id": 1, "crop_class": "maize", "confidence": 0.7}])
     _patch_db(monkeypatch, conn)
@@ -446,8 +440,7 @@ async def test_mixed_text_and_tool_call_turn_streams_text_and_runs_tool(
     model_turn = next(
         c
         for c in second_turn_contents
-        if c.role == "model"
-        and any(getattr(p, "function_call", None) is not None for p in c.parts)
+        if c.role == "model" and any(getattr(p, "function_call", None) is not None for p in c.parts)
     )
     text_in_model_turn = [p.text for p in model_turn.parts if getattr(p, "text", None)]
     assert text_in_model_turn == [
@@ -654,9 +647,9 @@ async def test_thought_signature_round_trips_into_rebuilt_content(
     model_turns = [c for c in second_turn_contents if getattr(c, "role", None) == "model"]
     fc_parts = [p for c in model_turns for p in _function_call_parts(c)]
     assert fc_parts, "expected a rebuilt function-call part in the model turn"
-    assert any(
-        getattr(p, "thought_signature", None) == sig for p in fc_parts
-    ), "the thought_signature must round-trip verbatim onto the rebuilt part"
+    assert any(getattr(p, "thought_signature", None) == sig for p in fc_parts), (
+        "the thought_signature must round-trip verbatim onto the rebuilt part"
+    )
 
 
 async def test_no_thought_signature_leaves_rebuilt_content_unchanged(

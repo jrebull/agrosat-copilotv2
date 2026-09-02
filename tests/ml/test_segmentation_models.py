@@ -32,9 +32,7 @@ def _seed() -> None:
 
 def test_deeplabv3plus_forward_shape() -> None:
     """Forward ``(2,10,128,128) -> (2,18,128,128)`` sin NaN (CPU, sin pesos HF)."""
-    model = build_deeplabv3plus_mobilenet(
-        in_channels=10, classes=18, encoder_weights=None
-    ).eval()
+    model = build_deeplabv3plus_mobilenet(in_channels=10, classes=18, encoder_weights=None).eval()
     x = torch.randn(2, 10, 128, 128)
     with torch.no_grad():
         logits = model(x)
@@ -44,9 +42,7 @@ def test_deeplabv3plus_forward_shape() -> None:
 
 def test_deeplabv3plus_hcat6_classes() -> None:
     """Con ``classes=6`` (HCAT) la salida tiene 6 canales."""
-    model = build_deeplabv3plus_mobilenet(
-        in_channels=10, classes=6, encoder_weights=None
-    ).eval()
+    model = build_deeplabv3plus_mobilenet(in_channels=10, classes=6, encoder_weights=None).eval()
     x = torch.randn(1, 10, 128, 128)
     with torch.no_grad():
         logits = model(x)
@@ -61,9 +57,7 @@ def test_deeplabv3plus_invalid_atrous_rates_raises() -> None:
 
 def test_deeplabv3plus_backward_produces_grad() -> None:
     """Un backward sobre la perdida produce gradiente finito en los parametros."""
-    model = build_deeplabv3plus_mobilenet(
-        in_channels=10, classes=18, encoder_weights=None
-    ).train()
+    model = build_deeplabv3plus_mobilenet(in_channels=10, classes=18, encoder_weights=None).train()
     loss_fn = build_dice_ce_loss(ignore_index=_IGNORE_INDEX, n_classes=18)
     x = torch.randn(2, 10, 64, 64)
     target = torch.randint(0, 18, (2, 64, 64))
@@ -201,7 +195,9 @@ def test_tsvit_returns_visual_proj() -> None:
 
 def test_tsvit_factory_defaults() -> None:
     """``build_tsvit`` produce un TSViT con la salida densa esperada."""
-    model = build_tsvit(num_classes=18, n_timesteps=4, img_size=64, dim=32, depth_temporal=1, depth_spatial=1).eval()
+    model = build_tsvit(
+        num_classes=18, n_timesteps=4, img_size=64, dim=32, depth_temporal=1, depth_spatial=1
+    ).eval()
     x = torch.randn(1, 4, 10, 64, 64)
     doy = torch.randint(1, 366, (1, 4))
     with torch.no_grad():

@@ -296,9 +296,7 @@ class EnsembleModel(abc.ABC):
             A parcel-level Polars DataFrame (see ``pixel_to_parcel_probs``).
         """
         self.validate_probs(probs_18, class_axis=0, name="pixel_softmax")
-        return pixel_to_parcel_probs(
-            probs_18, parcel_ids, patch_id=patch_id, method=method
-        )
+        return pixel_to_parcel_probs(probs_18, parcel_ids, patch_id=patch_id, method=method)
 
     # ------------------------------------------------------------------
     # Spatial sub-folds (anti-leakage: meta-learner sees OOF only).
@@ -409,8 +407,7 @@ class EnsembleModel(abc.ABC):
         yp = np.asarray(y_pred).reshape(-1)
         if yt.shape != yp.shape:
             raise ValueError(
-                f"y_true ({yt.size}) and y_pred ({yp.size}) must have the same "
-                "number of elements."
+                f"y_true ({yt.size}) and y_pred ({yp.size}) must have the same number of elements."
             )
         acc = DenseConfusionAccumulator(num_classes, ignore_index=ignore_index)
         acc.update(yp, yt)

@@ -58,9 +58,7 @@ logger = structlog.get_logger(__name__)
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _DEFAULT_PASTIS_ROOT = _REPO_ROOT / "data" / "PASTIS-R"
 _DEFAULT_CAPTIONS_PATH = _REPO_ROOT / "data" / "farslip" / "pastis_captions.parquet"
-_DEFAULT_PROTO_PATH = (
-    _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis.parquet"
-)
+_DEFAULT_PROTO_PATH = _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis.parquet"
 
 #: Non-agronomic classes excluded from the present-classes / parcels accounting.
 _BACKGROUND_CLASS: int = 0
@@ -107,15 +105,10 @@ def load_typical_phenology(path: Path = _DEFAULT_PROTO_PATH) -> dict[str, str]:
         logger.warning("typical_phenology_missing", path=str(path))
         return {}
     df = pl.read_parquet(path, columns=["class_name", "description"])
-    return {
-        str(row["class_name"]): str(row["description"])
-        for row in df.iter_rows(named=True)
-    }
+    return {str(row["class_name"]): str(row["description"]) for row in df.iter_rows(named=True)}
 
 
-def _patch_present_classes(
-    semantic: np.ndarray, active_class_ids: tuple[int, ...]
-) -> list[int]:
+def _patch_present_classes(semantic: np.ndarray, active_class_ids: tuple[int, ...]) -> list[int]:
     """Active crop class_ids present in the patch (excludes background/void).
 
     Args:
@@ -335,9 +328,7 @@ def generate_captions_parquet(
         if not present_ids:
             logger.info("caption_patch_no_active_class", patch_id=pid)
             continue
-        present_names = [
-            PASTIS_CLASS_MAP.get(cid, f"clase {cid}") for cid in present_ids
-        ]
+        present_names = [PASTIS_CLASS_MAP.get(cid, f"clase {cid}") for cid in present_ids]
         spatial = _spatial_composition(semantic, tuple(active_class_ids))
         n_parcels = _patch_n_parcels(patch.get("instance"), semantic)
         total_area = _patch_total_area_px(semantic)
@@ -427,10 +418,7 @@ def load_captions(path: Path = _DEFAULT_CAPTIONS_PATH) -> dict[str, str]:
         logger.warning("captions_parquet_missing", path=str(path))
         return {}
     df = pl.read_parquet(path, columns=["patch_id", "caption_glo"])
-    return {
-        str(row["patch_id"]): str(row["caption_glo"])
-        for row in df.iter_rows(named=True)
-    }
+    return {str(row["patch_id"]): str(row["caption_glo"]) for row in df.iter_rows(named=True)}
 
 
 def audit_captions(path: Path = _DEFAULT_CAPTIONS_PATH) -> dict[str, int]:

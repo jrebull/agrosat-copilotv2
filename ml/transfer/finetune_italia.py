@@ -82,16 +82,8 @@ DEFAULT_ITALIA_ROOT: Path = _REPO_ROOT / "data" / "pastis_italia_2018"
 
 #: Default PASTIS-R checkpoints for the backbone init (real, on disk / DVC).
 DEFAULT_PASTIS_CHECKPOINTS: dict[str, Path] = {
-    "tsvit-pheno": _REPO_ROOT
-    / "checkpoints"
-    / "segmentation"
-    / "tsvit-pheno-v1"
-    / "best.pt",
-    "utae": _REPO_ROOT
-    / "checkpoints"
-    / "segmentation"
-    / "utae-isaac"
-    / "best_model.pt",
+    "tsvit-pheno": _REPO_ROOT / "checkpoints" / "segmentation" / "tsvit-pheno-v1" / "best.pt",
+    "utae": _REPO_ROOT / "checkpoints" / "segmentation" / "utae-isaac" / "best_model.pt",
 }
 
 #: Default root for the per-epoch transfer checkpoints (RELATIVE; lands on F: on
@@ -303,9 +295,7 @@ def load_italia_patches(
     )
     wanted = set(folds) if folds is not None else None
 
-    on_disk = sorted(
-        int(p.stem.split("_", 1)[1]) for p in s2_dir.glob("S2_*.npy")
-    )
+    on_disk = sorted(int(p.stem.split("_", 1)[1]) for p in s2_dir.glob("S2_*.npy"))
     patch_ids: list[int] = []
     images: list[np.ndarray] = []
     masks: list[np.ndarray] = []
@@ -449,9 +439,7 @@ def build_italia_finetune_model(
         else:
             # Fail-fast on a typo (e.g. "full"): the old `else`-is-l4 fallback
             # would silently build the wrong capacity (code review, finding low).
-            raise ValueError(
-                f"tsvit_capacity must be 'l4' or 'fullm'; got {tsvit_capacity!r}."
-            )
+            raise ValueError(f"tsvit_capacity must be 'l4' or 'fullm'; got {tsvit_capacity!r}.")
         head_kind = "cls_tokens"
         # TSViT cls-token id namespace = the contiguous semantic-18 ids (0..17).
         pastis_head_ids = dict(pastis_names)
@@ -478,11 +466,7 @@ def build_italia_finetune_model(
     loaded = torch.load(pastis_checkpoint, map_location="cpu", weights_only=False)
     pastis_state = resolve_state_dict(loaded, spec)
     own = model.state_dict()
-    compatible = {
-        k: v
-        for k, v in pastis_state.items()
-        if k in own and own[k].shape == v.shape
-    }
+    compatible = {k: v for k, v in pastis_state.items() if k in own and own[k].shape == v.shape}
     own.update(compatible)
     model.load_state_dict(own, strict=False)
     logger.info(
@@ -594,9 +578,7 @@ def _is_head_param(name: str) -> bool:
     return "out_conv" in name or "to_seg" in name or "temporal_cls_tokens" in name
 
 
-def _doy_positions(
-    doy: np.ndarray, batch: int, *, device: torch.device | str
-) -> torch.Tensor:
+def _doy_positions(doy: np.ndarray, batch: int, *, device: torch.device | str) -> torch.Tensor:
     """Build a ``(B, T)`` day-of-year tensor for U-TAE positional encoding."""
     import torch
 
@@ -873,9 +855,7 @@ def run_italia_finetune(
     )
     label_space = build_italia_label_space(italia_root=italia_root)
 
-    all_patches = load_italia_patches(
-        italia_root=italia_root, n_timesteps=config.n_timesteps
-    )
+    all_patches = load_italia_patches(italia_root=italia_root, n_timesteps=config.n_timesteps)
     train_idx = [i for i, f in enumerate(all_patches.folds) if f != test_fold]
     test_idx = [i for i, f in enumerate(all_patches.folds) if f == test_fold]
     if not train_idx or not test_idx:
@@ -950,9 +930,7 @@ def run_italia_finetune(
     # Disabled for U-TAE (no semantic branch) and when lambda_contrast == 0
     # (back-compat / no prototypes on disk).
     pheno_branch: nn.Module | None = None
-    use_contrast = (
-        config.model_kind == "tsvit-pheno" and config.lambda_contrast > 0.0
-    )
+    use_contrast = config.model_kind == "tsvit-pheno" and config.lambda_contrast > 0.0
     if use_contrast:
         proto_path = config.pheno_prototypes or DEFAULT_ITALIA_PROTOTYPES
         if not Path(proto_path).is_file():
@@ -1015,25 +993,25 @@ def run_italia_finetune(
             if train
             else np.arange(len(idxs))
         )
-        acc = DenseConfusionAccumulator(
-            label_space.num_classes, ignore_index=ignore_index
-        )
+        acc = DenseConfusionAccumulator(label_space.num_classes, ignore_index=ignore_index)
         running = 0.0
         grad_ctx = torch.enable_grad() if train else torch.no_grad()
         with grad_ctx:
             for start in range(0, len(order), config.batch_size):
                 batch_local = order[start : start + config.batch_size]
                 batch = [idxs[i] for i in batch_local]
-                xb = torch.from_numpy(
-                    np.stack([all_patches.images[i] for i in batch])
-                ).float().to(device)
-                yb = torch.from_numpy(
-                    np.stack([all_patches.masks[i] for i in batch])
-                ).long().to(device)
-                doy_list = [all_patches.doys[i] for i in batch]
-                logits, visual_proj = _forward(
-                    xb, doy_list, want_proj=epoch_contrast
+                xb = (
+                    torch.from_numpy(np.stack([all_patches.images[i] for i in batch]))
+                    .float()
+                    .to(device)
                 )
+                yb = (
+                    torch.from_numpy(np.stack([all_patches.masks[i] for i in batch]))
+                    .long()
+                    .to(device)
+                )
+                doy_list = [all_patches.doys[i] for i in batch]
+                logits, visual_proj = _forward(xb, doy_list, want_proj=epoch_contrast)
                 loss = criterion(logits, yb)
                 if epoch_contrast and visual_proj is not None:
                     # Project the frozen Italian text prototypes through the
@@ -1082,9 +1060,7 @@ def run_italia_finetune(
     # only with the backbone (phase 2), so the contrastive term is OFF here.
     for name, p in model.named_parameters():
         p.requires_grad = _is_head_param(name)
-    opt = torch.optim.AdamW(
-        [p for p in model.parameters() if p.requires_grad], lr=config.lr_head
-    )
+    opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=config.lr_head)
     for ep in range(config.head_warmup_epochs):
         m = _epoch(train_only_idx, train=True, opt=opt, contrast=False)
         logger.info(
@@ -1110,9 +1086,7 @@ def run_italia_finetune(
     if pheno_branch is not None:
         for p in pheno_branch.parameters():
             p.requires_grad = True
-        param_groups.append(
-            {"params": list(pheno_branch.parameters()), "lr": config.lr_head}
-        )
+        param_groups.append({"params": list(pheno_branch.parameters()), "lr": config.lr_head})
     opt = torch.optim.AdamW(param_groups, weight_decay=config.weight_decay)
 
     # US-079 fix A: linear warmup (~5% of the fine-tune epochs) + cosine decay, the
@@ -1139,11 +1113,7 @@ def run_italia_finetune(
     for ep in range(config.finetune_epochs):
         m = _epoch(train_only_idx, train=True, opt=opt)
         # US-079 fix A: select best.pt on the HELD-OUT val mIoU, not train.
-        val_m = (
-            _epoch(val_idx, train=False, opt=None)
-            if has_val
-            else m
-        )
+        val_m = _epoch(val_idx, train=False, opt=None) if has_val else m
         logger.info(
             "italia_finetune_epoch",
             epoch=ep,
@@ -1168,9 +1138,7 @@ def run_italia_finetune(
     # Test: dense post-softmax probabilities + hard metrics on the held-out fold.
     model.eval()
     probs_by_patch: dict[int, np.ndarray] = {}
-    test_acc = DenseConfusionAccumulator(
-        label_space.num_classes, ignore_index=ignore_index
-    )
+    test_acc = DenseConfusionAccumulator(label_space.num_classes, ignore_index=ignore_index)
     with torch.no_grad():
         for i in test_idx:
             xb = torch.from_numpy(all_patches.images[i][None]).float().to(device)
@@ -1203,9 +1171,7 @@ def run_italia_finetune(
         "class_weighting": config.class_weighting,
         "lambda_contrast": config.lambda_contrast if use_contrast else 0.0,
         "pheno_prototypes": (
-            str(config.pheno_prototypes or DEFAULT_ITALIA_PROTOTYPES)
-            if use_contrast
-            else None
+            str(config.pheno_prototypes or DEFAULT_ITALIA_PROTOTYPES) if use_contrast else None
         ),
         "test_patch_ids": [all_patches.patch_ids[i] for i in test_idx],
         "softmax_path": str(probs_path),

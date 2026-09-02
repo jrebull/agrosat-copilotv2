@@ -176,9 +176,7 @@ def build_comparison_table(
             f"missing {sorted(missing)}."
         )
 
-    raw_scenarios = {
-        key: _load_scenario(scenario_paths[key]) for key in _SCENARIO_LABELS
-    }
+    raw_scenarios = {key: _load_scenario(scenario_paths[key]) for key in _SCENARIO_LABELS}
     aligned = _align_scenarios_by_parcel(raw_scenarios)
     n_parcels = next(iter(aligned.values())).height
 
@@ -317,9 +315,7 @@ def _load_scenario(path: str | Path) -> pl.DataFrame:
     df = pl.read_parquet(resolved)
     for col in ("parcel_id", "class_id"):
         if col not in df.columns:
-            raise ValueError(
-                f"The parquet {resolved} must contain the column `{col}`."
-            )
+            raise ValueError(f"The parquet {resolved} must contain the column `{col}`.")
     return df
 
 
@@ -668,9 +664,7 @@ def fold5_barplot_figure(df: pl.DataFrame) -> Figure:
 
     for col in ("model", "miou", "f1_macro"):
         if col not in df.columns:
-            raise ValueError(
-                f"`df` must contain the column `{col}` to build the barplot."
-            )
+            raise ValueError(f"`df` must contain the column `{col}` to build the barplot.")
 
     plot_df = df
     if "status" in df.columns:
@@ -736,8 +730,7 @@ def _load_fold5_frame(df_or_path: pl.DataFrame | str | Path) -> pl.DataFrame:
     if path.suffix == ".csv":
         return pl.read_csv(path)
     raise ValueError(
-        f"Unsupported fold-5 input extension `{path.suffix}` ({path}); "
-        "expected .parquet or .csv."
+        f"Unsupported fold-5 input extension `{path.suffix}` ({path}); expected .parquet or .csv."
     )
 
 

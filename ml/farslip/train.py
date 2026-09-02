@@ -98,9 +98,7 @@ def _build_dataset(
     import polars as pl
 
     if rois_key not in _ROIS_BY_KEY:
-        raise KeyError(
-            f"rois={rois_key!r} not recognized. Valid: {list(_ROIS_BY_KEY)}"
-        )
+        raise KeyError(f"rois={rois_key!r} not recognized. Valid: {list(_ROIS_BY_KEY)}")
     roi_slugs = _ROIS_BY_KEY[rois_key]
 
     # Pre-scan: unify cap_classes and regions across the 3 manifests.
@@ -251,9 +249,7 @@ def build_text_prototypes(
     )  # (n_categories, 384)
     proto_tiled = np.tile(proto_cap, (n_regions, 1))  # (n_protos, 384), region-major
     if proto_tiled.shape[0] != n_protos:
-        raise ValueError(
-            f"tiled prototypes rows={proto_tiled.shape[0]} != expected {n_protos}"
-        )
+        raise ValueError(f"tiled prototypes rows={proto_tiled.shape[0]} != expected {n_protos}")
     dim_in = int(proto_tiled.shape[1])
     prototypes = torch.from_numpy(proto_tiled).float()
     meta = {
@@ -280,34 +276,28 @@ app = typer.Typer(add_completion=False, no_args_is_help=False)
 
 @app.command()
 def train(
-    rois: Annotated[
-        str, typer.Option(help="Identificador de ROI set, e.g. 'italy'")
-    ] = "italy",
+    rois: Annotated[str, typer.Option(help="Identificador de ROI set, e.g. 'italy'")] = "italy",
     epochs: Annotated[int, typer.Option(help="Numero de epochs")] = 4,
     batch_size: Annotated[int, typer.Option(help="Batch size logico")] = 64,
     lr: Annotated[float, typer.Option(help="Learning rate AdamW")] = 1e-5,
     seed: Annotated[int, typer.Option(help="Semilla determinismo")] = 42,
-    output_dir: Annotated[
-        Path, typer.Option(help="Directorio local para checkpoints")
-    ] = Path("artifacts/farslip"),
+    output_dir: Annotated[Path, typer.Option(help="Directorio local para checkpoints")] = Path(
+        "artifacts/farslip"
+    ),
     gcs_output_uri: Annotated[
         str | None, typer.Option(help="URI GCS para subir pesos finales")
     ] = None,
-    dataset_root: Annotated[
-        Path, typer.Option(help="Raiz dataset farslip_pairs")
-    ] = Path("data/farslip_pairs"),
+    dataset_root: Annotated[Path, typer.Option(help="Raiz dataset farslip_pairs")] = Path(
+        "data/farslip_pairs"
+    ),
     teacher_model_id: Annotated[
         str, typer.Option(help="HF id del CLIP teacher")
     ] = "openai/clip-vit-base-patch16",
-    resume: Annotated[
-        str | None, typer.Option(help="Ruta/URI a checkpoint para reanudar")
-    ] = None,
+    resume: Annotated[str | None, typer.Option(help="Ruta/URI a checkpoint para reanudar")] = None,
     time_cap_hours: Annotated[float, typer.Option(help="Hard cap horas")] = 8.0,
     proto_source: Annotated[
         str,
-        typer.Option(
-            help="Fuente de prototipos: 'pastis' (fenologicos US-033) o 'random' (A/B)"
-        ),
+        typer.Option(help="Fuente de prototipos: 'pastis' (fenologicos US-033) o 'random' (A/B)"),
     ] = "pastis",
     band_selection: Annotated[
         str,

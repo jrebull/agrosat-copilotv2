@@ -124,9 +124,7 @@ def test_missing_artifacts_render_warning_not_traceback() -> None:
     assert "reencuadre-notebook-full" in hint, (
         "Hint Baseline debe mencionar `make reencuadre-notebook-full`"
     )
-    assert "baseline-v2-full" in hint, (
-        "Hint Baseline debe mencionar `make baseline-v2-full`"
-    )
+    assert "baseline-v2-full" in hint, "Hint Baseline debe mencionar `make baseline-v2-full`"
 
 
 # ---------------------------------------------------------------------------

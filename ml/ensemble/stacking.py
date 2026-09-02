@@ -325,9 +325,7 @@ class StackingEnsemble(EnsembleModel):
         splits: list[tuple[np.ndarray, np.ndarray]] = []
         for fold in assignments:
             test_pos = np.array(sorted(fold.test_ids), dtype=np.int64)
-            train_pos = np.array(
-                sorted(set(fold.train_ids) | set(fold.val_ids)), dtype=np.int64
-            )
+            train_pos = np.array(sorted(set(fold.train_ids) | set(fold.val_ids)), dtype=np.int64)
             # Defensive bounds + disjointness (the buffer already guarantees it).
             test_pos = test_pos[np.isin(test_pos, all_pos)]
             train_pos = train_pos[np.isin(train_pos, all_pos)]
@@ -380,12 +378,9 @@ class StackingEnsemble(EnsembleModel):
                 parsed.append(wkt.loads(value))
             else:  # pragma: no cover - defensive, unsupported geometry encoding
                 raise ValueError(
-                    f"unsupported geometry encoding: {type(value)!r}; pass shapely, "
-                    "WKT or WKB."
+                    f"unsupported geometry encoding: {type(value)!r}; pass shapely, WKT or WKB."
                 )
-        return gpd.GeoDataFrame(
-            {_KEY: ids}, geometry=parsed, crs="EPSG:4326"
-        )
+        return gpd.GeoDataFrame({_KEY: ids}, geometry=parsed, crs="EPSG:4326")
 
     # ------------------------------------------------------------------
     # Meta-learner construction.
@@ -422,9 +417,7 @@ class StackingEnsemble(EnsembleModel):
         )
 
     @staticmethod
-    def _proba_to_global(
-        proba_local: np.ndarray, model_classes: np.ndarray
-    ) -> np.ndarray:
+    def _proba_to_global(proba_local: np.ndarray, model_classes: np.ndarray) -> np.ndarray:
         """Expand a meta-learner's local proba to the full 18-class space.
 
         A meta-learner trained on a sub-fold may only observe a subset of the 18
@@ -512,9 +505,7 @@ class StackingEnsemble(EnsembleModel):
             model = self._build_meta_learner()
             model.fit(x_meta[train_pos], y[train_pos])
             proba_local = np.asarray(model.predict_proba(x_meta[test_pos]))
-            proba_full = self._proba_to_global(
-                proba_local, np.asarray(model.classes_)
-            )
+            proba_full = self._proba_to_global(proba_local, np.asarray(model.classes_))
             preds = proba_full.argmax(axis=1)
             fold_metrics = EnsembleModel.compute_metrics(
                 y[test_pos], preds, num_classes=_NUM_CLASSES, ignore_index=None
@@ -552,9 +543,7 @@ class StackingEnsemble(EnsembleModel):
     # Predict.
     # ------------------------------------------------------------------
 
-    def predict_proba(
-        self, parcel_ids: Sequence[str] | None = None
-    ) -> np.ndarray:
+    def predict_proba(self, parcel_ids: Sequence[str] | None = None) -> np.ndarray:
         """Return per-parcel post-softmax probabilities ``(n_parcels, 18)``.
 
         Reassembles the OOF-only meta features (the SAME post-softmax base
@@ -595,9 +584,7 @@ class StackingEnsemble(EnsembleModel):
 
         proba_local = np.asarray(self.meta_model_.predict_proba(x_meta))
         proba_full = self._proba_to_global(proba_local, self.meta_classes_)
-        return EnsembleModel.validate_probs(
-            proba_full, class_axis=-1, name="stacking_proba"
-        )
+        return EnsembleModel.validate_probs(proba_full, class_axis=-1, name="stacking_proba")
 
 
 def _aggregate_metrics(per_fold: list[dict[str, float]]) -> dict[str, float]:
@@ -613,6 +600,4 @@ def _aggregate_metrics(per_fold: list[dict[str, float]]) -> dict[str, float]:
     if not per_fold:
         return {"f1_macro": float("nan"), "accuracy": float("nan")}
     keys = per_fold[0].keys()
-    return {
-        key: float(np.mean([fold[key] for fold in per_fold])) for key in keys
-    }
+    return {key: float(np.mean([fold[key] for fold in per_fold])) for key in keys}

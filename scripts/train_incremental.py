@@ -132,8 +132,7 @@ def _load_student_state_dict(checkpoint: Path) -> dict[str, torch.Tensor]:
     if checkpoint.suffix == ".pt":
         return torch.load(checkpoint, weights_only=True, map_location="cpu")
     raise ValueError(
-        f"unsupported checkpoint format {checkpoint.suffix!r}; "
-        f"expected .safetensors or .pt"
+        f"unsupported checkpoint format {checkpoint.suffix!r}; expected .safetensors or .pt"
     )
 
 
@@ -288,22 +287,16 @@ def train(
     ] = "farslip-incremental-poc",
     stage1_classes: Annotated[int, typer.Option(help="Clases en Stage-1")] = 4,
     stage2_classes: Annotated[int, typer.Option(help="Clases en Stage-2")] = 18,
-    epochs_per_stage: Annotated[
-        int, typer.Option(help="Epochs por stage (POC=2)")
-    ] = 2,
+    epochs_per_stage: Annotated[int, typer.Option(help="Epochs por stage (POC=2)")] = 2,
     batch_size: Annotated[int, typer.Option(help="Batch size")] = 64,
     lr: Annotated[float, typer.Option(help="Learning rate AdamW")] = 1e-5,
     seed: Annotated[int, typer.Option(help="Semilla determinismo")] = 42,
-    folds: Annotated[
-        str, typer.Option(help="Folds PASTIS, coma-separados")
-    ] = "1,2,3",
+    folds: Annotated[str, typer.Option(help="Folds PASTIS, coma-separados")] = "1,2,3",
     ratio: Annotated[float, typer.Option(help="Ratio filtro 3:1 Meadow")] = 3.0,
-    pastis_root: Annotated[
-        Path, typer.Option(help="Raiz PASTIS-R")
-    ] = Path("data/PASTIS-R"),
-    output_dir: Annotated[
-        Path, typer.Option(help="Dir checkpoints (cae en F: en la VM)")
-    ] = Path("checkpoints/farslip-incremental"),
+    pastis_root: Annotated[Path, typer.Option(help="Raiz PASTIS-R")] = Path("data/PASTIS-R"),
+    output_dir: Annotated[Path, typer.Option(help="Dir checkpoints (cae en F: en la VM)")] = Path(
+        "checkpoints/farslip-incremental"
+    ),
     from_scratch: Annotated[
         bool,
         typer.Option(help="Stage-2 SIN warm-start (control del gate de fallback)"),
@@ -311,9 +304,7 @@ def train(
     time_cap_hours: Annotated[float, typer.Option(help="Hard cap horas")] = 4.0,
     mlflow_uri: Annotated[
         str,
-        typer.Option(
-            help="MLflow tracking URI (Docker :5010; SQLite file:// para CI)"
-        ),
+        typer.Option(help="MLflow tracking URI (Docker :5010; SQLite file:// para CI)"),
     ] = _DEFAULT_MLFLOW_URI,
 ) -> None:
     """Entrena el protocolo incremental 4->18 sobre PASTIS-R real (POC 2ep/stage).

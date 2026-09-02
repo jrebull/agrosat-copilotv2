@@ -65,9 +65,7 @@ logger = structlog.get_logger(__name__)
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _DEFAULT_PASTIS_ROOT = _REPO_ROOT / "data" / "PASTIS-R"
 _CLASS_MAP_PATH = _REPO_ROOT / "data" / "reference" / "pastis_class_mapping.json"
-_DEFAULT_OUTPUT = (
-    _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis.parquet"
-)
+_DEFAULT_OUTPUT = _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis.parquet"
 
 #: Default US-078 Mediterranean homologue dataset root (Italy 2018).
 _DEFAULT_ITALIA_ROOT = _REPO_ROOT / "data" / "pastis_italia_2018"
@@ -332,9 +330,7 @@ def compute_italia_class_mean_ndvi_curves(
     sums = {c: np.zeros(n_time_bins, dtype=np.float64) for c in crop_ids}
     counts = {c: np.zeros(n_time_bins, dtype=np.int64) for c in crop_ids}
 
-    s2_paths = sorted(
-        s2_dir.glob("S2_*.npy"), key=lambda p: int(p.stem.split("_", 1)[1])
-    )
+    s2_paths = sorted(s2_dir.glob("S2_*.npy"), key=lambda p: int(p.stem.split("_", 1)[1]))
     if max_patches is not None:
         s2_paths = s2_paths[:max_patches]
 

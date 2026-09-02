@@ -204,9 +204,7 @@ def test_temporal_sampling_stats_irregular_gaps() -> None:
 def test_doy_coverage() -> None:
     """doy_coverage crece al anadir observaciones bien distribuidas."""
     sparse = temporal_sampling_stats([20190101, 20190701])
-    dense = temporal_sampling_stats(
-        [20190101, 20190301, 20190501, 20190701, 20190901, 20191101]
-    )
+    dense = temporal_sampling_stats([20190101, 20190301, 20190501, 20190701, 20190901, 20191101])
     assert 0.0 <= sparse["doy_coverage"] <= 1.0
     assert dense["doy_coverage"] > sparse["doy_coverage"]
 
@@ -240,9 +238,7 @@ def test_confusion_symmetry_detects_asymmetric() -> None:
     y_true = np.array([1] * 20 + [2] * 20)
     y_pred = np.array([2] * 18 + [1] * 2 + [2] * 20)
     df = confusion_symmetry_analysis(y_true, y_pred)
-    pair = df.filter(
-        (pl.col("class_a") == "1") & (pl.col("class_b") == "2")
-    ).row(0, named=True)
+    pair = df.filter((pl.col("class_a") == "1") & (pl.col("class_b") == "2")).row(0, named=True)
     assert pair["asymmetric"] > pair["symmetric"]
     assert pair["interpretation"] == "external_factor"
 
@@ -251,12 +247,8 @@ def test_confusion_interpretation_labels() -> None:
     """class_names mapea ids a nombres legibles en el resultado."""
     y_true = np.array([1, 1, 2, 2])
     y_pred = np.array([2, 1, 1, 2])
-    df = confusion_symmetry_analysis(
-        y_true, y_pred, class_names={1: "wheat", 2: "rye"}
-    )
-    labels = set(df.get_column("class_a").to_list()) | set(
-        df.get_column("class_b").to_list()
-    )
+    df = confusion_symmetry_analysis(y_true, y_pred, class_names={1: "wheat", 2: "rye"})
+    labels = set(df.get_column("class_a").to_list()) | set(df.get_column("class_b").to_list())
     assert labels == {"wheat", "rye"}
 
 
@@ -327,9 +319,7 @@ def test_phenology_calendar_stage_names() -> None:
 
 def test_phenology_calendar_n_stages() -> None:
     """n_stages personalizado genera el numero correcto de etapas distintas."""
-    df = pl.DataFrame(
-        {"parcel_id": list(range(6)), "peak_doy": [30, 90, 150, 210, 270, 330]}
-    )
+    df = pl.DataFrame({"parcel_id": list(range(6)), "peak_doy": [30, 90, 150, 210, 270, 330]})
     out = phenology_calendar_features(df, doy_col="peak_doy", n_stages=6)
     assert out.get_column("growth_stage").n_unique() == 6
     # Nombres genericos cuando n_stages != 4.
@@ -352,9 +342,7 @@ def test_phenology_calendar_handles_null_doy() -> None:
 def test_cloud_gap_robustness_baseline_zero_drift() -> None:
     """mask_fraction=0.0 debe tener drift exactamente 0."""
     ts = _synthetic_timeseries(n_timesteps=24)
-    df = cloud_gap_robustness(
-        _extract_ndwi_evi_ndvi, ts, mask_fractions=(0.0, 0.4), seed=42
-    )
+    df = cloud_gap_robustness(_extract_ndwi_evi_ndvi, ts, mask_fractions=(0.0, 0.4), seed=42)
     baseline = df.filter(pl.col("mask_fraction") == 0.0)
     assert baseline.height > 0
     assert (baseline.get_column("drift_from_baseline") == 0.0).all()
@@ -363,9 +351,7 @@ def test_cloud_gap_robustness_baseline_zero_drift() -> None:
 def test_cloud_gap_robustness_drift_increases() -> None:
     """A mayor mask_fraction, la deriva media tiende a crecer."""
     ts = _synthetic_timeseries(n_timesteps=30)
-    df = cloud_gap_robustness(
-        _extract_ndwi_evi_ndvi, ts, mask_fractions=(0.0, 0.2, 0.6), seed=42
-    )
+    df = cloud_gap_robustness(_extract_ndwi_evi_ndvi, ts, mask_fractions=(0.0, 0.2, 0.6), seed=42)
     drift_02 = (
         df.filter(pl.col("mask_fraction") == 0.2)
         .get_column("drift_from_baseline")
@@ -387,9 +373,7 @@ def test_cloud_gap_robustness_drift_increases() -> None:
 def test_cloud_gap_robustness_shape() -> None:
     """El DataFrame de salida tiene las 5 columnas del contrato."""
     ts = _synthetic_timeseries(n_timesteps=20)
-    df = cloud_gap_robustness(
-        _extract_ndwi_evi_ndvi, ts, mask_fractions=(0.0, 0.3), seed=1
-    )
+    df = cloud_gap_robustness(_extract_ndwi_evi_ndvi, ts, mask_fractions=(0.0, 0.3), seed=1)
     assert df.columns == [
         "mask_fraction",
         "n_timesteps_kept",

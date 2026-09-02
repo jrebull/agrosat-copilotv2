@@ -84,7 +84,10 @@ def _write_metadata(root: Path, fold_by_pid: dict[str, int]) -> None:
             "id": pid,
             "type": "Feature",
             "properties": {"ID_PATCH": int(pid), "Fold": int(fold), "TILE": "T30UXV"},
-            "geometry": {"type": "MultiPolygon", "coordinates": [[[[0, 0], [1, 0], [1, 1], [0, 0]]]]},
+            "geometry": {
+                "type": "MultiPolygon",
+                "coordinates": [[[[0, 0], [1, 0], [1, 1], [0, 0]]]],
+            },
         }
         for pid, fold in fold_by_pid.items()
     ]
@@ -127,9 +130,7 @@ def synthetic_pastis(tmp_path: Path) -> Path:
     sem_d = np.full((_H, _W), 2, dtype=np.uint8)
     _write_synthetic_patch(root, "40000", n_timesteps=10, fold=4, semantic_fill=sem_d)
 
-    _write_metadata(
-        root, {"10000": 1, "10001": 1, "20000": 2, "40000": 4}
-    )
+    _write_metadata(root, {"10000": 1, "10001": 1, "20000": 2, "40000": 4})
     return root
 
 
@@ -140,9 +141,7 @@ def synthetic_pastis(tmp_path: Path) -> Path:
 
 def test_2d_mode_shape(synthetic_pastis: Path) -> None:
     """Modo 2D (``collapse_time='median'``) entrega ``x (10,H,W)`` + ``y (H,W)``."""
-    ds = PASTISSegmentationDataset(
-        root=synthetic_pastis, folds=(1,), collapse_time="median"
-    )
+    ds = PASTISSegmentationDataset(root=synthetic_pastis, folds=(1,), collapse_time="median")
     x, y = ds[0]
     assert x.shape == (_N_BANDS, _H, _W)
     assert y.shape == (_H, _W)
@@ -181,9 +180,7 @@ def test_temporal_keeps_all_when_t_below_n(synthetic_pastis: Path) -> None:
 
 def test_pick_mode_shape(synthetic_pastis: Path) -> None:
     """Modo ``pick`` colapsa a un frame central ``(10,H,W)``."""
-    ds = PASTISSegmentationDataset(
-        root=synthetic_pastis, folds=(1,), collapse_time="pick"
-    )
+    ds = PASTISSegmentationDataset(root=synthetic_pastis, folds=(1,), collapse_time="pick")
     x, _ = ds[0]
     assert x.shape == (_N_BANDS, _H, _W)
 
@@ -291,10 +288,8 @@ def test_fallback_scale_when_no_norm_stats(synthetic_pastis: Path) -> None:
     de las 12 fechas (bases 5000..6100) es ~5550/10000 = 0.555.
     """
     assert not (synthetic_pastis / "NORM_S2_patch.json").exists()
-    ds = PASTISSegmentationDataset(
-        root=synthetic_pastis, folds=(1,), collapse_time="median"
-    )
-    assert not ds._norm_stats  # noqa: SLF001 - verificacion de estado interno
+    ds = PASTISSegmentationDataset(root=synthetic_pastis, folds=(1,), collapse_time="median")
+    assert not ds._norm_stats
     x, _ = ds[0]
     # Mediana temporal de bases [5000,5100,...,6100] = 5550 -> /10000 = 0.555.
     assert torch.all(x >= 0.0)
@@ -319,7 +314,7 @@ def test_norm_stats_applied_when_present(tmp_path: Path) -> None:
     (root / "NORM_S2_patch.json").write_text(json.dumps(norm), encoding="utf-8")
 
     ds = PASTISSegmentationDataset(root=root, folds=(1,), collapse_time="median")
-    assert ds._norm_stats  # noqa: SLF001
+    assert ds._norm_stats
     x, _ = ds[0]
     # Bases temporales 5000..5300 -> mediana 5150; (5150-5000)/10000 = 0.015.
     assert abs(x.mean().item() - 0.015) < 1e-3
@@ -411,14 +406,10 @@ def test_negative_index_supported(synthetic_pastis: Path) -> None:
 
 
 @pytest.mark.slow
-@pytest.mark.skipif(
-    not _pastis_present, reason="PASTIS-R no descargado en data/PASTIS-R/DATA_S2/."
-)
+@pytest.mark.skipif(not _pastis_present, reason="PASTIS-R no descargado en data/PASTIS-R/DATA_S2/.")
 def test_real_dataset_contract_2d() -> None:
     """Smoke end-to-end sobre PASTIS-R real (fold 1, 1 patch, modo 2D)."""
-    ds = PASTISSegmentationDataset(
-        root=_REAL_PASTIS_ROOT, folds=(1,), collapse_time="median"
-    )
+    ds = PASTISSegmentationDataset(root=_REAL_PASTIS_ROOT, folds=(1,), collapse_time="median")
     assert len(ds) > 0
     x, y = ds[0]
     assert x.shape == (10, 128, 128)
@@ -432,9 +423,7 @@ def test_real_dataset_contract_2d() -> None:
 
 
 @pytest.mark.slow
-@pytest.mark.skipif(
-    not _pastis_present, reason="PASTIS-R no descargado en data/PASTIS-R/DATA_S2/."
-)
+@pytest.mark.skipif(not _pastis_present, reason="PASTIS-R no descargado en data/PASTIS-R/DATA_S2/.")
 def test_real_dataset_contract_temporal() -> None:
     """Smoke end-to-end sobre PASTIS-R real (fold 1, modo temporal T=10)."""
     ds = PASTISSegmentationDataset(

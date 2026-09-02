@@ -263,17 +263,11 @@ def _install_dump_mocks(
 
     _FakeSegDataset.last_kwargs = {}
     monkeypatch.setattr(ds_mod, "PASTISSegmentationDataset", _FakeSegDataset)
-    monkeypatch.setattr(
-        seg_inf, "load_checkpoint_model", lambda spec, **_kw: _DummyModel()
-    )
+    monkeypatch.setattr(seg_inf, "load_checkpoint_model", lambda spec, **_kw: _DummyModel())
 
-    def _fake_softmax(
-        model: nn.Module, x: torch.Tensor, *, model_kind: str
-    ) -> np.ndarray:
+    def _fake_softmax(model: nn.Module, x: torch.Tensor, *, model_kind: str) -> np.ndarray:
         # Deterministic native-space softmax at 128 px.
-        logits = make_logits(
-            num_classes=native_num_classes, size=HARNESS_SIZE, seed=42
-        )[0]
+        logits = make_logits(num_classes=native_num_classes, size=HARNESS_SIZE, seed=42)[0]
         shifted = logits - logits.max(axis=0, keepdims=True)
         exp = np.exp(shifted)
         return (exp / exp.sum(axis=0, keepdims=True)).astype(np.float32)
@@ -300,9 +294,7 @@ def _spec(model_kind: str, native_num_classes: int) -> CheckpointSpec:
     )
 
 
-def test_dump_writes_pixel_parquet_schema(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_writes_pixel_parquet_schema(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """dump_oof writes a per-pixel parquet with the contract columns + shapes."""
     _install_dump_mocks(monkeypatch, native_num_classes=18)
     spec = _spec("deeplabv3plus", 18)
@@ -347,9 +339,7 @@ def test_dump_writes_pixel_parquet_schema(
     )
 
 
-def test_dump_pred_equals_softmax_argmax(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_pred_equals_softmax_argmax(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """The persisted pred equals the argmax of the persisted softmax.
 
     ``pred`` is the argmax of the float32 softmax computed before storage; the
@@ -378,9 +368,7 @@ def test_dump_pred_equals_softmax_argmax(
         np.testing.assert_allclose(pred_prob, max_prob, atol=_SUM_TOL_F16)
 
 
-def test_dump_20class_model_remaps_to_18(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_20class_model_remaps_to_18(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """A 20-class model is unified to (18,128,128) in probability space."""
     _install_dump_mocks(monkeypatch, native_num_classes=20)
     spec = _spec("unet", 20)
@@ -390,14 +378,10 @@ def test_dump_20class_model_remaps_to_18(
     df = read_softmax_parquet(Path(manifest["models"]["unet"]["path"]))
     softmax = df.row(0, named=True)["softmax"]
     assert softmax.shape == (18, 128, 128)
-    np.testing.assert_allclose(
-        softmax.astype(np.float32).sum(axis=0), 1.0, atol=_SUM_TOL_F16
-    )
+    np.testing.assert_allclose(softmax.astype(np.float32).sum(axis=0), 1.0, atol=_SUM_TOL_F16)
 
 
-def test_dump_held_out_flag_fold5_true(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_held_out_flag_fold5_true(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """dump_oof(fold=5) marks every row held_out=True."""
     _install_dump_mocks(monkeypatch, native_num_classes=18)
     spec = _spec("deeplabv3plus", 18)
@@ -409,9 +393,7 @@ def test_dump_held_out_flag_fold5_true(
     assert df["held_out"].to_list() == [True, True]
 
 
-def test_dump_held_out_flag_fold4_false(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_held_out_flag_fold4_false(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """dump_oof(fold=4) marks every row held_out=False (selection fold, leak)."""
     fake_ds = _install_dump_mocks(monkeypatch, native_num_classes=18)
     spec = _spec("deeplabv3plus", 18)
@@ -438,9 +420,7 @@ def test_dump_uses_fold_dataset_and_semantic18(
     assert fake_ds.last_kwargs.get("ignore_index") == 255
 
 
-def test_dump_norm_train_only(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_norm_train_only(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Normalization stats are overwritten with the train-only (1,2,3) average."""
     captured: dict[str, _FakeSegDataset] = {}
     _install_dump_mocks(monkeypatch, native_num_classes=20)
@@ -456,9 +436,7 @@ def test_dump_norm_train_only(
     monkeypatch.setattr(dense_metrics, "_apply_train_norm", _spy)
 
     spec = _spec("unet", 20)
-    dump_mod.dump_oof(
-        {"unet": spec}, fold=5, out_dir=tmp_path, device="cpu", max_patches=1
-    )
+    dump_mod.dump_oof({"unet": spec}, fold=5, out_dir=tmp_path, device="cpu", max_patches=1)
     ds = captured["ds"]
     for mean, std in ds._norm_stats.values():  # type: ignore[attr-defined]
         # Mean of train folds 1,2,3 == 2.0; the held-out fold-5 (5.0) is gone.
@@ -505,9 +483,7 @@ def test_dump_missing_raises_when_not_skipping(
         )
 
 
-def test_dump_writes_manifest(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_writes_manifest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """manifest.json is written with one entry per model + provenance tags."""
     import json
 
@@ -529,15 +505,11 @@ def test_dump_writes_manifest(
     assert entry["dtype"] == "float16"
 
 
-def test_dump_cli_smoke(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_dump_cli_smoke(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """The CLI parses args and runs dump_oof on the (mocked) default registry."""
     _install_dump_mocks(monkeypatch, native_num_classes=18)
     spec = _spec("deeplabv3plus", 18)
-    monkeypatch.setattr(
-        "ml.eval.checkpoint_registry.CHECKPOINT_REGISTRY", {"deeplabv3plus": spec}
-    )
+    monkeypatch.setattr("ml.eval.checkpoint_registry.CHECKPOINT_REGISTRY", {"deeplabv3plus": spec})
     rc = dump_mod.main(
         [
             "--fold",

@@ -194,9 +194,7 @@ def main(
             indices_da = _enrich_with_indices(s2_da, indices_to_compute)
             indices_da.attrs["parcel_id"] = int(patch["patch_id"])
             indices_da.attrs["year"] = int(str(dates[0])[:4])
-            features_df = extract_temporal_features(
-                indices_da, indices=indices_to_compute
-            )
+            features_df = extract_temporal_features(indices_da, indices=indices_to_compute)
         except Exception as exc:  # noqa: BLE001
             logger.warning("patch_skipped", patch_id=patch["patch_id"], error=str(exc))
             continue

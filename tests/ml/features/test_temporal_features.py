@@ -58,7 +58,10 @@ def _make_synthetic_dataarray(
 
     if ndvi_curve is None:
         doys = np.array(
-            [(t - np.datetime64(f"{year}-01-01", "ns")) / np.timedelta64(1, "D") + 1 for t in times],
+            [
+                (t - np.datetime64(f"{year}-01-01", "ns")) / np.timedelta64(1, "D") + 1
+                for t in times
+            ],
             dtype=np.float64,
         )
         ndvi_curve = 0.85 * np.exp(-0.5 * ((doys - 180) / 30.0) ** 2)

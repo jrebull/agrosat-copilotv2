@@ -80,9 +80,7 @@ def _write_five_member_fixture(
 
     for m, member in enumerate(_BASE_MEMBERS_5):
         probs = _make_parcel_probs(n_parcels, seed=seed + 100 * (m + 1), signal_from=labels)
-        _parcel_frame(ids, probs).write_parquet(
-            oof_dir / f"oof_parcel_{member}_fold5.parquet"
-        )
+        _parcel_frame(ids, probs).write_parquet(oof_dir / f"oof_parcel_{member}_fold5.parquet")
 
     coords: list[tuple[float, float]] = []
     for i in range(n_parcels):

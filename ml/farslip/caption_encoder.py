@@ -59,10 +59,7 @@ def encode_captions_minilm(
         show_progress_bar=False,
         normalize_embeddings=True,
     )
-    embeddings = {
-        pid: torch.from_numpy(matrix[i]).to(torch.float32)
-        for i, pid in enumerate(pids)
-    }
+    embeddings = {pid: torch.from_numpy(matrix[i]).to(torch.float32) for i, pid in enumerate(pids)}
     logger.info(
         "captions_preencoded",
         n_captions=len(embeddings),
@@ -116,9 +113,7 @@ class CaptionCollate:
                 f"{len(missing)} batch {self.id_key} have no pre-encoded caption "
                 f"(e.g. {missing[:5]}); pre-encode every caption before training."
             )
-        batch["caption_cls"] = torch.stack(
-            [self.caption_embeddings[i] for i in ids], dim=0
-        )
+        batch["caption_cls"] = torch.stack([self.caption_embeddings[i] for i in ids], dim=0)
         return batch
 
 

@@ -109,9 +109,7 @@ KSHOT_STRINGS: dict[str, dict[str, str]] = {
         "xlabel": "k (muestras etiquetadas por clase del país objetivo)",
         "ylabel": "F1-macro (Estonia, conjunto de consulta)",
         "title": "Curva few-shot EuroCropsML: LV[+PT] -> EE",
-        "footnote": (
-            "EuroCropsML (Reuter et al. 2025, CC-BY-SA-4.0). 3 semillas, barras = std."
-        ),
+        "footnote": ("EuroCropsML (Reuter et al. 2025, CC-BY-SA-4.0). 3 semillas, barras = std."),
     },
 }
 
@@ -225,8 +223,7 @@ def build_dense_table(result: dict[str, Any]) -> str:
         ),
     ]
     body = "\n".join(
-        f"{name} & {miou:.4f} & {f1:.4f} & {pa:.4f} \\\\"
-        for name, miou, f1, pa in rows
+        f"{name} & {miou:.4f} & {f1:.4f} & {pa:.4f} \\\\" for name, miou, f1, pa in rows
     )
     caption = (
         "Dense France $\\rightarrow$ Catalonia transfer (TSViT-pheno finetuned on the "
@@ -310,9 +307,7 @@ def build_kshot_table(curve: pl.DataFrame) -> str:
     for k in ks:
         cells: list[str] = []
         for scenario in SCENARIO_ORDER:
-            row = summary.filter(
-                (pl.col("scenario") == scenario) & (pl.col("k") == k)
-            )
+            row = summary.filter((pl.col("scenario") == scenario) & (pl.col("k") == k))
             if row.height == 0:
                 cells.append("--")
                 continue
@@ -348,9 +343,7 @@ def build_kshot_table(curve: pl.DataFrame) -> str:
     )
 
 
-def build_kshot_figure(
-    curve: pl.DataFrame, out_stem: Path, *, dpi: int, lang: str = "en"
-) -> None:
+def build_kshot_figure(curve: pl.DataFrame, out_stem: Path, *, dpi: int, lang: str = "en") -> None:
     """Plot the k-shot F1-macro curve with per-seed error bars (PNG + SVG).
 
     All visible text is resolved from :data:`KSHOT_STRINGS` and
@@ -398,9 +391,7 @@ def build_kshot_figure(
     _save_fig(fig, out_stem, dpi=dpi)
 
 
-def build_mexico_figure(
-    ndvi: pl.DataFrame, out_stem: Path, *, dpi: int, lang: str = "en"
-) -> None:
+def build_mexico_figure(ndvi: pl.DataFrame, out_stem: Path, *, dpi: int, lang: str = "en") -> None:
     """Plot the qualitative Mexico avocado/guava NDVI phenology (PNG + SVG).
 
     Purely qualitative: shows the real GEE-derived per-AOI NDVI time series of the

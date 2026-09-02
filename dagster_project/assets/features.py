@@ -177,9 +177,7 @@ def parcel_features_fused(context: AssetExecutionContext) -> MaterializeResult:
 
     md5 = _hash_file_md5(out_path)
     regions: list[str] = (
-        sorted({str(r) for r in parcels["region"].tolist()})
-        if "region" in parcels.columns
-        else []
+        sorted({str(r) for r in parcels["region"].tolist()}) if "region" in parcels.columns else []
     )
     log.info(
         "parcel_features_fused.complete",
@@ -204,8 +202,7 @@ def parcel_features_fused(context: AssetExecutionContext) -> MaterializeResult:
             "data_version": MetadataValue.text(DATA_VERSION_TAG),
             "code_version": MetadataValue.text(CODE_VERSION_LABEL),
             "preview": MetadataValue.md(
-                f"```\nshape: ({df.height}, {df.width})\nfirst_cols: "
-                f"{df.columns[:6]}\n```"
+                f"```\nshape: ({df.height}, {df.width})\nfirst_cols: {df.columns[:6]}\n```"
             ),
         }
     )
@@ -336,8 +333,7 @@ def parcel_features_scaler(context: AssetExecutionContext) -> MaterializeResult:
     )
     if not features_path.exists():
         raise FileNotFoundError(
-            f"features parquet missing: {features_path}. Materialize "
-            "parcel_features_fused first."
+            f"features parquet missing: {features_path}. Materialize parcel_features_fused first."
         )
     if not fold_train_path.exists():
         raise FileNotFoundError(

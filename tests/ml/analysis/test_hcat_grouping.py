@@ -69,7 +69,10 @@ def test_add_hcat_l1_group_assigns_and_leaves_void_null() -> None:
     id_map = hcat_group_id_map()
     assert names[:4] == ["CEREALS", "CEREALS", "PERMANENT_WOODY", "OTHER"]
     assert ids[:4] == [
-        id_map["CEREALS"], id_map["CEREALS"], id_map["PERMANENT_WOODY"], id_map["OTHER"]
+        id_map["CEREALS"],
+        id_map["CEREALS"],
+        id_map["PERMANENT_WOODY"],
+        id_map["OTHER"],
     ]
     assert names[4] is None and names[5] is None
     assert ids[4] is None and ids[5] is None
@@ -85,14 +88,10 @@ def test_per_label_f1_table_shape_and_support() -> None:
     """per_label_f1_table devuelve f1 + soporte por etiqueta."""
     y_true = np.array([0, 0, 1, 1, 2])
     y_pred = np.array([0, 0, 1, 2, 2])
-    table = per_label_f1_table(
-        y_true, y_pred, label_names={0: "a", 1: "b", 2: "c"}
-    )
+    table = per_label_f1_table(y_true, y_pred, label_names={0: "a", 1: "b", 2: "c"})
     assert table.columns == ["label_id", "label_name", "f1", "support"]
     assert table.height == 3
-    support = dict(
-        zip(table["label_id"].to_list(), table["support"].to_list(), strict=True)
-    )
+    support = dict(zip(table["label_id"].to_list(), table["support"].to_list(), strict=True))
     assert support == {0: 2, 1: 2, 2: 1}
 
 
@@ -129,17 +128,13 @@ def _synthetic_dataset(seed: int = 7) -> pl.DataFrame:
 def test_evaluate_flat_vs_grouped_runs_and_groups_help() -> None:
     """El evaluador corre y el esquema agrupado no empeora el F1-macro."""
     df = _synthetic_dataset()
-    result = evaluate_flat_vs_grouped(
-        df, model="rf", k_folds=3, buffer_km=0.0, random_state=42
-    )
+    result = evaluate_flat_vs_grouped(df, model="rf", k_folds=3, buffer_km=0.0, random_state=42)
     # 18 clases planas; el esquema agrupado tiene a lo sumo 6 grupos (sobre la
     # rejilla espacial sintetica algun grupo pequeno puede no entrar en algun
     # fold; en datos reales los 6 grupos tienen miles de parcelas).
     assert result.flat_per_class.height == 18
     assert 1 <= result.grouped_per_group.height <= 6
-    assert set(result.grouped_per_group["label_name"].to_list()) <= set(
-        HCAT_L1_GROUP_ORDER
-    )
+    assert set(result.grouped_per_group["label_name"].to_list()) <= set(HCAT_L1_GROUP_ORDER)
     assert set(result.flat_metrics) >= {"f1_macro", "f1_weighted", "miou", "accuracy"}
     # En datos separables por grupo, agregar las hermanas sube el macro.
     assert result.grouped_metrics["f1_macro"] >= result.flat_metrics["f1_macro"]

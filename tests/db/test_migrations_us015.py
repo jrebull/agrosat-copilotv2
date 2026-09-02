@@ -29,9 +29,9 @@ import pytest
 pytest.importorskip("testcontainers", reason="testcontainers no instalado")
 pytest.importorskip("sqlalchemy", reason="sqlalchemy requerido")
 
-from sqlalchemy import create_engine, text  # noqa: E402
-from sqlalchemy.engine import Engine  # noqa: E402
-from sqlalchemy.exc import OperationalError  # noqa: E402
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import Engine
+from sqlalchemy.exc import OperationalError
 
 try:
     from testcontainers.postgres import PostgresContainer
@@ -86,9 +86,7 @@ def _apply_us015(engine: Engine) -> None:
     """Aplica solo las dos migraciones de la US-015 (parcels y features_parcels)."""
     targets = sorted(MIGRATIONS_DIR.glob("2026051621*_*.sql"))
     if len(targets) != 2:
-        raise RuntimeError(
-            f"Esperaba 2 migraciones US-015, encontré {len(targets)}: {targets}"
-        )
+        raise RuntimeError(f"Esperaba 2 migraciones US-015, encontré {len(targets)}: {targets}")
     with engine.begin() as conn:
         for migration_path in targets:
             conn.execute(text(_split_migration(migration_path.read_text(encoding="utf-8"))))
@@ -103,14 +101,18 @@ def pg_engine() -> Engine:
     last_error: Exception | None = None
     for image in CANDIDATE_IMAGES:
         try:
-            container = PostgresContainer(image=image, username="test", password="test", dbname="test")
+            container = PostgresContainer(
+                image=image, username="test", password="test", dbname="test"
+            )
             container.start()
         except Exception as exc:  # pragma: no cover - depende del host
             last_error = exc
             continue
 
         try:
-            url = container.get_connection_url().replace("postgresql+psycopg2", "postgresql+psycopg")
+            url = container.get_connection_url().replace(
+                "postgresql+psycopg2", "postgresql+psycopg"
+            )
             try:
                 engine = create_engine(url, future=True)
                 with engine.connect() as conn:
@@ -155,7 +157,10 @@ def _columns(engine: Engine, table: str) -> dict[str, str]:
         rows = conn.execute(query, {"table": table}).all()
     # Para tipos USER-DEFINED (geometry, vector) information_schema reporta
     # data_type='USER-DEFINED' y el detalle queda en udt_name.
-    return {row.column_name: (row.udt_name if row.data_type == "USER-DEFINED" else row.data_type) for row in rows}
+    return {
+        row.column_name: (row.udt_name if row.data_type == "USER-DEFINED" else row.data_type)
+        for row in rows
+    }
 
 
 def test_dbmate_up_creates_parcels(pg_engine: Engine) -> None:
@@ -260,8 +265,7 @@ def test_round_trip_up_down_up(pg_engine: Engine) -> None:
     with pg_engine.connect() as conn:
         exists = conn.execute(
             text(
-                "SELECT to_regclass('public.features_parcels'),"
-                "       to_regclass('public.parcels')"
+                "SELECT to_regclass('public.features_parcels'),       to_regclass('public.parcels')"
             )
         ).one()
     assert exists[0] is None and exists[1] is None, "Rollback no eliminó las tablas"

@@ -133,9 +133,7 @@ def _build_cells() -> list:
         )
     )
 
-    cells.append(
-        md("## Comparativa de los 6 modelos (60 pts)")
-    )
+    cells.append(md("## Comparativa de los 6 modelos (60 pts)"))
 
     cells.append(
         code(

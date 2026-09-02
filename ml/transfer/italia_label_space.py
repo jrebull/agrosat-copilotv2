@@ -312,9 +312,7 @@ def warm_start_head(
         pastis_name = label_space.leaf_to_pastis.get(leaf)
         pastis_id = name_to_pastis_id.get(pastis_name) if pastis_name else None
         if pastis_id is None:
-            logger.info(
-                "warm_start_skip_no_pastis_row", leaf=leaf, pastis_name=pastis_name
-            )
+            logger.info("warm_start_skip_no_pastis_row", leaf=leaf, pastis_name=pastis_name)
             continue
         row = label_space.index[leaf]
         new_head_weight[row] = pastis_head_weight[pastis_id]

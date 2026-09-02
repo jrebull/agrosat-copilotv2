@@ -180,9 +180,7 @@ def test_conversational_examples_from_fixture(tmp_path: Path) -> None:
     traces = tmp_path / "traces"
     traces.mkdir()
     rec = {"benchmark": "GeoAnalystBench", "task": "t", "prediction": "p"}
-    (traces / "trace_gemini_x.jsonl").write_text(
-        json.dumps(rec) + "\n", encoding="utf-8"
-    )
+    (traces / "trace_gemini_x.jsonl").write_text(json.dumps(rec) + "\n", encoding="utf-8")
     out = pf.export_conversational_examples(out_dir=tmp_path, traces_dir=traces)
     assert out is not None and out.exists()
     payload = json.loads(out.read_text(encoding="utf-8"))

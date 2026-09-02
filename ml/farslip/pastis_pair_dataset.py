@@ -52,7 +52,24 @@ logger = structlog.get_logger(__name__)
 #: Grapevine, in dominance order); the order of the 18 fixes which classes each
 #: intermediate ``n_classes`` activates. IDs are raw PASTIS class_ids (1..18).
 INCREMENTAL_CURRICULUM: tuple[int, ...] = (
-    1, 3, 2, 8, 4, 14, 5, 16, 10, 6, 15, 7, 11, 9, 12, 17, 13, 18
+    1,
+    3,
+    2,
+    8,
+    4,
+    14,
+    5,
+    16,
+    10,
+    6,
+    15,
+    7,
+    11,
+    9,
+    12,
+    17,
+    13,
+    18,
 )
 
 #: Band indices in the PASTIS-R 10-band layout (B02..B12) for the 4-band
@@ -79,9 +96,7 @@ _N_PASTIS_CROPS: int = 18
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _DEFAULT_PASTIS_ROOT = _REPO_ROOT / "data" / "PASTIS-R"
-_DEFAULT_PROTO_PATH = (
-    _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis.parquet"
-)
+_DEFAULT_PROTO_PATH = _REPO_ROOT / "data" / "features" / "phenology_class_prototypes_pastis.parquet"
 
 
 def active_classes(n_classes: int) -> tuple[int, ...]:
@@ -97,9 +112,7 @@ def active_classes(n_classes: int) -> tuple[int, ...]:
         ValueError: if ``n_classes`` is not in ``[1, 18]``.
     """
     if not 1 <= n_classes <= _N_PASTIS_CROPS:
-        raise ValueError(
-            f"n_classes must be in [1, {_N_PASTIS_CROPS}], received {n_classes}."
-        )
+        raise ValueError(f"n_classes must be in [1, {_N_PASTIS_CROPS}], received {n_classes}.")
     return INCREMENTAL_CURRICULUM[:n_classes]
 
 
@@ -123,9 +136,7 @@ def peak_ndvi_composite(s2: np.ndarray) -> np.ndarray:
         ValueError: if ``s2`` is not a 4-D ``(T, 10, H, W)`` tensor.
     """
     if s2.ndim != 4 or s2.shape[1] <= max(_COMPOSITE_BANDS):
-        raise ValueError(
-            f"s2 must be (T, >=7, H, W) PASTIS 10-band, received shape {s2.shape}."
-        )
+        raise ValueError(f"s2 must be (T, >=7, H, W) PASTIS 10-band, received shape {s2.shape}.")
     s2f = s2.astype(np.float32)
     red = s2f[:, _PASTIS_B04]  # (T, H, W)
     nir = s2f[:, _PASTIS_B08]

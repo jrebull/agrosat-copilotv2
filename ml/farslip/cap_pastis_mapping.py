@@ -144,9 +144,7 @@ def expand_to_cap(
             ``pastis_class_ids``.
     """
     if proto_pastis.ndim != 2:
-        raise ValueError(
-            f"proto_pastis must be 2-D (P, D); got shape {proto_pastis.shape}"
-        )
+        raise ValueError(f"proto_pastis must be 2-D (P, D); got shape {proto_pastis.shape}")
     resolved_mapping = mapping if mapping is not None else CAP_TO_PASTIS
     n_pastis, dim = proto_pastis.shape
     if pastis_class_ids is None:
@@ -155,9 +153,7 @@ def expand_to_cap(
     else:
         class_ids = list(pastis_class_ids)
         if len(class_ids) != n_pastis:
-            raise ValueError(
-                f"pastis_class_ids len={len(class_ids)} != proto rows={n_pastis}"
-            )
+            raise ValueError(f"pastis_class_ids len={len(class_ids)} != proto rows={n_pastis}")
     class_id_to_row = {cid: row for row, cid in enumerate(class_ids)}
 
     out = np.empty((len(cap_classes), dim), dtype=np.float32)

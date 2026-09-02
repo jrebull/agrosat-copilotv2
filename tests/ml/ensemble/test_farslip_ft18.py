@@ -116,9 +116,7 @@ def _patch_bridge(monkeypatch: pytest.MonkeyPatch) -> None:
         # Cover the fold-5 instance ids used by _make_test_dataset.
         return {inst: inst * 1000 + 7 for inst in range(1, 50)}
 
-    monkeypatch.setattr(
-        "ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map
-    )
+    monkeypatch.setattr("ml.utils.parcel_reconcile.instance_to_parcel_id_map", _fake_map)
 
 
 # ---------------------------------------------------------------------------
@@ -276,10 +274,13 @@ def test_background_void_rows_dropped_from_training(tmp_path, _patch_bridge, mon
 
     # 6 valid agronomic parcels (classes 1..3 x2) + 2 ignore (Background 0, Void 19).
     train_samples = [
-        ("10001", 1, 1), ("10001", 2, 1),
-        ("10002", 3, 2), ("10002", 4, 2),
-        ("10003", 5, 3), ("10003", 6, 3),
-        ("10004", 7, 0),   # Background -> dropped
+        ("10001", 1, 1),
+        ("10001", 2, 1),
+        ("10002", 3, 2),
+        ("10002", 4, 2),
+        ("10003", 5, 3),
+        ("10003", 6, 3),
+        ("10004", 7, 0),  # Background -> dropped
         ("10004", 8, 19),  # Void -> dropped
     ]
     out = tmp_path / "oof.parquet"

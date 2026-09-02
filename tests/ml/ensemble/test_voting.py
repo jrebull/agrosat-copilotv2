@@ -95,9 +95,7 @@ def test_default_members_are_three_dense(tmp_path: Path) -> None:
 
 def test_members_are_substitutable(tmp_path: Path) -> None:
     """The third voter can be swapped (e.g. deeplabv3plus) -- R-VOTE."""
-    ens = VotingEnsemble(
-        members=("tsvit-pheno", "utae", "deeplabv3plus"), oof_dir=tmp_path
-    )
+    ens = VotingEnsemble(members=("tsvit-pheno", "utae", "deeplabv3plus"), oof_dir=tmp_path)
     assert ens.members == ("tsvit-pheno", "utae", "deeplabv3plus")
 
 
@@ -131,9 +129,7 @@ def test_soft_vote_is_mean_of_probs(tmp_path: Path) -> None:
     ens = VotingEnsemble(oof_dir=tmp_path)
     proba = ens.predict_proba([pid])
 
-    expected = np.mean(
-        np.stack([maps[m].astype(np.float64) for m in _MEMBERS], axis=0), axis=0
-    )
+    expected = np.mean(np.stack([maps[m].astype(np.float64) for m in _MEMBERS], axis=0), axis=0)
     assert proba.shape == (NUM_CLASSES, SMALL_SIZE, SMALL_SIZE)
     np.testing.assert_allclose(proba, expected, atol=1e-6)
     # The averaged map is itself post-softmax (sum-to-1 over the class axis).
@@ -143,9 +139,7 @@ def test_soft_vote_is_mean_of_probs(tmp_path: Path) -> None:
 def test_soft_vote_known_uniform_maps(tmp_path: Path) -> None:
     """With three identical uniform maps the vote is that uniform map exactly."""
     pid = "20000"
-    uniform = np.full(
-        (NUM_CLASSES, SMALL_SIZE, SMALL_SIZE), 1.0 / NUM_CLASSES, dtype=np.float32
-    )
+    uniform = np.full((NUM_CLASSES, SMALL_SIZE, SMALL_SIZE), 1.0 / NUM_CLASSES, dtype=np.float32)
     for member in _MEMBERS:
         _write_known_pixel_oof(tmp_path, member, softmax_by_patch={pid: uniform})
 
@@ -236,10 +230,7 @@ def test_predict_proba_preserves_order(tmp_path: Path) -> None:
     """The output rows follow the requested patch_ids order, not the file order."""
     pids = ("70000", "70001", "70002")
     # Distinct per-patch maps so order is observable.
-    maps = {
-        pid: make_softmax_map(size=SMALL_SIZE, seed=100 + i)
-        for i, pid in enumerate(pids)
-    }
+    maps = {pid: make_softmax_map(size=SMALL_SIZE, seed=100 + i) for i, pid in enumerate(pids)}
     for member in _MEMBERS:
         _write_known_pixel_oof(tmp_path, member, softmax_by_patch=dict(maps))
 
@@ -247,9 +238,7 @@ def test_predict_proba_preserves_order(tmp_path: Path) -> None:
     reordered = [pids[2], pids[0], pids[1]]
     proba = ens.predict_proba(reordered)
     for row, pid in enumerate(reordered):
-        np.testing.assert_allclose(
-            proba[row], maps[pid].astype(np.float64), atol=1e-6
-        )
+        np.testing.assert_allclose(proba[row], maps[pid].astype(np.float64), atol=1e-6)
 
 
 def test_empty_patch_ids_raises(tmp_path: Path) -> None:
@@ -269,9 +258,7 @@ def test_missing_patch_in_member_raises(tmp_path: Path) -> None:
         "tsvit-pheno",
         softmax_by_patch={pid_common: sm, pid_only_two: sm},
     )
-    _write_known_pixel_oof(
-        tmp_path, "utae", softmax_by_patch={pid_common: sm, pid_only_two: sm}
-    )
+    _write_known_pixel_oof(tmp_path, "utae", softmax_by_patch={pid_common: sm, pid_only_two: sm})
     # unet lacks pid_only_two.
     _write_known_pixel_oof(tmp_path, "unet", softmax_by_patch={pid_common: sm})
 
@@ -316,38 +303,28 @@ def test_evaluate_patches_fold5_against_mocked_gt(
     """
     ens, pids = _setup_two_patch_voting(tmp_path)
     preds = ens.predict(pids)
-    monkeypatch.setattr(
-        ens, "load_ground_truth", lambda patch_ids: preds
-    )
+    monkeypatch.setattr(ens, "load_ground_truth", lambda patch_ids: preds)
     metrics = ens.evaluate_patches(pids, fold=5)
     assert metrics["accuracy"] == pytest.approx(1.0)
     assert metrics["f1_macro"] == pytest.approx(1.0)
 
 
-def test_evaluate_patches_fold4_raises(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_evaluate_patches_fold4_raises(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """evaluate_patches(fold=4) -> ValueError (fold-4 was selection, never reported)."""
     ens, pids = _setup_two_patch_voting(tmp_path)
     preds = ens.predict(pids)
-    monkeypatch.setattr(
-        ens, "load_ground_truth", lambda patch_ids: preds
-    )
+    monkeypatch.setattr(ens, "load_ground_truth", lambda patch_ids: preds)
     with pytest.raises(ValueError, match="fold-5-only"):
         ens.evaluate_patches(pids, fold=4)
 
 
-def test_evaluate_imperfect_gt_below_one(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_evaluate_imperfect_gt_below_one(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """A ground truth that disagrees with the vote drives accuracy below 1."""
     ens, pids = _setup_two_patch_voting(tmp_path)
     preds = ens.predict(pids)
     # Flip every label that is not the ignore index -> guaranteed disagreement.
     flipped = np.where(preds == 255, 255, (preds + 1) % NUM_CLASSES)
-    monkeypatch.setattr(
-        ens, "load_ground_truth", lambda patch_ids: flipped
-    )
+    monkeypatch.setattr(ens, "load_ground_truth", lambda patch_ids: flipped)
     metrics = ens.evaluate_patches(pids, fold=5)
     assert metrics["accuracy"] < 1.0
 
@@ -394,9 +371,7 @@ def test_load_ground_truth_aligns_to_patch_order(
             pid = self.patch_ids[pos]
             return object(), self._labels[pid]
 
-    monkeypatch.setattr(
-        voting_mod, "PASTISSegmentationDataset", _FakeDataset, raising=False
-    )
+    monkeypatch.setattr(voting_mod, "PASTISSegmentationDataset", _FakeDataset, raising=False)
     # Patch the symbol used inside load_ground_truth (imported lazily).
     import ml.data.pastis_seg_dataset as ds_mod
 

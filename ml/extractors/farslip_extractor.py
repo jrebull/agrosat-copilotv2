@@ -272,9 +272,7 @@ class FarSLIPExtractor:
         state = load_file(str(path), device=str(self.device))
         # The weights come from CLIPVisionModel (student state). We load into the
         # internal vision_model; we ignore missing/unexpected keys (text encoder).
-        missing, unexpected = self.model.vision_model.load_state_dict(
-            state, strict=False
-        )
+        missing, unexpected = self.model.vision_model.load_state_dict(state, strict=False)
         if missing:
             _log.warning("missing keys al cargar student", n=len(missing))
         if unexpected:
@@ -346,8 +344,7 @@ class FarSLIPExtractor:
                 arr = src.read()  # (C, H, W)
             if arr.shape[0] != self.n_in_channels:
                 raise ValueError(
-                    f"crop {path} has {arr.shape[0]} bands; "
-                    f"expected {self.n_in_channels}"
+                    f"crop {path} has {arr.shape[0]} bands; expected {self.n_in_channels}"
                 )
             arrays.append(arr)
 
@@ -370,9 +367,7 @@ class FarSLIPExtractor:
         )
         input_ids = tok["input_ids"].to(self.device)
         attention_mask = tok["attention_mask"].to(self.device)
-        text_out = self.model.text_model(
-            input_ids=input_ids, attention_mask=attention_mask
-        )
+        text_out = self.model.text_model(input_ids=input_ids, attention_mask=attention_mask)
         pooled = text_out.pooler_output
         embeds = self.model.text_projection(pooled)
         embeds = F.normalize(embeds, p=2, dim=-1)
@@ -390,9 +385,7 @@ class FarSLIPExtractor:
         if crops.dim() != 4:
             raise ValueError(f"crops must be (B,C,H,W); got {crops.shape}")
         if crops.shape[1] != self.n_in_channels:
-            raise ValueError(
-                f"expected C={self.n_in_channels}; got C={crops.shape[1]}"
-            )
+            raise ValueError(f"expected C={self.n_in_channels}; got C={crops.shape[1]}")
         target = 224
         if crops.shape[-1] != target or crops.shape[-2] != target:
             crops = F.interpolate(

@@ -147,7 +147,5 @@ def build_team_conclusions_markdown(conclusions: tuple[MemberConclusion, ...]) -
         "obtenidos, desde el ángulo de su rol en el proyecto.\n"
     ]
     for c in conclusions:
-        blocks.append(
-            f"\n### {c.name} — _{c.role}_\n\n{c.text}\n"
-        )
+        blocks.append(f"\n### {c.name} — _{c.role}_\n\n{c.text}\n")
     return "".join(blocks)

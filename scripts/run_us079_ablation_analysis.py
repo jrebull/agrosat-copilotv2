@@ -152,9 +152,7 @@ def fig_ab_per_class(
             color=_ARM_COLORS.get(alias, "#999999"),
         )
     ax.set_xticks(x + width * (len(aliases) - 1) / 2)
-    labels = [
-        f"* {nm}" if cons else nm for nm, cons in zip(names, conserved_flags, strict=True)
-    ]
+    labels = [f"* {nm}" if cons else nm for nm, cons in zip(names, conserved_flags, strict=True)]
     ax.set_xticklabels(labels, rotation=90, fontsize=7)
     for tick, cons in zip(ax.get_xticklabels(), conserved_flags, strict=True):
         if cons:
@@ -162,9 +160,7 @@ def fig_ab_per_class(
             tick.set_fontweight("bold")
     ax.set_ylabel("F1 por clase")
     ax.set_ylim(0.0, 1.0)
-    ax.set_title(
-        "US-079 ablacion A/B: F1 por clase (conservadas en rojo, prefijo *)"
-    )
+    ax.set_title("US-079 ablacion A/B: F1 por clase (conservadas en rojo, prefijo *)")
     ax.legend(loc="upper right", fontsize=9)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
@@ -191,9 +187,7 @@ def fig_ab_conserved_delta(table: pl.DataFrame, out_path: Path) -> Path | None:
     if "delta_b_minus_a" not in table.columns:
         logger.info("us079_fig_skipped", fig="ab_conserved_delta", reason="no B arm yet")
         return None
-    conserved = table.filter(pl.col("is_conserved")).sort(
-        "delta_b_minus_a", descending=True
-    )
+    conserved = table.filter(pl.col("is_conserved")).sort("delta_b_minus_a", descending=True)
     if conserved.height == 0:
         logger.info("us079_fig_skipped", fig="ab_conserved_delta", reason="no conserved class")
         return None
@@ -392,9 +386,7 @@ def main() -> None:
         "levels": levels,
     }
     args.out_json.parent.mkdir(parents=True, exist_ok=True)
-    args.out_json.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+    args.out_json.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     logger.info(
         "us079_ablation_report_written",
         path=str(args.out_json),

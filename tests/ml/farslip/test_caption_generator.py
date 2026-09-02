@@ -328,9 +328,7 @@ def _make_instance(n_parcels: int, h: int = 16, w: int = 16) -> np.ndarray:
     return flat.reshape(h, w)
 
 
-def _patch_pastis(
-    monkeypatch: pytest.MonkeyPatch, patches: dict[str, dict[str, object]]
-) -> None:
+def _patch_pastis(monkeypatch: pytest.MonkeyPatch, patches: dict[str, dict[str, object]]) -> None:
     """Mocks PASTIS disk access on ``caption_cache`` (loader, index, phenology)."""
 
     def _fake_loader(
@@ -343,9 +341,7 @@ def _patch_pastis(
             {"patch_id": pid, "TILE": str(p["tile"]), "Fold": int(p["fold"])}
             for pid, p in patches.items()
         ]
-        return pl.DataFrame(
-            rows, schema={"patch_id": pl.Utf8, "TILE": pl.Utf8, "Fold": pl.Int64}
-        )
+        return pl.DataFrame(rows, schema={"patch_id": pl.Utf8, "TILE": pl.Utf8, "Fold": pl.Int64})
 
     monkeypatch.setattr(cc, "load_pastis_patch", _fake_loader)
     monkeypatch.setattr(cc, "pastis_patch_index", _fake_index)
@@ -374,9 +370,7 @@ def _two_patch_fixture() -> dict[str, dict[str, object]]:
     }
 
 
-def test_generate_captions_parquet_schema(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_generate_captions_parquet_schema(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _patch_pastis(monkeypatch, _two_patch_fixture())
     client = _MockGemmaClient()
     out = tmp_path / "captions.parquet"
@@ -408,14 +402,21 @@ def test_generate_captions_parquet_resume_idempotent(
 
     first = _MockGemmaClient()
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), first  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        first,  # type: ignore[arg-type]
     )
     assert first.calls == 2
 
     # Second run with resume=True must NOT invoke the client (both already done).
     second = _MockGemmaClient()
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), second, resume=True  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        second,
+        resume=True,  # type: ignore[arg-type]
     )
     assert second.calls == 0
     assert pl.read_parquet(out).height == 2
@@ -431,7 +432,10 @@ def test_generate_captions_parquet_resume_only_new(
     _patch_pastis(monkeypatch, {"100": patches["100"]})
     first = _MockGemmaClient()
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), first  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        first,  # type: ignore[arg-type]
     )
     assert first.calls == 1
 
@@ -439,7 +443,11 @@ def test_generate_captions_parquet_resume_only_new(
     _patch_pastis(monkeypatch, patches)
     second = _MockGemmaClient()
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), second, resume=True  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        second,
+        resume=True,  # type: ignore[arg-type]
     )
     assert second.calls == 1
     assert pl.read_parquet(out).height == 2
@@ -463,7 +471,11 @@ def test_generate_captions_parquet_flushes_incrementally(
 
     monkeypatch.setattr(cc, "_flush_captions", _spy_flush)
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), _MockGemmaClient(), flush_every=1  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        _MockGemmaClient(),
+        flush_every=1,  # type: ignore[arg-type]
     )
     # Persisted progressively (1 then 2), not only at the very end.
     assert flushed_heights[0] == 1
@@ -487,7 +499,11 @@ def test_generate_captions_parquet_resumes_after_crash(
     _patch_pastis(monkeypatch, patches)
     with pytest.raises(RuntimeError, match="simulated"):
         generate_captions_parquet(
-            tmp_path / "PASTIS-R", out, (1,), _CrashAfterFirst(), flush_every=1  # type: ignore[arg-type]
+            tmp_path / "PASTIS-R",
+            out,
+            (1,),
+            _CrashAfterFirst(),
+            flush_every=1,  # type: ignore[arg-type]
         )
     # The first caption survived the crash on disk.
     assert pl.read_parquet(out).height == 1
@@ -495,19 +511,24 @@ def test_generate_captions_parquet_resumes_after_crash(
     # Relaunch: only the missing patch is generated.
     resume_client = _MockGemmaClient()
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), resume_client, resume=True  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        resume_client,
+        resume=True,  # type: ignore[arg-type]
     )
     assert resume_client.calls == 1
     assert pl.read_parquet(out).height == 2
 
 
-def test_load_captions_roundtrip(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_load_captions_roundtrip(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _patch_pastis(monkeypatch, _two_patch_fixture())
     out = tmp_path / "captions.parquet"
     generate_captions_parquet(
-        tmp_path / "PASTIS-R", out, (1,), _MockGemmaClient()  # type: ignore[arg-type]
+        tmp_path / "PASTIS-R",
+        out,
+        (1,),
+        _MockGemmaClient(),  # type: ignore[arg-type]
     )
     captions = load_captions(out)
     assert set(captions) == {"100", "200"}

@@ -195,9 +195,7 @@ def _collect_patches(
             logger.info("s4a_patch_kept", patch=repo_path, parcel_frac=round(frac, 4))
         else:
             local.unlink(missing_ok=True)
-            logger.info(
-                "s4a_patch_dropped_empty", patch=repo_path, parcel_frac=round(frac, 4)
-            )
+            logger.info("s4a_patch_dropped_empty", patch=repo_path, parcel_frac=round(frac, 4))
     return kept
 
 
@@ -287,9 +285,7 @@ def download_subset(
         n_fr=len(fr_kept),
     )
     manifest_path = out_dir / "subset_manifest.json"
-    manifest_path.write_text(
-        json.dumps(asdict(manifest), indent=2), encoding="utf-8"
-    )
+    manifest_path.write_text(json.dumps(asdict(manifest), indent=2), encoding="utf-8")
     logger.info(
         "s4a_download_done",
         n_cat=manifest.n_cat,

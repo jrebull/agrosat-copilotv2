@@ -41,21 +41,11 @@ def synthetic_spectral_frame() -> pl.DataFrame:
     # Reflectancias coherentes para los 4 anclajes (sog/peak/senescence + extra).
     for anchor in DEFAULT_PHENOLOGY_ANCHORS:
         # B04 red ~0.05, B05 red-edge ~0.15, B06 ~0.35, B07 ~0.45, B08 NIR ~0.55.
-        base[f"{anchor}_b04"] = (
-            rng.normal(loc=0.05, scale=0.01, size=n).clip(0.01, 0.2).tolist()
-        )
-        base[f"{anchor}_b05"] = (
-            rng.normal(loc=0.15, scale=0.02, size=n).clip(0.05, 0.4).tolist()
-        )
-        base[f"{anchor}_b06"] = (
-            rng.normal(loc=0.35, scale=0.03, size=n).clip(0.1, 0.6).tolist()
-        )
-        base[f"{anchor}_b07"] = (
-            rng.normal(loc=0.45, scale=0.04, size=n).clip(0.1, 0.7).tolist()
-        )
-        base[f"{anchor}_b08"] = (
-            rng.normal(loc=0.55, scale=0.05, size=n).clip(0.1, 0.8).tolist()
-        )
+        base[f"{anchor}_b04"] = rng.normal(loc=0.05, scale=0.01, size=n).clip(0.01, 0.2).tolist()
+        base[f"{anchor}_b05"] = rng.normal(loc=0.15, scale=0.02, size=n).clip(0.05, 0.4).tolist()
+        base[f"{anchor}_b06"] = rng.normal(loc=0.35, scale=0.03, size=n).clip(0.1, 0.6).tolist()
+        base[f"{anchor}_b07"] = rng.normal(loc=0.45, scale=0.04, size=n).clip(0.1, 0.7).tolist()
+        base[f"{anchor}_b08"] = rng.normal(loc=0.55, scale=0.05, size=n).clip(0.1, 0.8).tolist()
     return pl.DataFrame(base)
 
 

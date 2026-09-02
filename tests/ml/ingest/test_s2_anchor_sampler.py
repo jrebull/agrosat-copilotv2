@@ -30,7 +30,6 @@ from ml.ingest.s2_anchor_sampler import (
     sample_s2_anchors_for_parcels,
 )
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -136,9 +135,7 @@ def _patch_ee(monkeypatch: pytest.MonkeyPatch, fake_ee: types.ModuleType) -> Non
 # ---------------------------------------------------------------------------
 
 
-def test_schema_and_15_spectral_cols(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_schema_and_15_spectral_cols(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Output tiene parcel_id Utf8 + year Int16 + 15 cols espectrales Float64."""
     parcels = _make_parcels(n=3)
     payload = _payload_for_parcels(parcels)
@@ -173,9 +170,7 @@ def test_schema_and_15_spectral_cols(
             assert df.schema[_band_col_name(anchor, band)] == pl.Float64
 
 
-def test_determinism_and_stable_order(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_determinism_and_stable_order(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Misma entrada -> mismo output (orden estable por parcel_id)."""
     parcels = _make_parcels(n=4)
     payload = _payload_for_parcels(parcels)
@@ -210,9 +205,7 @@ def test_determinism_and_stable_order(
     assert df1["parcel_id"].to_list() == sorted(df1["parcel_id"].to_list())
 
 
-def test_batching_respects_size(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_batching_respects_size(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """``batch_size < n_parcels`` no pierde filas."""
     parcels = _make_parcels(n=8)
     payload = _payload_for_parcels(parcels)
@@ -232,9 +225,7 @@ def test_batching_respects_size(
     assert set(df["parcel_id"].to_list()) == {f"p{i:03d}" for i in range(8)}
 
 
-def test_cache_hit_skips_ee_call(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_cache_hit_skips_ee_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Segunda llamada con misma entrada usa cache y no llama EE."""
     parcels = _make_parcels(n=2)
     payload = _payload_for_parcels(parcels)

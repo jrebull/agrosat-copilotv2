@@ -87,17 +87,11 @@ def test_comparison_table_three_scenarios(
     scenarios = set(table.get_column("scenario").to_list())
     assert len(scenarios) == 3
     for scenario in scenarios:
-        models = (
-            table.filter(pl.col("scenario") == scenario)
-            .get_column("model")
-            .to_list()
-        )
+        models = table.filter(pl.col("scenario") == scenario).get_column("model").to_list()
         assert sorted(models) == ["LGBM", "RF", "XGB"]
 
 
-def test_comparison_uses_same_spatial_cv(
-    scenario_paths: dict[str, str], tmp_path: Path
-) -> None:
+def test_comparison_uses_same_spatial_cv(scenario_paths: dict[str, str], tmp_path: Path) -> None:
     """El mismo CV espacial 5-fold se reusa para los 3 escenarios.
 
     Tras una corrida, el caché de folds de ``ml.train.baseline`` queda
@@ -148,18 +142,12 @@ def test_comparison_computes_alphaearth_delta(
     """alphaearth_delta = f1_macro(AlphaEarth) - f1_macro(S2 crudo)."""
     table = comparison_result.table
     ae_best = float(
-        table.filter(pl.col("scenario").str.contains("AlphaEarth"))
-        .get_column("f1_macro")
-        .max()
+        table.filter(pl.col("scenario").str.contains("AlphaEarth")).get_column("f1_macro").max()
     )
     s2_best = float(
-        table.filter(pl.col("scenario").str.contains("Sentinel-2"))
-        .get_column("f1_macro")
-        .max()
+        table.filter(pl.col("scenario").str.contains("Sentinel-2")).get_column("f1_macro").max()
     )
-    assert comparison_result.alphaearth_delta == pytest.approx(
-        ae_best - s2_best, abs=1e-9
-    )
+    assert comparison_result.alphaearth_delta == pytest.approx(ae_best - s2_best, abs=1e-9)
 
 
 def test_comparison_table_sorted_by_f1_macro(
@@ -174,9 +162,7 @@ def test_comparison_best_scenario_matches_table(
     comparison_result: ComparisonResult,
 ) -> None:
     """best_scenario es el escenario de la fila con mayor f1_macro."""
-    top = comparison_result.table.sort("f1_macro", descending=True).row(
-        0, named=True
-    )
+    top = comparison_result.table.sort("f1_macro", descending=True).row(0, named=True)
     assert comparison_result.best_scenario == top["scenario"]
 
 
@@ -294,9 +280,7 @@ def test_s2_raw_aggregate_skips_missing_tensor() -> None:
 
 def test_align_scenarios_inner_join_by_parcel() -> None:
     """``_align_scenarios_by_parcel`` reduce los 3 frames al parcel_id comun."""
-    scenarios = make_three_scenarios(
-        n=120, n_classes=3, seed=1, drop_from_combined=20
-    )
+    scenarios = make_three_scenarios(n=120, n_classes=3, seed=1, drop_from_combined=20)
     aligned = _align_scenarios_by_parcel(scenarios)
     heights = {k: v.height for k, v in aligned.items()}
     # combined perdio 20 filas => el inner join deja 100 en los 3.

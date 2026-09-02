@@ -104,9 +104,7 @@ async def run(inp: AoiStatsInput, ctx: ToolContext) -> AoiStats:
     n_labelled = sum(labelled_counts.values())
 
     if n_labelled > 0:
-        crop_fractions = {
-            crop: count / n_labelled for crop, count in labelled_counts.items()
-        }
+        crop_fractions = {crop: count / n_labelled for crop, count in labelled_counts.items()}
         # Mode: highest count, ties broken by class name for determinism.
         dominant_crop = max(
             labelled_counts.items(),

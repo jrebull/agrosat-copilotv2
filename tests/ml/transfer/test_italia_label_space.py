@@ -91,8 +91,7 @@ def test_build_label_space_reads_json_when_parquet_absent(tmp_path: Path) -> Non
         "background_id": 0,
         "other_class_name": "other",
         "classes": [
-            {"class_id": i, "hcat4_name": n, "n_parcels": 500}
-            for i, n in enumerate(names, start=1)
+            {"class_id": i, "hcat4_name": n, "n_parcels": 500} for i, n in enumerate(names, start=1)
         ],
     }
     (tmp_path / "class_mapping.json").write_text(json.dumps(mapping), encoding="utf-8")
@@ -200,9 +199,7 @@ def test_warm_start_skips_conserved_without_pastis_row(tmp_path: Path) -> None:
     # The other conserved leaves are still warmed.
     assert "common_soft_wheat" in warmed
     # The skipped leaf row stays at init (zeros), not copied from PASTIS ones.
-    np.testing.assert_array_equal(
-        new_w[space.index["maize_corn_popcorn"]], np.zeros(dim)
-    )
+    np.testing.assert_array_equal(new_w[space.index["maize_corn_popcorn"]], np.zeros(dim))
 
 
 # --------------------------------------------------------------------------- #

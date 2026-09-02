@@ -156,9 +156,7 @@ def resample_mask_128_nearest(
     """
     arr = _to_numpy_int(mask)
     if arr.ndim != 2:
-        raise ValueError(
-            f"`mask` must be a 2D (H, W) class map; received shape {arr.shape}."
-        )
+        raise ValueError(f"`mask` must be a 2D (H, W) class map; received shape {arr.shape}.")
     if arr.shape == (size, size):
         return arr.astype(np.int64, copy=True)
 
@@ -166,9 +164,7 @@ def resample_mask_128_nearest(
     # the values exact by interpolating on a float view and casting back. torch
     # interpolate needs a (N, C, H, W) tensor.
     tensor = torch.from_numpy(arr.astype(np.float32))[None, None, :, :]
-    resampled = torch.nn.functional.interpolate(
-        tensor, size=(size, size), mode="nearest"
-    )
+    resampled = torch.nn.functional.interpolate(tensor, size=(size, size), mode="nearest")
     return resampled[0, 0].round().to(torch.int64).numpy()
 
 
@@ -233,14 +229,9 @@ def remap_probs_20_to_18(
     arr = _to_numpy_float(probs)
     class_axis = _find_class_axis(arr.shape, expected=20)
     if not 0 <= background_id < 20 or not 0 <= void_id < 20:
-        raise ValueError(
-            f"background_id={background_id} and void_id={void_id} must be in "
-            "[0, 20)."
-        )
+        raise ValueError(f"background_id={background_id} and void_id={void_id} must be in [0, 20).")
     if background_id == void_id:
-        raise ValueError(
-            f"background_id and void_id must differ; both were {background_id}."
-        )
+        raise ValueError(f"background_id and void_id must differ; both were {background_id}.")
 
     keep = [c for c in range(20) if c not in (background_id, void_id)]
     kept = np.take(arr, keep, axis=class_axis)
@@ -282,8 +273,7 @@ def resample_probs_128_bilinear(
     arr = _to_numpy_float(probs)
     if arr.ndim != 3:
         raise ValueError(
-            f"`probs` must be a 3D (C, H, W) probability map; received shape "
-            f"{arr.shape}."
+            f"`probs` must be a 3D (C, H, W) probability map; received shape {arr.shape}."
         )
 
     if arr.shape[1:] != (size, size):
@@ -538,9 +528,7 @@ def register_label_space(space: LabelSpace, *, overwrite: bool = False) -> None:
                 f"semantic18 range [0, {_SEMANTIC18_SIZE})."
             )
     if space.name in _REGISTRY and not overwrite:
-        raise ValueError(
-            f"label-space {space.name!r} is already registered; pass overwrite=True."
-        )
+        raise ValueError(f"label-space {space.name!r} is already registered; pass overwrite=True.")
     _REGISTRY[space.name] = space
 
 
@@ -560,9 +548,7 @@ def get_label_space(name: str | None = None) -> LabelSpace:
     if name is None:
         name = DEFAULT_LABEL_SPACE
     if name not in _REGISTRY:
-        raise KeyError(
-            f"unknown label-space {name!r}; registered: {sorted(_REGISTRY)}."
-        )
+        raise KeyError(f"unknown label-space {name!r}; registered: {sorted(_REGISTRY)}.")
     return _REGISTRY[name]
 
 
@@ -575,9 +561,7 @@ def list_label_spaces() -> tuple[str, ...]:
     return tuple(sorted(_REGISTRY))
 
 
-def restrict_posterior(
-    proba: np.ndarray, label_space: LabelSpace
-) -> dict[int, float]:
+def restrict_posterior(proba: np.ndarray, label_space: LabelSpace) -> dict[int, float]:
     """Mask a semantic18 posterior to a label-space and renormalize over it.
 
     Drops the ``dropped_class_ids`` mass of a ``(18,)`` post-softmax row and
@@ -684,19 +668,13 @@ def _build_hcat_macro() -> LabelSpace:
                 f"hcat-macro id {cid} is missing from the semantic18 name table "
                 "or the macro mapping; re-derive from the US-074 crosswalk."
             )
-    class_names = {
-        cid: f"{_HCAT_MACRO_BY_ID[cid]}|{SEMANTIC18_CLASS_NAMES[cid]}"
-        for cid in kept
-    }
+    class_names = {cid: f"{_HCAT_MACRO_BY_ID[cid]}|{SEMANTIC18_CLASS_NAMES[cid]}" for cid in kept}
     return LabelSpace(
         name="hcat-macro",
         kept_class_ids=kept,
         dropped_class_ids=(),
         class_names=class_names,
-        source=(
-            "US-074 crosswalk PASTIS-18 -> HCAT v3 "
-            "(data/reference/hcat_crosswalk.parquet)"
-        ),
+        source=("US-074 crosswalk PASTIS-18 -> HCAT v3 (data/reference/hcat_crosswalk.parquet)"),
     )
 
 

@@ -65,9 +65,7 @@ def build_pastis_phenology_anchors(
     features_subset_path: Path | str = Path(
         "data/test_fixtures/feature_selection_parcels_subset.parquet"
     ),
-    output_path: Path | str = Path(
-        "data/features/pastis_phenology_anchors_2019.parquet"
-    ),
+    output_path: Path | str = Path("data/features/pastis_phenology_anchors_2019.parquet"),
     target_year: int = 2019,
     overwrite: bool = False,
 ) -> Path:
@@ -122,9 +120,7 @@ def build_pastis_phenology_anchors(
         first_key = min(dates_s2.keys(), key=int)
         first_yyyymmdd = str(dates_s2[first_key])
         try:
-            patch_base_date[int(props["ID_PATCH"])] = datetime.strptime(
-                first_yyyymmdd, "%Y%m%d"
-            )
+            patch_base_date[int(props["ID_PATCH"])] = datetime.strptime(first_yyyymmdd, "%Y%m%d")
         except (KeyError, ValueError):
             continue
 
@@ -145,9 +141,7 @@ def build_pastis_phenology_anchors(
     required = {"parcel_id", "patch_id", "sog_doy", "peak_doy", "senescence_doy"}
     missing = required - set(df.columns)
     if missing:
-        raise ValueError(
-            f"subset {sub_path} is missing required columns: {sorted(missing)}."
-        )
+        raise ValueError(f"subset {sub_path} is missing required columns: {sorted(missing)}.")
 
     # 3. Convert relative DOY -> calendar DOY per parcel.
     rows: list[dict[str, int | str]] = []

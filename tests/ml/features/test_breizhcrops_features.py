@@ -30,9 +30,7 @@ def _synthetic_long(
     """Construye un long-format sintetico de UNA parcela (bandas crudas DN)."""
     rng = np.random.default_rng(seed)
     # Fechas mensuales 2017 como enteros YYYYMMDD.
-    dates = np.array(
-        [2017_0000 + (m + 1) * 100 + 15 for m in range(n_steps)], dtype=np.int64
-    )
+    dates = np.array([2017_0000 + (m + 1) * 100 + 15 for m in range(n_steps)], dtype=np.int64)
     doys = np.array([(m + 1) * 30 for m in range(n_steps)], dtype=np.int64)
     rows: list[dict[str, object]] = []
     for band in PASTIS_S2_BANDS:

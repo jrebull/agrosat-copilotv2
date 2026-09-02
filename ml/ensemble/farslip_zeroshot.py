@@ -207,8 +207,7 @@ def build_text_class_bank(
         arr = np.asarray(embeds.detach().cpu().float().numpy(), dtype=np.float32)
         if arr.ndim != 2 or arr.shape[1] != _EMBED_DIM:
             raise ValueError(
-                f"encode_text must return (N, {_EMBED_DIM}); got {arr.shape} "
-                f"for class {name!r}."
+                f"encode_text must return (N, {_EMBED_DIM}); got {arr.shape} for class {name!r}."
             )
         mean_vec = arr.mean(axis=0)
         norm = float(np.linalg.norm(mean_vec))
@@ -270,9 +269,7 @@ def zeroshot_parcel_proba(
     """
     bank = np.asarray(text_bank, dtype=np.float32)
     if bank.ndim != 2 or bank.shape[1] != _EMBED_DIM:
-        raise ValueError(
-            f"text_bank must be (C, {_EMBED_DIM}); got {bank.shape}."
-        )
+        raise ValueError(f"text_bank must be (C, {_EMBED_DIM}); got {bank.shape}.")
     scale = float(logit_scale)
 
     probs: list[np.ndarray] = []
@@ -289,13 +286,10 @@ def zeroshot_parcel_proba(
         crops = image.unsqueeze(0)  # (1, 4, H, W)
         with torch.inference_mode():
             embeds = extractor.extract_embeddings(crops)
-        img_vec = np.asarray(
-            embeds.detach().cpu().float().numpy(), dtype=np.float32
-        )
+        img_vec = np.asarray(embeds.detach().cpu().float().numpy(), dtype=np.float32)
         if img_vec.ndim != 2 or img_vec.shape[1] != _EMBED_DIM:
             raise ValueError(
-                f"extract_embeddings must return (B, {_EMBED_DIM}); "
-                f"got {img_vec.shape}."
+                f"extract_embeddings must return (B, {_EMBED_DIM}); got {img_vec.shape}."
             )
         logits = (img_vec @ bank.T) * scale  # (1, C)
         row = _softmax_rows(logits)[0]  # (C,)
@@ -334,9 +328,7 @@ def _scatter_to_semantic18(
     Returns:
         A ``(n, 18)`` float32 row-stochastic matrix.
     """
-    if proba.shape[1] == _NUM_CLASSES and list(bank_classes) == list(
-        range(_NUM_CLASSES)
-    ):
+    if proba.shape[1] == _NUM_CLASSES and list(bank_classes) == list(range(_NUM_CLASSES)):
         return proba.astype(np.float32)
     full = np.zeros((proba.shape[0], _NUM_CLASSES), dtype=np.float64)
     for col, gid in enumerate(bank_classes):
@@ -406,9 +398,7 @@ def _translate_to_canonical_keys(
         text = str(raw)
         patch, sep, inst = text.rpartition("_")
         if not sep or not patch:
-            raise ValueError(
-                f"malformed parcel_id {raw!r}; expected '{{patch}}_{{instance}}'."
-            )
+            raise ValueError(f"malformed parcel_id {raw!r}; expected '{{patch}}_{{instance}}'.")
         if patch not in cache:
             cache[patch] = _instance_to_parcel_id_map(patch, pastis_root)
         raster_id = cache[patch].get(int(inst))
@@ -499,9 +489,7 @@ def materialize_zeroshot_oof(
             active_class_ids=active,
         )
 
-    text_bank = build_text_class_bank(
-        extractor, bank_names, prompts_per_class=prompts_per_class
-    )
+    text_bank = build_text_class_bank(extractor, bank_names, prompts_per_class=prompts_per_class)
     proba_local, raw_parcel_ids, _class_ids = zeroshot_parcel_proba(
         extractor, dataset, text_bank, logit_scale=logit_scale
     )

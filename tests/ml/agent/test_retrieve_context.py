@@ -102,12 +102,20 @@ async def test_enabled_injects_grounding(monkeypatch, make_ctx) -> None:
     """``rag_enabled=True`` -> documents retrieved and grounding text built."""
     retrieved = [
         RAGDocument(
-            id=1, content="Trigo en fase de senescencia.", source="phenology_caption",
-            parcel_id="10000_1", distance_m=120.0, score=0.92,
+            id=1,
+            content="Trigo en fase de senescencia.",
+            source="phenology_caption",
+            parcel_id="10000_1",
+            distance_m=120.0,
+            score=0.92,
         ),
         RAGDocument(
-            id=2, content="Maiz con pico NDVI tardio.", source="phenology_caption",
-            parcel_id="10000_2", distance_m=300.0, score=0.81,
+            id=2,
+            content="Maiz con pico NDVI tardio.",
+            source="phenology_caption",
+            parcel_id="10000_2",
+            distance_m=300.0,
+            score=0.81,
         ),
     ]
 

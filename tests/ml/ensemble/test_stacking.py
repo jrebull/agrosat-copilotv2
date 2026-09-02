@@ -139,9 +139,7 @@ def write_stacking_fixture(
             "geometry": [Point(lon, lat).wkt for lon, lat in coords],
         }
     )
-    gt_labels = pl.DataFrame(
-        {"canonical_parcel_id": ids, "label": labels}
-    )
+    gt_labels = pl.DataFrame({"canonical_parcel_id": ids, "label": labels})
     return parcel_geoms, gt_labels
 
 
@@ -206,9 +204,7 @@ def test_build_meta_features_rejects_logits(tmp_path: Path) -> None:
     df = pl.read_parquet(bad)
     rng = np.random.default_rng(0)
     logits = rng.uniform(-5.0, 5.0, size=(df.height, NUM_CLASSES))
-    df = df.with_columns(
-        [pl.Series(col, logits[:, c]) for c, col in enumerate(PROB_COLUMNS)]
-    )
+    df = df.with_columns([pl.Series(col, logits[:, c]) for c, col in enumerate(PROB_COLUMNS)])
     df.write_parquet(bad)
     ens = StackingEnsemble(_MEMBERS, oof_dir=tmp_path)
     with pytest.raises(ValueError):
@@ -272,9 +268,7 @@ def test_fit_raises_on_injected_leakage(tmp_path: Path) -> None:
     leaked_train = np.concatenate([train_pos, test_pos[:1]])
     leaked = [(leaked_train, test_pos), *real_splits[1:]]
 
-    with mock.patch.object(
-        StackingEnsemble, "_subfolds_by_canonical_id", return_value=leaked
-    ):
+    with mock.patch.object(StackingEnsemble, "_subfolds_by_canonical_id", return_value=leaked):
         with pytest.raises(ValueError, match="leakage"):
             ens.fit(parcel_geoms, gt_labels=gt)
 
@@ -307,9 +301,7 @@ def test_spatial_cv_used_not_random(tmp_path: Path) -> None:
 def test_subfold_buffer_excludes_border_parcels(tmp_path: Path) -> None:
     """With a buffer the union of sub-fold rows may exclude border parcels."""
     parcel_geoms, gt = write_stacking_fixture(tmp_path, n_parcels=60, seed=8)
-    ens = StackingEnsemble(
-        _MEMBERS, oof_dir=tmp_path, n_spatial_folds=3, buffer_km=1.0
-    )
+    ens = StackingEnsemble(_MEMBERS, oof_dir=tmp_path, n_spatial_folds=3, buffer_km=1.0)
     keys_df, _, _ = ens.build_meta_features(gt_labels=gt)
     splits = ens._subfolds_by_canonical_id(parcel_geoms, keys_df)
     # Every test block is geographically held out and disjoint from its train.
@@ -376,7 +368,10 @@ def test_fit_predict_both_meta_families(tmp_path: Path, meta: str) -> None:
     """logreg and xgb meta-learners both train and emit (n, 18) post-softmax."""
     parcel_geoms, gt = write_stacking_fixture(tmp_path, n_parcels=60, seed=12)
     ens = StackingEnsemble(
-        _MEMBERS, oof_dir=tmp_path, meta=meta, n_spatial_folds=3  # type: ignore[arg-type]
+        _MEMBERS,
+        oof_dir=tmp_path,
+        meta=meta,
+        n_spatial_folds=3,  # type: ignore[arg-type]
     )
     ens.fit(parcel_geoms, gt_labels=gt)
 
@@ -428,9 +423,7 @@ def test_predict_before_fit_raises(tmp_path: Path) -> None:
 
 def test_informative_bases_help_meta(tmp_path: Path) -> None:
     """With informative base learners the meta beats random-chance accuracy."""
-    parcel_geoms, gt = write_stacking_fixture(
-        tmp_path, n_parcels=90, seed=15, informative=True
-    )
+    parcel_geoms, gt = write_stacking_fixture(tmp_path, n_parcels=90, seed=15, informative=True)
     ens = StackingEnsemble(_MEMBERS, oof_dir=tmp_path, n_spatial_folds=3).fit(
         parcel_geoms, gt_labels=gt
     )

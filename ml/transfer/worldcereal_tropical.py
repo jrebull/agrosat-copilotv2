@@ -187,12 +187,8 @@ def worldcereal_label_image(aez_id: int) -> Any:
         WorldCerealDataMissing: if the AEZ has no ``temporarycrops`` product.
     """
     if ee is None:  # pragma: no cover - exercised only without the SDK
-        raise ImportError(
-            "earthengine-api is not installed. Run `poetry install --with ml,geo`."
-        )
-    ic = ee.ImageCollection(WORLDCEREAL_COLLECTION).filter(
-        ee.Filter.eq("aez_id", int(aez_id))
-    )
+        raise ImportError("earthengine-api is not installed. Run `poetry install --with ml,geo`.")
+    ic = ee.ImageCollection(WORLDCEREAL_COLLECTION).filter(ee.Filter.eq("aez_id", int(aez_id)))
 
     def _product(product: str) -> Any:
         sub = ic.filter(ee.Filter.eq("product", product))
@@ -239,9 +235,7 @@ def _aez_geometry(aez_id: int) -> Any:
         )
     )
     if ic.size().getInfo() == 0:
-        raise WorldCerealDataMissing(
-            f"WorldCereal AEZ {aez_id} has no temporarycrops product."
-        )
+        raise WorldCerealDataMissing(f"WorldCereal AEZ {aez_id} has no temporarycrops product.")
     return ic.first().geometry()
 
 
@@ -285,9 +279,7 @@ def sample_worldcereal_points(
     """
     cache_root = cache_dir or Path("data/cache/gee")
     cache_root.mkdir(parents=True, exist_ok=True)
-    cache_file = (
-        cache_root / f"worldcereal_pts_{region.name}_{n_per_class}_{scale}_{seed}.parquet"
-    )
+    cache_file = cache_root / f"worldcereal_pts_{region.name}_{n_per_class}_{scale}_{seed}.parquet"
     if cache_file.exists():
         return pl.read_parquet(cache_file)
 
@@ -308,9 +300,7 @@ def sample_worldcereal_points(
         )
         info = sample.getInfo()
     except Exception as exc:  # noqa: BLE001 - graceful degradation
-        logger.warning(
-            "worldcereal_sample_failed", region=region.name, error=str(exc)
-        )
+        logger.warning("worldcereal_sample_failed", region=region.name, error=str(exc))
         return pl.DataFrame(schema=_points_schema())
 
     rows: list[dict[str, object]] = []
@@ -486,13 +476,7 @@ def zero_shot_separability(
         est = build_estimator("xgb", _baseline_params(n_tr))
         est.fit(x[train_idx], y[train_idx])
         pred = est.predict(x[test_idx])
-        f1s.append(
-            float(
-                f1_score(
-                    y[test_idx], pred, average="macro", zero_division=0
-                )
-            )
-        )
+        f1s.append(float(f1_score(y[test_idx], pred, average="macro", zero_division=0)))
     return {
         "f1_macro_cv": float(np.mean(f1s)),
         "f1_macro_std": float(np.std(f1s)),
@@ -625,11 +609,7 @@ def _baseline_params(n_classes: int | None = None) -> dict[str, object]:
     Returns:
         The XGBoost hyperparameter dict.
     """
-    objective = (
-        "binary:logistic"
-        if n_classes is not None and n_classes <= 2
-        else "multi:softprob"
-    )
+    objective = "binary:logistic" if n_classes is not None and n_classes <= 2 else "multi:softprob"
     return {
         "n_estimators": 200,
         "max_depth": 6,
@@ -642,9 +622,7 @@ def _baseline_params(n_classes: int | None = None) -> dict[str, object]:
     }
 
 
-def _sample_k_shot(
-    rng: np.random.Generator, labels: np.ndarray, k: int
-) -> np.ndarray:
+def _sample_k_shot(rng: np.random.Generator, labels: np.ndarray, k: int) -> np.ndarray:
     """Pick up to ``k`` support indices per class.
 
     Args:
@@ -711,9 +689,7 @@ def run_fewshot_curve(
             est = build_estimator("xgb", _baseline_params(n_sup))
             est.fit(x[support_idx], y[support_idx])
             pred = est.predict(x[test_idx])
-            f1 = float(
-                f1_score(y[test_idx], pred, average="macro", zero_division=0)
-            )
+            f1 = float(f1_score(y[test_idx], pred, average="macro", zero_division=0))
             rows.append(
                 {
                     "region": region_name,

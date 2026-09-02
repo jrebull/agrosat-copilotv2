@@ -150,7 +150,7 @@ CELLS: list[nbf.NotebookNode] = [
         "import datetime as _dt\n"
         "_T0_NB = _dt.datetime.now()\n"
         "def log(msg: str, *, level: str = 'info') -> None:\n"
-        "    \"\"\"Imprime un log con timestamp HH:MM:SS y delta desde el inicio.\"\"\"\n"
+        '    """Imprime un log con timestamp HH:MM:SS y delta desde el inicio."""\n'
         "    now = _dt.datetime.now()\n"
         "    delta_s = (now - _T0_NB).total_seconds()\n"
         "    badge = {'info': '[i]', 'ok': '[+]', 'warn': '[!]', 'step': '[#]'}.get(level, '[i]')\n"
@@ -436,7 +436,7 @@ CELLS: list[nbf.NotebookNode] = [
         "        f'**F1-macro `geom_only`**: `{geom_only.f1_macro:.4f}` con `{geom_only.n_features}` features\\n\\n'\n"
         "        f'**F1-macro `full`**: `{full.f1_macro:.4f}` con `{full.n_features}` features\\n\\n'\n"
         "        f'**Delta (`full - geom_only`)**: `{delta:+.4f}`\\n\\n'\n"
-        "        f'**Test leakage (`geom_only < 0.10`)**: {\"PASS\" if leakage_passed else \"REVISAR\"}'\n"
+        '        f\'**Test leakage (`geom_only < 0.10`)**: {"PASS" if leakage_passed else "REVISAR"}\'\n'
         "    ))\n"
         "    log(f'leakage test geom_only={geom_only.f1_macro:.4f} passed={leakage_passed}', level='ok' if leakage_passed else 'warn')\n"
     ),

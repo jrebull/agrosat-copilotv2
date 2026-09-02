@@ -279,9 +279,9 @@ CELLS: list[nbf.NotebookNode] = [
         "display(Markdown(\n"
         "    f'**Estadísticas globales del embedding**  \\n'\n"
         "    f'- Media global: `{ae_matrix.mean():.4f}` | Sigma global: `{ae_matrix.std():.4f}`  \\n'\n"
-        "    f'- **Norma L2 por píxel**: media `{l2_stats[\"mean\"]:.4f}` ± `{l2_stats[\"std\"]:.4f}` '\n"
+        '    f\'- **Norma L2 por píxel**: media `{l2_stats["mean"]:.4f}` ± `{l2_stats["std"]:.4f}` \'\n'
         "    f'(CV = `{l2_stats[\"cv\"]:.4f}`) → '\n"
-        "    f'{\"**normalizado al hipersphere**\" if is_l2_normalized else \"**NO está L2-normalizado** (varía por píxel)\"}  \\n'\n"
+        '    f\'{"**normalizado al hipersphere**" if is_l2_normalized else "**NO está L2-normalizado** (varía por píxel)"}  \\n\'\n'
         "    f'- **Dimensiones muertas** (>95% píxeles cerca de cero): `{dead_dims}` / `{n_dims}`  \\n'\n"
         "    f'- **Dimensiones de baja varianza** (sigma < 1e-3): `{low_var_dims}` / `{n_dims}`  \\n'\n"
         "    f'- Estadísticas por dim → `{ae_stats_path.relative_to(REPO_ROOT)}`'\n"
@@ -454,7 +454,7 @@ CELLS: list[nbf.NotebookNode] = [
         "def cv_f1_macro_official_folds(\n"
         "    X: np.ndarray, y: np.ndarray, folds: np.ndarray, seed: int = 42\n"
         ") -> tuple[float, float]:\n"
-        "    \"\"\"Mean F1-macro over the official PASTIS-R folds (1..5).\"\"\"\n"
+        '    """Mean F1-macro over the official PASTIS-R folds (1..5)."""\n'
         "    scores = []\n"
         "    unique_folds = sorted(set(int(f) for f in folds.tolist()))\n"
         "    for f in unique_folds:\n"
@@ -757,7 +757,7 @@ CELLS: list[nbf.NotebookNode] = [
         "meta = scaler._agrosat_meta  # type: ignore[attr-defined]\n"
         "display(Markdown(\n"
         "    f'**Scaler persistido en**: `{scaler_path.relative_to(REPO_ROOT)}`  \\n'\n"
-        "    f'**Versión**: `{meta[\"version\"]}` | **n_train**: `{meta[\"n_train\"]}` | '\n"
+        '    f\'**Versión**: `{meta["version"]}` | **n_train**: `{meta["n_train"]}` | \'\n'
         "    f'**features ajustadas**: `{len(meta[\"feature_cols\"])}`  \\n'\n"
         "    f'**Tamaño joblib**: `{scaler_path.stat().st_size / 1024:.1f} KB`'\n"
         "))\n"
@@ -1235,9 +1235,9 @@ CELLS: list[nbf.NotebookNode] = [
         "lines.append(\n"
         "    f'La media global del embedding es `{ae_matrix.mean():.4f}` con sigma `{ae_matrix.std():.4f}`. '\n"
         "    f'La norma L2 por parcela tiene CV = `{l2_stats[\"cv\"]:.4f}` → '\n"
-        "    f'{\"AlphaEarth normaliza al hipersphere\" if is_l2_normalized else \"NO normaliza al hipersphere (varía por píxel)\"}. '\n"
+        '    f\'{"AlphaEarth normaliza al hipersphere" if is_l2_normalized else "NO normaliza al hipersphere (varía por píxel)"}. \'\n'
         "    f'Hay `{dead_dims}` dimensiones muertas y `{low_var_dims}` de baja varianza, lo que indica '\n"
-        "    f'{\"un embedding muy denso (todas las dims aportan)\" if dead_dims == 0 and low_var_dims < 4 else \"que algunas dims aportan poco y podrían descartarse\"}.'\n"
+        '    f\'{"un embedding muy denso (todas las dims aportan)" if dead_dims == 0 and low_var_dims < 4 else "que algunas dims aportan poco y podrían descartarse"}.\'\n'
         ")\n"
         "lines.append('')\n"
         "lines.append('### Ortogonalidad y correlación cruzada\\n')\n"
@@ -1288,11 +1288,11 @@ CELLS: list[nbf.NotebookNode] = [
         "    lines.append(\n"
         "        f'Random Forest 80 árboles bajo CV sobre los 5 folds espaciales oficiales PASTIS-R '\n"
         "        f'(misma partición, mismas parcelas). '\n"
-        "        f'AlphaEarth 64-dim: F1-macro `{ae_row[\"f1_macro_mean\"]:.4f} ± {ae_row[\"f1_macro_std\"]:.4f}` '\n"
-        "        f'(`{ae_row[\"n_samples\"]}` parcelas, `{ae_row[\"n_classes\"]}` clases). '\n"
+        '        f\'AlphaEarth 64-dim: F1-macro `{ae_row["f1_macro_mean"]:.4f} ± {ae_row["f1_macro_std"]:.4f}` \'\n'
+        '        f\'(`{ae_row["n_samples"]}` parcelas, `{ae_row["n_classes"]}` clases). \'\n'
         "        f'Spectral-temporal manual `{st_row[\"n_features\"]}-dim`: '\n"
-        "        f'`{st_row[\"f1_macro_mean\"]:.4f} ± {st_row[\"f1_macro_std\"]:.4f}` '\n"
-        "        f'(`{st_row[\"n_samples\"]}` parcelas, `{st_row[\"n_classes\"]}` clases). '\n"
+        '        f\'`{st_row["f1_macro_mean"]:.4f} ± {st_row["f1_macro_std"]:.4f}` \'\n'
+        '        f\'(`{st_row["n_samples"]}` parcelas, `{st_row["n_classes"]}` clases). \'\n'
         "    )\n"
         "    direction = 'AlphaEarth' if diff > 0.02 else ('spectral-temporal' if diff < -0.02 else 'ninguna')\n"
         "    if direction == 'AlphaEarth':\n"
