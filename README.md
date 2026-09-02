@@ -122,8 +122,8 @@ puede construirse el paper.
 | Resultado | Métrica | Fuente |
 |:--|:--|:--|
 | Mejor individual · TSViT-pheno, PASTIS-R 18 clases | mIoU **0.6253** · F1-macro **0.7500** | `paper/sections/05_results.tex` |
-| Modelo final · Stacking-5 heterogéneo, held-out fold-5 | F1-macro **0.7470** · acc 0.8490 | `reports/ensemble/metrics/comparison_us040.csv` |
-| Ganancia del ensamble sobre TSViT-pheno, ambos a nivel parcela | **+12.2 pp** F1-macro (0.7470 vs 0.6253) | `reports/ensemble/metrics/comparison_us040.csv` |
+| Ensamble final · Stacking-5 con FarSLIP, held-out fold-5 | F1-macro **0.7486** · acc 0.8495 (Stacking-3 sin FarSLIP: 0.7470 · 0.8490) | `reports/ensemble/metrics/us043_farslip_grid.csv` |
+| Ganancia del ensamble sobre el mejor miembro, ambos a nivel parcela | **+1.2 pp** F1-macro (0.7486 vs 0.7367 de TSViT-pheno) | `reports/ensemble/metrics/headline_voting4.csv` y `us043_farslip_grid.csv` |
 | Modelo desplegado · Voting-3 v2, 12 clases | F1-macro **0.8992** · acc 0.9375 | `reports/agent_bench/perceiver_champion_eval_v2.json` |
 | Recableo del perceiver al campeón, 14 688 parcelas | acc 0.8539 → **0.9375** | `reports/agent_bench/perceiver_champion_eval_v2.json` |
 | Transferencia Francia → Cataluña | zero-shot 0.0 → few-shot mIoU **0.2468** | `reports/segmentation/sen4agrinet_transfer_result.json` |
@@ -134,8 +134,8 @@ puede construirse el paper.
 
 | Resultado | Métrica | Fuente |
 |:--|:--|:--|
-| Stacking-5 out-of-fold, libre de fuga | F1-macro 0.6477 · acc 0.7935 | `reports/ensemble/us043_farslip_summary.json` |
-| Aporte de FarSLIP, 5 vs 3 miembros | +0.0118 F1-macro | `reports/ensemble/us043_farslip_summary.json` |
+| Stacking-5 con el miembro TSViT-pheno-fullm, mismo fold-5 | F1-macro 0.6477 · acc 0.7935 | `reports/ensemble/us043_farslip_summary.json` |
+| Aporte de FarSLIP, 5 vs 3 miembros | +0.0016 F1-macro con el miembro campeón; +0.0118 con el miembro fullm | `reports/ensemble/metrics/us043_farslip_grid.csv` |
 | Curva calidad-cobertura, 18 → 9 clases más frecuentes | F1-macro 0.7486 → 0.8912 reteniendo 81.9 % de parcelas | `reports/ensemble/metrics/us043_winner_cardinality_curve.csv` |
 | Campeón re-evaluado sobre las 9 clases de Francia | F1-macro 0.9121 | `reports/ensemble/metrics/ec_neighborhood_result.json` |
 | Vecindad espacial k-NN sobre el campeón | Δ +0.0002, no material | `reports/ensemble/metrics/ec_neighborhood_result.json` |
