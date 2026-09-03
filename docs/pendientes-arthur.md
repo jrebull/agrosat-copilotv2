@@ -14,21 +14,26 @@ es lo que bloquea de verdad hoy.
    qué folds se entrenó**. Si vio el fold 5, el mejor individual se cae y hay que rehacer
    toda la sección de resultados. Para Arthur son minutos en la VM; para el artículo es la
    diferencia entre poder enviarlo y no.
-2. **Firmar o rebatir [`ADR-013`](decisions/ADR-013-angulo-micai.md) con su enmienda.** El
+2. **Qué seis clases se retiraron para llegar a `france-12`, y con qué criterio.** Por
+   soporte, por F1, por criterio agronómico o por una mezcla. No es curiosidad: el artículo
+   compara mecanismos para recortar la leyenda, y el criterio que el equipo usó de verdad al
+   desplegar vale más que cualquier regla que me invente yo. Lo mismo para `france-9`.
+
+3. **Firmar o rebatir [`ADR-013`](decisions/ADR-013-angulo-micai.md) con su enmienda.** El
    encuadre cambió: artículo nuevo desde cero sobre el punto de operación, el manuscrito
    heredado no se repara. Sin esa firma no se escribe la introducción ni el título.
-3. **Autoría, confirmada por escrito.** Arthur primero, Javier segundo. Y avisar a Isaac
+4. **Autoría, confirmada por escrito.** Arthur primero, Javier segundo. Y avisar a Isaac
    Ávila y Aaron Bocanegra de que quedan acreditados como autores del código en README,
    `LICENSE` y los créditos del camera-ready, no del artículo.
-4. **Autor de correspondencia.** Firma la licencia de Springer **a mano** y no se puede
+5. **Autor de correspondencia.** Firma la licencia de Springer **a mano** y no se puede
    cambiar después del camera-ready. Decidirlo ahora cuesta un minuto; decidirlo tarde
    cuesta el envío.
-5. ~~Ventana H100 para el reentrenamiento OOF.~~ **Retirado el 2 de septiembre de 2026: no
+6. ~~Ventana H100 para el reentrenamiento OOF.~~ **Retirado el 2 de septiembre de 2026: no
    hace falta.** El run de MLflow de TSViT-pheno (`0eef8a60`) tardó 1 915,4 s, unos 32
    minutos, en una RTX 4070. Cinco folds son 2,7 horas de GPU de consumo y el dataset denso
    solo necesita 36 GB de PASTIS-R, no 68. Lo hacemos nosotros en una L4 spot. Lo único que
    sí seguiría siendo suyo es el acceso a Azure, y para esto no se necesita Azure.
-6. **`dvc push` de `data/features/alphaearth_italia_2018.parquet`.** Es lo único que
+7. **`dvc push` de `data/features/alphaearth_italia_2018.parquet`.** Es lo único que
    `dvc status --cloud` reporta como ausente en el remoto. Barato y cierra un hueco.
 
 Lo que **bajó de prioridad** con el reencuadre, porque su contenido sale del cuerpo del
