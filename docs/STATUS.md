@@ -77,6 +77,13 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   Javier y pendiente de Arthur; justificación en [`paper/que-paper-sale.md`](paper/que-paper-sale.md).
   Plan reformulado en diez fases: robustez en CPU, BreizhCrops como segundo conjunto de
   datos, reentrenamiento OOF opcional en GPU, y escritura desde cero.
+- Corroboración: `reports/ensemble/metrics/weighted_voting_pastis.csv` ya traía la cifra
+  libre de fuga al lado de la publicada (0,536 junto a 0,747). La fila del voto simple `1/N`,
+  que no ajusta nada, permite separar el coste de la fuga (0,068) del de promediar macros por
+  bloque (0,143): el número honesto del stacking es **0,679**, no 0,536.
+- El campeón desplegado es un Voting-3 sobre `france-12` con doce clases: el equipo ya
+  **retiró seis clases a mano para desplegar**. La decisión que el artículo formaliza ya se
+  toma en la práctica sin medirla.
 - Pregunta abierta para Arthur: `tsvit-pheno` saca 0,7367 y `tsvit-pheno-fullm` 0,2552 sobre
   las mismas parcelas. Antes de publicar hay que comprobar con qué folds se entrenó cada
   checkpoint.

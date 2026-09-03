@@ -4,7 +4,7 @@ Cada cifra impresa en el artículo debe re-derivarse desde un archivo de esta ta
 Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` recalcula
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
-**Sellado el**: 2026-09-02 · **HEAD del repositorio**: `87cccdd`
+**Sellado el**: 2026-09-03 · **HEAD del repositorio**: `bfc776a`
 **Fase**: 1 de [`docs/plan-micai-2027.md`](../docs/plan-micai-2027.md) ·
 **Ángulo vigente**: [`ADR-013`](../docs/decisions/ADR-013-angulo-micai.md) (reencuadre).
 
@@ -41,6 +41,7 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Curva de cardinalidad por soporte acumulado | `reports/ensemble/metrics/us043_winner_cardinality_curve.csv` | `f46bfcc6c98b105130331f1f563b59f0` | 745 | `1890bef` | SELLADO | Eje distinto al anterior: top-k por soporte, no retirada de clases. No confundir. |
 | Desempeño por clase del campeón | `reports/ensemble/metrics/us043_winner_per_class.csv` | `72fdb7179a5b840a4916ab78f5b09279` | 2095 | `1890bef` | SELLADO | Base del delta por clase de la fase 2. |
 | Nulo de vecindad: barrido k x alfa con veredicto | `reports/ensemble/metrics/ec_neighborhood_result.json` | `1824155553a74b10ce387c6e04891002` | 5501 | `2c8dc2b` | SELLADO | Da +0,0027 en el punto que mejora ambos ejes y +0,0068 en el óptimo de 18 clases; umbral 0,01; sin intervalo. |
+| Los cuatro combinadores con SUS DOS regímenes en columnas contiguas | `reports/ensemble/metrics/weighted_voting_pastis.csv` | `e35eb0fc7ef375906d42dc4813f4091c` | 355 | `03b41f4` | SELLADO | Prueba de que la cifra libre de fuga existía: f1_macro junto a f1_macro_spatialcv. La fila del voto simple 1/N, que no ajusta nada, separa el coste de la fuga del coste de agregar por bloque. |
 | Comparativa de los cuatro ensambles de rúbrica | `reports/ensemble/metrics/comparison_us040.csv` | `76817f5ee3ca330418e15c03540aa756` | 429 | `10084d2` | SELLADO | Origen de la cifra 0,7470 del Stacking-3. |
 | FarSLIP fiel frente a AlphaEarth en sonda de parcelas | `reports/farslip/metrics/us037_farslip_fiel_vs_alphaearth.csv` | `6b99e9ccfaf28625a6c21fdc040c3005` | 243 | `2625188` | SELLADO | Contiene tanto el eje de F1 como el de silhouette; no mezclarlos. |
 | Recableo del perceptor del copiloto al campeón | `reports/agent_bench/perceiver_champion_eval_v2.json` | `04ae7461ee3df7a2d155006ec09c2747` | 1755 | `48dd6cf` | SELLADO | Solo si la capa conversacional entra al texto. |
@@ -63,10 +64,10 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Fase 2: cobertura y calidad por bloque y mecanismo | `reports/paper_micai/fase2/cobertura_por_bloque.csv` | `ef01ed30e0e05823b489224383a486b6` | 5766 | `87cccdd` | SELLADO | Cada bloque contra UNA leyenda elegida fuera de él, con la leyenda registrada. |
 | Fase 2: resumen de la frontera calidad-cobertura | `reports/paper_micai/fase2/cobertura_resumen.csv` | `992f24b6cdc4449a491a235d1eafd839` | 1322 | `87cccdd` | SELLADO | Media, mínimo y máximo entre bloques de los dos mecanismos a igual cobertura. |
 | Fase 2: contraste de los dos mecanismos con intervalo | `reports/paper_micai/fase2/cobertura_comparacion.json` | `f1dfb273b8e266b8a4c8c2198db0ded8` | 4219 | `87cccdd` | SELLADO | Contribución central: retirar clases domina al rechazo por confianza y el IC excluye el cero por debajo de doce clases. |
-| Fase 2: barrido completo del refinamiento por vecindad | `reports/paper_micai/fase2/vecindad_barrido.csv` | `4b6399f6c8a9da817e71cee396e6666e` | 1484 | sin seguimiento en git | SELLADO | Ningun punto con alfa mayor que cero mejora al alfa cero sobre el mejor predictor libre de fuga. |
-| Fase 2: veredicto del nulo de vecindad con intervalo | `reports/paper_micai/fase2/vecindad_veredicto.json` | `568ffd6739409dda52274b6d0d7c3f14` | 1710 | sin seguimiento en git | SELLADO | Regla R1 de ADR-013: el intervalo incluye el cero, asi que es un nulo acotado. |
-| Fase 2: FarSLIP cinco frente a tres miembros | `reports/paper_micai/fase2/farslip_cinco_vs_tres.csv` | `0a83f40f2279cf4c6a19bccaacfad024` | 568 | sin seguimiento en git | SELLADO | Las filas in-sample reproducen 0,7470 y 0,7486; las libres de fuga dan 0,6789 y 0,6794. |
-| Fase 2: delta de FarSLIP con intervalo | `reports/paper_micai/fase2/farslip_delta.json` | `b6fe5ac82c3da95cfe339afaa70cdfbc` | 1231 | sin seguimiento en git | SELLADO | +0,0006 con IC de [-0,0024, +0,0034]: el aporte no se distingue de cero fuera del regimen in-sample. |
+| Fase 2: barrido completo del refinamiento por vecindad | `reports/paper_micai/fase2/vecindad_barrido.csv` | `4b6399f6c8a9da817e71cee396e6666e` | 1484 | `18e699e` | SELLADO | Ningun punto con alfa mayor que cero mejora al alfa cero sobre el mejor predictor libre de fuga. |
+| Fase 2: veredicto del nulo de vecindad con intervalo | `reports/paper_micai/fase2/vecindad_veredicto.json` | `568ffd6739409dda52274b6d0d7c3f14` | 1710 | `18e699e` | SELLADO | Regla R1 de ADR-013: el intervalo incluye el cero, asi que es un nulo acotado. |
+| Fase 2: FarSLIP cinco frente a tres miembros | `reports/paper_micai/fase2/farslip_cinco_vs_tres.csv` | `0a83f40f2279cf4c6a19bccaacfad024` | 568 | `18e699e` | SELLADO | Las filas in-sample reproducen 0,7470 y 0,7486; las libres de fuga dan 0,6789 y 0,6794. |
+| Fase 2: delta de FarSLIP con intervalo | `reports/paper_micai/fase2/farslip_delta.json` | `b6fe5ac82c3da95cfe339afaa70cdfbc` | 1231 | `18e699e` | SELLADO | +0,0006 con IC de [-0,0024, +0,0034]: el aporte no se distingue de cero fuera del regimen in-sample. |
 | Registro de la búsqueda sistemática de la fase 0 | `reports/paper_micai/fase0/search_log.csv` | `ac14cc4e5db38c7976c1c6b6c4af05e1` | 12831 | `4052b0b` | SELLADO | Consulta, fuente, fecha, código HTTP y registros. |
 | Registro de las consultas manuales de buscador | `reports/paper_micai/fase0/search_log_manual.csv` | `3de611cd854356095debdb34fb0cbbc5` | 2163 | `4052b0b` | SELLADO | Las seis consultas tipo Google Scholar. |
 | Candidatos devueltos por la búsqueda | `reports/paper_micai/fase0/search_candidates.csv` | `c56c4aad185e7a08a4dc7a383eaef35f` | 162047 | `4052b0b` | SELLADO | Sin filtrar, tal como los devolvió cada API. |

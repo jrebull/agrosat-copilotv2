@@ -30,6 +30,69 @@ Dos consecuencias:
 1. **Las cuatro cifras pertenecen al mismo régimen**, el in-sample del meta-modelo. La auditoría heredada acertaba al decir que 0,7470 y 0,6477 no se diferencian por régimen sino por miembro, y se equivocaba al llamar *held-out* a ese régimen.
 2. **La clave `stacking_5_oof_cv` del JSON está mal nombrada.** 0,6477 no es la validación cruzada del meta-modelo, que en ese universo da 0,4287, sino su reentrenamiento sobre todo.
 
+## 1 bis. El proyecto ya había calculado la cifra honesta y publicó la otra
+
+Corroboración encontrada después de medir, en un artefacto que llevaba meses en el
+repositorio: `reports/ensemble/metrics/weighted_voting_pastis.csv` trae las dos columnas
+juntas, `f1_macro` y `f1_macro_spatialcv`.
+
+| Modelo | `f1_macro` | `f1_macro_spatialcv` | Combinador |
+|---|---|---|---|
+| Stacking (meta-LogReg, 54 pesos) | 0,747 | 0,536 | `meta_logreg` |
+| Voting ponderado (3 pesos) | 0,7444 | 0,5581 | `weighted_vote_f1max` |
+| Blending (Optuna, 3 pesos) | 0,7436 | — | `optuna_simplex` |
+| Voting simple (1/N) | 0,673 | 0,4877 | `mean_1_over_N` |
+
+Mi medición independiente del stacking de tres miembros dio 0,747045 y 0,536002. Coincide
+con esa tabla al tercer decimal. **La cifra libre de fuga no se descubrió aquí: existía y
+estaba guardada al lado de la que se publicó.**
+
+### Y la fila del voto simple permite separar dos efectos que se confundían
+
+El voto simple `1/N` **no ajusta nada**, así que no puede filtrar. Aun así cae de 0,673 a
+0,4877 en la columna de validación espacial. Esa caída no es fuga: es el efecto de promediar
+macros por bloque, donde un bloque de dos a cuatro mil parcelas rara vez contiene las
+dieciocho clases y las ausentes entran como ceros. Es exactamente la razón por la que la
+fase 2 agrupa las predicciones y puntúa una sola vez en lugar de promediar macros.
+
+Con eso, el hueco del stacking de tres miembros se descompone:
+
+| Estimador | F1-macro | Qué mide |
+|---|---|---|
+| Reajuste sobre todas las parcelas | 0,7470 | In-sample para el meta-modelo |
+| Agrupado espacial (fase 2) | 0,6789 | Libre de fuga, una sola puntuación |
+| Media de macros por bloque | 0,5360 | Libre de fuga, penalizado por la agregación |
+
+La fuga cuesta **0,068** y la forma de agregar cuesta otros **0,143**. Confundir las dos
+lleva a decir que el número honesto es 0,536, y no lo es: es 0,679. El primero castiga al
+modelo por un artefacto de medición encima de su error real.
+
+Para el artículo esto tiene dos consecuencias. La primera es que el estimador libre de fuga
+que se reporta debe ser el agrupado, no la media de macros por bloque. La segunda es que la
+corroboración se cita tal cual: el proyecto tenía la columna correcta y arrastró la otra,
+que es un modo de fallo mucho más común e instructivo que un error de cálculo.
+
+### El campeón desplegado tiene la misma estructura
+
+El modelo que quedó en producción no es el Stacking-5 sino un **Voting-3 v2** sobre
+`france-12` —doce clases, 14 688 parcelas, F1-macro 0,8992 según
+`reports/agent_bench/perceiver_champion_eval_v2.json`—. No escapa al problema:
+`ml.agent.tools.classify._load_voting_three` aprende sus tres pesos convexos maximizando
+F1-macro y los reajusta sobre todas las parcelas del fold 5, igual que el stacking. Su
+propia fila en el CSV lo dice: 0,7444 reajustado frente a 0,5581 en validación espacial.
+
+Y su 0,8992 se mide sobre **doce** clases, no dieciocho, así que no es comparable con
+ninguna cifra de este documento sin decir eso primero.
+
+### Lo que este hallazgo le regala al artículo
+
+El equipo **retiró seis clases a mano para poder desplegar**, y construyó dos espacios de
+etiquetas, `france-9` y `france-12`, para hacerlo. Eso convierte la contribución de
+hipotética en documentada: la decisión que el artículo formaliza y mide ya se toma en la
+práctica, sin medirla y sin declarar el compromiso. Queda pendiente preguntar al equipo
+**qué seis clases y con qué criterio**, porque ese criterio real es el tercer mecanismo que
+la fase 3 iba a comparar contra una regla inventada.
+
 ## 2. Bajo un protocolo libre de fuga ninguna combinación mejora al mejor miembro
 
 Los diez miembros medidos con el mismo arnés, las mismas parcelas y la misma métrica:
