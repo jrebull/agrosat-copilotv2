@@ -1,0 +1,29 @@
+\section{Limitaciones y conclusión}
+\label{sec:conclusion}
+
+\paragraph{Limitaciones.}
+Los dos bancos son franceses, así que la réplica varía año, región, reparto de clases y familia de
+modelo, pero no el sistema agrícola; queda abierto si la descomposición se sostiene en un paisaje
+de agricultura de pequeña escala. En el banco de réplica los bloques son las dos regiones
+administrativas, porque el índice publicado no trae coordenadas por parcela, así que nuestro
+remuestreo captura la variación dentro de las regiones y no entre ellas; por eso reportamos las
+diferencias por bloque. Ese banco exigió además imputar el \num{1.62}\,\% de las celdas de
+características, concentradas en índices de cociente cuyo denominador involucra una banda que la
+colección codifica como cero para el píxel enmascarado; la imputación usa solo la mediana de la
+región de entrenamiento, y no puede favorecer a un mecanismo sobre otro porque todos leen la misma
+posterior. Por último, nuestras posteriores fuera de fold en el banco primario existen para un solo
+fold, y por eso el meta-modelo de la sección~\ref{sec:arbitro} se entrena con pocos datos; eso es
+una limitación de los artefactos de que disponemos, no una afirmación sobre el apilamiento en
+general.
+
+\paragraph{Conclusión.}
+El F1 promediado por clase sobre un catálogo podado mezcla dos cosas que quien lee no puede
+separar: lo que hizo el método y lo que hizo el denominador más pequeño. Dimos un protocolo que las
+separa, y la respuesta en dos bancos públicos es que manda el denominador: el \num{88}\,\% en el
+primero, el \num{95}\,\% en el segundo en el punto de operación preregistrado, y el \num{100}\,\%
+en el tramo donde la cobertura sigue completa y todos los mecanismos devuelven una cifra idéntica.
+A igual cobertura no encontramos evidencia de que recortar la leyenda supere a abstenerse, y sí
+evidencia significativa de lo contrario en el banco más desbalanceado; el criterio que se reporta
+usar, la retirada por soporte bajo, es el más débil que probamos y empeora conforme se retiran más
+clases. Nada de esto exige un modelo nuevo. Exige reportar el número de clases, la cobertura y una
+línea de control junto a cada cifra macro calculada sobre un catálogo que alguien eligió.

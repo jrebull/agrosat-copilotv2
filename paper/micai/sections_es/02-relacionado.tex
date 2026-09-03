@@ -1,0 +1,53 @@
+\section{Trabajo relacionado}
+\label{sec:relacionado}
+
+Organizamos el trabajo relacionado por lo que cada línea establece y por dónde se detiene, porque
+el hueco que este artículo aborda está en el espacio entre dos literaturas que rara vez se
+encuentran.
+
+\paragraph{Clasificación selectiva.}
+La opción de abstenerse es antigua y está bien caracterizada. La regla de Chow fija el compromiso
+óptimo entre error y rechazo para una posterior conocida \cite{chow1970reject}, y el tratamiento
+moderno la extiende a redes profundas con rechazo aprendido o calibrado
+\cite{geifman2017selective,geifman2019selectivenet,liu2019deepgamblers}, con revisiones recientes
+que cartografían el espacio de diseño \cite{hendrickx2024rejectsurvey,hasan2023uncertaintysurvey}.
+Dos refinamientos importan aquí: la observación de que una sola curva de riesgo y cobertura oculta
+qué grupos pagan la abstención \cite{jones2020selectivedisparities}, y la extensión de las curvas
+de rechazo a precisión y exhaustividad en lugar de solo al error
+\cite{fischer2023rejectcurves,pugnana2022aucselective}. Lo que esta literatura no trata es la
+abstención \emph{por clase}: su unidad de rechazo es la muestra, así que un mecanismo que declina
+nombrar una categoría entera cae fuera de su formalismo, y la interacción entre ese mecanismo y
+una métrica promediada por clase no se analiza.
+
+\paragraph{Estructura de clases en mapeo de cultivos.}
+El trabajo sobre mapeo de cultivos sí manipula el catálogo de clases, pero como recurso de
+modelado y no como punto de operación. Turkoglu y colaboradores organizan los tipos de cultivo en
+una jerarquía y dejan que el modelo retroceda a un nivel más grueso cuando la decisión fina no es
+fiable \cite{turkoglu2021hierarchies}, que es el mecanismo existente más cercano al recorte de
+leyenda; la evaluación, sin embargo, reporta exactitud global sobre una sola partición, así que ni
+el efecto sobre un promedio por clase ni su variabilidad en el espacio quedan medidos. Los
+esfuerzos de armonización paneuropea afrontan el mismo problema al nivel de la nomenclatura
+\cite{schneider2021eurocrops,claverie2026eurocropsv2}, y el trabajo de mapeo de grano fino señala
+el costo de las clases raras sin aislarlo
+\cite{lei2025finecrop,li2021costeffective,donmez2025cropcover}. En toda esta literatura el catálogo
+podado se reporta como una propiedad del dato.
+
+\paragraph{Bancos de datos y modelos temporales.}
+Evaluamos sobre dos bancos públicos por parcela. PASTIS aporta series Sentinel-2 con anotación
+panóptica sobre Francia \cite{garnot2021pastis}; BreizhCrops aporta una colección por parcela más
+grande sobre Bretaña, con partición nativa por región administrativa y un reparto de clases extremo
+\cite{russwurm2020breizhcrops}. Las arquitecturas temporales que usamos como predictores son
+estándar: convoluciones temporales \cite{pelletier2019tempcnn}, autoatención sobre series crudas
+\cite{russwurm2020selfattention} y transformadores de visión adaptados a series de imágenes
+satelitales \cite{tarasiou2023tsvit}. Ninguna es contribución de este artículo; aportan las
+posteriores sobre las que opera el protocolo.
+
+\paragraph{Protocolo de evaluación.}
+Que el protocolo sea espacial y no aleatorio no es opcional. La validación cruzada que ignora la
+autocorrelación espacial infla las estimaciones de capacidad predictiva, a veces de forma severa
+\cite{roberts2017crossvalidation,ploton2020spatialvalidation}. Por eso elegimos cada punto de
+operación sobre bloques espaciales disjuntos del bloque donde se evalúa. La literatura de ensambles
+aporta el ingrediente restante, el meta-modelo de apilamiento cuyo comportamiento implícito
+examinamos \cite{wolpert1992stacking,zhang2022ensemblereview,abdali2023parallelcascaded}, y es
+precisamente la exigencia de Wolpert de particiones libres de fuga para entrenar el modelo de
+segundo nivel la que nuestra comparación entre dentro y fuera de muestra pone a prueba.

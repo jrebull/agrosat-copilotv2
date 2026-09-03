@@ -1,0 +1,187 @@
+\section{Resultados}
+\label{sec:resultados}
+
+\subsection{El pasillo donde todos los mecanismos son idénticos}
+\label{sec:pasillo}
+
+En el banco de réplica, recortar el catálogo de nueve clases a seis sube el F1 macro alineado de
+\num{0.4895} a \num{0.7342}, una mejora aparente de \num{0.2447}. En todo ese tramo las cuatro
+series —retirada por F1, retirada por soporte, rechazo por confianza y el control que no aplica
+mecanismo alguno— devuelven el \emph{mismo} valor, y la cobertura se queda en \num{1.000}.
+
+La razón es aritmética y es lo que hace concluyente la observación. Las tres clases que se retiran
+primero tienen dos, siete y \num{289} parcelas de \num{60000}; el argmax sin restringir
+prácticamente nunca las predice, así que quitarlas de la leyenda no quita ninguna parcela del mapa
+entregado. Ningún mecanismo hace nada. La métrica sube casi un cuarto de punto por su cuenta.
+
+\begin{table}[tbp]
+\caption{Descomposición de la mejora aparente en el banco de réplica, universo de nueve clases. La
+columna «denominador» es el control de la sección~\ref{sec:control}: el predictor intacto puntuado
+sobre la misma leyenda, entregándolo todo. $K = 5$ es el criterio principal preregistrado.}
+\label{tab:descomposicion}
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+$K$ & F1 alineado & mejora aparente & denominador & mecanismo & cobertura \\
+\midrule
+9 & 0,4895 & ---     & ---              & ---            & 1,000 \\
+8 & 0,5507 & +0,0612 & +0,0612 (100,0\%) & +0,0000 (0,0\%) & 1,000 \\
+7 & 0,6293 & +0,1398 & +0,1398 (100,0\%) & +0,0000 (0,0\%) & 1,000 \\
+6 & 0,7342 & +0,2447 & +0,2447 (100,0\%) & +0,0000 (0,0\%) & 1,000 \\
+\textbf{5} & \textbf{0,8055} & \textbf{+0,3160} & \textbf{+0,3004 (95,1\%)} & \textbf{+0,0156 (4,9\%)} & \textbf{0,859} \\
+4 & 0,8579 & +0,3684 & +0,3352 (91,0\%) & +0,0333 (9,0\%) & 0,806 \\
+3 & 0,9126 & +0,4232 & +0,3826 (90,4\%) & +0,0406 (9,6\%) & 0,444 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{La descomposición se transporta}
+\label{sec:transporte}
+
+El mismo protocolo, sin cambios, da la misma respuesta cualitativa en el banco primario. Recortar
+de dieciocho clases a ocho sube el F1 macro alineado de \num{0.5612} a \num{0.8052}, una mejora
+aparente de \num{0.2440}, de la cual el control recupera \num{0.2155}, es decir el
+\num{88.3}\,\%. En el punto de operación preregistrado, $K = 9$, el control recupera el
+\num{87.1}\,\%, y el resultado se sostiene en los dos predictores que probamos.
+
+Dos bancos, dos años, dos regiones, dos familias de modelo y un solo protocolo coinciden, por
+tanto: manda el denominador. Donde difieren es en grado, y en la dirección que importa para quien
+despliega: el banco de réplica, cuyo desbalance es un orden de magnitud peor, deja al mecanismo aún
+menos que explicar.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{frontier-primary.pdf}
+\caption{La misma frontera en el banco primario, para sus dos predictores más fuertes. El control
+que no aplica mecanismo (cruces) ya recupera la mayor parte de la distancia recorrida por los
+mecanismos, y la retirada por soporte (cuadrados) vuelve a quedar por debajo de los otros dos en
+todo el recorrido.}
+\label{fig:primario}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{frontier-replication.pdf}
+\caption{Frontera de calidad y cobertura en el banco de réplica, en los dos universos de clases
+preregistrados. Las cuatro series son indistinguibles hasta $K = 6$ porque la cobertura es completa
+y ningún mecanismo actúa; la línea punteada marca el criterio principal. La retirada por soporte
+(cuadrados) es la única serie que baja conforme se retiran más clases.}
+\label{fig:replica}
+\end{figure}
+
+\subsection{A igual cobertura, gana la abstención}
+\label{sec:orden}
+
+Una vez que la cobertura baja de uno y los mecanismos empiezan a diferir, se pueden ordenar. En el
+criterio principal del banco de réplica, el rechazo por confianza alcanza \num{0.8303} frente a
+\num{0.8055} del recorte de leyenda a la misma cobertura, una diferencia de \num{-0.0248} con
+intervalo pareado al \num{95}\,\% de $(-0{,}0272,\, -0{,}0225)$ y $p$ corregido por Holm por debajo
+de \num{0.0001}. Las dos regiones coinciden en signo y magnitud, con \num{-0.0248} y
+\num{-0.0249}.
+
+En el banco primario la diferencia tiene el mismo signo pero no se distingue de cero:
+\num{-0.0288} con intervalo de $(-0{,}0414,\, +0{,}0080)$ y $p$ corregido por Holm de \num{0.336}.
+El resumen honesto sobre los dos bancos es, por tanto, que no encontramos evidencia de que recortar
+la leyenda supere a la abstención, y que en el banco mayor y más desbalanceado encontramos
+evidencia significativa de lo contrario.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{cobertura.pdf}
+\caption{Las mismas mediciones dibujadas contra la cobertura entregada en vez de contra el tamaño
+de la leyenda, que es como las lee la literatura de clasificación selectiva. El control (cruces)
+vive en la vertical de cobertura uno por construcción, porque nunca retiene nada; lo que la figura
+enseña es cuántas de esas cruces quedan \emph{por encima} de las curvas de los mecanismos a
+cobertura menor.}
+\label{fig:cobertura}
+\end{figure}
+
+\subsection{La retirada por soporte es el criterio más débil, y no es monótona}
+\label{sec:soporte}
+
+Retirar clases por soporte bajo es el criterio que se reporta usar, y es el peor de los tres en los
+dos bancos. En el banco de réplica alcanza \num{0.7129} en el criterio principal frente a
+\num{0.8055} de la retirada por F1, una brecha de \num{0.0926} que se ensancha hasta \num{0.2085}
+en $K = 3$. En el banco primario la brecha correspondiente está entre \num{0.12} y \num{0.13}.
+
+Hace además algo que ninguno de los otros dos hace: \emph{empeora} conforme se retiran más clases,
+de \num{0.7129} en $K = 5$ a \num{0.7041} en $K = 3$. Inspeccionar las leyendas lo explica. La
+retirada por soporte quita la colza, que tiene \num{1718} parcelas y que el modelo separa bien,
+mientras conserva las dos clases de pradera, que el modelo confunde entre sí. El criterio optimiza
+el tamaño de muestra, que no es la misma cantidad que la calidad de lo que se entrega. La
+figura~\ref{fig:leyendas} enseña la sustitución directamente.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{leyendas.pdf}
+\caption{Qué clases conserva cada criterio conforme se recorta la leyenda, en el banco de réplica;
+una celda llena significa que la clase se promete. La retirada por soporte (derecha) suelta la
+colza en $K = 5$ mientras conserva las dos clases de pradera, que el modelo confunde entre sí; la
+retirada por calidad (izquierda) hace lo contrario. Los dos criterios discrepan justamente en las
+clases que deciden el resultado.}
+\label{fig:leyendas}
+\end{figure}
+
+\subsection{Un meta-modelo entrenado retira clases de forma implícita}
+\label{sec:arbitro}
+
+El mecanismo que este artículo formaliza ya lo aplican, sin declararlo, los ensambles entrenados.
+En el banco primario, un meta-modelo de apilamiento sobre tres miembros lleva una clase de
+\num{355} parcelas a un F1 de exactamente \num{0.0000}, mientras que el mejor modelo individual
+alcanza \num{0.7790} en esa misma clase. El meta-modelo ha retirado una clase del producto sin que
+nadie lo decidiera, y sin que aparezca en ninguna tabla de resultados.
+
+\begin{table}[tbp]
+\caption{F1 por clase en el banco primario, libre de fuga, ordenado por soporte. El árbitro
+entrenado es el único combinador que lleva una clase a cero, y lo hace con una de \num{355}
+parcelas que todos los demás —incluida la media sin entrenar— manejan por encima de \num{0.77}.
+La retirada es, por tanto, un comportamiento aprendido y no una propiedad de combinar.}
+\label{tab:porclase}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Clase & soporte & mejor indiv. & media & voto pond. & árbitro \\
+\midrule
+Meadow & 6\,128 & 0,9099 & 0,8980 & 0,9046 & 0,9138 \\
+Corn & 2\,196 & 0,9295 & 0,8683 & 0,9053 & 0,9274 \\
+Grapevine & 2\,067 & 0,9066 & 0,9141 & 0,9154 & 0,9124 \\
+Soft winter wheat & 1\,584 & 0,8922 & 0,8466 & 0,8712 & 0,8886 \\
+Leguminous fodder & 660 & 0,5087 & 0,3498 & 0,4707 & 0,5243 \\
+Winter rapeseed & 387 & 0,9358 & 0,9153 & 0,9275 & 0,9377 \\
+\textbf{Winter durum wheat} & \textbf{355} & \textbf{0,7790} & \textbf{0,7752} & \textbf{0,7782} & \textbf{0,0000} \\
+Spring barley & 198 & 0,6667 & 0,4691 & 0,5879 & 0,5228 \\
+Mixed cereal & 193 & 0,4949 & 0,3525 & 0,4302 & 0,2709 \\
+Potatoes & 103 & 0,5595 & 0,5143 & 0,5638 & 0,5823 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[tbp]
+\caption{El mismo meta-modelo de apilamiento bajo tres estimadores. No son tres opciones
+plausibles: el primero está contaminado y el tercero lo castiga un artefacto de agregación.}
+\label{tab:regimenes}
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrl}
+\toprule
+Estimador & F1 macro & qué mide \\
+\midrule
+Reajuste sobre todas las parcelas & 0,7470 & dentro de muestra \\
+Agrupado fuera de fold & 0,6789 & libre de fuga, puntuado una vez \\
+Media de macros por bloque & 0,5360 & libre de fuga, sesgado al agregar \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El régimen en que se mide ese meta-modelo es decisivo. Puntuado dentro de muestra —reajustado sobre
+todas las parcelas después de la validación cruzada, que es el comportamiento por omisión de muchas
+implementaciones de apilamiento— reporta \num{0.7470}. Puntuado libre de fuga, agrupando sus
+posteriores espaciales fuera de fold y puntuando una sola vez, reporta \num{0.6789}. Promediar los
+macros por bloque en lugar de agrupar reporta \num{0.5360}. La fuga cuesta \num{0.068} y la forma
+de agregar otros \num{0.143}; confundir las dos lleva a reportar \num{0.536} como la cifra honesta
+cuando es \num{0.679}, y castiga al modelo por un artefacto de medición encima de su error real.
+Frente al mejor modelo individual, el meta-modelo libre de fuga pierde por \num{0.0572} con un
+intervalo de $(-0{,}0644,\, -0{,}0499)$ que excluye el cero.

@@ -6,6 +6,39 @@
 
 We use two public parcel-level benchmarks and never tune the protocol between them.
 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{parcelas.pdf}
+\caption{Three patches of the held-out fold of the primary benchmark. Top: natural-color
+Sentinel-2 composite from the acquisition nearest to 1 July. Bottom: the parcel-level agronomic
+annotation. The unit of the product is the parcel, and the catalog this paper studies is the list
+of names the bottom row is allowed to use.}
+\label{fig:patches}
+\end{figure}
+
+\begin{table}[tbp]
+\caption{The two benchmarks. Both are described by the same \num{185}-dimensional temporal
+feature vector, so the replication varies data, year, region and model family, but not
+representation.}
+\label{tab:benchmarks}
+\centering
+\begin{tabular}{lrr}
+\toprule
+ & primary (PASTIS-R) & replication (BreizhCrops) \\
+\midrule
+Season & 2018--2019 & 2017 \\
+Region & metropolitan France & Brittany \\
+Parcels scored & 16\,640 & 60\,000 \\
+Classes & 18 & 9 \\
+Majority class & 6\,128 & 18\,113 \\
+Minority class & 103 & 2 \\
+Imbalance ratio & 60:1 & 9\,057:1 \\
+Blocks & 5 spatial (H3, 1\,km buffer) & 2 administrative regions \\
+Predictor & pre-trained members & gradient boosting, leave-one-region-out \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 The \textbf{primary benchmark} is PASTIS-R \cite{garnot2021pastis}, from which we take the
 held-out fold and aggregate the dense annotations to parcel level, yielding \num{16640} parcels
 across \num{496} image patches and eighteen agronomic classes. Its imbalance is severe: the
@@ -21,6 +54,16 @@ majority class outnumbers the minority by up to \num{19207}:\num{1}, and in our 
 the nine classes hold two, seven and \num{289} parcels respectively. Both benchmarks are described
 by the same \num{185}-dimensional temporal feature vector, derived from seventeen spectral indices,
 so that the two experiments differ in data and model but not in representation.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{soporte.pdf}
+\caption{Class support on a logarithmic scale. Bars below \num{300} parcels are drawn in the
+accent color: these are the classes every retirement criterion removes first. The replication
+benchmark's tail is not merely thinner, it is degenerate --- two and seven parcels --- which is
+what makes the corridor of Sect.~\ref{sec:corridor} possible.}
+\label{fig:support}
+\end{figure}
 
 \subsection{Predictors}
 \label{sec:predictors}

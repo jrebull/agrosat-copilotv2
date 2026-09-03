@@ -82,7 +82,13 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Fase 4: figura de la replica | `reports/paper_micai/fase4/replica.svg` | `3f54d20d9c92505866cef87a2448219d` | 55182 | sin seguimiento en git | SELLADO | Los dos universos lado a lado; las cuatro series coinciden hasta K = 6. |
 | Fase 6: manuscrito MICAI, fuente principal | `paper/micai/main.tex` | `9907536ca2a23204b8b616d6b72dd27d` | 3403 | `2d96ca7` | SELLADO | Clase llncs con `\newif\ifanon`; anonimo por defecto, A4 real, `hidelinks`. |
 | Fase 6: bibliografia derivada de la matriz verificada | `paper/micai/refs.bib` | `b105ea5913081aa5f8b24f1a332764f6` | 15065 | `2d96ca7` | SELLADO | 44 entradas, todas resueltas por arXiv, Crossref u OpenAlex; generada, no escrita a mano. |
-| Fase 6: PDF de envio, version anonima | `paper/micai/main.pdf` | `d3f8039a83d16bdeda7484b7876dbd5a` | 362651 | sin seguimiento en git (`*.pdf` global) | SELLADO | 12 paginas A4, cero errores, cero overfull, gate de identidad en verde. `make micai-pdf` lo reconstruye byte a byte desde las fuentes versionadas, asi que el sello vale aunque el binario no viaje. |
+| Fase 6: PDF de envio, version anonima | `paper/micai/main.pdf` | `9b270b6274046f61138c3b80a76c30f6` | 628702 | sin seguimiento en git (`*.pdf` global) | SELLADO | 12 paginas A4, cero errores, cero overfull, gate de identidad en verde. `make micai-pdf` lo reconstruye byte a byte desde las fuentes versionadas, asi que el sello vale aunque el binario no viaje. |
+| Fase 6: figura de parcelas reales del fold retenido | `reports/paper_micai/figuras/parcelas.svg` | `927a17710e3afc6db31291ca360398c0` | 310658 | sin seguimiento en git | SELLADO | Tres parches en color natural y su anotacion agronomica; ancla el articulo en el dato. |
+| Fase 6: figura del soporte por clase de los dos bancos | `reports/paper_micai/figuras/soporte.svg` | `ea2615d03b84655514a2f406b1047319` | 71298 | sin seguimiento en git | SELLADO | Escala logaritmica; la cola del segundo banco es degenerada, con dos y siete parcelas. |
+| Fase 6: figura de composicion de leyendas | `reports/paper_micai/figuras/leyendas.svg` | `1df574718eb3408f90e48152fbc3ef53` | 60617 | sin seguimiento en git | SELLADO | Ensena que la retirada por soporte suelta la colza y conserva las dos praderas. |
+| Fase 6: figura de la frontera en cobertura | `reports/paper_micai/figuras/cobertura.svg` | `fa1e1e7b66ad35b439b7dbabf26c53c5` | 65871 | sin seguimiento en git | SELLADO | La misma medicion contra cobertura entregada, como la lee la literatura selectiva. |
+| Fase 6: manuscrito en espanol, fuente | `paper/micai/main_es.tex` | `b31bb84a72ce371e839fe104c9ccb56f` | 3421 | `a35e96f` | SELLADO | Version de lectura y revision del equipo; la de envio es main.tex. |
+| Fase 6: manuscrito en espanol, PDF | `paper/micai/main_es.pdf` | `98bf630b4659ccdb28d159efc7e62f9e` | 636843 | sin seguimiento en git (`*.pdf` global) | SELLADO | 15 paginas A4, cero errores, cero overfull, gate de identidad en verde. |
 | Registro de la búsqueda sistemática de la fase 0 | `reports/paper_micai/fase0/search_log.csv` | `ac14cc4e5db38c7976c1c6b6c4af05e1` | 12831 | `4052b0b` | SELLADO | Consulta, fuente, fecha, código HTTP y registros. |
 | Registro de las consultas manuales de buscador | `reports/paper_micai/fase0/search_log_manual.csv` | `3de611cd854356095debdb34fb0cbbc5` | 2163 | `4052b0b` | SELLADO | Las seis consultas tipo Google Scholar. |
 | Candidatos devueltos por la búsqueda | `reports/paper_micai/fase0/search_candidates.csv` | `c56c4aad185e7a08a4dc7a383eaef35f` | 162047 | `4052b0b` | SELLADO | Sin filtrar, tal como los devolvió cada API. |
@@ -132,6 +138,8 @@ memoria.
 | `reports/paper_micai/fase4/replica_*` | `scripts/run_paper_micai_fase4.py` sobre el mismo `ml/eval/paper_micai_coverage.py` de la fase 3, figura con `scripts/build_paper_micai_fase4_figure.py` |
 | `paper/micai/refs.bib` | `scripts/build_paper_micai_bib.py` sobre `reports/paper_micai/fase0/related_work_verified.csv` |
 | `paper/micai/main.pdf` | `make micai-pdf`, verificado por `make micai-anon-check` |
+| `reports/paper_micai/figuras/parcelas.*` | `scripts/build_paper_micai_patch_figure.py` sobre `data/PASTIS-R` |
+| `reports/paper_micai/figuras/{soporte,leyendas,cobertura}.*` | `scripts/build_paper_micai_extra_figures.py` |
 
 **Con cálculo versionado pero sin driver.** En estos seis, la lógica sí está en el
 repositorio; lo que no está versionado es el guion que la invocó y escribió el archivo.

@@ -1,0 +1,82 @@
+% Version en espanol del manuscrito MICAI, para lectura y revision del equipo.
+% NO es la version de envio: MICAI publica en ingles y la de envio es main.tex.
+% Compilar con: pdflatex main_es && bibtex main_es && pdflatex main_es && pdflatex main_es
+\documentclass[runningheads]{llncs}
+
+\pdfinfoomitdate=1
+\pdftrailerid{}
+\pdfsuppressptexinfo=-1
+
+\newif\ifanon
+\anontrue
+
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noquoting,es-nolists]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\sisetup{output-decimal-marker={,}, group-separator={\,}, group-minimum-digits=4}
+\graphicspath{{figures/}}
+\emergencystretch=1em
+\AtBeginDocument{\pdfpagewidth=210mm \pdfpageheight=297mm}
+
+\begin{document}
+
+\title{¿Cuánto de esa mejora es el denominador?\texorpdfstring{\\}{ }Un control para el recorte de leyenda en mapeo de cultivos desbalanceado}
+\titlerunning{¿Cuánto de esa mejora es el denominador?}
+
+\ifanon
+  \author{Autoría anónima}
+  \institute{Institución anónima}
+\else
+  \author{Arthur Zizumbo\inst{1} \and Javier A. Rebull-Saucedo\inst{1}\thanks{Autor de correspondencia.}}
+  \institute{Institución anónima, Ciudad, País\\
+    \email{autor@ejemplo.org}}
+\fi
+
+\maketitle
+
+\begin{abstract}
+Los mapas de cultivos por parcela se evalúan de forma rutinaria con F1 promediado por clase sobre
+un catálogo que quien los produce ya ha podado, y la poda se reporta, cuando se reporta, como una
+propiedad del dato y no como una decisión. Preguntamos cuánto de la mejora resultante corresponde
+al mecanismo que podó el catálogo y cuánto al denominador más pequeño que la poda crea.
+Formalizamos dos mecanismos de operación que cambian cobertura por calidad macro, recortar la
+leyenda prometida y abstenerse en las parcelas de baja confianza, y los evaluamos bajo un
+protocolo de bloques espaciales que elige el punto de operación fuera de los datos que lo miden,
+puntúa ambos mecanismos sobre el mismo conjunto de clases y nunca consulta una etiqueta para
+decidir qué entrega. Frente a un control que puntúa al predictor intacto sobre esa misma leyenda
+recortada entregándolo todo, la mayor parte de la mejora aparente desaparece: en un primer banco
+público el control se lleva casi toda; en un segundo, de otro año y otra región, casi la
+totalidad; y en el tramo donde la cobertura sigue completa, la totalidad, con todos los mecanismos
+devolviendo cifras idénticas. A igual cobertura, la abstención supera al recorte de leyenda en los
+dos bancos, y retirar clases por soporte bajo, que es lo que se reporta hacer en la práctica, es
+el criterio más débil de los que probamos y no es monótono en el número de clases retiradas. Una
+cifra macro calculada sobre un catálogo podado es, por tanto, ininterpretable sin este control,
+que cuesta una línea.
+
+\keywords{Mapeo de cultivos \and Desbalance de clases \and Clasificación selectiva \and
+Protocolo de evaluación \and Validación cruzada espacial}
+\end{abstract}
+
+\input{sections_es/01-introduccion}
+\input{sections_es/02-relacionado}
+\input{sections_es/03-metodo}
+\input{sections_es/04-resultados}
+\input{sections_es/05-discusion}
+\input{sections_es/06-conclusion}
+
+\appendix
+\input{sections_es/07-apendice}
+
+\bibliographystyle{splncs04}
+\bibliography{refs}
+
+\end{document}

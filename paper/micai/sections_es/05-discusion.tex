@@ -1,0 +1,44 @@
+\section{Discusión}
+\label{sec:discusion}
+
+\paragraph{Qué compra realmente cada mecanismo.}
+El recorte de leyenda y el rechazo por confianza cambian los dos cobertura por calidad macro, pero
+le cobran a clientes distintos. Recortar la leyenda rechaza un tipo de cultivo entero en todas
+partes: quien lo siembra no recibe nada, en ninguna parcela, en ninguna región. La abstención
+rechaza parcelas sueltas repartidas entre todos los cultivos, así que ningún productor queda
+excluido de forma sistemática, que es la propia preocupación de la literatura de clasificación
+selectiva sobre quién paga la abstención \cite{jones2020selectivedisparities}. Nuestras mediciones
+dicen además que la abstención es la mejor compra a igual cobertura. Los dos argumentos apuntan en
+la misma dirección, y no conocemos escenario operativo en que sea preferible lo contrario salvo
+uno: cuando el consumidor aguas abajo exige un catálogo fijo y publicado y no puede actuar sobre un
+mapa parcial.
+
+\paragraph{Qué habría que reportar.}
+Una cifra promediada por clase calculada sobre un catálogo podado es ininterpretable por sí sola, y
+el arreglo no es caro ni novedoso. Repórtese el número de clases sobre el que se toma el promedio,
+la cobertura que el producto entrega, y el control de la sección~\ref{sec:control}. Tres números,
+uno de los cuales cuesta una sola línea de código. Sin ellos, un artículo que sube el F1 macro un
+cuarto de punto tras retirar tres clases raras está reportando aritmética, y quien lo lee no puede
+distinguirlo de un artículo que mejoró un modelo.
+
+\paragraph{Sobre el criterio que se usa en la práctica.}
+Que la retirada por soporte sea a la vez el criterio más débil y no monótona merece énfasis, porque
+el soporte es el criterio que se usa. Se elige por una razón defendible —una clase con pocas
+muestras es una clase cuya estimación es inestable— pero inestabilidad de la estimación y mala
+separabilidad son propiedades distintas, y el soporte solo rastrea la primera. Una clase con
+\num{1718} parcelas que el modelo separa limpiamente aporta más a un mapa entregado que dos clases
+abundantes que el modelo no logra distinguir. Elegir por calidad por clase medida, sobre bloques
+disjuntos de aquellos donde se evaluará, no cuesta nada más y es estrictamente mejor en todas las
+comparaciones que corrimos.
+
+\paragraph{Sobre cómo medir meta-modelos.}
+Las tres cifras del mismo modelo de apilamiento —\num{0.7470}, \num{0.6789} y \num{0.5360}— no son
+tres estimaciones plausibles entre las que elegir. La primera está contaminada, y la formulación
+original del apilamiento ya exigía las particiones libres de fuga que ella viola
+\cite{wolpert1992stacking}. La tercera está libre de fuga pero castiga al modelo por un artefacto
+de agregación: promediar macros por bloque en un escenario desbalanceado puntúa cada bloque sobre
+clases que sus parcelas no contienen. Agrupar las posteriores fuera de fold y puntuar una sola vez,
+que da \num{0.6789}, es el estimador que responde a la pregunta que de verdad se está haciendo. La
+distancia entre la primera y la última es lo bastante ancha como para invertir una conclusión sobre
+si el ensamble aporta algo, y por eso el régimen tiene que declararse cada vez que se imprime una
+cifra así.

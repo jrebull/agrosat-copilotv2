@@ -85,6 +85,16 @@ honest summary across both benchmarks is therefore that we find no evidence that
 legend outperforms abstention, and on the larger and more imbalanced benchmark we find significant
 evidence of the reverse.
 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{cobertura.pdf}
+\caption{The same measurements plotted against delivered coverage rather than legend size, which
+is how the selective classification literature reads them. The control (crosses) sits on the
+coverage-one vertical by construction, since it never withholds anything; the point of the figure
+is how many of those crosses lie \emph{above} the mechanisms' curves at lower coverage.}
+\label{fig:coverage}
+\end{figure}
+
 \subsection{Retirement by support is the weakest criterion, and it is not monotone}
 \label{sec:support}
 
@@ -99,7 +109,18 @@ retired, from \num{0.7129} at $K = 5$ to \num{0.7041} at $K = 3$. Inspecting the
 why. Support-based retirement removes rapeseed, which holds \num{1718} parcels and which the model
 separates well, while retaining both meadow classes, which the model confuses with each other. The
 criterion optimizes sample size, which is not the same quantity as the quality of what is
-delivered.
+delivered. Fig.~\ref{fig:legends} shows the substitution directly.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{leyendas.pdf}
+\caption{Which classes each criterion keeps as the legend shrinks, on the replication benchmark;
+a filled cell means the class is promised. Support-based retirement (right) drops rapeseed at
+$K = 5$ while keeping both meadow classes, which the model confuses with one another;
+quality-based retirement (left) does the reverse. The two criteria disagree about exactly the
+classes that decide the outcome.}
+\label{fig:legends}
+\end{figure}
 
 \subsection{A trained meta-learner retires classes implicitly}
 \label{sec:arbiter}
@@ -109,6 +130,48 @@ the primary benchmark, a stacking meta-learner over three members drives one cla
 parcels to an F1 of exactly \num{0.0000}, while the best single model reaches \num{0.7790} on that
 same class. The meta-learner has retired a class from the product without anyone choosing to, and
 without it appearing anywhere in a results table.
+
+\begin{table}[tbp]
+\caption{Per-class F1 on the primary benchmark, leak-free, ordered by support. The trained
+arbiter is the only combiner that zeroes a class, and it does so to one of \num{355} parcels that
+every other combiner --- including the untrained mean --- handles above \num{0.77}. The retirement
+is therefore a learned behavior, not a property of combining.}
+\label{tab:perclass}
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Class & support & best single & mean & weighted vote & trained arbiter \\
+\midrule
+Meadow & 6\,128 & 0.9099 & 0.8980 & 0.9046 & 0.9138 \\
+Corn & 2\,196 & 0.9295 & 0.8683 & 0.9053 & 0.9274 \\
+Grapevine & 2\,067 & 0.9066 & 0.9141 & 0.9154 & 0.9124 \\
+Soft winter wheat & 1\,584 & 0.8922 & 0.8466 & 0.8712 & 0.8886 \\
+Leguminous fodder & 660 & 0.5087 & 0.3498 & 0.4707 & 0.5243 \\
+Winter rapeseed & 387 & 0.9358 & 0.9153 & 0.9275 & 0.9377 \\
+\textbf{Winter durum wheat} & \textbf{355} & \textbf{0.7790} & \textbf{0.7752} & \textbf{0.7782} & \textbf{0.0000} \\
+Spring barley & 198 & 0.6667 & 0.4691 & 0.5879 & 0.5228 \\
+Mixed cereal & 193 & 0.4949 & 0.3525 & 0.4302 & 0.2709 \\
+Potatoes & 103 & 0.5595 & 0.5143 & 0.5638 & 0.5823 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[tbp]
+\caption{The same stacking meta-learner under three estimators. These are not three plausible
+choices: the first is contaminated and the third is penalized by an aggregation artifact.}
+\label{tab:regimes}
+\centering
+\begin{tabular}{lrl}
+\toprule
+Estimator & macro F1 & what it measures \\
+\midrule
+Refit on all parcels & 0.7470 & in-sample for the meta-learner \\
+Pooled spatial out-of-fold & 0.6789 & leak-free, scored once \\
+Mean of per-block macros & 0.5360 & leak-free, penalized by aggregation \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 The regime in which such a meta-learner is measured is decisive. Scored in-sample --- refitted on
 all parcels after cross-validation, which is the default of many stacking implementations --- it

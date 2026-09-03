@@ -1,0 +1,158 @@
+\section{Materiales y método}
+\label{sec:metodo}
+
+\subsection{Datos}
+\label{sec:datos}
+
+Usamos dos bancos públicos por parcela y no ajustamos el protocolo entre uno y otro.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{parcelas.pdf}
+\caption{Tres parches del fold retenido del banco primario. Arriba, composición en color natural
+de Sentinel-2 en la toma más cercana al primero de julio. Abajo, la anotación agronómica por
+parcela. La unidad del producto es la parcela, y el catálogo que estudia este artículo es la lista
+de nombres que la fila de abajo tiene permitido usar.}
+\label{fig:parches}
+\end{figure}
+
+\begin{table}[tbp]
+\caption{Los dos bancos. Los dos se describen con el mismo vector de \num{185} características
+temporales, así que la réplica varía dato, año, región y familia de modelo, pero no
+representación.}
+\label{tab:bancos}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrr}
+\toprule
+ & primario (PASTIS-R) & réplica (BreizhCrops) \\
+\midrule
+Campaña & 2018--2019 & 2017 \\
+Región & Francia metropolitana & Bretaña \\
+Parcelas puntuadas & 16\,640 & 60\,000 \\
+Clases & 18 & 9 \\
+Clase mayoritaria & 6\,128 & 18\,113 \\
+Clase minoritaria & 103 & 2 \\
+Razón de desbalance & 60:1 & 9\,057:1 \\
+Bloques & 5 espaciales (H3) & 2 regiones \\
+Predictor & miembros preentrenados & gradiente potenciado \\
+Partición del predictor & fold retenido & una región fuera \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El \textbf{banco primario} es PASTIS-R \cite{garnot2021pastis}, del que tomamos el fold retenido y
+agregamos la anotación densa a nivel de parcela, con \num{16640} parcelas sobre \num{496} parches
+de imagen y dieciocho clases agronómicas. Su desbalance es severo: la clase mayoritaria tiene
+\num{6128} parcelas y la minoritaria \num{103}, una razón de unos \num{60}:\num{1}.
+
+El \textbf{banco de réplica} es BreizhCrops \cite{russwurm2020breizhcrops}, series Sentinel-2 L2A
+sobre Bretaña para la campaña de 2017, con nueve clases agronómicas y partición nativa por región
+administrativa. Usamos las regiones \texttt{frh01} y \texttt{frh04} con un submuestreo
+estratificado proporcional de \num{30000} parcelas cada una y semilla fija, \num{60000} en total.
+Su desbalance es un orden de magnitud peor que el del banco primario: en el índice completo la
+clase mayoritaria supera a la menor hasta por \num{19207}:\num{1}, y en nuestro submuestreo tres de
+las nueve clases tienen dos, siete y \num{289} parcelas respectivamente. Los dos bancos se
+describen con el mismo vector de \num{185} características temporales, derivado de diecisiete
+índices espectrales, de modo que los dos experimentos difieren en dato y modelo pero no en
+representación.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{soporte.pdf}
+\caption{Soporte por clase en escala logarítmica. Las barras por debajo de \num{300} parcelas van
+en el color de acento: son las clases que todo criterio de retirada quita primero. La cola del
+banco de réplica no es solo más delgada, es degenerada —dos y siete parcelas—, y eso es lo que
+hace posible el pasillo de la sección~\ref{sec:pasillo}.}
+\label{fig:soporte}
+\end{figure}
+
+\subsection{Predictores}
+\label{sec:predictores}
+
+El protocolo opera sobre posteriores y es indiferente a cómo se produjeron. En el banco primario
+tomamos los dos más fuertes de diez miembros disponibles, un transformador de visión para series de
+imágenes satelitales \cite{tarasiou2023tsvit} y un modelo de gradiente potenciado sobre
+incrustaciones aprendidas. En el banco de réplica entrenamos un clasificador de gradiente potenciado
+\emph{dejando una región fuera}: la posterior de cada parcela viene de un modelo que nunca vio su
+región, así que toda posterior que puntuamos es una predicción genuinamente fuera de región. Ese
+clasificador alcanza F1-macro \num{0.4979} y exactitud \num{0.7421} en \texttt{frh01}, y
+\num{0.4811} y \num{0.7257} en \texttt{frh04}.
+
+\subsection{Bloques}
+\label{sec:bloques}
+
+Todo punto de operación se elige sobre datos disjuntos de los datos que lo miden. En el banco
+primario los bloques son espaciales: una teselación H3 de resolución cinco, agrupada y separada por
+un colchón de \SI{1}{\kilo\meter}, que da cinco bloques. En el banco de réplica el índice publicado
+no trae coordenadas por parcela, así que la estructura espacial más fina disponible es la región
+administrativa; usamos las dos regiones como los dos bloques. Es una limitación real y la tratamos
+como tal: con dos bloques el remuestreo captura la variación \emph{dentro} de las regiones y no
+\emph{entre} ellas, así que reportamos la diferencia por bloque de cada contraste y no solo un
+intervalo agregado.
+
+\subsection{Los dos mecanismos, y un tercer criterio}
+\label{sec:mecanismos}
+
+Sea $\mathcal{C}$ el conjunto completo de $C$ clases, $p(\cdot \mid x)$ la posterior del predictor
+para la parcela $x$ y $\hat{y}(x) = \arg\max_{c \in \mathcal{C}} p(c \mid x)$ su predicción sin
+restringir.
+
+El \emph{recorte de leyenda} elige un subconjunto $\mathcal{L} \subseteq \mathcal{C}$ con
+$|\mathcal{L}| = K$ sobre los bloques de entrenamiento, y en el bloque de evaluación entrega una
+parcela cuando $\hat{y}(x) \in \mathcal{L}$, emitiendo $\arg\max_{c \in \mathcal{L}} p(c \mid x)$.
+Probamos dos criterios para elegir $\mathcal{L}$: por F1 por clase sobre los bloques de
+entrenamiento, y por soporte de clase sobre esos mismos bloques, el segundo porque es lo que se
+reporta hacer en la práctica.
+
+El \emph{rechazo por confianza} conserva $\mathcal{L} = \mathcal{C}$ y entrega las parcelas cuyo
+$\max_c p(c \mid x)$ supera un umbral. El umbral es el cuantil de las confianzas del propio bloque
+que iguala el número de parcelas que el mecanismo comparado entregó en ese mismo bloque, de modo
+que los dos se comparan a igual cobertura.
+
+Ningún mecanismo lee una etiqueta verdadera para decidir qué entrega. Vale la pena decirlo con
+todas sus letras porque la implementación natural del recorte de leyenda sí la lee: entregar las
+parcelas cuya etiqueta \emph{verdadera} cae en $\mathcal{L}$ es un oráculo, e infla la calidad
+aparente del mecanismo. Nuestra regla de entrega usa el argmax sin restringir, que es observable en
+inferencia.
+
+\subsection{El estimando alineado}
+\label{sec:estimando}
+
+Dos mecanismos que prometen catálogos distintos no se pueden comparar por el promedio macro de cada
+uno, porque los promedios se toman sobre denominadores distintos. Por eso puntuamos todo mecanismo
+con
+
+\begin{equation}
+  \mathrm{F1}_{\text{alineado}} \;=\; \frac{1}{|\mathcal{L} \cap \mathcal{Y}|}
+  \sum_{c \,\in\, \mathcal{L} \cap \mathcal{Y}} \mathrm{F1}_c ,
+  \label{eq:alineado}
+\end{equation}
+
+\noindent donde $\mathcal{L}$ es la leyenda bajo prueba e $\mathcal{Y}$ las clases realmente
+presentes entre las parcelas entregadas. Los dos mecanismos de un contraste se puntúan sobre la
+\emph{misma} $\mathcal{L}$. Reportamos también el macro nativo de cada mecanismo sobre lo que
+promete individualmente, pero solo como vista de producto; no es comparable entre mecanismos y
+nunca lo usamos para un contraste.
+
+\subsection{El control}
+\label{sec:control}
+
+El control que da título a este artículo cabe en una línea. Para cada leyenda $\mathcal{L}$ y cada
+bloque, puntúese al predictor intacto sobre $\mathcal{L}$ con la ecuación~\ref{eq:alineado}
+entregando \emph{todas} las parcelas. No se retira ninguna clase de la emisión ni se rechaza
+ninguna parcela; solo cambia el denominador. Si ese control iguala o supera a un mecanismo, la
+calidad la compró la elección del conjunto de clases y no el mecanismo.
+
+\subsection{Inferencia}
+\label{sec:inferencia}
+
+Los contrastes usan un remuestreo pareado: se sortea un índice por bloque y se vuelven a puntuar
+\emph{los dos} mecanismos sobre él, de modo que comparten el ruido de muestreo. Sorteamos
+\num{1000} remuestreos y reportamos el intervalo percentil de la diferencia de medias del F1
+alineado por bloque, junto con las diferencias por bloque. En el banco primario remuestreamos
+además por parche de imagen en vez de por parcela, porque las parcelas de un mismo parche comparten
+imagen y no son independientes. El criterio principal preregistrado es $K = \lceil C/2 \rceil$; los
+demás valores de $K$ forman una familia exploratoria, corregida con el procedimiento descendente de
+Holm y Bonferroni dentro de cada predictor y cada banco.

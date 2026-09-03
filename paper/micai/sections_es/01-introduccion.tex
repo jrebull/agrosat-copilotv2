@@ -1,0 +1,48 @@
+\section{Introducción}
+\label{sec:introduccion}
+
+Un mapa de cultivos por parcela promete un catálogo. El catálogo es una decisión: alguien eligió
+qué tipos de cultivo va a nombrar el producto y cuáles no, y esa elección se toma mucho antes de
+que se calcule ninguna cifra de calidad. En la práctica rara vez se reporta como una elección.
+Llega en una frase sobre que algunas clases tenían muy poca muestra, y la evaluación que sigue se
+calcula sobre lo que quedó.
+
+Esto importa porque la métrica que domina la literatura de mapeo de cultivos desbalanceado es el
+F1 promediado por clase, y promediar por clase divide entre el número de clases. Retirar una clase
+que el modelo manejaba mal sube el promedio dos veces: una al borrar del numerador un F1 bajo, y
+otra al encoger el denominador. El segundo efecto no requiere modelo, ni mecanismo, ni trabajo
+alguno. Es aritmética. Y sin embargo, una mejora producida enteramente por el segundo efecto es
+indistinguible, en una tabla de resultados, de una mejora producida por un método.
+
+Tomamos esa ambigüedad como objeto de estudio. Consideramos dos mecanismos con los que se puede
+cambiar cobertura por calidad macro. El primero recorta la leyenda prometida: el producto nombra
+$K$ de las $C$ clases disponibles y declina responder allí donde su predicción sin restringir cae
+fuera de ellas. El segundo conserva la leyenda completa y se abstiene en las parcelas donde el
+predictor está menos seguro, en la tradición de la clasificación selectiva
+\cite{chow1970reject,geifman2017selective}. Los dos reducen cuánto mapa se entrega, los dos suben
+la cifra macro, y la pregunta es de cuánto de esa subida es responsable cada uno.
+
+Nuestra respuesta es un control, y es casi vergonzosamente barato. Puntúese al predictor
+\emph{intacto} sobre esa misma leyenda recortada, entregándolo todo. Lo que ese control recupere
+nunca lo compró el mecanismo. En un primer banco público de dieciocho clases agronómicas, el
+control se lleva el \num{88.3}\,\% de la mejora aparente al pasar de dieciocho clases a ocho. En
+un segundo banco, de otro año, otra región y otra familia de modelo, se lleva el \num{95.1}\,\% en
+el punto de operación preregistrado. Y en el tramo donde la cobertura sigue completa se lleva
+\emph{toda}: cada mecanismo que probamos devuelve la misma cifra, hasta el cuarto decimal, mientras
+el promedio macro sube \num{0.2447}.
+
+Del mismo protocolo salen otros dos resultados. A igual cobertura, abstenerse en las parcelas de
+baja confianza supera al recorte de leyenda en los dos bancos, que es lo contrario de lo que
+supone la práctica que nos propusimos formalizar. Y retirar clases por soporte bajo, que es el
+criterio que se reporta usar, es el más débil de los tres que probamos y no es monótono en el
+número de clases retiradas: retirar más puede empeorar el mapa entregado.
+
+Las contribuciones son las siguientes. Formalizamos los dos mecanismos y damos un protocolo de
+bloques espaciales que elige el punto de operación fuera de los datos que lo miden, puntúa ambos
+mecanismos sobre el mismo conjunto de clases para que sus cifras sean comparables, y nunca consulta
+una etiqueta verdadera para decidir qué parcelas entrega. Cuantificamos la descomposición de la
+mejora aparente en denominador y mecanismo sobre dos bancos públicos bajo un protocolo que no
+cambia entre uno y otro. Ordenamos los tres criterios de retirada con intervalos pareados y
+corrección por multiplicidad. Y mostramos que un meta-modelo de apilamiento entrenado ejecuta esa
+misma retirada de forma implícita y no declarada, y que la diferencia entre medirla dentro y fuera
+de muestra basta para invertir la conclusión sobre si el ensamble aporta algo.
