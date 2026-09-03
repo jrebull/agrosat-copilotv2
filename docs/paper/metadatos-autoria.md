@@ -60,6 +60,19 @@ canónica del nombre la eligen sus dueños, no yo.
   que quiere publicar).
 - Javier: `rebull@exatec.tec.mx`.
 
+## Antes del envío, por el doble ciego
+
+El cuaderno del proyecto vive en [`jrebull/agrosat-micai-site`](https://github.com/jrebull/agrosat-micai-site),
+**público por decisión del equipo el 2 de septiembre de 2026**. El sitio desplegado lleva
+`noindex`, pero el repositorio sí es indexable y contiene los dos nombres, los dos ORCID y
+la afiliación.
+
+- [ ] **Antes de enviar**, hacer una de estas dos y dejar constancia de cuál: pasar el
+      repositorio a privado (`gh repo edit --visibility private`), o retirar del sitio los
+      nombres, los ORCID y la afiliación hasta después de la notificación.
+- [ ] No enlazar el sitio desde el artículo ni desde el repositorio citado mientras dure la
+      revisión.
+
 ## Qué falta
 
 - [ ] Decidir el autor de correspondencia.
