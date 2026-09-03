@@ -1,0 +1,98 @@
+{
+  "pregunta": "Las auditorias trataron los cinco bloques como restriccion del dato. Son el valor por defecto de build_spatial_kfold, y el fold retenido tiene 176 celdas H3 distintas.",
+  "advertencia": "Si k se elige tras ver cual da significancia, esto es p-hacking con otro nombre. La conclusion NO es que exista un k que da significancia: es que k es un grado de libertad que hay que preregistrar con criterio ajeno al resultado, por ejemplo un tamano minimo de bloque o el numero de celdas de la teselacion. Y al subir k los bloques se acercan, asi que el colchon tiene que crecer con k o la independencia se degrada.",
+  "barrido": [
+    {
+      "k_solicitado": 5,
+      "bloques_utiles": 5,
+      "parcelas_min_por_bloque": 1313,
+      "delta": -0.016691,
+      "sd_entre_bloques": 0.019608,
+      "ic_low": -0.041038,
+      "ic_high": 0.007655,
+      "excluye_cero": false,
+      "mde": 0.032598,
+      "tiene_potencia": false
+    },
+    {
+      "k_solicitado": 8,
+      "bloques_utiles": 8,
+      "parcelas_min_por_bloque": 1313,
+      "delta": -0.012874,
+      "sd_entre_bloques": 0.025573,
+      "ic_low": -0.034254,
+      "ic_high": 0.008505,
+      "excluye_cero": false,
+      "mde": 0.029481,
+      "tiene_potencia": false
+    },
+    {
+      "k_solicitado": 10,
+      "bloques_utiles": 10,
+      "parcelas_min_por_bloque": 662,
+      "delta": -0.018173,
+      "sd_entre_bloques": 0.018581,
+      "ic_low": -0.031465,
+      "ic_high": -0.00488,
+      "excluye_cero": true,
+      "mde": 0.018483,
+      "tiene_potencia": false
+    },
+    {
+      "k_solicitado": 12,
+      "bloques_utiles": 12,
+      "parcelas_min_por_bloque": 402,
+      "delta": -0.019465,
+      "sd_entre_bloques": 0.023436,
+      "ic_low": -0.034355,
+      "ic_high": -0.004574,
+      "excluye_cero": true,
+      "mde": 0.020814,
+      "tiene_potencia": false
+    },
+    {
+      "k_solicitado": 15,
+      "bloques_utiles": 15,
+      "parcelas_min_por_bloque": 346,
+      "delta": -0.025098,
+      "sd_entre_bloques": 0.01759,
+      "ic_low": -0.034839,
+      "ic_high": -0.015357,
+      "excluye_cero": true,
+      "mde": 0.013684,
+      "tiene_potencia": true
+    },
+    {
+      "k_solicitado": 20,
+      "bloques_utiles": 20,
+      "parcelas_min_por_bloque": 172,
+      "delta": -0.013413,
+      "sd_entre_bloques": 0.025871,
+      "ic_low": -0.02552,
+      "ic_high": -0.001305,
+      "excluye_cero": true,
+      "mde": 0.017088,
+      "tiene_potencia": false
+    },
+    {
+      "k_solicitado": 25,
+      "bloques_utiles": 25,
+      "parcelas_min_por_bloque": 172,
+      "delta": -0.019524,
+      "sd_entre_bloques": 0.024934,
+      "ic_low": -0.029816,
+      "ic_high": -0.009232,
+      "excluye_cero": true,
+      "mde": 0.014565,
+      "tiene_potencia": true
+    }
+  ],
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "dadd68c",
+    "k_leyenda": 9,
+    "predictor": "tsvit-pheno",
+    "min_parcelas_por_bloque": 100,
+    "generado": "2026-09-03T21:46:52+00:00"
+  }
+}

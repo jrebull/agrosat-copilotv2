@@ -1,0 +1,60 @@
+{
+  "pregunta": "El criterio principal se movio a la disparidad sin calcular su potencia. calcula sobre las mismas cinco unidades, con cuatro medidas declaradas antes de mirar ninguna.",
+  "soporte_minimo_por_clase": 50,
+  "nota": "El factor de ocho que motivo el giro es el maximo de 18 razones cuya mediana es 1,00, leido tras mirar la tabla, y no es monotono en soporte: la clase 8, con 167 parcelas, es mas rara que la 10 con 355 y recibe 0,958 cobertura bajo recorte.",
+  "medidas": {
+    "cobertura_minima": {
+      "delta_medio": 0.286946,
+      "sd_entre_bloques": 0.300025,
+      "ic_t": [
+        -0.085585,
+        0.659477
+      ],
+      "excluye_cero": false,
+      "mde_con_5_bloques": 0.498785,
+      "tiene_potencia": false,
+      "bloques_necesarios": 16
+    },
+    "rango": {
+      "delta_medio": -0.325695,
+      "sd_entre_bloques": 0.294415,
+      "ic_t": [
+        -0.691259,
+        0.03987
+      ],
+      "excluye_cero": false,
+      "mde_con_5_bloques": 0.489458,
+      "tiene_potencia": false,
+      "bloques_necesarios": 12
+    },
+    "desviacion_entre_clases": {
+      "delta_medio": -0.127381,
+      "sd_entre_bloques": 0.125015,
+      "ic_t": [
+        -0.282607,
+        0.027845
+      ],
+      "excluye_cero": false,
+      "mde_con_5_bloques": 0.207834,
+      "tiene_potencia": false,
+      "bloques_necesarios": 14
+    },
+    "brecha_p10_p90": {
+      "delta_medio": -0.242353,
+      "sd_entre_bloques": 0.262298,
+      "ic_t": [
+        -0.568039,
+        0.083332
+      ],
+      "excluye_cero": false,
+      "mde_con_5_bloques": 0.436063,
+      "tiene_potencia": false,
+      "bloques_necesarios": 17
+    }
+  },
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "dadd68c",
+    "generado": "2026-09-03T21:46:58+00:00"
+  }
+}
