@@ -255,6 +255,50 @@ el 0,8956 sobre las ocho clases fáciles sin mecanismo alguno. Explica además p
 reducción de dieciocho a doce clases que el equipo hizo para desplegar **parece** mejorar la
 calidad. Es más estrecho que lo que perseguíamos y es verdad.
 
+## X5 · Lo que aportó el cuarto auditor, de fuga de datos
+
+Llegó el último y encontró tres cosas que los otros tres no vieron.
+
+**El hueco entre regímenes que publiqué está confundido con un cambio de hiperparámetros.**
+Mi función agrupada usa `LogisticRegression(max_iter=1000)` sin `class_weight`, mientras que
+`ml/ensemble/stacking.py` usa `max_iter=2000, class_weight="balanced"`. O sea que al comparar
+«refit» contra «agrupado» estaba comparando además dos meta-modelos distintos. Con los mismos
+hiperparámetros el hueco real es mayor que el que reporté: 0,7486 frente a 0,6619 (0,0867), o
+0,7625 frente a 0,6794 (0,0831), en lugar de los 0,0692 publicados. **El hallazgo del régimen
+in-sample se sostiene y se refuerza; la cifra concreta del hueco estaba mal atribuida.**
+
+**El conjunto de miembros campeón se eligió puntuando ocho configuraciones sobre las mismas
+parcelas.** `us043_farslip_grid.csv` tiene ocho filas y se tomó el argmax. Así que 0,7486 no
+solo es in-sample para el meta-modelo: también es selección sobre el conjunto medido.
+
+**Cuatro de los diez miembros no tienen procedencia verificable.** `xgb-alphaearth`,
+`farslip-ft18`, `farslip-zeroshot` y el de Italia no aparecen en `manifest.json` ni traen
+columnas `fold` o `held_out`. Su código sí entrena en los folds 1 a 4, pero eso no se puede
+comprobar desde el artefacto entregado, y tres de ellos son miembros del campeón.
+
+**Y una observación que le da la vuelta a la sospecha sobre `tsvit-pheno`.** Su mIoU de 0,614
+es el nivel que la literatura reporta para TSViT en PASTIS. Lo anómalo no es que él rinda
+bien: es que U-TAE rinda 0,15 cuando la literatura le da alrededor de 0,63. La hipótesis
+parsimoniosa deja de ser «tsvit-pheno está contaminado» y pasa a ser «los otros miembros
+están mal entrenados». Sigue haciendo falta el registro de folds, pero la pregunta cambia de
+signo, y de paso explica por qué ninguna combinación mejora al mejor miembro: no hay con qué
+combinarlo.
+
+## Controles que pasan, ampliados
+
+A los tres que ya tenía se suman, verificados por el cuarto auditor:
+
+- La separación mínima entre una parcela de prueba y la más cercana de entrenamiento es de
+  **22 951 metros** en el peor bloque, muy por encima de los 1 300 de un parche.
+- `assert_oof_only` se ejecuta de verdad en cada sub-bloque y nunca dispara.
+- El meta-modelo solo ve noventa columnas post-softmax; ninguna deriva de la etiqueta, y las
+  etiquetas coinciden bit a bit con el ground truth sellado.
+- **La elección in-sample del «mejor individual» resulta inocua**: eligiéndolo por bloque
+  desde los otros bloques sale `tsvit-pheno` en los cinco y la cifra agrupada es idéntica al
+  décimo decimal.
+- El universo de 16 640 no está sesgado: es exactamente el total de parcelas del fold 5 con
+  etiqueta válida, con retención 1,0 en las dieciocho clases.
+
 ## Estado
 
 **La sección 4 de [`fase2-hallazgos.md`](fase2-hallazgos.md) queda retirada** hasta rehacer
