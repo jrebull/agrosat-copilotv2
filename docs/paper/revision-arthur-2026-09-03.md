@@ -40,7 +40,17 @@ Consecuencias, medidas:
 
 - La fase 3 ordenó los diez miembros y tomó los dos primeros. Con `fullm` en 0,2552 quedó fuera; con 0,7883 sería **el primero**. La frase del artículo «we take the two strongest of ten available members» **es falsa**, y un revisor con el dato la tumba.
 - **Lo que NO está contaminado**: el árbitro de la sección 4.5. Sus miembros son `tsvit-pheno, utae, xgb-alphaearth, farslip-ft18, farslip-zeroshot`, comprobado en `reports/paper_micai/fase2/arbitraje_pruebas.json`. `fullm` no está entre ellos, así que el cero de *Winter durum wheat* no es un artefacto del bug. Esto lo verifiqué antes de creerlo.
-- **No lo puedo arreglar aquí**: este fork no tiene `checkpoints/`, así que el re-volcado es imposible sin los pesos. Queda declarar la limitación con nombre y número.
+- **CORREGIDO el 3 de septiembre, y la corrección es contra mí.** Escribí que este fork no tiene
+  `checkpoints/` y que por eso el re-volcado era imposible. **Es falso.** Existe
+  `checkpoints/segmentation.dvc` —2,84 GB, 37 ficheros— y los pesos están en el remoto: verificado
+  blob a blob, `tsvit-pheno-fullm-v1/best.pt` son 144 951 653 bytes en GCS y `fullm-v2` otros
+  144 940 133. Están a un `dvc pull` de distancia. Repetí la afirmación sin comprobar el puntero
+  DVC, que es exactamente lo que este documento reprocha en otros sitios. **El arreglo de `fullm`
+  es posible aquí**, y con él la frase «los dos miembros más fuertes de diez» pasa de limitación a
+  declarar a error a corregir.
+- **Lo que sí está perdido de verdad** son otros tres, y son de FarSLIP: `parcel/18cls`,
+  `parcel/04cls` e `incremental/08cls`. Ni fichero, ni puntero, ni blob. Cuatro scripts los
+  referencian como valor por defecto, y `farslip-ft18` es uno de los cinco miembros del árbitro.
 
 ## 3. CONFIRMADO: el párrafo de las cinco peores IoU del sitio es falso
 

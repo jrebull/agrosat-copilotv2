@@ -1,0 +1,85 @@
+{
+  "pregunta": "Cuanto cuesta cada uno de los tres defectos de protocolo que cuatro revisores encontraron. Estas cifras se publicaron primero en prosa y sin artefacto.",
+  "predictor": "tsvit-pheno",
+  "k_principal": 9,
+  "defecto_1_denominador_no_comun": {
+    "por_bloque": [
+      {
+        "bloque": 0,
+        "n_clases_retirada": 9,
+        "n_clases_confianza": 9,
+        "n_clases_comun": 9,
+        "delta_publicado": -0.031256,
+        "delta_denominador_comun": -0.031256
+      },
+      {
+        "bloque": 1,
+        "n_clases_retirada": 7,
+        "n_clases_confianza": 7,
+        "n_clases_comun": 7,
+        "delta_publicado": -0.017962,
+        "delta_denominador_comun": -0.017962
+      },
+      {
+        "bloque": 2,
+        "n_clases_retirada": 9,
+        "n_clases_confianza": 8,
+        "n_clases_comun": 8,
+        "delta_publicado": -0.044753,
+        "delta_denominador_comun": 0.015978
+      },
+      {
+        "bloque": 3,
+        "n_clases_retirada": 8,
+        "n_clases_confianza": 8,
+        "n_clases_comun": 8,
+        "delta_publicado": -0.017519,
+        "delta_denominador_comun": -0.017519
+      },
+      {
+        "bloque": 4,
+        "n_clases_retirada": 6,
+        "n_clases_confianza": 6,
+        "n_clases_comun": 6,
+        "delta_publicado": -0.032698,
+        "delta_denominador_comun": -0.032698
+      }
+    ],
+    "delta_publicado": -0.028838,
+    "delta_denominador_comun": -0.016691,
+    "encogimiento_relativo": 0.421193,
+    "bloques_que_cambian_de_signo": [
+      2
+    ]
+  },
+  "defecto_2_unidad_de_remuestreo": {
+    "deltas_por_bloque": [
+      -0.031256,
+      -0.017962,
+      -0.044753,
+      -0.017519,
+      -0.032698
+    ],
+    "media": -0.028838,
+    "ic_t_sobre_bloques": [
+      -0.043001,
+      -0.014674
+    ],
+    "excluye_cero": true,
+    "nota": "El intervalo publicado remuestreaba parcelas dentro de cada bloque y nunca bloques, aunque el estimando declarado es la media por bloque."
+  },
+  "defecto_3_punto_de_operacion_asimetrico": {
+    "f1_umbral_dentro_del_bloque": 0.793294,
+    "f1_umbral_fijado_fuera": 0.792024,
+    "ventaja_de_la_asimetria": 0.00127,
+    "nota": "La retirada de leyenda siempre eligio su catalogo fuera del bloque evaluado. El rechazo por confianza no, y es el brazo que ganaba."
+  },
+  "procedencia": {
+    "semilla": 42,
+    "code_version": "dcfff4a",
+    "polars": "1.44.1",
+    "numpy": "2.3.5",
+    "generado": "2026-09-03T20:55:39+00:00",
+    "ground_truth": "reports/paper_micai/fase1/parcel_gt_fold5.parquet"
+  }
+}
