@@ -88,3 +88,82 @@ El barrido de 2024–2026 **estrecha el hueco y lo mejora**, porque un hueco pre
 El barrido de bancos cierra el punto que más pesaba: **CropHarvest** (Zenodo, CC BY-SA 4.0, con separación espacial explícita y documentada) y **GEO-Bench `m-SA-crop-type`** (Sudáfrica, CC BY 4.0). Los dos traen su propia partición, así que no la construimos nosotros — que es exactamente lo que un revisor cuestionaría si la inventásemos. Detalle y descartes en [`bancos-candidatos.md`](bancos-candidatos.md).
 
 Cuatro bancos, dos continentes, y ninguno con la partición hecha en casa.
+
+---
+
+## 7. Segunda vuelta: de describir a decidir (3 de septiembre, noche)
+
+Una revisión estratégica a ciegas del plan devolvió un juicio que la aritmética confirma sin
+discusión: **de los 150 puntos planificados, solo 27 producían conocimiento nuevo. El 18 %.** El
+resto era rehabilitación. Es lo que pasa después de cuatro rechazos, y es exactamente la trampa.
+
+### Lo que cambia
+
+**La primera contribución dejaba de ser un resultado para ser una confesión.** El plan abría con
+«un protocolo que hace comparables los mecanismos, y la medida de lo que cuesta cada error al
+construirlo», es decir, con la autopsia de tres errores propios. Ningún revisor recuerda una
+enmienda; recuerda un resultado. Y un artículo que abre explicando qué hizo mal invita al comité a
+evaluar la versión anterior. **La autopsia baja a método y apéndice.**
+
+**El artículo se mordía la cola.** Denuncia que el F1-macro no es comparable entre catálogos, y
+luego iba a comparar con F1-macro cuatro mecanismos que cambian el catálogo. Los cuatro producen
+errores **cualitativamente distintos** —una etiqueta segura y falsa, un silencio, una ambigüedad
+acotada, una verdad gruesa— y ninguna métrica escalar de acierto los ordena.
+
+**La EPIC 25 es la respuesta**: evaluación en espacio de costes, no de aciertos. Una familia de
+pérdidas con cuatro parámetros, un barrido, y un **diagrama de fases** que dice qué mecanismo gana
+en qué región. Encima, cuatro casos de uso agrícolas con sus razones de coste. **Cero horas de
+GPU**: es re-puntuar predicciones que ya existen. Es el mejor cociente entre impacto y esfuerzo de
+todo el plan.
+
+**Y recupera el único activo que nadie puede reproducir.** Este equipo tiene algo que casi nadie en
+esta literatura tiene: **una decisión de punto de operación tomada de verdad en un producto
+desplegado** —de 18 clases a 12, criterio F1 por clase ≥ 0,90, cobertura resultante 0,9054— con su
+contrafactual medible. El reencuadre la había borrado («el artículo ya no trata del sistema») y eso
+era un error: **el doble ciego exige quitar el nombre, no el hecho**. Cualquiera con una GPU y
+PASTIS reproduce el resto del artículo. La decisión que este equipo ya tomó en producción no la
+reproduce nadie. Va al mapa, como estudio de caso, con la pregunta que nadie publica: dado su coste
+implícito, ¿acertó?
+
+### Lo que se recorta, y por qué
+
+- **US-138, reentrenamiento OOF de cinco folds.** Su rol declarado empieza «como equipo cuyo
+  meta-modelo se entrena con un solo fold», y el reencuadre ya sacó el árbitro del artículo. Ocho
+  puntos y presupuesto de nube al servicio de una sección que no existe.
+- **US-137, cuarto banco.** Tres bancos y dos continentes ya responden la objeción de transporte.
+- **US-150**, gobernanza disfrazada de trabajo de artículo.
+- **La reimplementación de un rechazador aprendido**, dentro de US-132. Chow, conforme y retroceso
+  jerárquico ya son un conjunto honesto de líneas base; reimplementar un SelectiveNet es un
+  proyecto de investigación en riesgo de ajuste que un revisor criticará se haga como se haga.
+
+### Las tres escotillas, cerradas
+
+El plan tenía una salida en forma de protocolo para cada desenlace empírico: «si el resultado no
+sobrevive a la simetría, se dice», «si la conclusión no se transporta, el artículo gana un matiz»,
+«si no replica, la contribución pasa a ser el protocolo». **Un plan con una escotilla para cada
+desenlace aterriza en la escotilla.** Eso no es honestidad, es un compromiso previo con el
+resultado menos interesante. Queda escrito en US-126: **el protocolo no puede ser el resultado de
+reserva**. Si el experimento central no da nada, se va a revista y se espera al año siguiente.
+
+### Dos vehículos
+
+Doce páginas de actas no aguantan la rejilla que este plan produce, y unas actas rara vez se
+convierten en la referencia metodológica de nadie.
+
+- **MICAI 2027, doce páginas: el artículo de decisión.** Tres bancos, cuatro mecanismos, el
+  diagrama de fases, la contabilidad de quién paga y la decisión de despliegue real como estudio de
+  caso. Una figura que la gente fotografía.
+- **Revista, el artículo de protocolo.** Los cuatro bancos, las multiplicidades, los nulos, la
+  autopsia y el arnés. Una revista tiene sitio para eso y lo premia.
+
+Y una advertencia que conviene no olvidar: MICAI no es la sede donde vive la comunidad de mapeo de
+cultivos. El techo de este trabajo en MICAI es estar bien recordado **en MICAI**. Si el objetivo es
+cambiar cómo trabaja el área, el vehículo que llega a esa gente es la revista. Se envía a MICAI el
+artículo con postura, y no se confunde la aceptación con haber llegado.
+
+### El presupuesto, después
+
+| | antes | después |
+|---|---|---|
+| Puntos planificados | 150 | 152 |
+| Puntos que producen conocimiento nuevo | 27 (**18 %**) | 48 (**32 %**) |
