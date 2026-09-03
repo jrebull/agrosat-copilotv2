@@ -32,7 +32,21 @@ La frase de CropHarvest que responde por adelantado a la objeción de autocorrel
 
 ## Qué significa para el plan
 
-**US-136** (tercer banco, fuera de Francia) → **CropHarvest**, tarea de Kenia o Togo.
-**US-137** (cuarto banco, fuera de Europa occidental) → **GEO-Bench `m-SA-crop-type`** para Sudáfrica, o una segunda tarea de CropHarvest.
+**Corregido el 3 de septiembre.** Este apartado enrutaba a US-136 y US-137, y las dos cambiaron.
 
-Los dos entran con la partición espacial que ya traen; no la construimos nosotros, que es justo la crítica que un revisor haría si la inventáramos.
+**CropHarvest queda descartado**, y por un criterio que este documento no aplicó: sus tareas de
+referencia son **binarias**. Con K = 2 el recorte de leyenda a K = 1 es degenerado, el retroceso
+jerárquico no tiene taxonomía sobre la que retroceder y el conjunto conforme `{0,1}` **es** la
+abstención. Los cuatro mecanismos colapsan en uno. El barrido priorizó partición espacial y licencia
+—criterios correctos— y no comprobó la **cardinalidad del espacio de etiquetas**, que para este
+artículo es el criterio de admisión número uno.
+
+**US-137 se recortó**, así que el candidato por defecto pasa a US-136: **GEO-Bench
+`m-SA-crop-type`**, con tres avisos verificados que hay que decidir antes de usarlo y no en marzo:
+es segmentación por píxel y no clasificación por parcela; las fichas públicas listan **diez**
+categorías y no nueve; y el banco **submuestrea**, lo que reconfigura el desbalance, que es
+justamente nuestra variable independiente.
+
+Y un segundo criterio de admisión que faltaba: **la partición ajena tiene que definir bloques
+espaciales suficientes** para el efecto mínimo detectable. Si entrega un solo conjunto de prueba, el
+banco entra como descriptivo y no como confirmatorio.

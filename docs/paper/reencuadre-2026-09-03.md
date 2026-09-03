@@ -243,3 +243,24 @@ supervivencia («del artículo actual → destino»), y la sección 5 dice que l
 pregunta; este empezó por los artefactos y buscó qué pregunta los admitía. Queda dicho, y la
 US-157 —manipular el desbalance dentro de un banco, con la geografía fija— es la respuesta que no
 depende de qué artefacto sobrevivió.
+
+
+---
+
+## 9. Enmiendas, fechadas (3 de septiembre de 2026, noche)
+
+Este documento se escribió en tres vueltas y el plan siguió cambiando después. Estas son las
+diferencias, para que quien ejecute no lea una versión superada.
+
+| Dice arriba | Vale esto |
+|---|---|
+| «Cuatro bancos de datos» (§3, §6) | **Tres.** CropHarvest se cayó por cardinalidad binaria y el cuarto se recortó. El transporte se apoya en un solo sistema de etiquetado ajeno, y eso se declara en el artículo |
+| «MICAI 2027, doce páginas» (§7) | **Veinte páginas**, decidido el 3 de septiembre |
+| «Dos vehículos: … revista, el artículo de protocolo» (§7) | **Un solo vehículo: MICAI.** Con veinte páginas cabe todo y no hay artículo de revista en paralelo |
+| «El criterio principal se mueve a la disparidad» (§8) | **Es una hipótesis, no un hallazgo.** Medida la potencia, ninguna de las cuatro medidas de disparidad la tiene con cinco bloques. La decisión depende de US-155 |
+| «Un factor de ocho» (§8) | Es el **máximo de dieciocho razones cuya mediana es 1,00**, leído tras mirar la tabla, y no es monótono en soporte |
+
+Y una cosa que no estaba en ninguna vuelta y cambia el diagnóstico: **cinco bloques era el valor por
+defecto de una función, no una restricción del dato**. El fold retenido tiene 176 celdas H3, y con
+quince bloques el contraste excluye el cero y tiene potencia. Eso abre la puerta a recuperar el
+hallazgo y abre a la vez un grado de libertad que nadie había preregistrado. Ver US-171.
