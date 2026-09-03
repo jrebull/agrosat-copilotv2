@@ -27,7 +27,7 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
 ## Modelos y artefactos
 
 - Campeón desplegado: Voting-3 v2, 12 clases (`france-12`), F1-macro 0.8992 (`reports/agent_bench/perceiver_champion_eval_v2.json`).
-- Modelo final del curso: Stacking-5 heterogéneo con FarSLIP, F1-macro 0.7486 held-out fold-5 (`reports/ensemble/metrics/us043_farslip_grid.csv`); el Stacking-3 sin FarSLIP de US-040 da 0.7470 (`comparison_us040.csv`).
+- Modelo final del curso: Stacking-5 heterogéneo con FarSLIP, F1-macro 0.7486 **in-sample para el meta-modelo**, no held-out (`reports/ensemble/metrics/us043_farslip_grid.csv`); el Stacking-3 sin FarSLIP de US-040 da 0.7470 (`comparison_us040.csv`).
 - Datos versionados en DVC (`gs://agrosat-dvc-remote`): features, OOF, embeddings FarSLIP, checkpoints y datasets de transferencia. Falta en el remoto `data/features/alphaearth_italia_2018.parquet`. PASTIS-R crudo no está en DVC: se descarga de Zenodo (53.7 GB, MD5 `4887513d6c2d2b07fa935d325bd53e09`) y en esta máquina ya está extraído en `data/PASTIS-R/` (gitignorado).
 
 ## Artículo MICAI 2027
@@ -38,7 +38,7 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   bajo F1-macro; el arbitraje heterogéneo queda como mecanismo y la vecindad espacial como
   control negativo acotado. Evidencia en [`paper/novedad.md`](paper/novedad.md); decisión en
   [`ADR-013`](decisions/ADR-013-angulo-micai.md), pendiente de firma de Arthur y Javier.
-- Búsqueda sistemática sellada en `reports/paper_micai/fase0/`: 59 consultas automáticas en
+- Búsqueda sistemática sellada en `reports/paper_micai/fase0/`: 61 consultas automáticas en
   arXiv, Semantic Scholar y OpenAlex más seis manuales, con respuesta cruda por consulta, y
   una matriz de 43 trabajos con método, fortaleza, límite y hueco, todos con identificador
   resuelto por API (0 filas fuera de estado `OK`).
@@ -47,7 +47,7 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   geoespacial, «Harvesting AlphaEarth» no recomienda adaptación few-shot y dice que el
   embedding anual carece de sensibilidad temporal, y AgroMind se contradice consigo mismo en
   el conteo de pares QA entre el resumen de arXiv y el texto completo de su v3.
-- **Fase 1 en curso**: [`paper/ARTIFACTS.md`](../paper/ARTIFACTS.md) sella 33 artefactos con
+- **Fase 1 en curso**: [`paper/ARTIFACTS.md`](../paper/ARTIFACTS.md) sella 51 artefactos con
   MD5 y declara 8 cifras sin artefacto. Gate `make paper-artifacts-check` en verde y probado
   en negativo. Los once parquets OOF coinciden con el `md5` de su propio `.dvc`.
 - Corregido en el camino: `docs/pendientes-arthur.md` daba por perdidos artefactos que sí
@@ -67,7 +67,8 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   reentrenado sobre las mismas parcelas que puntúa, no un held-out. Libre de fuga ninguna
   combinación mejora al mejor miembro individual (tsvit-pheno, F1-macro 0,7367). La
   contribución central se sostiene: a igual cobertura, retirar clases domina al rechazo por
-  confianza (delta +0,050 a +0,194 con IC que excluye el cero por debajo de doce clases).
+  confianza **RETIRADA**: una auditoría ciega multiagente mostró que ese delta es un artefacto de
+  promediar sobre conjuntos de clases distintos; al igualarlos el signo se invierte.
   El nulo de vecindad es un nulo limpio y el aporte de FarSLIP no se distingue de cero fuera
   del régimen in-sample. Detalle y advertencias en
   [`paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).

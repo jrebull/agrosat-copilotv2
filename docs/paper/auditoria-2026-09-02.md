@@ -1,5 +1,10 @@
 # Auditoría completa del estado del artículo — 2 de septiembre de 2026
 
+> **Aviso del 2 de septiembre, más tarde.** Una auditoría ciega con cuatro revisores
+> independientes tumbó la contribución central que este documento daba por sostenida.
+> Ver la sección final, «Auditoría ciega multiagente». Lo que sigue se conserva sin
+> editar porque el propio error forma parte del registro.
+
 **Alcance**: todo lo producido en las fases 0, 1 y 2, incluido **mi propio código**, que es
 de donde cuelga ahora la contribución del artículo.
 **Modo del skill**: 2 (integridad científica) más el modificador de patrones de incidente.
@@ -147,3 +152,111 @@ la auditoría, con la cobertura ahora exactamente igualada.
 | — | Tres checkpoints de FarSLIP sin versionar | Arthur |
 | — | Seis artefactos sellados sin guion generador | nosotros, en la fase 3 |
 | — | Validez externa: un solo conjunto de datos | nosotros, en la fase 4 |
+
+
+---
+
+# Auditoría ciega multiagente — la contribución central no se sostiene
+
+Cuatro revisores independientes, sin acceso a mis conclusiones y con instrucción explícita de
+no dar por buenos ni el código ni los documentos. Tres han reportado. **Dos de ellos, por
+caminos distintos, y mi propia verificación posterior, llegan al mismo sitio: el resultado
+que este documento llamaba «contribución central» es un artefacto de la métrica.**
+
+## X1 · El delta se invierte al puntuar ambos mecanismos sobre el mismo conjunto de clases
+
+`_macro_on_legend` promedia sobre conjuntos distintos según el mecanismo: la retirada de
+clases promedia sobre las **K clases de mejor F1**, y el rechazo por confianza sobre las
+hasta dieciocho presentes, incluidas las peores. Al primero se le quitan del promedio los
+sumandos pequeños y al segundo no. El delta que crecía al bajar K era en su mayor parte
+aritmética del denominador.
+
+Recalculado por mí, conservándole a la retirada toda su ventaja y cambiando **solo** el
+conjunto sobre el que se promedia el comparador:
+
+| K | Delta publicado | A mismo conjunto de clases | Versión desplegable |
+|---|---|---|---|
+| 18 | +0.0000 | +0.0000 | +0.0000 |
+| 16 | +0.0003 | **−0.0128** | −0.0130 |
+| 14 | +0.0076 | **−0.0185** | −0.0162 |
+| 12 | **+0.0504** | **−0.0174** | −0.0190 |
+| 10 | **+0.1423** | **−0.0095** | −0.0148 |
+| 9 (criterio principal) | **+0.1501** | **−0.0253** | −0.0288 |
+| 8 | **+0.1944** | **−0.0166** | −0.0343 |
+
+**El signo se invierte en los siete valores de K**, y en el punto de operación preregistrado
+el intervalo excluye el cero en dirección contraria.
+
+La demostración más limpia la aporta el auditor estadístico: sobre las mismas 16 640
+parcelas, **sin retirar ni rechazar nada**, el F1-macro calculado sobre las ocho clases más
+fáciles es **0,8956**, más alto que el 0,8243 que este documento atribuía a la retirada. No
+hacía falta ningún mecanismo para obtener ese número: bastaba con cambiar el denominador.
+
+## X2 · La retirada decide a quién responde mirando la etiqueta verdadera
+
+`delivered = np.isin(block_labels, columns)`, donde `block_labels` es el ground truth. La
+cobertura del mecanismo estrella es oracular: entrega exactamente las parcelas cuya clase
+verdadera está prometida, y se puntúa solo sobre ellas. El comparador elige con posteriores
+y sin mirar etiqueta alguna. Se comparaban bajo **información asimétrica**, y el documento
+afirmaba lo contrario: «toda decisión se toma fuera del bloque que se mide» es cierto para
+la leyenda y falso para el conjunto entregado.
+
+La cifra que vería un operador real con leyenda corta, sobre todas las parcelas del bloque:
+0,5560 a K = 12 y 0,6410 a K = 8, frente a los 0,6715 y 0,8243 publicados.
+
+## X3 · El bootstrap de la contribución central no era pareado
+
+Dos sorteos independientes, uno por mecanismo. La firma es inequívoca y la tenía delante: a
+K = 18 los dos mecanismos son literalmente el mismo objeto, el delta sale exactamente cero,
+y el intervalo publicado era [−0,0294, +0,0308]. **Un intervalo no degenerado para la
+comparación de una cosa consigo misma.** Yo leí esa fila como comprobación de cordura
+superada y no vi que el intervalo la delataba.
+
+Con un único índice de remuestreo por bloque obtengo [0,0000, 0,0000] a K = 18, como debe
+ser, e intervalos más estrechos en el resto. Añadido: la tabla se generó con 400 réplicas y
+no con las mil que el preregistro congela.
+
+## X4 · Otros hallazgos que cambian lecturas
+
+- **El hueco «árbitro contra mejor individual» es en tres cuartas partes una sola clase.**
+  Excluyendo la clase 10, el delta pasa de −0,0572 a −0,0148. La cifra no debe citarse sin
+  ese desglose.
+- **Los intervalos son entre un 15 % y un 45 % demasiado estrechos** por ignorar la
+  autocorrelación espacial. Los contrastes grandes sobreviven; los nulos se **refuerzan**.
+- **McNemar contrasta exactitud, no F1-macro.** El árbitro gana un punto de exactitud de
+  forma significativa mientras su F1-macro es indistinguible. Publicar las dos columnas y
+  concluir desde una sola es lectura selectiva.
+- **Promediar macros por bloque está sesgado −0,176** frente a agrupar y puntuar una vez,
+  que es justo lo que el docstring del módulo dice preferir.
+- **El preregistro de las fases 3 y 4 no es ciego respecto a BreizhCrops.** El dataset está
+  versionado desde mayo y su distribución de clases se publicó en un notebook commiteado con
+  outputs. El criterio de escape se escribió sabiendo la respuesta.
+- **El manuscrito heredado tiene 24 páginas, no 36.** `pdfinfo paper/main.pdf` y el propio
+  `main.log`. Repetí la cifra heredada sin comprobarla.
+- Diecinueve discrepancias numéricas y dieciséis cifras sin artefacto en los documentos,
+  entre ellas que `STATUS.md` seguía llamando «held-out» al 0,7486 que el propio ADR-013
+  prohíbe llamar así.
+
+## Qué sobrevive
+
+Las tres auditorías coinciden en qué se puede publicar:
+
+- **El hallazgo del régimen in-sample** (§1 y §1 bis). Verificado y reproducido de cero por
+  dos auditores. Es sólido.
+- **Los tres resultados nulos**: arbitraje contra promedio, aporte de FarSLIP y vecindad
+  espacial. Se refuerzan al corregir por autocorrelación.
+- **La comparación de reglas de combinación** (§2), con el desglose de la clase 10 y
+  contrastando la magnitud que se titula.
+
+Y **aparece una contribución mejor fundada que la que teníamos**, que sale de este mismo
+error: *el F1-macro no es comparable entre leyendas de cardinalidad distinta, y esa
+incomparabilidad invalida una práctica de comparación extendida*. La demuestra en una línea
+el 0,8956 sobre las ocho clases fáciles sin mecanismo alguno. Explica además por qué la
+reducción de dieciocho a doce clases que el equipo hizo para desplegar **parece** mejorar la
+calidad. Es más estrecho que lo que perseguíamos y es verdad.
+
+## Estado
+
+**La sección 4 de [`fase2-hallazgos.md`](fase2-hallazgos.md) queda retirada** hasta rehacer
+el experimento con los tres defectos corregidos. Ninguna de sus cifras se cita mientras
+tanto.
