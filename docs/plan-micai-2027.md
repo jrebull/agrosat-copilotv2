@@ -187,7 +187,7 @@ autores y año resueltos por arXiv, Crossref u OpenAlex.
 
 Hecho: plantilla `llncs` con A4 real, `cmap` antes de `fontenc`, `xurl`, `hyperref` con `hidelinks`, `\emergencystretch`, `\keywords` dentro del abstract y apéndice antes de las referencias (punto 1); `\newif\ifanon` con la anónima por defecto (punto 3); y el **gate de identidad probado en negativo** (punto 4): `make micai-anon-check` extrae el texto del PDF ensamblado más sus metadatos, busca dieciséis tokens, se autoprueba token por token y se comprobó que **falla** sobre una compilación con `\anonfalse`. De regalo, la compilación es **reproducible byte a byte** —`\pdfinfoomitdate`, `\pdftrailerid{}`, `\pdfsuppressptexinfo` en el `.tex` y metadatos anulados más `svg.hashsalt` fijo en las figuras—, sin lo cual sellar el PDF de envío no significaba nada.
 
-Queda el punto 2 (autor de correspondencia, depende de Arthur) y el punto 5 (empaquetado `.zip`).
+El punto 2 está **montado pero sin decidir**: el camera-ready existe (`make micai-pdf-cr`, quince páginas, ORCID, afiliación, créditos y Disclosure of Interests) y lleva impresa una nota al pie que dice que el autor de correspondencia sigue sin decidir, para que no se cuele por descuido. Sale del mismo `main.tex` mediante un testigo en disco, y está comprobado que **el cuerpo es byte a byte el mismo** que el de la versión anónima. Queda decidir esa persona y el punto 5, el empaquetado `.zip`.
 
 ### Fase 8 · Plantilla LNCS, doble ciego y paquete (especificación original)
 

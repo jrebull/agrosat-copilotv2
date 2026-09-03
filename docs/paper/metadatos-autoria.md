@@ -5,7 +5,7 @@ el sistema del congreso, la licencia y el repositorio citable, y **no permite ca
 autor de correspondencia después del camera-ready**. Este archivo fija esas cadenas en un
 solo sitio para que nadie las teclee de memoria.
 
-**Última verificación**: 2 de septiembre de 2026.
+**Última verificación**: 3 de septiembre de 2026.
 
 ---
 
@@ -33,7 +33,9 @@ se lo comunique.
 
 ## Autor de correspondencia
 
-**Sin decidir.** Es la única decisión de este archivo que no se puede posponer: esa persona
+**Sin decidir**, y desde el 3 de septiembre esa falta **es visible en el PDF**: el camera-ready
+imprime una nota al pie que dice «PENDIENTE: autor de correspondencia sin decidir». Se hizo así a
+propósito, para que no pueda colarse en un envío por descuido. Es la única decisión de este archivo que no se puede posponer: esa persona
 firma la licencia de Springer **a mano** —las firmas digitales no se aceptan— y Springer no
 permite cambiarla después del camera-ready.
 
@@ -73,9 +75,23 @@ la afiliación.
 - [ ] No enlazar el sitio desde el artículo ni desde el repositorio citado mientras dure la
       revisión.
 
+## Estado del camera-ready
+
+Existe y compila: `make micai-pdf-cr` produce `paper/micai/main_cr.pdf` y su versión en español,
+quince páginas cada una, con ORCID, afiliación, agradecimientos a Isaac Ávila y Aaron Bocanegra
+como autores del software, y «Disclosure of Interests».
+
+Sale del **mismo** `main.tex` que la versión anónima, mediante un testigo en disco que el objetivo
+de Make crea y borra. Comprobado: el PDF anónimo conserva el mismo MD5 antes y después de escribir
+todo el bloque de firmas, así que **el cuerpo del artículo es byte a byte el mismo** en las dos
+salidas, que es lo que exige la fase 8.
+
+El objetivo de Make además **exige que el gate de anonimato falle** sobre el camera-ready. Un gate
+que solo se comprueba en verde no distingue entre «está anónimo» y «no lo he mirado».
+
 ## Qué falta
 
-- [ ] Decidir el autor de correspondencia.
+- [ ] Decidir el autor de correspondencia. **Es lo único que bloquea el camera-ready.**
 - [ ] Elegir la forma canónica del apellido de Javier, con guion o sin él, y unificarla en
       el artículo y en el ORCID.
 - [ ] Unificar `Arthur Zizumbo` a la forma completa en `pyproject.toml`.

@@ -8,8 +8,11 @@
 \pdftrailerid{}
 \pdfsuppressptexinfo=-1
 
+% La version anonima es la de por defecto. `make micai-pdf-cr` deja el testigo en disco
+% y compila el camera-ready, de modo que el cuerpo del articulo sale del MISMO fuente y
+% no de una copia que se pueda desincronizar.
 \newif\ifanon
-\anontrue
+\IfFileExists{camera-ready.flag}{\anonfalse}{\anontrue}
 
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
@@ -36,9 +39,16 @@
   \author{Anonymous Author(s)}
   \institute{Anonymous Institution}
 \else
-  \author{Arthur Zizumbo\inst{1} \and Javier A. Rebull-Saucedo\inst{1}\thanks{Corresponding author.}}
-  \institute{Anonymous Institution, City, Country\\
-    \email{author@example.org}}
+  \author{%
+    Arthur Jafed Zizumbo Velasco\inst{1}\orcidID{0009-0002-1603-8946}
+    \and
+    Javier A. Rebull-Saucedo\inst{1}\orcidID{0009-0008-2089-5274}%
+    \thanks{\textbf{PENDING: corresponding author not yet decided.} Springer does not allow
+    changing it after the camera-ready, and that person signs the license by hand.}%
+  }
+  \authorrunning{A. J. Zizumbo Velasco and J. A. Rebull-Saucedo}
+  \institute{Tecnológico de Monterrey, Mexico\\
+    \email{A01796363@tec.mx}, \email{rebull@exatec.tec.mx}}
 \fi
 
 \maketitle
@@ -75,6 +85,19 @@ protocol \and Spatial cross-validation}
 
 \appendix
 \input{sections/07-appendix}
+
+\ifanon\else
+\begin{credits}
+\subsubsection{\ackname}
+The segmentation and ensembling code this evaluation runs on was written by Isaac Ávila and
+Aaron Bocanegra, who are credited as authors of the software rather than of this paper. The
+two benchmarks are public and we thank their maintainers.
+
+\subsubsection{\discintname}
+The authors have no competing interests to declare that are relevant to the content of this
+article.
+\end{credits}
+\fi
 
 \bibliographystyle{splncs04}
 \bibliography{refs}

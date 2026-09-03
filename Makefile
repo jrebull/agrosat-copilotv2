@@ -1,4 +1,4 @@
-.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke train-h100 azure-h100-start azure-h100-stop azure-h100-status mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check micai-pdf micai-anon-check micai-bib
+.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke train-h100 azure-h100-start azure-h100-stop azure-h100-status mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check micai-pdf micai-anon-check micai-bib micai-pdf-cr micai-pdf-es
 
 help:
 	@echo "AgroSatCopilot — comandos disponibles:"
@@ -547,8 +547,36 @@ micai-pdf:  ## Compila el manuscrito MICAI (paper/micai) con bibliografia y devu
 	@cd paper/micai && test "$$(grep -c Overfull main.log)" = "0" || (echo "micai-pdf: hay cajas overfull" && exit 1)
 	@pdfinfo paper/micai/main.pdf | grep -iE "pages|page size"
 
-micai-anon-check:  ## Gate de doble ciego sobre el PDF ensamblado, con autoprueba en negativo.
+micai-pdf-es:  ## Compila la version en espanol (lectura y revision del equipo), anonima.
+	cd paper/micai && rm -f camera-ready.flag
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main_es.tex >/dev/null
+	cd paper/micai && bibtex main_es >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main_es.tex >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main_es.tex >/dev/null
+	@cd paper/micai && test "$$(grep -c '^!' main_es.log)" = "0" || (echo "micai-pdf-es: LaTeX reporto errores" && exit 1)
+	@cd paper/micai && test "$$(grep -c Overfull main_es.log)" = "0" || (echo "micai-pdf-es: hay cajas overfull" && exit 1)
+	@pdfinfo paper/micai/main_es.pdf | grep -iE "pages|page size"
+
+micai-anon-check:  ## Gate de doble ciego sobre los dos PDF anonimos, con autoprueba en negativo.
 	poetry run python scripts/paper_micai_anon_check.py paper/micai/main.pdf
+	poetry run python scripts/paper_micai_anon_check.py paper/micai/main_es.pdf
 
 micai-bib:  ## Regenera paper/micai/refs.bib desde la matriz verificada de la fase 0.
 	poetry run python scripts/build_paper_micai_bib.py
+
+micai-pdf-cr:  ## Compila el camera-ready (no anonimo) del manuscrito MICAI, en main_cr.pdf.
+	cd paper/micai && touch camera-ready.flag
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error -jobname=main_cr main.tex >/dev/null
+	cd paper/micai && bibtex main_cr >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error -jobname=main_cr main.tex >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error -jobname=main_cr main.tex >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error -jobname=main_cr_es main_es.tex >/dev/null
+	cd paper/micai && bibtex main_cr_es >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error -jobname=main_cr_es main_es.tex >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error -jobname=main_cr_es main_es.tex >/dev/null
+	cd paper/micai && rm -f camera-ready.flag
+	@cd paper/micai && test "$$(grep -c '^!' main_cr.log)" = "0" || (echo "micai-pdf-cr: LaTeX reporto errores" && exit 1)
+	@cd paper/micai && test "$$(grep -c Overfull main_cr.log)" = "0" || (echo "micai-pdf-cr: hay cajas overfull" && exit 1)
+	@echo "El camera-ready NO debe pasar el gate de anonimato; se comprueba que efectivamente falla:"
+	@poetry run python scripts/paper_micai_anon_check.py paper/micai/main_cr.pdf; test $$? -eq 1 || (echo "micai-pdf-cr: el camera-ready no revela identidad, algo va mal" && exit 1)
+	@pdfinfo paper/micai/main_cr.pdf | grep -iE "pages|page size"
