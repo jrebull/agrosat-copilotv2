@@ -61,7 +61,7 @@ premisas del artículo era falsa. Tres de los defectos estadísticos los reprodu
 - Ángulo nuevo y qué sobrevive: [`docs/paper/reencuadre-2026-09-03.md`](paper/reencuadre-2026-09-03.md)
 - Recomendación final y coste de rehacerlo: [`docs/paper/recomendacion-final.md`](paper/recomendacion-final.md)
 - Qué se puede regenerar de lo perdido: [`docs/paper/artefactos-perdidos.md`](paper/artefactos-perdidos.md)
-- Plan nuevo, ocho épicas y cuarenta historias: **EPIC 18 a 25**, publicadas en el cuaderno. **Sede única: MICAI 2027, de 16 a 18 páginas**, sin artículo de revista en paralelo
+- Plan nuevo, ocho épicas y cuarenta historias: **EPIC 18 a 25**, publicadas en el cuaderno. **Sede única: MICAI 2027, veinte páginas**, sin artículo de revista en paralelo, con la EPIC 26 dedicada a las diez pruebas que anticipan los ataques de un revisor estricto: [`docs/paper/campo-de-tiro.md`](paper/campo-de-tiro.md)
 
 El ángulo pasa a ser: **prometer menos clases, responder menos parcelas, o responder con un
 conjunto**. La descomposición denominador contra mecanismo baja de contribución central a

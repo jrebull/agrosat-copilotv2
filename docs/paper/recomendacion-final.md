@@ -1,13 +1,13 @@
 # Recomendación final: qué artículo escribir, y qué cuesta
 
-**Fecha**: 3 de septiembre de 2026. **Decisión del equipo**: sede única MICAI 2027, de 16 a 18 páginas, sin artículo de revista en paralelo.
+**Fecha**: 3 de septiembre de 2026. **Decisión del equipo**: sede única MICAI 2027, **veinte páginas**, sin artículo de revista en paralelo. Con ese tope cabe además una sección de robustez de verdad: ver [`campo-de-tiro.md`](campo-de-tiro.md).
 
 Esto es mi mejor recomendación, con el coste declarado y sin suavizar lo que hay que rehacer.
 
-## 1. Qué cambia el tope de 18 páginas
+## 1. Qué cambia el tope de 20 páginas
 
 Cambia más de lo que parece. La recomendación de partir el trabajo en dos vehículos existía porque
-**doce páginas no aguantaban la rejilla**. Con dieciocho, cabe entera: cuatro mecanismos, tres o más
+**doce páginas no aguantaban la rejilla**. Con veinte cabe entera, **y sobra sitio para robustez**: cuatro mecanismos, tres o más
 bancos, líneas base, equidad por clase y por tamaño de parcela, diagrama de fases y caso de
 despliegue. **No hay que partir nada.** Y lo que sigue sin caber no es una sección: es la autopsia de
 nuestros propios errores como primera contribución.
