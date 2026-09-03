@@ -545,6 +545,8 @@ micai-pdf:  ## Compila el manuscrito MICAI (paper/micai) con bibliografia y devu
 	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
 	@cd paper/micai && test "$$(grep -c '^!' main.log)" = "0" || (echo "micai-pdf: LaTeX reporto errores" && exit 1)
 	@cd paper/micai && test "$$(grep -c Overfull main.log)" = "0" || (echo "micai-pdf: hay cajas overfull" && exit 1)
+	@cd paper/micai && test "$$(grep -c 'Citation.*undefined' main.log)" = "0" || (echo "micai-pdf: hay citas sin resolver" && exit 1)
+	@cd paper/micai && test "$$(grep -c 'Reference.*undefined' main.log)" = "0" || (echo "micai-pdf: hay referencias cruzadas sin resolver" && exit 1)
 	@pdfinfo paper/micai/main.pdf | grep -iE "pages|page size"
 
 micai-pdf-es:  ## Compila la version en espanol (lectura y revision del equipo), anonima.

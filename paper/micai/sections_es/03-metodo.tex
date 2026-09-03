@@ -26,7 +26,7 @@ representación.}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrr}
 \toprule
- & primario (PASTIS-R) & réplica (BreizhCrops) \\
+ & primario (PASTIS) & réplica (BreizhCrops) \\
 \midrule
 Campaña & 2018--2019 & 2017 \\
 Región & Francia metropolitana & Bretaña \\
@@ -42,7 +42,10 @@ Partición del predictor & fold retenido & una región fuera \\
 \end{tabular}
 \end{table}
 
-El \textbf{banco primario} es PASTIS-R \cite{garnot2021pastis}, del que tomamos el fold retenido y
+El \textbf{banco primario} es PASTIS \cite{garnot2021pastis}. Lo obtenemos por la distribución
+PASTIS-R, que añade series de radar alineadas \cite{saintefaregarnot2022multimodal}, pero
+\emph{usamos solo su modalidad óptica}: todos los predictores leen Sentinel-2, así que llamar al
+banco PASTIS-R nombraría un sensor que nunca tocamos. De él tomamos el fold retenido y
 agregamos la anotación densa a nivel de parcela, con \num{16640} parcelas sobre \num{496} parches
 de imagen y dieciocho clases agronómicas. Su desbalance es severo: la clase mayoritaria tiene
 \num{6128} parcelas y la minoritaria \num{103}, una razón de unos \num{60}:\num{1}.

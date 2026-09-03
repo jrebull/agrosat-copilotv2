@@ -24,7 +24,7 @@ representation.}
 \centering
 \begin{tabular}{lrr}
 \toprule
- & primary (PASTIS-R) & replication (BreizhCrops) \\
+ & primary (PASTIS) & replication (BreizhCrops) \\
 \midrule
 Season & 2018--2019 & 2017 \\
 Region & metropolitan France & Brittany \\
@@ -39,7 +39,10 @@ Predictor & pre-trained members & gradient boosting, leave-one-region-out \\
 \end{tabular}
 \end{table}
 
-The \textbf{primary benchmark} is PASTIS-R \cite{garnot2021pastis}, from which we take the
+The \textbf{primary benchmark} is PASTIS \cite{garnot2021pastis}. We obtain it through the
+PASTIS-R distribution, which adds aligned radar series \cite{saintefaregarnot2022multimodal}, but
+\emph{we use its optical modality only}: every predictor here reads Sentinel-2, so calling the
+benchmark PASTIS-R would name a sensor we never touch. From it we take the
 held-out fold and aggregate the dense annotations to parcel level, yielding \num{16640} parcels
 across \num{496} image patches and eighteen agronomic classes. Its imbalance is severe: the
 majority class holds \num{6128} parcels and the minority class \num{103}, a ratio of roughly
