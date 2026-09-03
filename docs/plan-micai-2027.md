@@ -49,6 +49,22 @@ Las cifras que se rederivan hoy desde disco: 61 %. Las que contradicen el artefa
 ---
 
 
+## 2 bis. REENCUADRE del 3 de septiembre de 2026
+
+**Las fases 6 a 10 de este documento quedan superadas.** Cuatro revisores a ciegas auditaron el
+borrador de quince páginas con criterios de MICAI y **los cuatro recomendaron rechazo**, por
+caminos que apenas se solapan; en paralelo, la revisión del coautor encontró que una de las
+premisas del artículo era falsa. Tres de los defectos estadísticos los reprodujimos nosotros.
+
+- Auditoría y verificación: [`docs/paper/auditoria-revisores-2026-09-03.md`](paper/auditoria-revisores-2026-09-03.md)
+- Revisión del coautor, verificada punto por punto: [`docs/paper/revision-arthur-2026-09-03.md`](paper/revision-arthur-2026-09-03.md)
+- Ángulo nuevo y qué sobrevive: [`docs/paper/reencuadre-2026-09-03.md`](paper/reencuadre-2026-09-03.md)
+- Plan nuevo, siete épicas y treinta y una historias: **EPIC 18 a 24**, publicadas en el cuaderno
+
+El ángulo pasa a ser: **prometer menos clases, responder menos parcelas, o responder con un
+conjunto**. La descomposición denominador contra mecanismo baja de contribución central a
+recomendación de reporte, con su precedente reconocido.
+
 ## 3. Fases
 
 Las fases 0, 1 y 2 están cerradas y su detalle vive en sus documentos. Lo que sigue es el

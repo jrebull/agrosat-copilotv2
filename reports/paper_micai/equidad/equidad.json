@@ -1,0 +1,37 @@
+{
+  "pregunta": "Quien paga la abstencion. Si el rechazo por confianza concentra su rechazo en las clases raras, hace de forma implicita lo mismo que el recorte de leyenda.",
+  "resultados": [
+    {
+      "banco": "PASTIS-R",
+      "k_principal": 9,
+      "spearman_soporte_vs_cobertura_confianza": {
+        "rho": 0.28586171310629516,
+        "p": 0.25016959354548063
+      },
+      "spearman_soporte_vs_cobertura_retirada": {
+        "rho": 0.43446852425180604,
+        "p": 0.07159701126026871
+      },
+      "cobertura_media_clases_raras_confianza": 0.7229994227494086,
+      "cobertura_media_clases_raras_retirada": 0.5586214858539019,
+      "clases_con_cobertura_cero_confianza": [],
+      "clases_con_cobertura_cero_retirada": []
+    },
+    {
+      "banco": "BreizhCrops",
+      "k_principal": 5,
+      "spearman_soporte_vs_cobertura_confianza": {
+        "rho": -0.16666666666666669,
+        "p": 0.668231040071504
+      },
+      "spearman_soporte_vs_cobertura_retirada": {
+        "rho": 0.016666666666666666,
+        "p": 0.9660548039946862
+      },
+      "cobertura_media_clases_raras_confianza": 0.8635689569945626,
+      "cobertura_media_clases_raras_retirada": 0.7095073323447026,
+      "clases_con_cobertura_cero_confianza": [],
+      "clases_con_cobertura_cero_retirada": []
+    }
+  ]
+}
