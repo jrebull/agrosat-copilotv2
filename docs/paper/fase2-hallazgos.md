@@ -152,15 +152,20 @@ En la clase 10 el árbitro **no emite ni una sola predicción** en los bloques q
 
 Aplicando la **regla R2** de ADR-013, la curva se compara contra el baseline obligatorio. Cada bloque espacial se evalúa contra **una** leyenda, elegida con los otros bloques; el umbral de confianza se fija igual, en los otros bloques, para igualar la cobertura.
 
-| K | Cobertura media (retirada / confianza) | F1-macro retirada | F1-macro confianza | Delta | IC 95 % | ¿Excluye el cero? |
+| K | Cobertura, idéntica en ambos | F1-macro retirada | F1-macro confianza | Delta | IC 95 % | ¿Excluye el cero? |
 |---|---|---|---|---|---|---|
-| 18 | 1.000 / 1.000 | 0.5612 | 0.5613 | −0.0001 | [−0.0293, +0.0303] | no |
-| 16 | 0.942 / 0.901 | 0.5866 | 0.5918 | −0.0052 | [−0.0407, +0.0269] | no |
-| 14 | 0.890 / 0.857 | 0.6236 | 0.6101 | +0.0135 | [−0.0260, +0.0463] | no |
-| 12 | 0.865 / 0.839 | 0.6715 | 0.6098 | **+0.0616** | [+0.0130, +0.0935] | sí |
-| 10 | 0.839 / 0.820 | 0.7694 | 0.6139 | **+0.1554** | [+0.1047, +0.1911] | sí |
-| 9 | 0.829 / 0.813 | 0.7783 | 0.6241 | **+0.1542** | [+0.1067, +0.1971] | sí |
-| 8 | 0.810 / 0.802 | 0.8243 | 0.6268 | **+0.1975** | [+0.1441, +0.2284] | sí |
+| 18 | 1.000 | 0.5612 | 0.5612 | +0.0000 | [−0.0294, +0.0308] | no |
+| 16 | 0.942 | 0.5866 | 0.5863 | +0.0003 | [−0.0364, +0.0287] | no |
+| 14 | 0.890 | 0.6236 | 0.6160 | +0.0076 | [−0.0265, +0.0437] | no |
+| 12 | 0.865 | 0.6715 | 0.6210 | **+0.0504** | [+0.0092, +0.0909] | sí |
+| 10 | 0.839 | 0.7694 | 0.6271 | **+0.1423** | [+0.0934, +0.1790] | sí |
+| 9 | 0.829 | 0.7783 | 0.6282 | **+0.1501** | [+0.1081, +0.1907] | sí |
+| 8 | 0.810 | 0.8243 | 0.6298 | **+0.1944** | [+0.1428, +0.2304] | sí |
+
+La fila de K = 18 es la comprobación de cordura: a cobertura completa los dos mecanismos
+son el mismo objeto y el delta sale exactamente cero. Estas cifras son las de la corrección
+descrita en la auditoría del 2 de septiembre; la versión anterior comparaba a coberturas que
+no coincidían.
 
 **La contribución central se sostiene.** A igual cobertura, recortar la leyenda compra más calidad macro que rechazar parcelas por confianza, y la ventaja crece según se acorta la leyenda: por debajo de doce clases el intervalo excluye el cero.
 

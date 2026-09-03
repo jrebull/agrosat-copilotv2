@@ -14,26 +14,34 @@ es lo que bloquea de verdad hoy.
    qué folds se entrenó**. Si vio el fold 5, el mejor individual se cae y hay que rehacer
    toda la sección de resultados. Para Arthur son minutos en la VM; para el artículo es la
    diferencia entre poder enviarlo y no.
-2. **Qué seis clases se retiraron para llegar a `france-12`, y con qué criterio.** Por
-   soporte, por F1, por criterio agronómico o por una mezcla. No es curiosidad: el artículo
-   compara mecanismos para recortar la leyenda, y el criterio que el equipo usó de verdad al
-   desplegar vale más que cualquier regla que me invente yo. Lo mismo para `france-9`.
+2. ~~Qué seis clases se retiraron y con qué criterio.~~ **Respondido el 2 de septiembre:**
+   «fue porque se tenía muy poca muestra» y «bajaban mucho el F1 macro». Es decir, soporte
+   bajo más daño al macro. Va al artículo como criterio documentado y sustituye a la regla
+   que yo iba a inventar para la fase 3. Queda una pregunta menor: **qué seis clases
+   exactamente**, para poder cotejarlas con la curva.
+3. **La inconsistencia de `tsvit-pheno-fullm`, hallazgo B2 de la auditoría.** Da F1-macro
+   0,7918 a nivel píxel en `tsvit_pheno_vs_base_fold5.csv` y **0,2552** a nivel parcela en
+   `oof_parcel_tsvit-pheno-fullm_fold5.parquet`, sobre el mismo fold 5. En `tsvit-pheno` los
+   dos niveles concuerdan (0,7401 y 0,7367), así que no es el efecto normal de agregar
+   píxeles a parcela. Descartado que sea un desplazamiento de clases. Pregunta concreta: con
+   qué checkpoint y con qué reconciliación píxel-parcela se generó ese volcado. Hasta que se
+   explique, la rama «fullm» de la rejilla no se cita en el artículo.
 
-3. **Firmar o rebatir [`ADR-013`](decisions/ADR-013-angulo-micai.md) con su enmienda.** El
+4. **Firmar o rebatir [`ADR-013`](decisions/ADR-013-angulo-micai.md) con su enmienda.** El
    encuadre cambió: artículo nuevo desde cero sobre el punto de operación, el manuscrito
    heredado no se repara. Sin esa firma no se escribe la introducción ni el título.
-4. **Autoría, confirmada por escrito.** Arthur primero, Javier segundo. Y avisar a Isaac
+5. **Autoría, confirmada por escrito.** Arthur primero, Javier segundo. Y avisar a Isaac
    Ávila y Aaron Bocanegra de que quedan acreditados como autores del código en README,
    `LICENSE` y los créditos del camera-ready, no del artículo.
-5. **Autor de correspondencia.** Firma la licencia de Springer **a mano** y no se puede
+6. **Autor de correspondencia.** Firma la licencia de Springer **a mano** y no se puede
    cambiar después del camera-ready. Decidirlo ahora cuesta un minuto; decidirlo tarde
    cuesta el envío.
-6. ~~Ventana H100 para el reentrenamiento OOF.~~ **Retirado el 2 de septiembre de 2026: no
+7. ~~Ventana H100 para el reentrenamiento OOF.~~ **Retirado el 2 de septiembre de 2026: no
    hace falta.** El run de MLflow de TSViT-pheno (`0eef8a60`) tardó 1 915,4 s, unos 32
    minutos, en una RTX 4070. Cinco folds son 2,7 horas de GPU de consumo y el dataset denso
    solo necesita 36 GB de PASTIS-R, no 68. Lo hacemos nosotros en una L4 spot. Lo único que
    sí seguiría siendo suyo es el acceso a Azure, y para esto no se necesita Azure.
-7. **`dvc push` de `data/features/alphaearth_italia_2018.parquet`.** Es lo único que
+8. **`dvc push` de `data/features/alphaearth_italia_2018.parquet`.** Es lo único que
    `dvc status --cloud` reporta como ausente en el remoto. Barato y cierra un hueco.
 
 Lo que **bajó de prioridad** con el reencuadre, porque su contenido sale del cuerpo del

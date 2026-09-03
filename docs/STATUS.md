@@ -67,7 +67,7 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   reentrenado sobre las mismas parcelas que puntúa, no un held-out. Libre de fuga ninguna
   combinación mejora al mejor miembro individual (tsvit-pheno, F1-macro 0,7367). La
   contribución central se sostiene: a igual cobertura, retirar clases domina al rechazo por
-  confianza (delta +0,062 a +0,198 con IC que excluye el cero por debajo de doce clases).
+  confianza (delta +0,050 a +0,194 con IC que excluye el cero por debajo de doce clases).
   El nulo de vecindad es un nulo limpio y el aporte de FarSLIP no se distingue de cero fuera
   del régimen in-sample. Detalle y advertencias en
   [`paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).

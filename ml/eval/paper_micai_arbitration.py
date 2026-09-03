@@ -274,10 +274,21 @@ def coverage_by_confidence(
 ) -> list[dict[str, object]]:
     """Quality-coverage points obtained by rejecting the least confident parcels.
 
-    The threshold of a block is the quantile that hits the target coverage on the
-    OTHER blocks, so it is never tuned on the parcels it filters. The legend stays
-    complete: what shrinks is the set of parcels answered, which is why the macro
-    runs over every class present among the delivered ones.
+    The threshold is the quantile of the EVALUATED block's own confidences that
+    hits the target coverage. That is not leakage: hitting a coverage target reads
+    only the posteriors, never a label, and any deployment can rank its parcels by
+    confidence and answer the most confident 80 % without knowing a single truth.
+
+    Taking the quantile from the other blocks instead — the first thing this
+    function did — looks more cautious and is actually wrong: the confidence
+    distribution shifts from block to block, so the same threshold delivered a very
+    different fraction in each one. Measured mismatch against the mechanism it is
+    supposed to be matched with: 0.064 on average and 0.261 in the worst block,
+    which is not a comparison at equal coverage but a comparison at whatever
+    coverage came out.
+
+    The legend stays complete: what shrinks is the set of parcels answered, which
+    is why the macro runs over every class present among the delivered ones.
 
     Args:
         proba: Posterior matrix of the predictor under study.
@@ -295,9 +306,15 @@ def coverage_by_confidence(
         if train_pos.size == 0 or test_pos.size == 0:
             continue
         for index, target in enumerate(targets_by_block.get(block, [])):
-            threshold = float(np.quantile(confidence[train_pos], max(0.0, 1.0 - target)))
+            block_conf = confidence[test_pos]
+            # Deliver exactly the n most confident parcels of this block, where n is
+            # the count the other mechanism delivered here. Ties are broken by order
+            # so the delivered count is exact rather than approximately right.
+            n_deliver = max(0, min(test_pos.size, round(target * test_pos.size)))
+            order = np.argsort(-block_conf, kind="stable")
+            delivered = np.zeros(test_pos.size, dtype=bool)
+            delivered[order[:n_deliver]] = True
             block_labels = labels[test_pos]
-            delivered = confidence[test_pos] >= threshold
             emitted = pred_full[test_pos]
             records.append(
                 {

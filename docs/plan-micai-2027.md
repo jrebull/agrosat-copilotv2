@@ -74,6 +74,15 @@ Los cinco puntos hechos, cada uno con artefacto sellado, semilla, versiones, com
 prueba pareada con intervalo. Detalle en
 [`docs/paper/fase2-hallazgos.md`](paper/fase2-hallazgos.md).
 
+### Fase 2 ter · Auditoría completa — HECHA
+
+[`docs/paper/auditoria-2026-09-02.md`](paper/auditoria-2026-09-02.md). Dos hallazgos
+bloqueantes, tres importantes y tres controles que pasan. El bloqueante propio —la cobertura
+no estaba igualada, desajuste de hasta 0,261— está corregido y reejecutado, y la conclusión
+sobrevive con el desajuste ya en cero. El bloqueante ajeno es la inconsistencia de
+`tsvit-pheno-fullm` entre píxel (0,7918) y parcela (0,2552), que deja la rama «fullm» de la
+rejilla fuera de cualquier cita hasta que se explique.
+
 ### Fase 3 · Robustez del resultado sobre PASTIS-R (CPU, sin terceros)
 
 Cierra las objeciones baratas antes de tocar datos nuevos. Salida:
@@ -83,8 +92,10 @@ Cierra las objeciones baratas antes de tocar datos nuevos. Salida:
    (F1-macro 0,5913). Si el resultado se mantiene, la conclusión es una propiedad del
    desbalance y no de un modelo concreto. Es la respuesta más barata a la objeción de
    validez externa.
-2. **Tercer mecanismo.** Retirar clases **por soporte** en lugar de por F1, que es lo que
-   se hace en la práctica y lo primero que va a preguntar un revisor.
+2. **Tercer mecanismo, ahora anclado en la práctica.** Retirar clases por **soporte bajo**,
+   que es el criterio que el equipo declaró haber usado de verdad para pasar de dieciocho
+   clases a `france-12`: «se tenía muy poca muestra» y «bajaban mucho el F1 macro». Deja de
+   ser una regla inventada y pasa a ser la reproducción de una decisión documentada.
 3. **Multiplicidad.** Corregir los siete contrastes de K (Holm o Benjamini-Hochberg) y
    declarar por escrito qué es confirmatorio y qué exploratorio, decidido **antes** de
    mirar los resultados nuevos.

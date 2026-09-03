@@ -151,7 +151,7 @@ sustituye lo anterior: lo estrecha.
 3. **La pata de la vecindad es un nulo limpio**, más limpio que el sellado: ningún alfa
    mayor que cero mejora y el intervalo incluye el cero. Regla R1 satisfecha.
 4. **La contribución central se sostiene** (regla R2): a igual cobertura, retirar clases
-   domina al rechazo por confianza, con delta de +0,062 a +0,198 e intervalo que excluye el
+   domina al rechazo por confianza, con delta de +0,050 a +0,194 e intervalo que excluye el
    cero por debajo de doce clases.
 5. **Apareció el mecanismo que une las piezas.** El árbitro entrenado deja la clase 10 en
    F1 exactamente cero sobre 355 parcelas: ya retira clases por su cuenta, sin declararlo.

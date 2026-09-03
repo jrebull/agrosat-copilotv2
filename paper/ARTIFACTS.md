@@ -4,7 +4,7 @@ Cada cifra impresa en el artículo debe re-derivarse desde un archivo de esta ta
 Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` recalcula
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
-**Sellado el**: 2026-09-03 · **HEAD del repositorio**: `bfc776a`
+**Sellado el**: 2026-09-03 · **HEAD del repositorio**: `e85c310`
 **Fase**: 1 de [`docs/plan-micai-2027.md`](../docs/plan-micai-2027.md) ·
 **Ángulo vigente**: [`ADR-013`](../docs/decisions/ADR-013-angulo-micai.md) (reencuadre).
 
@@ -61,9 +61,10 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Fase 2: bootstrap pareado y McNemar del arbitraje | `reports/paper_micai/fase2/arbitraje_pruebas.json` | `9c2191f7ed5537857b7bdb5b22ae6a11` | 2223 | `87cccdd` | SELLADO | El árbitro no gana al promedio y pierde contra el mejor individual, con intervalos que excluyen el cero. |
 | Fase 2: F1 por clase de las cuatro reglas | `reports/paper_micai/fase2/arbitraje_por_clase.csv` | `18493e9b47b5b00d60fe5cb664205d51` | 1556 | `87cccdd` | SELLADO | Muestra que el árbitro retira la clase 10 en silencio: F1 exactamente 0 sobre 355 parcelas. |
 | Fase 2: posteriores del árbitro agrupado libre de fuga | `reports/paper_micai/fase2/arbitro_agrupado_posteriores.parquet` | `f0747c3a71108d4fb1c183b40bb2f5a4` | 2325843 | `87cccdd` | SELLADO | Cada parcela predicha por el bloque que no la vio; insumo del nulo de vecindad. |
-| Fase 2: cobertura y calidad por bloque y mecanismo | `reports/paper_micai/fase2/cobertura_por_bloque.csv` | `ef01ed30e0e05823b489224383a486b6` | 5766 | `87cccdd` | SELLADO | Cada bloque contra UNA leyenda elegida fuera de él, con la leyenda registrada. |
-| Fase 2: resumen de la frontera calidad-cobertura | `reports/paper_micai/fase2/cobertura_resumen.csv` | `992f24b6cdc4449a491a235d1eafd839` | 1322 | `87cccdd` | SELLADO | Media, mínimo y máximo entre bloques de los dos mecanismos a igual cobertura. |
-| Fase 2: contraste de los dos mecanismos con intervalo | `reports/paper_micai/fase2/cobertura_comparacion.json` | `f1dfb273b8e266b8a4c8c2198db0ded8` | 4219 | `87cccdd` | SELLADO | Contribución central: retirar clases domina al rechazo por confianza y el IC excluye el cero por debajo de doce clases. |
+| Fase 2: cobertura y calidad por bloque y mecanismo | `reports/paper_micai/fase2/cobertura_por_bloque.csv` | `c5e9d5c7f202c764958e243b591ae63b` | 5757 | `87cccdd` | SELLADO | Cada bloque contra UNA leyenda elegida fuera de él, con la leyenda registrada. |
+| Fase 2: resumen de la frontera calidad-cobertura | `reports/paper_micai/fase2/cobertura_resumen.csv` | `f2c73a3c79519829f8b4c718bbed2bc1` | 1327 | `87cccdd` | SELLADO | Media, mínimo y máximo entre bloques de los dos mecanismos a igual cobertura. |
+| Fase 2: comparativa densa por fold de las variantes de TSViT | `reports/segmentation/metrics/tsvit_pheno_vs_base_fold5.csv` | `44b73e188a1a510e805b062d8d62facc` | 588 | `71ca906` | SELLADO | Da 0,7918 de F1-macro pixel a tsvit-pheno-fullm, frente a 0,2552 de su volcado por parcela: la inconsistencia B2 de la auditoria. |
+| Fase 2: contraste de los dos mecanismos con intervalo | `reports/paper_micai/fase2/cobertura_comparacion.json` | `53412f216cfc831e1631f36543733efa` | 4188 | `87cccdd` | SELLADO | Contribución central: retirar clases domina al rechazo por confianza y el IC excluye el cero por debajo de doce clases. |
 | Fase 2: barrido completo del refinamiento por vecindad | `reports/paper_micai/fase2/vecindad_barrido.csv` | `4b6399f6c8a9da817e71cee396e6666e` | 1484 | `18e699e` | SELLADO | Ningun punto con alfa mayor que cero mejora al alfa cero sobre el mejor predictor libre de fuga. |
 | Fase 2: veredicto del nulo de vecindad con intervalo | `reports/paper_micai/fase2/vecindad_veredicto.json` | `568ffd6739409dda52274b6d0d7c3f14` | 1710 | `18e699e` | SELLADO | Regla R1 de ADR-013: el intervalo incluye el cero, asi que es un nulo acotado. |
 | Fase 2: FarSLIP cinco frente a tres miembros | `reports/paper_micai/fase2/farslip_cinco_vs_tres.csv` | `0a83f40f2279cf4c6a19bccaacfad024` | 568 | `18e699e` | SELLADO | Las filas in-sample reproducen 0,7470 y 0,7486; las libres de fuga dan 0,6789 y 0,6794. |

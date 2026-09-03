@@ -21,7 +21,7 @@ Todo lo siguiente está sellado con MD5, es libre de fuga, se reproduce en CPU y
 | Tabla de individuales bajo un protocolo único | El mejor miembro es tsvit-pheno con F1-macro 0,7367 |
 | Cuatro reglas de combinación en sus dos regímenes, con bootstrap pareado y McNemar | Ninguna combinación libre de fuga mejora al mejor miembro |
 | F1 por clase de las cuatro reglas | El árbitro entrenado deja la clase 10 en F1 exactamente 0 sobre 355 parcelas |
-| Frontera calidad-cobertura de dos mecanismos a igual cobertura, por bloque, con IC | Retirar clases domina al rechazo por confianza: +0,062 a K=12 y +0,198 a K=8 |
+| Frontera calidad-cobertura de dos mecanismos a igual cobertura, por bloque, con IC | Retirar clases domina al rechazo por confianza: +0,050 a K=12 y +0,194 a K=8 |
 | Nulo de vecindad con IC y barrido completo | Ningún alfa mayor que cero mejora; el intervalo incluye el cero |
 | Delta de FarSLIP con IC | +0,0006, IC [−0,0024, +0,0034] |
 | Desbalance medido: 6 128 parcelas en la clase mayor, 103 en la menor | La razón por la que la métrica tiene que ser macro y no exactitud |
