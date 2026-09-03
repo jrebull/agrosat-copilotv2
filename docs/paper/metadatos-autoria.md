@@ -16,7 +16,7 @@ un correo ni de un documento anterior.
 
 | Autor | ORCID | Nombre que devuelve el registro | Visibilidad |
 |---|---|---|---|
-| Primer autor | [`0009-0002-1603-8946`](https://orcid.org/0009-0002-1603-8946) | Arthur Jafed · Zizumbo Velasco | pública |
+| Primer autor y **autor de correspondencia** | [`0009-0002-1603-8946`](https://orcid.org/0009-0002-1603-8946) | Arthur Jafed · Zizumbo Velasco | pública |
 | Segundo autor | [`0009-0008-2089-5274`](https://orcid.org/0009-0008-2089-5274) | Javier Augusto · Rebull Saucedo | pública |
 
 Los dos coinciden con las personas que firman. El de Arthur queda registrado y su punto
@@ -24,24 +24,34 @@ sale de la lista de pendientes.
 
 ## Orden de firma
 
-1. Arthur Jafed Zizumbo Velasco
+1. Arthur Jafed Zizumbo-Velasco
 2. Javier A. Rebull-Saucedo
 
-Isaac Ávila y Aaron Bocanegra quedan acreditados como **autores del código** en `README.md`,
-`LICENSE` y los créditos del camera-ready, no como autores del artículo. Falta que Arthur
-se lo comunique.
+**Con guion medio los dos**, decidido el 3 de septiembre de 2026. El registro ORCID de Arthur
+devuelve «Zizumbo Velasco» sin guion; la forma que firma el artículo lleva guion y es la que hay
+que usar también en el sistema del congreso y en la licencia.
+
+**Isaac Ávila y Aaron Bocanegra van en los agradecimientos, no como autores del código.**
+Corregido el 3 de septiembre: el camera-ready los presentaba como autores del software, y eso
+**no era cierto**. Ahora se les agradece sin atribuirles un papel que no se ha verificado.
 
 ## Autor de correspondencia
 
-**Sin decidir**, y desde el 3 de septiembre esa falta **es visible en el PDF**: el camera-ready
-imprime una nota al pie que dice «PENDIENTE: autor de correspondencia sin decidir». Se hizo así a
-propósito, para que no pueda colarse en un envío por descuido. Es la única decisión de este archivo que no se puede posponer: esa persona
+**Arthur Jafed Zizumbo-Velasco**, decidido el 3 de septiembre de 2026. Ya está impreso en el
+camera-ready con `\thanks{Corresponding author.}`, y la nota provisional que advertía de que
+faltaba decidirlo ha desaparecido del fuente.
+
+Firma la licencia de Springer **a mano** —las digitales no se aceptan— y Springer no permite
+cambiarlo después del camera-ready. Es la única decisión de este archivo que no se puede posponer: esa persona
 firma la licencia de Springer **a mano** —las firmas digitales no se aceptan— y Springer no
 permite cambiarla después del camera-ready.
 
-## Afiliación
+## Afiliación y financiamiento
 
-Tecnológico de Monterrey. Una sola afiliación para ambos. En el artículo se escribe
+Tecnológico de Monterrey. Una sola afiliación para ambos. El camera-ready **agradece** a la
+institución y a la vez **declara explícitamente que el trabajo no recibió financiamiento, beca
+ni apoyo institucional**, ni del Tec ni de ningún otro organismo. Las dos cosas conviven sin
+contradicción: una reconoce dónde se hizo el trabajo, la otra dice quién no lo pagó. En el artículo se escribe
 «Tecnológico de Monterrey», no «Tec de Monterrey» ni «ITESM».
 
 ## Discrepancias detectadas en el repositorio
@@ -91,9 +101,14 @@ que solo se comprueba en verde no distingue entre «está anónimo» y «no lo h
 
 ## Qué falta
 
-- [ ] Decidir el autor de correspondencia. **Es lo único que bloquea el camera-ready.**
-- [ ] Elegir la forma canónica del apellido de Javier, con guion o sin él, y unificarla en
-      el artículo y en el ORCID.
+- [x] ~~Decidir el autor de correspondencia.~~ Arthur, 3 de septiembre de 2026.
+- [x] ~~Elegir la forma canónica del apellido.~~ Con guion medio los dos, 3 de septiembre de 2026.
+- [ ] **Discrepancia abierta, y no la resuelvo de oficio**: `README.md`, `LICENSE` y
+      `pyproject.toml` siguen presentando a Isaac Ávila y Aaron Bocanegra como autores del
+      código, heredado del proyecto original. El artículo ya no lo dice. Si eso tampoco es
+      cierto en el repositorio, hay que corregirlo ahí, pero la autoría del software y su
+      licencia las deciden sus dueños.
+- [ ] Propagar la forma con guion a `pyproject.toml`, `README.md` y `LICENSE`, hoy sin él.
 - [ ] Unificar `Arthur Zizumbo` a la forma completa en `pyproject.toml`.
 - [ ] Confirmar el correo de publicación de Arthur.
 - [ ] `CITATION.cff`, que hoy no existe.
