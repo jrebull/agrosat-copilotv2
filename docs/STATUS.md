@@ -89,6 +89,13 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   las mismas parcelas. Antes de publicar hay que comprobar con qué folds se entrenó cada
   checkpoint.
 
+- **Fase 3 hecha.** La frontera rehecha sin los tres defectos dice que **H1 no se sostiene**:
+  a K = 9 el intervalo incluye el cero en los dos predictores y nada sobrevive a Holm. Lo que
+  sí demuestra es la descomposición: de dieciocho clases a ocho el F1-macro sube 0,2440 y
+  **0,2155 de esa subida es solo el denominador**, sin mecanismo alguno. Y retirar por soporte,
+  el criterio que el equipo usó al desplegar, es el peor de los tres. Detalle en
+  [`paper/fase3-hallazgos.md`](paper/fase3-hallazgos.md).
+
 ## Entorno y gates
 
 - Corre en macOS Apple Silicon y en Linux/Windows con GPU (ver [`runbook-local-setup.md`](runbook-local-setup.md), Apéndice D para Mac).

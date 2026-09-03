@@ -83,6 +83,10 @@ sobrevive con el desajuste ya en cero. El bloqueante ajeno es la inconsistencia 
 `tsvit-pheno-fullm` entre píxel (0,7918) y parcela (0,2552), que deja la rama «fullm» de la
 rejilla fuera de cualquier cita hasta que se explique.
 
+### Fase 3 · Robustez del resultado sobre PASTIS-R — HECHA
+
+Rehecha la frontera con los tres defectos corregidos, más el segundo predictor, el tercer mecanismo, Holm y el control sin mecanismo. **H1 no se sostiene**: a K = 9 el intervalo incluye el cero en los dos predictores y ningún contraste sobrevive a la corrección por multiplicidad. Lo que sí queda demostrado es la descomposición: al pasar de dieciocho clases a ocho, **0,2155 de los 0,2440 de mejora aparente son solo el denominador**, sin mecanismo alguno. Y retirar por soporte, que es lo que el equipo hizo, es el peor de los tres criterios por entre 0,12 y 0,13. Detalle en [`docs/paper/fase3-hallazgos.md`](paper/fase3-hallazgos.md).
+
 ### Fase 3 · Robustez del resultado sobre PASTIS-R (CPU, sin terceros)
 
 Cierra las objeciones baratas antes de tocar datos nuevos. Salida:
