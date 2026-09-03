@@ -140,5 +140,82 @@ Salida en `reports/paper_micai/fase4/`.
 
 ## 8. Enmiendas
 
-Ninguna todavía. Cualquier cambio a lo anterior se añade aquí, con fecha y motivo, y nunca
-borrando lo que sustituye.
+### Enmienda 1 · 2 de septiembre de 2026, tras inspeccionar BreizhCrops y antes de entrenar
+
+**Motivo**: la inspección que la seccion 7 obliga a hacer antes de entrenar revela un
+reparto de clases que hace inservible el criterio principal tal como estaba escrito.
+
+Medido con `ml.ingest.breizhcrops_loader.breizhcrops_parcel_index`:
+
+| Región | Parcelas | Clases | Mayor | Menor | Razón |
+|---|---|---|---|---|---|
+| frh01 | 178 632 | 9 | 52 013 (praderas temporales) | **1** (girasol) | 52 013 : 1 |
+| frh04 | 122 708 | 9 | 38 414 (praderas temporales) | **2** (girasol) | 19 207 : 1 |
+
+El criterio de escape de la sección 4 —razón por debajo de 10— **no se dispara**: el
+desbalance es mucho mayor que en PASTIS-R, que era de 60 a 1. Pero aparece el problema
+contrario, que el preregistro no previó: con clases de una y dos parcelas, un F1-macro sobre
+nueve clases lo decide el azar de en qué bloque cae esa única parcela. No es una medida, es
+ruido con nombre.
+
+**Qué se cambia**, y solo esto:
+
+1. El contraste se reporta en **dos universos**, ambos publicados: las **nueve** clases tal
+   como vienen, y las **siete** con soporte de al menos cien parcelas, que es el suelo que el
+   conjunto primario tenía por su cuenta. El umbral se elige por mensurabilidad y se declara
+   aquí antes de ver un solo resultado; no se ajustará después.
+2. El criterio principal `K = round(C/2)` se aplica a cada universo con su propio `C`: K = 5
+   sobre nueve clases y K = 4 sobre siete. Ambos se reportan.
+3. Si los dos universos discrepan, se reportan los dos y se dice cuál es más interpretable y
+   por qué, sin elegir el que convenga.
+
+4. **Los bloques dejan de ser hexágonos y pasan a ser regiones.** El índice de BreizhCrops
+   **no trae coordenadas por parcela** —sus columnas son `idx, meanCLD, id, CODE_CULTU,
+   path, sequencelength, classid, classname, region`—, así que la teselación H3 del conjunto
+   primario es imposible aquí. La única estructura espacial disponible es la región, que es
+   además como el propio banco está diseñado para partirse. Se usan las dos regiones
+   descargadas, `frh01` y `frh04`, como los dos bloques. Son menos que los cinco del conjunto
+   primario y el intervalo lo acusará: se reporta así, no se disimula.
+5. **Submuestreo estratificado por presupuesto de cómputo.** Extraer las 185 características
+   por parcela cuesta unos 33 milisegundos, o sea cerca de tres horas para las 301 340
+   parcelas de las dos regiones. Se toma un submuestreo **proporcional** de 30 000 parcelas
+   por región con semilla fija, que preserva el reparto de clases —que es justo el objeto de
+   estudio— y deja la clase de huertos por encima de las cien parcelas en las dos. El motivo
+   es el reloj, no el resultado, y el tamaño se fija aquí antes de ver ninguna cifra.
+
+**Qué no se cambia**: ni la métrica, ni la definición de los mecanismos, ni el estimando
+alineado, ni el remuestreo pareado, ni el hecho de que la decisión de cada bloque se tome
+fuera de él.
+
+**Nota de honestidad sobre la ceguera.** La sección 1 decía que la fase 4 era confirmatoria
+sobre datos «que hoy no he mirado». Eso era inexacto y hay que dejarlo escrito: BreizhCrops
+está versionado en el repositorio desde mayo y su distribución de clases se publicó en un
+notebook commiteado con salidas. No lo había leído, pero estaba disponible, así que la fase 4
+**no es una réplica ciega: es una réplica preespecificada sobre un conjunto conocido**. Lo
+señaló la auditoría ciega y se corrige aquí en lugar de defenderlo.
+
+**Y el papel de la fase 4 cambia**, porque H1 se cayó en la fase 3. Ya no confirma que un
+mecanismo domine al otro. Comprueba si **la descomposición** se transporta: cuánto de la
+mejora aparente al recortar la leyenda es el denominador y cuánto el mecanismo, en otro
+conjunto de datos, otra región y otro reparto de clases.
+
+### Corrección 1 al punto 5 de la enmienda · 3 de septiembre de 2026, con el extractor corriendo
+
+La enmienda 1 justificó el submuestreo diciendo que extraer las 185 características cuesta
+«unos 33 milisegundos por parcela, o sea cerca de tres horas para las 301 340 parcelas». **Esa
+cifra estaba mal por un factor de veintitrés.** Medido contra el reloj, no estimado: frh01
+tardó de 22:53:20 a 05:19:11, es decir **6 h 26 min para 30 000 parcelas**, unos **772 ms por
+parcela**. Extraer las dos regiones completas habría costado del orden de **sesenta y cinco
+horas**, no tres.
+
+Qué cambia y qué no. **La decisión no cambia**: el tamaño de 30 000 por región se fijó antes de
+ver ningún resultado y sigue fijado; el coste real solo refuerza el motivo que ya se había
+declarado. Lo que cambia es la cifra impresa, que era falsa y queda corregida aquí en lugar de
+sobrevivir hasta el artículo. La regla de la casa —ninguna cifra sin artefacto que la sostenga—
+también vale para las cifras de coste, y ésta no lo tenía.
+
+Un defecto de ingeniería que la corrección deja anotado, porque afecta a la reproducibilidad y
+no al resultado: `scripts/build_breizhcrops_features.py` escribe el parquet **solo al final**,
+después de las dos regiones. Con un coste real de doce horas eso significa que un fallo en la
+hora once lo pierde todo. Quien repita esto debe materializar cada región por separado antes de
+concatenar.

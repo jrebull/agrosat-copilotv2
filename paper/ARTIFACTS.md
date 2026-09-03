@@ -118,6 +118,8 @@ memoria.
 | `reports/paper_micai/fase1/parcel_gt_fold5*.{parquet,csv,json}` | `scripts/paper_micai_seal_fold5.py` |
 | `reports/paper_micai/fase2/*` | `scripts/run_paper_micai_fase2.py` sobre `ml/eval/paper_micai_arbitration.py` |
 | `reports/paper_micai/fase3/*` | `scripts/run_paper_micai_fase3.py` sobre `ml/eval/paper_micai_coverage.py`, figura con `scripts/build_paper_micai_fase3_figure.py` |
+| `reports/paper_micai/fase4/breizhcrops_*` | `scripts/build_breizhcrops_features.py` sobre `ml/ingest/breizhcrops_loader.py` y `ml/features/breizhcrops_features.py` |
+| `reports/paper_micai/fase4/replica_*` | `scripts/run_paper_micai_fase4.py` sobre el mismo `ml/eval/paper_micai_coverage.py` de la fase 3, figura con `scripts/build_paper_micai_fase4_figure.py` |
 
 **Con cálculo versionado pero sin driver.** En estos seis, la lógica sí está en el
 repositorio; lo que no está versionado es el guion que la invocó y escribió el archivo.

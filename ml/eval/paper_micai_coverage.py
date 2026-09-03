@@ -89,7 +89,12 @@ def macro_over(labels: np.ndarray, predicted: np.ndarray, classes: Sequence[int]
 
 
 def legend_by_f1(
-    labels: np.ndarray, predicted: np.ndarray, train_pos: np.ndarray, k: int
+    labels: np.ndarray,
+    predicted: np.ndarray,
+    train_pos: np.ndarray,
+    k: int,
+    *,
+    num_classes: int = NUM_CLASSES,
 ) -> tuple[int, ...]:
     """Pick the K classes with the best binary F1 on the blocks not being measured.
 
@@ -98,6 +103,7 @@ def legend_by_f1(
         predicted: Unrestricted predictions for the whole universe.
         train_pos: Positional indices of the blocks used to decide.
         k: Legend size.
+        num_classes: Size of the label space; the second dataset has nine, not eighteen.
 
     Returns:
         The promised classes, sorted.
@@ -115,14 +121,16 @@ def legend_by_f1(
                 ),
                 c,
             )
-            for c in range(NUM_CLASSES)
+            for c in range(num_classes)
         ),
         reverse=True,
     )
     return tuple(sorted(c for _, c in ranked[:k]))
 
 
-def legend_by_support(labels: np.ndarray, train_pos: np.ndarray, k: int) -> tuple[int, ...]:
+def legend_by_support(
+    labels: np.ndarray, train_pos: np.ndarray, k: int, *, num_classes: int = NUM_CLASSES
+) -> tuple[int, ...]:
     """Pick the K most frequent classes on the blocks not being measured.
 
     This is the criterion the team reported having used to deploy: the six classes it
@@ -133,12 +141,13 @@ def legend_by_support(labels: np.ndarray, train_pos: np.ndarray, k: int) -> tupl
         labels: Ground-truth labels for the whole universe.
         train_pos: Positional indices of the blocks used to decide.
         k: Legend size.
+        num_classes: Size of the label space.
 
     Returns:
         The promised classes, sorted.
     """
-    counts = np.bincount(labels[train_pos], minlength=NUM_CLASSES)
-    ranked = sorted(((int(counts[c]), c) for c in range(NUM_CLASSES)), reverse=True)
+    counts = np.bincount(labels[train_pos], minlength=num_classes)
+    ranked = sorted(((int(counts[c]), c) for c in range(num_classes)), reverse=True)
     return tuple(sorted(c for _, c in ranked[:k]))
 
 
@@ -218,6 +227,8 @@ def confidence_baseline(
     labels: np.ndarray,
     splits: Sequence[tuple[np.ndarray, np.ndarray]],
     reference: Sequence[BlockPoint],
+    *,
+    num_classes: int = NUM_CLASSES,
 ) -> list[BlockPoint]:
     """Deliver the most confident parcels, matching a reference mechanism's count.
 
@@ -251,7 +262,7 @@ def confidence_baseline(
                 mechanism="rechazo por confianza",
                 k=ref.k,
                 block=ref.block,
-                legend=tuple(range(NUM_CLASSES)),
+                legend=tuple(range(num_classes)),
                 delivered=delivered,
                 emitted=emitted,
                 aligned_f1=macro_over(truth[delivered], emitted[delivered], ref.legend),
