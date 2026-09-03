@@ -48,9 +48,13 @@ Consecuencias, medidas:
   DVC, que es exactamente lo que este documento reprocha en otros sitios. **El arreglo de `fullm`
   es posible aquí**, y con él la frase «los dos miembros más fuertes de diez» pasa de limitación a
   declarar a error a corregir.
-- **Lo que sí está perdido de verdad** son otros tres, y son de FarSLIP: `parcel/18cls`,
-  `parcel/04cls` e `incremental/08cls`. Ni fichero, ni puntero, ni blob. Cuatro scripts los
-  referencian como valor por defecto, y `farslip-ft18` es uno de los cinco miembros del árbitro.
+- **Lo que sí está perdido de verdad** son otros tres, y son de FarSLIP. Pero «perdidos» los
+  tres es otra imprecisión mía, corregida el 3 de septiembre por una investigación forense:
+  `parcel/04cls` es **regenerable con receta verificada** contra dos puntos del barrido;
+  `parcel/18cls` se puede correr pero **no se puede validar**, porque N=18 nunca entró al barrido;
+  e `incremental/08cls` **nunca existió**, con cinco evidencias convergentes. Detalle en
+  [`artefactos-perdidos.md`](artefactos-perdidos.md). Tampoco son cuatro los scripts que los usan
+  por defecto, son tres: el cuarto lo nombra en un ejemplo de su docstring.
 
 ## 3. CONFIRMADO: el párrafo de las cinco peores IoU del sitio es falso
 
