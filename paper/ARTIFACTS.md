@@ -86,6 +86,8 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Potencia: la disparidad bloque a bloque | `reports/paper_micai/potencia/disparidad_por_bloque.csv` | `28fba97ed0deff7b9dba33127cff25cf` | 856 | sin seguimiento en git | SELLADO | Cuatro medidas por bloque y mecanismo, con soporte minimo de cincuenta parcelas por clase. |
 | Barrido del numero de bloques espaciales | `reports/paper_micai/bloques/bloques.json` | `f5e2fd620edcb05a417a0e3fd42671b3` | 2965 | sin seguimiento en git | SELLADO | Cinco bloques era el valor por defecto, no una restriccion del dato: con quince el contraste excluye el cero Y tiene potencia. Con la advertencia de que elegir k por su resultado es p-hacking. |
 | Barrido de bloques, tabla | `reports/paper_micai/bloques/barrido_bloques.csv` | `bef2b85ceb9f3ed5507bd547180ec7fb` | 598 | sin seguimiento en git | SELLADO | Siete valores de k con su delta, su intervalo, su MDE y si tiene potencia. |
+| Preregistro: parametros del diseno, medidos antes de fijarlos | `reports/paper_micai/prereg/parametros_prereg.json` | `6b4376fcccae3cbb7d78fea40bdcb16a` | 4280 | sin seguimiento en git | SELLADO | Separacion espacial y clases estimables por k, y la banda de equivalencia anclada en el MDE. NO calcula ningun contraste entre mecanismos. |
+| Preregistro: tabla del diseno por k | `reports/paper_micai/prereg/parametros_diseno.csv` | `2b9956a5370d642180ebdc09095d4188` | 783 | sin seguimiento en git | SELLADO | El criterio espacial selecciona k=5: separacion minima de 23,5 km frente a 2,9 desde k=8, y diez clases estimables en el peor bloque frente a dos desde k=12. |
 | Equidad: cobertura por clase bajo cada mecanismo | `reports/paper_micai/equidad/cobertura_por_clase.csv` | `a254affe1425a0e5a55622e9c09bf601` | 1115 | sin seguimiento en git | SELLADO | Quien paga la abstencion, medido. Responde a la objecion de que citabamos a Jones et al. al reves. |
 | Equidad: correlaciones y clases sin cobertura | `reports/paper_micai/equidad/equidad.json` | `1ddb39e59fd5990ab3ffd2e342620df1` | 1303 | sin seguimiento en git | SELLADO | Spearman entre soporte y cobertura por mecanismo y banco, con su p. |
 | Fase 6: manuscrito MICAI, fuente principal | `paper/micai/main.tex` | `b603d1ba9600aa537cfc8710a2c236ce` | 4388 | `2d96ca7` | SELLADO | Clase llncs con `\newif\ifanon`; anonimo por defecto, A4 real, `hidelinks`. |
@@ -149,6 +151,7 @@ memoria.
 | `reports/paper_micai/equidad/*` | `scripts/run_paper_micai_equidad.py` |
 | `reports/paper_micai/potencia/*` | `scripts/run_paper_micai_potencia_disparidad.py` |
 | `reports/paper_micai/bloques/*` | `scripts/run_paper_micai_bloques.py` |
+| `reports/paper_micai/prereg/*` | `scripts/run_paper_micai_parametros_prereg.py` |
 | `reports/paper_micai/fase4/replica_*` | `scripts/run_paper_micai_fase4.py` sobre el mismo `ml/eval/paper_micai_coverage.py` de la fase 3, figura con `scripts/build_paper_micai_fase4_figure.py` |
 | `paper/micai/refs.bib` | `scripts/build_paper_micai_bib.py` sobre `related_work_verified.csv` mas `related_work_overrides.csv` |
 | `paper/micai/main.pdf` | `make micai-pdf`, verificado por `make micai-anon-check` |
