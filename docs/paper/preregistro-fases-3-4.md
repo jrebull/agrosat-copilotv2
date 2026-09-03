@@ -219,3 +219,37 @@ no al resultado: `scripts/build_breizhcrops_features.py` escribe el parquet **so
 después de las dos regiones. Con un coste real de doce horas eso significa que un fallo en la
 hora once lo pierde todo. Quien repita esto debe materializar cada región por separado antes de
 concatenar.
+
+### Corrección 2 · 3 de septiembre de 2026, con la tabla ya extraída y antes de leer contraste alguno
+
+Al primer intento de entrenar, XGBoost se negó: la tabla de características contiene valores no
+finitos. Medido sobre el parquet sellado: **179 747 celdas de 11 100 000, un 1,62 %**, repartidas
+en **22 de las 185 columnas** y tocando **38 034 de las 60 000 parcelas**.
+
+No es ruido aleatorio, tiene causa y conviene dejarla escrita porque es un hallazgo sobre el
+propio banco de datos:
+
+- `GCVI` (29 523 parcelas) y `MCARI` (21 570) son cocientes cuyo denominador lleva la banda verde
+  o la del borde rojo. BreizhCrops codifica el pixel sin dato como cero, así que cualquier fecha
+  enmascarada mete un infinito, y basta una para que la media y el máximo de la serie sean
+  infinitos.
+- `PSRI` aporta 133 más por la misma vía, con signo a ambos lados.
+- Las columnas fenológicas (`senescence_doy`, `ndvi_slope_post_peak`, 5 886 cada una) son NaN
+  cuando la serie no llega a tener senescencia detectable dentro de la ventana.
+
+**Tratamiento, y por qué éste.** Se imputa cada celda no finita con la **mediana de su columna
+calculada solo sobre la región de entrenamiento**, que es exactamente lo que el baseline tabular
+del proyecto ya hacía con estas mismas columnas (`_column_medians` y `_impute_with` de
+`ml/train/baseline.py`, reutilizados y no reescritos). Se elige por dos razones: es la convención
+que el repositorio ya tenía, así que no es una decisión inventada para esta corrida; y calcular la
+mediana **solo en la región de entrenamiento** deja la región evaluada fuera de la imputación, que
+es la misma disciplina de fuga que el resto del protocolo.
+
+**Qué no cambia**: ni el protocolo, ni los mecanismos, ni el estimando, ni los universos, ni los
+valores de K. Esto ocurre aguas arriba del protocolo, en la entrada del clasificador, y el
+protocolo recibe posteriores igual que antes.
+
+Queda anotado como limitación honesta: un 1,62 % de las celdas de este segundo conjunto son
+imputadas, cosa que no ocurría en el conjunto primario, y eso puede empujar hacia abajo la
+calidad del clasificador de la fase 4. No afecta a la comparación **entre mecanismos**, que es lo
+que la fase 4 mide, porque todos los mecanismos leen la misma posterior.

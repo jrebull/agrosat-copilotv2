@@ -77,12 +77,22 @@ def main() -> None:
                 )
             principal = contrastes["contrastes"][universo]["k_principal"]
             ax.axvline(principal, color="#131A17", linewidth=0.5, linestyle=(0, (1, 3)))
+            ax.annotate(
+                "criterio principal",
+                xy=(principal, 0.5),
+                xytext=(principal + 0.12, 0.5),
+                fontsize=7,
+                rotation=90,
+                color="#131A17",
+                va="bottom",
+                ha="right",
+            )
             ax.set_xticks(sorted(sub["k_leyenda"].unique().to_list()))
             ax.invert_xaxis()
             ax.set_xlabel("clases prometidas")
             ax.set_title(universo, fontsize=9, pad=6)
         axes[0].set_ylabel("F1-macro sobre la leyenda compartida")
-        axes[0].legend(loc="lower left", fontsize=7.5)
+        axes[0].legend(loc="upper left", fontsize=7.5)
         fig.tight_layout()
 
         for ext in ("svg", "png"):

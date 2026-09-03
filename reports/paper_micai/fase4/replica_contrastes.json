@@ -1,0 +1,388 @@
+{
+  "conjunto": "BreizhCrops 2017 L2A, regiones frh01 y frh04",
+  "clases": [
+    {
+      "class_id": 0,
+      "class_name": "barley"
+    },
+    {
+      "class_id": 1,
+      "class_name": "wheat"
+    },
+    {
+      "class_id": 2,
+      "class_name": "rapeseed"
+    },
+    {
+      "class_id": 3,
+      "class_name": "corn"
+    },
+    {
+      "class_id": 4,
+      "class_name": "sunflower"
+    },
+    {
+      "class_id": 5,
+      "class_name": "orchards"
+    },
+    {
+      "class_id": 6,
+      "class_name": "nuts"
+    },
+    {
+      "class_id": 7,
+      "class_name": "permanent meadows"
+    },
+    {
+      "class_id": 8,
+      "class_name": "temporary meadows"
+    }
+  ],
+  "entrenamiento": [
+    {
+      "region_evaluada": "frh01",
+      "n_entrenamiento": 30000,
+      "n_evaluacion": 30000,
+      "clases_en_entrenamiento": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "f1_macro": 0.4978665560302734,
+      "accuracy": 0.7421333333333333
+    },
+    {
+      "region_evaluada": "frh04",
+      "n_entrenamiento": 30000,
+      "n_evaluacion": 30000,
+      "clases_en_entrenamiento": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "f1_macro": 0.4810674088296556,
+      "accuracy": 0.7257333333333333
+    }
+  ],
+  "contrastes": {
+    "todas las clases": {
+      "clases_originales": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "n_parcelas": 60000,
+      "k_principal": 5,
+      "criterio_principal": {
+        "f1_retirada_f1": 0.8055063918656408,
+        "f1_retirada_soporte": 0.7128997611840592,
+        "f1_confianza": 0.8303446918912394,
+        "f1_sin_mecanismo": 0.7898977587251794,
+        "cobertura_media": 0.8594833333333334,
+        "delta_vs_confianza": -0.024838300025598614,
+        "ci_low": -0.027209452349966884,
+        "ci_high": -0.022505150791403812,
+        "excluye_cero": 1.0,
+        "p_bootstrap": 0.0,
+        "deltas_por_bloque": [
+          -0.02475588578566712,
+          -0.02492071426553022
+        ],
+        "p_holm": 0.0,
+        "significativo_holm": 1.0
+      },
+      "familia_exploratoria": {
+        "k=9": {
+          "f1_retirada_f1": 0.4894669824299645,
+          "f1_retirada_soporte": 0.4894669824299645,
+          "f1_confianza": 0.4894669824299645,
+          "f1_sin_mecanismo": 0.4894669824299645,
+          "cobertura_media": 1.0,
+          "delta_vs_confianza": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "excluye_cero": 0.0,
+          "p_bootstrap": 1.0,
+          "deltas_por_bloque": [
+            0.0,
+            0.0
+          ],
+          "p_holm": 1.0,
+          "significativo_holm": 0.0
+        },
+        "k=8": {
+          "f1_retirada_f1": 0.5506503552337101,
+          "f1_retirada_soporte": 0.5506503552337101,
+          "f1_confianza": 0.5506503552337101,
+          "f1_sin_mecanismo": 0.5506503552337101,
+          "cobertura_media": 1.0,
+          "delta_vs_confianza": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "excluye_cero": 0.0,
+          "p_bootstrap": 1.0,
+          "deltas_por_bloque": [
+            0.0,
+            0.0
+          ],
+          "p_holm": 1.0,
+          "significativo_holm": 0.0
+        },
+        "k=7": {
+          "f1_retirada_f1": 0.6293146916956687,
+          "f1_retirada_soporte": 0.6293146916956687,
+          "f1_confianza": 0.6293146916956687,
+          "f1_sin_mecanismo": 0.6293146916956687,
+          "cobertura_media": 1.0,
+          "delta_vs_confianza": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "excluye_cero": 0.0,
+          "p_bootstrap": 1.0,
+          "deltas_por_bloque": [
+            0.0,
+            0.0
+          ],
+          "p_holm": 1.0,
+          "significativo_holm": 0.0
+        },
+        "k=6": {
+          "f1_retirada_f1": 0.7342004736449468,
+          "f1_retirada_soporte": 0.7342004736449468,
+          "f1_confianza": 0.7342004736449468,
+          "f1_sin_mecanismo": 0.7342004736449468,
+          "cobertura_media": 1.0,
+          "delta_vs_confianza": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "excluye_cero": 0.0,
+          "p_bootstrap": 1.0,
+          "deltas_por_bloque": [
+            0.0,
+            0.0
+          ],
+          "p_holm": 1.0,
+          "significativo_holm": 0.0
+        },
+        "k=5": {
+          "f1_retirada_f1": 0.8055063918656408,
+          "f1_retirada_soporte": 0.7128997611840592,
+          "f1_confianza": 0.8303446918912394,
+          "f1_sin_mecanismo": 0.7898977587251794,
+          "cobertura_media": 0.8594833333333334,
+          "delta_vs_confianza": -0.024838300025598614,
+          "ci_low": -0.027209452349966884,
+          "ci_high": -0.022505150791403812,
+          "excluye_cero": 1.0,
+          "p_bootstrap": 0.0,
+          "deltas_por_bloque": [
+            -0.02475588578566712,
+            -0.02492071426553022
+          ],
+          "p_holm": 0.0,
+          "significativo_holm": 1.0
+        },
+        "k=4": {
+          "f1_retirada_f1": 0.8579066375461305,
+          "f1_retirada_soporte": 0.7338787770035622,
+          "f1_confianza": 0.8691994603892846,
+          "f1_sin_mecanismo": 0.8246497411758177,
+          "cobertura_media": 0.8057833333333333,
+          "delta_vs_confianza": -0.011292822843154138,
+          "ci_low": -0.013772689562815587,
+          "ci_high": -0.008672680514196372,
+          "excluye_cero": 1.0,
+          "p_bootstrap": 0.0,
+          "deltas_por_bloque": [
+            -0.01586309769134575,
+            -0.006722547994962524
+          ],
+          "p_holm": 0.0,
+          "significativo_holm": 1.0
+        },
+        "k=3": {
+          "f1_retirada_f1": 0.9126385579269536,
+          "f1_retirada_soporte": 0.704085571490852,
+          "f1_confianza": 0.9655426430782701,
+          "f1_sin_mecanismo": 0.8720626815447649,
+          "cobertura_media": 0.4435,
+          "delta_vs_confianza": -0.052904085151316504,
+          "ci_low": -0.0567338509282957,
+          "ci_high": -0.04901560391661565,
+          "excluye_cero": 1.0,
+          "p_bootstrap": 0.0,
+          "deltas_por_bloque": [
+            -0.049852652772168105,
+            -0.055955517530464904
+          ],
+          "p_holm": 0.0,
+          "significativo_holm": 1.0
+        }
+      },
+      "f1_macro_sin_recortar": 0.4903093759344073,
+      "accuracy_sin_recortar": 0.7339333333333333
+    },
+    "clases con al menos 100 parcelas": {
+      "clases_originales": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        7,
+        8
+      ],
+      "n_parcelas": 59991,
+      "k_principal": 4,
+      "criterio_principal": {
+        "f1_retirada_f1": 0.857934391812609,
+        "f1_retirada_soporte": 0.7339192106303418,
+        "f1_confianza": 0.869200348324326,
+        "f1_sin_mecanismo": 0.8246742794503062,
+        "cobertura_media": 0.8058243019777709,
+        "delta_vs_confianza": -0.011265956511717024,
+        "ci_low": -0.013922549643977386,
+        "ci_high": -0.00861809622329522,
+        "excluye_cero": 1.0,
+        "p_bootstrap": 0.0,
+        "deltas_por_bloque": [
+          -0.015796985034563393,
+          -0.006734927988870543
+        ],
+        "p_holm": 0.0,
+        "significativo_holm": 1.0
+      },
+      "familia_exploratoria": {
+        "k=7": {
+          "f1_retirada_f1": 0.6293499276005008,
+          "f1_retirada_soporte": 0.6293499276005008,
+          "f1_confianza": 0.6293499276005008,
+          "f1_sin_mecanismo": 0.6293499276005008,
+          "cobertura_media": 1.0,
+          "delta_vs_confianza": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "excluye_cero": 0.0,
+          "p_bootstrap": 1.0,
+          "deltas_por_bloque": [
+            0.0,
+            0.0
+          ],
+          "p_holm": 1.0,
+          "significativo_holm": 0.0
+        },
+        "k=6": {
+          "f1_retirada_f1": 0.7342415822005841,
+          "f1_retirada_soporte": 0.7342415822005841,
+          "f1_confianza": 0.7342415822005841,
+          "f1_sin_mecanismo": 0.7342415822005841,
+          "cobertura_media": 1.0,
+          "delta_vs_confianza": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "excluye_cero": 0.0,
+          "p_bootstrap": 1.0,
+          "deltas_por_bloque": [
+            0.0,
+            0.0
+          ],
+          "p_holm": 1.0,
+          "significativo_holm": 0.0
+        },
+        "k=5": {
+          "f1_retirada_f1": 0.8055459370190315,
+          "f1_retirada_soporte": 0.7129498363635424,
+          "f1_confianza": 0.8303165987493097,
+          "f1_sin_mecanismo": 0.7899348461180196,
+          "cobertura_media": 0.8595159325206194,
+          "delta_vs_confianza": -0.0247706617302782,
+          "ci_low": -0.02725633122079263,
+          "ci_high": -0.022369196158435266,
+          "excluye_cero": 1.0,
+          "p_bootstrap": 0.0,
+          "deltas_por_bloque": [
+            -0.02463875795448356,
+            -0.02490256550607295
+          ],
+          "p_holm": 0.0,
+          "significativo_holm": 1.0
+        },
+        "k=4": {
+          "f1_retirada_f1": 0.857934391812609,
+          "f1_retirada_soporte": 0.7339192106303418,
+          "f1_confianza": 0.869200348324326,
+          "f1_sin_mecanismo": 0.8246742794503062,
+          "cobertura_media": 0.8058243019777709,
+          "delta_vs_confianza": -0.011265956511717024,
+          "ci_low": -0.013922549643977386,
+          "ci_high": -0.00861809622329522,
+          "excluye_cero": 1.0,
+          "p_bootstrap": 0.0,
+          "deltas_por_bloque": [
+            -0.015796985034563393,
+            -0.006734927988870543
+          ],
+          "p_holm": 0.0,
+          "significativo_holm": 1.0
+        },
+        "k=3": {
+          "f1_retirada_f1": 0.9126496307767046,
+          "f1_retirada_soporte": 0.7041420813496749,
+          "f1_confianza": 0.9655574640036855,
+          "f1_sin_mecanismo": 0.8720731837828828,
+          "cobertura_media": 0.4435494284844431,
+          "delta_vs_confianza": -0.052907833226980894,
+          "ci_low": -0.05696475219566397,
+          "ci_high": -0.04906161561233218,
+          "excluye_cero": 1.0,
+          "p_bootstrap": 0.0,
+          "deltas_por_bloque": [
+            -0.049852652772168105,
+            -0.05596301368179368
+          ],
+          "p_holm": 0.0,
+          "significativo_holm": 1.0
+        }
+      },
+      "f1_macro_sin_recortar": 0.6304351923040186,
+      "accuracy_sin_recortar": 0.7340434398493108
+    }
+  },
+  "notas": {
+    "protocolo": "Mismo modulo y mismo metodo que la fase 3, sin tocar una linea. Cambian solo las adaptaciones que la enmienda 1 declaro antes de entrenar.",
+    "bloques": "Los bloques son las dos regiones. Con dos bloques el remuestreo captura la variacion dentro de cada region, no entre regiones; por eso se publican tambien los dos deltas por bloque, que es donde se ve si las dos regiones dicen lo mismo.",
+    "universos": "El universo de siete clases retiene las de al menos cien parcelas y renormaliza la posterior sobre ellas, para que la confianza siga significando confianza dentro del universo que se puntua."
+  },
+  "procedencia": {
+    "semilla": 42,
+    "n_boot": 1000,
+    "code_version": "a8386d8",
+    "polars": "1.44.1",
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.0",
+    "xgboost": "3.4.1",
+    "generado": "2026-09-03T15:51:47+00:00",
+    "criterio_principal": "K = round(C / 2) por universo, redondeando hacia arriba",
+    "soporte_minimo": 100,
+    "no_finitos": "Las celdas no finitas se imputan con la mediana de la region de ENTRENAMIENTO, que es el tratamiento que ya usa el baseline tabular del proyecto y deja la region evaluada fuera de la imputacion.",
+    "features": "reports/paper_micai/fase4/breizhcrops_features.parquet"
+  }
+}

@@ -101,6 +101,11 @@ def _provenance(seed: int, n_boot: int) -> dict[str, Any]:
         "generado": datetime.now(UTC).isoformat(timespec="seconds"),
         "criterio_principal": "K = round(C / 2) por universo, redondeando hacia arriba",
         "soporte_minimo": SOPORTE_MINIMO,
+        "no_finitos": (
+            "Las celdas no finitas se imputan con la mediana de la region de ENTRENAMIENTO, "
+            "que es el tratamiento que ya usa el baseline tabular del proyecto y deja la "
+            "region evaluada fuera de la imputacion."
+        ),
         "features": "reports/paper_micai/fase4/breizhcrops_features.parquet",
     }
 
@@ -115,17 +120,29 @@ def _leave_one_region_out(
         feature_cols: Columns fed to the model.
         seed: Seed of the classifier.
 
+    Non-finite cells are imputed with the median of the TRAINING region only, which is the
+    same treatment the project's tabular baseline gives them and keeps the held-out region
+    out of the imputation.
+
     Returns:
         Posterior matrix, labels, region index per parcel, region names and a per-region
         training log.
     """
     from xgboost import XGBClassifier
 
+    from ml.train.baseline import _column_medians, _impute_with
+
     regions = sorted(table["region"].unique().to_list())
     labels = table["class_id"].cast(pl.Int64).to_numpy()
     n_classes = int(labels.max()) + 1
-    features = table.select(feature_cols).to_numpy()
+    features = table.select(feature_cols).to_numpy().astype(np.float64)
     block = np.array([regions.index(r) for r in table["region"].to_list()])
+    logger.info(
+        "celdas_no_finitas",
+        celdas=int((~np.isfinite(features)).sum()),
+        parcelas=int((~np.isfinite(features)).any(axis=1).sum()),
+        columnas=int((~np.isfinite(features)).any(axis=0).sum()),
+    )
 
     proba = np.zeros((table.height, n_classes), dtype=np.float64)
     log: list[dict[str, Any]] = []
@@ -142,10 +159,13 @@ def _leave_one_region_out(
             random_state=seed,
             n_jobs=-1,
         )
+        medians = _column_medians(features[train])
+        x_train = _impute_with(features[train], medians)
+        x_test = _impute_with(features[test], medians)
         present = sorted(set(labels[train].tolist()))
         remap = {c: i for i, c in enumerate(present)}
-        model.fit(features[train], np.array([remap[c] for c in labels[train]]))
-        local = np.asarray(model.predict_proba(features[test]))
+        model.fit(x_train, np.array([remap[c] for c in labels[train]]))
+        local = np.asarray(model.predict_proba(x_test))
         proba[np.ix_(np.flatnonzero(test), np.asarray(present, dtype=int))] = local
         entry = {
             "region_evaluada": region,

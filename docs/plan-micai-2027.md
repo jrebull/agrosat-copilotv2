@@ -107,6 +107,10 @@ Cierra las objeciones baratas antes de tocar datos nuevos. Salida:
    para dibujar la frontera y no solo sus intersecciones.
 5. **Figura de la frontera** en vectorial, legible en blanco y negro.
 
+### Fase 4 · Segundo conjunto de datos: BreizhCrops — HECHA
+
+La descomposición **se transporta, y más limpia**. Con el mismo protocolo, el mismo módulo y un XGBoost entrenado dejando una región fuera sobre BreizhCrops 2017: al pasar de nueve clases a seis el F1-macro sube **+0,2447 con las cuatro series dando el mismo número y cobertura 1,0000**, porque las clases retiradas son tan raras que el argmax libre no las predice nunca. En el criterio principal preregistrado (K = 5) el **95,1 %** de la mejora aparente es el denominador. H1 vuelve a caer y esta vez hacia el otro lado: el rechazo por confianza supera a la retirada de clases con IC que **excluye** el cero y Holm por debajo de 0,0001, cuando en el conjunto primario no se distinguía de cero. Retirar por soporte —lo que el equipo hizo— queda último otra vez y además **no es monótono**: empeora al retirar más. Detalle en [`docs/paper/fase4-hallazgos.md`](paper/fase4-hallazgos.md).
+
 ### Fase 4 · Segundo conjunto de datos: BreizhCrops (CPU, sin terceros)
 
 Es la respuesta real a «un solo dataset», y no necesita GPU. Salida:

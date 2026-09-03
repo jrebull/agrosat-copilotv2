@@ -5,7 +5,7 @@
 > hay en disco y en la base de datos; para el detalle histórico de cada US ver
 > [`us-resolved/`](us-resolved/) y para lo abierto [`blockers/PENDIENTES.md`](blockers/PENDIENTES.md).
 
-Última actualización: 2 de septiembre de 2026 (fase 0 del artículo MICAI cerrada, fase 1 en curso).
+Última actualización: 3 de septiembre de 2026 (artículo MICAI: fases 0 a 4 cerradas; la réplica sobre BreizhCrops confirma la descomposición).
 
 ## Base de datos (fuente de verdad: `dbmate status`)
 
@@ -95,6 +95,15 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   **0,2155 de esa subida es solo el denominador**, sin mecanismo alguno. Y retirar por soporte,
   el criterio que el equipo usó al desplegar, es el peor de los tres. Detalle en
   [`paper/fase3-hallazgos.md`](paper/fase3-hallazgos.md).
+
+- **Fase 4 hecha, y la descomposición se transporta.** Mismo protocolo y mismo módulo sobre
+  **BreizhCrops 2017**, con XGBoost entrenado dejando una región fuera. De nueve clases a seis
+  el F1-macro sube **+0,2447 con las cuatro series dando el mismo número y cobertura 1,0000**:
+  las clases retiradas son tan raras que el argmax libre no las predice nunca, así que ningún
+  mecanismo hace nada y la métrica sube sola. En el criterio principal preregistrado el
+  **95,1 %** de la mejora es el denominador. H1 cae otra vez y ahora hacia el otro lado: el
+  rechazo por confianza gana con IC que **excluye** el cero y Holm < 0,0001. Retirar por soporte
+  queda último y **no es monótono**. Detalle en [`paper/fase4-hallazgos.md`](paper/fase4-hallazgos.md).
 
 ## Entorno y gates
 

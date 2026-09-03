@@ -1,0 +1,16 @@
+{
+  "regiones": [
+    "frh01",
+    "frh04"
+  ],
+  "submuestreo_por_region": 30000,
+  "semilla": 42,
+  "n_parcelas": 60000,
+  "n_features": 185,
+  "anio": 2017,
+  "nivel": "L2A",
+  "code_version": "a8386d8",
+  "polars": "1.44.1",
+  "generado": "2026-09-03T15:47:54+00:00",
+  "nota": "Submuestreo proporcional por region con semilla fija, declarado en la enmienda 1 del preregistro antes de ver ninguna cifra. Los bloques del protocolo son las dos regiones, porque BreizhCrops no trae coordenadas por parcela."
+}

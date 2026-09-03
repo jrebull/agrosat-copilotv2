@@ -25,29 +25,44 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 OUT_DIR = REPO_ROOT / "reports" / "paper_micai" / "fase4"
 REGIONS = ("frh01", "frh04")
 
+#: Columnas de identificacion; el resto de la tabla son caracteristicas.
+META_COLS = ("parcel_id", "year", "class_id", "class_name", "region")
+
 
 def main() -> None:
     """Build the per-parcel feature table for every region and seal its provenance."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample", type=int, default=30000)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--solo-sellar",
+        action="store_true",
+        help="Re-deriva soporte y procedencia desde el parquet ya extraido, sin recalcular.",
+    )
     args = parser.parse_args()
 
     from ml.features.breizhcrops_features import build_breizhcrops_features
     from ml.ingest.breizhcrops_loader import breizhcrops_pixel_series
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    frames: list[pl.DataFrame] = []
-    for region in REGIONS:
-        series = breizhcrops_pixel_series(region=region, sample_parcels=args.sample, seed=args.seed)
-        logger.info("serie_cargada", region=region, filas=series.height)
-        feats = build_breizhcrops_features(series).with_columns(pl.lit(region).alias("region"))
-        logger.info("features_listas", region=region, parcelas=feats.height)
-        frames.append(feats)
-
-    table = pl.concat(frames, how="vertical")
     path = OUT_DIR / "breizhcrops_features.parquet"
-    table.write_parquet(path, compression="zstd")
+
+    if args.solo_sellar:
+        table = pl.read_parquet(path)
+        logger.info("parquet_reusado", parcelas=table.height)
+    else:
+        frames: list[pl.DataFrame] = []
+        for region in REGIONS:
+            series = breizhcrops_pixel_series(
+                region=region, sample_parcels=args.sample, seed=args.seed
+            )
+            logger.info("serie_cargada", region=region, filas=series.height)
+            feats = build_breizhcrops_features(series).with_columns(pl.lit(region).alias("region"))
+            logger.info("features_listas", region=region, parcelas=feats.height)
+            frames.append(feats)
+
+        table = pl.concat(frames, how="vertical")
+        table.write_parquet(path, compression="zstd")
 
     support = (
         table.group_by("region", "class_id", "class_name")
@@ -71,7 +86,7 @@ def main() -> None:
                 "submuestreo_por_region": args.sample,
                 "semilla": args.seed,
                 "n_parcelas": table.height,
-                "n_features": table.width - 4,
+                "n_features": table.width - len(META_COLS),
                 "anio": 2017,
                 "nivel": "L2A",
                 "code_version": head or "desconocido",

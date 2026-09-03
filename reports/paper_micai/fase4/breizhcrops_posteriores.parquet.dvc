@@ -1,0 +1,5 @@
+outs:
+- md5: bcc55122c8047c75f644d852c5880b11
+  size: 2593890
+  hash: md5
+  path: breizhcrops_posteriores.parquet
