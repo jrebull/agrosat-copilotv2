@@ -60,3 +60,31 @@ Su diagnóstico y el de los revisores **no se solapan y los dos son necesarios**
 Lo que él no vio, porque revisaba el proyecto y no el manuscrito: los tres defectos del aparato inferencial, el reporte selectivo entre universos preregistrados, y que el gate de anonimato no normaliza acentos.
 
 Lo que los revisores no vieron, porque no tenían su repositorio: que el volcado de `fullm` está roto, que la VM se perdió con tres checkpoints, y que hay dos fuentes de verdad.
+
+
+---
+
+## 5. El hueco, afilado por el barrido bibliográfico (3 de septiembre, tarde)
+
+El barrido de 2024–2026 **estrecha el hueco y lo mejora**, porque un hueco preciso se defiende y uno amplio se tumba. Los nueve DOI se verificaron contra Crossref y los dos de arXiv contra su API, por mí, no solo por el barrido.
+
+**Lo que ya no podemos decir:**
+
+- *«Nadie abstiene en mapeo de cultivos.»* Rey et al. 2025 excluyen píxeles por umbral de incertidumbre **sobre PASTIS, con U-TAE, UNET3D y TSViT** —nuestro banco y nuestras arquitecturas—. Lo decisivo es cómo: en todo el trabajo no aparecen «abstention», «selective classification» ni «risk-coverage», y lo conforme se menciona una vez en trabajo relacionado. Es abstención de facto, sin marco, sin curva riesgo-cobertura y sin preguntar quién paga.
+- *«Recortar el catálogo no se ha medido.»* Ghassemi et al. 2025 tratan el tamaño del catálogo como variable de diseño medida: de las 52 clases de LUCAS 2022 concluyen que **26 equilibran exactitud y detalle**. En cobertura del suelo general, con clasificación plana y jerárquica, sin marco de abstención y sin contabilidad de quién pierde.
+- *«El desbalance extremo es nuestra premisa original.»* Wang et al. 2026 sacan **F1 de 36,72 % sobre 101 variedades** en H2Crop intentando salvar las clases raras. Es la mejor evidencia publicada de que un catálogo puede exceder lo que el modelo distingue, y sus autores no sacan la conclusión de diseño. Nosotros sí podemos.
+
+**Lo que sí queda, y es más defendible que lo anterior:**
+
+> Las tres piezas existen en la literatura de cultivos y **ninguna se habla con las otras**. La jerarquía normativa está montada y validada —HCAT4, EuroCrops v2.0 con 47 millones de parcelas— pero solo se usa como supervisión, nunca como opción de repliegue. El rechazo existe, pero por **novedad** (Carvalho 2023, Xu 2026, Giménez 2023) o como umbral ad hoc de un solo punto. Y lo conforme llega a cobertura del suelo, pero no a tipo de cultivo por parcela desde series temporales. El único trabajo de observación de la Tierra que dice «abstain» con umbrales interpretables, SHRUG-FM en CVPR EarthVision 2026, evalúa incendio, inundación y deslizamiento: **ninguna tarea agrícola**.
+
+**La contribución, reformulada:** no es el mecanismo, es **la contabilidad**. Medir, para cada uno de los tres mecanismos, **qué cultivos y qué tamaños de parcela absorben la promesa retirada**. Eso, en teledetección, no lo ha hecho nadie, y encaja exactamente con lo que ya medimos en `reports/paper_micai/equidad/`.
+
+**Y una regla de redacción que sale de aquí.** Las búsquedas negativas de este barrido tienen un sesgo declarado: OpenAlex carece de resumen para buena parte de Elsevier e IEEE, así que un cero suyo infravalora. En el artículo se escribe **«no encontramos trabajo que…», nunca «nadie ha…»**, y se declara el alcance de la búsqueda. Un revisor con un contraejemplo tumba una afirmación absoluta, y no la tumbaría dos veces.
+
+
+## 6. Los bancos ya están elegidos, y con partición espacial ajena
+
+El barrido de bancos cierra el punto que más pesaba: **CropHarvest** (Zenodo, CC BY-SA 4.0, con separación espacial explícita y documentada) y **GEO-Bench `m-SA-crop-type`** (Sudáfrica, CC BY 4.0). Los dos traen su propia partición, así que no la construimos nosotros — que es exactamente lo que un revisor cuestionaría si la inventásemos. Detalle y descartes en [`bancos-candidatos.md`](bancos-candidatos.md).
+
+Cuatro bancos, dos continentes, y ninguno con la partición hecha en casa.
