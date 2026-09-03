@@ -167,3 +167,79 @@ artículo con postura, y no se confunde la aceptación con haber llegado.
 |---|---|---|
 | Puntos planificados | 150 | 152 |
 | Puntos que producen conocimiento nuevo | 27 (**18 %**) | 48 (**32 %**) |
+
+---
+
+## 8. Tercera vuelta: al reparar el protocolo, el hallazgo se disuelve (3 de septiembre, noche)
+
+Un *red team* a ciegas encontró lo que ninguna de las auditorías anteriores había compuesto, y lo he
+verificado con el artefacto sellado del diagnóstico. **Es el hecho más importante de todo el
+proyecto.**
+
+### El hallazgo titular ya no existe
+
+Las dos correcciones de la EPIC 19 nunca se habían aplicado **juntas**. Compuestas:
+
+| | media | IC t sobre bloques | p |
+|---|---|---|---|
+| deltas publicados | −0,028838 | (−0,0430, −0,0147) | **0,005** |
+| con denominador común | −0,016691 | (−0,0410, **+0,0077**) | **0,130** |
+
+**Incluye el cero.** Y falta aplicar la simetría del umbral, que por construcción empuja aún más
+hacia cero. La EPIC 19 no repara el hallazgo: **lo disuelve**. El plan estaba escrito como si la
+reparación fuera un impuesto metodológico que se paga y se sigue; en realidad es la refutación.
+
+De paso, el objetivo de la EPIC 19 decía «los tres empujaban hacia la conclusión que publiqué», y
+es falso: el del remuestreo empuja al contrario, y la asimetría del umbral solo valía 0,00127.
+Corregido.
+
+### El diseño no puede detectar lo que busca
+
+Con sd entre bloques de 0,0196 y cinco bloques:
+
+| escenario | efecto mínimo detectable |
+|---|---|
+| un contraste, α = 0,05 | **0,0326** |
+| seis contrastes con Holm, que es lo que traen cuatro mecanismos | **0,0508** |
+| efecto observado | **0,0167** |
+
+Harían falta **13 bloques** con un contraste y **20** bajo Holm. Hay 5 y 2. Y la EPIC 20, al pasar de
+dos mecanismos a cuatro, **sube el umbral de 0,033 a 0,051 mientras el efecto real es 0,017**: añade
+multiplicidad sin añadir unidad de análisis.
+
+### Dónde sí hay efecto
+
+En la disparidad, y por goleada. La clase 10 del banco primario, con 355 parcelas, recibe **0,090 de
+cobertura bajo recorte y 0,741 bajo abstención: un factor de ocho.** Frente a un delta de calidad de
+0,0167 que no llega a significativo.
+
+**El criterio principal del artículo se mueve ahí**, que es la magnitud donde el diseño tiene
+potencia. La contabilidad de equidad deja de ser la tercera contribución y pasa a ser la tesis.
+
+### Un banco no puede alojar el experimento
+
+**CropHarvest no sirve**, y es verificable en diez minutos: sus tareas de referencia —Kenia, Togo,
+Brasil— son **binarias**. Con K = 2 el recorte a K = 1 es degenerado, el retroceso jerárquico no
+tiene taxonomía sobre la que retroceder, y el conjunto conforme `{0,1}` **es** la abstención: los
+cuatro mecanismos colapsan en uno. `bancos-candidatos.md` eligió por partición espacial y licencia,
+que son criterios correctos, y **no comprobó la cardinalidad del espacio de etiquetas**, que para
+este artículo es el criterio de admisión número uno. Añadido, y el barrido se rehace.
+
+### El eje común que falta, y que existe desde 1997
+
+«A igual cobertura» **no está definido** para dos de los cuatro mecanismos: un conjunto conforme y
+una clase gruesa se entregan en el 100 % de las parcelas siempre. La solución no es un parche sino
+reformular los cuatro como **predictores con valores de conjunto**, con un eje único
+`E[|C(x)|]` definido para todos. Eso está publicado: **Ha 1997** da la regla óptima de rechazo
+selectivo de clases, y **Mortier et al. 2021 y 2022** ya comparan el retroceso jerárquico con los
+conjuntos. Nuestra línea base clásica era Chow 1970, que es el **caso degenerado** de Ha. Citábamos
+el caso particular y omitíamos el general.
+
+### El sesgo del superviviente, admitido
+
+El *red team* lo señala y tiene razón: la sección 1 de este documento es literalmente una tabla de
+supervivencia («del artículo actual → destino»), y la sección 5 dice que la contribución de equidad
+«encaja exactamente con lo que ya medimos». Un reencuadre dirigido por la pregunta empieza por la
+pregunta; este empezó por los artefactos y buscó qué pregunta los admitía. Queda dicho, y la
+US-157 —manipular el desbalance dentro de un banco, con la geografía fija— es la respuesta que no
+depende de qué artefacto sobrevivió.
