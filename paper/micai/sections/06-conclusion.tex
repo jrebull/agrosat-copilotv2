@@ -1,0 +1,28 @@
+\section{Limitations and Conclusion}
+\label{sec:conclusion}
+
+\paragraph{Limitations.}
+Both benchmarks are French, so the replication varies year, region, class distribution and model
+family, but not the agricultural system; whether the decomposition holds in a smallholder landscape
+is open. On the replication benchmark the blocks are the two administrative regions, because the
+published index carries no per-parcel coordinates, so our resampling captures variation within
+regions and not between them; we report the per-block differences for this reason. That benchmark
+also required imputing \num{1.62}\,\% of feature cells, concentrated in ratio indices whose
+denominator involves a band the collection encodes as zero for masked pixels; the imputation uses
+the training region's median only, and it cannot favor one mechanism over another because all
+mechanisms read the same posterior. Finally, our out-of-fold posteriors on the primary benchmark
+exist for a single fold, which is why the meta-learner of Sect.~\ref{sec:arbiter} is trained on
+little data; that is a limitation of the artifacts available to us, not a claim about stacking in
+general.
+
+\paragraph{Conclusion.}
+Macro-averaged F1 over a pruned class catalog mixes two things a reader cannot separate: what the
+method did, and what the smaller denominator did. We gave a protocol that separates them, and the
+answer on two public benchmarks is that the denominator dominates --- \num{88}\,\% on the first,
+\num{95}\,\% on the second at the pre-registered operating point, and \num{100}\,\% over the range
+where coverage stays complete and every mechanism returns an identical number. At equal coverage
+we find no evidence that shrinking the legend beats abstaining, and significant evidence of the
+reverse on the more imbalanced benchmark; the criterion practitioners report using, retirement by
+low support, is the weakest we tested and degrades as more classes are retired. None of this
+requires a new model. It requires reporting the class count, the coverage, and one control line
+alongside every macro-averaged figure computed over a catalog someone chose.

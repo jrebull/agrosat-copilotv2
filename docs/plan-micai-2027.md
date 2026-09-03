@@ -148,7 +148,11 @@ No bloquea la escritura y **no depende de Arthur ni de la H100**. El coste está
 5. Cada checkpoint y cada volcado OOF salen con `dvc add`, `dvc push` y su corrida en
    MLflow. Lo hacemos nosotros, así que la disciplina es nuestra.
 
-### Fase 6 · Escritura desde cero, doce páginas LNCS
+### Fase 6 · Escritura desde cero — PRIMER BORRADOR COMPLETO
+
+`paper/micai/` existe y compila: **doce páginas exactas en A4, cero errores de LaTeX, cero cajas overfull, abstract de 249 palabras**, con las seis secciones escritas de punta a punta y las dos figuras de las fases 3 y 4 incrustadas. Ninguna cifra impresa carece de fila sellada. El encuadre cambió con el resultado y está reescrito en [`docs/paper/que-paper-sale.md`](paper/que-paper-sale.md) §5: la tesis ya no es que recortar la leyenda domine —eso se falsificó— sino **cuánto de una mejora macro es el denominador**, con el control de una línea como contribución. Falta la pasada de estilo fino y la revisión de Arthur.
+
+### Fase 6 · Escritura desde cero, doce páginas LNCS (especificación original)
 
 Redacta Javier, revisa Arthur. Título de trabajo, contribuciones y reparto de páginas en
 [`docs/paper/que-paper-sale.md`](paper/que-paper-sale.md), sección 5.
@@ -163,7 +167,11 @@ Redacta Javier, revisa Arthur. Título de trabajo, contribuciones y reparto de p
 - Trabajo relacionado **por limitaciones**, no como lista: cada cita con su fortaleza y su
   límite. La matriz de la fase 0 ya está redactada así.
 
-### Fase 7 · Bibliografía
+### Fase 7 · Bibliografía — GENERADA, FALTAN DOI DE ACTAS
+
+`paper/micai/refs.bib` se **genera** desde la matriz verificada con `make micai-bib`, así que ninguna entrada puede existir sin haber pasado por arXiv, Crossref u OpenAlex. Son 44 entradas verificadas, 25 citadas en el manuscrito. Se añadió BreizhCrops, que faltaba y que la fase 4 necesita. Queda el punto 1: completar el DOI de actas de las entradas que hoy solo tienen identificador arXiv.
+
+### Fase 7 · Bibliografía (especificación original)
 
 Parte de `reports/paper_micai/fase0/related_work_verified.csv`: 43 entradas con título,
 autores y año resueltos por arXiv, Crossref u OpenAlex.
@@ -175,7 +183,13 @@ autores y año resueltos por arXiv, Crossref u OpenAlex.
 4. Sin campos `note`, siglas protegidas con llaves, más de seis autores se listan seis y
    «et al.».
 
-### Fase 8 · Plantilla LNCS, doble ciego y paquete
+### Fase 8 · Plantilla LNCS, doble ciego y paquete — PUNTOS 1 A 4 HECHOS
+
+Hecho: plantilla `llncs` con A4 real, `cmap` antes de `fontenc`, `xurl`, `hyperref` con `hidelinks`, `\emergencystretch`, `\keywords` dentro del abstract y apéndice antes de las referencias (punto 1); `\newif\ifanon` con la anónima por defecto (punto 3); y el **gate de identidad probado en negativo** (punto 4): `make micai-anon-check` extrae el texto del PDF ensamblado más sus metadatos, busca dieciséis tokens, se autoprueba token por token y se comprobó que **falla** sobre una compilación con `\anonfalse`. De regalo, la compilación es **reproducible byte a byte** —`\pdfinfoomitdate`, `\pdftrailerid{}`, `\pdfsuppressptexinfo` en el `.tex` y metadatos anulados más `svg.hashsalt` fijo en las figuras—, sin lo cual sellar el PDF de envío no significaba nada.
+
+Queda el punto 2 (autor de correspondencia, depende de Arthur) y el punto 5 (empaquetado `.zip`).
+
+### Fase 8 · Plantilla LNCS, doble ciego y paquete (especificación original)
 
 1. `\documentclass[runningheads]{llncs}`, `\AtBeginDocument{\pdfpagewidth=210mm
    \pdfpageheight=297mm}` para el A4 real, `cmap` antes de `fontenc`, `xurl`, `hyperref`

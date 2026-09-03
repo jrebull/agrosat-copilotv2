@@ -1,0 +1,50 @@
+\section{Related Work}
+\label{sec:related}
+
+We organize related work by what each line of research establishes and where it stops, because the
+gap this paper addresses lies in the space between two literatures that rarely meet.
+
+\paragraph{Selective classification.}
+The option to abstain is old and well characterized. Chow's rule fixes the optimal
+error--reject tradeoff for a known posterior \cite{chow1970reject}, and the modern treatment
+extends it to deep networks with learned or calibrated rejection
+\cite{geifman2017selective,geifman2019selectivenet,liu2019deepgamblers}, with recent surveys
+mapping the design space \cite{hendrickx2024rejectsurvey,hasan2023uncertaintysurvey}. Two
+refinements matter here: the observation that a single risk--coverage curve hides which groups pay
+for the abstention \cite{jones2020selectivedisparities}, and the extension of reject curves to
+precision and recall rather than error alone \cite{fischer2023rejectcurves,pugnana2022aucselective}.
+What this literature does not treat is abstention by \emph{class}: its unit of rejection is the
+sample, so a mechanism that declines to name an entire category falls outside its formalism, and
+the interaction between that mechanism and a macro-averaged metric is not analyzed.
+
+\paragraph{Class structure in crop mapping.}
+Work on crop mapping does manipulate the class catalog, but as a modeling device rather than as an
+operating point. Turkoglu et al.\ organize crop types into a hierarchy and let the model back off
+to a coarser level when the fine-grained decision is unreliable \cite{turkoglu2021hierarchies},
+which is the closest existing mechanism to legend shrinking; the evaluation, however, reports
+overall accuracy on a single split, so the effect on a macro average and its variability across
+space are not measured. Pan-European harmonization efforts confront the same problem at the level
+of the nomenclature itself \cite{schneider2021eurocrops,claverie2026eurocropsv2}, and fine-grained
+mapping work notes the cost of rare classes without isolating it
+\cite{lei2025finecrop,li2021costeffective,donmez2025cropcover}. Across this literature the pruned
+catalog is reported as a property of the data.
+
+\paragraph{Benchmarks and temporal models.}
+We evaluate on two public parcel-level benchmarks. PASTIS provides Sentinel-2 time series with
+panoptic annotations over France \cite{garnot2021pastis}; BreizhCrops provides a larger parcel-level
+collection over Brittany with a native partition by administrative region and an extreme class
+distribution \cite{russwurm2020breizhcrops}. The temporal architectures we use as predictors are
+standard: temporal convolutions \cite{pelletier2019tempcnn}, self-attention over raw series
+\cite{russwurm2020selfattention}, and vision transformers adapted to satellite image time series
+\cite{tarasiou2023tsvit}. None of these are contributions of this paper; they supply the posteriors
+over which the protocol operates.
+
+\paragraph{Evaluation protocol.}
+That the protocol is spatial rather than random is not optional. Cross-validation that ignores
+spatial autocorrelation inflates estimates of predictive performance, sometimes severely
+\cite{roberts2017crossvalidation,ploton2020spatialvalidation}. We therefore choose every operating
+point on spatial blocks disjoint from the block it is evaluated on. The ensembling literature
+supplies the remaining ingredient, the stacking meta-learner whose implicit behavior we examine
+\cite{wolpert1992stacking,zhang2022ensemblereview,abdali2023parallelcascaded}, and it is precisely
+Wolpert's requirement of leakage-free partitions for training the second-level model that our
+in-sample versus out-of-sample comparison puts to the test.

@@ -1,0 +1,82 @@
+% Manuscrito MICAI 2027. Compilar con:  pdflatex main && bibtex main && pdflatex main && pdflatex main
+% Version anonima para revision:  \anontrue  (por defecto).  Camera-ready: \anonfalse
+\documentclass[runningheads]{llncs}
+
+% Compilacion reproducible: sin estos tres, pdflatex incrusta la fecha y un identificador
+% aleatorio en cada corrida, y el MD5 del PDF de envio cambia sin que cambie una sola palabra.
+\pdfinfoomitdate=1
+\pdftrailerid{}
+\pdfsuppressptexinfo=-1
+
+\newif\ifanon
+\anontrue
+
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\sisetup{group-minimum-digits=4, detect-weight=true, detect-family=true}
+\graphicspath{{figures/}}
+\emergencystretch=1em
+\AtBeginDocument{\pdfpagewidth=210mm \pdfpageheight=297mm}
+
+\begin{document}
+
+\title{How Much of That Gain Is the Denominator?\texorpdfstring{\\}{ }A Control for Legend Shrinking in Imbalanced Crop Mapping}
+\titlerunning{How Much of That Gain Is the Denominator?}
+
+\ifanon
+  \author{Anonymous Author(s)}
+  \institute{Anonymous Institution}
+\else
+  \author{Arthur Zizumbo\inst{1} \and Javier A. Rebull-Saucedo\inst{1}\thanks{Corresponding author.}}
+  \institute{Anonymous Institution, City, Country\\
+    \email{author@example.org}}
+\fi
+
+\maketitle
+
+\begin{abstract}
+Parcel-level crop maps are routinely evaluated with macro-averaged F1 over a catalog of classes the
+practitioner has already pruned, and the pruning is reported, when it is reported at all, as a
+property of the data rather than as a decision. We ask how much of the resulting gain belongs to
+the mechanism that pruned the catalog and how much to the smaller denominator that pruning
+creates. We formalize two operating mechanisms that trade coverage for macro quality, shrinking the
+promised legend and abstaining on low-confidence parcels, and evaluate them under a spatial-block
+protocol that chooses the operating point outside the data used to measure it, scores both
+mechanisms over the same class set, and never consults a label to decide what to deliver. Against a
+control that scores the untouched predictor over the same shrunken legend while delivering
+everything, most of the apparent gain disappears: on a first public benchmark the control accounts
+for most of it, on a second benchmark in a different year and region for almost all of it, and over
+the range where coverage stays complete for the entire gain, with every mechanism returning
+identical numbers. At matched coverage, abstention outperforms legend shrinking on both benchmarks,
+and retiring classes by low support, which is what practitioners report doing, is the weakest
+criterion we test and is not monotone in the number of classes retired. A macro-averaged figure
+computed over a pruned catalog is therefore uninterpretable without this control, which costs one
+line to compute.
+
+\keywords{Crop mapping \and Class imbalance \and Selective classification \and Evaluation
+protocol \and Spatial cross-validation}
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-related}
+\input{sections/03-method}
+\input{sections/04-results}
+\input{sections/05-discussion}
+\input{sections/06-conclusion}
+
+\appendix
+\input{sections/07-appendix}
+
+\bibliographystyle{splncs04}
+\bibliography{refs}
+
+\end{document}

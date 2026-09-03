@@ -5,7 +5,7 @@
 > hay en disco y en la base de datos; para el detalle histórico de cada US ver
 > [`us-resolved/`](us-resolved/) y para lo abierto [`blockers/PENDIENTES.md`](blockers/PENDIENTES.md).
 
-Última actualización: 3 de septiembre de 2026 (artículo MICAI: fases 0 a 4 cerradas; la réplica sobre BreizhCrops confirma la descomposición).
+Última actualización: 3 de septiembre de 2026 (artículo MICAI: fases 0 a 4 cerradas, primer borrador completo de doce páginas en paper/micai).
 
 ## Base de datos (fuente de verdad: `dbmate status`)
 
@@ -104,6 +104,14 @@ Tablas con RLS forzada: `aois`, `chat_messages`, `chat_sessions`, `features_parc
   **95,1 %** de la mejora es el denominador. H1 cae otra vez y ahora hacia el otro lado: el
   rechazo por confianza gana con IC que **excluye** el cero y Holm < 0,0001. Retirar por soporte
   queda último y **no es monótono**. Detalle en [`paper/fase4-hallazgos.md`](paper/fase4-hallazgos.md).
+
+- **Primer borrador completo del manuscrito.** `paper/micai/` compila en **doce páginas A4, cero
+  errores de LaTeX, cero cajas overfull**, abstract de 249 palabras, seis secciones escritas y las
+  dos figuras incrustadas. La bibliografía se **genera** desde la matriz verificada
+  (`make micai-bib`, 44 entradas resueltas por API, 25 citadas), el gate de doble ciego
+  (`make micai-anon-check`) está **probado en negativo** contra una compilación no anónima, y tanto
+  el PDF como las figuras son **reproducibles byte a byte**, sin lo cual sellarlos no significaba
+  nada. Falta la pasada de estilo, los DOI de actas y la revisión de Arthur.
 
 ## Entorno y gates
 

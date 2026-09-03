@@ -55,55 +55,88 @@ De las 43 entradas de la matriz, con título y autores resueltos por API:
 
 **B no sostiene un artículo por sí solo.** Que nuestro meta-modelo se evaluara in-sample es un error nuestro; convertirlo en tesis exigiría demostrar que la práctica está extendida, y eso pide auditar repositorios ajenos, que es otro proyecto. Como **sección de protocolo dentro de A**, en cambio, es lo que hace creíble todo lo demás: explica por qué nuestras cifras no coinciden con las que el propio equipo publicó antes.
 
-## 5. Recomendación: encuadre C
+## 5. Encuadre vigente, reescrito tras las fases 3 y 4
 
-El artículo trata de **cómo se decide qué promete un mapa de cultivos**, y usa el ensamble como el caso que revela el problema.
+> **Este apartado se reescribió el 3 de septiembre de 2026.** La versión anterior sostenía que
+> «recortar la leyenda compra más calidad macro que rechazar parcelas por confianza a igual
+> cobertura» y que «domina por debajo de doce clases». Las fases 3 y 4 **falsificaron** esa
+> afirmación, y el encuadre cambia con ella en lugar de sobrevivirla. Lo que era la tesis pasa a
+> ser el resultado negativo; lo que era un control auxiliar pasa a ser la contribución.
 
-El hilo, en una frase: *un árbitro entrenado ya retira clases por su cuenta —deja una clase entera en F1 cero sin declararlo—, así que conviene sacar esa decisión del modelo y convertirla en un punto de operación medible; y cuando se mide, retirar clases compra más calidad macro que rechazar parcelas por confianza a igual cobertura.*
+El artículo trata de **cuánto de una mejora de F1-macro es el método y cuánto es el denominador**,
+y usa el recorte de leyenda en mapeo de cultivos como el caso donde eso se puede medir y separar.
 
-Eso enmarca la contribución en el **mecanismo**, no en el marcador, que es justo lo que separa un artículo de un banco de pruebas.
+El hilo, en una frase: *cuando se reporta F1-macro sobre un catálogo de clases recortado, casi toda
+la mejora es el cambio de denominador y no el mecanismo que la produjo; el control que lo revela
+cuesta una línea —puntuar el predictor intacto sobre la misma leyenda— y sin él la conclusión se
+invierte.*
 
 ### Título de trabajo
 
-> *Promising fewer crops or answering fewer parcels? Two operating points for imbalanced parcel-level crop mapping*
+> *How much of that gain is the denominator? A control for legend shrinking in imbalanced crop mapping*
 
 Sin nombre del sistema ni de la institución: nace listo para doble ciego.
 
 ### Contribuciones, con verbos honestos
 
-Inline, no en lista con viñetas: (i) formalizamos dos mecanismos para cambiar cobertura por calidad macro —recortar la leyenda y abstenerse por confianza— y damos un protocolo por bloques espaciales que elige el punto de operación fuera de los datos que lo miden; (ii) los comparamos a igual cobertura sobre un banco público con intervalos pareados, y mostramos que recortar la leyenda domina por debajo de doce clases; (iii) mostramos que un meta-modelo entrenado ejecuta ese mismo recorte de forma implícita y no declarada, y que la diferencia entre medirlo dentro y fuera de muestra basta para invertir la conclusión sobre si el ensamble aporta.
+Inline, no en lista con viñetas: (i) formalizamos dos mecanismos para cambiar cobertura por calidad
+macro —recortar la leyenda y abstenerse por confianza— y damos un protocolo por bloques espaciales
+que elige el punto de operación fuera de los datos que lo miden, con un **estimando alineado** que
+puntúa los dos sobre el mismo conjunto de clases y una entrega que **no lee la etiqueta**;
+(ii) mostramos que la mayor parte de la mejora aparente al recortar la leyenda es el cambio de
+denominador y no el mecanismo —88 % en el banco primario, 95 % en el segundo y **100 % en el tramo
+donde la cobertura sigue completa**—, y damos el control de una línea que lo revela;
+(iii) mostramos que a igual cobertura **abstenerse por confianza supera a recortar la leyenda**, con
+intervalos pareados y corrección por multiplicidad, y que **retirar por soporte bajo** —que es lo que
+se hace en la práctica— es el peor de los tres criterios y además no es monótono; (iv) mostramos que
+un meta-modelo entrenado ejecuta ese recorte de forma implícita y no declarada, y que la diferencia
+entre medirlo dentro y fuera de muestra basta para invertir la conclusión sobre si el ensamble aporta.
+
+### Por qué esto es un artículo y no un resultado negativo suelto
+
+Porque la contribución no es «el mecanismo no funciona», sino **el control que permite saberlo**, más
+la demostración de que sin ese control la literatura del área publica el denominador como si fuera
+método. Se sostiene en dos bancos, dos años, dos regiones y dos familias de modelo, con el mismo
+protocolo y sin tocar su método entre uno y otro.
 
 ### Esqueleto de doce páginas
 
 | Sección | Contenido | Páginas |
 |---|---|---|
-| 1 Introducción | El desbalance real (6 128 frente a 103), por qué la leyenda es una decisión y no un dato, contribuciones inline | 1,25 |
+| 1 Introducción | El desbalance real (6 128 frente a 103, y 19 207 a 1 en el segundo banco), por qué la leyenda es una decisión y no un dato, contribuciones inline | 1,25 |
 | 2 Trabajo relacionado, por limitaciones | Clasificación selectiva y su taxonomía por muestra; Turkoglu y el retroceso jerárquico; agregación de clases en mapeo europeo; validación espacial | 1,5 |
-| 3 Materiales y método | PASTIS-R y el universo compartido; los miembros; el protocolo de bloques y por qué las predicciones se agrupan en lugar de promediar macros; los dos mecanismos; el bootstrap pareado | 2,75 |
-| 4 Resultados | 4.1 la frontera de los dos mecanismos con sus intervalos; 4.2 la retirada implícita del árbitro, con la tabla por clase; 4.3 controles negativos: vecindad y rama contrastiva | 3,25 |
-| 5 Discusión | Qué compra cada mecanismo y a quién; por qué la inestabilidad de la leyenda entre regiones es parte del resultado; dentro frente a fuera de muestra | 1,25 |
-| 6 Limitaciones y conclusión | Una región, un fold, un dataset; el meta-modelo mal alimentado | 0,75 |
+| 3 Materiales y método | Los dos bancos y el universo compartido; el protocolo de bloques; el **estimando alineado** y por qué el F1 nativo no es comparable; la entrega sin oráculo; el control sin mecanismo; el bootstrap pareado y Holm | 2,75 |
+| 4 Resultados | 4.1 la descomposición y el pasillo donde las cuatro series coinciden; 4.2 la réplica en el segundo banco; 4.3 el orden de los tres mecanismos y la no monotonía del soporte; 4.4 la retirada implícita del árbitro, dentro frente a fuera de muestra | 3,25 |
+| 5 Discusión | Qué compra cada mecanismo y a quién; qué habría que reportar para que una cifra macro sea interpretable | 1,25 |
+| 6 Limitaciones y conclusión | Dos bancos pero una geografía; bloques por región en el segundo; imputación del 1,62 % | 0,75 |
 | Referencias | Unas 30 entradas con DOI | 1,25 |
 
 Cabe en doce con holgura de media página, que es lo que pide la experiencia cuando una figura crece al final.
 
-## 6. Lo que falta para que aguante, y es todo CPU
+## 6. Lo que faltaba, y ya está hecho
 
-Ninguno bloquea la escritura; los dos primeros sí deberían estar antes de enviar.
+Los cinco puntos que este apartado listaba el 2 de septiembre están cerrados por las fases 3 y 4.
+Se dejan con su estado para que se vea qué respondió cada uno.
 
-1. **Repetir la comparación de cobertura sobre un segundo predictor** (xgb-alphaearth, F1-macro 0,5913). Si el resultado se mantiene, la conclusión es una propiedad del desbalance y no de un modelo concreto. Es la respuesta más barata a la objeción de validez externa. Minutos.
-2. **Corregir multiplicidad** sobre los siete valores de K y declarar qué es confirmatorio y qué exploratorio. Hoy hay siete contrastes sin corrección; un revisor con oficio lo verá.
-3. **Un tercer mecanismo**, retirar clases por soporte en lugar de por F1, que es lo que hace la gente en la práctica y lo primero que preguntarán. Barato.
-4. **Curva de rechazo por confianza con más puntos**, no solo los siete igualados, para dibujar la frontera completa.
-5. **La figura de la frontera** en vectorial, con los dos mecanismos y sus bandas.
+| # | Qué era | Estado |
+|---|---|---|
+| 1 | Segundo predictor (`xgb-alphaearth`) | **Hecho** en la fase 3. La conclusión se mantiene en los dos predictores |
+| 2 | Corrección por multiplicidad y declarar confirmatorio frente a exploratorio | **Hecho**: Holm sobre la familia de siete K, con el criterio principal preregistrado |
+| 3 | Tercer mecanismo, retirar por soporte | **Hecho**, y resultó el peor de los tres en los dos bancos, además de no monótono |
+| 4 | Curva de rechazo por confianza con más puntos | **Hecho**: la frontera completa, con el control sin mecanismo añadido |
+| 5 | Figura de la frontera en vectorial | **Hecha** para los dos bancos, legible en blanco y negro |
 
-## 7. Las cuatro objeciones que va a recibir, y su respuesta
+Lo que queda por delante es escribir, no medir. La fase 5 —reentrenamiento OOF de cinco folds— sigue
+siendo opcional y **no bloquea**: la contribución vigente no depende del marcador del ensamble.
+
+## 7. Las objeciones que va a recibir, y su respuesta
 
 | Objeción | Respuesta que el dato sostiene |
 |---|---|
-| «Un solo dataset y una sola región» | Se declara en el título, en el alcance y en limitaciones. La contribución es el mecanismo y el protocolo, no el marcador; y el paquete de 420 KB hace que replicarlo cueste minutos |
-| «Esto ya lo hace Turkoglu 2021» | Mecanismo distinto (leyenda plana frente a retroceso jerárquico), métrica distinta (macro frente a exactitud) y aquí hay comparador a igual cobertura, intervalos pareados y cinco bloques en lugar de un fold |
-| «¿Por qué F1-macro?» | Porque la clase mayor tiene 6 128 parcelas y la menor 103: la exactitud premia ignorar las raras, que es exactamente la decisión que el artículo estudia |
+| «Un solo dataset y una sola región» | **Ya no aplica.** Dos bancos, dos años, dos regiones y dos familias de modelo, con el mismo protocolo y sin tocar su método entre uno y otro |
+| «Esto ya lo hace Turkoglu 2021» | Mecanismo distinto (leyenda plana frente a retroceso jerárquico), métrica distinta (macro frente a exactitud) y aquí hay comparador a igual cobertura, estimando alineado, intervalos pareados y control sin mecanismo |
+| «¿Por qué F1-macro?» | Porque la clase mayor tiene 6 128 parcelas y la menor 103 en el primer banco, y 19 207 a 1 en el segundo: la exactitud premia ignorar las raras, que es exactamente la decisión que el artículo estudia |
+| «Es un resultado negativo» | La contribución no es «el mecanismo no funciona», sino **el control que permite saberlo**, más la demostración de que sin él se publica el denominador como si fuera método. Y hay un resultado positivo: a igual cobertura la abstención por confianza gana, con IC que excluye el cero |
 | «¿Por qué su ensamble no mejora?» | Se reporta con su causa: los volcados OOF solo existen para el fold 5, así que el meta-modelo se entrena con muy poco. Es una limitación de los artefactos, no una afirmación sobre el stacking en general |
 
 ## 8. Restricciones de MICAI, verificadas hoy
@@ -119,7 +152,7 @@ Todo esto **se vuelve a verificar** cuando salga la convocatoria de 2027. Doce p
 
 ## 9. Desde cero, y por qué
 
-El manuscrito heredado tiene treinta y seis páginas, citas con título y autores inventados, cifras del régimen equivocado y una tesis central que la fase 2 desmontó. Repararlo cuesta más que escribir doce páginas nuevas sobre artefactos sellados, y deja rastros: el que repara arrastra frases que ya no corresponden a ningún dato.
+El manuscrito heredado tiene veinticuatro páginas —no treinta y seis, como se dijo primero; lo dice `pdfinfo`—, citas con título y autores inventados, cifras del régimen equivocado y una tesis central que la fase 2 desmontó. Repararlo cuesta más que escribir doce páginas nuevas sobre artefactos sellados, y deja rastros: el que repara arrastra frases que ya no corresponden a ningún dato.
 
 Se reutiliza, eso sí, lo que costó trabajo y sigue siendo válido: las 43 referencias verificadas por API, el ledger de custodia con sus 49 artefactos, las tablas de la fase 2 y la plantilla LNCS ya prototipada.
 

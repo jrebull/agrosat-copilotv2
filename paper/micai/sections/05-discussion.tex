@@ -1,0 +1,42 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{What each mechanism actually buys.}
+Legend shrinking and confidence rejection both trade coverage for macro quality, but they charge
+different customers. Shrinking the legend refuses an entire crop type everywhere: a farmer growing
+it receives nothing, in every parcel, in every region. Abstention refuses individual parcels
+scattered across all crop types, so no grower is systematically excluded, which is the selective
+classification literature's own concern about who pays for the abstention
+\cite{jones2020selectivedisparities}. Our measurements say that abstention is also the better buy
+at equal coverage. The two arguments point the same way, and we know of no operational setting in
+which the reverse is preferable except one: when the downstream consumer requires a fixed,
+published catalog and cannot act on a partial map.
+
+\paragraph{What should be reported.}
+A macro-averaged figure computed over a pruned catalog is uninterpretable on its own, and the fix
+is neither expensive nor novel. Report the number of classes the average is taken over, the
+coverage the product delivers, and the control of Sect.~\ref{sec:control}. Three numbers, one of
+which costs a single line of code. Without them, a paper that raises macro F1 by a quarter of a
+point after retiring three rare classes is reporting arithmetic, and a reader cannot tell it from a
+paper that improved a model.
+
+\paragraph{On the criterion practitioners use.}
+The finding that retirement by support is both the weakest criterion and non-monotone deserves
+emphasis, because support is the criterion that gets used. It is chosen for a defensible reason ---
+a class with few samples is a class whose estimate is unstable --- but instability of the estimate
+and poor separability are different properties, and support only tracks the first. A class with
+\num{1718} parcels that the model separates cleanly contributes more to a delivered map than two
+abundant classes the model cannot tell apart. Choosing by measured per-class quality, on blocks
+disjoint from those that will be evaluated, costs nothing extra and is strictly better in every
+comparison we ran.
+
+\paragraph{On measuring meta-learners.}
+The three figures for the same stacking model --- \num{0.7470}, \num{0.6789} and \num{0.5360} ---
+are not three plausible estimates to choose among. The first is contaminated, and Wolpert's
+original formulation of stacking already required the leakage-free partitions it violates
+\cite{wolpert1992stacking}. The third is leak-free but penalizes the model for an aggregation
+artifact: averaging per-block macro scores in an imbalanced setting scores blocks over classes
+their parcels do not contain. Pooling the out-of-fold posteriors and scoring once, which gives
+\num{0.6789}, is the estimator that answers the question actually being asked. The gap between the
+first and the last is wide enough to reverse a conclusion about whether the ensemble contributes
+anything, which is why the regime has to be stated whenever such a number is printed.

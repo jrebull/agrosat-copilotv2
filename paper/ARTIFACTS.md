@@ -5,7 +5,7 @@ Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` reca
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
 **Sellado el**: 2026-09-03 · **HEAD del repositorio**: `a8386d8`
-**Fase**: 4 de [`docs/plan-micai-2027.md`](../docs/plan-micai-2027.md) ·
+**Fase**: 6 de [`docs/plan-micai-2027.md`](../docs/plan-micai-2027.md) ·
 **Ángulo vigente**: [`ADR-013`](../docs/decisions/ADR-013-angulo-micai.md) (reencuadre).
 
 ## Versiones de cómputo del sellado
@@ -72,19 +72,22 @@ el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 | Fase 3: la frontera rehecha, por bloque y mecanismo | `reports/paper_micai/fase3/frontera_por_bloque.csv` | `8a10691f779c155067b2e06d60bd0874` | 30960 | sin seguimiento en git | SELLADO | Cuatro series por predictor con estimando alineado y entrega sin oráculo; incluye la leyenda de cada bloque. |
 | Fase 3: resumen de la frontera | `reports/paper_micai/fase3/frontera_resumen.csv` | `cf1dce117ca1d6eeacb595596d46b469` | 5808 | sin seguimiento en git | SELLADO | Media, mínimo y máximo entre bloques del F1 alineado, y el F1 nativo al lado, que NO es comparable entre mecanismos. |
 | Fase 3: contrastes con intervalo pareado y corrección de Holm | `reports/paper_micai/fase3/frontera_contrastes.json` | `bc282a67b8b69b71e6037c1e9748e0e4` | 15532 | sin seguimiento en git | SELLADO | H1 no se sostiene: a K=9 el IC incluye el cero en los dos predictores y ningún contraste sobrevive a Holm. |
-| Fase 3: figura de la frontera | `reports/paper_micai/fase3/frontera.svg` | `a4869f852987d19a20987cd8bd079e2b` | 57405 | sin seguimiento en git | SELLADO | Tres mecanismos más el control sin mecanismo, con el criterio principal marcado. |
+| Fase 3: figura de la frontera | `reports/paper_micai/fase3/frontera.svg` | `d103c5ad7c6a1209f7dab329915e5a97` | 57355 | sin seguimiento en git | SELLADO | Tres mecanismos más el control sin mecanismo, con el criterio principal marcado. |
 | Fase 4: caracteristicas por parcela de BreizhCrops (185 columnas, 60 000 parcelas) | `reports/paper_micai/fase4/breizhcrops_features.parquet` | `274a4cc93c79fce8b797e6671cdf1e3d` | 55923894 | `a8386d8` (.dvc) | SELLADO | Submuestreo proporcional de 30 000 por region, semilla 42, mismas 185 caracteristicas que el conjunto primario. |
 | Fase 4: soporte por clase y region | `reports/paper_micai/fase4/breizhcrops_soporte.csv` | `026f4d8698cb48862f0108e0a3f9a98b` | 430 | sin seguimiento en git | SELLADO | Siete clases por encima de cien parcelas; girasol con 2 y nueces con 7 en total. |
 | Fase 4: procedencia del sellado de caracteristicas | `reports/paper_micai/fase4/breizhcrops_procedencia.json` | `517df9be473300707126e8ebbdc7662d` | 510 | sin seguimiento en git | SELLADO | Semilla, submuestreo, version de codigo y el conteo real de 185 caracteristicas. |
 | Fase 4: posteriores dejando una region fuera | `reports/paper_micai/fase4/breizhcrops_posteriores.parquet` | `bcc55122c8047c75f644d852c5880b11` | 2593890 | `a8386d8` (.dvc) | SELLADO | Cada posterior viene de un modelo que no vio la region de esa parcela. |
 | Fase 4: replica del protocolo, por bloque y mecanismo | `reports/paper_micai/fase4/replica_por_bloque.csv` | `d85baf968e38869e3437b94283a8c536` | 9955 | sin seguimiento en git | SELLADO | Cuatro series en los dos universos declarados, con la leyenda y la cobertura de cada bloque. |
 | Fase 4: contrastes de la replica con Holm | `reports/paper_micai/fase4/replica_contrastes.json` | `d023732d961bfe2d9d04ba10849259fd` | 11802 | sin seguimiento en git | SELLADO | La descomposicion se transporta: 95,1 % denominador en el criterio principal y 100 % donde la cobertura sigue completa. |
-| Fase 4: figura de la replica | `reports/paper_micai/fase4/replica.svg` | `d24624cfbb3c89477fc740f858bf70e9` | 55232 | sin seguimiento en git | SELLADO | Los dos universos lado a lado; las cuatro series coinciden hasta K = 6. |
+| Fase 4: figura de la replica | `reports/paper_micai/fase4/replica.svg` | `3f54d20d9c92505866cef87a2448219d` | 55182 | sin seguimiento en git | SELLADO | Los dos universos lado a lado; las cuatro series coinciden hasta K = 6. |
+| Fase 6: manuscrito MICAI, fuente principal | `paper/micai/main.tex` | `9907536ca2a23204b8b616d6b72dd27d` | 3403 | `2d96ca7` | SELLADO | Clase llncs con `\newif\ifanon`; anonimo por defecto, A4 real, `hidelinks`. |
+| Fase 6: bibliografia derivada de la matriz verificada | `paper/micai/refs.bib` | `b105ea5913081aa5f8b24f1a332764f6` | 15065 | `2d96ca7` | SELLADO | 44 entradas, todas resueltas por arXiv, Crossref u OpenAlex; generada, no escrita a mano. |
+| Fase 6: PDF de envio, version anonima | `paper/micai/main.pdf` | `d3f8039a83d16bdeda7484b7876dbd5a` | 362651 | sin seguimiento en git (`*.pdf` global) | SELLADO | 12 paginas A4, cero errores, cero overfull, gate de identidad en verde. `make micai-pdf` lo reconstruye byte a byte desde las fuentes versionadas, asi que el sello vale aunque el binario no viaje. |
 | Registro de la búsqueda sistemática de la fase 0 | `reports/paper_micai/fase0/search_log.csv` | `ac14cc4e5db38c7976c1c6b6c4af05e1` | 12831 | `4052b0b` | SELLADO | Consulta, fuente, fecha, código HTTP y registros. |
 | Registro de las consultas manuales de buscador | `reports/paper_micai/fase0/search_log_manual.csv` | `3de611cd854356095debdb34fb0cbbc5` | 2163 | `4052b0b` | SELLADO | Las seis consultas tipo Google Scholar. |
 | Candidatos devueltos por la búsqueda | `reports/paper_micai/fase0/search_candidates.csv` | `c56c4aad185e7a08a4dc7a383eaef35f` | 162047 | `4052b0b` | SELLADO | Sin filtrar, tal como los devolvió cada API. |
-| Matriz de trabajo relacionado redactada | `reports/paper_micai/fase0/related_work_matrix.csv` | `78fd6400073bcb6bbc26aef72d608cb7` | 25495 | `4052b0b` | SELLADO | Método, fortaleza, límite y hueco por entrada. |
-| Matriz de trabajo relacionado verificada por API | `reports/paper_micai/fase0/related_work_verified.csv` | `eb8953b459467dbbd196120a9da53891` | 36052 | `4052b0b` | SELLADO | 43 entradas, 43 en estado OK. |
+| Matriz de trabajo relacionado redactada | `reports/paper_micai/fase0/related_work_matrix.csv` | `4f546d4871198014b4437e2ee70df809` | 26225 | `4052b0b` | SELLADO | Método, fortaleza, límite y hueco por entrada. |
+| Matriz de trabajo relacionado verificada por API | `reports/paper_micai/fase0/related_work_verified.csv` | `633b122070d9b03248132487989a993d` | 37039 | `4052b0b` | SELLADO | 43 entradas, 43 en estado OK. |
 
 ## Cifras sin artefacto
 
@@ -127,6 +130,8 @@ memoria.
 | `reports/paper_micai/fase3/*` | `scripts/run_paper_micai_fase3.py` sobre `ml/eval/paper_micai_coverage.py`, figura con `scripts/build_paper_micai_fase3_figure.py` |
 | `reports/paper_micai/fase4/breizhcrops_*` | `scripts/build_breizhcrops_features.py` sobre `ml/ingest/breizhcrops_loader.py` y `ml/features/breizhcrops_features.py` |
 | `reports/paper_micai/fase4/replica_*` | `scripts/run_paper_micai_fase4.py` sobre el mismo `ml/eval/paper_micai_coverage.py` de la fase 3, figura con `scripts/build_paper_micai_fase4_figure.py` |
+| `paper/micai/refs.bib` | `scripts/build_paper_micai_bib.py` sobre `reports/paper_micai/fase0/related_work_verified.csv` |
+| `paper/micai/main.pdf` | `make micai-pdf`, verificado por `make micai-anon-check` |
 
 **Con cálculo versionado pero sin driver.** En estos seis, la lógica sí está en el
 repositorio; lo que no está versionado es el guion que la invocó y escribió el archivo.

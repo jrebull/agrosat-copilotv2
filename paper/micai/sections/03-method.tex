@@ -1,0 +1,108 @@
+\section{Materials and Method}
+\label{sec:method}
+
+\subsection{Data}
+\label{sec:data}
+
+We use two public parcel-level benchmarks and never tune the protocol between them.
+
+The \textbf{primary benchmark} is PASTIS-R \cite{garnot2021pastis}, from which we take the
+held-out fold and aggregate the dense annotations to parcel level, yielding \num{16640} parcels
+across \num{496} image patches and eighteen agronomic classes. Its imbalance is severe: the
+majority class holds \num{6128} parcels and the minority class \num{103}, a ratio of roughly
+\num{60}:\num{1}.
+
+The \textbf{replication benchmark} is BreizhCrops \cite{russwurm2020breizhcrops}, Sentinel-2 L2A
+series over Brittany for the 2017 season, with nine agronomic classes and a native partition into
+administrative regions. We use regions \texttt{frh01} and \texttt{frh04} with a proportional
+stratified subsample of \num{30000} parcels each, fixed seed, for a total of \num{60000} parcels.
+Its imbalance is an order of magnitude worse than the primary benchmark: in the full index the
+majority class outnumbers the minority by up to \num{19207}:\num{1}, and in our subsample three of
+the nine classes hold two, seven and \num{289} parcels respectively. Both benchmarks are described
+by the same \num{185}-dimensional temporal feature vector, derived from seventeen spectral indices,
+so that the two experiments differ in data and model but not in representation.
+
+\subsection{Predictors}
+\label{sec:predictors}
+
+The protocol operates on posteriors and is agnostic to how they were produced. On the primary
+benchmark we take the two strongest of ten available members, a vision transformer for satellite
+image time series \cite{tarasiou2023tsvit} and a gradient-boosted model over learned embeddings.
+On the replication benchmark we train a gradient-boosted classifier \emph{leaving one region out}:
+each parcel's posterior comes from a model that never saw its region, which makes every posterior
+we score a genuine out-of-region prediction. That classifier reaches macro-F1 \num{0.4979} and
+accuracy \num{0.7421} on \texttt{frh01}, and \num{0.4811} and \num{0.7257} on \texttt{frh04}.
+
+\subsection{Blocks}
+\label{sec:blocks}
+
+Every operating point is chosen on data disjoint from the data that measures it. On the primary
+benchmark the blocks are spatial: an H3 tessellation at resolution five, clustered and separated by
+a \SI{1}{\kilo\meter} buffer, giving five blocks. On the replication benchmark the index publishes
+no per-parcel coordinates, so the finest spatial structure available is the administrative region;
+we use the two regions as the two blocks. This is a real limitation and we treat it as one: with
+two blocks the resampling captures variation \emph{within} regions and not \emph{between} them, so
+we report the per-block difference for every contrast rather than a pooled interval alone.
+
+\subsection{The two mechanisms, and a third criterion}
+\label{sec:mechanisms}
+
+Let $\mathcal{C}$ be the full set of $C$ classes, $p(\cdot \mid x)$ the predictor's posterior for
+parcel $x$, and $\hat{y}(x) = \arg\max_{c \in \mathcal{C}} p(c \mid x)$ its unrestricted
+prediction.
+
+\emph{Legend shrinking} selects a subset $\mathcal{L} \subseteq \mathcal{C}$ with
+$|\mathcal{L}| = K$ on the training blocks, and on the evaluation block delivers a parcel when
+$\hat{y}(x) \in \mathcal{L}$, emitting $\arg\max_{c \in \mathcal{L}} p(c \mid x)$. We test two
+criteria for choosing $\mathcal{L}$: by per-class F1 on the training blocks, and by class support
+on the training blocks, the latter because it is what practitioners report doing.
+
+\emph{Confidence rejection} keeps $\mathcal{L} = \mathcal{C}$ and delivers the parcels whose
+$\max_c p(c \mid x)$ falls above a threshold. The threshold is the quantile of the block's own
+confidences that matches the number of parcels the comparison mechanism delivered in that same
+block, so the two are compared at equal coverage.
+
+Neither mechanism reads a ground-truth label to decide what to deliver. This is worth stating
+explicitly because the natural implementation of legend shrinking does read one: delivering the
+parcels whose \emph{true} label lies in $\mathcal{L}$ is an oracle, and it inflates the mechanism's
+apparent quality. Our delivery rule uses the unrestricted argmax, which is observable at inference
+time.
+
+\subsection{The aligned estimand}
+\label{sec:estimand}
+
+Two mechanisms that promise different catalogs cannot be compared by each one's own macro average,
+because the averages are taken over different denominators. We therefore score every mechanism with
+
+\begin{equation}
+  \mathrm{F1}_{\text{aligned}} \;=\; \frac{1}{|\mathcal{L} \cap \mathcal{Y}|}
+  \sum_{c \,\in\, \mathcal{L} \cap \mathcal{Y}} \mathrm{F1}_c ,
+  \label{eq:aligned}
+\end{equation}
+
+\noindent where $\mathcal{L}$ is the legend under test and $\mathcal{Y}$ the classes actually
+present among the delivered parcels. Both mechanisms in a contrast are scored over the \emph{same}
+$\mathcal{L}$. We also report each mechanism's native macro over what it individually promises, but
+only as a product-facing view; it is not comparable across mechanisms and we never use it for a
+contrast.
+
+\subsection{The control}
+\label{sec:control}
+
+The control that gives this paper its title is one line. For each legend $\mathcal{L}$ and each
+block, score the untouched predictor over $\mathcal{L}$ using Eq.~\ref{eq:aligned} while delivering
+\emph{every} parcel. No class is retired from the emission, no parcel is refused; only the
+denominator changes. If this control matches or exceeds a mechanism, the quality was bought by the
+choice of class set and not by the mechanism.
+
+\subsection{Inference}
+\label{sec:inference}
+
+Contrasts use a paired bootstrap: one resample index is drawn per block and \emph{both} mechanisms
+are rescored on it, so the two share the sampling noise. We draw \num{1000} resamples and report
+the percentile interval of the difference of mean block-level aligned F1, together with the
+per-block differences. On the primary benchmark we additionally resample by image patch rather
+than by parcel, since parcels within a patch share an image and are not independent. The
+pre-registered principal criterion is $K = \lceil C/2 \rceil$; the remaining values of $K$ form an
+exploratory family, corrected by the Holm--Bonferroni step-down procedure within each predictor and
+each benchmark.

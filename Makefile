@@ -1,4 +1,4 @@
-.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke train-h100 azure-h100-start azure-h100-stop azure-h100-status mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check
+.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke train-h100 azure-h100-start azure-h100-stop azure-h100-status mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check micai-pdf micai-anon-check micai-bib
 
 help:
 	@echo "AgroSatCopilot — comandos disponibles:"
@@ -537,3 +537,18 @@ paper-cite-check:  ## Valida que cada \cite{} del manuscrito tenga entrada en pa
 
 paper-artifacts-check:  ## Recalcula el MD5 de cada artefacto sellado en paper/ARTIFACTS.md y falla si cambio.
 	poetry run python scripts/paper_artifacts_check.py
+
+micai-pdf:  ## Compila el manuscrito MICAI (paper/micai) con bibliografia y devuelve su numero de paginas.
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
+	cd paper/micai && bibtex main >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
+	cd paper/micai && pdflatex -interaction=nonstopmode -halt-on-error main.tex >/dev/null
+	@cd paper/micai && test "$$(grep -c '^!' main.log)" = "0" || (echo "micai-pdf: LaTeX reporto errores" && exit 1)
+	@cd paper/micai && test "$$(grep -c Overfull main.log)" = "0" || (echo "micai-pdf: hay cajas overfull" && exit 1)
+	@pdfinfo paper/micai/main.pdf | grep -iE "pages|page size"
+
+micai-anon-check:  ## Gate de doble ciego sobre el PDF ensamblado, con autoprueba en negativo.
+	poetry run python scripts/paper_micai_anon_check.py paper/micai/main.pdf
+
+micai-bib:  ## Regenera paper/micai/refs.bib desde la matriz verificada de la fase 0.
+	poetry run python scripts/build_paper_micai_bib.py

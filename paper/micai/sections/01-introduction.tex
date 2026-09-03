@@ -1,0 +1,50 @@
+\section{Introduction}
+\label{sec:introduction}
+
+A parcel-level crop map promises a catalog. The catalog is a decision: someone chose which crop
+types the product will name and which it will not, and that choice is made long before any
+accuracy figure is computed. In practice the choice is rarely reported as a choice. It arrives in a
+sentence about how some classes had too few samples, and the evaluation that follows is computed
+over whatever survived.
+
+This matters because the metric that dominates the literature on imbalanced crop mapping is
+macro-averaged F1, and macro-averaging divides by the number of classes. Removing a class the model
+handled badly raises the macro average twice over: once by deleting a low per-class score from the
+numerator, and once by shrinking the denominator. The second effect requires no model, no
+mechanism, and no work. It is arithmetic. Yet a gain produced entirely by the second effect is
+indistinguishable, in a results table, from a gain produced by a method.
+
+We take that ambiguity as the object of study. We consider two mechanisms that a practitioner can
+use to trade coverage for macro quality. The first shrinks the promised legend: the product names
+$K$ of the $C$ available classes and declines to answer wherever its unrestricted prediction falls
+outside them. The second keeps the full legend and abstains on the parcels where the predictor is
+least confident, in the tradition of selective classification
+\cite{chow1970reject,geifman2017selective}. Both reduce how much of the map is delivered; both
+raise the macro figure;
+and the question is how much of that rise either one is responsible for.
+
+Our answer is a control, and it is almost embarrassingly cheap. Score the \emph{untouched}
+predictor over the same shrunken legend while delivering everything. Whatever that control
+recovers was never bought by the mechanism. On a first public benchmark of eighteen agronomic
+classes, the control accounts for \num{88.3}\,\% of the apparent gain from shrinking the catalog
+from eighteen classes to eight. On a second benchmark, in a different year, a different region and
+with a different model family, it accounts for \num{95.1}\,\% at the pre-registered operating
+point. And over the range where coverage remains complete, it accounts for \emph{all} of it: every
+mechanism we test returns the same number, to four decimals, while the macro figure climbs by
+\num{0.2447}.
+
+Two further results follow from the same protocol. At matched coverage, abstaining on
+low-confidence parcels outperforms shrinking the legend on both benchmarks, which is the opposite
+of what the practice we set out to formalize assumes. And retiring classes by low support, which is
+the criterion practitioners describe using, is the weakest of the three we test and is not monotone
+in the number of classes retired: retiring more can make the delivered map worse.
+
+The contributions are as follows. We formalize the two mechanisms and give a spatial-block protocol
+that chooses the operating point outside the data used to measure it, scores both mechanisms over
+the same class set so that their numbers are comparable, and never consults a ground-truth label to
+decide which parcels to deliver. We quantify the decomposition of the apparent gain into
+denominator and mechanism on two public benchmarks under an unchanged protocol. We order the three
+retirement criteria with paired bootstrap intervals and a multiplicity correction. And we show that
+a trained stacking meta-learner performs the same retirement implicitly and undeclared, and that
+the difference between measuring it inside and outside the sample is enough to reverse the
+conclusion about whether the ensemble helps at all.

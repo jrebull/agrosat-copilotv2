@@ -1,0 +1,121 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{The corridor where every mechanism is identical}
+\label{sec:corridor}
+
+On the replication benchmark, shrinking the catalog from nine classes to six raises aligned macro
+F1 from \num{0.4895} to \num{0.7342}, an apparent gain of \num{0.2447}. Over that entire range all
+four series --- retirement by F1, retirement by support, confidence rejection, and the control that
+applies no mechanism at all --- return the \emph{same} value, and coverage stays at
+\num{1.000}.
+
+The reason is arithmetic and it is what makes the observation conclusive. The three classes
+retired first hold two, seven and \num{289} parcels out of \num{60000}; the unrestricted argmax
+essentially never predicts them, so removing them from the legend removes no parcel from the
+delivered map. No mechanism does anything. The metric rises by almost a quarter of a point on its
+own.
+
+\begin{table}[tbp]
+\caption{Decomposition of the apparent gain on the replication benchmark, nine-class universe.
+``Denominator'' is the control of Sect.~\ref{sec:control}: the untouched predictor scored over the
+same legend, delivering everything. $K = 5$ is the pre-registered principal criterion.}
+\label{tab:decomposition}
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+$K$ & aligned F1 & apparent gain & denominator & mechanism & coverage \\
+\midrule
+9 & 0.4895 & ---     & ---              & ---            & 1.000 \\
+8 & 0.5507 & +0.0612 & +0.0612 (100.0\%) & +0.0000 (0.0\%) & 1.000 \\
+7 & 0.6293 & +0.1398 & +0.1398 (100.0\%) & +0.0000 (0.0\%) & 1.000 \\
+6 & 0.7342 & +0.2447 & +0.2447 (100.0\%) & +0.0000 (0.0\%) & 1.000 \\
+\textbf{5} & \textbf{0.8055} & \textbf{+0.3160} & \textbf{+0.3004 (95.1\%)} & \textbf{+0.0156 (4.9\%)} & \textbf{0.859} \\
+4 & 0.8579 & +0.3684 & +0.3352 (91.0\%) & +0.0333 (9.0\%) & 0.806 \\
+3 & 0.9126 & +0.4232 & +0.3826 (90.4\%) & +0.0406 (9.6\%) & 0.444 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The decomposition transports}
+\label{sec:transport}
+
+The same protocol, unchanged, gives the same qualitative answer on the primary benchmark. Shrinking
+from eighteen classes to eight raises aligned macro F1 from \num{0.5612} to \num{0.8052}, an
+apparent gain of \num{0.2440}, of which the control recovers \num{0.2155}, or
+\num{88.3}\,\%. At the pre-registered operating point of $K = 9$ the control recovers
+\num{87.1}\,\% and the result holds for both of the two predictors we tested.
+
+Two benchmarks, two years, two regions, two model families and one protocol therefore agree: the
+denominator dominates. Where they differ is in degree, and in the direction that matters for a
+practitioner: the replication benchmark, whose imbalance is an order of magnitude worse, leaves the
+mechanism even less to explain.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{frontier-primary.pdf}
+\caption{The same frontier on the primary benchmark, for its two strongest predictors. The control
+that applies no mechanism (crosses) already recovers most of the distance travelled by the
+mechanisms, and retirement by support (squares) again trails the other two throughout.}
+\label{fig:primary}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{frontier-replication.pdf}
+\caption{Quality--coverage frontier on the replication benchmark, in the two pre-registered class
+universes. The four series are indistinguishable until $K = 6$ because coverage is complete and no
+mechanism acts; the dotted line marks the principal criterion. Retirement by support (squares) is
+the only series that falls as more classes are retired.}
+\label{fig:replication}
+\end{figure}
+
+\subsection{At equal coverage, abstention wins}
+\label{sec:ordering}
+
+Once coverage falls below one and the mechanisms begin to differ, they can be ordered. At the
+principal criterion of the replication benchmark, confidence rejection reaches \num{0.8303} against
+\num{0.8055} for legend shrinking at the same coverage, a difference of \num{-0.0248} with a paired
+\num{95}\,\% interval of $(-0.0272, -0.0225)$ and a Holm-adjusted $p$ below \num{0.0001}. Both
+regions agree in sign and magnitude, at \num{-0.0248} and \num{-0.0249}.
+
+On the primary benchmark the difference has the same sign but is not distinguishable from zero:
+\num{-0.0288} with an interval of $(-0.0414, +0.0080)$ and a Holm-adjusted $p$ of \num{0.336}. The
+honest summary across both benchmarks is therefore that we find no evidence that shrinking the
+legend outperforms abstention, and on the larger and more imbalanced benchmark we find significant
+evidence of the reverse.
+
+\subsection{Retirement by support is the weakest criterion, and it is not monotone}
+\label{sec:support}
+
+Retiring classes by low support is the criterion practitioners describe using, and it is the worst
+of the three on both benchmarks. On the replication benchmark it reaches \num{0.7129} at the
+principal criterion against \num{0.8055} for retirement by F1, a gap of \num{0.0926}, which widens
+to \num{0.2085} at $K = 3$. On the primary benchmark the corresponding gap is between \num{0.12}
+and \num{0.13}.
+
+It also does something neither other criterion does: it \emph{degrades} as more classes are
+retired, from \num{0.7129} at $K = 5$ to \num{0.7041} at $K = 3$. Inspecting the legends explains
+why. Support-based retirement removes rapeseed, which holds \num{1718} parcels and which the model
+separates well, while retaining both meadow classes, which the model confuses with each other. The
+criterion optimizes sample size, which is not the same quantity as the quality of what is
+delivered.
+
+\subsection{A trained meta-learner retires classes implicitly}
+\label{sec:arbiter}
+
+The mechanism this paper formalizes is already being applied, undeclared, by trained ensembles. On
+the primary benchmark, a stacking meta-learner over three members drives one class of \num{355}
+parcels to an F1 of exactly \num{0.0000}, while the best single model reaches \num{0.7790} on that
+same class. The meta-learner has retired a class from the product without anyone choosing to, and
+without it appearing anywhere in a results table.
+
+The regime in which such a meta-learner is measured is decisive. Scored in-sample --- refitted on
+all parcels after cross-validation, which is the default of many stacking implementations --- it
+reports \num{0.7470}. Scored leak-free by pooling its spatial out-of-fold posteriors and scoring
+once, it reports \num{0.6789}. Averaging per-block macro scores instead of pooling reports
+\num{0.5360}. The leakage accounts for \num{0.068} and the choice of aggregation for a further
+\num{0.143}; conflating the two leads to reporting \num{0.536} as the honest figure when it is
+\num{0.679}, penalizing the model for a measurement artifact on top of its actual error. Against
+the best single model, the leak-free meta-learner loses by \num{0.0572} with an interval of
+$(-0.0644, -0.0499)$ that excludes zero.

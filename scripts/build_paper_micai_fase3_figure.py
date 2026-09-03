@@ -37,6 +37,18 @@ STYLE = {
     "ytick.direction": "in",
     "legend.frameon": False,
     "figure.dpi": 200,
+    # Sal fija para los identificadores del SVG: sin ella matplotlib los aleatoriza en cada
+    # corrida y la figura deja de ser reproducible byte a byte.
+    "svg.hashsalt": "agrosat-micai",
+}
+
+#: Matplotlib incrusta la fecha de generacion en SVG y PDF, lo que rompe el sello de custodia
+#: en cada regeneracion por un motivo que no tiene que ver con los datos. Anularla deja la figura
+#: reproducible byte a byte.
+DETERMINISTIC_METADATA: dict[str, dict[str, None]] = {
+    "svg": {"Date": None},
+    "png": {"Software": None},
+    "pdf": {"CreationDate": None},
 }
 
 #: Cada mecanismo con su marcador y su trazo, no solo con su color.
@@ -94,9 +106,9 @@ def main() -> None:
         axes[0].legend(loc="lower left", fontsize=7.5)
         fig.tight_layout()
 
-        for ext in ("svg", "png"):
+        for ext in ("svg", "png", "pdf"):
             out = FASE3 / f"frontera.{ext}"
-            fig.savefig(out, bbox_inches="tight")
+            fig.savefig(out, bbox_inches="tight", metadata=DETERMINISTIC_METADATA[ext])
             logger.info("figura_guardada", path=str(out.relative_to(REPO_ROOT)))
         plt.close(fig)
 

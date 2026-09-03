@@ -246,6 +246,11 @@ notebooks/_export/
 *.tar.gz
 *.tar
 *.7z
+# El proyecto LaTeX del articulo MICAI tiene que compilar desde un clon limpio, asi que sus
+# figuras viajan con el; son las mismas que produce `make micai-pdf` aguas arriba y son
+# reproducibles byte a byte.
+!paper/micai/figures/*.pdf
+
 # Exceptions for frontend & docs assets
 !frontend/public/icons/*.png
 !frontend/public/images/*.png
