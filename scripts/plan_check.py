@@ -239,7 +239,29 @@ def main() -> int:
             logger.error("sin_artefacto_de_salida", historia=sid)
             fallos += 1
 
-    # 5. Resumen.
+    # 5. Historias que declaran dependencias y a la vez dicen no tenerlas.
+    # La auditoria externa lo encontro dentro de US-140: el criterio de aceptacion decia «sin
+    # dependencias» mientras el campo `dep` declaraba cuatro. Una contradiccion dentro del mismo
+    # objeto no la ve ninguna lectura humana, y es barata de comprobar.
+    for sid, st in stories.items():
+        if not _deps(st):
+            continue
+        texto = " ".join([*st.get("ac", []), str(st.get("role") or "")]).lower()
+        # Solo la afirmacion explicita. «No depende de que salga X» es prosa legitima sobre el
+        # resultado, no una declaracion de dependencias, y meterla aqui produce tres falsos
+        # positivos reales en este mismo plan.
+        for frase in ("sin dependencias", "sin dependencia:"):
+            if frase in texto:
+                logger.error(
+                    "dice_no_tener_dependencias_pero_las_declara",
+                    historia=sid,
+                    frase=frase,
+                    depende_de=", ".join(_deps(st)),
+                )
+                fallos += 1
+                break
+
+    # 6. Resumen.
     sp_total = sum(int(s["sp"]) for s in stories.values())
     por_estado: dict[str, int] = {}
     for s in stories.values():

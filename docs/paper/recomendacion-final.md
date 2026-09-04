@@ -35,8 +35,12 @@ Y el diseño no puede detectar un efecto de ese tamaño: con cinco bloques el ef
 es **0,0326** con un contraste y **0,0508** bajo Holm con seis, contra un efecto observado de
 **0,0167**. Harían falta trece y veinte bloques. Hay cinco y dos.
 
-**En cambio, la disparidad es un factor de ocho**: la clase 10 recibe 0,090 de cobertura bajo recorte
-y 0,741 bajo abstención. Ahí el diseño sí tiene potencia de sobra, y ahí va el criterio principal.
+**La disparidad se midió, y NO tiene potencia de sobra.** Esta frase decía lo contrario y era falsa.
+La clase 10 recibe 0,090 de cobertura bajo recorte y 0,741 bajo abstención, que es una razón de ocho
+— pero es la **mayor de dieciocho razones cuya mediana es 1,00**, y con las cuatro medidas de
+disparidad declaradas el intervalo por bloque **incluye el cero en las cuatro**: harían falta entre
+doce y diecisiete bloques. Ni la disparidad ni ningún otro criterio se elige por dónde haya
+potencia; el criterio principal se fija en la firma, uno solo, desde la tabla de pérdidas.
 
 ## 4. Lo que hay que rehacer, y no es poco
 

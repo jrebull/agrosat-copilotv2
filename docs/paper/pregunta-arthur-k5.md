@@ -12,8 +12,8 @@
 >
 > | bloques | intervalo del contraste | ¿excluye el cero? | separación prueba–entrenamiento | clases estimables en el peor bloque |
 > |---:|---|---|---:|---:|
-> | **5** | (−0,041, **+0,008**) | **no** | **23,5 km** | **10 de 18** |
-> | 15 | (−0,035, −0,015) | sí | 2,2 km | 2 de 18 |
+> | **5** | (−0,041, **+0,008**) | **no** | **22,972 km** | **10 de 18** |
+> | 15 | (−0,035, −0,015) | sí | 2,009 km | 2 de 18 |
 >
 > Con quince bloques **el resultado sale significativo**. Con cinco no.
 >
@@ -21,7 +21,7 @@
 >
 > **Lo que pagamos**: el contraste principal deja de ser significativo. El artículo no puede decir «a igual cobertura gana la abstención». Pasa a decir «son equivalentes en calidad dentro de una banda declarada, y lo que de verdad cambia es a quién le retiran la promesa».
 >
-> **Por qué lo propongo igual**: con quince bloques los bloques son **vecinos** —2,2 km de separación, cuando el colchón que usamos para construirlos es de 1 km—, así que la independencia espacial que el artículo entero presume deja de estar demostrada. Y el peor bloque se queda con **dos** clases estimables de dieciocho, con lo que el F1-macro que promediamos ahí ya no es una media sobre el catálogo: es otra cosa con el mismo nombre.
+> **Por qué lo propongo igual**: con quince bloques los bloques son **vecinos** —2,0 km de separación, cuando el colchón que usamos para construirlos es de 1 km—, así que la independencia espacial que el artículo entero presume deja de estar demostrada. Y el peor bloque se queda con **dos** clases estimables de dieciocho, con lo que el F1-macro que promediamos ahí ya no es una media sobre el catálogo: es otra cosa con el mismo nombre.
 >
 > Y hay una razón que pesa más que las dos: **el quince es la celda más favorable de las siete que probé** —el mayor efecto y la menor dispersión a la vez—. Si lo elegimos, lo estamos eligiendo porque da significancia. Eso es exactamente lo que nos tumbó el artículo anterior, un piso más abajo.
 >

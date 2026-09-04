@@ -1,12 +1,12 @@
 {
-  "para_que": "Fijar con un motivo los tres grados de libertad del preregistro: el suelo de soporte por bloque, el criterio espacial de k, y la banda de equivalencia. Este guion NO calcula ningun contraste entre mecanismos.",
+  "para_que": "Fijar con un motivo los grados de libertad del preregistro: el suelo de soporte por bloque y el criterio espacial de k. Este guion NO calcula ningun contraste entre mecanismos y NO produce banda de equivalencia.",
   "diseno_por_k": [
     {
       "k": 5,
       "bloques": 5,
       "parcelas_min": 1313,
-      "separacion_min_km": 23.505,
-      "separacion_mediana_km": 133.489,
+      "separacion_min_km": 22.972,
+      "separacion_mediana_km": 122.056,
       "area_min_km2": 3570.9,
       "clases_min_S5": 11,
       "parcelas_cubiertas_S5": 0.9886,
@@ -23,8 +23,8 @@
       "k": 8,
       "bloques": 8,
       "parcelas_min": 1313,
-      "separacion_min_km": 2.877,
-      "separacion_mediana_km": 5.474,
+      "separacion_min_km": 1.975,
+      "separacion_mediana_km": 4.635,
       "area_min_km2": 3396.9,
       "clases_min_S5": 11,
       "parcelas_cubiertas_S5": 0.9886,
@@ -41,8 +41,8 @@
       "k": 10,
       "bloques": 10,
       "parcelas_min": 662,
-      "separacion_min_km": 2.384,
-      "separacion_mediana_km": 6.102,
+      "separacion_min_km": 1.85,
+      "separacion_mediana_km": 4.606,
       "area_min_km2": 904.8,
       "clases_min_S5": 9,
       "parcelas_cubiertas_S5": 0.9743,
@@ -59,8 +59,8 @@
       "k": 12,
       "bloques": 12,
       "parcelas_min": 402,
-      "separacion_min_km": 2.632,
-      "separacion_mediana_km": 5.991,
+      "separacion_min_km": 2.506,
+      "separacion_mediana_km": 4.494,
       "area_min_km2": 1416.0,
       "clases_min_S5": 5,
       "parcelas_cubiertas_S5": 0.9502,
@@ -77,8 +77,8 @@
       "k": 15,
       "bloques": 15,
       "parcelas_min": 346,
-      "separacion_min_km": 2.206,
-      "separacion_mediana_km": 5.125,
+      "separacion_min_km": 2.009,
+      "separacion_mediana_km": 3.211,
       "area_min_km2": 650.5,
       "clases_min_S5": 5,
       "parcelas_cubiertas_S5": 0.9422,
@@ -95,8 +95,8 @@
       "k": 20,
       "bloques": 20,
       "parcelas_min": 172,
-      "separacion_min_km": 2.412,
-      "separacion_mediana_km": 5.199,
+      "separacion_min_km": 2.142,
+      "separacion_mediana_km": 4.171,
       "area_min_km2": 381.1,
       "clases_min_S5": 5,
       "parcelas_cubiertas_S5": 0.9186,
@@ -113,8 +113,8 @@
       "k": 25,
       "bloques": 25,
       "parcelas_min": 172,
-      "separacion_min_km": 2.022,
-      "separacion_mediana_km": 5.586,
+      "separacion_min_km": 1.85,
+      "separacion_mediana_km": 3.711,
       "area_min_km2": 273.4,
       "clases_min_S5": 5,
       "parcelas_cubiertas_S5": 0.9186,
@@ -128,19 +128,395 @@
       "parcelas_cubiertas_S50": 0.5475
     }
   ],
-  "banda_equivalencia_por_k": {
-    "5": 0.0326,
-    "8": 0.0226,
-    "10": 0.0195,
-    "12": 0.0174,
-    "15": 0.0153,
-    "20": 0.013,
-    "25": 0.0115
-  },
-  "nota_banda": "La banda se ancla en el efecto minimo detectable del diseno: declarar una equivalencia mas estrecha de lo que el diseno distingue seria afirmar sin poder medir.",
+  "barrido_colchon": [
+    {
+      "k": 5,
+      "colchon_km": 1.0,
+      "bloques": 5,
+      "separacion_min_km": 22.972,
+      "clases_min_S20": 10,
+      "parcelas_de_prueba": 16640
+    },
+    {
+      "k": 5,
+      "colchon_km": 5.0,
+      "bloques": 5,
+      "separacion_min_km": 22.972,
+      "clases_min_S20": 10,
+      "parcelas_de_prueba": 16640
+    },
+    {
+      "k": 5,
+      "colchon_km": 10.0,
+      "bloques": 5,
+      "separacion_min_km": 22.972,
+      "clases_min_S20": 10,
+      "parcelas_de_prueba": 16640
+    },
+    {
+      "k": 5,
+      "colchon_km": 15.0,
+      "bloques": 5,
+      "separacion_min_km": 22.972,
+      "clases_min_S20": 10,
+      "parcelas_de_prueba": 16640
+    },
+    {
+      "k": 8,
+      "colchon_km": 1.0,
+      "bloques": 8,
+      "separacion_min_km": 1.975,
+      "clases_min_S20": 9,
+      "parcelas_de_prueba": 16351
+    },
+    {
+      "k": 8,
+      "colchon_km": 5.0,
+      "bloques": 8,
+      "separacion_min_km": 4.885,
+      "clases_min_S20": 9,
+      "parcelas_de_prueba": 15898
+    },
+    {
+      "k": 8,
+      "colchon_km": 10.0,
+      "bloques": 8,
+      "separacion_min_km": 11.281,
+      "clases_min_S20": 8,
+      "parcelas_de_prueba": 14314
+    },
+    {
+      "k": 8,
+      "colchon_km": 15.0,
+      "bloques": 8,
+      "separacion_min_km": 20.694,
+      "clases_min_S20": 7,
+      "parcelas_de_prueba": 12806
+    },
+    {
+      "k": 10,
+      "colchon_km": 1.0,
+      "bloques": 10,
+      "separacion_min_km": 1.85,
+      "clases_min_S20": 5,
+      "parcelas_de_prueba": 16478
+    },
+    {
+      "k": 10,
+      "colchon_km": 5.0,
+      "bloques": 10,
+      "separacion_min_km": 4.885,
+      "clases_min_S20": 5,
+      "parcelas_de_prueba": 15945
+    },
+    {
+      "k": 10,
+      "colchon_km": 10.0,
+      "bloques": 10,
+      "separacion_min_km": 10.107,
+      "clases_min_S20": 5,
+      "parcelas_de_prueba": 13877
+    },
+    {
+      "k": 10,
+      "colchon_km": 15.0,
+      "bloques": 10,
+      "separacion_min_km": 15.628,
+      "clases_min_S20": 4,
+      "parcelas_de_prueba": 12026
+    },
+    {
+      "k": 12,
+      "colchon_km": 1.0,
+      "bloques": 12,
+      "separacion_min_km": 2.506,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 16435
+    },
+    {
+      "k": 12,
+      "colchon_km": 5.0,
+      "bloques": 12,
+      "separacion_min_km": 5.106,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 15933
+    },
+    {
+      "k": 12,
+      "colchon_km": 10.0,
+      "bloques": 12,
+      "separacion_min_km": 9.996,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 13949
+    },
+    {
+      "k": 12,
+      "colchon_km": 15.0,
+      "bloques": 12,
+      "separacion_min_km": 15.478,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 11516
+    },
+    {
+      "k": 15,
+      "colchon_km": 1.0,
+      "bloques": 15,
+      "separacion_min_km": 2.009,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 16321
+    },
+    {
+      "k": 15,
+      "colchon_km": 5.0,
+      "bloques": 15,
+      "separacion_min_km": 4.951,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 15418
+    },
+    {
+      "k": 15,
+      "colchon_km": 10.0,
+      "bloques": 15,
+      "separacion_min_km": 10.463,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 12752
+    },
+    {
+      "k": 15,
+      "colchon_km": 15.0,
+      "bloques": 15,
+      "separacion_min_km": 14.989,
+      "clases_min_S20": 2,
+      "parcelas_de_prueba": 10413
+    }
+  ],
+  "solapamiento_entre_bloques": [
+    {
+      "k": 5,
+      "pares": 10,
+      "jaccard_medio_train": 0.4273,
+      "jaccard_max_train": 0.551,
+      "jaccard_medio_train_val": 0.6,
+      "jaccard_max_train_val": 0.8005
+    },
+    {
+      "k": 8,
+      "pares": 28,
+      "jaccard_medio_train": 0.5217,
+      "jaccard_max_train": 0.5668,
+      "jaccard_medio_train_val": 0.75,
+      "jaccard_max_train_val": 0.8192
+    },
+    {
+      "k": 10,
+      "pares": 45,
+      "jaccard_medio_train": 0.5515,
+      "jaccard_max_train": 0.6083,
+      "jaccard_medio_train_val": 0.8,
+      "jaccard_max_train_val": 0.9009
+    },
+    {
+      "k": 12,
+      "pares": 66,
+      "jaccard_medio_train": 0.5709,
+      "jaccard_max_train": 0.6294,
+      "jaccard_medio_train_val": 0.8333,
+      "jaccard_max_train_val": 0.9424
+    },
+    {
+      "k": 15,
+      "pares": 105,
+      "jaccard_medio_train": 0.5906,
+      "jaccard_max_train": 0.6402,
+      "jaccard_medio_train_val": 0.8667,
+      "jaccard_max_train_val": 0.9515
+    },
+    {
+      "k": 20,
+      "pares": 190,
+      "jaccard_medio_train": 0.6099,
+      "jaccard_max_train": 0.6501,
+      "jaccard_medio_train_val": 0.9,
+      "jaccard_max_train_val": 0.9701
+    },
+    {
+      "k": 25,
+      "pares": 300,
+      "jaccard_medio_train": 0.6215,
+      "jaccard_max_train": 0.6518,
+      "jaccard_medio_train_val": 0.92,
+      "jaccard_max_train_val": 0.9737
+    }
+  ],
+  "universo_de_clases_por_bloque": [
+    {
+      "k": 5,
+      "clases_por_bloque": [
+        11,
+        13,
+        14,
+        13,
+        10
+      ],
+      "en_todos_los_bloques": 6,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.4,
+      "jaccard_medio_entre_universos": 0.5654
+    },
+    {
+      "k": 8,
+      "clases_por_bloque": [
+        13,
+        11,
+        11,
+        13,
+        13,
+        9,
+        10,
+        9
+      ],
+      "en_todos_los_bloques": 5,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.2941,
+      "jaccard_medio_entre_universos": 0.5437
+    },
+    {
+      "k": 10,
+      "clases_por_bloque": [
+        7,
+        9,
+        13,
+        10,
+        11,
+        9,
+        8,
+        5,
+        10,
+        11
+      ],
+      "en_todos_los_bloques": 1,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.1667,
+      "jaccard_medio_entre_universos": 0.4466
+    },
+    {
+      "k": 12,
+      "clases_por_bloque": [
+        11,
+        8,
+        13,
+        10,
+        9,
+        8,
+        11,
+        11,
+        4,
+        2,
+        7,
+        11
+      ],
+      "en_todos_los_bloques": 1,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.0833,
+      "jaccard_medio_entre_universos": 0.4434
+    },
+    {
+      "k": 15,
+      "clases_por_bloque": [
+        8,
+        4,
+        6,
+        5,
+        7,
+        10,
+        10,
+        8,
+        7,
+        12,
+        11,
+        9,
+        8,
+        11,
+        2
+      ],
+      "en_todos_los_bloques": 1,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.0667,
+      "jaccard_medio_entre_universos": 0.3803
+    },
+    {
+      "k": 20,
+      "clases_por_bloque": [
+        8,
+        8,
+        6,
+        9,
+        4,
+        7,
+        8,
+        2,
+        11,
+        6,
+        9,
+        4,
+        9,
+        1,
+        5,
+        4,
+        12,
+        6,
+        10,
+        6
+      ],
+      "en_todos_los_bloques": 1,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.0667,
+      "jaccard_medio_entre_universos": 0.3641
+    },
+    {
+      "k": 25,
+      "clases_por_bloque": [
+        10,
+        4,
+        6,
+        5,
+        4,
+        9,
+        3,
+        6,
+        2,
+        9,
+        10,
+        7,
+        5,
+        1,
+        5,
+        9,
+        7,
+        4,
+        5,
+        5,
+        2,
+        10,
+        6,
+        3,
+        5
+      ],
+      "en_todos_los_bloques": 1,
+      "en_la_union": 18,
+      "jaccard_min_entre_universos": 0.0769,
+      "jaccard_medio_entre_universos": 0.3415
+    }
+  ],
+  "banda_equivalencia": null,
+  "nota_banda": "RETIRADA tras la auditoria externa. La version anterior la anclaba en el efecto minimo detectable del diseno, y eso hace que la resolucion del instrumento defina que cuenta como equivalente. El margen sale de la menor diferencia practicamente relevante para quien usa el mapa, y lo fija US-174 con los casos de uso. Hasta entonces este artefacto no produce ningun numero que pueda pasar por una banda.",
+  "nota_separacion": "Distancia exacta al vecino mas cercano con KD-tree. La version anterior submuestreaba unos 300 puntos de cada lado antes de tomar el minimo, lo que sesga el numero HACIA ARRIBA por construccion: quitar candidatos solo puede mantener o subir un minimo. Con k=5 la separacion minima cae de 23,505 a 22,972 km y con k=8 de 2,877 a 1,975 km; el criterio no cambia de veredicto, pero el numero publicado si.",
+  "nota_solapamiento": "Jaccard entre los conjuntos de ENTRENAMIENTO de dos bloques, y aparte entre entrenamiento mas validacion. Son dos numeros distintos y confundirlos ya paso: el 0,60 medio que se publico era el de train+val, no el de train.",
+  "nota_universos": "El suelo S por bloque hace que cada bloque promedie sobre un conjunto de clases distinto, es decir un denominador movil, que es exactamente el defecto que el articulo denuncia. Antes de firmar el suelo hay que elegir: universo comun fijado desde entrenamiento, o estimando clase-por-bloque declarado con su ponderacion. Este artefacto mide el tamano del problema, no lo resuelve.",
   "procedencia": {
     "semilla": 42,
-    "code_version": "96b8af9",
-    "generado": "2026-09-03T22:46:52+00:00"
+    "num_clases": 18,
+    "code_version": "38097f8",
+    "generado": "2026-09-04T02:39:13+00:00"
   }
 }

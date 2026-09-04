@@ -55,3 +55,30 @@
 4. Se repite hasta que la última línea diga **arrancamos**.
 
 **Una regla para el equipo, no para el auditor**: no se responde a un hallazgo con una historia de usuario. Se responde con un cambio de comportamiento y con la manera de comprobarlo. Si el arreglo de verdad es futuro, se dice que sigue **ABIERTO** y se explica por qué, en vez de darlo por cerrado.
+
+---
+
+## Estado para la ronda 3
+
+La ronda 2 encontró **dos cierres falsos y tres defectos nuevos**, y el veredicto siguió siendo *no
+arrancamos*. Antes de relanzar el prompt de arriba, esto es lo que cambió, para que el auditor lo
+verifique en vez de creerlo:
+
+| Qué se tocó | Dónde comprobarlo |
+|---|---|
+| `g` ya no recibe el cero, y hay un espía que lo prueba | `ml/eval/set_valued.py`, `tests/ml/eval/test_set_valued.py::test_la_utilidad_nunca_le_pasa_un_cero_a_g` |
+| La cardinalidad dejó de ser «el eje de coste»: `cardinalidad_esperada` no acepta ninguna `g` | `ml/eval/set_valued.py` |
+| Distancia mínima con KD-tree exacto; las tres cifras publicadas cambian | `scripts/run_paper_micai_parametros_prereg.py`, `reports/paper_micai/prereg/parametros_diseno.csv` |
+| Barrido de colchón con productor y artefacto (antes solo prosa) | `reports/paper_micai/prereg/barrido_colchon.csv` |
+| Jaccard con los dos conjuntos nombrados por separado | `parametros_prereg.json`, clave `solapamiento_entre_bloques` |
+| El denominador móvil del suelo `S`, medido y publicado como problema abierto | `parametros_prereg.json`, clave `universo_de_clases_por_bloque`; §4.2 del preregistro |
+| Banda de equivalencia retirada del productor, con su motivo | `parametros_prereg.json`, `banda_equivalencia: null` |
+| Gate de contradicción «sin dependencias» con dependencias declaradas | `scripts/plan_check.py`, `make plan-check` |
+| `H1-2026` frente a `H1`; retirada la regla condicional del criterio principal | `docs/paper/preregistro-v2-borrador.md` §2 y §3 |
+| 0,88269 renombrada a cuota de soporte de la verdad en las tres apariciones | `plan.html`, `index.html`, US-171 |
+
+**Lo que NO se tocó, y se dice antes de que lo encuentre**: los tres defectos de
+`ml/eval/paper_micai_coverage.py` siguen en el código y ese módulo sigue sin tests; el MDE sigue
+siendo aproximación con t central; la multiplicidad de toda la superficie y la selección de
+predictores siguen sin implementar; y la tabla de pérdidas, el estimando y el margen práctico —las
+tres que bloquean la firma— siguen siendo historias, no comportamiento.

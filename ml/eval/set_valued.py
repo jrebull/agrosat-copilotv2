@@ -1,4 +1,4 @@
-"""Los mecanismos como predictores con valores de conjunto, bajo un eje de coste unico.
+"""Los mecanismos como predictores con valores de conjunto, sobre la poblacion completa.
 
 Este modulo existe porque «a igual cobertura» **no esta definido** para dos de los cuatro
 mecanismos que el articulo compara. Un conjunto conforme y una clase gruesa se entregan en el cien
@@ -16,11 +16,16 @@ mecanismo como una funcion que asigna a cada parcela un **subconjunto** del espa
     conforme             C(x) = conjunto arbitrario
     retroceso jerarquico C(x) = las hojas bajo el nodo emitido
 
-Con eso hay **un solo eje de coste**, `E[|C(x)|]`, definido para los seis, y una utilidad
+Con eso los seis viven en el mismo objeto y se puntuan sobre la poblacion COMPLETA de prueba, no
+sobre la entregada.
 
-    u(y, C) = g(|C|) * 1[y en C]
-
-que se evalua sobre la poblacion COMPLETA de prueba, no sobre la entregada.
+**La cardinalidad NO es el coste, y este modulo ya no finge que lo sea.** Una auditoria externa lo
+puso asi: `E[|C(x)|]` trata igual a dos conjuntos del mismo tamano aunque uno sea agronomicamente
+inutil, y le pone precio cero al conjunto vacio. La moneda comun del articulo es una **tabla de
+perdidas por accion, resultado y afectado**, y esa tabla no se deduce del dato: la fijan los casos
+de uso (US-172). Hasta que exista, aqui solo vive `cardinalidad_esperada`, que es un **descriptor**
+y se llama como lo que es. `g` sigue siendo la utilidad declarada de acertar con un conjunto de un
+tamano dado, y solo eso.
 
 **El valor de no responder es un termino aparte, y tiene que serlo.** Una auditoria externa
 encontro que la primera version de este modulo multiplicaba la utilidad por la contencion, con lo
@@ -45,7 +50,7 @@ __all__ = [
     "NUM_CLASSES",
     "SetPrediction",
     "abstencion",
-    "coste_esperado",
+    "cardinalidad_esperada",
     "recorte",
     "singleton",
     "utilidad_macro",
@@ -146,18 +151,21 @@ def abstencion(proba: np.ndarray, umbral: float, mecanismo: str = "abstencion") 
     return SetPrediction(mask, mecanismo)
 
 
-def coste_esperado(pred: SetPrediction, g: Callable[[np.ndarray], np.ndarray]) -> float:
-    """The single cost axis, defined for every mechanism.
+def cardinalidad_esperada(pred: SetPrediction) -> float:
+    """Mean size of the emitted set, counting abstention as zero.
+
+    This is a **descriptor**, not the cost. It used to be called ``coste_esperado`` and to take a
+    cost function, which is how cardinality ended up standing in for a loss nobody had declared: two
+    sets of the same size are not equally expensive, and an empty set is not free. The cost axis is
+    the loss table of US-172 and it does not live in this module.
 
     Args:
         pred: The set-valued prediction.
-        g: Declared cost of emitting a set of a given size, applied elementwise. ``g(0)`` prices
-            abstention and is a declaration, not a technicality.
 
     Returns:
-        Mean cost per parcel.
+        Mean cardinality per parcel over the whole population.
     """
-    return float(np.mean(g(pred.tamanos)))
+    return float(pred.tamanos.mean())
 
 
 def utilidad_macro(
@@ -179,7 +187,9 @@ def utilidad_macro(
     Args:
         labels: Ground-truth labels.
         pred: The set-valued prediction.
-        g: Declared utility of a NON-EMPTY set of a given size when the truth is inside it.
+        g: Declared utility of a NON-EMPTY set of a given size when the truth is inside it. It is
+            never called with a zero: a function defined only for positive sizes is legitimate here
+            and must not break.
         utilidad_abstencion: Declared utility of emitting nothing. It is a separate term on
             purpose: multiplying by containment, as the first version did, makes the empty set
             worth zero whatever the declaration says, so the price of abstaining could not be
@@ -197,8 +207,14 @@ def utilidad_macro(
     """
     acierta = pred.mask[np.arange(labels.size), labels]
     vacios = pred.vacios
-    valor = np.where(acierta & ~vacios, g(pred.tamanos), 0.0)
-    valor = np.where(vacios, utilidad_abstencion, valor)
+    valor = np.zeros(labels.size, dtype=float)
+    # `g` se evalua SOLO sobre conjuntos no vacios. Calcularla sobre todos los tamanos y descartar
+    # las columnas despues es el mismo error de antes en otra forma: la firma promete que g nunca ve
+    # un cero, y una g legitima que rechace el cero reventaba igual.
+    premiados = np.flatnonzero(acierta & ~vacios)
+    if premiados.size:
+        valor[premiados] = g(pred.tamanos[premiados])
+    valor[vacios] = utilidad_abstencion
     if clases is None:
         cuenta = np.bincount(labels, minlength=pred.mask.shape[1])
         clases = [c for c in range(pred.mask.shape[1]) if cuenta[c] >= soporte_minimo]

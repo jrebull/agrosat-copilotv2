@@ -9,7 +9,7 @@ from sklearn.metrics import recall_score
 from ml.eval.set_valued import (
     SetPrediction,
     abstencion,
-    coste_esperado,
+    cardinalidad_esperada,
     recorte,
     singleton,
     utilidad_macro,
@@ -41,19 +41,24 @@ def test_el_vacio_es_abstencion_y_no_un_caso_especial(universo) -> None:
     assert set(np.unique(pred.tamanos)) <= {0, 1}
 
 
-def test_el_coste_esta_definido_para_todos_los_mecanismos(universo) -> None:
-    """The cost axis exists for every mechanism, which is the whole point of the frame."""
+def test_la_cardinalidad_es_un_descriptor_y_no_acepta_una_funcion_de_coste(universo) -> None:
+    """Cardinality is comparable across mechanisms, but it is a descriptor, not the cost.
+
+    La firma es el control: `cardinalidad_esperada` NO recibe ninguna `g`. Mientras la recibia, la
+    cardinalidad estaba ocupando el lugar de una perdida que nadie habia declarado, y dos conjuntos
+    del mismo tamano valian lo mismo aunque uno fuera agronomicamente inutil.
+    """
     _, proba = universo
-    legend = [0, 1, 2]
     for pred in (
         singleton(proba),
-        recorte(proba, legend, "recorte"),
+        recorte(proba, [0, 1, 2], "recorte"),
         abstencion(proba, umbral=0.5),
     ):
-        coste = coste_esperado(pred, lambda k: k.astype(float))
-        assert 0.0 <= coste <= proba.shape[1]
+        assert 0.0 <= cardinalidad_esperada(pred) <= proba.shape[1]
     # El predictor intacto entrega exactamente una clase por parcela.
-    assert coste_esperado(singleton(proba), lambda k: k.astype(float)) == pytest.approx(1.0)
+    assert cardinalidad_esperada(singleton(proba)) == pytest.approx(1.0)
+    with pytest.raises(TypeError):
+        cardinalidad_esperada(singleton(proba), lambda k: k.astype(float))  # type: ignore[call-arg]
 
 
 def test_la_utilidad_singleton_es_el_recall_macro_no_el_f1(universo) -> None:
@@ -156,3 +161,30 @@ def test_abstenerse_gratis_hace_que_abstenerse_convenga(universo) -> None:
     )
     assert todo == pytest.approx(1.0), "abstenerse siempre con precio uno tiene que valer uno"
     assert todo > nada
+
+
+def test_la_utilidad_nunca_le_pasa_un_cero_a_g(universo) -> None:
+    """`g` prices non-empty sets only, so it must never be evaluated on the empty one.
+
+    Segunda regresion del mismo defecto, encontrada por la auditoria externa despues de la primera
+    correccion: la firma prometia que `g` solo veia tamanos positivos y la implementacion la
+    aplicaba sobre TODOS los tamanos antes de descartar columnas. Los tests pasaban porque
+    `G_SINGLETON` acepta el cero en silencio; una `g` legitima definida solo para tamanos positivos
+    reventaba. El espia es el unico control que lo detecta: comprobar el numero de salida no puede.
+    """
+    labels, proba = universo
+    clases = sorted(set(labels.tolist()))
+    vistos: list[int] = []
+
+    def g_estricta(k: np.ndarray) -> np.ndarray:
+        """A legitimate utility, defined only for positive sizes."""
+        vistos.extend(int(x) for x in np.atleast_1d(k))
+        if np.any(k < 1):
+            raise ValueError("g recibio un conjunto vacio y no esta definida ahi")
+        return np.where(k == 1, 1.0, 0.0)
+
+    pred = abstencion(proba, umbral=0.5)
+    assert pred.vacios.any(), "el caso solo tiene sentido si de verdad se abstiene en algo"
+    utilidad_macro(labels, pred, g_estricta, utilidad_abstencion=0.25, clases=clases)
+    assert vistos, "si g no se llamo nunca, el test no prueba nada"
+    assert min(vistos) >= 1, f"g recibio un cero: {sorted(set(vistos))}"

@@ -209,6 +209,12 @@ multiplicidad sin añadir unidad de análisis.
 
 ### Dónde sí hay efecto
 
+> **RETIRADO por la enmienda §8 de este mismo documento, y se deja escrito para que se vea el
+> error.** Lo que sigue en este apartado es falso por dos caminos: ocho es el máximo de dieciocho
+> razones cuya mediana es 1,00, y ninguna de las cuatro medidas de disparidad declaradas tiene
+> potencia con cinco bloques. Además, «el criterio principal se mueve donde hay potencia» es elegir
+> el resultado antes de medirlo.
+
 En la disparidad, y por goleada. La clase 10 del banco primario, con 355 parcelas, recibe **0,090 de
 cobertura bajo recorte y 0,741 bajo abstención: un factor de ocho.** Frente a un delta de calidad de
 0,0167 que no llega a significativo.

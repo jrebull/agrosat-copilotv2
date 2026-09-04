@@ -30,10 +30,10 @@ está medida:
 | El ataque | La respuesta, con su número |
 |---|---|
 | «Su estimando alineado no está alineado» | Cierto, y **AÚN NO REPARADO**: US-124 sigue pendiente y el código conserva la conducta. Medido: encogía el contraste un 42,1 % y un bloque cambiaba de signo |
-| «Su intervalo remuestrea la unidad equivocada» | Cierto, y **AÚN NO REPARADO**: US-125 sigue pendiente. Y una auditoría externa añade algo peor: partir el mismo territorio más fino no crea réplicas independientes, con Jaccard de 0,60 entre los entrenamientos de los folds |
+| «Su intervalo remuestrea la unidad equivocada» | Cierto, y **AÚN NO REPARADO**: US-125 sigue pendiente. Y una auditoría externa añade algo peor: partir el mismo territorio más fino no crea réplicas independientes, con Jaccard de 0,4273 medio entre los entrenamientos de los folds, y 0,6000 si se cuenta entrenamiento mas validacion — el 0,60 que publicabamos como «entre entrenamientos» era el segundo |
 | «Un brazo elige su punto de operación dentro del bloque que lo mide» | Cierto, y **medido**: valía 0,00127, un 4,4 % del delta. Real y casi inconsecuente |
-| «Citan a Jones et al. para respaldar lo contrario de lo que demuestra» | Cierto, y ahora **medido**: no hay asociación significativa entre soporte y cobertura bajo abstención, y sí bajo recorte |
-| «No tienen potencia» | Cierto: efecto mínimo detectable 0,033 contra un efecto de 0,017. Por eso el criterio principal se mudó a la disparidad, que es un factor de ocho |
+| «Citan a Jones et al. para respaldar lo contrario de lo que demuestra» | Cierto, y ahora **medido**: **ninguna de las dos asociaciones es significativa**. Bajo recorte, Spearman 0,434 con p = 0,0716 en PASTIS y 0,017 con p = 0,9661 en BreizhCrops; bajo abstención, 0,286 (p = 0,250) y −0,167 (p = 0,668). La versión anterior de esta fila decía «y sí bajo recorte», que es leer un 0,0716 como si fuera un 0,05 |
+| «No tienen potencia» | Cierto: efecto mínimo detectable **aproximado** 0,033 contra un efecto de 0,017, y pendiente de rehacer con t no central. **Y la respuesta que estaba escrita aquí era peor que el ataque**: mudar el criterio principal a donde sí hay potencia es elegir el resultado antes de medirlo. El criterio principal se fija en la firma, uno solo y sin regla condicional |
 | «Dos bancos franceses no demuestran transporte» | Cierto, y peor: comparten el sistema de etiquetado. Por eso el barrido de desbalance dentro de banco |
 | «Su F1-macro no es comparable entre catálogos y lo usan para comparar catálogos» | Cierto. Por eso el eje de coste único y la utilidad declarada |
 
@@ -44,13 +44,13 @@ está medida:
 | Introducción | 1,5 |
 | Trabajo relacionado, por limitaciones | 2 |
 | Método: marco de conjuntos, estimando, protocolo, inferencia | 3,5 |
-| Resultados | 6,5 |
+| Resultados | 6 |
 | **Robustez: las diez pruebas de arriba** | **2,5** |
 | Discusión | 1,5 |
 | Limitaciones y conclusión | 1 |
 | Apéndice | 0,5 |
 | Referencias | 1,5 |
-| **Total** | **20,5**, o sea medio punto de más: el recorte sale de resultados, nunca de robustez |
+| **Total** | **20**, que es el tope. Los seis puntos y medio de resultados bajaron a seis, aplicando la regla de recorte de abajo: sale de resultados, nunca de robustez |
 
 **Regla de recorte**: si sobran páginas se recorta de resultados hacia el apéndice, **nunca de
 robustez**. Un resultado más en la mesa no compensa un flanco abierto, y este equipo ya perdió un
