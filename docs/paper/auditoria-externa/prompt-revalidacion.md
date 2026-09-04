@@ -182,3 +182,33 @@ separados. Los trece artefactos `OBSOLETO` siguen sin regenerar.
    y busca los otros miembros de esa clase. Es lo que las rondas 4 y 5 encontraron dos veces.
 2. **Los gates nuevos.** `paper-obsoletos-check` es un control recién nacido: intenta burlarlo.
 3. **La propagación, otra vez**, con tres afirmaciones distintas de las que ya comprobaste.
+
+---
+
+## Estado para la ronda 7
+
+La ronda 6 confirmó las cinco reparaciones de la 5 y dejó dos reservas. Las dos están cerradas:
+
+| Qué se tocó | Dónde comprobarlo |
+|---|---|
+| El gate de publicación vigila **cifras**, no solo rutas: 1 007 valores de cuatro decimales extraídos de los propios artefactos obsoletos | `scripts/paper_obsoletos_check.py::cifras_distintivas`; test en negativo con `--docs` |
+| Doce documentos con cuarentena, cuatro más que ayer — los encontró el gate | `docs/paper/*.md` |
+| El gate escanea también el **cuaderno público**, donde una cifra obsoleta hace más daño: encontró 22 | `index.html`, `plan.html`, con banner visible y `data-cuarentena` |
+| Las revisiones recibidas quedan exentas por **archivo ajeno**: marcarlas sería editar lo que alguien escribió | `ARCHIVO_AJENO` |
+| El preregistro deja de anclar una expectativa en el MDE obsoleto (0,0326) | `docs/paper/preregistro-v2-borrador.md` §5 |
+| Las cuatro cifras de la enmienda 3, marcadas como pendientes de recalcular antes de firmar | ídem §7 |
+| «Se había refutado» retirado de los tres sitios que quedaban | preregistro §1, `index.html`, documento de revisores |
+
+**Lo que NO cambió**: US-172 a US-175, y con ellas el criterio principal. El MDE con t central. La
+multiplicidad de toda la superficie. La selección de predictores sobre datos separados. Los trece
+artefactos `OBSOLETO`, sin regenerar.
+
+**Para la ronda 7**, además de las tres partes:
+
+1. **El gate de cifras es nuevo y por tanto sospechoso.** Dos cosas ya sabidas y dichas, para que
+   no las cuentes como hallazgo: **no detecta redondeos ni paráfrasis** —0,0326 escrito «0,033» o
+   «3,3 %» se le escapa, y bajar a tres decimales lo llenaría de coincidencias—, y esa frontera está
+   escrita en su docstring. Lo que sí buscamos: si se le escapa una copia LITERAL por alguna vía que
+   no vimos. Al escanear el cuaderno público encontró 22 cifras que la versión anterior no veía.
+2. **La clase, no el caso**, otra vez: por cada reparación de esta ronda, busca los demás miembros
+   de su clase.

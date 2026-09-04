@@ -1,5 +1,12 @@
 # Auditoría completa del estado del artículo — 2 de septiembre de 2026
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 > **Aviso del 2 de septiembre, más tarde.** Una auditoría ciega con cuatro revisores
 > independientes tumbó la contribución central que este documento daba por sostenida.
 > Ver la sección final, «Auditoría ciega multiagente». Lo que sigue se conserva sin

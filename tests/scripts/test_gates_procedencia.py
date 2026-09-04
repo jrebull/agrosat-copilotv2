@@ -9,6 +9,8 @@ que el gate se rompa.
 from __future__ import annotations
 
 import importlib.util
+import math
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -334,3 +336,68 @@ def test_quitar_la_cuarentena_de_un_consumidor_rompe_el_gate(tmp_path: Path) -> 
         assert "fase3-hallazgos.md" in salida
     finally:
         shutil.copy2(respaldo, doc)
+
+
+def test_copiar_una_cifra_obsoleta_a_otro_documento_rompe_el_gate(tmp_path: Path) -> None:
+    """Prose copies numbers, not paths. Watching only the path was the hole.
+
+    Una auditoria copio 0,0326 al preregistro sin nombrar el artefacto y el gate paso. Ahora las
+    cifras distintivas —cuatro decimales o mas— se extraen de los propios artefactos obsoletos.
+    """
+    codigo, salida = _correr_obsoletos_check(LEDGER)
+    assert codigo == 0, salida
+    cifra = re.search(r"p\. ej\. (\d+,\d{4})", salida)
+    if cifra is None:
+        # El gate esta verde, asi que se toma una cifra de un artefacto obsoleto directamente.
+        import json
+
+        datos = json.loads(
+            (REPO_ROOT / "reports/paper_micai/bloques/bloques.json").read_text(encoding="utf-8")
+        )
+        crudos: list[float] = []
+
+        def recoger(v: object) -> None:
+            if isinstance(v, bool):
+                return
+            if isinstance(v, int | float):
+                crudos.append(float(v))
+            elif isinstance(v, dict):
+                for x in v.values():
+                    recoger(x)
+            elif isinstance(v, list):
+                for x in v:
+                    recoger(x)
+
+        recoger(datos)
+        candidatas = [
+            f"{abs(x):.10f}".rstrip("0") for x in crudos if abs(x) < 1000 and not math.isnan(x)
+        ]
+        largas = [c for c in candidatas if len(c.partition(".")[2]) >= 4]
+        assert largas, "el artefacto obsoleto no trae ninguna cifra distintiva"
+        entero, _, dec = largas[0].partition(".")
+        texto_cifra = f"{entero},{dec[:4]}"
+    else:
+        texto_cifra = cifra.group(1)
+
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "documento-nuevo.md").write_text(
+        f"# Un documento activo\n\nEl efecto medido fue {texto_cifra} y lo damos por bueno.\n",
+        encoding="utf-8",
+    )
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "paper_obsoletos_check.py"),
+            "--ledger",
+            str(LEDGER),
+            "--docs",
+            str(docs),
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 1, proc.stdout
+    assert "reproduce" in proc.stdout

@@ -1,8 +1,15 @@
 # Preregistro v2 — borrador para firma
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Estado**: BORRADOR, y tras la **segunda** auditoría externa sigue siéndolo. Cuatro parámetros están abiertos: la **función de pérdida**, el **estimando con su población**, la **banda de equivalencia** y el **criterio principal**. No se firma hasta cerrarlos los cuatro, y no vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
 
-Este documento existe porque el preregistro anterior se citó como credencial mientras se omitía que su hipótesis se había refutado y que la regla de entrega había cambiado. Aquí se declara todo antes, incluidos los grados de libertad que la vez pasada nadie sabía que lo eran.
+Este documento existe porque el preregistro anterior se citó como credencial mientras se omitía que su hipótesis **no había replicado** y que la regla de entrega había cambiado. (Decía «se había refutado», que es la palabra que este mismo documento prohíbe en §7: un exploratorio corregido a posteriori no refuta.) Aquí se declara todo antes, incluidos los grados de libertad que la vez pasada nadie sabía que lo eran.
 
 **Convención de nombres, y no es cosmética.** Las hipótesis de este documento se numeran `H1`, `H2`. Las del preregistro anterior se citan siempre como **`H1-2026`**, con año. Reutilizar el identificador para dos cosas distintas fue un hallazgo de la auditoría: el mismo documento decía que `H1` estaba por declarar y dos páginas después que «H1 se refutó».
 
@@ -138,7 +145,7 @@ El 0,60 medio y el 0,80 máximo que este documento publicaba eran los de **entre
 
 ## 5. Universos y multiplicidad
 
-Los dos universos de clases se reportan los dos. El criterio principal se reporta sin corregir; la familia exploratoria, con Holm, excluyendo los puntos donde los mecanismos son idénticos por construcción. La multiplicidad **de toda la superficie** —bancos, predictores, universos y el mapa de decisión entero— se declara y se trata, no solo la de los contrastes tabulados. Y el MDE se recalcula con t no central: el que hoy está publicado (0,0326) es una aproximación con t central y **está etiquetado como aproximación** hasta que se rehaga.
+Los dos universos de clases se reportan los dos. El criterio principal se reporta sin corregir; la familia exploratoria, con Holm, excluyendo los puntos donde los mecanismos son idénticos por construcción. La multiplicidad **de toda la superficie** —bancos, predictores, universos y el mapa de decisión entero— se declara y se trata, no solo la de los contrastes tabulados. Y el MDE se recalcula con t no central. **Aquí no se cita el valor anterior**: salió del módulo con los tres defectos, su artefacto está marcado `OBSOLETO`, y un preregistro que ancla una expectativa en una cifra invalidada la está preregistrando. Se recalcula y se acepta lo que salga.
 
 ## 6. Bancos: qué es confirmatorio y qué no
 
@@ -148,7 +155,7 @@ Los dos universos de clases se reportan los dos. El criterio principal se report
 
 Toda desviación posterior entra como enmienda fechada **antes** de calcular el contraste afectado, incluida cualquiera que toque la regla de entrega, el estimando o `k`.
 
-**Enmienda 3 al preregistro anterior**, que faltaba: se declara que **`H1-2026` no replicó bajo el análisis exploratorio corregido** —el intervalo pasa de (−0,0430, −0,0147) con p = 0,005 a (−0,0410, +0,0077) con p = 0,130 al componer las dos correcciones de protocolo— y que la **regla de entrega cambió** del oráculo de etiqueta a la predicción, con el efecto medido de ese cambio.
+**Enmienda 3 al preregistro anterior**, que faltaba: se declara que **`H1-2026` no replicó bajo el análisis exploratorio corregido** —el intervalo pasaba de (−0,0430, −0,0147) con p = 0,005 a (−0,0410, +0,0077) con p = 0,130 al componer las dos correcciones de protocolo; **las cuatro cifras salieron del módulo con los tres defectos y se recalculan antes de firmar**— y que la **regla de entrega cambió** del oráculo de etiqueta a la predicción, con el efecto medido de ese cambio.
 
 **No se dice «`H1-2026` se refutó».** Dos motivos, y los dos son de la segunda auditoría: el inferencial que produjo ese resultado conserva el remuestreo defectuoso que US-125 aún no ha reparado, y un análisis exploratorio corregido a posteriori no refuta, no replica.
 

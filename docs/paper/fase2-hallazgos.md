@@ -1,5 +1,12 @@
 # Fase 2 — hallazgos de los experimentos en CPU
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Fase**: 2 de [`docs/plan-micai-2027.md`](../plan-micai-2027.md), bajo el ángulo reencuadrado de [`ADR-013`](../decisions/ADR-013-angulo-micai.md).
 **Fecha**: 2 de septiembre de 2026. **Responsable**: Javier A. Rebull-Saucedo.
 **Universo**: las 16 640 parcelas del fold 5 held-out de PASTIS-R, contra el ground truth sellado en `reports/paper_micai/fase1/parcel_gt_fold5.parquet`.

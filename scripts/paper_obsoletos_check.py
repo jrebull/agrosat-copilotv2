@@ -11,9 +11,18 @@ Este gate separa **custodia** de **disponibilidad editorial**:
 - Un documento que cita cifras de un artefacto OBSOLETO tiene que llevar la marca de cuarentena.
 - Un documento que menciona la RUTA de un artefacto OBSOLETO y no esta declarado como consumidor
   falla, para que la lista no envejezca en silencio.
+- Un documento que reproduce una CIFRA distintiva de un artefacto OBSOLETO falla igual. Buscar solo
+  la ruta era el agujero: una auditoria copio 0,0326 al preregistro, sin nombrar el artefacto ni la
+  marca, y el gate paso. Las cifras se extraen de los propios artefactos y se buscan en su forma
+  espanola; solo cuentan las de cuatro decimales o mas, que son las que no aparecen por casualidad.
 
 La marca es una linea que empieza por ``> **CUARENTENA**`` en Markdown, o el atributo
 ``data-cuarentena`` en HTML. Se pone arriba, donde se lee antes que las cifras.
+
+**Lo que este gate NO detecta, dicho antes de que lo encuentre nadie**: una cifra REDONDEADA al
+escribirla —0,0326 escrito «0,033» o «3,3 %»— o parafraseada. Vigila copias literales de cuatro
+decimales, que es donde el riesgo de falso positivo es bajo; bajar a tres decimales llenaria el
+control de coincidencias. La cobertura es de copia, no de paraphrase, y esa es su frontera.
 
 Uso:
     poetry run python scripts/paper_obsoletos_check.py
@@ -22,6 +31,8 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import csv
+import json
 import re
 import sys
 from pathlib import Path
@@ -39,6 +50,10 @@ MARCA_HTML = "data-cuarentena"
 #: Documentos que consumen cifras de artefactos OBSOLETO y estan declarados como tales.
 #: Anadir uno aqui NO le da permiso: solo declara que existe. El permiso lo da la marca.
 CONSUMIDORES: tuple[str, ...] = (
+    "docs/paper/auditoria-2026-09-02.md",
+    "docs/paper/fase2-hallazgos.md",
+    "docs/paper/novedad.md",
+    "docs/paper/preregistro-v2-borrador.md",
     "docs/paper/fase3-hallazgos.md",
     "docs/paper/fase4-hallazgos.md",
     "docs/paper/que-paper-sale.md",
@@ -57,6 +72,74 @@ EXENTOS: tuple[str, ...] = (
     "paper/ARTIFACTS.md",
     "paper/micai/ESTADO.md",
 )
+
+#: Documentos RECIBIDOS de terceros, que se archivan textualmente. No son afirmaciones nuestras y
+#: no se retocan: marcarlos con cuarentena seria editar lo que alguien nos escribio.
+ARCHIVO_AJENO: tuple[str, ...] = ("docs/paper/revisiones-externas/",)
+
+
+#: Decimales minimos para que una cifra se considere distintiva de su artefacto. Con menos, un
+#: 0,90 o un 0,25 aparecen por todas partes y el control se llena de falsos positivos.
+DECIMALES_MINIMOS = 4
+
+
+def _numeros(valor: object, salida: set[float]) -> None:
+    """Collect every float reachable from a decoded JSON value."""
+    if isinstance(valor, bool):
+        return
+    if isinstance(valor, (int, float)):
+        salida.add(float(valor))
+    elif isinstance(valor, dict):
+        for v in valor.values():
+            _numeros(v, salida)
+    elif isinstance(valor, list):
+        for v in valor:
+            _numeros(v, salida)
+
+
+def cifras_distintivas(ruta: Path) -> set[str]:
+    """Spanish-formatted figures a document could only have copied from this artefact.
+
+    Searching for the artefact PATH was the hole: prose copies numbers, not paths. Only figures
+    with at least :data:`DECIMALES_MINIMOS` decimals count, because those are the ones that do not
+    turn up by coincidence.
+
+    Args:
+        ruta: Path to a JSON or CSV artefact.
+
+    Returns:
+        The figures as they would be written in the prose of this project.
+    """
+    numeros: set[float] = set()
+    if ruta.suffix == ".json":
+        try:
+            _numeros(json.loads(ruta.read_text(encoding="utf-8")), numeros)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return set()
+    elif ruta.suffix == ".csv":
+        try:
+            with ruta.open(encoding="utf-8", newline="") as handle:
+                for fila in csv.reader(handle):
+                    for celda in fila:
+                        try:
+                            numeros.add(float(celda))
+                        except ValueError:
+                            continue
+        except UnicodeDecodeError:
+            return set()
+    else:
+        return set()
+
+    salida: set[str] = set()
+    for x in numeros:
+        if x != x or abs(x) >= 1000:  # NaN o magnitudes que no son estimadores
+            continue
+        texto = f"{abs(x):.10f}".rstrip("0")
+        entero, _, decimales = texto.partition(".")
+        if len(decimales) < DECIMALES_MINIMOS:
+            continue
+        salida.add(f"{entero},{decimales[:DECIMALES_MINIMOS]}")
+    return salida
 
 
 def rutas_obsoletas(ledger: Path) -> list[str]:
@@ -90,6 +173,18 @@ def main() -> int:
     """Check every declared consumer and hunt for undeclared ones."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER)
+    parser.add_argument(
+        "--docs",
+        type=Path,
+        default=REPO_ROOT / "docs" / "paper",
+        help="Raiz de documentos a vigilar. Existe para poder probar el gate en negativo.",
+    )
+    parser.add_argument(
+        "--sitio",
+        type=Path,
+        default=REPO_ROOT.parent / "agrosat-micai-site",
+        help="Raiz del cuaderno publico. Se omite si no esta en disco.",
+    )
     args = parser.parse_args()
 
     obsoletas = rutas_obsoletas(args.ledger)
@@ -109,11 +204,24 @@ def main() -> int:
                 f"{relativo}: cita cifras de artefactos OBSOLETO y no lleva la marca de cuarentena"
             )
 
-    # Cualquier documento que nombre una ruta obsoleta y no este declarado ni exento.
+    # Las cifras distintivas de cada artefacto obsoleto, con su origen.
+    origen: dict[str, str] = {}
+    for relativo in obsoletas:
+        for cifra in cifras_distintivas(REPO_ROOT / relativo):
+            origen.setdefault(cifra, relativo)
+    print(f"cifras distintivas vigiladas: {len(origen)}")
+
+    # Cualquier documento que nombre una ruta obsoleta, o reproduzca una de sus cifras, sin estar
+    # declarado ni exento.
     declarados = set(CONSUMIDORES) | set(EXENTOS)
-    for ruta in sorted((REPO_ROOT / "docs" / "paper").rglob("*.md")):
-        relativo = str(ruta.relative_to(REPO_ROOT))
-        if relativo in declarados:
+    for ruta in sorted(args.docs.rglob("*.md")):
+        absoluta = ruta.resolve()
+        relativo = (
+            str(absoluta.relative_to(REPO_ROOT))
+            if absoluta.is_relative_to(REPO_ROOT)
+            else str(absoluta)
+        )
+        if relativo in declarados or any(relativo.startswith(x) for x in ARCHIVO_AJENO):
             continue
         texto = ruta.read_text(encoding="utf-8")
         citadas = [x for x in obsoletas if x in texto]
@@ -122,6 +230,29 @@ def main() -> int:
                 f"{relativo}: nombra {len(citadas)} artefacto(s) OBSOLETO y no esta declarado "
                 f"como consumidor ni exento (p. ej. {citadas[0]})"
             )
+        copiadas = sorted({c for c in origen if c in texto})
+        if copiadas:
+            fallos.append(
+                f"{relativo}: reproduce {len(copiadas)} cifra(s) de artefactos OBSOLETO sin "
+                f"cuarentena (p. ej. {copiadas[0]}, de {origen[copiadas[0]]})"
+            )
+
+    # El cuaderno publico es donde una cifra obsoleta hace mas dano, y no se escaneaba.
+    if args.sitio.exists():
+        paginas = sorted(args.sitio.glob("*.html"))
+        print(f"paginas del cuaderno publico vigiladas: {len(paginas)}")
+        for pagina in paginas:
+            texto = pagina.read_text(encoding="utf-8")
+            if MARCA_HTML in texto:
+                continue
+            copiadas = sorted({c for c in origen if c in texto})
+            if copiadas:
+                fallos.append(
+                    f"{pagina.name}: reproduce {len(copiadas)} cifra(s) de artefactos OBSOLETO "
+                    f"sin marca de cuarentena (p. ej. {copiadas[0]}, de {origen[copiadas[0]]})"
+                )
+    else:
+        print(f"cuaderno publico no encontrado en {args.sitio}: no se vigila")
 
     for fallo in fallos:
         print(f"FALLO: {fallo}")

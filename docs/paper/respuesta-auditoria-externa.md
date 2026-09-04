@@ -5,7 +5,7 @@ historia de usuario*. Se cierra cuando **el comportamiento cambió** y hay dónd
 historia planificada es un compromiso, no una corrección, y contarla como cierre fue exactamente lo
 que la segunda auditoría desmontó.
 
-Cinco rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
+Seis rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
 cierres falsos. La tercera, tres cierres parciales contados enteros y un gate burlable moviendo una
 frase de campo. La cuarta encontró **fugas dentro de las reparaciones de la tercera**: un umbral que
 seguía leyendo el bloque de prueba por una rendija más estrecha, un gate de custodia que verificaba
@@ -14,6 +14,24 @@ pero no diccionarios. Lo que sigue es el estado real.
 
 
 
+
+
+---
+
+## Ronda 6 — 4 de septiembre de 2026
+
+La ronda 6 confirmó las cinco reparaciones de la 5 y dejó **dos reservas**, las dos sobre la misma
+cosa: un control recién nacido y una propagación a medias.
+
+| # | Hallazgo | Qué cambió de comportamiento |
+|---|---|---|
+| S1 | **El gate de publicación solo veía la RUTA del artefacto.** La prosa copia números, no rutas: `0,0326` estaba en el preregistro sin marca y el gate pasaba | El gate **extrae las cifras de los propios artefactos obsoletos** —1 007 de cuatro decimales o más, que son las que no salen por casualidad— y falla si un documento no declarado reproduce alguna. Al encenderlo saltaron **cinco documentos** que la búsqueda por ruta no veía. Test en negativo con `--docs` sobre un árbol temporal |
+| S2 | **«Se había refutado» sobrevivía** en el propio preregistro y en el cuaderno, mientras el mismo preregistro lo prohíbe en §7 | Corregido en los tres sitios que quedaban, y en cada uno se deja dicho qué decía antes. El documento de revisores lo lleva inline |
+| S3 | **El preregistro anclaba una expectativa en el MDE obsoleto** (0,0326) | Retirado el valor: un preregistro que ancla una expectativa en una cifra invalidada la está preregistrando. Se recalcula y se acepta lo que salga. Las cuatro cifras de la enmienda 3 quedan marcadas como pendientes de recalcular antes de firmar |
+
+**Doce documentos** llevan ahora cuarentena, cuatro más que ayer: los encontró el gate, no una
+lectura. Y las revisiones recibidas de terceros quedan **exentas por archivo ajeno**: marcarlas
+sería editar lo que alguien nos escribió.
 
 ---
 
