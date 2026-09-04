@@ -1,0 +1,5 @@
+outs:
+- md5: c36eeae718c56f56448a141c66ced343
+  size: 1192569
+  hash: md5
+  path: oof_parcel_xgb-alphaearth-remat-v1_fold5.parquet

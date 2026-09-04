@@ -12,7 +12,11 @@ registro global es `inventario.json`, que ningun volcado escribe.
 Comprueba, en este orden:
 
 1. Todo parquet en disco esta declarado en el inventario.
-2. Toda entrada del inventario esta en disco y su MD5 coincide.
+2. Toda entrada del inventario **existe**: si el parquet esta en disco se comprueban sus bytes; si
+   no esta, se comprueba su puntero `.dvc`. **Un clon limpio no trae los parquet, solo los
+   punteros**, y un gate que exigiera los bytes seria rojo en CI para siempre — o sea, un gate que
+   solo se puede correr en la maquina donde se escribio, que es lo que ya paso con el manifiesto
+   de rutas de Windows.
 3. Todo estado es uno de los tres admitidos.
 4. Todo `legacy_unverified` declara su `siguiente_paso`: sin salida escrita, un estado temporal
    se vuelve permanente.
@@ -28,12 +32,47 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OOF = REPO_ROOT / "ml" / "eval" / "oof"
 ESTADOS = ("canonical", "legacy_unverified", "excluded")
+
+
+def _verificar_puntero(puntero: Path, nombre: str, entrada: dict[str, object]) -> list[str]:
+    """Check the inventory against a DVC pointer when the parquet itself is not on disk.
+
+    En un clon limpio los parquet no estan: solo estan los `.dvc`. El puntero registra el MD5 y el
+    tamano del blob, que es exactamente lo que el inventario declara, asi que la comprobacion es la
+    misma con otra fuente.
+
+    Args:
+        puntero: Path to the ``.dvc`` pointer.
+        nombre: Parquet file name, for the messages.
+        entrada: The inventory entry.
+
+    Returns:
+        Zero or more failure messages.
+    """
+    texto = puntero.read_text(encoding="utf-8")
+    md5 = re.search(r"^\s*-?\s*md5:\s*([0-9a-f]{32})\s*$", texto, re.M)
+    size = re.search(r"^\s*size:\s*(\d+)\s*$", texto, re.M)
+    if md5 is None:
+        return [f"{nombre}: el puntero .dvc no trae MD5"]
+    fallos: list[str] = []
+    if md5.group(1) != entrada.get("md5"):
+        fallos.append(
+            f"{nombre}: el puntero .dvc registra {md5.group(1)} y el inventario "
+            f"{entrada.get('md5')}"
+        )
+    if size is not None and int(size.group(1)) != entrada.get("bytes"):
+        fallos.append(
+            f"{nombre}: el puntero .dvc registra {size.group(1)} bytes y el inventario "
+            f"{entrada.get('bytes')}"
+        )
+    return fallos
 
 
 def main() -> int:
@@ -53,21 +92,35 @@ def main() -> int:
     fallos: list[str] = []
     for nombre in sorted(en_disco - set(declarados)):
         fallos.append(f"{nombre}: esta en disco y el inventario no lo declara")
-    for nombre in sorted(set(declarados) - en_disco):
-        fallos.append(f"{nombre}: el inventario lo declara y no esta en disco")
 
-    for nombre in sorted(set(declarados) & en_disco):
+    por_bytes = 0
+    por_puntero = 0
+    for nombre in sorted(declarados):
         entrada = declarados[nombre]
         estado = entrada.get("estado")
         if estado not in ESTADOS:
             fallos.append(f"{nombre}: estado {estado!r} desconocido")
-        digest = hashlib.md5((args.oof / nombre).read_bytes()).hexdigest()  # noqa: S324
-        if digest != entrada.get("md5"):
-            fallos.append(f"{nombre}: MD5 {digest} y el inventario registra {entrada.get('md5')}")
         if estado == "legacy_unverified" and not entrada.get("siguiente_paso"):
             fallos.append(
                 f"{nombre}: es legacy_unverified y no declara siguiente_paso; sin salida "
                 "escrita, un estado temporal se vuelve permanente"
+            )
+
+        parquet = args.oof / nombre
+        puntero = args.oof / f"{nombre}.dvc"
+        if parquet.exists():
+            por_bytes += 1
+            digest = hashlib.md5(parquet.read_bytes()).hexdigest()  # noqa: S324
+            if digest != entrada.get("md5"):
+                fallos.append(
+                    f"{nombre}: MD5 {digest} y el inventario registra {entrada.get('md5')}"
+                )
+        elif puntero.exists():
+            por_puntero += 1
+            fallos.extend(_verificar_puntero(puntero, nombre, entrada))
+        else:
+            fallos.append(
+                f"{nombre}: el inventario lo declara y no esta ni el parquet ni su puntero .dvc"
             )
 
     # Las dos fuentes no pueden separarse en silencio.
@@ -88,7 +141,9 @@ def main() -> int:
     for entrada in declarados.values():
         clave = str(entrada.get("estado"))
         por_estado[clave] = por_estado.get(clave, 0) + 1
-    print(f"parquets en disco: {len(en_disco)}")
+    print(
+        f"declarados: {len(declarados)}  (por bytes: {por_bytes}, por puntero .dvc: {por_puntero})"
+    )
     for estado in ESTADOS:
         print(f"  {estado}: {por_estado.get(estado, 0)}")
     for fallo in fallos:

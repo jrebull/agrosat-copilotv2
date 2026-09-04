@@ -729,3 +729,82 @@ def test_un_legacy_sin_siguiente_paso_rompe_el_gate(tmp_path: Path) -> None:
     )
     assert proc.returncode == 1, proc.stdout
     assert "siguiente_paso" in proc.stdout
+
+
+def _copia_oof(tmp_path: Path, *, con_parquet: bool) -> Path:
+    """A copy of the OOF directory with or without the parquet files.
+
+    Sin ellos es un clon limpio: solo punteros `.dvc`. Es el caso que rompia el gate en CI y por
+    el que no se podia incorporar.
+    """
+    import shutil
+
+    origen = REPO_ROOT / "ml" / "eval" / "oof"
+    copia = tmp_path / "oof"
+    copia.mkdir()
+    for nombre in ("manifest.json", "inventario.json"):
+        shutil.copy2(origen / nombre, copia / nombre)
+    for puntero in origen.glob("*.dvc"):
+        shutil.copy2(puntero, copia / puntero.name)
+    if con_parquet:
+        for parquet in origen.glob("*.parquet"):
+            (copia / parquet.name).write_bytes(parquet.read_bytes())
+    return copia
+
+
+def _correr_oof_check(oof: Path) -> tuple[int, str]:
+    """Run the OOF inventory gate over a given directory."""
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "oof_manifest_check.py"), "--oof", str(oof)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout
+
+
+def test_el_gate_pasa_en_un_clon_limpio_sin_los_parquet(tmp_path: Path) -> None:
+    """A clean checkout has the pointers and not the blobs; the gate has to work there.
+
+    Un gate que exige los bytes solo se puede correr en la maquina donde se escribio, que es lo
+    mismo que le pasaba al manifiesto con sus rutas de Windows.
+    """
+    codigo, salida = _correr_oof_check(_copia_oof(tmp_path, con_parquet=False))
+    assert codigo == 0, salida
+    assert "por puntero .dvc" in salida
+    assert "por bytes: 0" in salida
+
+
+def test_un_puntero_dvc_que_no_cuadra_con_el_inventario_rompe_el_gate(tmp_path: Path) -> None:
+    """The DVC path must be able to fail, or it is decoration."""
+    import re as _re
+
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    puntero = next(copia.glob("oof_parcel_*.dvc"))
+    texto = puntero.read_text(encoding="utf-8")
+    mutado = _re.sub(r"(md5:\s*)[0-9a-f]{32}", r"\g<1>" + "0" * 32, texto, count=1)
+    assert mutado != texto
+    puntero.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_oof_check(copia)
+    assert codigo == 1, salida
+    assert "el puntero .dvc registra" in salida
+
+
+def test_un_parquet_que_no_cuadra_con_el_inventario_rompe_el_gate(tmp_path: Path) -> None:
+    """And the bytes path too, so both roads are proven and not just the one we run locally."""
+    copia = _copia_oof(tmp_path, con_parquet=True)
+    objetivo = next(copia.glob("oof_parcel_*.parquet"))
+    objetivo.write_bytes(objetivo.read_bytes() + b"\x00")
+    codigo, salida = _correr_oof_check(copia)
+    assert codigo == 1, salida
+    assert "el inventario registra" in salida
+
+
+def test_ni_el_parquet_ni_su_puntero_rompe_el_gate(tmp_path: Path) -> None:
+    """Declared and absent in both forms is the one case that must never pass silently."""
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    next(copia.glob("oof_parcel_*.dvc")).unlink()
+    codigo, salida = _correr_oof_check(copia)
+    assert codigo == 1, salida
+    assert "ni el parquet ni su puntero" in salida

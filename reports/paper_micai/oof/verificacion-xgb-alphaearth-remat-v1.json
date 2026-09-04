@@ -1,0 +1,43 @@
+{
+  "miembro": "xgb-alphaearth",
+  "generado": "2026-09-04T20:25:51+00:00",
+  "tipo": "tabular",
+  "n_parcelas_nuevo": 16640,
+  "n_parcelas_referencia": 28532,
+  "referencia": "tsvit-pheno",
+  "parcelas_fuera_de_la_referencia": 0,
+  "comparacion_con_el_anterior": {
+    "n_parcelas_comparables": 16640,
+    "coincidencia_argmax": 0.945433,
+    "diferencia_media_absoluta": 0.006196827,
+    "diferencia_maxima_absoluta": 0.679580688,
+    "por_estrato_de_confianza": [
+      {
+        "confianza_desde": 0.0,
+        "confianza_hasta": 0.5,
+        "n": 844,
+        "coincidencia_argmax": 0.547393
+      },
+      {
+        "confianza_desde": 0.5,
+        "confianza_hasta": 0.7,
+        "n": 2120,
+        "coincidencia_argmax": 0.791981
+      },
+      {
+        "confianza_desde": 0.7,
+        "confianza_hasta": 0.9,
+        "n": 3281,
+        "coincidencia_argmax": 0.974398
+      },
+      {
+        "confianza_desde": 0.9,
+        "confianza_hasta": 1.01,
+        "n": 10395,
+        "coincidencia_argmax": 0.999904
+      }
+    ]
+  },
+  "fallos": [],
+  "veredicto": "se_puede_promover"
+}

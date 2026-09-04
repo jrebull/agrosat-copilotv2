@@ -1,12 +1,20 @@
 """Seal the fold-5 parcel ground truth and centroids that every MICAI figure needs.
 
-The manuscript scores its ensembles on the 16 640 parcels shared by the ten
-fold-5 out-of-fold members. Those posteriors are versioned in DVC, but the labels
-and the centroids they are scored against are rebuilt from the raw PASTIS-R
-dataset, which is 68 GB and lives outside the repository. This script derives both
-frames once, restricted to that shared universe, and writes them under
-``reports/paper_micai/fase1/`` so a clean clone can re-derive every printed figure
-from a few hundred kilobytes.
+**La poblacion es la ELEGIBILIDAD DEL BANCO, no la interseccion de los miembros.** Es lo que
+declara `docs/paper/estimando-v1.json`: `population = all_eligible_test_parcels` con
+`include_non_delivery = true`. La version anterior intersecaba los miembros disponibles, y eso
+tiene dos consecuencias que no se ven hasta que muerden: la poblacion cambiaba al cambiar el
+estado de un fichero —de 28 532 a 16 640 con solo marcar un miembro como no canonico— y las
+parcelas que un predictor no cubre desaparecian del denominador en vez de contar como no entrega,
+que es exactamente el denominador movil que el articulo denuncia.
+
+Ahora la poblacion sale del fold retenido de PASTIS-R con etiqueta semantic18 valida, cada
+predictor se alinea con un LEFT JOIN, y **la ausencia es no entrega**. La cobertura de cada
+miembro pasa a ser un dato que se reporta, no una definicion que se aplica.
+
+Las etiquetas y los centroides se reconstruyen del PASTIS-R crudo, que son 68 GB y viven fuera del
+repositorio. Este guion los deriva una vez y los escribe en ``reports/paper_micai/fase1/`` para que
+un clon limpio pueda re-derivar cada figura impresa desde unos cientos de kilobytes.
 
 Usage:
     poetry run python scripts/paper_micai_seal_fold5.py
@@ -38,47 +46,41 @@ KEY = "canonical_parcel_id"
 PASTIS_ARCHIVE_MD5 = "4887513d6c2d2b07fa935d325bd53e09"
 
 
-def shared_universe(oof_dir: Path) -> list[str]:
-    """Intersect the parcel ids of every fold-5 member of the France universe.
+def cobertura_por_miembro(oof_dir: Path, poblacion: list[str]) -> list[dict[str, object]]:
+    """Coverage of every canonical member over the eligible population.
+
+    Es un DATO que se reporta, no una definicion que se aplica. Antes, lo que un miembro no
+    cubria desaparecia de la poblacion; ahora se cuenta y la parcela sigue ahi como no entrega.
 
     Args:
         oof_dir: Directory holding ``oof_parcel_*_fold5.parquet``.
+        poblacion: The eligible parcel ids.
 
     Returns:
-        The sorted parcel ids present in every member.
-
-    Solo entran los miembros que el inventario marca como `canonical`.
-
-    Raises:
-        FileNotFoundError: if no canonical parcel-level member is available.
+        One row per canonical member with how much of the population it covers.
     """
-    # El universo sellado se construye SOLO con miembros canonicos. La version anterior hacia un
-    # glob y excluia Italia por el nombre del fichero, asi que recogia los legacy_unverified sin
-    # preguntarle al inventario: el universo de parcelas del articulo salia en parte de ficheros
-    # cuya procedencia no esta verificada. Es el mismo consumidor silencioso que
-    # `load_member_posteriors`, un piso mas abajo.
     inventario = cargar_inventario()
-    members = sorted(
-        p
-        for p in oof_dir.glob("oof_parcel_*_fold5.parquet")
-        if inventario["ficheros"].get(p.name, {}).get("estado") == "canonical"
-    )
-    descartados = sorted(
-        p.name
-        for p in oof_dir.glob("oof_parcel_*_fold5.parquet")
-        if inventario["ficheros"].get(p.name, {}).get("estado") != "canonical"
-    )
-    if descartados:
-        logger.info("miembros_no_canonicos_descartados", n=len(descartados), ficheros=descartados)
-    if not members:
-        raise FileNotFoundError(f"no parcel OOF found in {oof_dir}; run `dvc pull {oof_dir}`.")
-    shared: set[str] | None = None
-    for path in members:
+    elegibles = set(poblacion)
+    filas: list[dict[str, object]] = []
+    for path in sorted(oof_dir.glob("oof_parcel_*_fold5.parquet")):
+        entrada = inventario["ficheros"].get(path.name, {})
+        if entrada.get("estado") != "canonical":
+            logger.info(
+                "miembro_no_canonico_descartado", fichero=path.name, estado=entrada.get("estado")
+            )
+            continue
         ids = set(pl.read_parquet(path, columns=[KEY])[KEY].to_list())
-        shared = ids if shared is None else (shared & ids)
-        logger.info("member_read", member=path.stem, n_parcels=len(ids))
-    assert shared is not None
-    return sorted(shared)
+        cubiertas = len(ids & elegibles)
+        filas.append(
+            {
+                "miembro": path.stem.removeprefix("oof_parcel_").removesuffix("_fold5"),
+                "parcelas_cubiertas": cubiertas,
+                "parcelas_sin_entrega": len(elegibles) - cubiertas,
+                "cobertura": round(cubiertas / len(elegibles), 6) if elegibles else 0.0,
+                "fuera_de_la_poblacion": len(ids - elegibles),
+            }
+        )
+    return filas
 
 
 def git_head() -> str:
@@ -111,16 +113,23 @@ def main() -> None:
         build_parcel_ground_truth,
     )
 
-    universe = shared_universe(args.oof_dir)
     patch_ids = _fold5_patch_ids(args.oof_dir)
-    logger.info("universe", n_parcels=len(universe), n_patches=len(patch_ids))
 
+    # La poblacion elegible: las parcelas del fold retenido con etiqueta semantic18 valida. No
+    # depende de que miembros existan ni de su estado, que es el punto entero de esta correccion.
     gt = build_parcel_ground_truth(patch_ids, args.pastis_root)
     geoms = build_parcel_geometries(patch_ids, args.pastis_root)
+    gt_shared = gt.sort(KEY)
+    universe = gt_shared[KEY].to_list()
+    logger.info("poblacion_elegible", n_parcels=len(universe), n_patches=len(patch_ids))
 
     keep = pl.DataFrame({KEY: universe})
-    gt_shared = gt.join(keep, on=KEY, how="inner").sort(KEY)
     geoms_shared = geoms.join(keep, on=KEY, how="inner").sort(KEY)
+
+    # La cobertura de cada miembro es un dato del informe, no un filtro de la poblacion.
+    cobertura = cobertura_por_miembro(args.oof_dir, universe)
+    for fila in cobertura:
+        logger.info("cobertura_miembro", **fila)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     gt_path = args.out_dir / "parcel_gt_fold5.parquet"

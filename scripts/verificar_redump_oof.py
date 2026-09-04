@@ -15,8 +15,13 @@ Comprueba seis cosas, y la ultima es la que de verdad interesa:
    silencioso. No falla por ser grande: falla si no se puede medir. Un cambio grande puede ser el
    arreglo, y por eso se imprime y lo mira una persona.
 
+**Sella su comparacion en un JSON.** Las cifras de una verificacion no pueden vivir solo en la
+prosa de un inventario: es el defecto que este proyecto lleva ocho rondas persiguiendo, y una
+verificacion cuyo resultado no es re-derivable no es una verificacion, es un recuerdo.
+
 Uso:
-    poetry run python scripts/verificar_redump_oof.py --temporal <dir> --miembro tsvit-pheno-fullm
+    poetry run python scripts/verificar_redump_oof.py --temporal <dir> --miembro tsvit-pheno-fullm \
+        --informe reports/paper_micai/oof/verificacion-tsvit-pheno-fullm.json
 """
 
 from __future__ import annotations
@@ -25,6 +30,7 @@ import argparse
 import hashlib
 import json
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -42,35 +48,47 @@ def main() -> int:
     parser.add_argument("--temporal", type=Path, required=True)
     parser.add_argument("--miembro", required=True)
     parser.add_argument("--oof", type=Path, default=DEFAULT_OOF)
+    parser.add_argument("--informe", type=Path, default=None)
     args = parser.parse_args()
 
     from ml.eval.checkpoint_registry import CHECKPOINT_REGISTRY
     from ml.utils.parcel_reconcile import PROB_COLUMNS
 
     fallos: list[str] = []
+    informe: dict[str, object] = {
+        "miembro": args.miembro,
+        "generado": datetime.now(UTC).isoformat(timespec="seconds"),
+    }
+    # Los miembros DENSOS salen de un checkpoint y de un volcado por parches; los TABULARES no
+    # tienen ninguna de las dos cosas. Que la herramienta admita los dos evita el segundo script
+    # que dice casi lo mismo y se desincroniza del primero.
     spec = CHECKPOINT_REGISTRY.get(args.miembro)
-    if spec is None:
-        print(f"ERROR: {args.miembro} no esta en CHECKPOINT_REGISTRY")
-        return 2
+    informe["tipo"] = "denso" if spec is not None else "tabular"
+    if spec is not None:
+        # 1 y 2. Configuracion y sello del checkpoint.
+        manifiesto = json.loads((args.temporal / "manifest.json").read_text(encoding="utf-8"))
+        entrada = manifiesto["models"].get(args.miembro, {})
+        print(f"modelo: {args.miembro}  status={entrada.get('status')}")
+        print(f"kwargs del registro: {spec.model_kwargs}")
+        if entrada.get("status") != "ok":
+            fallos.append(f"el volcado declara status={entrada.get('status')!r}")
+        digest = hashlib.md5(Path(spec.path).read_bytes()).hexdigest()  # noqa: S324
+        print(f"checkpoint: {spec.path}")
+        print(f"md5 del checkpoint: {digest}")
+        informe["checkpoint"] = str(Path(spec.path).relative_to(REPO_ROOT))
+        informe["checkpoint_md5"] = digest
+        informe["model_kwargs"] = dict(spec.model_kwargs)
 
-    # 1 y 2. Configuracion y sello del checkpoint.
-    manifiesto = json.loads((args.temporal / "manifest.json").read_text(encoding="utf-8"))
-    entrada = manifiesto["models"].get(args.miembro, {})
-    print(f"modelo: {args.miembro}  status={entrada.get('status')}")
-    print(f"kwargs del registro: {spec.model_kwargs}")
-    if entrada.get("status") != "ok":
-        fallos.append(f"el volcado declara status={entrada.get('status')!r}")
-    digest = hashlib.md5(Path(spec.path).read_bytes()).hexdigest()  # noqa: S324
-    print(f"checkpoint: {spec.path}")
-    print(f"md5 del checkpoint: {digest}")
-
-    # 3. Cobertura densa.
-    n_patches = entrada.get("n_patches")
-    print(f"parches volcados: {n_patches}")
-    if n_patches != PATCHES_ESPERADOS:
-        fallos.append(
-            f"se volcaron {n_patches} parches y el fold retenido tiene {PATCHES_ESPERADOS}"
-        )
+        # 3. Cobertura densa.
+        n_patches = entrada.get("n_patches")
+        print(f"parches volcados: {n_patches}")
+        informe["n_patches"] = n_patches
+        if n_patches != PATCHES_ESPERADOS:
+            fallos.append(
+                f"se volcaron {n_patches} parches y el fold retenido tiene {PATCHES_ESPERADOS}"
+            )
+    else:
+        print(f"modelo: {args.miembro} (tabular: sin checkpoint ni volcado por parches)")
 
     # 4. Cobertura por parcela frente a un canonico.
     nuevo = args.temporal / f"oof_parcel_{args.miembro}_fold5.parquet"
@@ -83,10 +101,18 @@ def main() -> int:
     ids_nuevo = set(t_nuevo["canonical_parcel_id"].to_list())
     ids_ref = set(t_ref["canonical_parcel_id"].to_list())
     print(f"parcelas: nuevo={len(ids_nuevo)}  canonico {CANONICO_DE_REFERENCIA}={len(ids_ref)}")
-    if ids_nuevo != ids_ref:
+    informe["n_parcelas_nuevo"] = len(ids_nuevo)
+    informe["n_parcelas_referencia"] = len(ids_ref)
+    informe["referencia"] = CANONICO_DE_REFERENCIA
+    informe["parcelas_fuera_de_la_referencia"] = len(ids_nuevo - ids_ref)
+    if ids_nuevo - ids_ref:
+        # Sobrar SIEMPRE es un fallo: son parcelas que el universo del banco no contiene.
+        fallos.append(f"{len(ids_nuevo - ids_ref)} parcelas no estan en {CANONICO_DE_REFERENCIA}")
+    if spec is not None and ids_ref - ids_nuevo:
+        # A un miembro denso se le exige cobertura completa; a uno tabular no, porque su ausencia
+        # es NO ENTREGA y asi lo declara estimando-v1.json.
         fallos.append(
-            f"la cobertura por parcela no coincide con {CANONICO_DE_REFERENCIA}: "
-            f"faltan {len(ids_ref - ids_nuevo)}, sobran {len(ids_nuevo - ids_ref)}"
+            f"faltan {len(ids_ref - ids_nuevo)} parcelas frente a {CANONICO_DE_REFERENCIA}"
         )
 
     # 5. Son probabilidades.
@@ -115,14 +141,51 @@ def main() -> int:
                 .select(PROB_COLUMNS)
                 .to_numpy()
             )
-            coincide = float((a.argmax(axis=1) == b.argmax(axis=1)).mean())
+            iguales = a.argmax(axis=1) == b.argmax(axis=1)
+            coincide = float(iguales.mean())
             print(f"parcelas comparables con el fichero anterior: {len(comun)}")
             print(f"coincidencia de argmax con el anterior: {coincide:.4f}")
             print(f"diferencia media absoluta de posteriores: {float(np.abs(a - b).mean()):.6f}")
+            # Los estratos por confianza: la media global esconde donde esta el desacuerdo, y en
+            # este articulo lo que importa es justo la franja donde el modelo duda.
+            conf = np.maximum(a.max(axis=1), b.max(axis=1))
+            estratos = []
+            for lo, hi in ((0.0, 0.5), (0.5, 0.7), (0.7, 0.9), (0.9, 1.01)):
+                m = (conf >= lo) & (conf < hi)
+                if not m.any():
+                    continue
+                estratos.append(
+                    {
+                        "confianza_desde": lo,
+                        "confianza_hasta": hi,
+                        "n": int(m.sum()),
+                        "coincidencia_argmax": round(float(iguales[m].mean()), 6),
+                    }
+                )
+                print(
+                    f"  confianza [{lo}, {hi}): n={int(m.sum()):6d}  "
+                    f"coincide={float(iguales[m].mean()):.4f}"
+                )
+            informe["comparacion_con_el_anterior"] = {
+                "n_parcelas_comparables": len(comun),
+                "coincidencia_argmax": round(coincide, 6),
+                "diferencia_media_absoluta": round(float(np.abs(a - b).mean()), 9),
+                "diferencia_maxima_absoluta": round(float(np.abs(a - b).max()), 9),
+                "por_estrato_de_confianza": estratos,
+            }
         else:
             fallos.append("el fichero anterior no comparte ninguna parcela: no se puede comparar")
     else:
         print("no hay fichero anterior con el que comparar")
+
+    informe["fallos"] = fallos
+    informe["veredicto"] = "no_promover" if fallos else "se_puede_promover"
+    if args.informe is not None:
+        args.informe.parent.mkdir(parents=True, exist_ok=True)
+        args.informe.write_text(
+            json.dumps(informe, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"informe sellado en {args.informe}")
 
     for fallo in fallos:
         print(f"FALLO: {fallo}")

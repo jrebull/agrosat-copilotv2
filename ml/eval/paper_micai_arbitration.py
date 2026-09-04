@@ -73,6 +73,12 @@ def load_member_posteriors(
     ``legacy_unverified`` en un JSON no impide que se lea: eso lo aprendio este proyecto con los
     trece artefactos ``OBSOLETO``, que llevaban su aviso y se citaban igual.
 
+    **Pendiente, y se dice aqui para que no se olvide**: bajo `estimando-v1.json` la ausencia de
+    una parcela en un miembro es NO ENTREGA, no un error. Esta funcion todavia levanta
+    `ValueError` cuando un miembro no cubre todo lo pedido. Hoy no muerde —los miembros canonicos
+    cubren la poblacion entera— pero en cuanto entre uno que no la cubra habra que decidir como se
+    representa la no entrega en una matriz densa, y esa decision no la toma un `except`.
+
     Args:
         oof_dir: Directory with ``oof_parcel_{member}_fold5.parquet``.
         members: Member names to load.
