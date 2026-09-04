@@ -1,4 +1,4 @@
-# Re-validación externa · ronda 2 en adelante
+# Re-validación externa · de la ronda 2 en adelante
 
 **Para quién**: el mismo auditor externo de la ronda anterior, o uno nuevo si se prefiere sangre fresca. Se usa después de cada ronda de correcciones, hasta que la respuesta a la última pregunta sea «arrancamos».
 
@@ -8,7 +8,7 @@
 
 > Auditaste este plan de investigación y tu veredicto fue **no arrancar todavía**. El equipo dice haber corregido. Tu trabajo ahora tiene tres partes, y la tercera es la que importa.
 >
-> **Dónde está todo**: el plan en `agrosat-micai-site/plan.html`, variable `EPICS`. Los artefactos en `agrosat-copilotv2/reports/paper_micai/`. El registro de custodia en `paper/ARTIFACTS.md`. El código en `ml/eval/`. Puedes correr `make plan-check`, `make paper-artifacts-check` y `pytest tests/ml/eval/`.
+> **Dónde está todo**: el plan en `agrosat-micai-site/plan.html`, variable `EPICS`. Los artefactos en `agrosat-copilotv2/reports/paper_micai/`. El registro de custodia en `paper/ARTIFACTS.md`. El código en `ml/eval/`. Puedes correr `make plan-check`, `make paper-artifacts-check`, `pytest tests/ml/eval/` y `pytest tests/scripts/`.
 >
 > **Lo que el equipo dice haber hecho** está en `docs/paper/respuesta-auditoria-externa.md`, con un apartado por cada hallazgo tuyo.
 >
@@ -30,12 +30,12 @@
 >
 > **Parte 3 · Lo nuevo, y es lo que de verdad pagamos.**
 >
-> No te limites a tu lista anterior. Cada ronda de correcciones es una oportunidad de meter defectos nuevos, y el equipo ya ha demostrado que los mete. Busca especialmente:
-> - **Un número que exista solo en prosa.** Ya ha pasado cuatro veces en este proyecto.
-> - **Una cifra tomada de un artefacto y atribuida a otro contexto.** Ha pasado tres veces.
-> - **Un control que no puede detectar aquello para lo que existe.** Ha pasado dos veces: un gate ciego a sus propios acentos, y un test que usaba el único valor que no distinguía.
-> - **Una decisión presentada como restricción del problema.** Ha pasado con el número de bloques.
-> - **Una afirmación que el diseño no puede sostener**, escrita en indicativo.
+> No te limites a tu lista anterior. Cada ronda de correcciones es una oportunidad de meter defectos nuevos, y el equipo ya ha demostrado que los mete. Estos cinco patrones tienen cuenta abierta; el número dice cuántas veces han aparecido ya:
+> - **Un número que exista solo en prosa.** Cinco veces.
+> - **Una cifra tomada de un artefacto y atribuida a otro contexto.** Cuatro veces.
+> - **Un control que no puede detectar aquello para lo que existe.** Cuatro veces: un gate ciego a sus propios acentos; un test que usaba el único valor que no distinguía; dos tests que comprobaban el número de salida en vez del mecanismo; y un gate que solo leía dos de los campos que debía cubrir. **Pregúntate siempre por el camino de al lado**: si el control se puede burlar moviendo la afirmación de sitio, no es un control.
+> - **Una corrección aplicada donde se señaló y no en el resto de sus apariciones.** Cuatro veces en una sola ronda: el preregistro decía lo correcto y el plan seguía diciendo lo anterior. **Toda afirmación corregida se busca en todas partes** — plan, preregistro, cuaderno público, ledger, docstrings y el propio manuscrito.
+> - **Una decisión presentada como restricción del problema**, o **una afirmación que el diseño no puede sostener**, escrita en indicativo.
 >
 > ---
 >
