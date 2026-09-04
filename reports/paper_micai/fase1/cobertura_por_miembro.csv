@@ -1,0 +1,9 @@
+miembro,parcelas_cubiertas,parcelas_sin_entrega,cobertura,fuera_de_la_poblacion
+anysat,16640,0,1.0,11892
+deeplabv3plus,16640,0,1.0,11892
+segformer,16640,0,1.0,11892
+tsvit-pheno-fullm,16640,0,1.0,11892
+tsvit-pheno,16640,0,1.0,11892
+unet,16640,0,1.0,11892
+utae,16640,0,1.0,11892
+xgb-alphaearth-remat-v1,16640,0,1.0,0

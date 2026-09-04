@@ -1,11 +1,15 @@
 {
-  "descripcion": "Etiquetas y centroides por parcela del fold 5 held-out de PASTIS-R, restringidos al universo compartido por los diez miembros OOF de Francia.",
+  "descripcion": "Etiquetas y centroides por parcela del fold 5 held-out de PASTIS-R. La poblacion es la ELEGIBILIDAD DEL BANCO: todas las parcelas de los parches con Fold == 5 en metadata.geojson que tienen etiqueta semantic18 valida. No depende de que miembros OOF existan ni de su estado.",
+  "poblacion": "all_eligible_test_parcels",
+  "fuente_de_los_parches": "data/PASTIS-R/metadata.geojson, propiedad Fold == 5",
+  "contrato_del_estimando": "docs/paper/estimando-v1.json",
+  "cambio": "La version anterior intersecaba los miembros OOF disponibles y sellaba 16 640 parcelas. Eso hacia que la poblacion dependiera de que ficheros existieran, y que lo que un predictor no cubre desapareciera del denominador en vez de contar como no entrega. Ahora la ausencia es NO ENTREGA y la cobertura de cada miembro se reporta en cobertura_por_miembro.csv.",
   "n_parcels": 16640,
   "n_patches": 496,
   "n_classes": 18,
   "pastis_archive_md5_zenodo": "4887513d6c2d2b07fa935d325bd53e09",
   "oof_dir": "ml/eval/oof",
-  "code_version": "d6ca043",
+  "code_version": "716e400",
   "polars": "1.44.1",
-  "generado": "2026-09-02T21:07:20+00:00"
+  "generado": "2026-09-04T20:53:00+00:00"
 }
