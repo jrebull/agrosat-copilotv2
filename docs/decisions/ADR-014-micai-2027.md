@@ -6,6 +6,7 @@
 **Fecha de corte**: **18 de septiembre de 2026.** Si no está firmado, se ejecuta el plan con las
 decisiones por defecto marcadas **[POR DEFECTO]** en cada apartado, y esta línea es su registro.
 **Sustituye a**: [ADR-013](ADR-013-angulo-micai.md), cuya tesis no sobrevivió a la fase 3.
+**Enmienda 1**, 4 de septiembre de 2026: el §6 pasa de «qué predictor» a «qué regla de selección o panel», porque el valor por defecto anterior contradecía a US-139.
 **Evidencia**: ocho rondas de auditoría externa en
 [`docs/paper/respuesta-auditoria-externa.md`](../paper/respuesta-auditoria-externa.md) · el
 preregistro en [`docs/paper/preregistro-v2-borrador.md`](../paper/preregistro-v2-borrador.md) · el
@@ -79,18 +80,23 @@ Ninguno de los dos queda en limbo:
 **No se destruyen.** El registro de lo que se creyó es parte del método de este proyecto, y borrarlo
 sería el mismo gesto que retirar una cifra y dejar la conclusión.
 
-### 6 · Qué predictor es el del artículo
+### 6 · Qué regla de selección o panel predeclarado usa el artículo
 
-**No se decide aquí, y el motivo es que hoy no se puede decidir honestamente.**
+**No se declara un predictor ganador**, y no por prudencia: hoy no se puede declarar honestamente.
+El ranking que usaríamos se calcula **sobre las mismas etiquetas con las que después se evalúa**
+(`scripts/run_paper_micai_fase3.py`, defecto declarado en el código), y elegir con él sesga hacia
+arriba todo lo que venga después.
 
-El ranking que usaríamos para elegirlo se calcula **sobre las mismas etiquetas con las que después
-se evalúa** (`scripts/run_paper_micai_fase3.py`, defecto declarado en el código). Elegir con ese
-ranking sesga hacia arriba todo lo que venga después.
+> **Regla que se firma**: no se declara un predictor ganador. Se reporta el **panel elegible
+> predeclarado** —al menos **tres predictores de familias distintas por banco**— y el predictor se
+> trata como **factor de sensibilidad**. Solo podrá seleccionarse uno mediante **selección anidada
+> independiente de la evaluación**. **[POR DEFECTO: el panel, sin ganador.]**
 
-> **Regla que sí se firma**: el predictor del artículo se elige con **selección anidada o sobre un
-> conjunto separado** (US-139), **antes** de calcular ningún contraste, y la regla de selección se
-> escribe en el preregistro antes de aplicarla. Si al final no hay presupuesto para eso, el artículo
-> **reporta los dos predictores** y no elige, declarando por qué. **[POR DEFECTO: reportar los dos.]**
+**Corrección del borrador anterior**: decía «el artículo reporta los dos predictores», y eso
+contradice a US-139, que exige un panel de al menos tres de familias distintas por banco. Dos
+predictores del mismo linaje no son un panel: son una comparación con el mismo sesgo dos veces. El
+error venía de que la pregunta estaba mal formulada —«qué predictor es el del artículo»— y una
+pregunta que presupone un ganador se contesta con un ganador.
 
 ### 7 · Qué NO autoriza este ADR
 
