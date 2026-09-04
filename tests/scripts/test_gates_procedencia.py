@@ -665,19 +665,28 @@ def test_el_analisis_micai_rechaza_un_oof_no_canonico() -> None:
         load_member_posteriors(REPO_ROOT / "ml" / "eval" / "oof", (no_canonico,), ["x"])
 
 
-def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito() -> None:
+def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito(tmp_path: Path) -> None:
     """Diagnostics and migrations need to read them; the analysis must not do it by accident."""
+    import polars as pl
+
     from ml.eval.oof.inventario import estado_de_miembro
     from ml.eval.paper_micai_arbitration import load_member_posteriors
+    from ml.utils.parcel_reconcile import PROB_COLUMNS
 
     no_canonico = next(
         m for m in ("farslip-ft18", "xgb-alphaearth") if estado_de_miembro(m) != "canonical"
     )
-    # Con la escapatoria pasa el control de estado y falla mas adelante, por cobertura: la
-    # diferencia es que el fallo ya no es "no puedes leer esto".
+    pl.DataFrame(
+        {
+            "canonical_parcel_id": ["otra-parcela"],
+            **{column: [1.0 / len(PROB_COLUMNS)] for column in PROB_COLUMNS},
+        }
+    ).write_parquet(tmp_path / f"oof_parcel_{no_canonico}_fold5.parquet")
+    # With the escape hatch, state validation passes and coverage validation
+    # fails later. The synthetic parquet keeps this distinction testable in CI.
     with pytest.raises(ValueError, match="no cubre"):
         load_member_posteriors(
-            REPO_ROOT / "ml" / "eval" / "oof",
+            tmp_path,
             (no_canonico,),
             ["parcela-que-no-existe"],
             permitir_no_canonicos=True,
@@ -687,15 +696,9 @@ def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito() -> None:
 def test_el_inventario_no_admite_estados_inventados(tmp_path: Path) -> None:
     """Three states, and a fourth one is a silent way of declaring nothing."""
     import json
-    import shutil
 
-    origen = REPO_ROOT / "ml" / "eval" / "oof"
-    copia = tmp_path / "oof"
-    copia.mkdir()
-    for parquet in origen.glob("*.parquet"):
-        (copia / parquet.name).write_bytes(parquet.read_bytes())
-    shutil.copy2(origen / "manifest.json", copia / "manifest.json")
-    datos = json.loads((origen / "inventario.json").read_text(encoding="utf-8"))
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    datos = json.loads((copia / "inventario.json").read_text(encoding="utf-8"))
     primero = next(iter(datos["ficheros"]))
     datos["ficheros"][primero]["estado"] = "casi_bueno"
     (copia / "inventario.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
@@ -713,15 +716,9 @@ def test_el_inventario_no_admite_estados_inventados(tmp_path: Path) -> None:
 def test_un_legacy_sin_siguiente_paso_rompe_el_gate(tmp_path: Path) -> None:
     """Without a written way out, a temporary state becomes a permanent one."""
     import json
-    import shutil
 
-    origen = REPO_ROOT / "ml" / "eval" / "oof"
-    copia = tmp_path / "oof"
-    copia.mkdir()
-    for parquet in origen.glob("*.parquet"):
-        (copia / parquet.name).write_bytes(parquet.read_bytes())
-    shutil.copy2(origen / "manifest.json", copia / "manifest.json")
-    datos = json.loads((origen / "inventario.json").read_text(encoding="utf-8"))
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    datos = json.loads((copia / "inventario.json").read_text(encoding="utf-8"))
     objetivo = next(k for k, v in datos["ficheros"].items() if v["estado"] == "legacy_unverified")
     datos["ficheros"][objetivo].pop("siguiente_paso", None)
     (copia / "inventario.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
@@ -752,8 +749,21 @@ def _copia_oof(tmp_path: Path, *, con_parquet: bool) -> Path:
     for puntero in origen.glob("*.dvc"):
         shutil.copy2(puntero, copia / puntero.name)
     if con_parquet:
-        for parquet in origen.glob("*.parquet"):
-            (copia / parquet.name).write_bytes(parquet.read_bytes())
+        import hashlib
+        import json
+
+        # Exercise the bytes branch without requiring DVC blobs in CI. The gate
+        # only validates identity here, so a tiny opaque payload is sufficient.
+        inventory_path = copia / "inventario.json"
+        inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+        name = next(
+            candidate for candidate in inventory["ficheros"] if candidate.startswith("oof_parcel_")
+        )
+        payload = b"oof-manifest-check synthetic bytes fixture"
+        (copia / name).write_bytes(payload)
+        inventory["ficheros"][name]["md5"] = hashlib.md5(payload).hexdigest()
+        inventory["ficheros"][name]["bytes"] = len(payload)
+        inventory_path.write_text(json.dumps(inventory, ensure_ascii=False), encoding="utf-8")
     return copia
 
 
