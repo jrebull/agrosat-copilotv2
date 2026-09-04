@@ -267,6 +267,16 @@ def _dump_one(
         "target": "semantic18",
         "ignore_index": 255,
     }
+    if is_temporal:
+        # CRITICAL (US-038/039): the temporal dataset MUST subsample the SAME number
+        # of dates the model was trained with, otherwise the model receives a series
+        # of a different length than it learned and its ordinal temporal PE desaligns,
+        # collapsing the scores (e.g. TSViT Full-M trained with T=37 scored 0.17 when
+        # the harness fed it T=10). Mirrors the same guard in ml.eval.dense_metrics:
+        # the capacity lives in spec.model_kwargs (TSVIT_FULLM_CONFIG -> n_timesteps=37)
+        # and models without it (L4 tsvit-pheno-v1) keep the historical default of 10,
+        # matching how they were trained.
+        ds_kwargs["n_timesteps"] = int(spec.model_kwargs.get("n_timesteps", 10))
     if data_root is not None:
         ds_kwargs["root"] = data_root
 

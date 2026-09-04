@@ -102,6 +102,22 @@
       "status": "ok",
       "held_out": true,
       "reason": null
+    },
+    "tsvit-pheno-fullm": {
+      "model": "tsvit-pheno-fullm",
+      "model_kind": "tsvit-pheno-fullm",
+      "path": "C:\\Users\\arthu\\Proyectos\\MNA\\agro_sat_copilot\\ml\\eval\\oof\\oof_tsvit-pheno-fullm_fold5.parquet",
+      "parcel_path": "C:\\Users\\arthu\\Proyectos\\MNA\\agro_sat_copilot\\ml\\eval\\oof\\oof_parcel_tsvit-pheno-fullm_fold5.parquet",
+      "shape": [
+        18,
+        128,
+        128
+      ],
+      "dtype": "float16",
+      "n_patches": 496,
+      "status": "ok",
+      "held_out": true,
+      "reason": null
     }
   }
 }
