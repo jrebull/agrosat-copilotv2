@@ -82,4 +82,4 @@
 | Review de PR | `agrosat-code-review` |
 | Crear commit / branch / PR | `agrosat-git-workflow` |
 | Cerrar User Story | `agrosat-git-workflow` |
-| Persistir decisión entre sesiones Claude Code | `agrosat-engram-memory` (dev) |
+| Persistir decisión entre sesiones Claude Code, solo si el binario y MCP están conectados | `agrosat-engram-memory` (dev opcional) |

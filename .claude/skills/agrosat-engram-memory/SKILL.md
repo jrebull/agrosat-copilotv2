@@ -101,6 +101,11 @@ The plugin exposes its MCP tools under the namespace `mcp__plugin_engram_engram_
 
 Do **not** add a manual `mcpServers.engram` entry in `.claude/settings.json` when the plugin is installed — it duplicates the MCP subprocess and the manual entry exposes tools under a different namespace (`mcp__engram__*`) that won't match this allowlist. Pick one path (plugin marketplace is the official one) and stick to it.
 
+The allowlist alone does **not** install or enable the plugin. On 2026-09-04 this repository has
+`enabledPlugins: {}`, and `engram` is not on the current macOS `PATH`; therefore no project memory is
+active in that environment. Agents must verify the binary and MCP connection before claiming that a
+memory was read or saved.
+
 We intentionally **do not allow** `mem_delete` or `mem_merge_projects` — destructive operations require explicit per-call approval.
 
 Cloud stays OFF unless someone runs `engram cloud enroll agrosat-copilot`. Do not enroll without team agreement.
@@ -167,22 +172,17 @@ From inside Claude Code, prefer the MCP `mem_search` / `mem_context` tools (resu
 engram search "h100 vram gemma" --project agrosat-copilot --limit 5
 ```
 
-## Team Sync (manual, opt-in)
+## Team Sync (disabled until a reviewable export policy exists)
 
-Engram supports git-based sync without enrolling in the hosted cloud:
+The upstream `engram sync` command writes `.engram/manifest.json` and compressed chunks under
+`.engram/chunks/`. It can export sessions, prompts and every observation in the selected project;
+upstream documents that `scope: personal` is not excluded automatically from project sync.
 
-```bash
-# Export new memories as a compressed chunk to .engram/ in the repo
-engram sync
-
-# Commit the chunk after redaction
-git add docs/engram/ && git commit -m "chore(engram): sync shareable memories"
-
-# On another laptop, after pulling:
-engram sync --import
-```
-
-Only commit chunks under `docs/engram/` after a teammate has read-reviewed and signed off (no secrets, no PII, no customer data). The local `~/.engram/engram.db` and the working `.engram/` directory are git-ignored.
+For this repository, `.engram/` is deliberately ignored and must **not** be force-added. There is no
+`make memory-sync` or `make memory-import` target. Until the team approves a redaction workflow and a
+gate that inspects the actual chunk payload, share durable knowledge through reviewed ADRs,
+`docs/us-resolved/` and other ordinary Markdown sources. Cloud enrollment remains prohibited without
+an explicit team decision.
 
 ## `.gitignore` Additions
 
@@ -199,12 +199,12 @@ Only commit chunks under `docs/engram/` after a teammate has read-reviewed and s
 ## Verification Checklist
 
 - [ ] `engram --version` works on each developer laptop (>= v1.15.10)
-- [ ] `engram mcp` listed in `.claude/settings.json` `mcpServers`
+- [ ] The Engram plugin is enabled and `claude mcp list` reports its process as connected
 - [ ] `engram cloud status` shows **not enrolled** for `agrosat-copilot`
 - [ ] `mem_current_project` returns `agrosat-copilot` from inside Claude Code
 - [ ] SQLite DB outside the repo (`%USERPROFILE%\.engram\engram.db`)
 - [ ] No `mem_save` content contains `sk-`, `Bearer`, `clerk_`, real UUIDs, or paths to creds
-- [ ] Team-shared chunks live under `docs/engram/` and have been reviewed
+- [ ] No `.engram/` chunk is tracked; reviewed shared decisions live in ordinary project docs
 - [ ] `.gitignore` excludes Engram local state
 - [ ] No FastAPI / ADK / TiTiler code imports or shells out to `engram`
 

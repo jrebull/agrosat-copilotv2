@@ -2,6 +2,10 @@
 
 > Lista completa de targets `make`. Resumen ejecutivo en [`AGENTS.md`](../../AGENTS.md).
 
+El ciclo recomendado para una US está en
+[`prompts-optimizers-fable.md`](prompts-optimizers-fable.md). Esa guía comprueba capacidades antes
+de exigirlas: actualmente no existen targets `graph-*` ni `memory-*` en este Makefile.
+
 ## Desarrollo local
 
 ```bash
