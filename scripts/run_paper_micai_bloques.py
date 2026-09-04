@@ -30,7 +30,13 @@ from scipy import stats
 from shapely import wkb, wkt
 
 from ml.eval.paper_micai_arbitration import KEY, load_member_posteriors
-from ml.eval.paper_micai_coverage import confidence_baseline, frontier, legend_by_f1, macro_over
+from ml.eval.paper_micai_coverage import (
+    confidence_baseline,
+    frontier,
+    legend_by_f1,
+    macro_over,
+    presentes_en_bloque,
+)
 from ml.features.spatial_split import build_spatial_kfold
 
 logger = structlog.get_logger(__name__)
@@ -108,9 +114,10 @@ def main(seed: int = 42) -> None:
             comun = sorted(
                 set(a.legend) & set(truth[a.delivered].tolist()) & set(truth[b.delivered].tolist())
             )
+            presentes = presentes_en_bloque(truth)
             deltas.append(
-                macro_over(truth[a.delivered], a.emitted[a.delivered], comun)
-                - macro_over(truth[b.delivered], b.emitted[b.delivered], comun)
+                macro_over(truth[a.delivered], a.emitted[a.delivered], comun, presentes=presentes)
+                - macro_over(truth[b.delivered], b.emitted[b.delivered], comun, presentes=presentes)
             )
         d = np.array(deltas)
         n = len(d)

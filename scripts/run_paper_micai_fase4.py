@@ -362,22 +362,37 @@ def replica(
             der = [p for p in confianza if p.k == k]
             sop = [p for p in por_soporte if p.k == k]
             ref = [p for p in sin_mec if p.k == k]
+            # Unidad declarada: el bloque. Aqui los bloques son las dos regiones, que son dos,
+            # y el intervalo lo dice en vez de disimularlo remuestreando parcelas.
+            blo = paired_interval(sub_labels, sub_splits, izq, der, unidad="bloque")
             par = paired_interval(
-                sub_labels, sub_splits, izq, der, n_boot=n_boot, random_state=seed
+                sub_labels,
+                sub_splits,
+                izq,
+                der,
+                unidad="parcela",
+                n_boot=n_boot,
+                random_state=seed,
             )
-            crudos.append(par["p_bootstrap"])
+            crudos.append(blo["p_valor"])
             detalle[f"k={k}"] = {
                 "f1_retirada_f1": float(np.mean([p.aligned_f1 for p in izq])),
                 "f1_retirada_soporte": float(np.mean([p.aligned_f1 for p in sop])),
                 "f1_confianza": float(np.mean([p.aligned_f1 for p in der])),
                 "f1_sin_mecanismo": float(np.mean([p.aligned_f1 for p in ref])),
                 "cobertura_media": float(np.mean([p.delivered.mean() for p in izq])),
-                "delta_vs_confianza": par["delta"],
-                "ci_low": par["ci_low"],
-                "ci_high": par["ci_high"],
-                "excluye_cero": par["excluye_cero"],
-                "p_bootstrap": par["p_bootstrap"],
-                "deltas_por_bloque": par["deltas_por_bloque"],
+                "delta_vs_confianza": blo["delta"],
+                # El intervalo publicable: unidad bloque. Aqui hay dos bloques, y se dice.
+                "ci_low": blo["ci_low"],
+                "ci_high": blo["ci_high"],
+                "excluye_cero": blo["excluye_cero"],
+                "p_valor": blo["p_valor"],
+                "unidad_del_intervalo": blo["unidad"],
+                "n_bloques": blo["n_unidades"],
+                "deltas_por_bloque": blo["deltas_por_bloque"],
+                "ci_low_remuestreo_parcela": par["ci_low"],
+                "ci_high_remuestreo_parcela": par["ci_high"],
+                "p_bootstrap_parcela": par["p_bootstrap"],
             }
         for k, adj in zip(k_values, holm(crudos), strict=True):
             detalle[f"k={k}"]["p_holm"] = adj

@@ -38,6 +38,7 @@ from ml.eval.paper_micai_coverage import (
     frontier,
     legend_by_f1,
     macro_over,
+    presentes_en_bloque,
 )
 
 logger = structlog.get_logger(__name__)
@@ -106,8 +107,18 @@ def _denominador(
                 "n_clases_comun": len(comun),
                 "delta_publicado": round(a.aligned_f1 - b.aligned_f1, 6),
                 "delta_denominador_comun": round(
-                    macro_over(truth[a.delivered], a.emitted[a.delivered], comun)
-                    - macro_over(truth[b.delivered], b.emitted[b.delivered], comun),
+                    macro_over(
+                        truth[a.delivered],
+                        a.emitted[a.delivered],
+                        comun,
+                        presentes=presentes_en_bloque(truth),
+                    )
+                    - macro_over(
+                        truth[b.delivered],
+                        b.emitted[b.delivered],
+                        comun,
+                        presentes=presentes_en_bloque(truth),
+                    ),
                     6,
                 ),
             }
@@ -182,12 +193,28 @@ def _simetria(
         orden = np.argsort(-confianza[test_pos], kind="stable")
         d_dentro = np.zeros(test_pos.size, dtype=bool)
         d_dentro[orden[: int(ref.delivered.sum())]] = True
-        dentro.append(macro_over(truth[d_dentro], free[test_pos][d_dentro], ref.legend))
+        # Se reproduce a proposito la conducta DEFECTUOSA: el universo sale de las verdades
+        # entregadas. Es lo que este guion existe para medir, y por eso no usa el bloque.
+        dentro.append(
+            macro_over(
+                truth[d_dentro],
+                free[test_pos][d_dentro],
+                ref.legend,
+                presentes=presentes_en_bloque(truth[d_dentro]),
+            )
+        )
 
         # Variante simetrica: el umbral se fija en los bloques de entrenamiento.
         umbral = float(np.quantile(confianza[train_pos], 1.0 - objetivo))
         d_fuera = confianza[test_pos] >= umbral
-        fuera.append(macro_over(truth[d_fuera], free[test_pos][d_fuera], ref.legend))
+        fuera.append(
+            macro_over(
+                truth[d_fuera],
+                free[test_pos][d_fuera],
+                ref.legend,
+                presentes=presentes_en_bloque(truth[d_fuera]),
+            )
+        )
 
     return {
         "f1_umbral_dentro_del_bloque": round(float(np.mean(dentro)), 6),

@@ -240,29 +240,51 @@ def frontera(
             sop = [p for p in por_soporte if p.k == k]
             ref = [p for p in sin_mec if p.k == k]
 
-            par = paired_interval(labels, splits, izq, der, n_boot=n_boot, random_state=seed)
+            # El intervalo del articulo es el de BLOQUE: cinco bloques espaciales son cinco
+            # unidades, y remuestrear parcelas dentro de ellos las convierte en dieciseis mil
+            # replicas que no existen. Los otros dos se conservan como descriptivos.
+            blo = paired_interval(labels, splits, izq, der, unidad="bloque")
+            par = paired_interval(
+                labels,
+                splits,
+                izq,
+                der,
+                unidad="parcela",
+                n_boot=n_boot,
+                random_state=seed,
+            )
             clu = paired_interval(
                 labels,
                 splits,
                 izq,
                 der,
+                unidad="cluster",
                 n_boot=max(200, n_boot // 4),
                 random_state=seed,
                 clusters=patches,
             )
-            crudos[k] = par["p_bootstrap"]
+            crudos[k] = blo["p_valor"]
             detalle[f"k={k}"] = {
                 "f1_retirada_f1": float(np.mean([p.aligned_f1 for p in izq])),
                 "f1_retirada_soporte": float(np.mean([p.aligned_f1 for p in sop])),
                 "f1_confianza": float(np.mean([p.aligned_f1 for p in der])),
                 "f1_sin_mecanismo": float(np.mean([p.aligned_f1 for p in ref])),
                 "cobertura_media": float(np.mean([p.delivered.mean() for p in izq])),
-                "delta_vs_confianza": par["delta"],
-                "ci_low": par["ci_low"],
-                "ci_high": par["ci_high"],
-                "excluye_cero": par["excluye_cero"],
-                "p_bootstrap": par["p_bootstrap"],
-                "deltas_por_bloque": par["deltas_por_bloque"],
+                "delta_vs_confianza": blo["delta"],
+                # El intervalo publicable: unidad bloque.
+                "ci_low": blo["ci_low"],
+                "ci_high": blo["ci_high"],
+                "excluye_cero": blo["excluye_cero"],
+                "p_valor": blo["p_valor"],
+                "unidad_del_intervalo": blo["unidad"],
+                "n_bloques": blo["n_unidades"],
+                "deltas_por_bloque": blo["deltas_por_bloque"],
+                # Descriptivos, y responden otra pregunta: cuanto se movería la estimacion si
+                # las parcelas (o los parches) de estos mismos bloques se hubieran muestreado
+                # de otro modo. No es el intervalo del articulo.
+                "ci_low_remuestreo_parcela": par["ci_low"],
+                "ci_high_remuestreo_parcela": par["ci_high"],
+                "p_bootstrap_parcela": par["p_bootstrap"],
                 "ci_low_cluster_parche": clu["ci_low"],
                 "ci_high_cluster_parche": clu["ci_high"],
                 "excluye_cero_cluster": clu["excluye_cero"],

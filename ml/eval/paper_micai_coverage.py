@@ -1,25 +1,33 @@
-"""Quality-coverage frontier for the MICAI manuscript, rebuilt after the blind audit.
+"""Quality-coverage frontier for the MICAI manuscript, after three rounds of audit.
 
-The first implementation of this experiment (phase 2) was retired because three
-independent defects each invalidated its headline. This module exists to make those
-three failures impossible to repeat, and each is answered by name here:
+The phase-2 implementation was retired for three independent defects. This module was
+written to make them impossible to repeat — and **two of the three came back in a
+different form**, which a third-round external audit found in this file after the
+project had already declared them closed. The current version answers all three, and
+each repair is expressed as a REQUIRED PARAMETER, because every one of these defects
+survived as a silent default:
 
-1. **The estimand was not aligned.** Retiring classes averaged the macro over the K
-   best classes while the abstention baseline averaged over the up-to-eighteen present,
-   so the reported delta was mostly the denominator moving. Every comparison in this
-   module scores both mechanisms over the SAME class set, and reports the native
-   (own-legend) view separately and clearly labelled as not comparable.
+1. **The estimand was not aligned.** Retiring classes averaged the macro over the K best
+   classes while the abstention baseline averaged over the up-to-eighteen present, so the
+   reported delta was mostly the denominator moving. The first repair scored both
+   mechanisms over the same legend — and then intersected it with the ground truth OF THE
+   DELIVERED PARCELS, which is mechanism-dependent, so the denominator moved again.
+   :func:`macro_over` now requires ``presentes``, a property of the BLOCK.
 2. **One mechanism read the answer.** Delivery was decided by the parcel's true label,
-   which no deployment knows. Here a mechanism delivers on what it can observe: the
-   unrestricted argmax falling inside the promised legend, or the confidence rank.
-3. **The interval was not paired.** Two independent resamples produced a non-degenerate
-   interval for comparing an object with itself. Here one index per block is drawn and
-   both mechanisms are recomputed on it, so the full-legend row must return a
-   degenerate interval; if it does not, the harness is broken again.
+   which no deployment knows. A mechanism now delivers on what it can observe. And the
+   confidence baseline's THRESHOLD comes from the training blocks: the first repair
+   ranked the evaluated block's own confidences to match the reference count exactly,
+   which is choosing the operating point inside the block that scores it.
+3. **The interval was not paired, and then it was paired at the wrong unit.** Two
+   independent resamples once produced a non-degenerate interval for comparing an object
+   with itself. The repair paired them — but resampled PARCELS inside each block, turning
+   five spatial blocks into sixteen thousand pretend replicates.
+   :func:`paired_interval` now requires ``unidad``; ``"bloque"`` is the estimand-level
+   interval, and the parcel and cluster bootstraps stay available, labelled as the
+   narrower descriptive question they actually answer.
 
-A fourth correction the audit raised: parcels inside a PASTIS patch share an image and
-are not independent, so a cluster bootstrap over patches is reported next to the
-parcel-level one rather than instead of it.
+Everything this module produced before these repairs is exploratory and stays labelled as
+such. Regenerating those artefacts is the artefact step of US-124 and US-125.
 """
 
 from __future__ import annotations
@@ -29,6 +37,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import structlog
+from scipy import stats
 from sklearn.metrics import accuracy_score, f1_score
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
@@ -66,23 +75,54 @@ class BlockPoint:
     accuracy: float
 
 
-def macro_over(labels: np.ndarray, predicted: np.ndarray, classes: Sequence[int]) -> float:
-    """Macro-F1 restricted to the classes that are both promised and present.
+def presentes_en_bloque(labels: np.ndarray) -> tuple[int, ...]:
+    """Classes present in a block, computed once from its FULL ground truth.
 
-    A promised class absent from this block would enter the average as a zero and
-    report a failure that never happened, so the average runs over the intersection.
+    This exists so that no caller is tempted to derive the class universe from the parcels a
+    mechanism happened to deliver. It is a property of the block, not of the mechanism.
+
+    Args:
+        labels: Ground-truth labels of every parcel in the block.
+
+    Returns:
+        The sorted classes present in the block.
+    """
+    return tuple(sorted(set(labels.tolist())))
+
+
+def macro_over(
+    labels: np.ndarray,
+    predicted: np.ndarray,
+    classes: Sequence[int],
+    *,
+    presentes: Sequence[int],
+) -> float:
+    """Macro-F1 over the promised classes that exist in the block.
+
+    A promised class absent from the block would enter the average as a zero and report a
+    failure that never happened, so the average runs over the intersection with what the
+    block contains.
+
+    **`presentes` is required and comes from the block, never from the delivered parcels.**
+    That was defect 1 of the external audit, and it survived the first repair: the previous
+    version intersected with ``set(labels)``, and ``labels`` was the ground truth OF THE
+    DELIVERED SUBSET, which differs between mechanisms. Two mechanisms were averaged over
+    two different class sets and the difference was reported as quality. It is the same
+    moving denominator the article denounces, one level down, and it is why this parameter
+    has no default: a default here is the defect coming back silently.
 
     Args:
         labels: Ground-truth labels of the delivered parcels.
         predicted: Predicted labels of the delivered parcels.
-        classes: Class set the average runs over.
+        classes: Class set the average is meant to run over.
+        presentes: Classes present in the whole block, from :func:`presentes_en_bloque`.
 
     Returns:
         The macro-F1, or ``0.0`` when the intersection is empty.
     """
     if labels.size == 0:
         return 0.0
-    evaluated = sorted(set(classes) & set(labels.tolist()))
+    evaluated = sorted(set(classes) & set(presentes))
     if not evaluated:
         return 0.0
     return float(f1_score(labels, predicted, labels=evaluated, average="macro", zero_division=0))
@@ -204,6 +244,7 @@ def frontier(
             delivered = np.isin(free[test_pos], columns)
             emitted = _emit_restricted(proba, test_pos, legend)
             truth = labels[test_pos]
+            presentes = presentes_en_bloque(truth)
             points.append(
                 BlockPoint(
                     mechanism=mechanism,
@@ -212,8 +253,12 @@ def frontier(
                     legend=legend,
                     delivered=delivered,
                     emitted=emitted,
-                    aligned_f1=macro_over(truth[delivered], emitted[delivered], legend),
-                    native_f1=macro_over(truth[delivered], emitted[delivered], legend),
+                    aligned_f1=macro_over(
+                        truth[delivered], emitted[delivered], legend, presentes=presentes
+                    ),
+                    native_f1=macro_over(
+                        truth[delivered], emitted[delivered], legend, presentes=presentes
+                    ),
                     accuracy=float(accuracy_score(truth[delivered], emitted[delivered]))
                     if delivered.any()
                     else 0.0,
@@ -233,9 +278,15 @@ def confidence_baseline(
     """Deliver the most confident parcels, matching a reference mechanism's count.
 
     The legend stays complete, so this mechanism emits over all eighteen classes; what
-    shrinks is how many parcels it answers. Its count comes from how many the reference
-    delivered in that same block, and its threshold is a quantile of its own confidences,
-    so no label is read at any point.
+    shrinks is how many parcels it answers.
+
+    **The threshold comes from the TRAINING blocks, never from the block being scored.** That
+    was defect 3 of the internal diagnosis and it survived the first repair: the previous
+    version ranked the evaluated block's own confidences and cut at the reference's count,
+    which is choosing the operating point inside the block that measures it. The reference
+    now fixes only the target delivery RATE; the threshold is that rate's quantile of the
+    training confidences, and the realised coverage in the test block is whatever it is.
+    Matching the count exactly is precisely what cannot be done without looking.
 
     Args:
         proba: Posterior matrix for the whole universe.
@@ -250,13 +301,18 @@ def confidence_baseline(
     confidence = proba.max(axis=1)
     points: list[BlockPoint] = []
     for ref in reference:
-        _, test_pos = splits[ref.block]
-        block_conf = confidence[test_pos]
-        order = np.argsort(-block_conf, kind="stable")
-        delivered = np.zeros(test_pos.size, dtype=bool)
-        delivered[order[: int(ref.delivered.sum())]] = True
+        train_pos, test_pos = splits[ref.block]
+        # La tasa objetivo la fija el mecanismo de referencia; el UMBRAL sale del entrenamiento.
+        tasa = float(ref.delivered.mean()) if ref.delivered.size else 0.0
+        umbral = (
+            float(np.quantile(confidence[train_pos], 1.0 - tasa))
+            if train_pos.size and tasa > 0.0
+            else np.inf
+        )
+        delivered = confidence[test_pos] >= umbral
         emitted = free[test_pos]
         truth = labels[test_pos]
+        presentes = presentes_en_bloque(truth)
         points.append(
             BlockPoint(
                 mechanism="rechazo por confianza",
@@ -265,9 +321,14 @@ def confidence_baseline(
                 legend=tuple(range(num_classes)),
                 delivered=delivered,
                 emitted=emitted,
-                aligned_f1=macro_over(truth[delivered], emitted[delivered], ref.legend),
+                aligned_f1=macro_over(
+                    truth[delivered], emitted[delivered], ref.legend, presentes=presentes
+                ),
                 native_f1=macro_over(
-                    truth[delivered], emitted[delivered], sorted(set(truth[delivered].tolist()))
+                    truth[delivered],
+                    emitted[delivered],
+                    presentes,
+                    presentes=presentes,
                 ),
                 accuracy=float(accuracy_score(truth[delivered], emitted[delivered]))
                 if delivered.any()
@@ -306,6 +367,7 @@ def no_mechanism_reference(
         delivered = np.ones(test_pos.size, dtype=bool)
         emitted = free[test_pos]
         truth = labels[test_pos]
+        presentes = presentes_en_bloque(truth)
         points.append(
             BlockPoint(
                 mechanism="sin mecanismo",
@@ -314,8 +376,8 @@ def no_mechanism_reference(
                 legend=ref.legend,
                 delivered=delivered,
                 emitted=emitted,
-                aligned_f1=macro_over(truth, emitted, ref.legend),
-                native_f1=macro_over(truth, emitted, ref.legend),
+                aligned_f1=macro_over(truth, emitted, ref.legend, presentes=presentes),
+                native_f1=macro_over(truth, emitted, ref.legend, presentes=presentes),
                 accuracy=float(accuracy_score(truth, emitted)),
             )
         )
@@ -328,38 +390,92 @@ def paired_interval(
     left: Sequence[BlockPoint],
     right: Sequence[BlockPoint],
     *,
-    n_boot: int,
-    random_state: int,
+    unidad: str,
+    n_boot: int = 0,
+    random_state: int = 0,
     clusters: np.ndarray | None = None,
 ) -> dict[str, Any]:
-    """Bootstrap the paired difference of two mechanisms' mean block macro-F1.
+    """Paired interval for the difference of two mechanisms' mean block macro-F1.
 
-    One index is drawn per block and BOTH mechanisms are rescored on it, which is what
-    makes the interval paired. When ``clusters`` is given the resampling unit is the
-    cluster (a PASTIS patch) rather than the parcel, because parcels inside a patch share
-    an image and are not independent.
+    **The resampling unit has to be declared, and it is the block.** That was defect 2 of the
+    internal diagnosis and it survived the first repair: resampling parcels inside each block
+    treats sixteen thousand parcels as sixteen thousand independent draws when the design has
+    five blocks, and produces an interval far narrower than the design supports. There is no
+    default for ``unidad`` on purpose — the previous silent default is what made the defect
+    invisible for two rounds of audit.
+
+    ``"bloque"`` is the estimand-level interval: a paired t over the per-block deltas, with the
+    block as the unit, which is what five spatial blocks entitle anyone to claim. It is
+    degenerate when the two mechanisms coincide, which is the harness self-check.
+
+    ``"parcela"`` and ``"cluster"`` keep the old bootstrap, but they answer a **different and
+    narrower question** — how much the estimate moves if this block's parcels (or patches)
+    had been sampled differently, holding the blocks fixed. They are descriptive and are not
+    the interval of the article.
 
     Args:
         labels: Ground-truth labels for the whole universe.
         splits: ``(train_pos, test_pos)`` index pairs, one per block.
         left: Points of the mechanism being tested, one per block.
         right: Points of the comparator, aligned with ``left``.
-        n_boot: Number of resamples.
-        random_state: Seed.
-        clusters: Optional cluster id per parcel of the whole universe.
+        unidad: ``"bloque"``, ``"parcela"`` or ``"cluster"``. Required.
+        n_boot: Number of resamples. Only used when the unit is not the block.
+        random_state: Seed. Only used when the unit is not the block.
+        clusters: Cluster id per parcel of the whole universe. Required for ``"cluster"``.
 
     Returns:
-        Observed delta, percentile interval, a two-sided bootstrap p-value and the
-        per-block deltas.
-    """
-    rng = np.random.default_rng(random_state)
-    observed = float(np.mean([p.aligned_f1 for p in left]) - np.mean([p.aligned_f1 for p in right]))
+        Observed delta, interval, two-sided p-value, the per-block deltas and the unit used.
 
+    Raises:
+        ValueError: on an unknown unit, or a cluster interval without cluster ids.
+    """
+    if unidad not in {"bloque", "parcela", "cluster"}:
+        raise ValueError(f"unidad de remuestreo desconocida: {unidad!r}")
+    if unidad == "cluster" and clusters is None:
+        raise ValueError("la unidad 'cluster' necesita los identificadores de cluster")
+
+    observed = float(np.mean([p.aligned_f1 for p in left]) - np.mean([p.aligned_f1 for p in right]))
+    por_bloque = [float(a.aligned_f1 - b.aligned_f1) for a, b in zip(left, right, strict=True)]
+
+    if unidad == "bloque":
+        d = np.asarray(por_bloque, dtype=float)
+        n = d.size
+        if n < 2:
+            raise ValueError(f"un intervalo por bloque necesita al menos dos bloques, hay {n}")
+        sd = float(d.std(ddof=1))
+        if sd == 0.0:
+            # Los dos mecanismos coinciden bloque a bloque: el intervalo TIENE que ser
+            # degenerado. Es la autocomprobacion del arnes.
+            return {
+                "delta": observed,
+                "ci_low": observed,
+                "ci_high": observed,
+                "excluye_cero": float(False),
+                "p_valor": 1.0,
+                "unidad": unidad,
+                "n_unidades": n,
+                "deltas_por_bloque": por_bloque,
+            }
+        error = sd / np.sqrt(n)
+        low, high = stats.t.interval(0.95, n - 1, float(d.mean()), error)
+        p = float(2 * stats.t.sf(abs(float(d.mean())) / error, n - 1))
+        return {
+            "delta": observed,
+            "ci_low": float(low),
+            "ci_high": float(high),
+            "excluye_cero": float(low > 0 or high < 0),
+            "p_valor": p,
+            "unidad": unidad,
+            "n_unidades": n,
+            "deltas_por_bloque": por_bloque,
+        }
+
+    rng = np.random.default_rng(random_state)
     prepared = []
     for a, b in zip(left, right, strict=True):
         _, test_pos = splits[a.block]
         truth = labels[test_pos]
-        group = None if clusters is None else clusters[test_pos]
+        group = None if unidad == "parcela" or clusters is None else clusters[test_pos]
         prepared.append((truth, group, a, b))
 
     draws = np.empty(n_boot, dtype=np.float64)
@@ -372,11 +488,24 @@ def paired_interval(
                 unique = np.unique(group)
                 picked = unique[rng.integers(0, unique.size, size=unique.size)]
                 idx = np.concatenate([np.flatnonzero(group == g) for g in picked])
+            # El universo de clases es el del BLOQUE, no el de la remuestra ni el de lo
+            # entregado: si se recalcula aqui, el denominador vuelve a moverse.
+            presentes = presentes_en_bloque(truth)
             left_scores.append(
-                macro_over(truth[idx][a.delivered[idx]], a.emitted[idx][a.delivered[idx]], a.legend)
+                macro_over(
+                    truth[idx][a.delivered[idx]],
+                    a.emitted[idx][a.delivered[idx]],
+                    a.legend,
+                    presentes=presentes,
+                )
             )
             right_scores.append(
-                macro_over(truth[idx][b.delivered[idx]], b.emitted[idx][b.delivered[idx]], a.legend)
+                macro_over(
+                    truth[idx][b.delivered[idx]],
+                    b.emitted[idx][b.delivered[idx]],
+                    a.legend,
+                    presentes=presentes,
+                )
             )
         draws[i] = float(np.mean(left_scores) - np.mean(right_scores))
 
@@ -388,10 +517,11 @@ def paired_interval(
         "ci_low": float(low),
         "ci_high": float(high),
         "excluye_cero": float(low > 0 or high < 0),
+        "p_valor": float(min(1.0, 2 * min(below, above))),
         "p_bootstrap": float(min(1.0, 2 * min(below, above))),
-        "deltas_por_bloque": [
-            float(a.aligned_f1 - b.aligned_f1) for a, b in zip(left, right, strict=True)
-        ],
+        "unidad": unidad,
+        "n_unidades": int(sum(t.size for t, _, _, _ in prepared)),
+        "deltas_por_bloque": por_bloque,
     }
 
 

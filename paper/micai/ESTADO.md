@@ -6,7 +6,7 @@
 ## Por qué
 
 Cuatro revisiones a ciegas con criterios de MICAI recomendaron rechazo, la revisión del coautor
-encontró falsa una de las premisas, y dos auditorías externas encontraron defectos que las nueve
+encontró falsa una de las premisas, y tres auditorías externas encontraron defectos que las
 internas no vieron. El resultado central no sobrevive: al componer las dos correcciones de
 protocolo, el intervalo pasa de (−0,0430, −0,0147) con p = 0,005 a (−0,0410, +0,0077) con p = 0,130.
 

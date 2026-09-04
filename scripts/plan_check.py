@@ -179,6 +179,44 @@ def _critical_path(stories: dict[str, dict[str, Any]]) -> tuple[int, list[str]]:
     return max((walk(s, frozenset()) for s in stories), key=lambda r: r[0])
 
 
+#: Formas de afirmar que una historia no depende de nada. Solo la afirmacion explicita: «no
+#: depende de que salga X» es prosa legitima sobre el resultado y no una declaracion.
+SIN_DEPENDENCIAS: tuple[str, ...] = (
+    "sin dependencias",
+    "sin dependencia:",
+    "sin dependencia previa",
+    "no depende de nada",
+    "no depende de ninguna",
+    "no tiene dependencias",
+    "sin prerrequisitos",
+    "sin prerrequisito",
+)
+
+
+def _textos(story: dict[str, Any]) -> list[str]:
+    """Every piece of prose in a story, whatever field it lives in.
+
+    Walking the whole object instead of a hand-picked pair of fields is the difference between
+    a control and the appearance of one: the previous version read only ``ac`` and ``role``, and
+    the next audit slipped the claim into the title.
+
+    Args:
+        story: One story object from the plan.
+
+    Returns:
+        The story's text values, excluding the dependency field itself.
+    """
+    salida: list[str] = []
+    for clave, valor in story.items():
+        if clave == "dep":
+            continue
+        if isinstance(valor, str):
+            salida.append(valor)
+        elif isinstance(valor, list):
+            salida.extend(str(x) for x in valor if isinstance(x, str))
+    return salida
+
+
 def main() -> int:
     """Run every structural check over the published plan.
 
@@ -243,14 +281,18 @@ def main() -> int:
     # La auditoria externa lo encontro dentro de US-140: el criterio de aceptacion decia «sin
     # dependencias» mientras el campo `dep` declaraba cuatro. Una contradiccion dentro del mismo
     # objeto no la ve ninguna lectura humana, y es barata de comprobar.
+    #
+    # La primera version solo miraba `ac` y `role`, y la ronda siguiente de auditoria la burlo
+    # moviendo la frase al TITULO. Ahora se recorre el objeto entero: cualquier campo de texto y
+    # cualquier lista de textos, sea cual sea su nombre, presente o futuro.
     for sid, st in stories.items():
         if not _deps(st):
             continue
-        texto = " ".join([*st.get("ac", []), str(st.get("role") or "")]).lower()
+        texto = " ".join(_textos(st)).lower()
         # Solo la afirmacion explicita. «No depende de que salga X» es prosa legitima sobre el
         # resultado, no una declaracion de dependencias, y meterla aqui produce tres falsos
         # positivos reales en este mismo plan.
-        for frase in ("sin dependencias", "sin dependencia:"):
+        for frase in SIN_DEPENDENCIAS:
             if frase in texto:
                 logger.error(
                     "dice_no_tener_dependencias_pero_las_declara",

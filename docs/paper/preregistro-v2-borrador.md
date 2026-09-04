@@ -38,17 +38,17 @@ Esto es lo que la vez pasada no existía, y es donde se perdió el resultado ant
 
 ### 4.1 El número de bloques espaciales
 
-`k` se fija por un **criterio espacial**, decidido y commiteado **antes** de mirar ningún contraste con ese `k`:
+El universo retenido tiene **176 celdas H3 de resolución 5** —producido por el artefacto, no escrito a mano—, así que admite muchos más de cinco bloques. `k` se fija por un **criterio espacial**, decidido y commiteado **antes** de mirar ningún contraste con ese `k`:
 
 > **Criterio, en dos condiciones que no miran ningún contraste:**
-> **(a) Separación espacial.** La separación mínima entre una parcela de prueba y la más cercana de entrenamiento tiene que ser un orden de magnitud mayor que el colchón con que se construyen los pliegues, porque un colchón que solo separa lo que él mismo impuso no demuestra nada.
+> **(a) Separación espacial.** La distancia mínima **entre centroides** de una parcela de prueba y la más cercana de entrenamiento tiene que ser un orden de magnitud mayor que el colchón con que se construyen los pliegues, porque un colchón que solo separa lo que él mismo impuso no demuestra nada. **Y se dice lo que es**: el universo sellado guarda centroides, así que esta distancia es una **cota superior** de la separación entre parcelas, y por sí sola no demuestra independencia — eso necesita un diagnóstico de autocorrelación residual, que no está hecho y entra como limitación declarada.
 > **(b) Estimabilidad del estimando.** El peor bloque tiene que conservar al menos **8 clases** con soporte suficiente. Un F1-macro sobre una leyenda de nueve clases calculado en un bloque donde solo dos son estimables no es una media macro: es otra cosa con el mismo nombre.
 
 **Los dos umbrales —el orden de magnitud y las ocho clases— son elegidos, no deducidos.** La auditoría externa tiene razón en esto y se corrige el lenguaje: no hay diagnóstico de autocorrelación que demuestre que diez veces el colchón implica independencia, ni fuente externa que fije ocho clases. Son criterios **razonables y declarados antes del contraste**, que es lo que los hace válidos como preregistro; no son una restricción del dato. Por eso se publica la curva entera y se declara la sensibilidad a los dos umbrales.
 
 **Medido con distancia exacta al vecino más cercano, y el resultado del criterio es incómodo para nosotros** (`reports/paper_micai/prereg/parametros_diseno.csv`):
 
-| k | separación mínima | separación mediana | clases estimables en el peor bloque (S=20) | ¿cumple? |
+| k | separación mínima entre centroides | mediana | clases estimables en el peor bloque (S=20) | ¿cumple? |
 |---:|---:|---:|---:|---|
 | **5** | **22,972 km** | **122,056 km** | **10** | **sí** |
 | 8 | 1,975 km | 4,635 km | 9 | no, por (a) |
@@ -66,7 +66,7 @@ Esto es lo que la vez pasada no existía, y es donde se perdió el resultado ant
 
 **¿Y no se pueden tener más bloques subiendo el colchón?** Se midió, porque era la única vía legítima para ganar potencia por diseño en vez de por elección. Veinte combinaciones, con productor y artefacto sellado (`reports/paper_micai/prereg/barrido_colchon.csv`) — antes estos números vivían solo en esta prosa, que es el defecto que más veces se ha repetido en este proyecto:
 
-| k | colchón | separación mínima | separación / colchón | clases estimables | parcelas de prueba | ¿cumple? |
+| k | colchón | separación mínima entre centroides | separación / colchón | clases estimables | parcelas de prueba | ¿cumple? |
 |---:|---:|---:|---:|---:|---:|---|
 | **5** | **1 km** | **22,972 km** | **23,0×** | **10** | **16 640** | **sí** |
 | 8 | 10 km | 11,281 km | 1,1× | 8 | 14 314 | no, por (a) |

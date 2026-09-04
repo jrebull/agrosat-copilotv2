@@ -43,7 +43,7 @@ from scipy.spatial import cKDTree
 from shapely import wkb, wkt
 
 from ml.eval.paper_micai_arbitration import KEY
-from ml.features.spatial_split import build_spatial_kfold
+from ml.features.spatial_split import _assign_h3_cell, build_spatial_kfold
 
 logger = structlog.get_logger(__name__)
 
@@ -114,21 +114,31 @@ def _bloques(
     return salida
 
 
-def _separacion_exacta_km(centros: np.ndarray, entrena: np.ndarray, prueba: np.ndarray) -> float:
-    """Exact distance from the test block to its nearest training parcel, in km.
+def _separacion_centroides_km(
+    centros: np.ndarray, entrena: np.ndarray, prueba: np.ndarray
+) -> float:
+    """Exact nearest-neighbour distance BETWEEN CENTROIDS, test to train, in km.
 
-    The retired implementation subsampled both sides to about 300 points before taking the minimum.
-    That is biased **upward** by construction: dropping candidates can only keep or raise a minimum,
-    so the design looked more separated than it is. A KD-tree gives the true nearest neighbour at
+    Two things this is not, and both matter because the number is used as evidence:
+
+    - It is not the distance between parcel boundaries. The sealed universe stores centroids, so
+      two adjacent fields separated by a hedge are as far apart as their centres. It is an
+      **upper bound** on the real separation.
+    - It is not, on its own, a demonstration of independence. That needs a residual
+      autocorrelation diagnostic, which is not done.
+
+    What it does fix is a real bias: the retired implementation subsampled both sides to about 300
+    points before taking the minimum, which is biased **upward** by construction, since dropping
+    candidates can only keep or raise a minimum. A KD-tree gives the exact nearest neighbour at
     negligible cost, and there was never a reason to approximate it.
 
     Args:
-        centros: Projected centroids of every parcel, in metres.
+        centros: Projected centroids of every parcel, in metres (EPSG:3035).
         entrena: Positional ids of the training parcels.
         prueba: Positional ids of the test parcels.
 
     Returns:
-        The minimum test-to-train distance in kilometres.
+        The minimum test-to-train centroid distance in kilometres.
     """
     arbol = cKDTree(centros[entrena])
     distancias, _ = arbol.query(centros[prueba], k=1)
@@ -148,6 +158,8 @@ def main(seed: int = 42) -> None:
     metrico = gdf.to_crs(3035)
     centros = np.column_stack([metrico.geometry.centroid.x, metrico.geometry.centroid.y])
 
+    celdas_h3 = len({_assign_h3_cell(c, 5) for c in gdf.geometry.centroid})
+
     filas: list[dict[str, Any]] = []
     solapamiento: list[dict[str, Any]] = []
     universos: list[dict[str, Any]] = []
@@ -156,15 +168,15 @@ def main(seed: int = 42) -> None:
         if len(bloques) < 3:
             continue
 
-        seps = [_separacion_exacta_km(centros, trv, te) for _, trv, te in bloques]
+        seps = [_separacion_centroides_km(centros, trv, te) for _, trv, te in bloques]
         areas = [float(metrico.iloc[te].union_all().convex_hull.area / 1e6) for _, _, te in bloques]
 
         fila: dict[str, Any] = {
             "k": k,
             "bloques": len(bloques),
             "parcelas_min": int(min(t.size for _, _, t in bloques)),
-            "separacion_min_km": round(min(seps), 3),
-            "separacion_mediana_km": round(float(np.median(seps)), 3),
+            "separacion_centroides_min_km": round(min(seps), 3),
+            "separacion_centroides_mediana_km": round(float(np.median(seps)), 3),
             "area_min_km2": round(min(areas), 1),
         }
         for s_min in SUELOS:
@@ -216,7 +228,7 @@ def main(seed: int = 42) -> None:
         bloques = _bloques(gdf, k, seed, buffer_km=km)
         if len(bloques) < 3:
             continue
-        seps = [_separacion_exacta_km(centros, trv, te) for _, trv, te in bloques]
+        seps = [_separacion_centroides_km(centros, trv, te) for _, trv, te in bloques]
         clases = [
             int((np.bincount(labels[te], minlength=NUM_CLASSES) >= S_REFERENCIA).sum())
             for _, _, te in bloques
@@ -226,7 +238,7 @@ def main(seed: int = 42) -> None:
                 "k": k,
                 "colchon_km": km,
                 "bloques": len(bloques),
-                "separacion_min_km": round(min(seps), 3),
+                "separacion_centroides_min_km": round(min(seps), 3),
                 f"clases_min_S{S_REFERENCIA}": min(clases),
                 # El colchon arregla la separacion comiendose las parcelas de los bordes: hay que
                 # ver el precio en el mismo renglon que el beneficio.
@@ -267,7 +279,11 @@ def main(seed: int = 42) -> None:
                     "que pueda pasar por una banda."
                 ),
                 "nota_separacion": (
-                    "Distancia exacta al vecino mas cercano con KD-tree. La version anterior "
+                    "Distancia exacta al vecino mas cercano ENTRE CENTROIDES, con KD-tree, en "
+                    "EPSG:3035. No es la distancia entre limites de parcela —el universo sellado "
+                    "guarda centroides— asi que es una COTA SUPERIOR de la separacion real, y por "
+                    "si sola no demuestra independencia: eso necesita un diagnostico de "
+                    "autocorrelacion residual que no esta hecho. La version anterior "
                     "submuestreaba unos 300 puntos de cada lado antes de tomar el minimo, lo que "
                     "sesga el numero HACIA ARRIBA por construccion: quitar candidatos solo puede "
                     "mantener o subir un minimo. Con k=5 la separacion minima cae de 23,505 a "
@@ -286,6 +302,11 @@ def main(seed: int = 42) -> None:
                     "comun fijado desde entrenamiento, o estimando clase-por-bloque declarado con "
                     "su ponderacion. Este artefacto mide el tamano del problema, no lo resuelve."
                 ),
+                # Las celdas H3 del universo se PRODUCEN aqui. Estaban escritas a mano en la
+                # prosa del plan y en el docstring de otro guion, que es el defecto que este
+                # proyecto mas ha repetido: un numero que solo existe porque alguien lo tecleo.
+                "celdas_h3_del_universo": celdas_h3,
+                "h3_res": 5,
                 "procedencia": {
                     "semilla": seed,
                     "num_clases": NUM_CLASSES,

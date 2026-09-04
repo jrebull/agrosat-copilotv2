@@ -1,4 +1,4 @@
-k,bloques,parcelas_min,separacion_min_km,separacion_mediana_km,area_min_km2,clases_min_S5,parcelas_cubiertas_S5,clases_min_S10,parcelas_cubiertas_S10,clases_min_S20,parcelas_cubiertas_S20,clases_min_S30,parcelas_cubiertas_S30,clases_min_S50,parcelas_cubiertas_S50
+k,bloques,parcelas_min,separacion_centroides_min_km,separacion_centroides_mediana_km,area_min_km2,clases_min_S5,parcelas_cubiertas_S5,clases_min_S10,parcelas_cubiertas_S10,clases_min_S20,parcelas_cubiertas_S20,clases_min_S30,parcelas_cubiertas_S30,clases_min_S50,parcelas_cubiertas_S50
 5,5,1313,22.972,122.056,3570.9,11,0.9886,11,0.9886,10,0.9671,8,0.9273,5,0.8469
 8,8,1313,1.975,4.635,3396.9,11,0.9886,11,0.9886,9,0.9671,8,0.9273,5,0.8469
 10,10,662,1.85,4.606,904.8,9,0.9743,7,0.9502,5,0.9139,5,0.8922,3,0.8127

@@ -118,7 +118,7 @@ todo el plan.
 
 **Y recupera el único activo que nadie puede reproducir.** Este equipo tiene algo que casi nadie en
 esta literatura tiene: **una decisión de punto de operación tomada de verdad en un producto
-desplegado** —de 18 clases a 12, criterio F1 por clase ≥ 0,90, cobertura resultante 0,88269 —14 688 parcelas de 16 640—, no 0,9054: esa cifra es el cumulative_support_share de la curva del Stacking-5, y se nos cruzó entre artefactos— con su
+desplegado** —de 18 clases a 12, y el criterio real es el que dice el código (`ml/eval/class_remap.py`): el catálogo de doce es el ÚLTIMO cuyo macro-F1 restringido se mantiene sobre 0,90 al ir añadiendo clases en orden de calidad resuelta (0,9001 con doce, por debajo con trece), no doce clases con F1 individual ≥ 0,90. Una tercera auditoría encontró que aquí decíamos «F1 por clase ≥ 0,90», que es otra regla. **Su cobertura de entrega está por medir**: 0,9054 era de otro modelo y 0,88269 es la cuota de soporte de la verdad, no una cobertura— con su
 contrafactual medible. El reencuadre la había borrado («el artículo ya no trata del sistema») y eso
 era un error: **el doble ciego exige quitar el nombre, no el hecho**. Cualquiera con una GPU y
 PASTIS reproduce el resto del artículo. La decisión que este equipo ya tomó en producción no la

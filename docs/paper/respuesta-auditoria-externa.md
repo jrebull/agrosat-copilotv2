@@ -5,8 +5,48 @@ historia de usuario*. Se cierra cuando **el comportamiento cambió** y hay dónd
 historia planificada es un compromiso, no una corrección, y contarla como cierre fue exactamente lo
 que la segunda auditoría desmontó.
 
-Dos rondas hasta hoy. La segunda verificó la primera en el código, no en esta página, y **encontró
-dos defectos nuevos graves y un cierre falso**. Lo que sigue es el estado real.
+Tres rondas hasta hoy. La segunda verificó la primera en el código y encontró dos cierres falsos.
+La tercera verificó la segunda y encontró **tres cierres parciales que habíamos contado enteros**,
+más un gate que se podía burlar moviendo una frase de campo. Lo que sigue es el estado real.
+
+
+---
+
+## Ronda 3 — 3 de septiembre de 2026
+
+La ronda 3 tiene un patrón propio y conviene decirlo antes que los hallazgos: **corregimos el
+documento donde el auditor había señalado y no el resto de sus apariciones**. El preregistro decía
+lo correcto y el plan seguía diciendo lo anterior, cuatro veces. La regla que faltaba es la sexta de
+la guía del proyecto y la teníamos escrita: *agota el alcance del control*.
+
+### Cerrado en esta ronda, con su evidencia
+
+| # | Hallazgo | Qué cambió de comportamiento |
+|---|---|---|
+| T1 | **Los tres defectos de `paper_micai_coverage.py` seguían en el código, y el módulo no tenía tests** | Los tres reparados, y **cada reparación es un parámetro obligatorio**, porque los tres sobrevivieron como valores por defecto silenciosos: `macro_over` exige `presentes` (el universo es del BLOQUE, no de lo entregado); `confidence_baseline` toma el umbral de los bloques de ENTRENAMIENTO, así que la cobertura ya no coincide exacta con la referencia; `paired_interval` exige `unidad`, y `"bloque"` es el intervalo del artículo. Ocho tests nuevos en `tests/ml/eval/test_paper_micai_coverage.py`, y **dos de ellos comprobados fallando** sobre la implementación anterior |
+| T2 | **US-155 conservaba «el criterio principal se mueve a donde haya potencia»**, contradiciendo a US-140 | Retirado del plan con su motivo. La potencia **evalúa** una variable elegida por la decisión sustantiva; no la elige |
+| T3 | **«Distancia exacta entre parcelas» era exacta solo entre centroides** | Renombrada a `separacion_centroides_min_km` en el artefacto, en el preregistro y en US-171, con la nota de que es una **cota superior** y de que el diagnóstico de autocorrelación que sí demostraría independencia no está hecho |
+| T4 | **El criterio de despliegue estaba mal descrito**: decíamos «F1 por clase ≥ 0,90» | El código dice otra cosa (`ml/eval/class_remap.py`): el catálogo de doce es el **último cuyo macro-F1 restringido se mantiene sobre 0,90** al añadir clases en orden de calidad resuelta — 0,9001 con doce, por debajo con trece. Corregido. Importa porque esa decisión real es el insumo de US-172 y no puede entrar deformada |
+| T5 | **0,88269 seguía publicada como cobertura** en el reencuadre | Corregida ahí también. Era la cuarta aparición, y las tres primeras se habían arreglado |
+| T6 | **El Jaccard seguía mal atribuido** en US-173 y en el cuaderno público | Corregido en los dos consumidores |
+| T7 | **US-140 seguía exigiendo declarar que «H1 se refutó»** | Ahora dice `H1-2026` **no replicó**, con el intervalo antes y después |
+| T8 | **El ledger tenía procedencia falsa y su gate no podía verla** | El gate comprueba ahora **procedencia, no solo bytes**: el commit de sellado tiene que existir y estar en la historia de HEAD, y una fila que dice «sin seguimiento en git» tiene que ser cierta. Al encenderlo saltaron **24 filas mintiendo**, no las tres que el auditor encontró a mano. Corregidas con el commit real de cada artefacto. Los dos controles, probados en negativo **y versionados** en `tests/scripts/test_gates_procedencia.py` |
+| T9 | **El gate de dependencias solo miraba dos campos**, y burlarlo era mover la frase al título | Recorre el objeto entero —cualquier campo de texto, presente o futuro— y reconoce ocho variantes de la afirmación. Tres tests parametrizados mutan título, rol y criterio de aceptación y exigen que falle en los tres |
+| T10 | **«La granularidad decide la significancia»** excedía lo que el diseño sostiene | Reescrito en sus tres apariciones: «en este análisis exploratorio, la conclusión cambia con k». Ni «decide» ni «demuestra» |
+| T11 | **Las 176 celdas H3 estaban escritas a mano** en un docstring y en un JSON | El artefacto las **produce**: `celdas_h3_del_universo`, con su `h3_res`. Salen 176 |
+| T12 | **La exclusión del rechazador aprendido se presentaba como inevitabilidad** («un revisor lo criticará se haga como se haga») | Declarada como exclusión de alcance con su coste: el artículo no dice nada sobre mecanismos **aprendidos** de renuncia. Y US-170 deja de afirmar que los cuatro «cubren el espacio» |
+| T13 | **`u(y,C) = g(|C|)` reaparecía en el plan** como si la cardinalidad fuera la moneda | US-160 lo separa: `g` es el premio por acertar con un conjunto de un tamaño dado; el coste sale de la tabla de US-172. En el código ya estaba separado |
+| T14 | **`k=15` seguía con 2,2 km** en el documento para Arthur tras recalcularlo | 2,009 km |
+| T15 | **`ESTADO.md` decía nueve auditorías internas** y el plan decía ocho | Sin número: el recuento no sale de ningún artefacto |
+
+### Lo que sigue ABIERTO, y no ha cambiado de dueño
+
+`A1` a `A10` de la ronda 2 siguen como estaban, salvo `A6`, que se cierra con T1. En resumen:
+**la tabla de pérdidas (US-172), el estimando y su población (US-173), el margen práctico (US-174)
+y las tres razones libres (US-175)** siguen sin existir, y con ellas el criterio principal. El MDE
+sigue siendo aproximación con t central. La multiplicidad de toda la superficie y la selección de
+predictores sobre datos separados siguen sin implementar. **Y todo lo que produjo el módulo
+reparado hoy queda pendiente de regenerar**, con el aviso escrito en la cabecera del ledger.
 
 ---
 
@@ -54,13 +94,20 @@ habíamos dado por cerrados** (la utilidad y el presupuesto de páginas: la corr
 incompleta) y dejó el resto abiertos. Los que siguen vivos están arriba, en la tabla de ABIERTO, con
 su dueño. No se repiten aquí para que no haya dos versiones del mismo estado.
 
-**El patrón que se repite, y hay que decirlo porque es el más caro**: cuatro veces hemos publicado
-un número que solo existía en la prosa, tres veces una cifra correcta en el contexto equivocado, y
-dos veces un control incapaz de detectar aquello para lo que existe —un gate ciego a sus propios
-acentos, un test que usaba el único valor que no distinguía—. Los tres modos de fallo tienen la
-misma raíz: **verificar el resultado en vez de verificar el mecanismo**. Por eso ahora todo control
-nuevo se prueba en negativo antes de creerle, y por eso los dos gates de esta ronda se probaron
-rompiéndolos.
+**Los cuatro patrones que se repiten**, porque son lo más caro del proyecto:
+
+1. **Un número que solo existe en la prosa** — cinco veces, la última las 176 celdas H3.
+2. **Una cifra correcta en el contexto equivocado** — cuatro veces, la última 0,88269.
+3. **Un control incapaz de detectar aquello para lo que existe** — cuatro veces: un gate ciego a
+   sus acentos, un test con el único valor que no distinguía, dos tests que miraban el número de
+   salida en vez del mecanismo, y un gate que solo leía dos de los campos que debía cubrir.
+4. **Corregir donde se señaló y no en el resto de las apariciones** — el patrón entero de la
+   ronda 3.
+
+Los cuatro tienen la misma raíz: **verificar el resultado en vez de verificar el mecanismo**, y
+después **verificar el ejemplo en vez de agotar el alcance**. Por eso ahora todo control nuevo se
+prueba en negativo antes de creerle, los de esta ronda están **versionados** para que la prueba no
+muera con la sesión, y toda corrección se busca en todas sus apariciones antes de darse por hecha.
 
 ---
 

@@ -82,3 +82,37 @@ verifique en vez de creerlo:
 siendo aproximación con t central; la multiplicidad de toda la superficie y la selección de
 predictores siguen sin implementar; y la tabla de pérdidas, el estimando y el margen práctico —las
 tres que bloquean la firma— siguen siendo historias, no comportamiento.
+
+---
+
+## Estado para la ronda 4
+
+La ronda 3 encontró **tres cierres parciales contados como enteros** y un patrón nuestro que no
+habíamos visto: *corregir donde el auditor señaló y dejar el resto de las apariciones*. El
+preregistro decía lo correcto y el plan seguía diciendo lo anterior, cuatro veces.
+
+Lo que cambió de comportamiento, para que se verifique en vez de creerse:
+
+| Qué se tocó | Dónde comprobarlo |
+|---|---|
+| Los tres defectos de la frontera, reparados; cada reparación es un **parámetro obligatorio** | `ml/eval/paper_micai_coverage.py`; `tests/ml/eval/test_paper_micai_coverage.py` (8 tests) |
+| El universo del macro es del BLOQUE, no de lo entregado | `macro_over(..., presentes=...)`, sin valor por defecto |
+| El umbral de confianza sale de los bloques de entrenamiento | `confidence_baseline`; la cobertura ya **no** coincide exacta con la referencia |
+| El intervalo declara su unidad; `"bloque"` es el del artículo | `paired_interval(..., unidad=...)`, sin valor por defecto |
+| Gate de procedencia del ledger: commit de sellado y versionado real | `scripts/paper_artifacts_check.py`; saltaron 24 filas falsas |
+| Gate de dependencias, recorriendo el objeto entero | `scripts/plan_check.py::_textos` |
+| Los dos gates, probados en negativo **y versionados** | `tests/scripts/test_gates_procedencia.py` (7 tests) |
+| Celdas H3 producidas, no tecleadas | `parametros_prereg.json`, clave `celdas_h3_del_universo` |
+| Distancia renombrada a **entre centroides**, con su limitación | `parametros_diseno.csv`, US-171, §4.1 del preregistro |
+| Criterio de despliegue descrito como lo describe el código | `ml/eval/class_remap.py`, reencuadre §«el único activo» |
+| Retirada de US-155 la regla de mover el criterio a donde haya potencia | `plan.html`, US-155 |
+
+**Lo que NO cambió**: la tabla de pérdidas, el estimando y su población, el margen práctico y las
+tres razones libres siguen sin existir, y con ellas el criterio principal. El MDE sigue siendo
+aproximación con t central. La multiplicidad de toda la superficie y la selección de predictores
+sobre datos separados siguen sin implementar. **Y todos los artefactos que produjo el módulo
+reparado hoy están pendientes de regenerar**, con el aviso en la cabecera del ledger.
+
+**Para la ronda 4, además de las tres partes de arriba, busca específicamente el patrón de la
+ronda 3**: una corrección aplicada en un documento y no en los otros que dicen lo mismo. Y
+comprueba si los controles nuevos son burlables por el camino de al lado, como lo fue el anterior.
