@@ -52,6 +52,21 @@ Esto es lo que la vez pasada no existía, y es donde se perdió el resultado ant
 
 **Y `k = 5` es exactamente el valor donde el contraste NO alcanza significancia.** Ese es el punto de haber declarado el criterio antes: si lo hubiéramos elegido mirando el resultado habríamos cogido el 15, que es a la vez el mayor `|delta|` y la menor desviación del barrido —la celda más favorable de siete— y que tiene una separación de 2,2 km y dos clases estimables en su peor bloque.
 
+**¿Y no se pueden tener más bloques subiendo el colchón?** Se midió, porque era la única vía
+legítima para ganar potencia por diseño en vez de por elección. **No existe.** El colchón sí arregla
+la separación, pero se come las parcelas de los bordes, y las que se come son desproporcionadamente
+de las clases raras:
+
+| k | colchón | separación mínima | clases estimables | ¿cumple? |
+|---:|---:|---:|---:|---|
+| **5** | 1 km | **23,6 km** | **10** | **sí** |
+| 10 | 15 km | 22,2 km | 4 | no |
+| 12 | 15 km | 15,8 km | 2 | no |
+| 15 | 15 km | 15,9 km | 2 | no |
+
+Ninguna combinación por encima de cinco bloques pasa las dos condiciones. `k = 5` no es una
+preferencia: es el único punto viable del diseño.
+
 **Prohibido explícitamente**: revisar `k` después de ver un contraste.
 
 **Se publica la curva entera** de sensibilidad a `k`, gane lo que gane, y `k` no se revisa después de ver un contraste. La sensibilidad **es un resultado**: el estimador se mueve 0,0122 entre valores de `k`, un 73 % del propio efecto y sin tendencia monótona, lo que significa que en validación cruzada espacial la granularidad de la partición decide la significancia — y la literatura del área la trata como un dato.
