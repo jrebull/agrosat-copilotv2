@@ -24,6 +24,8 @@ from pathlib import Path
 import polars as pl
 import structlog
 
+from ml.eval.oof.inventario import cargar_inventario
+
 logger = structlog.get_logger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -45,12 +47,29 @@ def shared_universe(oof_dir: Path) -> list[str]:
     Returns:
         The sorted parcel ids present in every member.
 
+    Solo entran los miembros que el inventario marca como `canonical`.
+
     Raises:
-        FileNotFoundError: if no parcel-level member is available.
+        FileNotFoundError: if no canonical parcel-level member is available.
     """
+    # El universo sellado se construye SOLO con miembros canonicos. La version anterior hacia un
+    # glob y excluia Italia por el nombre del fichero, asi que recogia los legacy_unverified sin
+    # preguntarle al inventario: el universo de parcelas del articulo salia en parte de ficheros
+    # cuya procedencia no esta verificada. Es el mismo consumidor silencioso que
+    # `load_member_posteriors`, un piso mas abajo.
+    inventario = cargar_inventario()
     members = sorted(
-        p for p in oof_dir.glob("oof_parcel_*_fold5.parquet") if "italia" not in p.name
+        p
+        for p in oof_dir.glob("oof_parcel_*_fold5.parquet")
+        if inventario["ficheros"].get(p.name, {}).get("estado") == "canonical"
     )
+    descartados = sorted(
+        p.name
+        for p in oof_dir.glob("oof_parcel_*_fold5.parquet")
+        if inventario["ficheros"].get(p.name, {}).get("estado") != "canonical"
+    )
+    if descartados:
+        logger.info("miembros_no_canonicos_descartados", n=len(descartados), ficheros=descartados)
     if not members:
         raise FileNotFoundError(f"no parcel OOF found in {oof_dir}; run `dvc pull {oof_dir}`.")
     shared: set[str] | None = None

@@ -30,6 +30,7 @@ import polars as pl
 import structlog
 from sklearn.metrics import accuracy_score, f1_score
 
+from ml.eval.oof.inventario import exigir_canonicos
 from ml.utils.parcel_reconcile import PROB_COLUMNS
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
@@ -61,21 +62,34 @@ def load_member_posteriors(
     oof_dir: Path,
     members: Sequence[str],
     keys: Sequence[str],
+    *,
+    permitir_no_canonicos: bool = False,
 ) -> dict[str, np.ndarray]:
     """Load each member's fold-5 parcel posteriors aligned to ``keys``.
+
+    **Rechaza por defecto los miembros que el inventario no marca como canonicos.** Este es el
+    unico punto por el que el analisis MICAI lee posteriores, asi que es el unico sitio donde la
+    regla se puede imponer una vez y valer para todas las fases. Marcar un fichero como
+    ``legacy_unverified`` en un JSON no impide que se lea: eso lo aprendio este proyecto con los
+    trece artefactos ``OBSOLETO``, que llevaban su aviso y se citaban igual.
 
     Args:
         oof_dir: Directory with ``oof_parcel_{member}_fold5.parquet``.
         members: Member names to load.
         keys: Canonical parcel ids defining the row order.
+        permitir_no_canonicos: Escape hatch for uses that are NOT the MICAI analysis —
+            diagnostics, migrations, the re-dump verification itself. No lo use el analisis.
 
     Returns:
         Mapping member name to a ``(len(keys), 18)`` float64 posterior matrix.
 
     Raises:
+        EstadoNoCanonicoError: if any member is not canonical and the escape hatch is off.
         FileNotFoundError: if a member's parquet is absent.
         ValueError: if a member does not cover every requested parcel.
     """
+    if not permitir_no_canonicos:
+        exigir_canonicos(list(members))
     order = pl.DataFrame({KEY: list(keys)}).with_row_index("_pos")
     out: dict[str, np.ndarray] = {}
     for member in members:

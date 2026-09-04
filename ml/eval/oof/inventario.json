@@ -1,0 +1,222 @@
+{
+  "para_que": [
+    "Inventario GLOBAL de los OOF, separado a proposito de manifest.json.",
+    "manifest.json es el manifiesto de UNA corrida de volcado denso y lo reescribe entero",
+    "quien la ejecuta: usarlo como registro global haria que un re-volcado de un solo modelo",
+    "borrase logicamente la declaracion de los otros seis. Este fichero no lo escribe ningun",
+    "volcado: se edita a mano, con motivo, y lo comprueba `make oof-manifest-check`."
+  ],
+  "estados": {
+    "canonical": "Procedencia declarada y verificable. Lo pueden leer los consumidores MICAI.",
+    "legacy_unverified": "Existe y se usa historicamente, sin procedencia verificada. Los consumidores MICAI lo RECHAZAN: declararlo no basta para impedir que se lea.",
+    "excluded": "Decidido formalmente que no entra en el analisis, con su motivo."
+  },
+  "actualizado": "2026-09-04",
+  "code_version": "ed48cda",
+  "ficheros": {
+    "oof_anysat_fold5.parquet": {
+      "miembro": "anysat",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "9f9c173c43c12a75f16dcb5ea269a00b",
+      "bytes": 256973340,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso por parche, declarado en manifest.json."
+    },
+    "oof_deeplabv3plus_fold5.parquet": {
+      "miembro": "deeplabv3plus",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "fdc41f228bafcc0a6ff16f228fab506b",
+      "bytes": 253427636,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso por parche, declarado en manifest.json."
+    },
+    "oof_parcel_anysat_fold5.parquet": {
+      "miembro": "anysat",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "3366dc2469ab82575e82f2d8bfe0ffcc",
+      "bytes": 2036192,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "Declarado en manifest.json con status ok."
+    },
+    "oof_parcel_deeplabv3plus_fold5.parquet": {
+      "miembro": "deeplabv3plus",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "6a2b13aa4213b73349310f767934635c",
+      "bytes": 2075019,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "Declarado en manifest.json con status ok."
+    },
+    "oof_parcel_farslip-ft18_fold5.parquet": {
+      "miembro": "farslip-ft18",
+      "granularidad": "parcel",
+      "estado": "legacy_unverified",
+      "md5": "433325d8ad2cb7c65a26c19065f25295",
+      "bytes": 1150480,
+      "filas": 16640,
+      "columnas": 21,
+      "motivo": "Los checkpoints FarSLIP originales no estan. Reproducirlo es recuperacion de deuda historica, no US-118.",
+      "siguiente_paso": "Excluido del analisis MICAI hasta reproducirlo o decidir formalmente que no entra"
+    },
+    "oof_parcel_farslip-zeroshot_fold5.parquet": {
+      "miembro": "farslip-zeroshot",
+      "granularidad": "parcel",
+      "estado": "legacy_unverified",
+      "md5": "28c2b44de3fd13e4cadb3937c5bcbea0",
+      "bytes": 1075770,
+      "filas": 16640,
+      "columnas": 21,
+      "motivo": "Mismo caso que farslip-ft18.",
+      "siguiente_paso": "Excluido del analisis MICAI hasta reproducirlo o decidir formalmente que no entra"
+    },
+    "oof_parcel_segformer_fold5.parquet": {
+      "miembro": "segformer",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "99d8b9c0e766d1a42f1cb6543bb7fba6",
+      "bytes": 2062477,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "Declarado en manifest.json con status ok."
+    },
+    "oof_parcel_tsvit-pheno-fullm_fold5.parquet": {
+      "miembro": "tsvit-pheno-fullm",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "16758cb30ec2fc818bf0bed56e4f3a1a",
+      "bytes": 2060956,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "CANONICO POR REPRODUCCION, no por sustitucion. El 4 de septiembre de 2026 se re-volco desde CHECKPOINT_REGISTRY en un directorio temporal y el resultado coincide con este fichero: argmax identico en las 28 532 parcelas y diferencia media de posteriores de 9e-06, que es el redondeo de float16 al escribir. El huerfano no era un misterio: sale de esta configuracion, y ahora esta demostrado en vez de supuesto. Se conservan los BYTES HISTORICOS a proposito: sustituirlos habria roto un sello del ledger y obligado a re-subir al remoto para ganar 9e-06, y ademas habria borrado la propiedad de que este es el fichero que usaron los analisis anteriores.",
+      "procedencia": {
+        "checkpoint": "checkpoints/segmentation/tsvit-pheno-fullm-v1/best.pt",
+        "checkpoint_md5": "22ae8074b2c689565f8b854a56e4c5f5",
+        "model_kwargs": {
+          "n_timesteps": 37,
+          "img_size": 128,
+          "patch_size": 8,
+          "dim": 192,
+          "depth_temporal": 6,
+          "depth_spatial": 6,
+          "heads": 6,
+          "dim_head": 64,
+          "mlp_ratio": 4,
+          "semantic_dim": 384
+        },
+        "n_patches": 496,
+        "n_parcelas": 28532,
+        "verificacion": {
+          "cobertura_igual_a": "tsvit-pheno",
+          "coincidencia_argmax_con_el_anterior": 1.0,
+          "diferencia_media_absoluta_posteriores": 9e-06,
+          "nota": "La diferencia es redondeo de float16 al escribir. Coincidencia de argmax perfecta en las 28 532 parcelas."
+        },
+        "productor": "ml.eval.oof.dump_oof.dump_oof con un registro de UN modelo, en directorio temporal",
+        "verificado_por": "scripts/verificar_redump_oof.py",
+        "fichero_promovido": "no; se conservan los bytes historicos, verificados por reproduccion"
+      }
+    },
+    "oof_parcel_tsvit-pheno_fold5.parquet": {
+      "miembro": "tsvit-pheno",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "b87f9b63ccecf4e5395bb22a307d67e8",
+      "bytes": 2071454,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "Declarado en manifest.json con status ok."
+    },
+    "oof_parcel_unet_fold5.parquet": {
+      "miembro": "unet",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "ff36268a0d9bdbaa732374fa031fcf3f",
+      "bytes": 2015608,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "Declarado en manifest.json con status ok."
+    },
+    "oof_parcel_utae_fold5.parquet": {
+      "miembro": "utae",
+      "granularidad": "parcel",
+      "estado": "canonical",
+      "md5": "597d867f32f9f7c52ff75702e2cf1c14",
+      "bytes": 2058667,
+      "filas": 28532,
+      "columnas": 27,
+      "motivo": "Declarado en manifest.json con status ok."
+    },
+    "oof_parcel_xgb-alphaearth-italia_fold5.parquet": {
+      "miembro": "xgb-alphaearth-italia",
+      "granularidad": "parcel",
+      "estado": "legacy_unverified",
+      "md5": "01b89dd26bc9c86bf186bdb628f9a12f",
+      "bytes": 14874167,
+      "filas": 103350,
+      "columnas": 41,
+      "motivo": "103 350 filas y 41 columnas: es el universo de Italia, no el de Francia. El blob de AlphaEarth Italia no estaba en el remoto.",
+      "siguiente_paso": "Excluido del analisis MICAI: ademas de no verificado, no es del universo del articulo"
+    },
+    "oof_parcel_xgb-alphaearth_fold5.parquet": {
+      "miembro": "xgb-alphaearth",
+      "granularidad": "parcel",
+      "estado": "legacy_unverified",
+      "md5": "97a083d90b1635dbfc216d837325877f",
+      "bytes": 1192508,
+      "filas": 16640,
+      "columnas": 21,
+      "motivo": "Ruta tabular, 16 640 filas por parcela. Alimenta al predictor desplegado, asi que importa; sus entradas locales estan por comprobar.",
+      "siguiente_paso": "Re-materializacion barata si las entradas locales estan completas"
+    },
+    "oof_segformer_fold5.parquet": {
+      "miembro": "segformer",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "718251a0bb6210b4416caf74c061564a",
+      "bytes": 256652144,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso por parche, declarado en manifest.json."
+    },
+    "oof_tsvit-pheno_fold5.parquet": {
+      "miembro": "tsvit-pheno",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "04deb9e4904b6ff4268d88988e63a788",
+      "bytes": 251685977,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso por parche, declarado en manifest.json."
+    },
+    "oof_unet_fold5.parquet": {
+      "miembro": "unet",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "4dda18eca55ed871c044208239da2fea",
+      "bytes": 257051592,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso por parche, declarado en manifest.json."
+    },
+    "oof_utae_fold5.parquet": {
+      "miembro": "utae",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "9fb4ad5710778db32ad8acefedf423a2",
+      "bytes": 251728386,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso por parche, declarado en manifest.json."
+    }
+  },
+  "aviso": [
+    "El re-volcado completo (parcela y denso) vive en un temporal y NO se promueve: el parcela coincide con el historico salvo redondeo, y el denso de 253 MB no estaba en el directorio, nadie lo consume, y subirlo al remoto compartido es una decision de presupuesto."
+  ]
+}

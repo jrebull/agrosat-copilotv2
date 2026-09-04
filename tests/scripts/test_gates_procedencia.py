@@ -634,3 +634,98 @@ def test_la_divergencia_entre_el_json_y_la_prosa_rompe_el_gate(tmp_path: Path) -
     codigo, salida = _correr_preregistro_check(CONTRATO, copia)
     assert codigo == 1, salida
     assert "rematch_on_test" in salida
+
+
+# --------------------------------------------------------------------------------------
+# US-118: el inventario de OOF y los consumidores que lo respetan.
+# --------------------------------------------------------------------------------------
+
+
+def test_el_analisis_micai_rechaza_un_oof_no_canonico() -> None:
+    """Declaring a file unverified does not stop anyone from reading it; refusing to load it does.
+
+    Es la leccion de los trece artefactos OBSOLETO, que llevaban su aviso en la cabecera del
+    ledger y se citaban igual. `load_member_posteriors` es el unico punto por el que el analisis
+    MICAI lee posteriores, asi que la regla se impone ahi una vez y vale para todas las fases.
+    """
+    from ml.eval.oof.inventario import EstadoNoCanonicoError, estado_de_miembro
+    from ml.eval.paper_micai_arbitration import load_member_posteriors
+
+    no_canonico = next(
+        m
+        for m in ("farslip-ft18", "farslip-zeroshot", "xgb-alphaearth", "xgb-alphaearth-italia")
+        if estado_de_miembro(m) != "canonical"
+    )
+    with pytest.raises(EstadoNoCanonicoError, match=no_canonico):
+        load_member_posteriors(REPO_ROOT / "ml" / "eval" / "oof", (no_canonico,), ["x"])
+
+
+def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito() -> None:
+    """Diagnostics and migrations need to read them; the analysis must not do it by accident."""
+    from ml.eval.oof.inventario import estado_de_miembro
+    from ml.eval.paper_micai_arbitration import load_member_posteriors
+
+    no_canonico = next(
+        m for m in ("farslip-ft18", "xgb-alphaearth") if estado_de_miembro(m) != "canonical"
+    )
+    # Con la escapatoria pasa el control de estado y falla mas adelante, por cobertura: la
+    # diferencia es que el fallo ya no es "no puedes leer esto".
+    with pytest.raises(ValueError, match="no cubre"):
+        load_member_posteriors(
+            REPO_ROOT / "ml" / "eval" / "oof",
+            (no_canonico,),
+            ["parcela-que-no-existe"],
+            permitir_no_canonicos=True,
+        )
+
+
+def test_el_inventario_no_admite_estados_inventados(tmp_path: Path) -> None:
+    """Three states, and a fourth one is a silent way of declaring nothing."""
+    import json
+    import shutil
+
+    origen = REPO_ROOT / "ml" / "eval" / "oof"
+    copia = tmp_path / "oof"
+    copia.mkdir()
+    for parquet in origen.glob("*.parquet"):
+        (copia / parquet.name).write_bytes(parquet.read_bytes())
+    shutil.copy2(origen / "manifest.json", copia / "manifest.json")
+    datos = json.loads((origen / "inventario.json").read_text(encoding="utf-8"))
+    primero = next(iter(datos["ficheros"]))
+    datos["ficheros"][primero]["estado"] = "casi_bueno"
+    (copia / "inventario.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "oof_manifest_check.py"), "--oof", str(copia)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 1, proc.stdout
+    assert "desconocido" in proc.stdout
+
+
+def test_un_legacy_sin_siguiente_paso_rompe_el_gate(tmp_path: Path) -> None:
+    """Without a written way out, a temporary state becomes a permanent one."""
+    import json
+    import shutil
+
+    origen = REPO_ROOT / "ml" / "eval" / "oof"
+    copia = tmp_path / "oof"
+    copia.mkdir()
+    for parquet in origen.glob("*.parquet"):
+        (copia / parquet.name).write_bytes(parquet.read_bytes())
+    shutil.copy2(origen / "manifest.json", copia / "manifest.json")
+    datos = json.loads((origen / "inventario.json").read_text(encoding="utf-8"))
+    objetivo = next(k for k, v in datos["ficheros"].items() if v["estado"] == "legacy_unverified")
+    datos["ficheros"][objetivo].pop("siguiente_paso", None)
+    (copia / "inventario.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "oof_manifest_check.py"), "--oof", str(copia)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 1, proc.stdout
+    assert "siguiente_paso" in proc.stdout
