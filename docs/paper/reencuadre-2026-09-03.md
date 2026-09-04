@@ -1,5 +1,12 @@
 # Reencuadre del artículo MICAI 2027
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Fecha**: 3 de septiembre de 2026. **Motivo**: cuatro revisores a ciegas recomendaron rechazo por caminos distintos, y la revisión de Arthur encontró una premisa falsa. Tres de los defectos estadísticos los reproduje yo mismo. Ver [`auditoria-revisores-2026-09-03.md`](auditoria-revisores-2026-09-03.md) y [`revision-arthur-2026-09-03.md`](revision-arthur-2026-09-03.md).
 
 **Decisión**: no se parchea. Se reencuadra, con el calendario largo que la convocatoria de 2027 permite.

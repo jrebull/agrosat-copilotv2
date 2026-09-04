@@ -1,5 +1,12 @@
 # Revisión de Arthur, verificada punto por punto
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Documentos revisados**: `evaluacion-cuaderno-micai-2027.md` y `rutas-micai-2027-post-hallazgos-2026-09-03.md`, ambos del 3 de septiembre de 2026.
 **Verificado contra**: este fork (`jrebull/agrosat-copilotv2`), no contra el `main` del que parte Arthur.
 **Criterio**: cada punto se marca CONFIRMADO (lo comprobé y tiene razón), NO APLICA AQUÍ (es cierto en su árbol y no en este), o MATIZ (tiene razón en parte).

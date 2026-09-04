@@ -10,10 +10,10 @@
 >
 > **El número de bloques espaciales con que evaluamos era el valor por defecto de una función, no una propiedad de PASTIS.** Son 5 porque `build_spatial_kfold` trae 5, y el fold 5 tiene 176 celdas H3: admite muchos más. Al barrerlo pasa esto:
 >
-> | bloques | intervalo del contraste | ¿excluye el cero? | separación prueba–entrenamiento | clases estimables en el peor bloque |
+> | bloques | intervalo del contraste | ¿excluye el cero? | separación prueba–entrenamiento (centroides, cota superior; no demuestra independencia) | clases estimables en el peor bloque |
 > |---:|---|---|---:|---:|
-> | **5** | (−0,041, **+0,008**) | **no** | **22,972 km** | **10 de 18** |
-> | 15 | (−0,035, −0,015) | sí | 2,009 km | 2 de 18 |
+> | **5** | (−0,041, **+0,008**) | **no** | **22,972 km** entre centroides | **10 de 18** |
+> | 15 | (−0,035, −0,015) | sí | 2,009 km entre centroides | 2 de 18 |
 >
 > Con quince bloques **el resultado sale significativo**. Con cinco no.
 >
@@ -29,7 +29,7 @@
 >
 > **¿Firmas que fijamos el número de bloques en cinco, por el criterio de separación espacial y clases estimables, sabiendo que ese es el valor donde nuestro contraste principal no alcanza significancia?**
 >
-> Si crees que hay un criterio mejor para elegirlo —uno que no mire el resultado—, dímelo ahora y lo aplicamos. Si crees que quince es defendible con esos 2,2 km, convénceme y lo discutimos. Lo que no podemos es decidirlo después de ver qué sale.
+> Si crees que hay un criterio mejor para elegirlo —uno que no mire el resultado—, dímelo ahora y lo aplicamos. Si crees que quince es defendible con esos 2,0 km, convénceme y lo discutimos. Lo que no podemos es decidirlo después de ver qué sale.
 >
 > De paso, tres cosas que van en el mismo ADR y son rápidas:
 > 1. **Sede**: MICAI 2027 y solo MICAI, hasta veinte páginas. ¿De acuerdo, o prefieres reservar la mitad para una revista?

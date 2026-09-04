@@ -1,5 +1,12 @@
 # Qué artículo sale de este proyecto, escrito desde cero
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Modo**: 1 del skill `micai-paper` — encuadre de la contribución y estructura.
 **Fecha**: 2 de septiembre de 2026. **Responsable**: Javier A. Rebull-Saucedo. **Decide con**: Arthur Jafed Zizumbo Velasco.
 **Base**: [`novedad.md`](novedad.md) (fase 0), [`fase2-hallazgos.md`](fase2-hallazgos.md) (fase 2) y [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md) (49 artefactos sellados).

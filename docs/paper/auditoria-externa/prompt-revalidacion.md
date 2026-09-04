@@ -150,3 +150,35 @@ regenerar.
    de los tres bloques.
 2. **La propagación.** Toma tres afirmaciones que esta ronda dice haber corregido y búscalas en
    TODAS partes: plan, preregistro, cuaderno, ledger, docstrings y manuscrito.
+
+---
+
+## Estado para la ronda 6
+
+La ronda 5 encontró que **dos de las tres reparaciones de la ronda 4 tenían el mismo tipo de agujero
+que arreglaban**, y de ahí sale el sexto patrón: *reparar el caso que nos enseñaron en vez de la
+clase de casos*.
+
+| Qué se tocó | Dónde comprobarlo |
+|---|---|
+| «Tres bloques» son tres bloques distintos y pareados, no tres posiciones de lista | `_exigir_bloques_pareados`; dos tests probados fallando |
+| El delta es la media de las **diferencias pareadas**, no la diferencia de dos medias | `paired_interval`; el test exige que el caso distinga las dos fórmulas |
+| Una fila del ledger declara commit o dice que no lo tiene: no hay tercera opción | `paper_artifacts_check.py`; test con una raya |
+| El gate de plan lee también el campo `dep` | `plan_check.py::_textos`; test |
+| **Gate de publicación nuevo**: `make paper-obsoletos-check` | Un documento que cite cifras `OBSOLETO` lleva cuarentena o falla |
+| Los tests se anclan en la estructura del objeto, no en frases del plan | `tests/scripts/test_gates_procedencia.py` |
+| US-155 y US-171 dejan de usar cifras obsoletas como criterio de aceptación | `plan.html` |
+| El cuaderno deja de titular «la afirmación que el artículo puede sostener» | `index.html` |
+| El mínimo de tres bloques, declarado como regla de publicación y no como frontera | docstring de `paired_interval` |
+| **US-172 pierde la salida por «supuesto del artículo»** | `plan.html`, US-172 |
+
+**Lo que NO cambió**: US-172 a US-175 siguen sin hacerse, y con ellas el criterio principal. El MDE
+con t central. La multiplicidad de toda la superficie. La selección de predictores sobre datos
+separados. Los trece artefactos `OBSOLETO` siguen sin regenerar.
+
+**Para la ronda 6**, además de las tres partes:
+
+1. **La clase, no el caso.** Por cada reparación de esta ronda, pregunta de qué clase es el defecto
+   y busca los otros miembros de esa clase. Es lo que las rondas 4 y 5 encontraron dos veces.
+2. **Los gates nuevos.** `paper-obsoletos-check` es un control recién nacido: intenta burlarlo.
+3. **La propagación, otra vez**, con tres afirmaciones distintas de las que ya comprobaste.

@@ -415,6 +415,37 @@ def no_mechanism_reference(
     return points
 
 
+def _exigir_bloques_pareados(left: Sequence[BlockPoint], right: Sequence[BlockPoint]) -> None:
+    """Refuse to treat a list of points as a set of blocks unless it is one.
+
+    Three entries are not three blocks. An external audit passed three points all carrying
+    ``block=0`` and got an interval with n=3 and a p-value: the code was counting **list
+    positions**. Two mechanisms are paired only when they are measured on the same blocks, in the
+    same order, once each.
+
+    Args:
+        left: Points of the mechanism being tested.
+        right: Points of the comparator.
+
+    Raises:
+        ValueError: when the two arms are not aligned block by block, or a block repeats.
+    """
+    izq = [(p.k, p.block) for p in left]
+    der = [(p.k, p.block) for p in right]
+    if izq != der:
+        raise ValueError(
+            "los dos brazos no estan pareados por (k, bloque): "
+            f"izquierda {izq} y derecha {der}. Un intervalo pareado exige el mismo bloque en la "
+            "misma posicion"
+        )
+    if len(set(izq)) != len(izq):
+        repetidos = sorted({x for x in izq if izq.count(x) > 1})
+        raise ValueError(
+            f"hay bloques repetidos {repetidos}: tres entradas del mismo bloque no son tres "
+            "bloques, y contarlas como unidades infla la muestra"
+        )
+
+
 def paired_interval(
     labels: np.ndarray,
     splits: Sequence[tuple[np.ndarray, np.ndarray]],
@@ -437,9 +468,14 @@ def paired_interval(
 
     ``"bloque"`` is the estimand-level interval: a paired t over the per-block deltas, with the
     block as the unit, which is what five spatial blocks entitle anyone to claim. It is
-    degenerate when the two mechanisms coincide, which is the harness self-check. **Below three
-    defined blocks it returns the deltas and nothing else** — no interval, no p — because that is
-    the declared contract for a two-region bench and the code was breaking it.
+    degenerate when the two mechanisms coincide, which is the harness self-check.
+
+    **Below three defined blocks it returns the deltas and nothing else** — no interval, no p.
+    That floor is a **conservative publication rule of this project, not a mathematical
+    boundary**: a t interval on two observations is computable and useless, and three do not buy
+    independence or power either. It exists because the two-region bench was producing an
+    interval, a p and a Holm correction that the design does not support. Independence and
+    minimum detectable effect are separate questions and are argued separately.
 
     ``"parcela"`` and ``"cluster"`` keep the old bootstrap, but they answer a **different and
     narrower question** — how much the estimate moves if this block's parcels (or patches)
@@ -466,12 +502,16 @@ def paired_interval(
         raise ValueError(f"unidad de remuestreo desconocida: {unidad!r}")
     if unidad == "cluster" and clusters is None:
         raise ValueError("la unidad 'cluster' necesita los identificadores de cluster")
+    _exigir_bloques_pareados(left, right)
 
-    izq_f1 = np.asarray([p.aligned_f1 for p in left], dtype=float)
-    der_f1 = np.asarray([p.aligned_f1 for p in right], dtype=float)
-    observed = float(np.nanmean(izq_f1) - np.nanmean(der_f1))
+    # El delta es la media de las DIFERENCIAS PAREADAS, no la diferencia de dos medias calculadas
+    # sobre poblaciones distintas. Con algun bloque indefinido las dos cosas dejan de coincidir, y
+    # publicabamos un delta que no era el centro de su propio intervalo.
     por_bloque = [float(a.aligned_f1 - b.aligned_f1) for a, b in zip(left, right, strict=True)]
     indefinidos = int(np.isnan(por_bloque).sum())
+    definidos = np.asarray(por_bloque, dtype=float)
+    definidos = definidos[~np.isnan(definidos)]
+    observed = float(definidos.mean()) if definidos.size else float("nan")
 
     if unidad == "bloque":
         d = np.asarray(por_bloque, dtype=float)
@@ -484,9 +524,11 @@ def paired_interval(
             "bloques_indefinidos": indefinidos,
             "deltas_por_bloque": por_bloque,
         }
-        # Con menos de tres bloques NO se publica intervalo ni p. Es el contrato de US-125 y el
-        # codigo lo estaba incumpliendo: BreizhCrops tiene exactamente dos regiones, y el
-        # productor le aplicaba Holm a un p que no deberia existir.
+        # Regla conservadora de publicacion de este proyecto, declarada y no deducida: con menos
+        # de tres bloques definidos no se publica intervalo ni p. Es el contrato de US-125 y el
+        # codigo lo incumplia — BreizhCrops tiene dos regiones y se le aplicaba Holm a un p que no
+        # deberia existir. No es una frontera matematica: con dos observaciones la t se calcula, y
+        # con tres tampoco hay independencia garantizada.
         min_bloques = 3
         if n < min_bloques:
             return {
@@ -573,11 +615,15 @@ def paired_interval(
                     presentes=presentes,
                 )
             )
-        draws[i] = float(np.nanmean(left_scores) - np.nanmean(right_scores))
+        diferencias = np.asarray(left_scores, dtype=float) - np.asarray(right_scores, dtype=float)
+        diferencias = diferencias[~np.isnan(diferencias)]
+        draws[i] = float(diferencias.mean()) if diferencias.size else float("nan")
 
-    low, high = np.percentile(draws, [2.5, 97.5])
-    below = float((draws <= 0).mean())
-    above = float((draws >= 0).mean())
+    validos = draws[~np.isnan(draws)]
+    sorteos_indefinidos = int(draws.size - validos.size)
+    low, high = np.percentile(validos, [2.5, 97.5])
+    below = float((validos <= 0).mean())
+    above = float((validos >= 0).mean())
     return {
         "delta": observed,
         "ci_low": float(low),
@@ -588,6 +634,7 @@ def paired_interval(
         "unidad": unidad,
         "n_unidades": int(sum(t.size for t, _, _, _ in prepared)),
         "bloques_indefinidos": indefinidos,
+        "sorteos_indefinidos": sorteos_indefinidos,
         "deltas_por_bloque": por_bloque,
     }
 

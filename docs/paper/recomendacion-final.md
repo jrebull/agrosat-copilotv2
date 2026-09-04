@@ -1,5 +1,12 @@
 # Recomendación final: qué artículo escribir, y qué cuesta
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Fecha**: 3 de septiembre de 2026. **Decisión del equipo**: sede única MICAI 2027, **veinte páginas**, sin artículo de revista en paralelo. Con ese tope cabe además una sección de robustez de verdad: ver [`campo-de-tiro.md`](campo-de-tiro.md).
 
 Esto es mi mejor recomendación, con el coste declarado y sin suavizar lo que hay que rehacer.

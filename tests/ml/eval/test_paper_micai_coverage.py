@@ -327,3 +327,57 @@ def test_un_bloque_indefinido_se_cuenta_en_vez_de_promediarse() -> None:
     assert r["bloques_indefinidos"] == 1
     assert r["n_unidades"] == 3
     assert r["p_valor"] is not None
+
+
+# --------------------------------------------------------------------------------------
+# Ronda 5: tres entradas no son tres bloques, y el delta tiene que ser el de los pares.
+# --------------------------------------------------------------------------------------
+
+
+def test_tres_entradas_del_mismo_bloque_no_son_tres_bloques() -> None:
+    """Counting list positions is not counting blocks.
+
+    La auditoria paso tres puntos con `block=0` y obtuvo n_unidades=3, intervalo y p. El minimo
+    de tres bloques no protegia nada si «bloque» significaba «posicion en una lista».
+    """
+    izq, der = _puntos([0.01, 0.02, 0.03])
+    repetido = [
+        BlockPoint(**{**vars(p), "block": 0}) for p in izq
+    ]  # los tres dicen ser el bloque 0
+    repetido_der = [BlockPoint(**{**vars(p), "block": 0}) for p in der]
+    with pytest.raises(ValueError, match="bloques repetidos"):
+        paired_interval(np.zeros(4, dtype=int), [], repetido, repetido_der, unidad="bloque")
+
+
+def test_los_dos_brazos_tienen_que_estar_pareados_por_bloque() -> None:
+    """A paired interval on unpaired arms is not paired."""
+    izq, der = _puntos([0.01, 0.02, 0.03])
+    desordenado = [der[1], der[0], der[2]]
+    with pytest.raises(ValueError, match="no estan pareados"):
+        paired_interval(np.zeros(4, dtype=int), [], izq, desordenado, unidad="bloque")
+
+
+def test_el_delta_es_la_media_de_las_diferencias_pareadas() -> None:
+    """With an undefined block, the difference of two means is not the mean of differences.
+
+    El delta se calculaba restando dos nanmean independientes mientras el intervalo usaba solo
+    los pares completos, asi que el delta publicado no era el centro de su propio intervalo. El
+    test anterior no podia verlo porque su brazo derecho valia siempre 0,5.
+    """
+    # El brazo derecho NO puede ser constante: con un derecho constante las dos formulas
+    # coinciden y el test no distingue nada. Ese era justo el fallo del test anterior.
+    izquierdos = [float("nan"), 0.80, 0.90, 0.70]
+    derechos = [0.10, 0.50, 0.60, 0.40]
+    izq, der = _puntos([0.0] * 4)
+    izq = [BlockPoint(**{**vars(p), "aligned_f1": v}) for p, v in zip(izq, izquierdos, strict=True)]
+    der = [BlockPoint(**{**vars(p), "aligned_f1": v}) for p, v in zip(der, derechos, strict=True)]
+
+    r = paired_interval(np.zeros(4, dtype=int), [], izq, der, unidad="bloque")
+    pareado = float(np.nanmean([np.nan, 0.30, 0.30, 0.30]))
+    dos_medias = float(np.nanmean(izquierdos)) - float(np.nanmean(derechos))
+    assert dos_medias != pytest.approx(pareado), "el caso no distingue las dos formulas"
+    assert r["delta"] == pytest.approx(pareado)
+    assert r["bloques_indefinidos"] == 1
+    assert r["n_unidades"] == 3
+    # Y el delta cae dentro de su propio intervalo, que es lo minimo exigible.
+    assert r["ci_low"] <= r["delta"] <= r["ci_high"]

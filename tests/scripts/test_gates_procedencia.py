@@ -81,22 +81,20 @@ def test_decir_que_no_hay_dependencias_teniendolas_rompe_el_gate(
     texto = plan.read_text(encoding="utf-8")
     ancla = '{id:"US-140"'
     assert ancla in texto, "el plan cambio de forma y este test ya no muta lo que cree"
+    # Las mutaciones se anclan en la ESTRUCTURA del objeto, no en frases del plan. Anclarlas en
+    # una frase fosiliza esa redaccion: una auditoria encontro este test conservando como ancla
+    # justo la frase que el plan acababa de retirar.
+    inicio = texto.index(ancla)
     if campo == "t":
-        mutado = texto.replace(
-            f'{ancla}, t:"Preregistro', f'{ancla}, t:"Preregistro sin dependencias,', 1
-        )
+        marca = ', t:"'
+        pos = texto.index(marca, inicio) + len(marca)
     elif campo == "role":
-        mutado = texto.replace(f"{ancla}", f"{ancla}", 1).replace(
-            'role:"Como equipo al que le refutaron la hipótesis',
-            'role:"Sin dependencias. Como equipo al que le refutaron la hipótesis',
-            1,
-        )
+        marca = ' role:"'
+        pos = texto.index(marca, inicio) + len(marca)
     else:
-        mutado = texto.replace(
-            '"El criterio principal se fija AQUÍ',
-            '"Sin dependencias. El criterio principal se fija AQUÍ',
-            1,
-        )
+        marca = ' ac:["'
+        pos = texto.index(marca, inicio) + len(marca)
+    mutado = texto[:pos] + "Sin dependencias. " + texto[pos:]
     assert mutado != texto, f"la mutacion del campo {campo} no cambio el fichero"
     copia = tmp_path / "plan.html"
     copia.write_text(mutado, encoding="utf-8")
@@ -254,3 +252,85 @@ def test_un_md5_que_ese_commit_nunca_produjo_rompe_el_gate(tmp_path: Path) -> No
         assert "el ledger registra" in salida
     finally:
         shutil.copy2(respaldo, origen)
+
+
+# --------------------------------------------------------------------------------------
+# Ronda 5: los tres caminos de al lado que quedaban en los gates.
+# --------------------------------------------------------------------------------------
+
+
+def test_una_fila_sellada_sin_commit_ni_excusa_rompe_el_gate(tmp_path: Path) -> None:
+    """The provenance check only ran when it FOUND a SHA, so a dash skipped it entirely."""
+    import re
+
+    texto = LEDGER.read_text(encoding="utf-8")
+    mutado, n = re.subn(
+        r"\| `[0-9a-f]{7,40}` \| (SELLADO|OBSOLETO) \|", r"| — | \1 |", texto, count=1
+    )
+    assert n == 1, "no se encontro ninguna fila con commit que mutar"
+    copia = tmp_path / "ARTIFACTS.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_artifacts_check(copia)
+    assert codigo == 1, salida
+    assert "no declara ni un commit" in salida
+
+
+def test_la_contradiccion_dentro_del_propio_campo_dep_rompe_el_gate(
+    plan: Path, tmp_path: Path
+) -> None:
+    """``dep`` was excluded from the scan, so the claim could live inside the dependency list."""
+    texto = plan.read_text(encoding="utf-8")
+    ancla = '{id:"US-140"'
+    inicio = texto.index(ancla)
+    marca = ' dep:"'
+    pos = texto.index(marca, inicio) + len(marca)
+    mutado = texto[:pos] + "Sin dependencias; " + texto[pos:]
+    assert mutado != texto
+    copia = tmp_path / "plan.html"
+    copia.write_text(mutado, encoding="utf-8")
+    assert _correr_plan_check(copia) == 1, "la afirmacion dentro del propio campo dep se cuela"
+
+
+def _correr_obsoletos_check(ledger: Path) -> tuple[int, str]:
+    """Run the publication gate over a given ledger."""
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "paper_obsoletos_check.py"),
+            "--ledger",
+            str(ledger),
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout
+
+
+def test_el_gate_de_publicacion_pasa_con_los_consumidores_marcados() -> None:
+    """Baseline: every declared consumer carries its quarantine banner."""
+    codigo, salida = _correr_obsoletos_check(LEDGER)
+    assert codigo == 0, salida
+
+
+def test_quitar_la_cuarentena_de_un_consumidor_rompe_el_gate(tmp_path: Path) -> None:
+    """The OBSOLETO state was announced and enforced nothing; now it blocks publication.
+
+    Se muta el DOCUMENTO, no el ledger, y se restaura despues: es la unica forma de comprobar que
+    el gate mira lo que dice mirar.
+    """
+    import shutil
+
+    doc = REPO_ROOT / "docs" / "paper" / "fase3-hallazgos.md"
+    respaldo = tmp_path / "respaldo.md"
+    shutil.copy2(doc, respaldo)
+    try:
+        texto = doc.read_text(encoding="utf-8")
+        assert "> **CUARENTENA**" in texto
+        doc.write_text(texto.replace("> **CUARENTENA**", "> Nota", 1), encoding="utf-8")
+        codigo, salida = _correr_obsoletos_check(LEDGER)
+        assert codigo == 1, salida
+        assert "fase3-hallazgos.md" in salida
+    finally:
+        shutil.copy2(respaldo, doc)

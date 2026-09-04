@@ -1,5 +1,12 @@
 # Fase 3 — la frontera rehecha, y la hipótesis no se sostiene
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Fase**: 3 de [`docs/plan-micai-2027.md`](../plan-micai-2027.md), bajo el preregistro de
 [`preregistro-fases-3-4.md`](preregistro-fases-3-4.md) y tras la
 [auditoría ciega](auditoria-2026-09-02.md).

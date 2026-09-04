@@ -13,7 +13,9 @@ now verifies three things a ledger row asserts and cannot be trusted on:
    commit that never produced them, which is what three preregistration rows were doing.
 2. The sealing commit in the header is an ancestor of HEAD **and no older than any row it
    seals**. Ancestry alone accepted the root commit, 467 commits back.
-3. A row that says an artefact is not tracked by git is telling the truth.
+3. A row that says an artefact is not tracked by git is telling the truth — and a row that says
+   neither is refused. The first version only ran the check when it *found* a SHA, so a cell with
+   a dash skipped provenance entirely.
 
 Rows whose state is ``OBSOLETO`` are sealed and verified like any other — the bytes are what
 they say — but were produced by code since found defective. **They cannot be cited.** The state is
@@ -238,6 +240,14 @@ def main() -> int:
             sha_fila = commit_fila.group(1)
             shas_de_fila.append(sha_fila)
             failures.extend(_verificar_blob(sha_fila, row, esta_en_git))
+        elif not declara_sin_git:
+            # La verificacion solo corria cuando ENCONTRABA un sha, asi que una celda con una raya
+            # —o vacia, o con texto— saltaba el control entero. Una fila sellada declara su
+            # procedencia o dice explicitamente que no la tiene; no hay tercera opcion.
+            failures.append(
+                f"{row['path']}: la fila esta {row['state']} y su celda de procedencia "
+                f"({row['git'].strip() or 'vacia'!r}) no declara ni un commit ni «{SIN_GIT}»"
+            )
         if declara_sin_git and esta_en_git:
             failures.append(
                 f"{row['path']}: el ledger dice «{SIN_GIT}» y el archivo si esta versionado"

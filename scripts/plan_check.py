@@ -202,11 +202,15 @@ def _textos(story: dict[str, Any]) -> list[str]:
     strings and flat lists, and the next audit slipped it into a nested ``meta`` dictionary. This
     one recurses, so there is no field name — present or future, at any depth — that hides it.
 
+    The dependency field itself is included. Excluding it looked harmless and was the third
+    bypass: ``dep:"Sin dependencias; US-172, ..."`` declared four dependencies and denied them in
+    the same string, and the gate did not read that string.
+
     Args:
         story: One story object from the plan.
 
     Returns:
-        The story's text values, excluding the dependency field itself.
+        Every text value in the story, at any depth.
     """
     salida: list[str] = []
 
@@ -222,9 +226,7 @@ def _textos(story: dict[str, Any]) -> list[str]:
                 recorrer(k)
                 recorrer(v)
 
-    for clave, valor in story.items():
-        if clave == "dep":
-            continue
+    for valor in story.values():
         recorrer(valor)
     return salida
 

@@ -5,7 +5,7 @@ historia de usuario*. Se cierra cuando **el comportamiento cambió** y hay dónd
 historia planificada es un compromiso, no una corrección, y contarla como cierre fue exactamente lo
 que la segunda auditoría desmontó.
 
-Cuatro rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
+Cinco rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
 cierres falsos. La tercera, tres cierres parciales contados enteros y un gate burlable moviendo una
 frase de campo. La cuarta encontró **fugas dentro de las reparaciones de la tercera**: un umbral que
 seguía leyendo el bloque de prueba por una rendija más estrecha, un gate de custodia que verificaba
@@ -13,6 +13,40 @@ los bytes de hoy pero no que el commit los hubiera producido, y un gate de plan 
 pero no diccionarios. Lo que sigue es el estado real.
 
 
+
+
+---
+
+## Ronda 5 — 4 de septiembre de 2026
+
+La ronda 4 arregló tres cosas y la 5 encontró que **dos de las tres reparaciones tenían el mismo
+tipo de agujero que arreglaban**. No es mala suerte: es que reparábamos el caso que nos habían
+enseñado y no la clase de casos.
+
+### Cerrado en esta ronda, con su evidencia
+
+| # | Hallazgo | Qué cambió de comportamiento |
+|---|---|---|
+| Q1 | **«Tres bloques» significaba tres elementos de una lista.** Tres puntos con `block=0` daban `n_unidades=3`, intervalo y p | `_exigir_bloques_pareados` rechaza bloques repetidos y brazos no pareados por `(k, bloque)`. Dos tests, los dos **comprobados fallando** sobre la versión anterior. El mínimo protegía la aritmética y no protegía nada: contaba posiciones |
+| Q2 | **El delta restaba dos `nanmean` independientes** mientras el intervalo usaba pares completos, así que el delta publicado no era el centro de su propio intervalo | `delta = media de las diferencias pareadas`. Lo mismo en el bootstrap, que ahora promedia diferencias por bloque y cuenta `sorteos_indefinidos`. El test viejo no podía verlo porque su brazo derecho valía siempre 0,5; el nuevo **exige explícitamente** que las dos fórmulas difieran en el caso de prueba |
+| Q3 | **Una fila del ledger con una raya en la celda de procedencia pasaba**: la verificación solo corría cuando *encontraba* un SHA | Una fila sellada declara su commit o dice explícitamente que no está versionada. No hay tercera opción, y hay test |
+| Q4 | **El gate de dependencias excluía el campo `dep`**, así que la contradicción cabía dentro de la propia lista de dependencias | Se lee el objeto entero, `dep` incluido. Test |
+| Q5 | **`OBSOLETO` avisaba y no impedía nada**: imprimía y devolvía éxito, mientras ocho documentos activos citaban esas cifras | **Gate de publicación nuevo**, `make paper-obsoletos-check`: un documento que cita cifras obsoletas lleva marca de cuarentena o falla, y uno que nombra una ruta obsoleta sin estar declarado también. Los ocho documentos llevan ya la marca. Probado quitándosela a uno |
+| Q6 | **Un test fosilizaba la redacción retirada** («le refutaron la hipótesis») usándola como ancla | Las tres mutaciones se anclan en la **estructura** del objeto, no en frases del plan |
+| Q7 | **El rol de US-140 contradecía a su propio criterio de aceptación** | Dice «H1-2026 no replicó bajo el análisis exploratorio corregido» |
+| Q8 | **US-155 y US-171 conservaban como criterio de aceptación cifras de artefactos OBSOLETO** | Reescritos: se recalculan y **se acepta lo que salga**. Las cifras viejas quedan como lo que se creyó, no como expectativa |
+| Q9 | **El cuaderno seguía titulando «La afirmación que el artículo puede sostener»** y afirmando que no se distinguen | Retitulado a «la afirmación **a la que aspira**, y por qué hoy no se sostiene», con las tres cosas que faltan nombradas |
+| Q10 | **Dos porcentajes de esfuerzo incompatibles en la misma página**, ninguno derivable del plan | Retirados los dos. El reparto se lee de `make plan-check` y no se transcribe: transcribirlo es exactamente lo que produjo la incompatibilidad |
+| Q11 | **El ledger llamaba «separación espacial exacta» a la distancia entre centroides** | Corregido en las tres filas, con la cota superior dicha. Y la pregunta a Arthur pasa de 2,2 a 2,009 km y nombra los centroides |
+| Q12 | **El mínimo de tres bloques se presentaba como frontera de inferencia** | Declarado como **regla conservadora de publicación de este proyecto**, con su motivo, y separado de la independencia y del MDE, que son preguntas distintas |
+| Q13 | **US-172 permitía cerrar cada precio como «supuesto del artículo»** — la salida que vaciaba el único bloqueante sustantivo | Eliminada. Ahora exige protocolo de elicitación escrito antes, **al menos tres informantes de cada uno de los dos grupos afectados**, respuestas crudas guardadas, síntesis trazable celda por celda, y publicación del desacuerdo cuando lo haya. Un precio que nadie de fuera del equipo haya dicho en voz alta no entra |
+
+### Lo que sigue ABIERTO
+
+US-172, US-173, US-174 y US-175, y con ellas el criterio principal. El MDE con t central. La
+multiplicidad de toda la superficie. La selección de predictores sobre datos separados, que está
+declarada pero no reparada. Y los trece artefactos `OBSOLETO`, que ahora al menos **no se pueden
+citar sin decirlo**.
 
 ---
 
@@ -143,9 +177,14 @@ su dueño. No se repiten aquí para que no haya dos versiones del mismo estado.
    los hubiera producido.
 4. **Corregir donde se señaló y no en el resto de las apariciones** — el patrón entero de la
    ronda 3, y cinco casos más en la ronda 4.
-5. **Reparar por el camino ancho y dejar el estrecho abierto** — el patrón de la ronda 4: el umbral
-   salía de entrenamiento y su tasa no; el gate leía listas y no diccionarios; el gate de custodia
-   comparaba bytes y no procedencia. **Toda reparación se pregunta ahora por el camino de al lado.**
+5. **Reparar por el camino ancho y dejar el estrecho abierto** — la ronda 4: el umbral salía de
+   entrenamiento y su tasa no; el gate leía listas y no diccionarios; el gate de custodia comparaba
+   bytes y no procedencia. Y la ronda 5, otra vez sobre las mismas reparaciones: el mínimo de
+   bloques contaba posiciones de lista; el gate de custodia solo verificaba cuando *encontraba* un
+   sha; el de plan leía todo el objeto menos el campo de dependencias.
+6. **Reparar el caso que nos ensenaron en vez de la clase de casos.** Es la lectura de la ronda 5, y
+   la regla que sale de ella: ante cada reparación, preguntar **de qué clase es el defecto** y
+   buscar los demás miembros de esa clase antes de darla por hecha.
 
 Los cuatro tienen la misma raíz: **verificar el resultado en vez de verificar el mecanismo**, y
 después **verificar el ejemplo en vez de agotar el alcance**. Por eso ahora todo control nuevo se
@@ -156,6 +195,7 @@ muera con la sesión, y toda corrección se busca en todas sus apariciones antes
 
 ## Veredicto vigente
 
-**No se arranca.** Las cuatro rondas coinciden en el mismo único cambio: **US-172, la tabla de
+**No se arranca.** Las cinco rondas coinciden en el mismo único cambio: **US-172, la tabla de
 pérdidas por acción, resultado y afectado**, obtenida de usuarios reales y no de nuestra intuición.
-Todo lo demás está esperando a eso.
+La ronda 5 añadió lo que faltaba: su criterio de aceptación permitía cerrarla declarando cada precio
+como «supuesto del artículo», que es cerrarla sin hacerla. Esa salida está eliminada.

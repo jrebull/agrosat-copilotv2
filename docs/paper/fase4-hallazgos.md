@@ -1,5 +1,12 @@
 # Fase 4 · La descomposición se transporta, y más limpia que en el conjunto primario
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md): las produjo `ml/eval/paper_micai_coverage.py`
+> cuando aun tenia los tres defectos —denominador movil, punto de operacion elegido dentro del
+> bloque evaluado, y remuestreo a nivel de parcela—. **Ninguna de esas cifras entra en el
+> articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
+> lo que creimos importa tanto como lo que resulte.
+
 **Fecha**: 3 de septiembre de 2026 · **Artefactos**: `reports/paper_micai/fase4/` ·
 **Preregistro**: [`preregistro-fases-3-4.md`](preregistro-fases-3-4.md), enmienda 1 y
 correcciones 1 y 2 · **Fase previa**: [`fase3-hallazgos.md`](fase3-hallazgos.md)
