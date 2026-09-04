@@ -7,7 +7,7 @@
 > articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
 > lo que creimos importa tanto como lo que resulte.
 
-**Estado**: BORRADOR, y tras la **segunda** auditoría externa sigue siéndolo. Cuatro parámetros están abiertos: la **función de pérdida**, el **estimando con su población**, la **banda de equivalencia** y el **criterio principal**. No se firma hasta cerrarlos los cuatro, y no vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
+**Estado**: BORRADOR, y tras la **segunda** auditoría externa sigue siéndolo. **Tres** parámetros están abiertos: la **función de pérdida**, el **margen práctico** y el **criterio principal**. El **estimando y su población quedan cerrados** en §4.5 y en [`estimando-v1.json`](estimando-v1.json). No se firma hasta cerrarlos los cuatro, y no vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
 
 Este documento existe porque el preregistro anterior se citó como credencial mientras se omitía que **el análisis de entonces reportaba que su hipótesis no replicaba** y que la regla de entrega había cambiado. Lo que se omitió es el hecho de haberlo reportado; **el veredicto en sí está hoy pendiente** (§7), porque las cifras que lo sostenían están invalidadas. (Esta frase decía primero «se había refutado» y después «no había replicado»: las dos afirmaban el veredicto, y la segunda lo afirmaba mientras el §7 lo declaraba pendiente.) Aquí se declara todo antes, incluidos los grados de libertad que la vez pasada nadie sabía que lo eran.
 
@@ -21,7 +21,9 @@ Un mapa de cultivos que no alcanza calidad puede prometer menos de cuatro manera
 
 No es solo un criterio, es una expectativa con su razón, y se declara para poder equivocarnos por escrito:
 
-> **H1.** A igual pérdida esperada por parcela, los cuatro mecanismos **no se distinguirán** en calidad agregada dentro de una banda de equivalencia **por declarar**.
+> **H1.** **En puntos de operación seleccionados en entrenamiento para un mismo presupuesto de pérdida**, los cuatro mecanismos **no se distinguirán** en calidad agregada dentro de una banda de equivalencia **por declarar**.
+>
+> La formulación anterior decía «a igual pérdida esperada por parcela», y eso solo se consigue igualando en la prueba, que es justo lo que §4.5 prohíbe y lo que el código ya impide. El presupuesto se fija en entrenamiento; lo que la prueba estime es el resultado realizado, y puede no ser igual entre mecanismos.
 >
 > Porque todos operan sobre la misma posterior y solo redistribuyen su incertidumbre.
 >
@@ -108,12 +110,15 @@ La regla candidata era: promediar solo sobre las clases con al menos **S = 20** 
 | Jaccard mínimo entre dos universos | **0,400** |
 | Jaccard medio entre universos | 0,565 |
 
-Seis clases de dieciocho son comunes a los cinco bloques. **No se firma el suelo así.** Las dos salidas honestas, y hay que elegir una en la firma:
+Seis clases de dieciocho son comunes a los cinco bloques. **DECIDIDO: universo común de clases fijado exclusivamente desde ENTRENAMIENTO**, el mismo para todos los mecanismos y todos los bloques.
 
-1. **Universo común fijado desde entrenamiento**, no desde las etiquetas del bloque evaluado, y el mismo para los cinco. Cuesta clases, pero el estimando es uno.
-2. **Estimando clase×bloque declarado**, con su ponderación explícita y *partial pooling*, y entonces el objeto que se estima no es una macro sino otra cosa, y se llama por su nombre.
+- Se deriva de las etiquetas de entrenamiento y **nunca de las del bloque evaluado**, que es lo que hacía móvil el denominador.
+- Es **uno solo**: el mismo conjunto de clases para los cinco bloques y para los seis mecanismos, así que dos números del artículo siempre se refieren a la misma población de clases.
+- Cuesta clases, y ese es su precio declarado.
 
-Lo que ya no se puede hacer es la tercera: promediar cinco macros de denominador distinto y llamarlo el mismo estimando. **Es la misma clase de defecto por la que se cayó el resultado anterior**, y esta vez lo encontró alguien de fuera.
+**Se retira la alternativa** del estimando clase×bloque con *partial pooling*: era una salida legítima y dejarla abierta significaba elegirla después, que es el defecto que este documento existe para impedir.
+
+Lo que ya no se puede hacer es promediar cinco macros de denominador distinto y llamarlo el mismo estimando. **Es la misma clase de defecto por la que se cayó el resultado anterior**, y esta vez lo encontró alguien de fuera.
 
 Para el registro, la medición que justificaba `S = 20` sigue siendo correcta en lo suyo: es el mayor suelo que conserva **10 clases** y el **96,7 %** de las parcelas en el peor bloque con `k = 5`; con `S = 30` bajan a 8 clases y 92,7 %, y con `S = 50` a 5 y 84,7 %. Eso mide el precio del suelo, no resuelve el denominador.
 
@@ -131,9 +136,40 @@ Se define **aquí**, no en la historia que lo calcula, porque una medida definid
 
 ### 4.5 El estimando y su población
 
-**Falta declararlo, y el diseño hoy mezcla dos.** O inferencia **condicional al conjunto de datos**, con el parche como clúster y el alcance local reconocido —y entonces el artículo **no afirma transporte**—; o inferencia **entre regiones y campañas**, con sitio-año como unidad y bancos genuinamente independientes.
+**DECIDIDO: inferencia condicional al conjunto de datos.** El diseño mezclaba dos y había que
+elegir una; se elige la que el diseño sostiene, no la que más nos convendría. La decisión vive
+además en un contrato ejecutable, [`estimando-v1.json`](estimando-v1.json), que un gate comprueba
+contra este apartado.
 
-Partir el mismo territorio más fino no crea réplicas nuevas. **Medido, y con los dos conjuntos nombrados por separado**, porque la vez pasada se citó un número como si fuera el otro:
+| | |
+|---|---|
+| **Alcance** | Condicional a cada banco, su región y campaña, su partición y su predictor |
+| **Población** | Todas las parcelas elegibles del bloque de prueba, **incluidas las que no reciben entrega** |
+| **Unidad observacional** | La parcela |
+| **Clúster de dependencia** | `patch_id`. Con menos de **tres clústeres únicos pareados**, el resultado es descriptivo: sin intervalo, sin p y sin Holm |
+| **Entre bancos** | **Ningún promedio inferencial.** Cada banco se reporta por separado |
+| **Transporte** | **No se afirma.** Ni a otras regiones ni a otras campañas |
+| **`k`** | Parámetro de **sensibilidad espacial**. No es un número de réplicas ni una palanca de potencia |
+| **PASTIS y BreizhCrops** | Siguen siendo **exploratorios** |
+
+**El estimando, simbólicamente**, sin inventar ninguna pérdida —la `L` la fija US-172—:
+
+$$R_{d,a,m}=\frac{1}{N_d}\sum_{i=1}^{N_d} L_a\bigl(y_i, C_{m,\tau_m}(x_i)\bigr)$$
+
+donde `d` es el banco con su partición, `a` el afectado, `m` el mecanismo, `N_d` **todas** las
+parcelas elegibles del bloque de prueba y `C_{m,τ_m}` el conjunto que el mecanismo emite con su
+punto de operación `τ_m`.
+
+> **`τ_m` se obtiene ENTERAMENTE de entrenamiento y validación.** La prueba solo estima el resultado
+> realizado. **Queda prohibido volver a igualar pérdida, cobertura o tasa usando la prueba**, que es
+> exactamente la fuga que dos auditorías encontraron en `confidence_baseline` —primero el umbral,
+> después su tasa objetivo— y que la invariancia ya implementada impide en el código.
+
+**Qué se pierde al elegir esto, dicho aquí**: el artículo no puede afirmar que sus conclusiones se
+transporten a otra región o campaña, y no lo afirmará. Lo que gana es que lo que sí afirme está
+sostenido por el diseño que tiene, en vez de por el que nos habría gustado tener.
+
+Partir el mismo territorio más fino no crea réplicas nuevas. **Medido, y con los dos conjuntos nombrados por separado**, porque la vez pasada se citó un número como si fuera el otro. La fuente única de estas cifras es la clave `solapamiento_entre_bloques` de [`reports/paper_micai/prereg/parametros_prereg.json`](../../reports/paper_micai/prereg/parametros_prereg.json); **no se vuelven a escribir desde ninguna otra**:
 
 | k | Jaccard medio entre **entrenamientos** | máximo | Jaccard medio entre **entrenamiento + validación** | máximo |
 |---:|---:|---:|---:|---:|

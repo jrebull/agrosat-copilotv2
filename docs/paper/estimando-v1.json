@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "fuente_normativa": "docs/paper/preregistro-v2-borrador.md, seccion 4.5",
+  "decidido": "2026-09-04",
+  "para_que": [
+    "Este fichero es la fuente NORMATIVA del estimando, no una copia de la prosa. Un contrato que",
+    "vive solo en un parrafo se contradice con el codigo sin que nadie lo note: aqui lo comprueba",
+    "`make preregistro-check`, que falla si el JSON y la seccion 4.5 divergen.",
+    "La funcion de perdida L NO esta aqui: la fija US-172 con usuarios reales, y ponerla ahora",
+    "seria inventarla."
+  ],
+  "scope": "dataset_conditional",
+  "population": "all_eligible_test_parcels",
+  "analysis_unit": "parcel",
+  "dependence_cluster": "patch_id",
+  "include_non_delivery": true,
+  "class_universe_source": "training_only",
+  "common_class_universe": true,
+  "operating_point_source": "training_validation_only",
+  "rematch_on_test": false,
+  "pool_across_datasets": false,
+  "transport_claim": false,
+  "minimum_unique_paired_clusters": 3,
+  "k_role": "spatial_sensitivity_not_replication",
+  "notas": {
+    "minimum_unique_paired_clusters": "Regla conservadora de publicacion, no frontera matematica: por debajo el resultado es descriptivo, sin intervalo, sin p y sin Holm.",
+    "rematch_on_test": "Igualar perdida, cobertura o tasa usando la prueba es la fuga que dos auditorias encontraron en confidence_baseline. La invariancia del umbral ya lo impide en el codigo.",
+    "transport_claim": "El precio declarado de elegir inferencia condicional: el articulo no afirma transporte a otras regiones ni campanas."
+  }
+}
