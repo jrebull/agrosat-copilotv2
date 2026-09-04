@@ -521,3 +521,27 @@ def test_borrar_las_permutaciones_rompe_el_gate(tmp_path: Path) -> None:
     codigo, salida = _correr_protocolo_check(copia)
     assert codigo == 1, salida
     assert "permutaciones" in salida
+
+
+def test_quitar_la_cuarentena_del_estado_del_manuscrito_rompe_el_gate(tmp_path: Path) -> None:
+    """``paper/micai/ESTADO.md`` cites invalidated figures, so it is a consumer, not an exemption.
+
+    Estuvo exento y ademas fuera del barrido —que solo recorria `docs/paper/`—, asi que el gate
+    daba verde sin verlo mientras el fichero afirmaba un veredicto con las cuatro cifras
+    invalidadas. Dos agujeros de la misma clase: eximir por lista y eximir por ubicacion.
+    """
+    import shutil
+
+    doc = REPO_ROOT / "paper" / "micai" / "ESTADO.md"
+    respaldo = tmp_path / "respaldo.md"
+    shutil.copy2(doc, respaldo)
+    try:
+        texto = doc.read_text(encoding="utf-8")
+        assert "> **CUARENTENA**" in texto
+        doc.write_text(texto.replace("> **CUARENTENA**", "> Nota", 1), encoding="utf-8")
+        codigo, salida = _correr_obsoletos_check(LEDGER)
+        assert codigo == 1, salida
+        assert "ESTADO.md" in salida
+    finally:
+        shutil.copy2(respaldo, doc)
+    assert _correr_obsoletos_check(LEDGER)[0] == 0

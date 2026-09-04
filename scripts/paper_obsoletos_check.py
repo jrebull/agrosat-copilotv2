@@ -63,6 +63,7 @@ CONSUMIDORES: tuple[str, ...] = (
     "docs/paper/reencuadre-2026-09-03.md",
     "docs/paper/auditoria-revisores-2026-09-03.md",
     "docs/paper/revision-arthur-2026-09-03.md",
+    "paper/micai/ESTADO.md",
 )
 
 #: Documentos que hablan DE la obsolescencia y no citan cifras como vigentes.
@@ -71,7 +72,6 @@ EXENTOS: tuple[str, ...] = (
     "docs/paper/auditoria-externa/prompt-revalidacion.md",
     "docs/paper/auditoria-externa/prompt-auditoria-externa.md",
     "paper/ARTIFACTS.md",
-    "paper/micai/ESTADO.md",
 )
 
 #: Documentos RECIBIDOS de terceros, que se archivan textualmente. No son afirmaciones nuestras y
@@ -194,6 +194,13 @@ def main() -> int:
         help="Raiz de documentos a vigilar. Existe para poder probar el gate en negativo.",
     )
     parser.add_argument(
+        "--extra",
+        type=Path,
+        action="append",
+        default=None,
+        help="Raices adicionales a vigilar. Por defecto, `paper/`.",
+    )
+    parser.add_argument(
         "--sitio",
         type=Path,
         default=REPO_ROOT.parent / "agrosat-micai-site",
@@ -243,7 +250,8 @@ def main() -> int:
     # Cualquier documento que nombre una ruta obsoleta, o reproduzca una de sus cifras, sin estar
     # declarado ni exento.
     declarados = set(CONSUMIDORES) | set(EXENTOS)
-    for ruta in sorted(args.docs.rglob("*.md")):
+    raices = [args.docs, *(args.extra or [REPO_ROOT / "paper"])]
+    for ruta in sorted({x for raiz in raices for x in raiz.rglob("*.md")}):
         absoluta = ruta.resolve()
         relativo = (
             str(absoluta.relative_to(REPO_ROOT))
