@@ -155,9 +155,17 @@ Los dos universos de clases se reportan los dos. El criterio principal se report
 
 Toda desviación posterior entra como enmienda fechada **antes** de calcular el contraste afectado, incluida cualquiera que toque la regla de entrega, el estimando o `k`.
 
-**Enmienda 3 al preregistro anterior**, que faltaba: se declara que **`H1-2026` no replicó bajo el análisis exploratorio corregido** —el intervalo pasaba de (−0,0430, −0,0147) con p = 0,005 a (−0,0410, +0,0077) con p = 0,130 al componer las dos correcciones de protocolo; **las cuatro cifras salieron del módulo con los tres defectos y se recalculan antes de firmar**— y que la **regla de entrega cambió** del oráculo de etiqueta a la predicción, con el efecto medido de ese cambio.
+**Enmienda 3 al preregistro anterior**, que faltaba: se declara que **el veredicto sobre `H1-2026` está PENDIENTE** —no «no replicó», que es lo que decía aquí y era afirmar con las cifras que se reconocen invalidadas dos líneas más abajo—. Lo que sí se declara sin depender de ninguna cifra es que la **regla de entrega cambió**. Lo que se observó, y se recalcula antes de firmar, fue que `H1-2026` no replicaba bajo el análisis exploratorio corregido —el intervalo pasaba de (−0,0430, −0,0147) con p = 0,005 a (−0,0410, +0,0077) con p = 0,130 al componer las dos correcciones de protocolo; **las cuatro cifras salieron del módulo con los tres defectos y se recalculan antes de firmar**— y que la **regla de entrega cambió** del oráculo de etiqueta a la predicción, con el efecto medido de ese cambio.
 
-**No se dice «`H1-2026` se refutó».** Dos motivos, y los dos son de la segunda auditoría: el inferencial que produjo ese resultado conserva el remuestreo defectuoso que US-125 aún no ha reparado, y un análisis exploratorio corregido a posteriori no refuta, no replica.
+**Ni «se refutó» ni «no replicó»: PENDIENTE.** Tres motivos, uno por auditoría:
+
+1. El inferencial que produjo ese resultado conservaba el remuestreo defectuoso, hoy reparado pero
+   sin regenerar los artefactos.
+2. Un análisis exploratorio corregido a posteriori no refuta.
+3. Y el que faltaba, de la sexta auditoría: **las cuatro cifras que sostienen el veredicto están
+   invalidadas**, así que el veredicto lo está también. Decir «no replicó» mientras se reconoce que
+   sus números no valen es exactamente lo que este documento existe para impedir. El veredicto se
+   emite cuando se recalcule, y puede salir en cualquiera de los dos sentidos.
 
 ## 8. Criterio de no envío
 

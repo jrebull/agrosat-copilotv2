@@ -58,7 +58,7 @@ La enmienda 1 obliga a publicar los dos universos y prohíbe elegir. El artícul
 
 ## 7. El preregistro se cita como credencial y se omite lo que dice — VERIFICADO
 
-Faltan dos cosas en el apéndice: que **H1-2026 no replicó** —así lo decía este apartado: «H1 se refutó», y es la palabra que después prohibimos, porque un exploratorio corregido a posteriori no refuta— y que la regla de entrega **cambió** respecto de la preregistrada (que era el oráculo de etiqueta). El cambio es correcto y es justo el que invirtió el resultado, y no está declarado como enmienda.
+Faltan dos cosas en el apéndice: el **veredicto sobre H1-2026**, hoy pendiente —este apartado decía «H1 se refutó», que es la palabra que después prohibimos; luego «no replicó», que tampoco vale mientras sus cuatro cifras estén invalidadas— y que la regla de entrega **cambió** respecto de la preregistrada (que era el oráculo de etiqueta). El cambio es correcto y es justo el que invirtió el resultado, y no está declarado como enmienda.
 
 ## 8. Una contribución anunciada que no existe — VERIFICADO
 

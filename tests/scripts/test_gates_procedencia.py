@@ -9,7 +9,6 @@ que el gate se rompa.
 from __future__ import annotations
 
 import importlib.util
-import math
 import re
 import subprocess
 import sys
@@ -114,7 +113,6 @@ def test_el_ledger_vigente_pasa_su_gate() -> None:
 def test_un_commit_de_sellado_inventado_rompe_el_gate(tmp_path: Path) -> None:
     """A sealing commit that is not in the history of HEAD is provenance, not decoration."""
     texto = LEDGER.read_text(encoding="utf-8")
-    import re
 
     mutado = re.sub(r"(\*\*Commit de sellado\*\*: `)[0-9a-f]{7,40}(`)", r"\g<1>deadbee\g<2>", texto)
     assert mutado != texto, "no se encontro el commit de sellado en la cabecera"
@@ -127,7 +125,6 @@ def test_un_commit_de_sellado_inventado_rompe_el_gate(tmp_path: Path) -> None:
 
 def test_decir_que_un_artefacto_no_esta_en_git_teniendolo_rompe_el_gate(tmp_path: Path) -> None:
     """The custody gate compared bytes for two rounds and never looked at provenance."""
-    import re
 
     texto = LEDGER.read_text(encoding="utf-8")
     seguidos = set(
@@ -180,7 +177,6 @@ def test_el_gate_de_dependencias_tambien_mira_dentro_de_un_dict_anidado(
 
 def test_un_commit_de_fila_inventado_rompe_el_gate(tmp_path: Path) -> None:
     """A row's commit has to exist. The audit replaced one with `deadbee` and the gate said OK."""
-    import re
 
     texto = LEDGER.read_text(encoding="utf-8")
     mutado, n = re.subn(
@@ -196,7 +192,6 @@ def test_un_commit_de_fila_inventado_rompe_el_gate(tmp_path: Path) -> None:
 
 def test_un_sello_anterior_a_sus_filas_rompe_el_gate(tmp_path: Path) -> None:
     """Ancestry alone accepted the root commit, 467 back. A seal cannot predate what it seals."""
-    import re
 
     raiz = subprocess.run(
         ["git", "rev-list", "--max-parents=0", "HEAD"],
@@ -224,7 +219,6 @@ def test_un_md5_que_ese_commit_nunca_produjo_rompe_el_gate(tmp_path: Path) -> No
     hoy pase y solo pueda fallar la de procedencia. Sin esto el test no distinguiria los dos
     controles.
     """
-    import re
     import shutil
 
     texto = LEDGER.read_text(encoding="utf-8")
@@ -263,7 +257,6 @@ def test_un_md5_que_ese_commit_nunca_produjo_rompe_el_gate(tmp_path: Path) -> No
 
 def test_una_fila_sellada_sin_commit_ni_excusa_rompe_el_gate(tmp_path: Path) -> None:
     """The provenance check only ran when it FOUND a SHA, so a dash skipped it entirely."""
-    import re
 
     texto = LEDGER.read_text(encoding="utf-8")
     mutado, n = re.subn(
@@ -341,48 +334,14 @@ def test_quitar_la_cuarentena_de_un_consumidor_rompe_el_gate(tmp_path: Path) -> 
 def test_copiar_una_cifra_obsoleta_a_otro_documento_rompe_el_gate(tmp_path: Path) -> None:
     """Prose copies numbers, not paths. Watching only the path was the hole.
 
-    Una auditoria copio 0,0326 al preregistro sin nombrar el artefacto y el gate paso. Ahora las
-    cifras distintivas —cuatro decimales o mas— se extraen de los propios artefactos obsoletos.
+    Una auditoria copio una cifra al preregistro sin nombrar el artefacto y el gate paso. Ahora
+    las cifras distintivas —cuatro decimales o mas— se extraen de los propios artefactos.
     """
-    codigo, salida = _correr_obsoletos_check(LEDGER)
-    assert codigo == 0, salida
-    cifra = re.search(r"p\. ej\. (\d+,\d{4})", salida)
-    if cifra is None:
-        # El gate esta verde, asi que se toma una cifra de un artefacto obsoleto directamente.
-        import json
-
-        datos = json.loads(
-            (REPO_ROOT / "reports/paper_micai/bloques/bloques.json").read_text(encoding="utf-8")
-        )
-        crudos: list[float] = []
-
-        def recoger(v: object) -> None:
-            if isinstance(v, bool):
-                return
-            if isinstance(v, int | float):
-                crudos.append(float(v))
-            elif isinstance(v, dict):
-                for x in v.values():
-                    recoger(x)
-            elif isinstance(v, list):
-                for x in v:
-                    recoger(x)
-
-        recoger(datos)
-        candidatas = [
-            f"{abs(x):.10f}".rstrip("0") for x in crudos if abs(x) < 1000 and not math.isnan(x)
-        ]
-        largas = [c for c in candidatas if len(c.partition(".")[2]) >= 4]
-        assert largas, "el artefacto obsoleto no trae ninguna cifra distintiva"
-        entero, _, dec = largas[0].partition(".")
-        texto_cifra = f"{entero},{dec[:4]}"
-    else:
-        texto_cifra = cifra.group(1)
-
+    cifra = _una_cifra_vigilada()
     docs = tmp_path / "docs"
     docs.mkdir()
     (docs / "documento-nuevo.md").write_text(
-        f"# Un documento activo\n\nEl efecto medido fue {texto_cifra} y lo damos por bueno.\n",
+        f"# Un documento activo\n\nEl efecto medido fue {cifra} y lo damos por bueno.\n",
         encoding="utf-8",
     )
     proc = subprocess.run(
@@ -401,3 +360,57 @@ def test_copiar_una_cifra_obsoleta_a_otro_documento_rompe_el_gate(tmp_path: Path
     )
     assert proc.returncode == 1, proc.stdout
     assert "reproduce" in proc.stdout
+
+
+def _una_cifra_vigilada() -> str:
+    """One figure the publication gate is actually watching, taken from the gate itself."""
+    import importlib.util
+
+    ruta = REPO_ROOT / "scripts" / "paper_obsoletos_check.py"
+    spec = importlib.util.spec_from_file_location("obsoletos_bajo_prueba", ruta)
+    assert spec is not None and spec.loader is not None
+    modulo = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = modulo
+    spec.loader.exec_module(modulo)
+    vigiladas: set[str] = set()
+    for relativo in modulo.rutas_obsoletas(LEDGER):
+        vigiladas |= modulo.cifras_distintivas(REPO_ROOT / relativo)
+    assert vigiladas, "el gate no vigila ninguna cifra"
+    return sorted(vigiladas)[0]
+
+
+def test_un_documento_nuevo_en_revisiones_externas_no_queda_invisible() -> None:
+    """The exemption is a sealed list, not a folder: a folder hides anything dropped into it."""
+    intruso = REPO_ROOT / "docs" / "paper" / "revisiones-externas" / "_intruso_de_prueba.md"
+    assert not intruso.exists()
+    try:
+        # La cifra se toma del propio conjunto vigilado, no de memoria: escribir una a mano es
+        # como el test se vuelve una comprobacion de que la cifra elegida sigue existiendo.
+        cifra = _una_cifra_vigilada()
+        intruso.write_text(
+            f"# Documento colado\n\nEl efecto fue {cifra} y lo damos por bueno.\n",
+            encoding="utf-8",
+        )
+        codigo, salida = _correr_obsoletos_check(LEDGER)
+        assert codigo == 1, salida
+        assert "_intruso_de_prueba.md" in salida
+    finally:
+        intruso.unlink(missing_ok=True)
+    assert _correr_obsoletos_check(LEDGER)[0] == 0
+
+
+def test_editar_un_documento_recibido_rompe_el_gate(tmp_path: Path) -> None:
+    """The exemption promises the received document is untouched; the seal is what proves it."""
+    import shutil
+
+    doc = REPO_ROOT / "docs" / "paper" / "revisiones-externas" / "README.md"
+    respaldo = tmp_path / "respaldo.md"
+    shutil.copy2(doc, respaldo)
+    try:
+        doc.write_text(doc.read_text(encoding="utf-8") + "\nUna linea nuestra.\n", encoding="utf-8")
+        codigo, salida = _correr_obsoletos_check(LEDGER)
+        assert codigo == 1, salida
+        assert "su MD5 cambio" in salida
+    finally:
+        shutil.copy2(respaldo, doc)
+    assert _correr_obsoletos_check(LEDGER)[0] == 0

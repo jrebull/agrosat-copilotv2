@@ -5,7 +5,7 @@ historia de usuario*. Se cierra cuando **el comportamiento cambió** y hay dónd
 historia planificada es un compromiso, no una corrección, y contarla como cierre fue exactamente lo
 que la segunda auditoría desmontó.
 
-Seis rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
+Siete rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
 cierres falsos. La tercera, tres cierres parciales contados enteros y un gate burlable moviendo una
 frase de campo. La cuarta encontró **fugas dentro de las reparaciones de la tercera**: un umbral que
 seguía leyendo el bloque de prueba por una rendija más estrecha, un gate de custodia que verificaba
@@ -15,6 +15,23 @@ pero no diccionarios. Lo que sigue es el estado real.
 
 
 
+
+
+---
+
+## Ronda 7 — 4 de septiembre de 2026
+
+Dos precisiones, y la segunda es la más importante de todas las rondas para la firma.
+
+| # | Hallazgo | Qué cambió de comportamiento |
+|---|---|---|
+| U1 | **La exención del archivo ajeno cubría la CARPETA entera por prefijo**, así que cualquier fichero nuevo dejado allí quedaba invisible | Ahora es una **lista cerrada sellada por MD5**. El gate comprueba los tres sellos: un documento recibido que cambie de bytes falla, porque la exención prometía justo que no se toca. Dos tests: un fichero colado en la carpeta ya no es invisible, y editar uno recibido rompe el gate |
+| U2 | **El veredicto sobre `H1-2026` se afirmaba mientras se reconocía que sus cifras están invalidadas** | El veredicto queda **PENDIENTE**, no solo sus números. Ni «se refutó» ni «no replicó»: se recalcula, y puede salir en cualquiera de los dos sentidos. Corregido en el preregistro, en US-140 —criterio de aceptación **y rol**—, en el cuaderno y en el documento de revisores |
+
+**U2 es la lección que no habíamos aprendido en seis rondas.** Habíamos retirado la cifra y dejado
+la conclusión, que es la misma operación que el artículo denuncia: **una conclusión no sobrevive a
+los números que la sostienen.** Lo que sí se declara sin depender de ninguna cifra es que la regla
+de entrega cambió.
 
 ---
 
@@ -203,6 +220,10 @@ su dueño. No se repiten aquí para que no haya dos versiones del mismo estado.
 6. **Reparar el caso que nos ensenaron en vez de la clase de casos.** Es la lectura de la ronda 5, y
    la regla que sale de ella: ante cada reparación, preguntar **de qué clase es el defecto** y
    buscar los demás miembros de esa clase antes de darla por hecha.
+7. **Retirar la cifra y dejar la conclusión.** La ronda 7: reconocíamos que las cuatro cifras del
+   veredicto sobre `H1-2026` estaban invalidadas y seguíamos afirmando el veredicto. **Una
+   conclusión no sobrevive a los números que la sostienen**, y es exactamente lo que el artículo
+   denuncia en otros. Al invalidar una cifra hay que preguntar qué afirmaciones caen con ella.
 
 Los cuatro tienen la misma raíz: **verificar el resultado en vez de verificar el mecanismo**, y
 después **verificar el ejemplo en vez de agotar el alcance**. Por eso ahora todo control nuevo se

@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -75,7 +76,20 @@ EXENTOS: tuple[str, ...] = (
 
 #: Documentos RECIBIDOS de terceros, que se archivan textualmente. No son afirmaciones nuestras y
 #: no se retocan: marcarlos con cuarentena seria editar lo que alguien nos escribio.
-ARCHIVO_AJENO: tuple[str, ...] = ("docs/paper/revisiones-externas/",)
+#:
+#: Es una LISTA CERRADA con el sello de cada archivo, no un prefijo de carpeta. Eximir la carpeta
+#: hacia invisible cualquier fichero nuevo que alguien dejara alli, y el sello ademas comprueba lo
+#: que la exencion promete: que el documento recibido no se ha tocado. Anadir uno exige registrar
+#: su MD5 aqui, que es el mismo gesto que sellar un artefacto.
+ARCHIVO_AJENO: dict[str, str] = {
+    "docs/paper/revisiones-externas/README.md": "22cf1d34c49a66b392ee183f974e19ff",
+    "docs/paper/revisiones-externas/evaluacion-cuaderno-micai-2027.md": (
+        "3a6f122e32a1c16fd1fcf85097d95766"
+    ),
+    "docs/paper/revisiones-externas/rutas-micai-2027-post-hallazgos.md": (
+        "c9d435e8e7ec239230ff91b6ba19cd00"
+    ),
+}
 
 
 #: Decimales minimos para que una cifra se considere distintiva de su artefacto. Con menos, un
@@ -204,6 +218,21 @@ def main() -> int:
                 f"{relativo}: cita cifras de artefactos OBSOLETO y no lleva la marca de cuarentena"
             )
 
+    # El archivo ajeno se comprueba, no se cree: la exencion promete que esos documentos no se han
+    # tocado, y un sello es la unica forma de que esa promesa signifique algo.
+    for relativo, sello in ARCHIVO_AJENO.items():
+        ruta = REPO_ROOT / relativo
+        if not ruta.exists():
+            fallos.append(f"{relativo}: exento como archivo ajeno y no esta en disco")
+            continue
+        digest = hashlib.md5(ruta.read_bytes()).hexdigest()  # noqa: S324 - sello de custodia
+        if digest != sello:
+            fallos.append(
+                f"{relativo}: es un documento recibido y su MD5 cambio ({digest} frente a "
+                f"{sello}). O se edito, que es lo que la exencion prometia no hacer, o hay que "
+                "resellarlo con un motivo"
+            )
+
     # Las cifras distintivas de cada artefacto obsoleto, con su origen.
     origen: dict[str, str] = {}
     for relativo in obsoletas:
@@ -221,7 +250,7 @@ def main() -> int:
             if absoluta.is_relative_to(REPO_ROOT)
             else str(absoluta)
         )
-        if relativo in declarados or any(relativo.startswith(x) for x in ARCHIVO_AJENO):
+        if relativo in declarados or relativo in ARCHIVO_AJENO:
             continue
         texto = ruta.read_text(encoding="utf-8")
         citadas = [x for x in obsoletas if x in texto]
@@ -260,6 +289,7 @@ def main() -> int:
         print(f"paper-obsoletos-check: {len(fallos)} fallo(s)")
         return 1
     print(f"consumidores declarados con cuarentena: {len(CONSUMIDORES)}")
+    print(f"documentos recibidos, exentos y sellados: {len(ARCHIVO_AJENO)}")
     print("paper-obsoletos-check: OK")
     return 0
 

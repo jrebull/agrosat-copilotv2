@@ -212,3 +212,26 @@ artefactos `OBSOLETO`, sin regenerar.
    no vimos. Al escanear el cuaderno público encontró 22 cifras que la versión anterior no veía.
 2. **La clase, no el caso**, otra vez: por cada reparación de esta ronda, busca los demás miembros
    de su clase.
+
+---
+
+## Estado para la ronda 8
+
+La ronda 7 dejó dos precisiones, y la segunda produjo el séptimo patrón: *retirar la cifra y dejar
+la conclusión*.
+
+| Qué se tocó | Dónde comprobarlo |
+|---|---|
+| La exención de documentos recibidos es una **lista cerrada sellada por MD5**, no un prefijo de carpeta | `scripts/paper_obsoletos_check.py::ARCHIVO_AJENO`; dos tests: fichero colado y documento editado |
+| **El veredicto sobre `H1-2026` queda PENDIENTE**, no solo sus cifras | Preregistro §7, US-140 (criterio **y** rol), `index.html`, documento de revisores |
+
+**Lo que NO cambió**: US-172 a US-175, y con ellas el criterio principal. El MDE con t central. La
+multiplicidad de toda la superficie. La selección de predictores sobre datos separados. Los trece
+artefactos `OBSOLETO`, sin regenerar.
+
+**Para la ronda 8**, además de las tres partes, el encargo que sale de U2 y es el más productivo que
+nos han dado:
+
+> **Toma cada cifra invalidada y pregunta qué AFIRMACIONES caen con ella.** No qué documentos la
+> copian —eso ya lo comprueba un gate— sino qué conclusiones dejan de estar sostenidas cuando su
+> número desaparece. Seis rondas retirando cifras y dejando en pie lo que decían.
