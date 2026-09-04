@@ -4,7 +4,7 @@ Cada cifra impresa en el artículo debe re-derivarse desde un archivo de esta ta
 Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` recalcula
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
-**Sellado el**: 2026-09-03 · **Commit de sellado**: `e2a61aa`
+**Sellado el**: 2026-09-03 · **Commit de sellado**: `574ae74`
 > El gate comprueba que ese commit exista y este en la historia de HEAD, e imprime cuantos
 > commits ha quedado atras. No se exige que sea HEAD: el commit que actualiza el ledger no
 > puede conocer su propio sha.
@@ -125,6 +125,8 @@ del diseño y siguen vigentes.
 | Consulta etica US-172: consentimiento | `reports/us172/consentimiento-US172-v0.2.pdf` | `30b5d7545726bb81ea843cf63a0089f8` | 22213 | sin seguimiento en git (`*.pdf` global) | SELLADO | Anexo A, para el comite y para los informantes. `make us172-adjuntos` lo reconstruye byte a byte con SOURCE_DATE_EPOCH fijo. |
 | Consulta etica US-172: filtro-elegibilidad | `reports/us172/filtro-elegibilidad-US172-v0.2.pdf` | `f382262eed063d875db4c1c4d8b0c8fd` | 21785 | sin seguimiento en git (`*.pdf` global) | SELLADO | Anexo D, con registro de todos los contactados incluidos excluidos y declinantes. `make us172-adjuntos` lo reconstruye byte a byte con SOURCE_DATE_EPOCH fijo. |
 | Consulta etica US-172: plan-custodia | `reports/us172/plan-custodia-US172-v0.2.pdf` | `de291133edba7fb202ece7a8071a8d1b` | 32719 | sin seguimiento en git (`*.pdf` global) | SELLADO | Apartados 6, 9 y 10 bis: custodio, cifrado, permisos, retencion, destruccion, vinculo reversible y campos operativos pendientes. `make us172-adjuntos` lo reconstruye byte a byte con SOURCE_DATE_EPOCH fijo. |
+| Verificacion OOF: tsvit-pheno-fullm | `reports/paper_micai/oof/verificacion-tsvit-pheno-fullm.json` | `f695d3fd3731143e190be317f5f68f58` | 1401 | `574ae74` | SELLADO | Verificacion del re-volcado: 496 parches, 28 532 parcelas, argmax igual en 28 531 de 28 532 (0,999965) y diferencia media 9e-06 frente al fichero historico, con los cuatro estratos de confianza. Es lo que acredita su procedencia. |
+| Verificacion OOF: xgb-alphaearth-remat-v1 | `reports/paper_micai/oof/verificacion-xgb-alphaearth-remat-v1.json` | `930db7a73ebffa1439179aae0723d91c` | 1091 | `574ae74` | SELLADO | Comparacion de la re-materializacion con el historico: argmax 0,9454, y por estratos 0,5474 por debajo de 0,5 de confianza frente a 0,9999 por encima de 0,9. El desacuerdo esta donde el modelo duda, que es la franja sobre la que opera el articulo. |
 | Equidad: cobertura por clase bajo cada mecanismo | `reports/paper_micai/equidad/cobertura_por_clase.csv` | `a254affe1425a0e5a55622e9c09bf601` | 1115 | `9e6fc19` | OBSOLETO | Quien paga la abstencion, medido. Responde a la objecion de que citabamos a Jones et al. al reves. |
 | Equidad: correlaciones y clases sin cobertura | `reports/paper_micai/equidad/equidad.json` | `1ddb39e59fd5990ab3ffd2e342620df1` | 1303 | `9e6fc19` | OBSOLETO | Spearman entre soporte y cobertura por mecanismo y banco, con su p. |
 | Fase 6: manuscrito MICAI, fuente principal | `paper/micai/main.tex` | `b603d1ba9600aa537cfc8710a2c236ce` | 4388 | `6fa433d` | SELLADO | Clase llncs con `\newif\ifanon`; anonimo por defecto, A4 real, `hidelinks`. |
