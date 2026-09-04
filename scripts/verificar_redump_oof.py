@@ -88,19 +88,25 @@ def main() -> int:
         # codificacion posicional se desalineaba y el F1-macro caia de 0,7883 a 0,2552. Este
         # guion IMPRIMIA los model_kwargs del registro y nunca comprobaba que el dataset los
         # hubiera usado: verificaba la configuracion declarada, no la efectiva.
-        t_ckpt = spec.model_kwargs.get("n_timesteps")
+        t_model_spec = int(spec.model_kwargs.get("n_timesteps", 10))
         t_ds = entrada.get("n_timesteps_dataset")
-        informe["n_timesteps_checkpoint"] = t_ckpt
+        t_manifest_spec = entrada.get("n_timesteps_model_spec")
+        informe["n_timesteps_model_spec"] = t_model_spec
         informe["n_timesteps_dataset"] = t_ds
-        print(f"n_timesteps: checkpoint={t_ckpt}  dataset={t_ds}")
-        if t_ckpt is not None and t_ds is None:
+        print(f"n_timesteps: model_spec={t_model_spec}  dataset={t_ds}")
+        if t_manifest_spec != t_model_spec:
+            fallos.append(
+                f"el manifiesto registra n_timesteps_model_spec={t_manifest_spec} y el registro "
+                f"activo exige {t_model_spec}"
+            )
+        if t_ds is None:
             fallos.append(
                 "el volcado no registra el n_timesteps del dataset: sin ese campo, un volcado "
                 "con la T equivocada es indistinguible de uno correcto mirando su manifiesto"
             )
-        elif t_ckpt is not None and int(t_ds) != int(t_ckpt):
+        elif int(t_ds) != t_model_spec:
             fallos.append(
-                f"el dataset uso n_timesteps={t_ds} y el checkpoint espera {t_ckpt}: la "
+                f"el dataset uso n_timesteps={t_ds} y la especificacion exige {t_model_spec}: la "
                 "codificacion posicional temporal queda desalineada y las metricas se hunden "
                 "sin que nada aborte"
             )

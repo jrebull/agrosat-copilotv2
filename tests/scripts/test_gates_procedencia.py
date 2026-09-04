@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -812,3 +813,86 @@ def test_ni_el_parquet_ni_su_puntero_rompe_el_gate(tmp_path: Path) -> None:
     codigo, salida = _correr_oof_check(copia)
     assert codigo == 1, salida
     assert "ni el parquet ni su puntero" in salida
+
+
+def _convert_manifest_to_v2(oof: Path) -> dict[str, Any]:
+    """Upgrade the copied historical manifest to the current executable contract."""
+    import json
+
+    path = oof / "manifest.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["schema_version"] = 2
+    for entry in data["models"].values():
+        if entry["status"] != "ok":
+            continue
+        entry["code_version"] = data["code_version"]
+        entry["data_version"] = data["data_version"]
+        if entry["model_kind"] in {
+            "tsvit",
+            "tsvit-pheno",
+            "tsvit-pheno-fullm",
+            "utae",
+            "anysat",
+        }:
+            entry["n_timesteps_dataset"] = 10
+            entry["n_timesteps_model_spec"] = 10
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    return data
+
+
+def test_complete_v2_manifest_passes(tmp_path: Path) -> None:
+    """The positive v2 control proves the new checks are satisfiable."""
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    _convert_manifest_to_v2(oof)
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 0, salida
+
+
+def test_temporal_entry_without_effective_steps_fails(tmp_path: Path) -> None:
+    """A temporal entry cannot hide the parameter that couples model and dataset."""
+    import json
+
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    data = _convert_manifest_to_v2(oof)
+    temporal = next(
+        entry
+        for entry in data["models"].values()
+        if entry["model_kind"] in {"tsvit-pheno", "utae", "anysat"}
+    )
+    temporal.pop("n_timesteps_dataset")
+    (oof / "manifest.json").write_text(json.dumps(data), encoding="utf-8")
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 1, salida
+    assert "no declara ambas configuraciones" in salida
+
+
+def test_mismatched_temporal_steps_fail(tmp_path: Path) -> None:
+    """Counting both fields is insufficient: the control enforces their coupling."""
+    import json
+
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    data = _convert_manifest_to_v2(oof)
+    temporal = next(
+        entry
+        for entry in data["models"].values()
+        if entry["model_kind"] in {"tsvit-pheno", "utae", "anysat"}
+    )
+    temporal["n_timesteps_dataset"] = 37
+    (oof / "manifest.json").write_text(json.dumps(data), encoding="utf-8")
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 1, salida
+    assert "no coinciden" in salida
+
+
+def test_model_appended_from_another_run_fails(tmp_path: Path) -> None:
+    """Per-entry provenance catches the append that top-level provenance could not."""
+    import json
+
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    data = _convert_manifest_to_v2(oof)
+    first = next(iter(data["models"].values()))
+    first["code_version"] = "otra-corrida"
+    (oof / "manifest.json").write_text(json.dumps(data), encoding="utf-8")
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 1, salida
+    assert "code_version de la entrada" in salida

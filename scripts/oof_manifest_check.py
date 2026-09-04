@@ -39,6 +39,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OOF = REPO_ROOT / "ml" / "eval" / "oof"
 ESTADOS = ("canonical", "legacy_unverified", "excluded")
+TEMPORAL_KINDS = frozenset({"tsvit", "tsvit-pheno", "tsvit-pheno-fullm", "utae", "anysat"})
 
 
 def _verificar_puntero(puntero: Path, nombre: str, entrada: dict[str, object]) -> list[str]:
@@ -73,6 +74,43 @@ def _verificar_puntero(puntero: Path, nombre: str, entrada: dict[str, object]) -
             f"{entrada.get('bytes')}"
         )
     return fallos
+
+
+def _check_run_manifest(manifest: dict[str, object]) -> list[str]:
+    """Validate effective configuration and provenance in schema-v2 run manifests.
+
+    Version 1 is retained as historical evidence and is protected by the custody
+    ledger. Version 2 makes every successful entry self-contained so appending a
+    model from another run or omitting the effective temporal configuration fails.
+    """
+    if manifest.get("schema_version") != 2:
+        return []
+    failures: list[str] = []
+    code_version = manifest.get("code_version")
+    data_version = manifest.get("data_version")
+    models = manifest.get("models")
+    if not isinstance(models, dict):
+        return ["manifest.json v2: models no es un objeto"]
+    for model, raw_entry in models.items():
+        if not isinstance(raw_entry, dict) or raw_entry.get("status") != "ok":
+            continue
+        if raw_entry.get("code_version") != code_version:
+            failures.append(f"{model}: code_version de la entrada no coincide con el de la corrida")
+        if raw_entry.get("data_version") != data_version:
+            failures.append(f"{model}: data_version de la entrada no coincide con el de la corrida")
+        if raw_entry.get("model_kind") in TEMPORAL_KINDS:
+            dataset_steps = raw_entry.get("n_timesteps_dataset")
+            model_steps = raw_entry.get("n_timesteps_model_spec")
+            if dataset_steps is None or model_steps is None:
+                failures.append(
+                    f"{model}: la entrada temporal no declara ambas configuraciones n_timesteps"
+                )
+            elif dataset_steps != model_steps:
+                failures.append(
+                    f"{model}: n_timesteps_dataset={dataset_steps} y "
+                    f"n_timesteps_model_spec={model_steps} no coinciden"
+                )
+    return failures
 
 
 def main() -> int:
@@ -127,6 +165,7 @@ def main() -> int:
     manifiesto_path = args.oof / "manifest.json"
     if manifiesto_path.exists():
         manifiesto = json.loads(manifiesto_path.read_text(encoding="utf-8"))
+        fallos.extend(_check_run_manifest(manifiesto))
         for modelo, datos in manifiesto.get("models", {}).items():
             if datos.get("status") != "ok":
                 continue

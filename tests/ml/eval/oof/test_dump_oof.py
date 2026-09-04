@@ -496,6 +496,7 @@ def test_dump_writes_manifest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     assert manifest_path.exists()
     loaded = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert loaded["fold"] == 5
+    assert loaded["schema_version"] == 2
     assert loaded["num_classes"] == 18
     assert loaded["size"] == 128
     assert "code_version" in loaded
@@ -503,6 +504,33 @@ def test_dump_writes_manifest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     entry = loaded["models"]["deeplabv3plus"]
     assert entry["status"] == "ok"
     assert entry["dtype"] == "float16"
+    assert entry["code_version"] == loaded["code_version"]
+    assert entry["data_version"] == loaded["data_version"]
+
+
+def test_temporal_manifest_records_effective_dataset_and_model_spec(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A temporal run records both sides of the configuration coupling."""
+    _install_dump_mocks(monkeypatch, native_num_classes=18)
+    spec = CheckpointSpec(
+        name="tsvit-pheno-fullm",
+        model_kind="tsvit-pheno-fullm",
+        path=Path(__file__).resolve(),
+        native_num_classes=18,
+        native_ignore_index=255,
+        model_kwargs={"n_timesteps": 37},
+    )
+    manifest = dump_mod.dump_oof(
+        {"tsvit-pheno-fullm": spec},
+        fold=5,
+        out_dir=tmp_path,
+        device="cpu",
+        max_patches=1,
+    )
+    entry = manifest["models"]["tsvit-pheno-fullm"]
+    assert entry["n_timesteps_dataset"] == 37
+    assert entry["n_timesteps_model_spec"] == 37
 
 
 def test_dump_cli_smoke(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

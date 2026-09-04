@@ -98,7 +98,7 @@
       "procedencia": {
         "checkpoint": "checkpoints/segmentation/tsvit-pheno-fullm-v1/best.pt",
         "checkpoint_md5": "22ae8074b2c689565f8b854a56e4c5f5",
-        "n_timesteps_checkpoint": 37,
+        "n_timesteps_model_spec": 37,
         "n_timesteps_dataset": 37,
         "n_patches": 496,
         "n_parcelas": 28532,
@@ -110,7 +110,7 @@
           "diferencia_media_absoluta": 0.0,
           "por_estrato": "1,0000 en los cuatro estratos de confianza"
         },
-        "leccion": "Una reproduccion NO acredita procedencia si el productor tiene un defecto: acredita que el defecto es reproducible. Por eso dump_oof registra ahora n_timesteps_dataset y n_timesteps_checkpoint en el manifiesto, y el verificador comprueba que coincidan: sin ese campo, un volcado con la T equivocada es indistinguible de uno correcto."
+        "leccion": "Una reproduccion NO acredita procedencia si el productor tiene un defecto: acredita que el defecto es reproducible. Por eso dump_oof registra ahora n_timesteps_dataset y n_timesteps_model_spec en el manifiesto, y el verificador comprueba que coincidan: sin esos campos, un volcado con la T equivocada es indistinguible de uno correcto."
       }
     },
     "oof_parcel_tsvit-pheno_fold5.parquet": {
