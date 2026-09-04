@@ -33,6 +33,13 @@ la conclusión, que es la misma operación que el artículo denuncia: **una conc
 los números que la sostienen.** Lo que sí se declara sin depender de ninguna cifra es que la regla
 de entrega cambió.
 
+**Y U2 tuvo dos apariciones más, encontradas en la comprobación siguiente**: la entradilla del
+preregistro y la del cuaderno seguían afirmando el veredicto —«no había replicado»— mientras el §7
+del mismo documento lo declaraba pendiente. Corregidas: lo que se omitió en su día fue **haber
+reportado** que no replicaba, y eso sí es un hecho sobre nuestra conducta; el veredicto en sí sigue
+pendiente. Retirar una afirmación exige buscarla en primera línea igual que en la letra pequeña, y
+las dos veces estaba en la primera.
+
 ---
 
 ## Ronda 6 — 4 de septiembre de 2026
