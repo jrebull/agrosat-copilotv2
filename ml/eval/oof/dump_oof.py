@@ -377,6 +377,12 @@ def _dump_one(
         "shape": [HARNESS_NUM_CLASSES, HARNESS_SIZE, HARNESS_SIZE],
         "dtype": dtype,
         "n_patches": n_scored,
+        # El parametro cuyo desajuste hundio las metricas de Full-M queda REGISTRADO en el
+        # artefacto. Sin el, un volcado con T=10 y otro con T=37 son indistinguibles mirando su
+        # manifiesto, y una verificacion que compare dos salidas del mismo bug las da por buenas:
+        # eso fue exactamente lo que paso.
+        "n_timesteps_dataset": ds_kwargs.get("n_timesteps"),
+        "n_timesteps_checkpoint": spec.model_kwargs.get("n_timesteps"),
         "status": "ok",
         "held_out": held_out,
         "reason": None,

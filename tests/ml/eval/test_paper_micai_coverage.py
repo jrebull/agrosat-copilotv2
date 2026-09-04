@@ -8,6 +8,8 @@ pueda volver en silencio, y cada uno se comprobo fallando sobre la implementacio
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -381,3 +383,55 @@ def test_el_delta_es_la_media_de_las_diferencias_pareadas() -> None:
     assert r["n_unidades"] == 3
     # Y el delta cae dentro de su propio intervalo, que es lo minimo exigible.
     assert r["ci_low"] <= r["delta"] <= r["ci_high"]
+
+
+# --------------------------------------------------------------------------------------
+# US-118: el dataset del volcado tiene que recibir el n_timesteps del checkpoint.
+# --------------------------------------------------------------------------------------
+
+
+def test_el_volcado_pasa_al_dataset_el_n_timesteps_del_checkpoint(monkeypatch) -> None:
+    """The dump must feed the dataset the same T the checkpoint was trained with.
+
+    Es el defecto que hundio a Full-M de 0,7883 a 0,2552: el volcado reconstruia el modelo con
+    T=37 y alimentaba al dataset con 10, la codificacion posicional ordinal se desalineaba y
+    `load_state_dict(strict=False)` no abortaba. Nada fallaba; solo las metricas.
+
+    Y es tambien el defecto que una verificacion nuestra dio por bueno, porque comparaba el
+    re-volcado con el fichero anterior y los dos salian del mismo bug. Este test mira el
+    MECANISMO: que kwargs recibe el dataset.
+    """
+    from ml.data import pastis_seg_dataset
+    from ml.eval import checkpoint_registry
+    from ml.eval.oof import dump_oof as modulo
+
+    recibidos: dict[str, object] = {}
+
+    class _DatasetEspia:
+        def __init__(self, **kwargs: object) -> None:
+            recibidos.update(kwargs)
+            raise FileNotFoundError("el espia no llega a leer datos, y no le hace falta")
+
+    # El volcado importa la clase DENTRO de la funcion, asi que el espia va en su modulo.
+    monkeypatch.setattr(pastis_seg_dataset, "PASTISSegmentationDataset", _DatasetEspia)
+    spec = checkpoint_registry.CHECKPOINT_REGISTRY["tsvit-pheno-fullm"]
+    esperado = int(spec.model_kwargs["n_timesteps"])
+
+    entrada = modulo._dump_one(
+        spec,
+        fold=5,
+        out_dir=Path("/tmp"),
+        data_root=Path("data/PASTIS-R"),
+        device="cpu",
+        dtype="float16",
+        max_patches=1,
+        skip_missing=True,
+        write_parcel=False,
+        code_version="test",
+        data_version="test",
+    )
+    assert recibidos.get("n_timesteps") == esperado, (
+        f"el dataset recibio n_timesteps={recibidos.get('n_timesteps')} y el checkpoint espera "
+        f"{esperado}"
+    )
+    assert entrada["status"] == "missing"

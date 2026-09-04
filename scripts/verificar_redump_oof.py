@@ -4,9 +4,12 @@ Promover primero y comprobar despues es como el arnes publico una cifra que era 
 malo ya estaba donde los consumidores leen. Aqui se comprueba en el temporal, y la promocion es un
 paso aparte que solo ocurre si todo pasa.
 
-Comprueba seis cosas, y la ultima es la que de verdad interesa:
+Comprueba siete cosas, y las dos ultimas son las que de verdad interesan:
 
 1. La configuracion usada es la del registro de checkpoints, campo a campo.
+1 bis. **El dataset recibio el mismo `n_timesteps` que el checkpoint.** Es la comprobacion que
+   faltaba, y su ausencia hizo que este guion diera por bueno un fichero producido por un bug:
+   comparaba el re-volcado con el fichero anterior, y los dos salian del mismo defecto.
 2. El MD5 del checkpoint coincide con el que se declara.
 3. El volcado denso cubre los 496 parches del fold retenido.
 4. El volcado por parcela cubre las mismas parcelas que un miembro canonico.
@@ -78,6 +81,29 @@ def main() -> int:
         informe["checkpoint"] = str(Path(spec.path).relative_to(REPO_ROOT))
         informe["checkpoint_md5"] = digest
         informe["model_kwargs"] = dict(spec.model_kwargs)
+
+        # 2 bis. EL ACOPLAMIENTO ENTRE EL MODELO Y EL DATASET. Es la comprobacion que le
+        # faltaba a este guion y por la que dio por bueno un fichero producido por un bug: el
+        # volcado reconstruia el modelo con n_timesteps=37 y alimentaba al dataset con 10, la
+        # codificacion posicional se desalineaba y el F1-macro caia de 0,7883 a 0,2552. Este
+        # guion IMPRIMIA los model_kwargs del registro y nunca comprobaba que el dataset los
+        # hubiera usado: verificaba la configuracion declarada, no la efectiva.
+        t_ckpt = spec.model_kwargs.get("n_timesteps")
+        t_ds = entrada.get("n_timesteps_dataset")
+        informe["n_timesteps_checkpoint"] = t_ckpt
+        informe["n_timesteps_dataset"] = t_ds
+        print(f"n_timesteps: checkpoint={t_ckpt}  dataset={t_ds}")
+        if t_ckpt is not None and t_ds is None:
+            fallos.append(
+                "el volcado no registra el n_timesteps del dataset: sin ese campo, un volcado "
+                "con la T equivocada es indistinguible de uno correcto mirando su manifiesto"
+            )
+        elif t_ckpt is not None and int(t_ds) != int(t_ckpt):
+            fallos.append(
+                f"el dataset uso n_timesteps={t_ds} y el checkpoint espera {t_ckpt}: la "
+                "codificacion posicional temporal queda desalineada y las metricas se hunden "
+                "sin que nada aborte"
+            )
 
         # 3. Cobertura densa.
         n_patches = entrada.get("n_patches")
