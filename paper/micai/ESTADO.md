@@ -39,6 +39,7 @@ las dos correcciones de protocolo el intervalo pasaba de (−0,0430, −0,0147) 
 
 El plan por épicas, con la **EPIC 27** a la cabeza: la tabla de pérdidas, el estimando y su
 población, y el margen práctico. Nada se computa antes de que el preregistro esté firmado
-(`docs/paper/preregistro-v2-borrador.md`, hoy en BORRADOR con cuatro parámetros abiertos).
+(`docs/paper/preregistro-v2-borrador.md`, hoy en BORRADOR con tres parámetros abiertos: función de
+pérdida, margen práctico y criterio principal; el estimando y su población ya están cerrados).
 
 El manuscrito nuevo es US-144 y siguientes, y **empieza cuando la EPIC 27 cierre**, no antes.

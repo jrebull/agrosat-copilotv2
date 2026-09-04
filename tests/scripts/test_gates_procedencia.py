@@ -580,6 +580,22 @@ def test_el_contrato_vigente_cuadra_con_la_prosa() -> None:
     assert codigo == 0, salida
 
 
+def test_cerrar_el_estimando_y_seguir_exigiendo_cuatro_parametros_rompe_el_gate(
+    tmp_path: Path,
+) -> None:
+    """The same header cannot declare three open parameters and then require closing four."""
+    texto = PREREGISTRO.read_text(encoding="utf-8")
+    mutado = texto.replace(
+        "No se firma hasta cerrar esos tres",
+        "No se firma hasta cerrarlos los cuatro",
+    )
+    copia = tmp_path / "preregistro.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_preregistro_check(CONTRATO, copia)
+    assert codigo == 1, salida
+    assert "tres parámetros" in salida
+
+
 @pytest.mark.parametrize(
     ("clave", "valor"),
     [

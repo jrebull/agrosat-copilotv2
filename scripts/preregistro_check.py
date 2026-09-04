@@ -63,6 +63,8 @@ COHERENCIA: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("class_universe_source", "fijado exclusivamente desde ENTRENAMIENTO", ()),
 )
 
+HEADER_COHERENCE_CHECKS = 3
+
 
 def _seccion_45(texto: str) -> str:
     """The prose of section 4.5, which is what the contract has to agree with."""
@@ -71,6 +73,12 @@ def _seccion_45(texto: str) -> str:
         return ""
     fin = texto.find("\n## ", inicio)
     return texto[inicio : fin if fin > 0 else len(texto)]
+
+
+def _cabecera(texto: str) -> str:
+    """Return the pre-registration header before the first numbered section."""
+    fin = texto.find("\n## 1.")
+    return texto[: fin if fin > 0 else len(texto)]
 
 
 def main() -> int:
@@ -98,12 +106,20 @@ def main() -> int:
                 f"`{clave}` vale {contrato[clave]!r} y la decision de US-173 es {valor!r}"
             )
 
-    prosa = _seccion_45(args.preregistro.read_text(encoding="utf-8"))
+    texto_preregistro = args.preregistro.read_text(encoding="utf-8")
+    cabecera = _cabecera(texto_preregistro)
+    prosa = _seccion_45(texto_preregistro)
+    if "**Tres** parámetros están abiertos" not in cabecera:
+        fallos.append("la cabecera no declara exactamente tres parámetros abiertos")
+    if "No se firma hasta cerrar esos tres" not in cabecera:
+        fallos.append("la regla de firma no exige cerrar los tres parámetros que siguen abiertos")
+    if "cerrarlos los cuatro" in cabecera:
+        fallos.append("la cabecera cierra el estimando pero todavía exige cerrar cuatro parámetros")
     if not prosa:
         fallos.append("el preregistro no tiene seccion 4.5: el contrato no tiene con que cuadrar")
     else:
         # La clave del universo de clases se decide en 4.2, no en 4.5.
-        completo = args.preregistro.read_text(encoding="utf-8")
+        completo = texto_preregistro
         for clave, debe, no_puede in COHERENCIA:
             ambito = completo if clave == "class_universe_source" else prosa
             if debe not in ambito:
@@ -115,11 +131,11 @@ def main() -> int:
                     )
 
     # La formula del estimando tiene que estar, y no puede traer una perdida inventada.
-    if not re.search(r"R_\{d,a,m\}", args.preregistro.read_text(encoding="utf-8")):
+    if not re.search(r"R_\{d,a,m\}", texto_preregistro):
         fallos.append("el preregistro no declara el estimando simbolicamente")
 
     print(f"claves del contrato verificadas: {len(EXIGIDO)}")
-    print(f"comprobaciones de coherencia con la prosa: {len(COHERENCIA)}")
+    print(f"comprobaciones de coherencia con la prosa: {len(COHERENCIA) + HEADER_COHERENCE_CHECKS}")
     for fallo in fallos:
         print(f"FALLO: {fallo}")
     if fallos:

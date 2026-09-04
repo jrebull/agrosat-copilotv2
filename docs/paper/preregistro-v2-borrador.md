@@ -7,7 +7,7 @@
 > articulo** hasta regenerarlas (US-124, US-125). Se conservan sin retocar porque el registro de
 > lo que creimos importa tanto como lo que resulte.
 
-**Estado**: BORRADOR, y tras la **segunda** auditoría externa sigue siéndolo. **Tres** parámetros están abiertos: la **función de pérdida**, el **margen práctico** y el **criterio principal**. El **estimando y su población quedan cerrados** en §4.5 y en [`estimando-v1.json`](estimando-v1.json). No se firma hasta cerrarlos los cuatro, y no vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
+**Estado**: BORRADOR, y tras la **segunda** auditoría externa sigue siéndolo. **Tres** parámetros están abiertos: la **función de pérdida**, el **margen práctico** y el **criterio principal**. El **estimando y su población quedan cerrados** en §4.5 y en [`estimando-v1.json`](estimando-v1.json). No se firma hasta cerrar esos tres, y no vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
 
 Este documento existe porque el preregistro anterior se citó como credencial mientras se omitía que **el análisis de entonces reportaba que su hipótesis no replicaba** y que la regla de entrega había cambiado. Lo que se omitió es el hecho de haberlo reportado; **el veredicto en sí está hoy pendiente** (§7), porque las cifras que lo sostenían están invalidadas. (Esta frase decía primero «se había refutado» y después «no había replicado»: las dos afirmaban el veredicto, y la segunda lo afirmaba mientras el §7 lo declaraba pendiente.) Aquí se declara todo antes, incluidos los grados de libertad que la vez pasada nadie sabía que lo eran.
 
