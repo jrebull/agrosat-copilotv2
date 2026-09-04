@@ -116,3 +116,37 @@ reparado hoy están pendientes de regenerar**, con el aviso en la cabecera del l
 **Para la ronda 4, además de las tres partes de arriba, busca específicamente el patrón de la
 ronda 3**: una corrección aplicada en un documento y no en los otros que dicen lo mismo. Y
 comprueba si los controles nuevos son burlables por el camino de al lado, como lo fue el anterior.
+
+---
+
+## Estado para la ronda 5
+
+La ronda 4 encontró **fugas dentro de las reparaciones de la ronda 3**, y de ahí sale el quinto
+patrón: *reparar por el camino ancho y dejar el estrecho abierto*.
+
+| Qué se tocó | Dónde comprobarlo |
+|---|---|
+| El punto de operación entero sale de entrenamiento, tasa incluida | `ml/eval/paper_micai_coverage.py::umbral_desde_entrenamiento`; test de **invariancia** frente a cualquier cambio en el bloque de prueba |
+| Con menos de tres bloques definidos no hay intervalo, ni p, ni Holm | `paired_interval`; `run_paper_micai_fase3.py` y `fase4.py` escriben `motivo_sin_holm` |
+| Varianza cero: separados «todo cero» y «constante no nula»; la segunda no inventa p | `paired_interval`, dos tests |
+| Lo indefinido es NaN, y los bloques indefinidos se cuentan | `macro_over`; clave `bloques_indefinidos` |
+| El gate de custodia verifica el **blob en el commit de cada fila** y que el sello no preceda a sus filas | `scripts/paper_artifacts_check.py`; `scripts/paper_artifacts_seal.py` calcula la columna desde git |
+| Estado **`OBSOLETO`** ejecutable: 13 filas verificadas pero no citables | `paper/ARTIFACTS.md`, salida del gate |
+| El gate de dependencias recorre diccionarios anidados | `scripts/plan_check.py::_textos` |
+| Retiradas del cuaderno las cifras del módulo defectuoso presentadas como corregidas | `index.html`, apartados de fase 3 y fase 4 |
+| «22 951 m entre parcelas» y «partición impecable», retirados | `index.html` |
+| «No se distinguen» deja de presentarse como sostenible | `docs/paper/recomendacion-final.md` §2 |
+| La selección de predictores sobre datos de evaluación, **declarada** en código y log | `scripts/run_paper_micai_fase3.py` |
+
+**Lo que NO cambió**: US-172, US-173, US-174 y US-175 siguen sin existir, y con ellas el criterio
+principal. El MDE sigue con t central. La multiplicidad de toda la superficie y la selección de
+predictores sobre datos separados siguen sin implementar. Los trece artefactos `OBSOLETO` siguen sin
+regenerar.
+
+**Para la ronda 5**, además de las tres partes, dos encargos concretos:
+
+1. **El camino de al lado, otra vez.** Cada reparación de esta ronda es un control nuevo. Intenta
+   burlarlo por donde no mira: el gate de custodia, el de plan, la invariancia del umbral y la regla
+   de los tres bloques.
+2. **La propagación.** Toma tres afirmaciones que esta ronda dice haber corregido y búscalas en
+   TODAS partes: plan, preregistro, cuaderno, ledger, docstrings y manuscrito.

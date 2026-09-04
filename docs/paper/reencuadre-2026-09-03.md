@@ -132,9 +132,11 @@ implícito, ¿acertó?
   puntos y presupuesto de nube al servicio de una sección que no existe.
 - **US-137, cuarto banco.** Tres bancos y dos continentes ya responden la objeción de transporte.
 - **US-150**, gobernanza disfrazada de trabajo de artículo.
-- **La reimplementación de un rechazador aprendido**, dentro de US-132. Chow, conforme y retroceso
-  jerárquico ya son un conjunto honesto de líneas base; reimplementar un SelectiveNet es un
-  proyecto de investigación en riesgo de ajuste que un revisor criticará se haga como se haga.
+- **La reimplementación de un rechazador aprendido**, dentro de US-132. **Es una exclusión de
+  alcance nuestra, no una imposibilidad**: cuesta presupuesto y arriesga sobreajuste, y el precio
+  que se paga es que el artículo no dice nada sobre mecanismos APRENDIDOS de renuncia. Decir que
+  «un revisor lo criticará se haga como se haga» era vestir nuestra decisión de inevitabilidad.
+  Chow, conforme y retroceso jerárquico quedan como líneas base declaradas.
 
 ### Las tres escotillas, cerradas
 

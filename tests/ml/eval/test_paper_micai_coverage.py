@@ -19,6 +19,7 @@ from ml.eval.paper_micai_coverage import (
     macro_over,
     paired_interval,
     presentes_en_bloque,
+    umbral_desde_entrenamiento,
 )
 
 
@@ -209,3 +210,120 @@ def test_el_intervalo_por_bloque_es_mas_ancho_que_el_de_parcela(universo) -> Non
         f"({ancho_parcela:.4f}): el remuestreo de parcelas esta comprando precision que el "
         "diseno no tiene"
     )
+
+
+# --------------------------------------------------------------------------------------
+# Ronda 4: la fuga que quedaba en el punto de operacion, y la inferencia donde no la hay.
+# --------------------------------------------------------------------------------------
+
+
+def test_el_umbral_no_depende_de_nada_del_bloque_de_prueba(universo) -> None:
+    """Invariance, not a symptom: the frozen threshold cannot move with any test-side change.
+
+    El test anterior comprobaba solo que los recuentos no coincidieran siempre, que es un
+    sintoma. Una auditoria mostro la fuga que dejaba pasar: la TASA objetivo seguia siendo
+    `ref.delivered.mean()`, o sea la cobertura que el otro mecanismo realizo EN EL BLOQUE DE
+    PRUEBA. Manteniendo el entrenamiento fijo y cambiando solo la mascara de referencia, la
+    entrega del comparador cambiaba. Aqui se comprueba el mecanismo: el umbral es funcion del
+    entrenamiento y de la leyenda, y de nada mas.
+    """
+    proba, _, splits = universo
+    train_pos, test_pos = splits[0]
+    legend = (0, 1, 2)
+    umbral = umbral_desde_entrenamiento(proba, train_pos, legend)
+
+    # Se destroza el bloque de prueba entero: otras posteriores, otro orden, otro tamano.
+    rng = np.random.default_rng(99)
+    otro = proba.copy()
+    otro[test_pos] = rng.dirichlet(np.ones(proba.shape[1]), size=test_pos.size)
+    assert umbral_desde_entrenamiento(otro, train_pos, legend) == umbral
+
+    # Y se comprueba que el umbral SI se mueve con el entrenamiento, para que el test no pase
+    # por ser insensible a todo.
+    otro_train = proba.copy()
+    otro_train[train_pos] = rng.dirichlet(np.ones(proba.shape[1]) * 5, size=train_pos.size)
+    assert umbral_desde_entrenamiento(otro_train, train_pos, legend) != umbral
+
+
+def test_cambiar_la_referencia_no_cambia_lo_que_entrega_el_comparador(universo) -> None:
+    """The comparator's delivery is a function of training and legend, not of the reference mask."""
+    proba, labels, splits = universo
+    libre = proba.argmax(axis=1)
+    ref = frontier(
+        proba,
+        labels,
+        splits,
+        (3,),
+        legend_fn=lambda train, k: legend_by_f1(labels, libre, train, k),
+        mechanism="retirada por F1",
+    )
+    original = [b.delivered.copy() for b in confidence_baseline(proba, labels, splits, ref)]
+
+    # Misma leyenda y mismo bloque, otra mascara de entrega en la referencia.
+    manipulada = [
+        BlockPoint(
+            mechanism=r.mechanism,
+            k=r.k,
+            block=r.block,
+            legend=r.legend,
+            delivered=np.zeros_like(r.delivered),
+            emitted=r.emitted,
+            aligned_f1=r.aligned_f1,
+            native_f1=r.native_f1,
+            accuracy=r.accuracy,
+        )
+        for r in ref
+    ]
+    despues = [b.delivered for b in confidence_baseline(proba, labels, splits, manipulada)]
+    for antes, ahora in zip(original, despues, strict=True):
+        assert np.array_equal(antes, ahora), (
+            "la entrega del comparador cambia al tocar la mascara de la referencia: el punto de "
+            "operacion sigue leyendo el bloque de prueba"
+        )
+
+
+def test_con_dos_bloques_no_hay_intervalo_ni_p() -> None:
+    """Two regions are two numbers. The contract says report both deltas and nothing else.
+
+    El productor de BreizhCrops tiene exactamente dos regiones y le estaba aplicando Holm a un
+    p que no deberia existir.
+    """
+    izq, der = _puntos([0.01, 0.03])
+    r = paired_interval(np.zeros(4, dtype=int), [], izq, der, unidad="bloque")
+    assert r["ci_low"] is None
+    assert r["ci_high"] is None
+    assert r["p_valor"] is None
+    assert r["excluye_cero"] is None
+    assert r["deltas_por_bloque"] == pytest.approx([0.01, 0.03])
+    assert "no se publica intervalo ni p" in r["motivo"]
+
+
+def test_varianza_cero_con_efecto_no_nulo_no_se_confunde_con_no_efecto() -> None:
+    """A constant non-zero difference is not "no difference", and there is no t to compute.
+
+    La rama de varianza cero devolvia p=1 y «no excluye el cero» para CUALQUIER constante, y el
+    unico test de esa rama usaba cuatro ceros: otra vez el unico valor que no distingue el bug.
+    """
+    izq, der = _puntos([0.1, 0.1, 0.1, 0.1])
+    r = paired_interval(np.zeros(4, dtype=int), [], izq, der, unidad="bloque")
+    assert r["ci_low"] == r["ci_high"] == pytest.approx(0.1)
+    assert r["excluye_cero"] == pytest.approx(1.0), "un intervalo en 0,1 no contiene el cero"
+    assert r["p_valor"] is None, "sin varianza no hay t, y no se inventa un p"
+    assert "no esta definida" in r["motivo"]
+
+
+def test_lo_indefinido_es_nan_y_no_un_cero_con_pinta_de_medida() -> None:
+    """An undefined cell must be visible to whoever averages it, not a perfect-failure zero."""
+    vacio = np.array([], dtype=int)
+    assert np.isnan(macro_over(vacio, vacio, [0, 1], presentes=(0, 1)))
+    verdad = np.array([0, 0, 1])
+    assert np.isnan(macro_over(verdad, verdad, [7, 8], presentes=presentes_en_bloque(verdad)))
+
+
+def test_un_bloque_indefinido_se_cuenta_en_vez_de_promediarse() -> None:
+    """The block interval drops undefined blocks and says how many it dropped."""
+    izq, der = _puntos([0.02, 0.04, 0.06, float("nan")])
+    r = paired_interval(np.zeros(4, dtype=int), [], izq, der, unidad="bloque")
+    assert r["bloques_indefinidos"] == 1
+    assert r["n_unidades"] == 3
+    assert r["p_valor"] is not None

@@ -199,9 +199,19 @@ def frontera(
     members = load_member_posteriors(OOF_DIR, ALL_MEMBERS, keys)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+    # DEFECTO DECLARADO, no reparado: los dos predictores se eligen puntuandolos sobre las MISMAS
+    # etiquetas que luego se usan para evaluarlos. Es seleccion sobre el conjunto de evaluacion, y
+    # sesga hacia arriba todo lo que venga despues. Repararlo necesita un conjunto separado o
+    # seleccion anidada, y es US-139. Mientras tanto se registra en el artefacto para que ningun
+    # lector lo tome por una eleccion ciega.
     ranking = sorted(((score(labels, p)["f1_macro"], n) for n, p in members.items()), reverse=True)
     predictors = [ranking[0][1], ranking[1][1]]
-    logger.info("predictores", principal=predictors[0], segundo=predictors[1])
+    logger.info(
+        "predictores",
+        principal=predictors[0],
+        segundo=predictors[1],
+        seleccion_sobre_evaluacion=True,
+    )
 
     rows: list[dict[str, Any]] = []
     contrasts: dict[str, Any] = {}
@@ -290,10 +300,22 @@ def frontera(
                 "excluye_cero_cluster": clu["excluye_cero"],
             }
 
-        ajustados = holm([crudos[k] for k in K_VALUES])
-        for k, adj in zip(K_VALUES, ajustados, strict=True):
-            detalle[f"k={k}"]["p_holm"] = adj
-            detalle[f"k={k}"]["significativo_holm"] = float(adj < 0.05)
+        # Holm sobre una familia que contiene un None no es una correccion: es un numero
+        # inventado. Si algun k no publica p —menos de tres bloques definidos— no hay familia.
+        familia = [crudos[k] for k in K_VALUES]
+        if any(x is None for x in familia):
+            for k in K_VALUES:
+                detalle[f"k={k}"]["p_holm"] = None
+                detalle[f"k={k}"]["significativo_holm"] = None
+                detalle[f"k={k}"]["motivo_sin_holm"] = (
+                    "algun k no publica p porque el intervalo por bloque necesita al menos tres "
+                    "bloques definidos"
+                )
+        else:
+            ajustados = holm([float(x) for x in familia])
+            for k, adj in zip(K_VALUES, ajustados, strict=True):
+                detalle[f"k={k}"]["p_holm"] = adj
+                detalle[f"k={k}"]["significativo_holm"] = float(adj < 0.05)
 
         contrasts[predictor] = {
             "criterio_principal": detalle[f"k={K_PRINCIPAL}"],

@@ -197,8 +197,10 @@ def _textos(story: dict[str, Any]) -> list[str]:
     """Every piece of prose in a story, whatever field it lives in.
 
     Walking the whole object instead of a hand-picked pair of fields is the difference between
-    a control and the appearance of one: the previous version read only ``ac`` and ``role``, and
-    the next audit slipped the claim into the title.
+    a control and the appearance of one, and it took two rounds to get right: the first version
+    read only ``ac`` and ``role``, and an audit slipped the claim into the title; the second read
+    strings and flat lists, and the next audit slipped it into a nested ``meta`` dictionary. This
+    one recurses, so there is no field name — present or future, at any depth — that hides it.
 
     Args:
         story: One story object from the plan.
@@ -207,13 +209,23 @@ def _textos(story: dict[str, Any]) -> list[str]:
         The story's text values, excluding the dependency field itself.
     """
     salida: list[str] = []
+
+    def recorrer(valor: object) -> None:
+        """Collect every string reachable from a value, at any depth."""
+        if isinstance(valor, str):
+            salida.append(valor)
+        elif isinstance(valor, list | tuple):
+            for x in valor:
+                recorrer(x)
+        elif isinstance(valor, dict):
+            for k, v in valor.items():
+                recorrer(k)
+                recorrer(v)
+
     for clave, valor in story.items():
         if clave == "dep":
             continue
-        if isinstance(valor, str):
-            salida.append(valor)
-        elif isinstance(valor, list):
-            salida.extend(str(x) for x in valor if isinstance(x, str))
+        recorrer(valor)
     return salida
 
 

@@ -157,3 +157,100 @@ def test_decir_que_un_artefacto_no_esta_en_git_teniendolo_rompe_el_gate(tmp_path
     codigo, salida = _correr_artifacts_check(copia)
     assert codigo == 1, salida
     assert mutada in salida
+
+
+# --------------------------------------------------------------------------------------
+# Ronda 4: los caminos de al lado que la auditoria encontro en los dos gates.
+# --------------------------------------------------------------------------------------
+
+
+def test_el_gate_de_dependencias_tambien_mira_dentro_de_un_dict_anidado(
+    plan: Path, tmp_path: Path
+) -> None:
+    """Nested fields are fields: the audit hid the claim in ``meta:{nota:...}`` and got a green."""
+    texto = plan.read_text(encoding="utf-8")
+    ancla = '{id:"US-140"'
+    assert ancla in texto
+    mutado = texto.replace(ancla, f'{ancla}, meta:{{nota:"Sin dependencias"}}', 1)
+    assert mutado != texto
+    copia = tmp_path / "plan.html"
+    copia.write_text(mutado, encoding="utf-8")
+    assert _correr_plan_check(copia) == 1, "la afirmacion escondida en un dict anidado se cuela"
+
+
+def test_un_commit_de_fila_inventado_rompe_el_gate(tmp_path: Path) -> None:
+    """A row's commit has to exist. The audit replaced one with `deadbee` and the gate said OK."""
+    import re
+
+    texto = LEDGER.read_text(encoding="utf-8")
+    mutado, n = re.subn(
+        r"\| `[0-9a-f]{7,40}` \| SELLADO \|", "| `deadbee` | SELLADO |", texto, count=1
+    )
+    assert n == 1, "no se encontro ninguna fila sellada con commit que mutar"
+    copia = tmp_path / "ARTIFACTS.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_artifacts_check(copia)
+    assert codigo == 1, salida
+    assert "deadbee" in salida
+
+
+def test_un_sello_anterior_a_sus_filas_rompe_el_gate(tmp_path: Path) -> None:
+    """Ancestry alone accepted the root commit, 467 back. A seal cannot predate what it seals."""
+    import re
+
+    raiz = subprocess.run(
+        ["git", "rev-list", "--max-parents=0", "HEAD"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    ).stdout.split()[0][:7]
+    texto = LEDGER.read_text(encoding="utf-8")
+    mutado, n = re.subn(
+        r"(\*\*Commit de sellado\*\*: `)[0-9a-f]{7,40}(`)", rf"\g<1>{raiz}\g<2>", texto, count=1
+    )
+    assert n == 1
+    copia = tmp_path / "ARTIFACTS.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_artifacts_check(copia)
+    assert codigo == 1, salida
+    assert "anterior a" in salida
+
+
+def test_un_md5_que_ese_commit_nunca_produjo_rompe_el_gate(tmp_path: Path) -> None:
+    """Today's bytes matching is not provenance: the commit has to have produced them.
+
+    Se muta el MD5 de una fila **y el archivo en disco**, para que la comprobacion de bytes de
+    hoy pase y solo pueda fallar la de procedencia. Sin esto el test no distinguiria los dos
+    controles.
+    """
+    import re
+    import shutil
+
+    texto = LEDGER.read_text(encoding="utf-8")
+    fila = re.search(
+        r"^\| [^|]+ \| `(reports/paper_micai/prereg/[^`]+)` \| `([0-9a-f]{32})` \| (\d+) \|",
+        texto,
+        re.M,
+    )
+    assert fila is not None, "no hay ninguna fila de preregistro que mutar"
+    ruta, md5_real, _ = fila.group(1), fila.group(2), fila.group(3)
+    origen = REPO_ROOT / ruta
+    respaldo = tmp_path / "respaldo.bin"
+    shutil.copy2(origen, respaldo)
+    try:
+        contenido = origen.read_bytes() + b"\n"
+        origen.write_bytes(contenido)
+        import hashlib
+
+        nuevo_md5 = hashlib.md5(contenido).hexdigest()
+        mutado = texto.replace(f"`{md5_real}`", f"`{nuevo_md5}`", 1).replace(
+            f"| {fila.group(3)} |", f"| {len(contenido)} |", 1
+        )
+        copia = tmp_path / "ARTIFACTS.md"
+        copia.write_text(mutado, encoding="utf-8")
+        codigo, salida = _correr_artifacts_check(copia)
+        assert codigo == 1, salida
+        assert "el ledger registra" in salida
+    finally:
+        shutil.copy2(respaldo, origen)

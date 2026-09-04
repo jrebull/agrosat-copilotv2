@@ -81,7 +81,7 @@ Subir el colchón **no compra separación relativa**: la separación mínima con
 
 **Prohibido explícitamente**: revisar `k` después de ver un contraste.
 
-**Se publica la curva entera** de sensibilidad a `k`, gane lo que gane. La sensibilidad **es un resultado**: el estimador se mueve 0,0122 entre valores de `k`, un 73 % del propio efecto y sin tendencia monótona, lo que significa que en validación cruzada espacial la granularidad de la partición decide la significancia.
+**Se publica la curva entera** de sensibilidad a `k`, gane lo que gane. La sensibilidad **es un resultado**: el estimador se mueve 0,0122 entre valores de `k`, un 73 % del propio efecto y sin tendencia monótona, es decir que **en este análisis exploratorio y en este territorio, la conclusión cambia con `k`**. No se escribe «la granularidad decide la significancia»: eso es una ley y esto es un territorio con folds solapados, medido además con el módulo que aún tenía los tres defectos.
 
 ### 4.2 El suelo de soporte por bloque, y el denominador móvil que introduce
 

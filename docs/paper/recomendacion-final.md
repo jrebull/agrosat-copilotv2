@@ -19,8 +19,20 @@ nuestros propios errores como primera contribución.
 > el reparto es predecible, tiene consecuencias medibles sobre la estadística de superficie, y hay
 > una región de costes donde cada mecanismo es el correcto.
 
-Esa afirmación **es sostenible con lo que hay**, y es la única que lo es. La que perseguíamos —«a
-igual cobertura gana la abstención»— **no lo es**, y no por falta de trabajo: por falta de potencia.
+**Es la frase que aspiramos a poder escribir, y hoy NO es sostenible.** Decía aquí que sí, y era la
+misma sobreafirmación que el artículo denuncia en otros. Tres cosas faltan y ninguna es menor:
+
+1. **«A igual coste» no significa nada todavía**, porque no hay función de pérdida: la cardinalidad
+   estuvo ocupando ese lugar sin justificación (US-172).
+2. **«No se distinguen» no se deduce de no haber encontrado diferencia.** Ausencia de evidencia no
+   es equivalencia; hace falta una prueba de equivalencia contra una banda declarada, y la banda
+   sale del usuario, no del instrumento (US-174). Con cinco y dos bloques, además, el diseño
+   difícilmente podrá establecerla.
+3. **«Se distinguen muchísimo en quién paga» tampoco está medido**: ninguna de las cuatro medidas
+   de disparidad declaradas tiene potencia con cinco bloques.
+
+Lo que sí se puede decir hoy: la que perseguíamos —«a igual cobertura gana la abstención»— **no se
+sostiene**, y no por falta de trabajo, sino por falta de potencia y por tres defectos de protocolo.
 
 ## 3. Por qué no es sostenible la anterior, con los números
 
@@ -86,14 +98,19 @@ Cuesta lo que cuesta. En orden de impacto:
 |---|---|
 | Reentrenamiento OOF de cinco folds | existía para alimentar al árbitro, y el árbitro salió del artículo |
 | Cuarto banco de datos | tres bancos y el barrido de desbalance ya responden el transporte |
-| Reimplementar un rechazador aprendido | riesgo de ajuste que el revisor criticará se haga como se haga |
+| Reimplementar un rechazador aprendido | **exclusión de alcance nuestra**, por presupuesto y riesgo de sobreajuste. El precio: el artículo no dice nada sobre mecanismos aprendidos de renuncia |
 | Gate sobre el HTML del cuaderno | gobernanza de proyecto, no trabajo de artículo |
 | `parcel/18cls` | se puede correr y **no se puede validar**: su configuración nunca entró al barrido |
 | La autopsia como primera contribución | las correcciones son obligatorias; la confesión no |
 
 ## 7. El presupuesto
 
-| | |
+> **Fotografía del 3 de septiembre de 2026, obsoleta desde el reencuadre de la EPIC 27.** La
+> fuente viva es `make plan-check`, que hoy da **quince épicas, ochenta y nueve historias, 376 SP
+> en total, 255 pendientes y un camino crítico de 96 SP** que empieza en US-172. Se conserva la
+> tabla vieja fechada en vez de borrarla, porque el motivo del cambio es parte del registro.
+
+| | 3 de septiembre (obsoleto) |
 |---|---|
 | Historias vivas | 40 |
 | Puntos | 191 |

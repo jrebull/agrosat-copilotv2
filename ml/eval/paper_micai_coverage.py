@@ -118,13 +118,16 @@ def macro_over(
         presentes: Classes present in the whole block, from :func:`presentes_en_bloque`.
 
     Returns:
-        The macro-F1, or ``0.0`` when the intersection is empty.
+        The macro-F1, or **NaN** when the estimand is undefined: nothing delivered, or no promised
+        class present in the block. It used to return ``0.0``, which is a legitimate-looking value
+        for a perfect failure and averages into the mean as if it had been measured. An undefined
+        cell has to be visible to whoever aggregates it.
     """
     if labels.size == 0:
-        return 0.0
+        return float("nan")
     evaluated = sorted(set(classes) & set(presentes))
     if not evaluated:
-        return 0.0
+        return float("nan")
     return float(f1_score(labels, predicted, labels=evaluated, average="macro", zero_division=0))
 
 
@@ -267,6 +270,41 @@ def frontier(
     return points
 
 
+def umbral_desde_entrenamiento(
+    proba: np.ndarray, train_pos: np.ndarray, legend: Sequence[int]
+) -> float:
+    """Confidence threshold that matches a legend's delivery rate, computed on TRAINING only.
+
+    Both halves of the operating point come from the training blocks, and that is the whole
+    point. The first repair moved the threshold out of the evaluated block but kept its target
+    rate as ``ref.delivered.mean()`` — the coverage the other mechanism REALISED in the test
+    block — so a quantity measured on the evaluated data still crossed into the comparator's
+    definition. An external audit showed it: holding training fixed and changing only the test
+    mask moved the comparator's delivery.
+
+    The rate is now the fraction of TRAINING parcels whose unrestricted argmax lands inside the
+    legend, which is exactly what the legend mechanism would deliver there, and is observable
+    before seeing any test parcel.
+
+    Args:
+        proba: Posterior matrix for the whole universe.
+        train_pos: Positional indices of the training parcels.
+        legend: Classes the reference mechanism promises.
+
+    Returns:
+        The confidence floor, or infinity when nothing can be delivered.
+    """
+    if train_pos.size == 0:
+        return float("inf")
+    columnas = np.asarray(legend, dtype=int)
+    tasa = float(np.isin(proba[train_pos].argmax(axis=1), columnas).mean())
+    if tasa <= 0.0:
+        return float("inf")
+    if tasa >= 1.0:
+        return float("-inf")
+    return float(np.quantile(proba[train_pos].max(axis=1), 1.0 - tasa))
+
+
 def confidence_baseline(
     proba: np.ndarray,
     labels: np.ndarray,
@@ -280,13 +318,12 @@ def confidence_baseline(
     The legend stays complete, so this mechanism emits over all eighteen classes; what
     shrinks is how many parcels it answers.
 
-    **The threshold comes from the TRAINING blocks, never from the block being scored.** That
-    was defect 3 of the internal diagnosis and it survived the first repair: the previous
-    version ranked the evaluated block's own confidences and cut at the reference's count,
-    which is choosing the operating point inside the block that measures it. The reference
-    now fixes only the target delivery RATE; the threshold is that rate's quantile of the
-    training confidences, and the realised coverage in the test block is whatever it is.
-    Matching the count exactly is precisely what cannot be done without looking.
+    **The whole operating point comes from the TRAINING blocks**, threshold and target rate
+    alike: see :func:`umbral_desde_entrenamiento`. Two repairs were needed. The first moved the
+    threshold out of the evaluated block but kept its target rate as the coverage the reference
+    REALISED in the test block, which is the same leak through a smaller hole. The realised
+    coverage here is whatever it is; matching a count exactly is precisely what cannot be done
+    without looking.
 
     Args:
         proba: Posterior matrix for the whole universe.
@@ -302,13 +339,7 @@ def confidence_baseline(
     points: list[BlockPoint] = []
     for ref in reference:
         train_pos, test_pos = splits[ref.block]
-        # La tasa objetivo la fija el mecanismo de referencia; el UMBRAL sale del entrenamiento.
-        tasa = float(ref.delivered.mean()) if ref.delivered.size else 0.0
-        umbral = (
-            float(np.quantile(confidence[train_pos], 1.0 - tasa))
-            if train_pos.size and tasa > 0.0
-            else np.inf
-        )
+        umbral = umbral_desde_entrenamiento(proba, train_pos, ref.legend)
         delivered = confidence[test_pos] >= umbral
         emitted = free[test_pos]
         truth = labels[test_pos]
@@ -406,7 +437,9 @@ def paired_interval(
 
     ``"bloque"`` is the estimand-level interval: a paired t over the per-block deltas, with the
     block as the unit, which is what five spatial blocks entitle anyone to claim. It is
-    degenerate when the two mechanisms coincide, which is the harness self-check.
+    degenerate when the two mechanisms coincide, which is the harness self-check. **Below three
+    defined blocks it returns the deltas and nothing else** — no interval, no p — because that is
+    the declared contract for a two-region bench and the code was breaking it.
 
     ``"parcela"`` and ``"cluster"`` keep the old bootstrap, but they answer a **different and
     narrower question** — how much the estimate moves if this block's parcels (or patches)
@@ -434,40 +467,73 @@ def paired_interval(
     if unidad == "cluster" and clusters is None:
         raise ValueError("la unidad 'cluster' necesita los identificadores de cluster")
 
-    observed = float(np.mean([p.aligned_f1 for p in left]) - np.mean([p.aligned_f1 for p in right]))
+    izq_f1 = np.asarray([p.aligned_f1 for p in left], dtype=float)
+    der_f1 = np.asarray([p.aligned_f1 for p in right], dtype=float)
+    observed = float(np.nanmean(izq_f1) - np.nanmean(der_f1))
     por_bloque = [float(a.aligned_f1 - b.aligned_f1) for a, b in zip(left, right, strict=True)]
+    indefinidos = int(np.isnan(por_bloque).sum())
 
     if unidad == "bloque":
         d = np.asarray(por_bloque, dtype=float)
+        d = d[~np.isnan(d)]
         n = d.size
-        if n < 2:
-            raise ValueError(f"un intervalo por bloque necesita al menos dos bloques, hay {n}")
+        base: dict[str, Any] = {
+            "delta": observed,
+            "unidad": unidad,
+            "n_unidades": n,
+            "bloques_indefinidos": indefinidos,
+            "deltas_por_bloque": por_bloque,
+        }
+        # Con menos de tres bloques NO se publica intervalo ni p. Es el contrato de US-125 y el
+        # codigo lo estaba incumpliendo: BreizhCrops tiene exactamente dos regiones, y el
+        # productor le aplicaba Holm a un p que no deberia existir.
+        min_bloques = 3
+        if n < min_bloques:
+            return {
+                **base,
+                "ci_low": None,
+                "ci_high": None,
+                "excluye_cero": None,
+                "p_valor": None,
+                "motivo": (
+                    f"con {n} bloque(s) definidos no se publica intervalo ni p: solo los deltas"
+                ),
+            }
         sd = float(d.std(ddof=1))
         if sd == 0.0:
-            # Los dos mecanismos coinciden bloque a bloque: el intervalo TIENE que ser
-            # degenerado. Es la autocomprobacion del arnes.
+            # Varianza entre bloques nula. Hay que separar los dos casos, porque el anterior
+            # devolvia p=1 para los dos y el unico test usaba el que no distingue: cero.
+            media = float(d.mean())
+            if media == 0.0:
+                # Los dos mecanismos coinciden bloque a bloque: autocomprobacion del arnes.
+                return {
+                    **base,
+                    "ci_low": 0.0,
+                    "ci_high": 0.0,
+                    "excluye_cero": float(False),
+                    "p_valor": 1.0,
+                    "motivo": "los dos mecanismos coinciden en todos los bloques",
+                }
             return {
-                "delta": observed,
-                "ci_low": observed,
-                "ci_high": observed,
-                "excluye_cero": float(False),
-                "p_valor": 1.0,
-                "unidad": unidad,
-                "n_unidades": n,
-                "deltas_por_bloque": por_bloque,
+                **base,
+                "ci_low": media,
+                "ci_high": media,
+                "excluye_cero": float(True),
+                "p_valor": None,
+                "motivo": (
+                    "varianza entre bloques exactamente nula con efecto no nulo: la t no esta "
+                    "definida y no se inventa un p. El intervalo degenerado dice lo que hay"
+                ),
             }
         error = sd / np.sqrt(n)
         low, high = stats.t.interval(0.95, n - 1, float(d.mean()), error)
         p = float(2 * stats.t.sf(abs(float(d.mean())) / error, n - 1))
         return {
-            "delta": observed,
+            **base,
             "ci_low": float(low),
             "ci_high": float(high),
             "excluye_cero": float(low > 0 or high < 0),
             "p_valor": p,
-            "unidad": unidad,
-            "n_unidades": n,
-            "deltas_por_bloque": por_bloque,
         }
 
     rng = np.random.default_rng(random_state)
@@ -507,7 +573,7 @@ def paired_interval(
                     presentes=presentes,
                 )
             )
-        draws[i] = float(np.mean(left_scores) - np.mean(right_scores))
+        draws[i] = float(np.nanmean(left_scores) - np.nanmean(right_scores))
 
     low, high = np.percentile(draws, [2.5, 97.5])
     below = float((draws <= 0).mean())
@@ -521,6 +587,7 @@ def paired_interval(
         "p_bootstrap": float(min(1.0, 2 * min(below, above))),
         "unidad": unidad,
         "n_unidades": int(sum(t.size for t, _, _, _ in prepared)),
+        "bloques_indefinidos": indefinidos,
         "deltas_por_bloque": por_bloque,
     }
 

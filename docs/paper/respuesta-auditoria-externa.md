@@ -5,10 +5,47 @@ historia de usuario*. Se cierra cuando **el comportamiento cambió** y hay dónd
 historia planificada es un compromiso, no una corrección, y contarla como cierre fue exactamente lo
 que la segunda auditoría desmontó.
 
-Tres rondas hasta hoy. La segunda verificó la primera en el código y encontró dos cierres falsos.
-La tercera verificó la segunda y encontró **tres cierres parciales que habíamos contado enteros**,
-más un gate que se podía burlar moviendo una frase de campo. Lo que sigue es el estado real.
+Cuatro rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
+cierres falsos. La tercera, tres cierres parciales contados enteros y un gate burlable moviendo una
+frase de campo. La cuarta encontró **fugas dentro de las reparaciones de la tercera**: un umbral que
+seguía leyendo el bloque de prueba por una rendija más estrecha, un gate de custodia que verificaba
+los bytes de hoy pero no que el commit los hubiera producido, y un gate de plan que recorría listas
+pero no diccionarios. Lo que sigue es el estado real.
 
+
+
+---
+
+## Ronda 4 — 4 de septiembre de 2026
+
+El patrón de esta ronda: **reparamos por el camino ancho y dejamos el estrecho abierto**. Las tres
+correcciones de la ronda 3 eran correctas en lo que arreglaban y seguían teniendo una rendija.
+
+### Cerrado en esta ronda, con su evidencia
+
+| # | Hallazgo | Qué cambió de comportamiento |
+|---|---|---|
+| C1 | **El punto de operación seguía leyendo el bloque de prueba.** El umbral salía de entrenamiento, pero su cuantil se fijaba con `ref.delivered.mean()`, la cobertura que el otro mecanismo **realizó en el bloque de prueba** | `umbral_desde_entrenamiento()` calcula las dos mitades sobre entrenamiento: la tasa es la fracción de parcelas de ENTRENAMIENTO cuyo argmax cae en la leyenda. Dos tests: uno de **invariancia** —destrozar el bloque de prueba entero no mueve el umbral, y tocar el entrenamiento sí— y otro que comprueba que cambiar la máscara de la referencia no cambia lo que entrega el comparador. El segundo **falla sobre la implementación de ayer**, comprobado |
+| C2 | **Con dos bloques se publicaban intervalo, p y Holm**, donde el contrato dice reportar solo los dos deltas | Por debajo de **tres bloques definidos**, `paired_interval` devuelve `ci=None`, `p=None` y el motivo. Los dos productores detectan el `None` y **no aplican Holm**: escriben `motivo_sin_holm` en su lugar. Test con n=2 |
+| C3 | **La rama de varianza cero devolvía p=1 para cualquier constante**, y su único test usaba cuatro ceros — otra vez el único valor que no distingue | Separados los dos casos: todo cero es la autocomprobación del arnés (p=1); constante no nula da intervalo degenerado, `excluye_cero` verdadero y **`p_valor: None`**, porque sin varianza la t no está definida y no se inventa un p. Test para cada caso |
+| C4 | **Una intersección vacía devolvía 0,0**, un valor con pinta de medida | `macro_over` devuelve **NaN**. `paired_interval` los descarta y publica `bloques_indefinidos`. Dos tests |
+| C5 | **El gate de custodia no comprobaba procedencia**: verificaba los bytes de hoy, no que el commit declarado los hubiera producido. Sustituir el sello por el commit raíz, 467 atrás, daba OK | Verifica el **blob en el commit de cada fila** —o el MD5 dentro de su puntero `.dvc`— y exige que el sello **no sea anterior a ninguna fila que sella**. Al encenderlo saltaron **las diez filas** que la auditoría predijo. Corregidas con `scripts/paper_artifacts_seal.py`, que **calcula** la columna desde git en vez de rellenarla a mano. Tres tests nuevos: commit de fila inventado, sello en el commit raíz, y MD5 que ese commit nunca produjo |
+| C6 | **El gate de dependencias no recorría diccionarios anidados**: `meta:{nota:"Sin dependencias"}` pasaba | Recorrido recursivo por cualquier estructura. Cuarto test parametrizado |
+| C7 | **Los artefactos obsoletos seguían siendo `SELLADO`** y el gate anunciaba «84 sellados, OK» | Estado **`OBSOLETO`** ejecutable: 13 filas marcadas, verificadas igual, contadas aparte y con aviso explícito de que no son citables |
+| C8 | **El cuaderno público presentaba esas cifras como «rehecho sin los tres defectos» y como transporte demostrado** | Los tres apartados marcados «pendiente de regenerar», con el texto viejo tachado y el motivo. El de BreizhCrops dice además que su intervalo y su Holm **no deberían existir** con dos regiones |
+| C9 | **«22 951 metros entre parcelas» y «partición impecable»** | El número no está en ningún artefacto —el vigente da 22 972— y es entre **centroides**. Retirado, con la limitación escrita |
+| C10 | **«No se distinguen» presentado como sostenible** | Reescrito: es la frase a la que aspiramos, y hoy no lo es. Faltan las tres cosas, y se nombran — sin pérdida «a igual coste» no significa nada, ausencia de evidencia no es equivalencia, y la disparidad tampoco tiene potencia |
+| C11 | **Correcciones no propagadas**: «decide la significancia» en el preregistro y en un título; «un revisor lo criticará se haga como se haga» en dos documentos; el campo de tiro decía que el código conservaba los defectos; «ocho auditorías internas» | Las cinco corregidas en todas sus apariciones |
+| C12 | **El presupuesto documental quedó obsoleto al reordenar el plan** | Fechado como fotografía del 3 de septiembre, con la fuente viva señalada: `make plan-check` da 89 historias, 255 SP pendientes y 96 SP de camino crítico |
+| C13 | **La selección de predictores usa las etiquetas que luego evalúa** | No reparado —necesita datos separados, y es US-139— pero **declarado en el código y en el log**, para que nadie lo tome por una elección ciega |
+
+### Lo que sigue ABIERTO
+
+Sin cambios de dueño: **US-172** (pérdida por acción, resultado y afectado), **US-173** (estimando y
+población), **US-174** (margen práctico), **US-175** (las tres razones libres) y, con ellas, el
+criterio principal. El MDE sigue siendo aproximación con t central. La multiplicidad de toda la
+superficie y la selección de predictores sobre datos separados siguen sin implementar. **Y los trece
+artefactos marcados `OBSOLETO` siguen sin regenerar**: ninguna de sus cifras entra en el artículo.
 
 ---
 
@@ -98,11 +135,17 @@ su dueño. No se repiten aquí para que no haya dos versiones del mismo estado.
 
 1. **Un número que solo existe en la prosa** — cinco veces, la última las 176 celdas H3.
 2. **Una cifra correcta en el contexto equivocado** — cuatro veces, la última 0,88269.
-3. **Un control incapaz de detectar aquello para lo que existe** — cuatro veces: un gate ciego a
-   sus acentos, un test con el único valor que no distinguía, dos tests que miraban el número de
-   salida en vez del mecanismo, y un gate que solo leía dos de los campos que debía cubrir.
+3. **Un control incapaz de detectar aquello para lo que existe** — siete veces: un gate ciego a
+   sus acentos; un test con el único valor que no distinguía, **dos veces**, porque la rama de
+   varianza cero repitió exactamente el mismo error; dos tests que miraban el número de salida en
+   vez del mecanismo; un gate que solo leía dos campos, y su sucesor que leía listas pero no
+   diccionarios; y un gate de custodia que comparaba los bytes de hoy sin comprobar que el commit
+   los hubiera producido.
 4. **Corregir donde se señaló y no en el resto de las apariciones** — el patrón entero de la
-   ronda 3.
+   ronda 3, y cinco casos más en la ronda 4.
+5. **Reparar por el camino ancho y dejar el estrecho abierto** — el patrón de la ronda 4: el umbral
+   salía de entrenamiento y su tasa no; el gate leía listas y no diccionarios; el gate de custodia
+   comparaba bytes y no procedencia. **Toda reparación se pregunta ahora por el camino de al lado.**
 
 Los cuatro tienen la misma raíz: **verificar el resultado en vez de verificar el mecanismo**, y
 después **verificar el ejemplo en vez de agotar el alcance**. Por eso ahora todo control nuevo se
@@ -113,6 +156,6 @@ muera con la sesión, y toda corrección se busca en todas sus apariciones antes
 
 ## Veredicto vigente
 
-**No se arranca.** El único cambio que más acerca el sí es el mismo que dijo la ronda 1 y repite la
-ronda 2: **US-172, la tabla de pérdidas por acción, resultado y afectado**, obtenida de usuarios
-reales y no de nuestra intuición. Todo lo demás está esperando a eso.
+**No se arranca.** Las cuatro rondas coinciden en el mismo único cambio: **US-172, la tabla de
+pérdidas por acción, resultado y afectado**, obtenida de usuarios reales y no de nuestra intuición.
+Todo lo demás está esperando a eso.

@@ -374,7 +374,7 @@ def replica(
                 n_boot=n_boot,
                 random_state=seed,
             )
-            crudos.append(blo["p_valor"])
+            crudos.append(blo["p_valor"])  # puede ser None: dos regiones no dan p
             detalle[f"k={k}"] = {
                 "f1_retirada_f1": float(np.mean([p.aligned_f1 for p in izq])),
                 "f1_retirada_soporte": float(np.mean([p.aligned_f1 for p in sop])),
@@ -394,9 +394,20 @@ def replica(
                 "ci_high_remuestreo_parcela": par["ci_high"],
                 "p_bootstrap_parcela": par["p_bootstrap"],
             }
-        for k, adj in zip(k_values, holm(crudos), strict=True):
-            detalle[f"k={k}"]["p_holm"] = adj
-            detalle[f"k={k}"]["significativo_holm"] = float(adj < 0.05)
+        # Holm sobre una familia sin p no es una correccion, es un numero inventado. Con dos
+        # regiones el intervalo por bloque no publica p, y aqui se dice en vez de rellenarlo.
+        if any(x is None for x in crudos):
+            for k in k_values:
+                detalle[f"k={k}"]["p_holm"] = None
+                detalle[f"k={k}"]["significativo_holm"] = None
+                detalle[f"k={k}"]["motivo_sin_holm"] = (
+                    "el intervalo por bloque no publica p con menos de tres bloques definidos; "
+                    "este banco tiene dos regiones, asi que se reportan solo los dos deltas"
+                )
+        else:
+            for k, adj in zip(k_values, holm([float(x) for x in crudos]), strict=True):
+                detalle[f"k={k}"]["p_holm"] = adj
+                detalle[f"k={k}"]["significativo_holm"] = float(adj < 0.05)
 
         contrastes[nombre] = {
             "clases_originales": clases,
