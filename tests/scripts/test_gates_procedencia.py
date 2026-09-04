@@ -545,3 +545,76 @@ def test_quitar_la_cuarentena_del_estado_del_manuscrito_rompe_el_gate(tmp_path: 
     finally:
         shutil.copy2(respaldo, doc)
     assert _correr_obsoletos_check(LEDGER)[0] == 0
+
+
+# --------------------------------------------------------------------------------------
+# US-173: el contrato del estimando, y las tres claves que lo convertirian en otro estudio.
+# --------------------------------------------------------------------------------------
+
+CONTRATO = REPO_ROOT / "docs" / "paper" / "estimando-v1.json"
+PREREGISTRO = REPO_ROOT / "docs" / "paper" / "preregistro-v2-borrador.md"
+
+
+def _correr_preregistro_check(contrato: Path, preregistro: Path) -> tuple[int, str]:
+    """Run the estimand-contract gate over a given pair of files."""
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "preregistro_check.py"),
+            "--contrato",
+            str(contrato),
+            "--preregistro",
+            str(preregistro),
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout
+
+
+def test_el_contrato_vigente_cuadra_con_la_prosa() -> None:
+    """Baseline: the JSON and section 4.5 say the same thing."""
+    codigo, salida = _correr_preregistro_check(CONTRATO, PREREGISTRO)
+    assert codigo == 0, salida
+
+
+@pytest.mark.parametrize(
+    ("clave", "valor"),
+    [
+        ("operating_point_source", "test"),
+        ("rematch_on_test", True),
+        ("transport_claim", True),
+    ],
+)
+def test_las_tres_claves_que_convertirian_esto_en_otro_estudio(
+    tmp_path: Path, clave: str, valor: object
+) -> None:
+    """Three keys turn the study into a different study; the gate refuses each.
+
+    Elegir el punto de operacion en la prueba, volver a igualar en la prueba, o afirmar transporte
+    no son ajustes de configuracion: son otro diseno. Que un JSON pueda cambiarlos en silencio es
+    exactamente por lo que el contrato tiene gate.
+    """
+    import json
+
+    datos = json.loads(CONTRATO.read_text(encoding="utf-8"))
+    datos[clave] = valor
+    copia = tmp_path / "estimando.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False, indent=2), encoding="utf-8")
+    codigo, salida = _correr_preregistro_check(copia, PREREGISTRO)
+    assert codigo == 1, salida
+    assert clave in salida
+
+
+def test_la_divergencia_entre_el_json_y_la_prosa_rompe_el_gate(tmp_path: Path) -> None:
+    """Two sources saying the same thing drift apart; that is what this gate is for."""
+    texto = PREREGISTRO.read_text(encoding="utf-8")
+    mutado = texto.replace("Queda prohibido volver a igualar", "Se permite volver a igualar", 1)
+    assert mutado != texto
+    copia = tmp_path / "preregistro.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_preregistro_check(CONTRATO, copia)
+    assert codigo == 1, salida
+    assert "rematch_on_test" in salida

@@ -248,6 +248,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Contrato del estimando (US-173). Solo stdlib, asi que no necesita poetry: si
+      # necesitara instalacion, la tentacion seria dejarlo fuera del gate barato y ahi es
+      # donde los controles se quedan "solo en local".
+      - name: contrato del estimando (preregistro-check)
+        run: python3 scripts/preregistro_check.py
+
+      # Campos operativos del protocolo de US-172: impide congelarlo antes de tiempo.
+      - name: protocolo de elicitacion (protocolo-check)
+        run: python3 scripts/protocolo_check.py
+
       # Notebooks: NO stripping enforced - se commitean con outputs poblados
       # (entregable visual del curso). La reproducibilidad se valida via
       # `make notebooks-check` con papermill (job aparte, no quality gate
