@@ -104,6 +104,7 @@ def test_decir_que_no_hay_dependencias_teniendolas_rompe_el_gate(
     )
 
 
+@pytest.mark.integration
 def test_el_ledger_vigente_pasa_su_gate() -> None:
     """Baseline for the custody gate."""
     codigo, salida = _correr_artifacts_check(LEDGER)
