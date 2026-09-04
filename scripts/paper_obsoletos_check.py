@@ -14,7 +14,9 @@ Este gate separa **custodia** de **disponibilidad editorial**:
 - Un documento que reproduce una CIFRA distintiva de un artefacto OBSOLETO falla igual. Buscar solo
   la ruta era el agujero: una auditoria copio 0,0326 al preregistro, sin nombrar el artefacto ni la
   marca, y el gate paso. Las cifras se extraen de los propios artefactos y se buscan en su forma
-  espanola; solo cuentan las de cuatro decimales o mas, que son las que no aparecen por casualidad.
+  espanola; solo cuentan las de cuatro decimales o mas, y **se descuentan las que aparecen tambien
+  en un artefacto vigente**: si un numero esta en los dos sitios no es distintivo del obsoleto, y
+  vigilarlo acusa a documentos que miden lo suyo.
 
 La marca es una linea que empieza por ``> **CUARENTENA**`` en Markdown, o el atributo
 ``data-cuarentena`` en HTML. Se pone arriba, donde se lee antes que las cifras.
@@ -157,26 +159,32 @@ def cifras_distintivas(ruta: Path) -> set[str]:
     return salida
 
 
-def rutas_obsoletas(ledger: Path) -> list[str]:
-    """Artefact paths whose ledger row is marked ``OBSOLETO``.
+def rutas_por_estado(ledger: Path, estado: str) -> list[str]:
+    """Artefact paths whose ledger row carries a given state.
 
     Args:
         ledger: Path to the custody ledger.
+        estado: State to select.
 
     Returns:
-        The obsolete artefact paths, in ledger order.
+        The matching artefact paths, in ledger order.
     """
     salida: list[str] = []
     for linea in ledger.read_text(encoding="utf-8").splitlines():
         if not linea.startswith("|") or re.match(r"^\|\s*[-:]+\s*\|", linea):
             continue
         celdas = [c.strip() for c in linea.strip().strip("|").split("|")]
-        if len(celdas) < MIN_CELDAS or celdas[5] != STALE_STATE:
+        if len(celdas) < MIN_CELDAS or celdas[5] != estado:
             continue
         ruta = CODE_RE.search(celdas[1])
         if ruta is not None:
             salida.append(ruta.group(1))
     return salida
+
+
+def rutas_obsoletas(ledger: Path) -> list[str]:
+    """Artefact paths whose ledger row is marked ``OBSOLETO``."""
+    return rutas_por_estado(ledger, STALE_STATE)
 
 
 def tiene_marca(texto: str, sufijo: str) -> bool:
@@ -241,12 +249,22 @@ def main() -> int:
                 "resellarlo con un motivo"
             )
 
-    # Las cifras distintivas de cada artefacto obsoleto, con su origen.
+    # Las cifras distintivas de cada artefacto obsoleto, con su origen. **Una cifra que tambien
+    # aparece en un artefacto VIGENTE no es distintiva del obsoleto**, y vigilarla produce falsos
+    # positivos: un delta de cuatro decimales medido hoy puede coincidir con uno de hace un mes
+    # por pura aritmetica. Se descuentan, y asi «distintiva» significa lo que dice.
     origen: dict[str, str] = {}
     for relativo in obsoletas:
         for cifra in cifras_distintivas(REPO_ROOT / relativo):
             origen.setdefault(cifra, relativo)
+    vigentes: set[str] = set()
+    for relativo in rutas_por_estado(args.ledger, "SELLADO"):
+        vigentes |= cifras_distintivas(REPO_ROOT / relativo)
+    colisiones = set(origen) & vigentes
+    for cifra in colisiones:
+        del origen[cifra]
     print(f"cifras distintivas vigiladas: {len(origen)}")
+    print(f"  descontadas por aparecer tambien en artefactos vigentes: {len(colisiones)}")
 
     # Cualquier documento que nombre una ruta obsoleta, o reproduzca una de sus cifras, sin estar
     # declarado ni exento.
