@@ -7,6 +7,7 @@
 decisiones por defecto marcadas **[POR DEFECTO]** en cada apartado, y esta línea es su registro.
 **Sustituye a**: [ADR-013](ADR-013-angulo-micai.md), cuya tesis no sobrevivió a la fase 3.
 **Enmienda 1**, 4 de septiembre de 2026: el §6 pasa de «qué predictor» a «qué regla de selección o panel», porque el valor por defecto anterior contradecía a US-139.
+**Enmienda 2**, 4 de septiembre de 2026: el panel usa `xgb-alphaearth-remat-v1` y no el componente histórico desplegado, que queda como referencia descriptiva.
 **Evidencia**: ocho rondas de auditoría externa en
 [`docs/paper/respuesta-auditoria-externa.md`](../paper/respuesta-auditoria-externa.md) · el
 preregistro en [`docs/paper/preregistro-v2-borrador.md`](../paper/preregistro-v2-borrador.md) · el
@@ -91,6 +92,18 @@ arriba todo lo que venga después.
 > predeclarado** —al menos **tres predictores de familias distintas por banco**— y el predictor se
 > trata como **factor de sensibilidad**. Solo podrá seleccionarse uno mediante **selección anidada
 > independiente de la evaluación**. **[POR DEFECTO: el panel, sin ganador.]**
+
+**Y el panel no contiene el componente que se desplegó, sino su reconstrucción.** Hay que decirlo
+con todas las letras porque es fácil de pasar por alto:
+
+> El panel inferencial usa **`xgb-alphaearth-remat-v1`**, una reconstrucción reproducible con
+> identidad propia. **No es el componente histórico desplegado.** Este permanece
+> `legacy_unverified`; se reporta descriptivamente su acuerdo global de **0,945433** y la
+> divergencia concentrada en baja confianza —0,5474 por debajo de 0,5 de confianza frente a 0,9999
+> por encima de 0,9—, pero **no se usa para inferencia**.
+
+Fingir que los dos son el mismo predictor sería el error que US-118 existe para impedir, cometido
+en el documento que fija el alcance.
 
 **Corrección del borrador anterior**: decía «el artículo reporta los dos predictores», y eso
 contradice a US-139, que exige un panel de al menos tres de familias distintas por banco. Dos
