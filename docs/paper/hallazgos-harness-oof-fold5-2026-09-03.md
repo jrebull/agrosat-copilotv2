@@ -1,5 +1,13 @@
 # Hallazgos del harness OOF fold-5: fuga descartada, bug de `n_timesteps` y su impacto en EPIC 6
 
+> **CUARENTENA** — Este documento cita cifras derivadas de artefactos marcados `OBSOLETO` en
+> [`paper/ARTIFACTS.md`](../../paper/ARTIFACTS.md), entre ellas las de EPIC 6 que salen de
+> `reports/paper_micai/fase3/`. **Ninguna de esas cifras entra en el artículo** hasta regenerarlas
+> (US-124, US-125). El hallazgo del documento —el bug de `n_timesteps` y su impacto— **no depende
+> de ellas**: sus mediciones propias son de esta sesión y se sostienen solas.
+>
+> *Banner añadido por el gate de publicación, que detectó las citas. El contenido no se ha tocado.*
+
 **Alcance**: auditoría de la sospecha de fuga de datos en `checkpoints/segmentation/tsvit-pheno-v1/best.pt` y del salto anómalo de F1-macro entre las dos variantes de TSViT-pheno sobre fold 5.
 **Base**: repo `main` @ `471d64a` + working tree, `data/PASTIS-R` local (2468 patches), GPU RTX 4070 Laptop.
 **Fecha**: 3-sep-2026.

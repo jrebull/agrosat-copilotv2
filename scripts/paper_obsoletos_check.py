@@ -55,6 +55,7 @@ CONSUMIDORES: tuple[str, ...] = (
     "docs/paper/fase2-hallazgos.md",
     "docs/paper/novedad.md",
     "docs/paper/preregistro-v2-borrador.md",
+    "docs/paper/hallazgos-harness-oof-fold5-2026-09-03.md",
     "docs/paper/fase3-hallazgos.md",
     "docs/paper/fase4-hallazgos.md",
     "docs/paper/que-paper-sale.md",
