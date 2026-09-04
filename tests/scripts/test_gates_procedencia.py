@@ -111,6 +111,34 @@ def test_el_ledger_vigente_pasa_su_gate() -> None:
     assert codigo == 0, salida
 
 
+def test_tracked_minimal_ledger_passes_in_fresh_checkout(tmp_path: Path) -> None:
+    """Keep a positive control in CI without requiring deliberately untracked PDFs."""
+    text = LEDGER.read_text(encoding="utf-8")
+    seal = re.search(r"^\*\*Sellado el\*\*:.+$", text, re.M)
+    assert seal is not None, "the ledger has no sealing header"
+    tracked = set(
+        subprocess.run(
+            ["git", "ls-files"], cwd=REPO_ROOT, capture_output=True, text=True, check=True
+        ).stdout.splitlines()
+    )
+    row = None
+    for line in text.splitlines():
+        cells = line.strip().strip("|").split("|")
+        if not line.startswith("|") or len(cells) < 6:
+            continue
+        path_match = re.search(r"`([^`]+)`", cells[1])
+        has_commit = re.search(r"`[0-9a-f]{7,40}`", cells[4])
+        if path_match is not None and path_match.group(1) in tracked and has_commit is not None:
+            row = line
+            break
+    assert row is not None, "the ledger has no tracked row for the positive control"
+    minimal_ledger = tmp_path / "ARTIFACTS.md"
+    minimal_ledger.write_text(f"# Positive control\n\n{seal.group(0)}\n\n{row}\n", encoding="utf-8")
+
+    code, output = _correr_artifacts_check(minimal_ledger)
+    assert code == 0, output
+
+
 def test_un_commit_de_sellado_inventado_rompe_el_gate(tmp_path: Path) -> None:
     """A sealing commit that is not in the history of HEAD is provenance, not decoration."""
     texto = LEDGER.read_text(encoding="utf-8")
