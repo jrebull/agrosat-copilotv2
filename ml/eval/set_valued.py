@@ -20,10 +20,18 @@ Con eso hay **un solo eje de coste**, `E[|C(x)|]`, definido para los seis, y una
 
     u(y, C) = g(|C|) * 1[y en C]
 
-que se evalua sobre la poblacion COMPLETA de prueba, no sobre la entregada. `g` se declara antes de
-mirar, en el preregistro, junto con el valor de `g(0)` para el conjunto vacio: **elegir cuanto vale
-no responder ES la decision etica del articulo**, y hasta ahora estaba incrustada en el F1-macro a
-un precio que nadie habia elegido.
+que se evalua sobre la poblacion COMPLETA de prueba, no sobre la entregada.
+
+**El valor de no responder es un termino aparte, y tiene que serlo.** Una auditoria externa
+encontro que la primera version de este modulo multiplicaba la utilidad por la contencion, con lo
+que el conjunto vacio caia a cero pasara lo que pasara y `g(0)` no se evaluaba nunca. Es decir: el
+modulo prometia dejar elegir cuanto vale abstenerse y hacia imposible elegirlo. Por eso ahora
+
+    u(y, C) = g(|C|) * 1[y en C]   si C no es vacio
+    u(y, vacio) = utilidad_abstencion,  declarada aparte
+
+**Elegir `utilidad_abstencion` ES la decision etica del articulo**, y hasta ahora estaba incrustada
+en el F1-macro a un precio que nadie habia elegido. Se declara en el preregistro antes de mirar.
 """
 
 from __future__ import annotations
@@ -157,6 +165,7 @@ def utilidad_macro(
     pred: SetPrediction,
     g: Callable[[np.ndarray], np.ndarray],
     *,
+    utilidad_abstencion: float,
     clases: Sequence[int] | None = None,
     soporte_minimo: int = 20,
 ) -> float:
@@ -170,7 +179,11 @@ def utilidad_macro(
     Args:
         labels: Ground-truth labels.
         pred: The set-valued prediction.
-        g: Declared utility of a set of a given size when the truth is inside it.
+        g: Declared utility of a NON-EMPTY set of a given size when the truth is inside it.
+        utilidad_abstencion: Declared utility of emitting nothing. It is a separate term on
+            purpose: multiplying by containment, as the first version did, makes the empty set
+            worth zero whatever the declaration says, so the price of abstaining could not be
+            chosen. It has no default, because a default here is a decision taken by omission.
         clases: Classes to average over. Defaults to those meeting the support floor.
         soporte_minimo: Parcels a class needs to enter the average. Measured in the design study:
             below this the per-class estimate is noise, and at every block count some block holds a
@@ -183,7 +196,9 @@ def utilidad_macro(
         ValueError: if no class meets the support floor, which must never pass silently.
     """
     acierta = pred.mask[np.arange(labels.size), labels]
-    valor = np.where(acierta, g(pred.tamanos), 0.0)
+    vacios = pred.vacios
+    valor = np.where(acierta & ~vacios, g(pred.tamanos), 0.0)
+    valor = np.where(vacios, utilidad_abstencion, valor)
     if clases is None:
         cuenta = np.bincount(labels, minlength=pred.mask.shape[1])
         clases = [c for c in range(pred.mask.shape[1]) if cuenta[c] >= soporte_minimo]

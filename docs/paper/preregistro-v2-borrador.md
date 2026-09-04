@@ -1,6 +1,6 @@
 # Preregistro v2 — borrador para firma
 
-**Estado**: BORRADOR CON PARÁMETROS FIJADOS, pendiente de firma. No vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
+**Estado**: BORRADOR. Tras la auditoría externa, **tres parámetros vuelven a estar abiertos**: la banda de equivalencia, la función de pérdida y el estimando con su población. No se firma hasta cerrarlos. No vale hasta que esté commiteado y firmado. **Nada de las EPIC 20, 21, 22 ni 25 se computa antes de ese commit.**
 
 Este documento existe porque el preregistro anterior se citó como credencial mientras se omitía que su hipótesis se había refutado y que la regla de entrega había cambiado. Aquí se declara todo antes, incluidos los grados de libertad que la vez pasada nadie sabía que lo eran.
 
@@ -12,7 +12,9 @@ Un mapa de cultivos que no alcanza calidad puede prometer menos de cuatro manera
 
 No es solo un criterio, es una expectativa con su razón, y se declara para poder equivocarnos por escrito:
 
-> **H1.** A igual coste esperado por parcela, los cuatro mecanismos **no se distinguirán** en calidad agregada dentro de una banda de equivalencia de **±0,033**, que es el efecto mínimo detectable del diseño con `k = 5` y no un número redondo: declarar una equivalencia más estrecha que lo que el diseño puede distinguir sería afirmar sin poder medir.
+> **H1.** A igual coste esperado por parcela, los cuatro mecanismos **no se distinguirán** en calidad agregada dentro de una banda de equivalencia **por declarar**.
+>
+> **Corregido tras auditoría externa**: la banda estaba anclada en el efecto mínimo detectable del diseño (±0,033), y eso está mal. Un margen de equivalencia tiene que salir de la **menor diferencia prácticamente relevante para quien usa el mapa**, no de la resolución del instrumento; si se ancla en el MDE, es el experimento el que define qué cuenta como equivalente. Queda pendiente de fijar con los casos de uso, y hasta entonces H1 no está preregistrada.
 >
 > Porque todos operan sobre la misma posterior y solo redistribuyen su incertidumbre.
 >
@@ -22,7 +24,9 @@ No es solo un criterio, es una expectativa con su razón, y se declara para pode
 
 ## 3. Criterio principal
 
-**Se decide después de US-155 y antes de correr nada más.** Hoy no puede fijarse honestamente: medida la potencia con cuatro medidas de disparidad declaradas, **ninguna la tiene con cinco bloques** —las cuatro incluyen el cero y necesitan entre doce y diecisiete—. Si tras fijar `k` por el criterio de §4 la disparidad tiene potencia, es el criterio principal; si no la tiene, el criterio principal es el mapa de decisión de la EPIC 25, que no depende de significancia, y el artículo lo dice.
+**Corregido tras auditoría externa: NO se decide después de ver dónde hay potencia.** Elegir la variable primaria según dónde el diseño la detecte es escoger el resultado antes de medirlo, con otro nombre. Se congela aquí, antes del banco confirmatorio, junto con el afectado, la pérdida, el margen práctico, la población y la regla de decisión. Lo hecho sobre PASTIS y BreizhCrops es **exploratorio** y se etiqueta así.
+
+Lo que la medición sí aporta, y se declara: Hoy no puede fijarse honestamente: medida la potencia con cuatro medidas de disparidad declaradas, **ninguna la tiene con cinco bloques** —las cuatro incluyen el cero y necesitan entre doce y diecisiete—. Si tras fijar `k` por el criterio de §4 la disparidad tiene potencia, es el criterio principal; si no la tiene, el criterio principal es el mapa de decisión de la EPIC 25, que no depende de significancia, y el artículo lo dice.
 
 ## 4. Los grados de libertad, declarados
 
@@ -85,7 +89,15 @@ Se define **aquí**, no en la historia que lo calcula, porque una medida definid
 
 ### 4.4 La función de coste
 
-`g(|C|)` de la familia de pérdidas se declara aquí, con su análisis de sensibilidad, y la normalización deja el problema en **dos** razones libres.
+**Dos correcciones de la auditoría externa, las dos de fondo.**
+
+**La cardinalidad no es el coste.** `E[|C|]` trata igual a dos conjuntos del mismo tamaño aunque uno sea agronómicamente inútil, y el conjunto vacío le cuesta cero. La moneda común es una **tabla de pérdidas por acción, resultado y afectado** —etiqueta errónea, no respuesta, conjunto ambiguo, retroceso taxonómico—, y la cardinalidad queda como descriptor secundario. El precio de abstenerse se suma directamente, no se multiplica por la contención.
+
+**Y son tres razones libres, no dos.** Cuatro costes menos una escala común dejan tres. Escribí dos sin justificarlo. O se declara aquí una segunda restricción sustantiva —una equivalencia concreta entre dos pérdidas— o el mapa se presenta como un símplex de tres, y en los dos casos se publica la sensibilidad fuera de esa sección.
+
+### 4.5 El estimando y su población
+
+**Falta declararlo, y el diseño hoy mezcla dos.** O inferencia **condicional al conjunto de datos**, con el parche como clúster y el alcance local reconocido; o inferencia **entre regiones y campañas**, con sitio-año como unidad y bancos genuinamente independientes. Partir el mismo territorio más fino no crea réplicas nuevas: los folds comparten entrenamiento y calibración con un Jaccard medio de 0,60 y máximo de 0,80.
 
 ## 5. Universos y multiplicidad
 

@@ -68,7 +68,7 @@ def test_la_utilidad_singleton_es_el_recall_macro_no_el_f1(universo) -> None:
     pred = singleton(proba)
     clases = sorted(set(labels.tolist()))
     esperado = recall_score(labels, proba.argmax(axis=1), labels=clases, average="macro")
-    obtenido = utilidad_macro(labels, pred, G_SINGLETON, clases=clases)
+    obtenido = utilidad_macro(labels, pred, G_SINGLETON, utilidad_abstencion=0.0, clases=clases)
     assert obtenido == pytest.approx(esperado, abs=1e-12)
 
 
@@ -80,9 +80,13 @@ def test_abstenerse_nunca_sube_la_utilidad_bajo_la_g_singleton(universo) -> None
     """
     labels, proba = universo
     clases = sorted(set(labels.tolist()))
-    completo = utilidad_macro(labels, singleton(proba), G_SINGLETON, clases=clases)
+    completo = utilidad_macro(
+        labels, singleton(proba), G_SINGLETON, utilidad_abstencion=0.0, clases=clases
+    )
     for umbral in (0.3, 0.5, 0.7, 0.9):
-        parcial = utilidad_macro(labels, abstencion(proba, umbral), G_SINGLETON, clases=clases)
+        parcial = utilidad_macro(
+            labels, abstencion(proba, umbral), G_SINGLETON, utilidad_abstencion=0.0, clases=clases
+        )
         assert parcial <= completo + 1e-12
 
 
@@ -102,7 +106,9 @@ def test_sin_clases_sobre_el_suelo_falla_en_vez_de_devolver_cero(universo) -> No
     """An undefined estimand raises; it does not return a valid-looking zero."""
     labels, proba = universo
     with pytest.raises(ValueError, match="suelo de soporte"):
-        utilidad_macro(labels, singleton(proba), G_SINGLETON, soporte_minimo=10_000)
+        utilidad_macro(
+            labels, singleton(proba), G_SINGLETON, utilidad_abstencion=0.0, soporte_minimo=10_000
+        )
 
 
 def test_la_mascara_entera_se_rechaza(universo) -> None:
@@ -110,3 +116,43 @@ def test_la_mascara_entera_se_rechaza(universo) -> None:
     _, proba = universo
     with pytest.raises(TypeError, match="booleana"):
         SetPrediction(np.zeros(proba.shape, dtype=int), "mala")
+
+
+def test_el_precio_de_abstenerse_se_puede_elegir_de_verdad(universo) -> None:
+    """The declared price of abstention must actually move the estimand.
+
+    Regresion de un fallo real: la primera version multiplicaba la utilidad por la contencion, con
+    lo que el conjunto vacio valia cero pasara lo que pasara y `g(0)` no se evaluaba nunca. El
+    modulo prometia dejar elegir cuanto vale abstenerse y lo hacia imposible. Y el test anterior no
+    podia detectarlo porque usaba el unico valor que no distingue, que es cero: el mismo modo de
+    fallo que un gate de anonimato ciego a sus propios acentos.
+    """
+    labels, proba = universo
+    clases = sorted(set(labels.tolist()))
+    pred = abstencion(proba, umbral=0.5)
+    assert pred.vacios.any(), "el caso solo tiene sentido si de verdad se abstiene en algo"
+    valores = [
+        utilidad_macro(labels, pred, G_SINGLETON, utilidad_abstencion=u, clases=clases)
+        for u in (0.0, 0.5, 1.0)
+    ]
+    assert valores[0] < valores[1] < valores[2], (
+        f"el precio de abstenerse no mueve el estimando: {valores}"
+    )
+
+
+def test_abstenerse_gratis_hace_que_abstenerse_convenga(universo) -> None:
+    """A pathological price makes abstention dominate, which is how we know it is priced at all.
+
+    No es un caso que vayamos a usar: es la prueba de que la palanca existe. Si con
+    `utilidad_abstencion = 1` abstenerse en todo no gana, es que el termino no esta conectado.
+    """
+    labels, proba = universo
+    clases = sorted(set(labels.tolist()))
+    todo = utilidad_macro(
+        labels, abstencion(proba, umbral=2.0), G_SINGLETON, utilidad_abstencion=1.0, clases=clases
+    )
+    nada = utilidad_macro(
+        labels, singleton(proba), G_SINGLETON, utilidad_abstencion=1.0, clases=clases
+    )
+    assert todo == pytest.approx(1.0), "abstenerse siempre con precio uno tiene que valer uno"
+    assert todo > nada

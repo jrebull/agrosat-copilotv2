@@ -118,7 +118,7 @@ todo el plan.
 
 **Y recupera el único activo que nadie puede reproducir.** Este equipo tiene algo que casi nadie en
 esta literatura tiene: **una decisión de punto de operación tomada de verdad en un producto
-desplegado** —de 18 clases a 12, criterio F1 por clase ≥ 0,90, cobertura resultante 0,9054— con su
+desplegado** —de 18 clases a 12, criterio F1 por clase ≥ 0,90, cobertura resultante 0,88269 —14 688 parcelas de 16 640—, no 0,9054: esa cifra es el cumulative_support_share de la curva del Stacking-5, y se nos cruzó entre artefactos— con su
 contrafactual medible. El reencuadre la había borrado («el artículo ya no trata del sistema») y eso
 era un error: **el doble ciego exige quitar el nombre, no el hecho**. Cualquiera con una GPU y
 PASTIS reproduce el resto del artículo. La decisión que este equipo ya tomó en producción no la

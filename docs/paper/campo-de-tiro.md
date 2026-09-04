@@ -29,8 +29,8 @@ está medida:
 
 | El ataque | La respuesta, con su número |
 |---|---|
-| «Su estimando alineado no está alineado» | Cierto: encogía el contraste un 42,1 % y un bloque cambiaba de signo. Reparado en US-124 |
-| «Su intervalo remuestrea la unidad equivocada» | Cierto: el estimando es la media por bloque. Reparado en US-125 |
+| «Su estimando alineado no está alineado» | Cierto, y **AÚN NO REPARADO**: US-124 sigue pendiente y el código conserva la conducta. Medido: encogía el contraste un 42,1 % y un bloque cambiaba de signo |
+| «Su intervalo remuestrea la unidad equivocada» | Cierto, y **AÚN NO REPARADO**: US-125 sigue pendiente. Y una auditoría externa añade algo peor: partir el mismo territorio más fino no crea réplicas independientes, con Jaccard de 0,60 entre los entrenamientos de los folds |
 | «Un brazo elige su punto de operación dentro del bloque que lo mide» | Cierto, y **medido**: valía 0,00127, un 4,4 % del delta. Real y casi inconsecuente |
 | «Citan a Jones et al. para respaldar lo contrario de lo que demuestra» | Cierto, y ahora **medido**: no hay asociación significativa entre soporte y cobertura bajo abstención, y sí bajo recorte |
 | «No tienen potencia» | Cierto: efecto mínimo detectable 0,033 contra un efecto de 0,017. Por eso el criterio principal se mudó a la disparidad, que es un factor de ocho |
@@ -50,6 +50,7 @@ está medida:
 | Limitaciones y conclusión | 1 |
 | Apéndice | 0,5 |
 | Referencias | 1,5 |
+| **Total** | **20,5**, o sea medio punto de más: el recorte sale de resultados, nunca de robustez |
 
 **Regla de recorte**: si sobran páginas se recorta de resultados hacia el apéndice, **nunca de
 robustez**. Un resultado más en la mesa no compensa un flanco abierto, y este equipo ya perdió un
