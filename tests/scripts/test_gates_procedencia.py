@@ -392,7 +392,13 @@ def test_copiar_una_cifra_obsoleta_a_otro_documento_rompe_el_gate(tmp_path: Path
 
 
 def _una_cifra_vigilada() -> str:
-    """One figure the publication gate is actually watching, taken from the gate itself."""
+    """One figure the publication gate is actually watching, taken FROM THE GATE.
+
+    Calcularla aparte fue un error concreto: cuando el gate empezo a descontar las cifras que
+    tambien aparecen en artefactos vigentes, el test siguio eligiendo del conjunto sin descontar
+    y acabo probando con una cifra que el gate ya no vigila. Un test que no comparte la
+    definicion con lo que prueba deja de probarlo sin avisar.
+    """
     import importlib.util
 
     ruta = REPO_ROOT / "scripts" / "paper_obsoletos_check.py"
@@ -401,9 +407,7 @@ def _una_cifra_vigilada() -> str:
     modulo = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = modulo
     spec.loader.exec_module(modulo)
-    vigiladas: set[str] = set()
-    for relativo in modulo.rutas_obsoletas(LEDGER):
-        vigiladas |= modulo.cifras_distintivas(REPO_ROOT / relativo)
+    vigiladas, _ = modulo.cifras_vigiladas(LEDGER)
     assert vigiladas, "el gate no vigila ninguna cifra"
     return sorted(vigiladas)[0]
 

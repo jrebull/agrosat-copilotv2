@@ -114,7 +114,9 @@ def _numeros(valor: object, salida: set[float]) -> None:
             _numeros(v, salida)
 
 
-def cifras_distintivas(ruta: Path) -> set[str]:
+def cifras_distintivas(
+    ruta: Path, *, minimo: int = DECIMALES_MINIMOS, redondear: bool = False
+) -> set[str]:
     """Spanish-formatted figures a document could only have copied from this artefact.
 
     Searching for the artefact PATH was the hole: prose copies numbers, not paths. Only figures
@@ -123,6 +125,10 @@ def cifras_distintivas(ruta: Path) -> set[str]:
 
     Args:
         ruta: Path to a JSON or CSV artefact.
+        minimo: Decimals a figure needs to count. The default is what makes a figure distinctive;
+            the discount set uses 1, because there the question is whether the value EXISTS.
+        redondear: Emit the four-decimal rounded form instead of the exact one, so that ``0.025``
+            in an artefact matches ``0,0250`` in a table. Used only for the discount set.
 
     Returns:
         The figures as they would be written in the prose of this project.
@@ -151,9 +157,12 @@ def cifras_distintivas(ruta: Path) -> set[str]:
     for x in numeros:
         if x != x or abs(x) >= 1000:  # NaN o magnitudes que no son estimadores
             continue
+        if redondear:
+            salida.add(f"{abs(x):.4f}".replace(".", ","))
+            continue
         texto = f"{abs(x):.10f}".rstrip("0")
         entero, _, decimales = texto.partition(".")
-        if len(decimales) < DECIMALES_MINIMOS:
+        if len(decimales) < minimo:
             continue
         salida.add(f"{entero},{decimales[:DECIMALES_MINIMOS]}")
     return salida
@@ -185,6 +194,35 @@ def rutas_por_estado(ledger: Path, estado: str) -> list[str]:
 def rutas_obsoletas(ledger: Path) -> list[str]:
     """Artefact paths whose ledger row is marked ``OBSOLETO``."""
     return rutas_por_estado(ledger, STALE_STATE)
+
+
+def cifras_vigiladas(ledger: Path) -> tuple[dict[str, str], int]:
+    """Figures that are distinctive of an obsolete artefact, with the artefact that owns each.
+
+    Es UNA sola definicion, y por eso vive aqui: el gate y sus tests la calculaban por separado y
+    se separaron en cuanto se anadio el descuento, con el resultado de que los tests elegian una
+    cifra que el gate ya no vigilaba y no detectaban nada.
+
+    Args:
+        ledger: Path to the custody ledger.
+
+    Returns:
+        The watched figures mapped to their obsolete artefact, and how many were discounted.
+    """
+    origen: dict[str, str] = {}
+    for relativo in rutas_obsoletas(ledger):
+        for cifra in cifras_distintivas(REPO_ROOT / relativo):
+            origen.setdefault(cifra, relativo)
+    vigentes: set[str] = set()
+    for relativo in rutas_por_estado(ledger, "SELLADO"):
+        # Para DESCONTAR se redondea a cuatro decimales sin exigir minimo: un artefacto vigente
+        # que guarda 0.025 y una tabla que escribe 0,0250 son el mismo numero, y comparar la
+        # forma en vez del valor los daba por distintos.
+        vigentes |= cifras_distintivas(REPO_ROOT / relativo, minimo=1, redondear=True)
+    colisiones = set(origen) & vigentes
+    for cifra in colisiones:
+        del origen[cifra]
+    return origen, len(colisiones)
 
 
 def tiene_marca(texto: str, sufijo: str) -> bool:
@@ -249,22 +287,9 @@ def main() -> int:
                 "resellarlo con un motivo"
             )
 
-    # Las cifras distintivas de cada artefacto obsoleto, con su origen. **Una cifra que tambien
-    # aparece en un artefacto VIGENTE no es distintiva del obsoleto**, y vigilarla produce falsos
-    # positivos: un delta de cuatro decimales medido hoy puede coincidir con uno de hace un mes
-    # por pura aritmetica. Se descuentan, y asi «distintiva» significa lo que dice.
-    origen: dict[str, str] = {}
-    for relativo in obsoletas:
-        for cifra in cifras_distintivas(REPO_ROOT / relativo):
-            origen.setdefault(cifra, relativo)
-    vigentes: set[str] = set()
-    for relativo in rutas_por_estado(args.ledger, "SELLADO"):
-        vigentes |= cifras_distintivas(REPO_ROOT / relativo)
-    colisiones = set(origen) & vigentes
-    for cifra in colisiones:
-        del origen[cifra]
+    origen, descontadas = cifras_vigiladas(args.ledger)
     print(f"cifras distintivas vigiladas: {len(origen)}")
-    print(f"  descontadas por aparecer tambien en artefactos vigentes: {len(colisiones)}")
+    print(f"  descontadas por aparecer tambien en artefactos vigentes: {descontadas}")
 
     # Cualquier documento que nombre una ruta obsoleta, o reproduzca una de sus cifras, sin estar
     # declarado ni exento.
