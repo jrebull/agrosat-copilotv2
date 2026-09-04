@@ -443,3 +443,81 @@ def test_editar_un_documento_recibido_rompe_el_gate(tmp_path: Path) -> None:
     finally:
         shutil.copy2(respaldo, doc)
     assert _correr_obsoletos_check(LEDGER)[0] == 0
+
+
+# --------------------------------------------------------------------------------------
+# El protocolo de US-172: no se congela con campos operativos sin rellenar.
+# --------------------------------------------------------------------------------------
+
+PROTOCOLO = REPO_ROOT / "docs" / "paper" / "perdidas-protocolo.md"
+
+
+def _correr_protocolo_check(protocolo: Path) -> tuple[int, str]:
+    """Run the protocol gate over a given file."""
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "protocolo_check.py"),
+            "--protocolo",
+            str(protocolo),
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout
+
+
+def test_el_protocolo_en_borrador_pasa_con_campos_pendientes() -> None:
+    """A draft may have empty fields; that is what a draft is."""
+    codigo, salida = _correr_protocolo_check(PROTOCOLO)
+    assert codigo == 0, salida
+    assert "estado: BORRADOR" in salida
+
+
+def test_congelar_con_campos_sin_rellenar_rompe_el_gate(tmp_path: Path) -> None:
+    """Freezing is the moment those fields stop being optional.
+
+    Son decisiones de personas y el codigo no puede rellenarlas; lo que si puede es impedir que el
+    documento se declare congelado sin ellas. Un aviso en prosa no impide nada.
+    """
+    texto = PROTOCOLO.read_text(encoding="utf-8")
+    mutado = texto.replace("**Estado**: BORRADOR", "**Estado**: CONGELADO", 1)
+    assert mutado != texto
+    copia = tmp_path / "protocolo.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_protocolo_check(copia)
+    assert codigo == 1, salida
+    assert "sin rellenar" in salida
+
+
+def test_congelar_sin_determinacion_institucional_rompe_el_gate(tmp_path: Path) -> None:
+    """A frozen protocol has to cite the institutional determination it was frozen against."""
+    texto = PROTOCOLO.read_text(encoding="utf-8")
+    mutado = texto.replace("**Estado**: BORRADOR", "**Estado**: CONGELADO", 1)
+    # Se rellenan los campos y se BORRA la fila de la determinacion: el unico fallo posible.
+    mutado = mutado.replace("`[POR DEFINIR]`", "`Nombre Apellido`")
+    mutado = "\n".join(
+        linea
+        for linea in mutado.splitlines()
+        if "Referencia de la determinación o aprobación institucional" not in linea
+    )
+    copia = tmp_path / "protocolo.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_protocolo_check(copia)
+    assert codigo == 1, salida
+    assert "determinacion institucional" in salida
+
+
+def test_borrar_las_permutaciones_rompe_el_gate(tmp_path: Path) -> None:
+    """Generating the reading orders after starting is choosing them knowing who is interviewed."""
+    texto = PROTOCOLO.read_text(encoding="utf-8")
+    mutado = "\n".join(
+        linea for linea in texto.splitlines() if not linea.strip().startswith("| `P")
+    )
+    copia = tmp_path / "protocolo.md"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_protocolo_check(copia)
+    assert codigo == 1, salida
+    assert "permutaciones" in salida

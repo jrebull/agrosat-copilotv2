@@ -6,7 +6,7 @@ pérdidas tienen tres grados de libertad una vez fijada la escala. Dos magnitude
 identificar y las habríamos rellenado nosotros, que es exactamente la salida por «supuesto del
 artículo» que US-172 prohíbe, entrando por la puerta de atrás.
 
-**Estado**: BORRADOR. Se congela con un commit fechado **antes de reclutar a nadie**, y desde ahí
+**Estado**: BORRADOR, con los campos operativos **sin rellenar** (§10 bis). Se congela con un commit fechado **antes de reclutar a nadie** y **después** de la determinación institucional, y desde ahí
 toda desviación entra como enmienda fechada. Este documento no produce ninguna cifra y no mira
 ningún resultado: por eso puede escribirse ahora.
 
@@ -139,9 +139,27 @@ Se leen **como situaciones concretas de su trabajo**, nunca como categorías:
 - `L5` «El mapa dice cereal de invierno, sin precisar cuál — y lo era.»
 - `L6` «El mapa dice cereal de invierno — y era un cultivo de primavera.»
 
-> **El orden de lectura se aleatoriza por informante y se registra en su ficha.** Con seis
-> entrevistas, un efecto de orden es indistinguible del efecto de grupo, y ese es justo el efecto que
-> el artículo quiere medir. Se usa una permutación por informante, generada antes de la entrevista.
+> **El orden de lectura se BLOQUEA por grupo, no se aleatoriza por informante.** Antes de la primera
+> entrevista se generan tres permutaciones `P1`–`P3`. **Cada grupo recibe exactamente una vez cada
+> permutación**; dentro del grupo se asignan al azar. Así los dos grupos tienen la misma
+> distribución de órdenes de lectura. Si se incorporan más informantes, las asignaciones continúan
+> balanceadas por grupo.
+>
+> Aleatorizar cada entrevista por separado —que es lo que decía la versión anterior— **todavía
+> permite que grupo y orden queden confundidos por azar**: con tres informantes por grupo, no es
+> improbable que un grupo reciba órdenes sistemáticamente distintos del otro. Y el efecto de grupo
+> es exactamente el efecto que el artículo quiere medir.
+
+**Las tres permutaciones, generadas y registradas antes de entrevistar** (semilla `20260904`,
+`random.Random`, sin reemplazo entre permutaciones):
+
+| | Orden de lectura |
+|---|---|
+| `P1` | `L3` · `L6` · `L5` · `L4` · `L2` · `L1` |
+| `P2` | `L3` · `L5` · `L1` · `L6` · `L4` · `L2` |
+| `P3` | `L1` · `L2` · `L5` · `L4` · `L3` · `L6` |
+
+La asignación de cada permutación a cada informante se anota en su ficha **antes** de la entrevista.
 
 ### 7.3 Primero el orden, después la magnitud
 
@@ -220,6 +238,26 @@ Declarado antes para no discutirlo después:
 - Que se lea la misma permutación a todos.
 - Que se recoja una sola respuesta antes de cerrar §6.
 
+## 10 bis. Campos operativos · **SIN RELLENAR**
+
+Estos campos son responsabilidad de personas, no del repositorio, y **el protocolo no puede pasar a
+`CONGELADO` mientras alguno diga `[POR DEFINIR]`**. Lo comprueba `make protocolo-check`.
+
+| Campo | Valor |
+|---|---|
+| Investigador responsable | `[POR DEFINIR]` |
+| Profesor responsable, si el anterior es estudiante | `[POR DEFINIR]` |
+| Custodio de las respuestas crudas | `[POR DEFINIR]` |
+| Plataforma cifrada concreta | `[POR DEFINIR]` |
+| Personas nominalmente autorizadas a leer lo crudo | `[POR DEFINIR]` |
+| Plazo de destrucción de las grabaciones | `[POR DEFINIR]` |
+| Cómo pide una persona retirar sus datos | `[POR DEFINIR]` |
+| Quién transcribe y quién valida la transcripción | `[POR DEFINIR]` |
+| Referencia de la determinación o aprobación institucional | `[POR DEFINIR]` |
+
+**Aquí no se escriben secretos, rutas privadas ni contactos personales.** Un nombre y un rol bastan;
+el correo de cada persona vive en el fichero de vínculo del custodio, fuera del repositorio.
+
 ## 11. Congelación
 
 Se congela con un commit fechado antes del primer reclutamiento. Toda desviación entra como
@@ -279,10 +317,15 @@ US-174 y la geometría de US-175.
 > trabajo distintos tipos de error de un mapa automático**. Las entrevistas duran entre 45 y 60
 > minutos.
 >
-> **No se recogen datos personales** más allá del tipo de trabajo y los años de experiencia en
-> tramos. No se pregunta por personas identificables, ni por datos de sus organizaciones, ni por
-> ningún dato sensible. Las respuestas se publican de forma anonimizada. Hay consentimiento informado
-> por escrito, participación voluntaria y derecho de retirada hasta la publicación.
+> Para gestionar la invitación y el derecho de retirada, el custodio conservará nombre y medio de
+> contacto en un fichero de vínculo separado, cifrado y con acceso restringido. El conjunto
+> analítico solo contendrá grupo y experiencia por tramos. Si la persona autoriza una grabación, su
+> voz se tratará como dato personal y la grabación se destruirá después de validar la
+> transcripción.
+>
+> No se pregunta por personas identificables, ni por datos de sus organizaciones, ni por ningún dato
+> sensible. Las respuestas se publican de forma anonimizada. Hay consentimiento informado por
+> escrito, participación voluntaria y derecho de retirada hasta la publicación.
 >
 > **Mi pregunta es concreta**: ¿requiere este estudio revisión o aprobación de un comité de ética de
 > la institución? Y si la requiere, ¿cuál es el procedimiento y el plazo estimado?
