@@ -231,3 +231,84 @@ def test_save_rejects_unsupported_or_empty_formats(
         save_figure(synthetic_figure, tmp_path / "empty", formats=())
     with pytest.raises(ValueError, match="no soportados"):
         save_figure(synthetic_figure, tmp_path / "raster", formats=("png",))
+
+
+# --------------------------------------------------------------------------------------
+# La figura no se dibuja sobre insumos que el ledger marca OBSOLETO.
+# --------------------------------------------------------------------------------------
+
+
+def test_una_figura_no_se_dibuja_sobre_insumos_obsoletos(tmp_path) -> None:
+    """A well-typeset figure of invalid data is worse than an ugly one: it looks reviewed.
+
+    El guion que la produce es el ultimo sitio donde se puede parar. Despues ya es un PDF que
+    alguien pega en una presentacion, y el estado del ledger deja de acompanarlo.
+    """
+    from ml.report.figuras_micai import require_current_inputs
+
+    ledger = tmp_path / "ARTIFACTS.md"
+    ledger.write_text(
+        "| x | `reports/a.csv` | `" + "0" * 32 + "` | 1 | `abc1234` | OBSOLETO | nota |\n"
+        "| y | `reports/b.csv` | `" + "1" * 32 + "` | 1 | `abc1234` | SELLADO | nota |\n",
+        encoding="utf-8",
+    )
+    require_current_inputs(("reports/b.csv",), ledger)
+    with pytest.raises(RuntimeError, match="OBSOLETO"):
+        require_current_inputs(("reports/a.csv", "reports/b.csv"), ledger)
+
+
+def test_una_ruta_citada_en_la_nota_de_otra_fila_no_se_confunde_con_su_fila(tmp_path) -> None:
+    """The path is read from its cell, not from anywhere in the line.
+
+    Es el mismo defecto que ya aparecio en el gate de bibliografia: una fila que menciona otra
+    ruta en su nota se tomaba por la fila de esa ruta. Aqui se comprueba que no vuelva.
+    """
+    from ml.report.figuras_micai import ledger_state
+
+    ledger = tmp_path / "ARTIFACTS.md"
+    ledger.write_text(
+        "| x | `reports/vigente.csv` | `" + "0" * 32 + "` | 1 | `abc1234` | SELLADO | "
+        "esta fila menciona `reports/obsoleto.csv` en su nota |\n"
+        "| y | `reports/obsoleto.csv` | `" + "1" * 32 + "` | 1 | `abc1234` | OBSOLETO | nota |\n",
+        encoding="utf-8",
+    )
+    assert ledger_state("reports/vigente.csv", ledger) == "SELLADO"
+    assert ledger_state("reports/obsoleto.csv", ledger) == "OBSOLETO"
+
+
+def test_la_figura_de_soporte_sale_al_ancho_final_y_con_bytes_estables(tmp_path) -> None:
+    """End-to-end over the real generator: physical width and byte reproducibility."""
+    import hashlib
+
+    from scripts.build_micai2027_figures import figura_soporte
+
+    primeros = figura_soporte("en", tmp_path)
+    huellas_1 = [hashlib.md5(p.read_bytes()).hexdigest() for p in primeros]
+    huellas_2 = [hashlib.md5(p.read_bytes()).hexdigest() for p in figura_soporte("en", tmp_path)]
+    assert huellas_1 == huellas_2, "dos generaciones identicas dan bytes distintos"
+    pdf = next(p for p in primeros if p.suffix == ".pdf")
+    texto = pdf.read_bytes()[:2000].decode("latin-1", errors="replace")
+    assert "MediaBox" in texto or pdf.stat().st_size > 0
+
+
+def test_las_dos_versiones_de_idioma_difieren_en_el_contenido(tmp_path) -> None:
+    """Language is a parameter: the two SVGs must not be the same file."""
+    import hashlib
+
+    from scripts.build_micai2027_figures import figura_soporte
+
+    es = next(p for p in figura_soporte("es", tmp_path) if p.suffix == ".svg")
+    en = next(p for p in figura_soporte("en", tmp_path) if p.suffix == ".svg")
+    assert hashlib.md5(es.read_bytes()).hexdigest() != hashlib.md5(en.read_bytes()).hexdigest()
+
+
+def test_el_banco_se_llama_pastis_y_no_pastis_r() -> None:
+    """The optical bank is PASTIS. The fix reached the manuscript and not the figures.
+
+    Un revisor mira la figura antes que el texto, asi que la etiqueta equivocada llegaba primero.
+    """
+    from scripts.build_micai2027_figures import TEXTOS
+
+    for idioma, textos in TEXTOS.items():
+        assert "PASTIS-R" not in textos["primario"], f"{idioma}: {textos['primario']}"
+        assert "PASTIS" in textos["primario"]

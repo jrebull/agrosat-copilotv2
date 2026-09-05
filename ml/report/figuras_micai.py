@@ -30,6 +30,8 @@ __all__ = [
     "apply_manuscript_style",
     "find_series_channel_violations",
     "find_texts_below_minimum",
+    "ledger_state",
+    "require_current_inputs",
     "save_figure",
     "translate_label",
     "validate_figure",
@@ -321,3 +323,55 @@ def save_figure(
         )
         written_paths.append(output_path)
     return written_paths
+
+
+def ledger_state(relative_path: str, ledger: Path | None = None) -> str | None:
+    """State the custody ledger records for a path, or ``None`` when it has no row.
+
+    Args:
+        relative_path: Path as written in the ledger.
+        ledger: Ledger path, defaulting to ``paper/ARTIFACTS.md``.
+
+    Returns:
+        The state, or ``None``.
+    """
+    import re
+
+    destino = ledger or Path(__file__).resolve().parents[2] / "paper" / "ARTIFACTS.md"
+    if not destino.exists():
+        return None
+    minimo_celdas = 6
+    for linea in destino.read_text(encoding="utf-8").splitlines():
+        if not linea.startswith("|"):
+            continue
+        celdas = linea.strip().strip("|").split("|")
+        if len(celdas) < minimo_celdas:
+            continue
+        path_cell = re.search(r"`([^`]+)`", celdas[1])
+        if path_cell is not None and path_cell.group(1) == relative_path:
+            return celdas[5].strip()
+    return None
+
+
+def require_current_inputs(paths: tuple[str, ...], ledger: Path | None = None) -> None:
+    """Refuse to draw a figure whose inputs the ledger marks ``OBSOLETO``.
+
+    Una figura bien tipografiada de datos invalidos es peor que una figura fea: parece revisada.
+    El guion que la produce es el ultimo sitio donde se puede parar, porque despues ya es un PDF
+    que alguien pega en una presentacion.
+
+    Args:
+        paths: Input paths, as written in the ledger.
+        ledger: Ledger path, for tests.
+
+    Raises:
+        RuntimeError: naming every obsolete input and what has to happen first.
+    """
+    obsoletos = [r for r in paths if ledger_state(r, ledger) == "OBSOLETO"]
+    if obsoletos:
+        raise RuntimeError(
+            f"{len(obsoletos)} insumo(s) marcados OBSOLETO en el ledger: "
+            + ", ".join(obsoletos)
+            + ". Se regeneran primero (US-124, US-125); dibujarlos ahora produce una figura "
+            "impecable de datos que no se pueden citar."
+        )
