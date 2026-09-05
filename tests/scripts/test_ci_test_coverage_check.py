@@ -52,12 +52,12 @@ def test_un_arbol_de_pruebas_nuevo_rompe_el_gate(tmp_path: Path) -> None:
 
 
 def test_un_subdirectorio_no_hereda_el_motivo_de_su_padre() -> None:
-    """``tests/ml/eval/*.py`` esta declarado; ``tests/ml/eval/sub/`` no lo esta por herencia.
+    """``tests/ml/train/*.py`` esta declarado; ``tests/ml/train/sub/`` no lo esta por herencia.
 
     Los patrones son de ``PurePosixPath.match``, donde ``*`` no cruza separadores. Si heredaran,
     un subarbol nuevo se colaria con el motivo escrito para otra cosa.
     """
-    sub = REPO_ROOT / "tests" / "ml" / "eval" / "_sub_de_prueba_del_gate"
+    sub = REPO_ROOT / "tests" / "ml" / "train" / "_sub_de_prueba_del_gate"
     sub.mkdir()
     (sub / "test_y.py").write_text("def test_y() -> None:\n    assert True\n", encoding="utf-8")
     try:
@@ -124,15 +124,18 @@ def test_un_workflow_sin_pytest_no_se_declara_verde(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "patron",
-    ["tests/ml/eval/*.py", "tests/ml/analysis/*.py", "tests/ml/eval/oof/*.py"],
+    "arbol",
+    ["tests/ml/eval", "tests/ml/analysis", "tests/ml/eval/oof"],
 )
-def test_la_superficie_del_articulo_esta_declarada_como_pendiente(patron: str) -> None:
-    """Los arboles que sostienen el articulo llevan escrito que aun no corren en la CI.
+def test_la_superficie_del_articulo_la_corre_la_ci(arbol: str) -> None:
+    """Los arboles que sostienen el articulo -frontera, custodia, inventario OOF- corren en la CI.
 
-    No es una excusa permanente: el motivo dice que falta comprobarlos en un checkout sin los
-    blobs de DVC, y ese es el trabajo que lo cierra.
+    Estuvieron declarados como suite local hasta comprobar que pasaban en un checkout SIN los
+    blobs de DVC. Pasan: un git worktree limpio dio 597 pruebas verdes, y el unico fallo era una
+    prueba que dependia de un checkpoint versionado y ya no depende.
     """
-    from scripts.ci_test_coverage_check import SUITE_LOCAL
+    from scripts.ci_test_coverage_check import SUITE_LOCAL, WORKFLOW, prefijos_de_ci
 
-    assert "pendiente de verificar sin blobs DVC" in SUITE_LOCAL[patron]
+    prefijos = prefijos_de_ci(WORKFLOW)
+    assert any(arbol == p or arbol.startswith(f"{p}/") for p in prefijos), prefijos
+    assert f"{arbol}/*.py" not in SUITE_LOCAL

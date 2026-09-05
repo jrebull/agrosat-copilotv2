@@ -91,7 +91,7 @@ def provenance(seed: int, extra: dict[str, Any] | None = None) -> dict[str, Any]
         "numpy": np.__version__,
         "scikit_learn": sklearn.__version__,
         "generado": datetime.now(UTC).isoformat(timespec="seconds"),
-        "universo": "fold 5 held-out de PASTIS-R, parcelas compartidas por los miembros",
+        "universo": "fold 5 held-out de PASTIS, parcelas compartidas por los miembros",
         "ground_truth": "reports/paper_micai/fase1/parcel_gt_fold5.parquet",
     }
     if extra:

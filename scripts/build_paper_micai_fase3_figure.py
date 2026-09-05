@@ -34,6 +34,9 @@ INSUMOS: tuple[str, ...] = (
     "reports/paper_micai/fase3/frontera_contrastes.json",
 )
 
+#: Salida -> insumos: el estado de custodia de la figura se contrasta con el de sus datos.
+INSUMOS_POR_FIGURA: dict[str, tuple[str, ...]] = {"reports/paper_micai/fase3/frontera.svg": INSUMOS}
+
 #: Estilo sobrio de articulo: serif, sin rejilla de color, distinguible en blanco y negro.
 STYLE = {
     "font.family": "serif",

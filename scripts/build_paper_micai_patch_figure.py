@@ -1,6 +1,6 @@
 """Figura cualitativa: parcelas reales del fold retenido, con su etiqueta agronomica.
 
-Es la figura que ancla el articulo en el dato. Muestra tres parches del fold 5 de PASTIS-R en
+Es la figura que ancla el articulo en el dato. Muestra tres parches del fold 5 de PASTIS en
 color natural, en una fecha de verano, junto a su anotacion por parcela coloreada por clase. La
 leyenda usa la misma paleta que el resto de figuras y separa en siena las clases raras, que son
 las que el recorte de leyenda retira primero.
