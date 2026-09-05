@@ -21,10 +21,21 @@ import structlog
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from ml.report.figuras_micai import require_current_inputs
+
 logger = structlog.get_logger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FASE3 = REPO_ROOT / "reports" / "paper_micai" / "fase3"
+
+#: Insumos de esta figura, para comprobar su estado en el ledger antes de dibujar.
+INSUMOS: tuple[str, ...] = (
+    "reports/paper_micai/fase3/frontera_resumen.csv",
+    "reports/paper_micai/fase3/frontera_contrastes.json",
+)
+
+#: Salida -> insumos: el estado de custodia de la figura se contrasta con el de sus datos.
+INSUMOS_POR_FIGURA: dict[str, tuple[str, ...]] = {"reports/paper_micai/fase3/frontera.svg": INSUMOS}
 
 #: Estilo sobrio de articulo: serif, sin rejilla de color, distinguible en blanco y negro.
 STYLE = {
@@ -62,6 +73,10 @@ SERIES = {
 
 def main() -> None:
     """Draw the frontier for both predictors into one two-panel figure."""
+    # Una figura impecable de datos invalidos parece revisada, y es peor que una fea.
+    # Este es el ultimo sitio donde se puede parar: despues ya es un PDF que alguien pega
+    # en una presentacion.
+    require_current_inputs(INSUMOS)
     resumen = pl.read_csv(FASE3 / "frontera_resumen.csv")
     contrastes = json.loads((FASE3 / "frontera_contrastes.json").read_text(encoding="utf-8"))
     predictores = [contrastes["predictor_principal"], contrastes["predictor_segundo"]]

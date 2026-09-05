@@ -105,6 +105,12 @@ def set_paper_style() -> None:
 
     Sets serif fonts, 300 DPI, tight column-width defaults and a deterministic
     seed for NumPy. Idempotent; safe to call at the top of every figure.
+
+    It deliberately does NOT set ``figure.constrained_layout.use``. That rcParam is layout
+    policy, not typography: once set it applied to every figure drawn later in the same
+    process, and ``tight_layout`` -called at 63 sites across ``ml/``- raises on a figure that
+    already has a constrained layout engine. The figures of this module ask for the engine one
+    by one, where it belongs.
     """
     np.random.seed(PAPER_SEED)
     plt.rcParams.update(
@@ -124,7 +130,6 @@ def set_paper_style() -> None:
             "ytick.labelsize": 8,
             "axes.spines.top": False,
             "axes.spines.right": False,
-            "figure.constrained_layout.use": True,
         }
     )
 
@@ -186,7 +191,7 @@ def promote_png(
         return None
     set_paper_style()
     img = mpimg.imread(source_png)
-    fig, ax = plt.subplots(figsize=(5.5, 4.0))
+    fig, ax = plt.subplots(figsize=(5.5, 4.0), layout="constrained")
     ax.imshow(img)
     ax.axis("off")
     ax.grid(False)
@@ -239,7 +244,7 @@ def fig_benchmark_barplot(
     f1 = df["f1_macro"].to_list()
     x = np.arange(len(models))
     width = 0.38
-    fig, ax = plt.subplots(figsize=(6.0, 3.4))
+    fig, ax = plt.subplots(figsize=(6.0, 3.4), layout="constrained")
     ax.bar(x - width / 2, miou, width, label="mIoU", color="#2c6fbb")
     ax.bar(x + width / 2, f1, width, label="F1-macro", color="#e08214")
     ax.set_xticks(x)
@@ -294,7 +299,7 @@ def fig_farslip_sweep_curve(
     df = pl.read_csv(sweep_csv).sort("n_classes")
     set_paper_style()
     n = df["n_classes"].to_list()
-    fig, ax = plt.subplots(figsize=(5.0, 3.2))
+    fig, ax = plt.subplots(figsize=(5.0, 3.2), layout="constrained")
     ax.plot(n, df["macro_f1"].to_list(), "o-", label="macro-F1", color="#2c6fbb")
     ax.plot(n, df["macro_iou"].to_list(), "s--", label="macro-IoU", color="#e08214")
     ax.set_xlabel(txt["xlabel"])
@@ -357,7 +362,7 @@ def fig_transfer_catalonia(
     few = [fs["miou"], fs["f1_macro"], fs["pixel_accuracy"]]
     x = np.arange(len(labels))
     width = 0.38
-    fig, ax = plt.subplots(figsize=(4.8, 3.2))
+    fig, ax = plt.subplots(figsize=(4.8, 3.2), layout="constrained")
     ax.bar(x - width / 2, zero, width, label=txt["zero_shot"], color="#9e9e9e")
     ax.bar(x + width / 2, few, width, label=txt["few_shot"], color="#2c6fbb")
     ax.set_xticks(x)
@@ -440,7 +445,7 @@ def fig_farslip_band_ablation(
     f1_std = df["f1_macro_std"].to_list()
     sil = df["silhouette"].to_list()
     x = np.arange(len(spaces))
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.6, 3.2))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.6, 3.2), layout="constrained")
     ax1.bar(x, f1, yerr=f1_std, capsize=4, color=["#7b3294", "#2c6fbb"])
     ax1.set_xticks(x)
     ax1.set_xticklabels(spaces, rotation=20, ha="right")
@@ -510,7 +515,7 @@ def fig_tsvit_full_config_delta(
     x = np.arange(len(labels))
     width = 0.38
     colors = ["#2c6fbb", "#e08214"]
-    fig, ax = plt.subplots(figsize=(5.2, 3.3))
+    fig, ax = plt.subplots(figsize=(5.2, 3.3), layout="constrained")
     for i, model in enumerate(models):
         vals = [float(df.filter(pl.col("modelo") == model)[c][0]) for c in cols]
         ax.bar(
@@ -590,7 +595,7 @@ def fig_llm_benchmark_barplot(
     x = np.arange(len(metrics))
     width = 0.8 / max(len(present), 1)
     colors = {"gemini": "#2c6fbb", "qwen": "#e08214"}
-    fig, ax = plt.subplots(figsize=(6.0, 3.2))
+    fig, ax = plt.subplots(figsize=(6.0, 3.2), layout="constrained")
     for i, key in enumerate(present):
         vals = [_m(data[key], sub, metric) for _, sub, metric in metrics]
         ax.bar(

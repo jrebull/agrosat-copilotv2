@@ -2,6 +2,8 @@
 
 > Lista operativa de targets `make`. Resumen ejecutivo en [`AGENTS.md`](../../AGENTS.md). `make help` imprime todos los targets con descripción.
 
+El ciclo recomendado para una US esta en [`prompts-optimizers-fable.md`](prompts-optimizers-fable.md).
+
 ## Quality gates (reemplazan pre-commit)
 
 ```bash

@@ -7,6 +7,11 @@
 decisiones por defecto marcadas **[POR DEFECTO]** en cada apartado, y esta línea es su registro.
 **Sustituye a**: [ADR-013](ADR-013-angulo-micai.md), cuya tesis no sobrevivió a la fase 3.
 **Enmienda 1**, 4 de septiembre de 2026: el §6 pasa de «qué predictor» a «qué regla de selección o panel», porque el valor por defecto anterior contradecía a US-139.
+**Enmienda 2**, 4 de septiembre de 2026: el panel usa `xgb-alphaearth-remat-v1` y no el componente histórico desplegado, que queda como referencia descriptiva.
+**Enmienda 3**, 4 de septiembre de 2026: se congela el panel en cinco miembros (§6 bis) y se fija el orden de ejecución (§7 bis).
+**Enmienda 3**, 4 de septiembre de 2026: US-119 retira `anysat` y `utae` del conjunto elegible
+inferencial mientras no se identifique la causa de su caída; `segformer` se conserva porque la
+premisa de que también caía fue desmentida por el artefacto.
 **Evidencia**: ocho rondas de auditoría externa en
 [`docs/paper/respuesta-auditoria-externa.md`](../paper/respuesta-auditoria-externa.md) · el
 preregistro en [`docs/paper/preregistro-v2-borrador.md`](../paper/preregistro-v2-borrador.md) · el
@@ -24,7 +29,7 @@ Lo que obligó al cambio, con su evidencia y no con una impresión:
 
 | Qué se creía | Qué se encontró | Dónde |
 |---|---|---|
-| El resultado central se sostenía | Su aparato tenía **tres defectos** —denominador móvil, punto de operación elegido dentro del bloque evaluado, remuestreo en la unidad equivocada—; **reparados en el código, sin regenerar los artefactos** | 13 filas `OBSOLETO` en el ledger |
+| El resultado central se sostenía | Su aparato tenía **tres defectos** —denominador móvil, punto de operación elegido dentro del bloque evaluado, remuestreo en la unidad equivocada—; **reparados en el código, sin regenerar los artefactos** | 25 filas `OBSOLETO` en el ledger |
 | «A igual cobertura» era comparable | **No está definido** para dos de los cuatro mecanismos: un conjunto conforme y una clase gruesa se entregan siempre | `ml/eval/set_valued.py` |
 | La cardinalidad servía de coste | Dos conjuntos del mismo tamaño no cuestan lo mismo, y el vacío no es gratis. **No hay función de pérdida** | US-172, sin hacer |
 | Había potencia en la disparidad | **Ninguna** de las cuatro medidas declaradas la tiene con cinco bloques | `reports/paper_micai/potencia/` |
@@ -92,11 +97,68 @@ arriba todo lo que venga después.
 > trata como **factor de sensibilidad**. Solo podrá seleccionarse uno mediante **selección anidada
 > independiente de la evaluación**. **[POR DEFECTO: el panel, sin ganador.]**
 
+**Y el panel no contiene el componente que se desplegó, sino su reconstrucción.** Hay que decirlo
+con todas las letras porque es fácil de pasar por alto:
+
+> El panel inferencial usa **`xgb-alphaearth-remat-v1`**, una reconstrucción reproducible con
+> identidad propia. **No es el componente histórico desplegado.** Este permanece
+> `legacy_unverified`; se reporta descriptivamente su acuerdo global de **0,945433** y la
+> divergencia concentrada en baja confianza —0,5474 por debajo de 0,5 de confianza frente a 0,9999
+> por encima de 0,9—, pero **no se usa para inferencia**.
+
+Fingir que los dos son el mismo predictor sería el error que US-118 existe para impedir, cometido
+en el documento que fija el alcance.
+
+**US-119 reduce el conjunto elegible de segmentación, pero no selecciona un ganador.** Para PASTIS
+quedan `tsvit-pheno`, `tsvit-pheno-fullm`, `deeplabv3plus`, `segformer` y `unet`; `anysat` y `utae`
+se conservan como descriptivos y no entran en inferencia mientras la causa de sus deltas de 0,3597
+y 0,4010 siga sin identificar. La decisión y la identidad de los pesos están en
+[`sanidad_miembros.json`](../../reports/paper_micai/us119/sanidad_miembros.json), no solo en esta
+prosa. US-139 todavía debe congelar el panel final y mantener al menos tres familias distintas.
+
 **Corrección del borrador anterior**: decía «el artículo reporta los dos predictores», y eso
 contradice a US-139, que exige un panel de al menos tres de familias distintas por banco. Dos
 predictores del mismo linaje no son un panel: son una comparación con el mismo sesgo dos veces. El
 error venía de que la pregunta estaba mal formulada —«qué predictor es el del artículo»— y una
 pregunta que presupone un ganador se contesta con un ganador.
+
+### 6 bis · El panel, congelado
+
+**Cinco miembros y cuatro familias**, declarados en [`panel-v1.json`](../paper/panel-v1.json) y en
+§4.6 del preregistro, con `make panel-check` comprobando que ninguno esté excluido, que las familias
+lleguen al mínimo y que la prosa diga lo mismo:
+
+`unet` · `deeplabv3plus` · `segformer` · `tsvit-pheno` · `tsvit-pheno-fullm`
+
+**El margen sobre el mínimo es de una familia.** Dos miembros son de la misma, y perder uno más deja
+el panel por debajo de su propio criterio. El gate lo imprime en cada ejecución.
+
+**Fuera, y la distinción importa**: `anysat` y `utae` por superar el umbral de US-119 con la causa
+**sin identificar**, así que su exclusión es **reversible**; los dos FarSLIP y el `xgb-alphaearth`
+histórico por procedencia, y eso no se revierte solo.
+
+> **Precisión que se mantiene**: `segformer` mejora en fold 5 y **sigue dentro del panel**. Eso
+> **no invalida el criterio del umbral**, que sigue vigente; demuestra que la lista previa de
+> sospechosos estaba parcialmente equivocada. **Un miembro se excluye por superar el umbral**,
+> nunca por figurar en aquella lista.
+
+**`xgb-alphaearth-remat-v1`, decidido el 4 de septiembre**: entra como **candidato nuevo con
+procedencia verificada**, **nunca como reproducción del desplegado** —no lo reproduce, y el
+desacuerdo está donde el artículo trabaja—. Fuera del panel de segmentación densa, que es otra
+ruta. El **XGB histórico se queda `legacy_unverified` y fuera de inferencia**. De ninguno de los dos
+se declara ganador: el predictor es factor de sensibilidad.
+
+### 7 bis · El orden de ejecución
+
+1. Congelar el panel *(hecho)*.
+2. **US-172** con pérdidas obtenidas de usuarios reales.
+3. Congelar el preregistro.
+4. Regenerar **una sola vez** los 25 artefactos `OBSOLETO`.
+5. Multiplicidad y análisis final.
+6. Manuscrito.
+
+**Regenerar ahora provocaría otra ronda de artefactos obsoletos**, porque cambiarían de nuevo al
+fijar la pérdida. Por eso se hace una vez y al final de los tres cierres.
 
 ### 7 · Qué NO autoriza este ADR
 
@@ -109,7 +171,7 @@ preregistro no se firma antes de US-172. Este ADR fija el alcance; no abre la ca
 
 - El artículo pierde la afirmación de transporte, que era su gancho más vendible.
 - El calendario depende de una elicitación con personas reales, que no se puede acelerar.
-- Trece artefactos hay que regenerarlos antes de citar una sola de sus cifras.
+- Veinticinco artefactos hay que regenerarlos antes de citar una sola de sus cifras.
 
 **A cambio:**
 

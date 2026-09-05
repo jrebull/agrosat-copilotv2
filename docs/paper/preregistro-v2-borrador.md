@@ -179,6 +179,51 @@ Partir el mismo territorio más fino no crea réplicas nuevas. **Medido, y con l
 
 El 0,60 medio y el 0,80 máximo que este documento publicaba eran los de **entrenamiento más validación**, no los de entrenamiento. Los dos son ciertos y no son el mismo número. Y la tendencia dice lo que importa: **cuanto más se parte, más comparten los folds**, hasta un 0,92 con veinticinco bloques. Subdividir no produce réplicas; produce el mismo dato contado más veces.
 
+### 4.6 El panel de predictores, congelado
+
+**La lista se fija aquí, antes de calcular nada**, y vive además en un contrato ejecutable,
+[`panel-v1.json`](panel-v1.json), que un gate comprueba contra este apartado y contra el inventario
+de OOF. Un panel elegido después de ver resultados no es un panel: es un ganador con otro nombre.
+
+| miembro | familia | temporal |
+|---|---|:--:|
+| `unet` | CNN encoder-decoder | no |
+| `deeplabv3plus` | CNN atrous | no |
+| `segformer` | transformer espacial | no |
+| `tsvit-pheno` | transformer temporal | sí |
+| `tsvit-pheno-fullm` | transformer temporal | sí |
+
+**Cinco miembros, cuatro familias distintas**, sobre un mínimo exigido de tres. El margen es de
+una: dos miembros comparten familia, y perder uno más dejaría el panel por debajo de su propio
+criterio. El gate lo imprime en cada ejecución para que la holgura no se descubra el día que se
+acabe.
+
+**El predictor es un factor de sensibilidad, no un competidor.** No se declara campeón, y solo
+podrá seleccionarse uno mediante **selección anidada independiente de la evaluación**. Que el
+recálculo diagnóstico sitúe `tsvit-pheno-fullm` en 0,7883 frente a 0,7367 de `tsvit-pheno` lo
+mantiene elegible y **no ordena nada**.
+
+**Quién queda fuera y por qué**, con la distinción que importa: `anysat` y `utae` salen por superar
+el umbral de discrepancia de US-119 —0,3597 y 0,4010— **con la causa sin identificar**, así que su
+exclusión es **reversible**: es por no saber, no por saber que están mal. `farslip-ft18`, `farslip-zeroshot` y el
+`xgb-alphaearth` histórico salen por procedencia, y eso no se revierte solo.
+
+> **Precisión que se mantiene escrita**: `segformer` **mejora** en fold 5 (−0,0235) y **sigue
+> dentro del panel**. Eso **no invalida el criterio del umbral**, que sigue vigente y hace su
+> trabajo; demuestra que la lista previa de sospechosos —«utae, anysat y segformer»— estaba
+> parcialmente equivocada. **Un miembro se excluye por superar el umbral**, nunca por figurar en
+> aquella lista.
+
+**`xgb-alphaearth-remat-v1`, decidido**: entra como **candidato nuevo con procedencia
+verificada**, y **nunca como reproducción del desplegado**. No lo reproduce —acuerdo de argmax
+0,945433, y 0,5474 por debajo de 0,5 de confianza, que es justo la franja sobre la que operan la
+abstención, los conjuntos y el recorte— y llamarlo reproducción sería la afirmación que US-118
+existe para impedir. No está en el panel de segmentación densa, que es de otra ruta. Si se usa, es
+como **factor de sensibilidad**: tampoco de él se declara ganador.
+
+El **XGB histórico permanece `legacy_unverified` y fuera de inferencia**. Se conserva como registro
+de lo que se usó, y como referencia descriptiva con su acuerdo medido.
+
 ## 5. Universos y multiplicidad
 
 Los dos universos de clases se reportan los dos. El criterio principal se reporta sin corregir; la familia exploratoria, con Holm, excluyendo los puntos donde los mecanismos son idénticos por construcción. La multiplicidad **de toda la superficie** —bancos, predictores, universos y el mapa de decisión entero— se declara y se trata, no solo la de los contrastes tabulados. Y el MDE se recalcula con t no central. **Aquí no se cita el valor anterior**: salió del módulo con los tres defectos, su artefacto está marcado `OBSOLETO`, y un preregistro que ancla una expectativa en una cifra invalidada la está preregistrando. Se recalcula y se acepta lo que salga.

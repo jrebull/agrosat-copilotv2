@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -392,7 +393,13 @@ def test_copiar_una_cifra_obsoleta_a_otro_documento_rompe_el_gate(tmp_path: Path
 
 
 def _una_cifra_vigilada() -> str:
-    """One figure the publication gate is actually watching, taken from the gate itself."""
+    """One figure the publication gate is actually watching, taken FROM THE GATE.
+
+    Calcularla aparte fue un error concreto: cuando el gate empezo a descontar las cifras que
+    tambien aparecen en artefactos vigentes, el test siguio eligiendo del conjunto sin descontar
+    y acabo probando con una cifra que el gate ya no vigila. Un test que no comparte la
+    definicion con lo que prueba deja de probarlo sin avisar.
+    """
     import importlib.util
 
     ruta = REPO_ROOT / "scripts" / "paper_obsoletos_check.py"
@@ -401,9 +408,7 @@ def _una_cifra_vigilada() -> str:
     modulo = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = modulo
     spec.loader.exec_module(modulo)
-    vigiladas: set[str] = set()
-    for relativo in modulo.rutas_obsoletas(LEDGER):
-        vigiladas |= modulo.cifras_distintivas(REPO_ROOT / relativo)
+    vigiladas, _ = modulo.cifras_vigiladas(LEDGER)
     assert vigiladas, "el gate no vigila ninguna cifra"
     return sorted(vigiladas)[0]
 
@@ -660,19 +665,28 @@ def test_el_analisis_micai_rechaza_un_oof_no_canonico() -> None:
         load_member_posteriors(REPO_ROOT / "ml" / "eval" / "oof", (no_canonico,), ["x"])
 
 
-def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito() -> None:
+def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito(tmp_path: Path) -> None:
     """Diagnostics and migrations need to read them; the analysis must not do it by accident."""
+    import polars as pl
+
     from ml.eval.oof.inventario import estado_de_miembro
     from ml.eval.paper_micai_arbitration import load_member_posteriors
+    from ml.utils.parcel_reconcile import PROB_COLUMNS
 
     no_canonico = next(
         m for m in ("farslip-ft18", "xgb-alphaearth") if estado_de_miembro(m) != "canonical"
     )
-    # Con la escapatoria pasa el control de estado y falla mas adelante, por cobertura: la
-    # diferencia es que el fallo ya no es "no puedes leer esto".
+    pl.DataFrame(
+        {
+            "canonical_parcel_id": ["otra-parcela"],
+            **{column: [1.0 / len(PROB_COLUMNS)] for column in PROB_COLUMNS},
+        }
+    ).write_parquet(tmp_path / f"oof_parcel_{no_canonico}_fold5.parquet")
+    # With the escape hatch, state validation passes and coverage validation
+    # fails later. The synthetic parquet keeps this distinction testable in CI.
     with pytest.raises(ValueError, match="no cubre"):
         load_member_posteriors(
-            REPO_ROOT / "ml" / "eval" / "oof",
+            tmp_path,
             (no_canonico,),
             ["parcela-que-no-existe"],
             permitir_no_canonicos=True,
@@ -682,15 +696,9 @@ def test_la_escapatoria_existe_y_hay_que_pedirla_a_proposito() -> None:
 def test_el_inventario_no_admite_estados_inventados(tmp_path: Path) -> None:
     """Three states, and a fourth one is a silent way of declaring nothing."""
     import json
-    import shutil
 
-    origen = REPO_ROOT / "ml" / "eval" / "oof"
-    copia = tmp_path / "oof"
-    copia.mkdir()
-    for parquet in origen.glob("*.parquet"):
-        (copia / parquet.name).write_bytes(parquet.read_bytes())
-    shutil.copy2(origen / "manifest.json", copia / "manifest.json")
-    datos = json.loads((origen / "inventario.json").read_text(encoding="utf-8"))
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    datos = json.loads((copia / "inventario.json").read_text(encoding="utf-8"))
     primero = next(iter(datos["ficheros"]))
     datos["ficheros"][primero]["estado"] = "casi_bueno"
     (copia / "inventario.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
@@ -708,15 +716,9 @@ def test_el_inventario_no_admite_estados_inventados(tmp_path: Path) -> None:
 def test_un_legacy_sin_siguiente_paso_rompe_el_gate(tmp_path: Path) -> None:
     """Without a written way out, a temporary state becomes a permanent one."""
     import json
-    import shutil
 
-    origen = REPO_ROOT / "ml" / "eval" / "oof"
-    copia = tmp_path / "oof"
-    copia.mkdir()
-    for parquet in origen.glob("*.parquet"):
-        (copia / parquet.name).write_bytes(parquet.read_bytes())
-    shutil.copy2(origen / "manifest.json", copia / "manifest.json")
-    datos = json.loads((origen / "inventario.json").read_text(encoding="utf-8"))
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    datos = json.loads((copia / "inventario.json").read_text(encoding="utf-8"))
     objetivo = next(k for k, v in datos["ficheros"].items() if v["estado"] == "legacy_unverified")
     datos["ficheros"][objetivo].pop("siguiente_paso", None)
     (copia / "inventario.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
@@ -747,8 +749,21 @@ def _copia_oof(tmp_path: Path, *, con_parquet: bool) -> Path:
     for puntero in origen.glob("*.dvc"):
         shutil.copy2(puntero, copia / puntero.name)
     if con_parquet:
-        for parquet in origen.glob("*.parquet"):
-            (copia / parquet.name).write_bytes(parquet.read_bytes())
+        import hashlib
+        import json
+
+        # Exercise the bytes branch without requiring DVC blobs in CI. The gate
+        # only validates identity here, so a tiny opaque payload is sufficient.
+        inventory_path = copia / "inventario.json"
+        inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+        name = next(
+            candidate for candidate in inventory["ficheros"] if candidate.startswith("oof_parcel_")
+        )
+        payload = b"oof-manifest-check synthetic bytes fixture"
+        (copia / name).write_bytes(payload)
+        inventory["ficheros"][name]["md5"] = hashlib.md5(payload).hexdigest()
+        inventory["ficheros"][name]["bytes"] = len(payload)
+        inventory_path.write_text(json.dumps(inventory, ensure_ascii=False), encoding="utf-8")
     return copia
 
 
@@ -808,3 +823,601 @@ def test_ni_el_parquet_ni_su_puntero_rompe_el_gate(tmp_path: Path) -> None:
     codigo, salida = _correr_oof_check(copia)
     assert codigo == 1, salida
     assert "ni el parquet ni su puntero" in salida
+
+
+def _convert_manifest_to_v2(oof: Path) -> dict[str, Any]:
+    """Upgrade the copied historical manifest to the current executable contract."""
+    import json
+
+    path = oof / "manifest.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["schema_version"] = 2
+    for entry in data["models"].values():
+        if entry["status"] != "ok":
+            continue
+        entry["code_version"] = data["code_version"]
+        entry["data_version"] = data["data_version"]
+        if entry["model_kind"] in {
+            "tsvit",
+            "tsvit-pheno",
+            "tsvit-pheno-fullm",
+            "utae",
+            "anysat",
+        }:
+            entry["n_timesteps_dataset"] = 10
+            entry["n_timesteps_model_spec"] = 10
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    return data
+
+
+def test_complete_v2_manifest_passes(tmp_path: Path) -> None:
+    """The positive v2 control proves the new checks are satisfiable."""
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    _convert_manifest_to_v2(oof)
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 0, salida
+
+
+def test_temporal_entry_without_effective_steps_fails(tmp_path: Path) -> None:
+    """A temporal entry cannot hide the parameter that couples model and dataset."""
+    import json
+
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    data = _convert_manifest_to_v2(oof)
+    temporal = next(
+        entry
+        for entry in data["models"].values()
+        if entry["model_kind"] in {"tsvit-pheno", "utae", "anysat"}
+    )
+    temporal.pop("n_timesteps_dataset")
+    (oof / "manifest.json").write_text(json.dumps(data), encoding="utf-8")
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 1, salida
+    assert "no declara ambas configuraciones" in salida
+
+
+def test_mismatched_temporal_steps_fail(tmp_path: Path) -> None:
+    """Counting both fields is insufficient: the control enforces their coupling."""
+    import json
+
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    data = _convert_manifest_to_v2(oof)
+    temporal = next(
+        entry
+        for entry in data["models"].values()
+        if entry["model_kind"] in {"tsvit-pheno", "utae", "anysat"}
+    )
+    temporal["n_timesteps_dataset"] = 37
+    (oof / "manifest.json").write_text(json.dumps(data), encoding="utf-8")
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 1, salida
+    assert "no coinciden" in salida
+
+
+def test_model_appended_from_another_run_fails(tmp_path: Path) -> None:
+    """Per-entry provenance catches the append that top-level provenance could not."""
+    import json
+
+    oof = _copia_oof(tmp_path, con_parquet=False)
+    data = _convert_manifest_to_v2(oof)
+    first = next(iter(data["models"].values()))
+    first["code_version"] = "otra-corrida"
+    (oof / "manifest.json").write_text(json.dumps(data), encoding="utf-8")
+    codigo, salida = _correr_oof_check(oof)
+    assert codigo == 1, salida
+    assert "code_version de la entrada" in salida
+
+
+# --------------------------------------------------------------------------------------
+# US-139: el panel congelado.
+# --------------------------------------------------------------------------------------
+
+PANEL = REPO_ROOT / "docs" / "paper" / "panel-v1.json"
+
+
+def _correr_panel_check(panel: Path) -> tuple[int, str]:
+    """Run the frozen-panel gate over a given panel file."""
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "panel_check.py"), "--panel", str(panel)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout
+
+
+def test_el_panel_congelado_es_coherente() -> None:
+    """Baseline: five members, four families, none of them excluded."""
+    codigo, salida = _correr_panel_check(PANEL)
+    assert codigo == 0, salida
+    assert "margen sobre el minimo" in salida
+
+
+def test_meter_en_el_panel_un_miembro_excluido_rompe_el_gate(tmp_path: Path) -> None:
+    """A member the analysis cannot read has no business in the panel.
+
+    La contradiccion solo se descubriria al correr el analisis, y para entonces el panel ya esta
+    congelado: es el orden equivocado para enterarse.
+    """
+    import json
+
+    datos = json.loads(PANEL.read_text(encoding="utf-8"))
+    excluido = datos["fuera_del_panel"][0]["nombre"]
+    datos["miembros"].append({"nombre": excluido, "familia": "colada", "temporal": False})
+    copia = tmp_path / "panel.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    codigo, salida = _correr_panel_check(copia)
+    assert codigo == 1, salida
+    assert excluido in salida
+
+
+def test_declarar_un_campeon_rompe_el_gate(tmp_path: Path) -> None:
+    """The predictor is a sensitivity factor; a champion is the thing the design cannot support."""
+    import json
+
+    datos = json.loads(PANEL.read_text(encoding="utf-8"))
+    datos["campeon_declarado"] = datos["miembros"][0]["nombre"]
+    copia = tmp_path / "panel.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    codigo, salida = _correr_panel_check(copia)
+    assert codigo == 1, salida
+    assert "campeon" in salida
+
+
+def test_quedarse_por_debajo_del_minimo_de_familias_rompe_el_gate(tmp_path: Path) -> None:
+    """The margin is one family; the gate has to notice the day it runs out."""
+    import json
+
+    datos = json.loads(PANEL.read_text(encoding="utf-8"))
+    for miembro in datos["miembros"]:
+        miembro["familia"] = "una_sola"
+    datos["familias_distintas"] = 1
+    copia = tmp_path / "panel.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    codigo, salida = _correr_panel_check(copia)
+    assert codigo == 1, salida
+    assert "familias distintas" in salida
+
+
+# --------------------------------------------------------------------------------------
+# US-142: el catalogo de referencias, y los identificadores que no toleran ser numeros.
+# --------------------------------------------------------------------------------------
+
+CATALOGO = REPO_ROOT / "paper" / "micai2027" / "refs-candidates.bib"
+OVERRIDES_CSV = REPO_ROOT / "reports" / "paper_micai" / "fase0" / "related_work_overrides.csv"
+
+
+def _correr_bib_check(catalogo: Path, overrides: Path | None = None) -> tuple[int, str]:
+    """Run the bibliography gate over a given catalogue."""
+    orden = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "paper_bib_check.py"),
+        "--catalogo",
+        str(catalogo),
+    ]
+    if overrides is not None:
+        orden += ["--overrides", str(overrides)]
+    proc = subprocess.run(orden, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
+    return proc.returncode, proc.stdout
+
+
+def test_el_catalogo_vigente_pasa_su_gate() -> None:
+    """Baseline: every entry locatable, no truncated author list."""
+    codigo, salida = _correr_bib_check(CATALOGO)
+    assert codigo == 0, salida
+    assert "sin identificador localizable: 0" in salida
+
+
+def test_las_entradas_sin_citar_se_reportan_pero_no_hacen_fallar() -> None:
+    """There is no new manuscript yet, so every entry is uncited and that is not a defect."""
+    codigo, salida = _correr_bib_check(CATALOGO)
+    assert codigo == 0, salida
+    assert "sin citar (se reporta, no falla)" in salida
+
+
+def test_un_eprint_con_el_cero_final_perdido_rompe_el_gate(tmp_path: Path) -> None:
+    """``2511.10370`` must survive literally; ``2511.1037`` is an eprint that does not exist.
+
+    El defecto no lo tenia el CSV: lo tenia el generador, que leia la columna infiriendo el tipo
+    y convertia el identificador en un float. El cero final desaparecia sin que nada avisara, y
+    leyendo el bib no se ve.
+    """
+    texto = CATALOGO.read_text(encoding="utf-8")
+    assert "2511.10370" in texto, "el catalogo ya no trae el identificador que este test vigila"
+    mutado = texto.replace("2511.10370", "2511.1037", 1)
+    copia = tmp_path / "refs.bib"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_bib_check(copia)
+    assert codigo == 1, salida
+    assert "cero final" in salida
+
+
+def test_leer_las_correcciones_como_numeros_produce_una_diferencia_detectable(
+    tmp_path: Path,
+) -> None:
+    """Coercing the literal columns is not cosmetic: it silently changes what gets published.
+
+    Se comprueba en el mecanismo, no en el resultado: se lee el CSV de las dos maneras y se exige
+    que al menos un valor cambie. Si algun dia dejaran de diferir, este test avisaria de que la
+    proteccion sobra o de que se dejo de necesitar.
+    """
+    import polars as pl
+
+    columnas = ("id", "volume", "number", "pages", "url")
+    literal = pl.read_csv(OVERRIDES_CSV, schema_overrides={c: pl.Utf8 for c in columnas})
+    inferido = pl.read_csv(OVERRIDES_CSV)
+    diferencias = [
+        (clave, a, b)
+        for clave, a, b in zip(
+            literal["key"].to_list(),
+            literal["id"].to_list(),
+            [None if v is None else str(v) for v in inferido["id"].to_list()],
+            strict=True,
+        )
+        if a != b
+    ]
+    assert diferencias, (
+        "leer los identificadores como numeros ya no cambia nada: o el esquema del CSV cambio, "
+        "o esta proteccion dejo de hacer falta y hay que decirlo"
+    )
+    assert any(a and b and a.rstrip("0") == b.rstrip("0") and a != b for _, a, b in diferencias), (
+        f"la diferencia esperada es un cero final perdido y no aparece: {diferencias}"
+    )
+
+
+def test_el_bib_historico_modificado_rompe_el_gate(tmp_path: Path) -> None:
+    """The archived bibliography is immutable; the gate has to notice if it moves.
+
+    Y tiene que reconocer la fila POR SU CELDA de ruta: la primera version buscaba la ruta como
+    subcadena en la linea entera, asi que la nota de otra fila —que menciona este fichero para
+    decir que es inmutable— se tomaba por su fila y comparaba su hash con el de otro artefacto.
+    El gate acusaba un cambio que no existia.
+    """
+    import shutil
+
+    historico = REPO_ROOT / "paper" / "micai" / "refs.bib"
+    respaldo = tmp_path / "refs.bib"
+    shutil.copy2(historico, respaldo)
+    try:
+        historico.write_text(
+            historico.read_text(encoding="utf-8") + "\n% una linea de mas\n", encoding="utf-8"
+        )
+        codigo, salida = _correr_bib_check(CATALOGO)
+        assert codigo == 1, salida
+        assert "inmutable" in salida
+    finally:
+        shutil.copy2(respaldo, historico)
+    assert _correr_bib_check(CATALOGO)[0] == 0
+
+
+@pytest.mark.parametrize(
+    ("etiqueta", "sustituto"),
+    [
+        ("tupla literal anotada", 'ALL_MEMBERS: tuple[str, ...] = ("unet", "deeplabv3plus")'),
+        ("sin anotacion de tipo", 'ALL_MEMBERS = ("unet", "deeplabv3plus")'),
+        ("como lista", 'ALL_MEMBERS: list[str] = ["unet", "deeplabv3plus"]'),
+        (
+            "a traves de un alias",
+            'MIEMBROS = ("unet", "deeplabv3plus")\nALL_MEMBERS: tuple[str, ...] = MIEMBROS',
+        ),
+        ("alias de dos saltos", 'A = ("unet",)\nMIEMBROS = A\nALL_MEMBERS = MIEMBROS'),
+        ("otra funcion parecida", "ALL_MEMBERS = miembros_de_otro_sitio()"),
+    ],
+)
+def test_ninguna_variante_sintactica_burla_la_lectura_del_panel(
+    etiqueta: str, sustituto: str
+) -> None:
+    """A member list written twice drifts apart, and this one did.
+
+    Al congelar el panel en cinco miembros, fase 2 y fase 3 seguian pidiendo los diez originales
+    -cinco ya excluidos o sin verificar-. Al regenerar sus artefactos habrian usado el conjunto
+    equivocado, o habrian reventado, sin que nada relacionara una cosa con la otra.
+
+    La primera version de esta comprobacion miraba un ``AnnAssign`` cuyo valor fuera una tupla
+    literal, y se le colaban tres variantes: quitar la anotacion, usar una lista, pasar por un
+    alias. Reparar el caso en vez de la clase es el modo de fallo que estas auditorias repiten,
+    asi que aqui se prueban las variantes y no solo la que se vio primero.
+    """
+    import shutil
+    import tempfile
+
+    guion = REPO_ROOT / "scripts" / "run_paper_micai_fase3.py"
+    original = "ALL_MEMBERS: tuple[str, ...] = miembros_del_panel()"
+    with tempfile.TemporaryDirectory() as tmp:
+        respaldo = Path(tmp) / "fase3.py"
+        shutil.copy2(guion, respaldo)
+        try:
+            texto = guion.read_text(encoding="utf-8")
+            assert original in texto
+            guion.write_text(texto.replace(original, sustituto, 1), encoding="utf-8")
+            codigo, salida = _correr_panel_check(PANEL)
+            assert codigo == 1, f"{etiqueta}: {salida}"
+            assert "ALL_MEMBERS no sale de miembros_del_panel()" in salida
+        finally:
+            shutil.copy2(respaldo, guion)
+    assert _correr_panel_check(PANEL)[0] == 0
+
+
+@pytest.mark.parametrize(
+    "modulo", ["scripts.run_paper_micai_fase2", "scripts.run_paper_micai_fase3"]
+)
+def test_los_guiones_piden_en_ejecucion_exactamente_el_panel_congelado(modulo: str) -> None:
+    """La comprobacion estatica vive en un gate sin dependencias; esta mira el valor de verdad.
+
+    El gate barato de la CI solo tiene stdlib, asi que razona sobre el AST. Aqui, donde si hay
+    dependencias, se importa el modulo y se compara el valor efectivo con el panel: es la unica
+    comprobacion que ninguna forma sintactica puede burlar.
+    """
+    import importlib
+
+    from ml.eval.paper_micai_arbitration import miembros_del_panel
+
+    assert importlib.import_module(modulo).ALL_MEMBERS == miembros_del_panel()
+
+
+# ------------------------------------------------------------------------------------------
+# El alcance del gate de cuarentena: era `docs/paper/**/*.md` y el manuscrito es `.tex`.
+# ------------------------------------------------------------------------------------------
+
+
+def _correr_obsoletos() -> tuple[int, str]:
+    """Correr el gate de cuarentena sobre el repositorio entero."""
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "paper_obsoletos_check.py")],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+def _con_fichero(ruta: Path, contenido: str) -> tuple[int, str]:
+    """Crear un fichero, correr el gate y borrarlo siempre."""
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(contenido, encoding="utf-8")
+    try:
+        return _correr_obsoletos()
+    finally:
+        ruta.unlink()
+
+
+@pytest.mark.parametrize(
+    ("etiqueta", "relativa", "ingles"),
+    [
+        ("el manuscrito, que es .tex y en ingles", "paper/micai2027/_prueba.tex", True),
+        ("el manuscrito, que es .tex y en espanol", "paper/micai2027/_prueba.tex", False),
+        ("un ADR, que vive en docs/decisions", "docs/decisions/_prueba.md", False),
+        ("el plan, que vive en context/", "context/_prueba.md", False),
+        ("un documento en la raiz", "_prueba.md", False),
+        ("docs/ fuera de docs/paper", "docs/_prueba.md", False),
+    ],
+)
+def test_el_gate_de_cuarentena_alcanza_donde_estaba_ciego(
+    etiqueta: str, relativa: str, ingles: bool
+) -> None:
+    """El alcance era ``docs/paper/**/*.md``, y el manuscrito es ``.tex``.
+
+    Seis superficies quedaban fuera, incluida la unica que de verdad importa: el fichero donde se
+    escribe el articulo. Un control que protege el manuscrito y no sabe leer su formato no protege
+    nada.
+    """
+    cifra = _una_cifra_vigilada()
+    escrita = cifra.replace(",", ".") if ingles else cifra
+    codigo, salida = _con_fichero(REPO_ROOT / relativa, f"El resultado fue {escrita}.\n")
+    assert codigo == 1, f"{etiqueta}: {salida}"
+    assert "reproduce" in salida
+    assert _correr_obsoletos()[0] == 0
+
+
+def test_una_cifra_dentro_de_otra_mas_larga_no_acusa_a_nadie() -> None:
+    """``0,0342`` estaba dentro de ``arXiv:2310.03425``, y el gate lo contaba como cita.
+
+    Buscar la subcadena acusa a quien no cita nada. Con la frontera puesta, dos ficheros de
+    entregables del curso dejaron de aparecer.
+    """
+    cifra = _una_cifra_vigilada()
+    decimales = cifra.split(",")[1]
+    codigo, salida = _con_fichero(
+        REPO_ROOT / "docs" / "_prueba.md", f"Vease arXiv:2310.{decimales}25 y nada mas.\n"
+    )
+    assert codigo == 0, salida
+
+
+def test_la_forma_inglesa_en_prosa_nuestra_no_acusa() -> None:
+    """En ``.md`` solo cuenta la coma decimal, y es una decision con motivo.
+
+    Admitir el punto en prosa llenaba el control de coincidencias con metricas de otras historias
+    -``0,4094`` sale en catorce documentos de US-022 y US-023- sin anadir ni una cita real. En
+    ``.tex`` si valen las dos, porque el manuscrito de envio se escribe en ingles.
+    """
+    cifra = _una_cifra_vigilada()
+    codigo, salida = _con_fichero(
+        REPO_ROOT / "docs" / "_prueba.md", f"El resultado fue {cifra.replace(',', '.')}.\n"
+    )
+    assert codigo == 0, salida
+
+
+def test_editar_una_fuente_del_manuscrito_retirado_rompe_el_gate() -> None:
+    """La exencion del manuscrito retirado promete que no se toca, y esto lo verifica.
+
+    Si se edita, deja de estar retirado y sus cifras vuelven a ser afirmaciones vigentes.
+    """
+    fuente = REPO_ROOT / "paper" / "micai" / "sections_es" / "04-resultados.tex"
+    respaldo = fuente.read_text(encoding="utf-8")
+    try:
+        fuente.write_text(respaldo + "\n% retoque\n", encoding="utf-8")
+        codigo, salida = _correr_obsoletos()
+        assert codigo == 1, salida
+        assert "es fuente del manuscrito retirado y su MD5 cambio" in salida
+    finally:
+        fuente.write_text(respaldo, encoding="utf-8")
+    assert _correr_obsoletos()[0] == 0
+
+
+def test_una_colision_declarada_no_tapa_una_cita_nueva() -> None:
+    """Las colisiones se declaran POR CIFRA, no por fichero.
+
+    Un documento cuyo numero coincide por casualidad con uno obsoleto no puede quedar libre de
+    vigilancia para siempre: la exencion cubre esa cifra y ninguna otra.
+    """
+    from scripts.paper_obsoletos_check import COLISIONES
+
+    fichero = REPO_ROOT / "docs" / "us-resolved" / "us-018.md"
+    declaradas = set(COLISIONES["docs/us-resolved/us-018.md"])
+    otra = next(c for c in sorted(_cifras_vigiladas_del_repo()) if c not in declaradas)
+    respaldo = fichero.read_text(encoding="utf-8")
+    try:
+        fichero.write_text(f"{respaldo}\n\nY ademas {otra}.\n", encoding="utf-8")
+        codigo, salida = _correr_obsoletos()
+        assert codigo == 1, salida
+        assert "us-018.md" in salida
+    finally:
+        fichero.write_text(respaldo, encoding="utf-8")
+    assert _correr_obsoletos()[0] == 0
+
+
+def _cifras_vigiladas_del_repo() -> dict[str, str]:
+    """Las cifras vigiladas del ledger vigente."""
+    from scripts.paper_obsoletos_check import cifras_vigiladas
+
+    return cifras_vigiladas(LEDGER)[0]
+
+
+def test_el_gate_de_cuarentena_no_tarda_mas_de_diez_segundos() -> None:
+    """Un control que se hace pesado acaba fuera de la CI, y entonces no es un control.
+
+    Con 1 160 cifras y 433 documentos, un patron por cifra son medio millon de barridos: dos
+    minutos. Una sola alternacion lo deja por debajo del segundo.
+    """
+    import time
+
+    inicio = time.monotonic()
+    assert _correr_obsoletos()[0] == 0
+    assert time.monotonic() - inicio < 10.0
+
+
+def test_cambiar_la_prosa_normativa_del_preregistro_rompe_el_gate() -> None:
+    """Comprobar que una FRASE esta presente no dice nada de lo que el parrafo afirma.
+
+    Es la leccion de la seccion 4.6, que decia que un miembro del panel "se excluye" mientras el
+    contrato lo tenia dentro, y el gate pasaba porque el nombre estaba. En la 4.5 no hay forma de
+    entender la prosa con un patron, asi que se hace lo unico honesto: si el texto normativo
+    cambia, el gate se pone en rojo hasta que alguien lo relea y lo vuelva a sellar. El sello no
+    afirma que la prosa sea correcta; afirma que nadie la ha movido desde que se leyo.
+    """
+    gate = REPO_ROOT / "scripts" / "preregistro_check.py"
+
+    def correr() -> tuple[int, str]:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        return proc.returncode, proc.stdout + proc.stderr
+
+    respaldo = PREREGISTRO.read_text(encoding="utf-8")
+    try:
+        PREREGISTRO.write_text(
+            respaldo.replace("La parcela", "La parcela, en efecto,", 1), encoding="utf-8"
+        )
+        codigo, salida = correr()
+        assert codigo == 1, salida
+        assert "la prosa normativa `seccion_4_5` cambio" in salida
+    finally:
+        PREREGISTRO.write_text(respaldo, encoding="utf-8")
+    assert correr()[0] == 0
+
+
+def test_resellar_cierra_el_fallo_y_solo_toca_el_sello() -> None:
+    """``--resellar`` existe para que la friccion sea un gesto explicito, no un hash a mano."""
+    gate = REPO_ROOT / "scripts" / "preregistro_check.py"
+    respaldo_doc = PREREGISTRO.read_text(encoding="utf-8")
+    respaldo_gate = gate.read_text(encoding="utf-8")
+    try:
+        PREREGISTRO.write_text(
+            respaldo_doc.replace("La parcela", "La parcela, en efecto,", 1), encoding="utf-8"
+        )
+        sellado = subprocess.run(
+            [sys.executable, str(gate), "--resellar"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert sellado.returncode == 0, sellado.stdout
+        assert "resellado `seccion_4_5`" in sellado.stdout
+        despues = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        assert despues.returncode == 0, despues.stdout
+        # El resellado toca el sello y nada mas: las decisiones del contrato siguen intactas.
+        assert "EXIGIDO: dict[str, Any] = {" in gate.read_text(encoding="utf-8")
+    finally:
+        PREREGISTRO.write_text(respaldo_doc, encoding="utf-8")
+        gate.write_text(respaldo_gate, encoding="utf-8")
+
+
+def test_un_parquet_en_un_subdirectorio_de_oof_no_queda_invisible(tmp_path: Path) -> None:
+    """El gate miraba solo la raiz de ``oof/``, y el flujo de re-volcado usa directorios temporales.
+
+    Un temporal olvidado ahi era invisible para el inventario mientras cualquier consumidor que
+    recorriera el arbol podia leerlo. Es la misma forma del defecto que ya paso una vez: un parquet
+    huerfano -de otra configuracion, de otra pasada- se lee igual de bien que uno legitimo.
+    """
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    escondido = copia / "tmp-redump"
+    escondido.mkdir()
+    (escondido / "oof_parcel_unet_fold5.parquet").write_bytes(b"PAR1")
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "oof_manifest_check.py"), "--oof", str(copia)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 1, proc.stdout
+    assert "hay un parquet en un subdirectorio" in proc.stdout
+
+
+def test_un_artefacto_sin_fila_en_el_ledger_rompe_el_gate() -> None:
+    """El ledger comprobaba que todo lo declarado existe; no comprobaba lo contrario.
+
+    Un artefacto producido y dejado en `reports/paper_micai/` sin fila se lee igual de bien que uno
+    con custodia, y podria citarse en el manuscrito sin que nada supiera de donde salio. Es la
+    misma forma del defecto que ya paso con un parquet OOF huerfano.
+    """
+    intruso = REPO_ROOT / "reports" / "paper_micai" / "fase1" / "_intruso_de_prueba.json"
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+
+    def correr() -> tuple[int, str]:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        return proc.returncode, proc.stdout + proc.stderr
+
+    intruso.write_text('{"resultado": 0.9999}\n', encoding="utf-8")
+    try:
+        codigo, salida = correr()
+        assert codigo == 1, salida
+        assert "el ledger no lo declara" in salida
+    finally:
+        intruso.unlink()
+    assert correr()[0] == 0
+
+
+def test_las_respuestas_crudas_de_la_busqueda_no_necesitan_fila() -> None:
+    """Sellar cada respuesta de la API seria sellar el ruido.
+
+    Son la ENTRADA de `search_candidates.csv`, que si esta sellado. La exclusion es por carpeta y
+    esta escrita con su motivo, no es un descuido.
+    """
+    cruda = REPO_ROOT / "reports" / "paper_micai" / "fase0" / "raw" / "_intruso_de_prueba.json"
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+    cruda.write_text('{"resultado": 0.9999}\n', encoding="utf-8")
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        assert proc.returncode == 0, proc.stdout
+    finally:
+        cruda.unlink()

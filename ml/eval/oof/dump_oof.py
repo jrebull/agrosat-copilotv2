@@ -377,6 +377,14 @@ def _dump_one(
         "shape": [HARNESS_NUM_CLASSES, HARNESS_SIZE, HARNESS_SIZE],
         "dtype": dtype,
         "n_patches": n_scored,
+        # Record the parameter whose mismatch collapsed the Full-M scores. Without
+        # it, T=10 and T=37 dumps are indistinguishable in the manifest.
+        "n_timesteps_dataset": ds_kwargs.get("n_timesteps"),
+        "n_timesteps_model_spec": (
+            int(spec.model_kwargs.get("n_timesteps", 10)) if is_temporal else None
+        ),
+        "code_version": code_version,
+        "data_version": data_version,
         "status": "ok",
         "held_out": held_out,
         "reason": None,
@@ -481,8 +489,8 @@ def dump_oof(
         write_parcel: Also write the per-parcel sidecar parquet per model.
 
     Returns:
-        Manifest dict ``{"fold", "held_out", "code_version", "data_version",
-        "dtype", "num_classes", "size", "models": {name: entry}}`` where each
+        Manifest dict ``{"schema_version", "fold", "held_out", "code_version",
+        "data_version", "dtype", "num_classes", "size", "models": {name: entry}}`` where each
         entry holds ``path, parcel_path, shape, dtype, n_patches, status,
         held_out, reason``. The same dict is also written to ``manifest.json``.
     """
@@ -514,6 +522,7 @@ def dump_oof(
         )
 
     manifest: dict[str, Any] = {
+        "schema_version": 2,
         "fold": fold,
         "held_out": fold == _HELD_OUT_FOLD,
         "code_version": code_version,

@@ -196,3 +196,37 @@ def test_real_benchmark_barplot_if_present(tmp_path: Path) -> None:
         pytest.skip("real fold-5 metrics missing")
     out = pf.fig_benchmark_barplot(src, out_dir=tmp_path)
     assert out is not None and out["png"].exists()
+
+
+def test_el_estilo_del_paper_no_impone_el_motor_de_disposicion_a_terceros() -> None:
+    """``set_paper_style`` cambia tipografia, no la politica de disposicion de todo el proceso.
+
+    El rcParam ``figure.constrained_layout.use`` es global: una vez puesto, TODA figura creada
+    despues en el mismo proceso nacia con motor de disposicion, y ``tight_layout`` -llamado en 63
+    sitios de ``ml/``- revienta sobre una figura que ya lo tiene. Se veia solo al correr la suite
+    entera: ``compare_alphaearth_vs_ndvi`` pasaba sola y fallaba despues de los tests del paper.
+    """
+    import matplotlib.pyplot as plt
+
+    pf.set_paper_style()
+    figura = plt.figure(figsize=(3.0, 2.0))
+    try:
+        assert figura.get_layout_engine() is None
+        figura.tight_layout()
+    finally:
+        plt.close(figura)
+
+
+def test_las_figuras_del_paper_si_piden_el_motor_de_disposicion() -> None:
+    """Quitar el global no puede quitarles la disposicion a las figuras que la necesitan.
+
+    Se comprueba en el codigo fuente y no en una figura de juguete: lo que hay que garantizar es
+    que ninguna creacion del modulo se quede sin pedirla al eliminarse el rcParam.
+    """
+    import inspect
+
+    fuente = inspect.getsource(pf)
+    creaciones = [linea for linea in fuente.splitlines() if "plt.subplots(" in linea]
+    assert creaciones, "el modulo ya no crea figuras con plt.subplots"
+    sin_motor = [linea.strip() for linea in creaciones if 'layout="constrained"' not in linea]
+    assert not sin_motor, f"creaciones sin motor de disposicion: {sin_motor}"

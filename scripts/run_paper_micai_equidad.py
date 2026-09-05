@@ -163,7 +163,7 @@ def main() -> None:
     helper = StackingEnsemble(base_members=("tsvit-pheno",), oof_dir=OOF_DIR, random_state=42)
     splits = helper._subfolds_by_canonical_id(geoms, pl.DataFrame({KEY: keys}))
     proba = load_member_posteriors(OOF_DIR, ("tsvit-pheno",), keys)["tsvit-pheno"]
-    registros.append(_analiza("PASTIS-R", proba, labels, splits, K_PRIMARIO, {}))
+    registros.append(_analiza("PASTIS", proba, labels, splits, K_PRIMARIO, {}))
 
     # --- banco de replica ---
     post = pl.read_parquet(FASE4 / "breizhcrops_posteriores.parquet")

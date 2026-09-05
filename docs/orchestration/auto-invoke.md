@@ -82,6 +82,6 @@
 |---|---|
 | Saber qué existe y dónde; impacto río abajo | `graphify query` / `graphify affected` (AGENTS.md raíz §Grafo) |
 | Reindexar el grafo tras integrar | `make graph-update` (un solo escritor) |
-| Persistir una decisión, un bug o un gotcha; sincronizar la memoria del equipo | `agrosat-engram-memory` (`make memory-sync` / `memory-import`) |
+| Persistir una decisión, un bug o un gotcha; sincronizar la memoria del equipo | `agrosat-engram-memory` (`make memory-sync` / `memory-import`; comprobar antes que el binario y el MCP responden) |
 | Editar cualquier `AGENTS.md`; auditar el harness | `make guides-sync` + `make harness-check` |
 | Crear rama, commitear, abrir PR, cerrar US | `agrosat-git-workflow` |

@@ -26,6 +26,8 @@ import structlog
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from ml.report.figuras_micai import require_current_inputs
+
 logger = structlog.get_logger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -33,6 +35,34 @@ FASE1 = REPO_ROOT / "reports" / "paper_micai" / "fase1"
 FASE3 = REPO_ROOT / "reports" / "paper_micai" / "fase3"
 FASE4 = REPO_ROOT / "reports" / "paper_micai" / "fase4"
 OUT_DIR = REPO_ROOT / "reports" / "paper_micai" / "figuras"
+
+#: Insumos de cada figura, tal y como los nombra el ledger de custodia. `soporte` describe el
+#: reparto de clases de los dos bancos y sale de artefactos SELLADO; `leyendas` y `cobertura`
+#: salen de la frontera, cuyos artefactos estan OBSOLETO desde que se repararon los tres defectos
+#: del modulo de evaluacion. Dibujarlas ahora produciria una figura impecable de datos que no se
+#: pueden citar, que es peor que no tenerla: parece revisada.
+INSUMOS_SOPORTE: tuple[str, ...] = (
+    "reports/paper_micai/fase1/parcel_gt_fold5.parquet",
+    "reports/paper_micai/fase4/breizhcrops_soporte.csv",
+)
+INSUMOS_LEYENDAS: tuple[str, ...] = (
+    "reports/paper_micai/fase4/replica_por_bloque.csv",
+    "reports/paper_micai/fase4/replica_contrastes.json",
+    "reports/paper_micai/fase4/breizhcrops_soporte.csv",
+)
+INSUMOS_COBERTURA: tuple[str, ...] = (
+    "reports/paper_micai/fase4/replica_por_bloque.csv",
+    "reports/paper_micai/fase3/frontera_por_bloque.csv",
+    "reports/paper_micai/fase3/frontera_contrastes.json",
+)
+
+#: Salida -> insumos, para que el estado de custodia de una figura se pueda contrastar con el de
+#: sus datos. Una figura no puede estar mas viva que aquello de lo que sale.
+INSUMOS_POR_FIGURA: dict[str, tuple[str, ...]] = {
+    "reports/paper_micai/figuras/soporte.svg": INSUMOS_SOPORTE,
+    "reports/paper_micai/figuras/leyendas.svg": INSUMOS_LEYENDAS,
+    "reports/paper_micai/figuras/cobertura.svg": INSUMOS_COBERTURA,
+}
 
 STYLE: dict[str, Any] = {
     "font.family": "serif",
@@ -82,6 +112,7 @@ def _save(fig: plt.Figure, name: str) -> None:
 
 def figura_soporte() -> None:
     """Draw the class-support distribution of both benchmarks on a log scale."""
+    require_current_inputs(INSUMOS_SOPORTE)
     primario = (
         pl.read_parquet(FASE1 / "parcel_gt_fold5.parquet")
         .group_by("label")
@@ -102,7 +133,7 @@ def figura_soporte() -> None:
                 axes[0],
                 primario["len"].to_list(),
                 [f"c{c}" for c in primario["label"].to_list()],
-                "PASTIS-R · 18 clases · 16 640 parcelas",
+                "PASTIS · 18 clases · 16 640 parcelas",
             ),
             (
                 axes[1],
@@ -138,6 +169,7 @@ def figura_soporte() -> None:
 
 def figura_leyendas() -> None:
     """Draw which classes each retirement criterion keeps as the legend shrinks."""
+    require_current_inputs(INSUMOS_LEYENDAS)
     tabla = pl.read_csv(FASE4 / "replica_por_bloque.csv").filter(
         (pl.col("universo") == "todas las clases") & (pl.col("bloque") == "frh01")
     )
@@ -192,6 +224,7 @@ def figura_leyendas() -> None:
 
 def figura_cobertura() -> None:
     """Draw the frontier against delivered coverage instead of against legend size."""
+    require_current_inputs(INSUMOS_COBERTURA)
     replica = pl.read_csv(FASE4 / "replica_por_bloque.csv").filter(
         pl.col("universo") == "todas las clases"
     )
@@ -202,7 +235,7 @@ def figura_cobertura() -> None:
     with plt.rc_context(STYLE):
         fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9), sharey=False)
         for ax, tabla, titulo in (
-            (axes[0], primario, f"PASTIS-R · {principal}"),
+            (axes[0], primario, f"PASTIS · {principal}"),
             (axes[1], replica, "BreizhCrops · dejando una region fuera"),
         ):
             resumen = (

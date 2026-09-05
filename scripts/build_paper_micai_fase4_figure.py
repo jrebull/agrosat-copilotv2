@@ -20,10 +20,21 @@ import structlog
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from ml.report.figuras_micai import require_current_inputs
+
 logger = structlog.get_logger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FASE4 = REPO_ROOT / "reports" / "paper_micai" / "fase4"
+
+#: Insumos de esta figura, para comprobar su estado en el ledger antes de dibujar.
+INSUMOS: tuple[str, ...] = (
+    "reports/paper_micai/fase4/replica_por_bloque.csv",
+    "reports/paper_micai/fase4/replica_contrastes.json",
+)
+
+#: Salida -> insumos: el estado de custodia de la figura se contrasta con el de sus datos.
+INSUMOS_POR_FIGURA: dict[str, tuple[str, ...]] = {"reports/paper_micai/fase4/replica.svg": INSUMOS}
 
 #: Mismo estilo sobrio que la fase 3, para que las dos figuras se lean como una serie.
 STYLE = {
@@ -61,6 +72,10 @@ SERIES = {
 
 def main() -> None:
     """Draw the replicated frontier for both declared universes."""
+    # Una figura impecable de datos invalidos parece revisada, y es peor que una fea.
+    # Este es el ultimo sitio donde se puede parar: despues ya es un PDF que alguien pega
+    # en una presentacion.
+    require_current_inputs(INSUMOS)
     tabla = pl.read_csv(FASE4 / "replica_por_bloque.csv")
     contrastes = json.loads((FASE4 / "replica_contrastes.json").read_text(encoding="utf-8"))
     universos = list(contrastes["contrastes"].keys())

@@ -12,7 +12,7 @@
     "excluded": "Decidido formalmente que no entra en el analisis, con su motivo."
   },
   "actualizado": "2026-09-04",
-  "code_version": "8f77c06",
+  "code_version": "358f867",
   "ficheros": {
     "oof_anysat_fold5.parquet": {
       "miembro": "anysat",
@@ -90,40 +90,27 @@
       "miembro": "tsvit-pheno-fullm",
       "granularidad": "parcel",
       "estado": "canonical",
-      "md5": "16758cb30ec2fc818bf0bed56e4f3a1a",
-      "bytes": 2060956,
+      "md5": "491df530cc03f34cd68268987758f76a",
+      "bytes": 2072878,
       "filas": 28532,
       "columnas": 27,
-      "motivo": "CANONICO POR REPRODUCCION, no por sustitucion. El 4 de septiembre de 2026 se re-volco desde CHECKPOINT_REGISTRY en un directorio temporal y el resultado coincide con este fichero: argmax igual en 28 531 de 28 532 parcelas (0,999965) y diferencia media de posteriores de 9e-06, con un maximo de 0,0033. La unica parcela que discrepa esta por debajo de 0,5 de confianza. Compatible con el redondeo de float16 al escribir. Se conservan los BYTES HISTORICOS a proposito: sustituirlos habria roto un sello del ledger y obligado a re-subir al remoto para ganar 9e-06, y habria borrado la propiedad de que este es el fichero que usaron los analisis anteriores.",
+      "motivo": "CANONICO POR REPRODUCCION del artefacto CORREGIDO. Historia completa, porque el primer intento acredito lo contrario de lo que creia: el 4 de septiembre se re-volco con la version de dump_oof que NO propagaba n_timesteps al dataset, y el resultado coincidia casi exacto con el fichero historico. Los dos salian del MISMO bug —modelo reconstruido con T=37, dataset entregando T=10, codificacion posicional desalineada— y la verificacion los dio por buenos. Con el fix de Arthur (PR #1) el re-volcado reproduce su artefacto corregido de forma exacta: argmax 1,0000 en los cuatro estratos de confianza y diferencia media 0,000000.",
       "procedencia": {
         "checkpoint": "checkpoints/segmentation/tsvit-pheno-fullm-v1/best.pt",
         "checkpoint_md5": "22ae8074b2c689565f8b854a56e4c5f5",
-        "model_kwargs": {
-          "n_timesteps": 37,
-          "img_size": 128,
-          "patch_size": 8,
-          "dim": 192,
-          "depth_temporal": 6,
-          "depth_spatial": 6,
-          "heads": 6,
-          "dim_head": 64,
-          "mlp_ratio": 4,
-          "semantic_dim": 384
-        },
+        "n_timesteps_model_spec": 37,
+        "n_timesteps_dataset": 37,
         "n_patches": 496,
         "n_parcelas": 28532,
-        "verificacion": {
-          "cobertura_igual_a": "tsvit-pheno",
-          "coincidencia_argmax_con_el_anterior": 0.999965,
-          "diferencia_media_absoluta_posteriores": 9e-06,
-          "nota": "Compatible con el redondeo de float16 al escribir. NO se dice «identico»: discrepa una parcela de 28 532, y redondear 0,999965 a 1,0000 en la prosa seria convertir una medicion en una afirmacion mas fuerte que ella.",
-          "parcelas_que_discrepan": 1,
-          "diferencia_maxima_absoluta": 0.003290415
-        },
-        "productor": "ml.eval.oof.dump_oof.dump_oof con un registro de UN modelo, en directorio temporal",
+        "productor": "ml.eval.oof.dump_oof.dump_oof tras el fix de n_timesteps (PR #1, 373acb7)",
         "verificado_por": "scripts/verificar_redump_oof.py",
-        "fichero_promovido": "no; se conservan los bytes historicos, verificados por reproduccion",
-        "informe_sellado": "reports/paper_micai/oof/verificacion-tsvit-pheno-fullm.json"
+        "informe_sellado": "reports/paper_micai/oof/verificacion-tsvit-pheno-fullm.json",
+        "verificacion": {
+          "coincidencia_argmax": 1.0,
+          "diferencia_media_absoluta": 0.0,
+          "por_estrato": "1,0000 en los cuatro estratos de confianza"
+        },
+        "leccion": "Una reproduccion NO acredita procedencia si el productor tiene un defecto: acredita que el defecto es reproducible. Por eso dump_oof registra ahora n_timesteps_dataset y n_timesteps_model_spec en el manifiesto, y el verificador comprueba que coincidan: sin esos campos, un volcado con la T equivocada es indistinguible de uno correcto."
       }
     },
     "oof_parcel_tsvit-pheno_fold5.parquet": {
@@ -236,9 +223,19 @@
         "informe_sellado": "reports/paper_micai/oof/verificacion-xgb-alphaearth-remat-v1.json",
         "relacion_con_el_historico": "Coincidencia de argmax 0,9454 y diferencia media 0,0062. El desacuerdo esta concentrado donde el modelo duda: 0,5474 por debajo de 0,5 de confianza y 0,9999 por encima de 0,9. Es COMPATIBLE con dos ajustes de la misma familia con semilla u orden distintos, y con la informacion disponible no se puede afirmar mas: no hay procedencia registrada del historico con la que comprobarlo."
       }
+    },
+    "oof_tsvit-pheno-fullm_fold5.parquet": {
+      "miembro": "tsvit-pheno-fullm",
+      "granularidad": "patch",
+      "estado": "canonical",
+      "md5": "f1acb08c8bc6898b3e64149905c374a5",
+      "bytes": 246089253,
+      "filas": 496,
+      "columnas": 9,
+      "motivo": "Volcado denso aportado por el PR #1 junto con el fix de n_timesteps, con su puntero .dvc. Declarado en manifest.json con status ok. Faltaba en el inventario y el gate lo encontro."
     }
   },
   "aviso": [
-    "El re-volcado completo (parcela y denso) vive en un temporal y NO se promueve: el parcela coincide con el historico salvo redondeo, y el denso de 253 MB no estaba en el directorio, nadie lo consume, y subirlo al remoto compartido es una decision de presupuesto."
+    "El volcado DENSO de tsvit-pheno-fullm ya esta en el repositorio: lo aporto el PR #1 con su puntero .dvc. Lo que este equipo genero en temporales no se promueve."
   ]
 }

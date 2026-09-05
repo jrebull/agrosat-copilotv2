@@ -134,6 +134,22 @@ Claude Code puede usar (`mcp__plugin_engram_engram__*` y `mcp__engram__*`); `mem
 `mem_merge_projects` (perfil `admin`) exigen aprobacion por llamada. No duplicar un
 `mcpServers.engram` manual en el proyecto: `engram setup claude-code` es el unico dueno del registro.
 
+## Por que los chunks ya pueden viajar en git
+
+La objecion que bloqueaba el sync de equipo era real: `engram sync` exporta el proyecto entero
+—sesiones, prompts y observaciones— y upstream documenta que `scope: personal` **no** queda fuera
+automaticamente. Compartir chunks sin poder mirar dentro era pedir una fuga.
+
+Lo que la desbloquea es el gate que faltaba: `make harness-check` abre cada `.jsonl.gz` y recorre
+las cuatro listas del chunk (`observations`, `prompts`, `sessions`, `mutations`) buscando dos
+cosas, y falla si encuentra cualquiera:
+
+- una fila cuyo `project` no sea `agrosat-copilotv2` (la firma de un `engram sync --all`);
+- un token con forma de secreto (`sk-`, `hf_`, `AIza`, `ghp_`, `AKIA`, `Bearer`, clave privada).
+
+Por eso las notas personales van bajo **otro nombre de proyecto**, nunca bajo este: el filtro es
+el proyecto, no la etiqueta `scope`. Y por eso `engram sync --all` esta prohibido de plano.
+
 ## Reparar `.engram/manifest.json`
 
 El manifest es el indice de chunks; `engram sync --import` **solo importa lo que esta listado**.

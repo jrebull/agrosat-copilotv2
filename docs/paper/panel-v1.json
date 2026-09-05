@@ -1,0 +1,85 @@
+{
+  "version": "v1",
+  "congelado": "2026-09-04",
+  "fuente_normativa": "docs/paper/preregistro-v2-borrador.md, seccion 4.6",
+  "para_que": [
+    "La lista de predictores se fija ANTES de calcular nada, y este fichero es esa lista.",
+    "Un panel que se elige despues de ver resultados no es un panel: es un ganador con otro",
+    "nombre. `make panel-check` comprueba que ningun miembro este excluido o sin verificar en",
+    "el inventario, que las familias declaradas cumplan el minimo, y que la prosa diga lo mismo."
+  ],
+  "miembros": [
+    {
+      "nombre": "unet",
+      "familia": "cnn_encoder_decoder",
+      "temporal": false
+    },
+    {
+      "nombre": "deeplabv3plus",
+      "familia": "cnn_atrous",
+      "temporal": false
+    },
+    {
+      "nombre": "segformer",
+      "familia": "transformer_espacial",
+      "temporal": false
+    },
+    {
+      "nombre": "tsvit-pheno",
+      "familia": "transformer_temporal",
+      "temporal": true
+    },
+    {
+      "nombre": "tsvit-pheno-fullm",
+      "familia": "transformer_temporal",
+      "temporal": true
+    }
+  ],
+  "familias_distintas": 4,
+  "minimo_familias_exigido": 3,
+  "el_predictor_es": "factor_de_sensibilidad",
+  "campeon_declarado": null,
+  "seleccion_permitida": "solo mediante seleccion anidada independiente de la evaluacion",
+  "fuera_del_panel": [
+    {
+      "nombre": "anysat",
+      "motivo": "US-119: discrepancia de 0,3597 entre la metrica declarada por su checkpoint y la de su volcado sobre fold 5, por encima del umbral de 0,15, con la causa SIN identificar. Excluido por no saber, no por saber que esta mal. Se conserva como descriptivo.",
+      "reversible": true
+    },
+    {
+      "nombre": "utae",
+      "motivo": "US-119: discrepancia de 0,4010, mismo criterio y misma causa sin identificar.",
+      "reversible": true
+    },
+    {
+      "nombre": "farslip-ft18",
+      "motivo": "Excluido de MICAI 2027: sin procedencia verificada y sin los checkpoints originales.",
+      "reversible": false
+    },
+    {
+      "nombre": "farslip-zeroshot",
+      "motivo": "Mismo caso que farslip-ft18.",
+      "reversible": false
+    },
+    {
+      "nombre": "xgb-alphaearth",
+      "motivo": "Historico, legacy_unverified: la re-materializacion no lo reproduce (argmax 0,9454, y 0,5474 por debajo de 0,5 de confianza). No se usa para inferencia. El historico permanece legacy_unverified y FUERA DE INFERENCIA; existe xgb-alphaearth-remat-v1 como candidato nuevo, que no es su reproduccion.",
+      "reversible": false
+    }
+  ],
+  "referencia_descriptiva": {
+    "componente_desplegado": "xgb-alphaearth historico",
+    "acuerdo_con_la_reconstruccion": 0.945433,
+    "divergencia": "concentrada en baja confianza: 0,5474 por debajo de 0,5 frente a 0,9999 por encima de 0,9",
+    "uso": "descriptivo, nunca inferencial"
+  },
+  "xgb_alphaearth_remat_v1": {
+    "estado": "CANDIDATO NUEVO con procedencia verificada",
+    "decidido": "2026-09-04",
+    "que_es": "Un predictor nuevo, re-materializado con productor, entradas y semilla registrados. Se trata como candidato por derecho propio.",
+    "que_NO_es": "La reproduccion del componente desplegado. No lo reproduce: acuerdo de argmax 0,945433, y 0,5474 por debajo de 0,5 de confianza, que es la franja sobre la que operan la abstencion, los conjuntos y el recorte. Llamarlo reproduccion seria la afirmacion que US-118 existe para impedir.",
+    "en_el_panel_de_segmentacion": false,
+    "motivo": "El panel congelado son cinco miembros de segmentacion densa y esta es la unica ruta tabular. Entra como candidato, no como miembro de ese panel.",
+    "si_se_usa": "como factor de sensibilidad; no se declara ganador"
+  }
+}

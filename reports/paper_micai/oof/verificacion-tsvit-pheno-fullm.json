@@ -1,6 +1,7 @@
 {
   "miembro": "tsvit-pheno-fullm",
-  "generado": "2026-09-04T20:24:30+00:00",
+  "generado": "2026-09-04T21:05:17+00:00",
+  "tipo": "denso",
   "checkpoint": "checkpoints/segmentation/tsvit-pheno-fullm-v1/best.pt",
   "checkpoint_md5": "22ae8074b2c689565f8b854a56e4c5f5",
   "model_kwargs": {
@@ -15,38 +16,41 @@
     "mlp_ratio": 4,
     "semantic_dim": 384
   },
+  "n_timesteps_checkpoint": 37,
+  "n_timesteps_dataset": 37,
   "n_patches": 496,
   "n_parcelas_nuevo": 28532,
   "n_parcelas_referencia": 28532,
   "referencia": "tsvit-pheno",
+  "parcelas_fuera_de_la_referencia": 0,
   "comparacion_con_el_anterior": {
     "n_parcelas_comparables": 28532,
-    "coincidencia_argmax": 0.999965,
-    "diferencia_media_absoluta": 9.381e-06,
-    "diferencia_maxima_absoluta": 0.003290415,
+    "coincidencia_argmax": 1.0,
+    "diferencia_media_absoluta": 1.5e-08,
+    "diferencia_maxima_absoluta": 8.598e-06,
     "por_estrato_de_confianza": [
       {
         "confianza_desde": 0.0,
         "confianza_hasta": 0.5,
-        "n": 2331,
-        "coincidencia_argmax": 0.999571
+        "n": 1954,
+        "coincidencia_argmax": 1.0
       },
       {
         "confianza_desde": 0.5,
         "confianza_hasta": 0.7,
-        "n": 4662,
+        "n": 3661,
         "coincidencia_argmax": 1.0
       },
       {
         "confianza_desde": 0.7,
         "confianza_hasta": 0.9,
-        "n": 6665,
+        "n": 6216,
         "coincidencia_argmax": 1.0
       },
       {
         "confianza_desde": 0.9,
         "confianza_hasta": 1.01,
-        "n": 14874,
+        "n": 16701,
         "coincidencia_argmax": 1.0
       }
     ]

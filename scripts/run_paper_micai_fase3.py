@@ -25,7 +25,12 @@ import polars as pl
 import structlog
 import typer
 
-from ml.eval.paper_micai_arbitration import KEY, load_member_posteriors, score
+from ml.eval.paper_micai_arbitration import (
+    KEY,
+    load_member_posteriors,
+    miembros_del_panel,
+    score,
+)
 from ml.eval.paper_micai_coverage import (
     BlockPoint,
     confidence_baseline,
@@ -45,19 +50,11 @@ OOF_DIR = REPO_ROOT / "ml" / "eval" / "oof"
 FASE1 = REPO_ROOT / "reports" / "paper_micai" / "fase1"
 OUT_DIR = REPO_ROOT / "reports" / "paper_micai" / "fase3"
 
-#: Los diez miembros del universo de Francia.
-ALL_MEMBERS: tuple[str, ...] = (
-    "anysat",
-    "deeplabv3plus",
-    "farslip-ft18",
-    "farslip-zeroshot",
-    "segformer",
-    "tsvit-pheno",
-    "tsvit-pheno-fullm",
-    "unet",
-    "utae",
-    "xgb-alphaearth",
-)
+#: Los miembros del analisis salen del PANEL CONGELADO, no de una lista escrita aqui.
+#: Estaban los diez originales, y al congelar el panel en cinco este guion seguia pidiendo
+#: los diez: cinco ya excluidos o sin verificar. Al regenerar habria usado el conjunto
+#: equivocado sin que nada relacionara una cosa con la otra.
+ALL_MEMBERS: tuple[str, ...] = miembros_del_panel()
 
 #: Tamanos de leyenda del barrido. El criterio principal preregistrado es K = round(C/2).
 K_VALUES: tuple[int, ...] = (18, 16, 14, 12, 10, 9, 8)

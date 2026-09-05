@@ -9,6 +9,13 @@
 
 ---
 
+> **CUARENTENA** — Este ADR cita cifras derivadas de artefactos marcados `OBSOLETO` en el registro
+> de custodia: las produjo el módulo de evaluación cuando aún tenía tres defectos —denominador
+> móvil, punto de operación elegido dentro del bloque que lo mide, y remuestreo a nivel de
+> parcela—. La decisión que registra sigue en pie; **los números que la acompañan no se citan**
+> hasta regenerarlos. Se conserva sin retocar porque un ADR es el registro de lo que se decidió y
+> con qué se decidió. Lo comprueba `make paper-obsoletos-check`.
+
 ## Contexto
 
 La fase 0 del plan pide decidir, antes de reescribir una línea del manuscrito, si el

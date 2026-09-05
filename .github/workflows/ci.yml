@@ -126,10 +126,14 @@ jobs:
         working-directory: backend
         run: poetry run pytest tests/unit -q -p no:cacheprovider
 
+      # tests/ml/eval y tests/ml/analysis sostienen el articulo (frontera, custodia, inventario
+      # OOF). Se comprobo que pasan en un checkout SIN los blobs de DVC —un git worktree limpio,
+      # 597 pruebas— antes de meterlos aqui: el unico fallo era una prueba que dependia de un
+      # checkpoint versionado y ya no depende. Anaden ~2,5 min al job.
       - name: pytest scripts + ML puro
         run: |
           poetry run pytest tests/scripts tests/ml/features tests/ml/utils tests/ml/report \
-            tests/ml/agent tests/ml/models tests/ml/losses \
+            tests/ml/agent tests/ml/models tests/ml/losses tests/ml/eval tests/ml/analysis \
             -q -m "not slow and not integration and not requires_gee" \
             --ignore=tests/ml/features/test_persist_features.py -p no:cacheprovider
 
@@ -263,6 +267,23 @@ jobs:
       # Campos operativos del protocolo de US-172: impide congelarlo antes de tiempo.
       - name: protocolo de elicitacion (protocolo-check)
         run: python3 scripts/protocolo_check.py
+
+      # Panel congelado: ningun miembro excluido, familias suficientes, y la prosa de acuerdo.
+      - name: panel congelado (panel-check)
+        run: python3 scripts/panel_check.py
+
+      # Frontera entre lo que corre la CI y lo que se corre en local. No discute el reparto
+      # -es decision del equipo-, impide que se mueva sin escribirlo: dos pruebas de
+      # tests/ml/test_correlations.py estuvieron en rojo meses porque ese fichero no cuelga de
+      # ningun directorio de los que enumera el paso de pruebas.
+      - name: frontera CI / suite local (ci-test-coverage-check)
+        run: python3 scripts/ci_test_coverage_check.py
+
+      # Inventario de OOF. Verifica los bytes cuando el parquet esta y el puntero .dvc cuando
+      # no: en un checkout limpio solo estan los punteros, y un gate que exigiera los blobs
+      # seria rojo aqui para siempre.
+      - name: inventario OOF
+        run: python3 scripts/oof_manifest_check.py
 
       # Notebooks: NO stripping enforced - se commitean con outputs poblados
       # (entregable visual del curso). La reproducibilidad se valida via

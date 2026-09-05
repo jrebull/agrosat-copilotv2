@@ -58,6 +58,30 @@ class Combination:
     regime: str
 
 
+#: Contrato del panel congelado. Es la fuente unica de que miembros entran al analisis.
+_PANEL = Path(__file__).resolve().parents[2] / "docs" / "paper" / "panel-v1.json"
+
+
+def miembros_del_panel(panel: Path | None = None) -> tuple[str, ...]:
+    """Members of the frozen panel, read from its contract.
+
+    Los guiones traian la lista a mano, y al congelar el panel en cinco miembros los dos de fase 2
+    y fase 3 seguian pidiendo diez: cinco de ellos ya excluidos o sin verificar. Al regenerar sus
+    artefactos habrian usado el conjunto equivocado —o reventado, segun que fallara antes— sin que
+    nada relacionara una cosa con la otra. Una lista escrita dos veces se separa; esta se lee.
+
+    Args:
+        panel: Contract path, for tests.
+
+    Returns:
+        The member names, in the contract's order.
+    """
+    import json
+
+    datos = json.loads((panel or _PANEL).read_text(encoding="utf-8"))
+    return tuple(str(m["nombre"]) for m in datos["miembros"])
+
+
 def load_member_posteriors(
     oof_dir: Path,
     members: Sequence[str],

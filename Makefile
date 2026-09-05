@@ -1,4 +1,4 @@
-.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check paper-artifacts-seal paper-obsoletos-check preregistro-check oof-manifest-check protocolo-check us172-adjuntos micai-pdf micai-anon-check micai-bib micai-pdf-cr micai-pdf-es plan-check
+.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check paper-artifacts-seal paper-obsoletos-check preregistro-check oof-manifest-check protocolo-check us172-adjuntos micai-pdf micai-anon-check micai-bib micai-pdf-cr micai-pdf-es plan-check paper-bib-check micai2027-bib micai2027-figures preregistro-resellar panel-check ci-test-coverage-check
 
 help:
 	@echo "AgroSatCopilot — comandos disponibles:"
@@ -518,6 +518,15 @@ paper-pdf-docker:  ## Compila paper/main.tex en un contenedor texlive (no requie
 	docker build -f infrastructure/docker/paper-latex.Dockerfile -t $(PAPER_IMAGE) infrastructure/docker
 	docker run --rm -v "$(CURDIR):/repo" -w /repo/$(PAPER_DIR) $(PAPER_IMAGE)
 
+micai2027-bib:  ## Genera el catalogo verificado de referencias del manuscrito nuevo.
+	poetry run python scripts/build_paper_micai_bib.py --salida paper/micai2027/refs-candidates.bib --sin-truncar-autores
+
+paper-bib-check:  ## Catalogo localizable, autores completos, historico intacto (US-142).
+	poetry run python scripts/paper_bib_check.py
+
+micai2027-figures:  ## Figuras del manuscrito nuevo bajo el contrato de US-143, en es y en.
+	poetry run python scripts/build_micai2027_figures.py
+
 paper-cite-check:  ## Valida que cada \cite{} del manuscrito tenga entrada en paper/bib/refs.bib (sin LaTeX).
 	poetry run python scripts/paper_cite_check.py
 
@@ -533,11 +542,20 @@ paper-obsoletos-check:  ## Falla si un documento activo cita cifras de artefacto
 preregistro-check:  ## Comprueba que el contrato del estimando y la prosa del preregistro dicen lo mismo.
 	poetry run python scripts/preregistro_check.py
 
+preregistro-resellar:  ## Resella la prosa normativa del preregistro. Solo tras releerla contra el contrato.
+	poetry run python scripts/preregistro_check.py --resellar
+
+panel-check:  ## Comprueba el panel congelado contra el inventario y el preregistro (US-139).
+	poetry run python scripts/panel_check.py
+
 oof-manifest-check:  ## Falla si hay un parquet OOF que el manifiesto no declara (US-118). HOY EN ROJO.
 	poetry run python scripts/oof_manifest_check.py
 
 protocolo-check:  ## Impide congelar el protocolo de US-172 con campos operativos sin rellenar.
 	poetry run python scripts/protocolo_check.py
+
+ci-test-coverage-check:  ## Falla si un fichero de prueba no lo corre la CI ni lo declara la suite local.
+	poetry run python scripts/ci_test_coverage_check.py
 
 us172-adjuntos:  ## Genera los cuatro PDF de la consulta al comite de etica desde el protocolo.
 	poetry run python scripts/build_us172_adjuntos.py --salida reports/us172

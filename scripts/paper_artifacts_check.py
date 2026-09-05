@@ -44,6 +44,41 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LEDGER = REPO_ROOT / "paper" / "ARTIFACTS.md"
+
+#: Raiz de los artefactos del articulo. El ledger comprobaba que todo lo declarado existe; no
+#: comprobaba lo contrario. Un artefacto producido y dejado aqui sin fila se lee igual de bien que
+#: uno con custodia, y podria citarse en el manuscrito sin que nada supiera de donde salio. Es la
+#: misma forma del defecto que ya paso con un parquet OOF huerfano.
+RAIZ_ARTEFACTOS = REPO_ROOT / "reports" / "paper_micai"
+
+
+#: Lo que vive bajo esa raiz sin ser un artefacto, con su motivo.
+#:
+#: - ``raw/``: respuestas crudas de las APIs de la busqueda bibliografica. Son la ENTRADA de
+#:   `search_candidates.csv`, que si esta sellado; sellar cada respuesta seria sellar el ruido.
+#: - ``.png`` y ``.pdf`` que acompanan a un ``.svg`` ya declarado: la misma figura en otro formato.
+#:   El ledger sella un representante por figura, no tres ficheros por figura.
+#: - Ficheros ocultos: `.gitignore` y companeros, que no son datos.
+def _no_es_artefacto(ruta: Path, declarados: set[str]) -> bool:
+    """Si un fichero bajo la raiz de artefactos no necesita fila en el ledger.
+
+    Args:
+        ruta: Fichero encontrado en disco.
+        declarados: Rutas ya declaradas en el ledger, relativas al repositorio.
+
+    Returns:
+        ``True`` cuando el fichero esta legitimamente fuera del ledger.
+    """
+    if "raw" in ruta.parts or ruta.name.startswith("."):
+        return True
+    if ruta.suffix == ".dvc":
+        return True
+    if ruta.suffix in {".png", ".pdf"}:
+        hermana = ruta.with_suffix(".svg")
+        return str(hermana.relative_to(REPO_ROOT)) in declarados
+    return False
+
+
 MISSING_STATE = "SIN_ARTEFACTO"
 STALE_STATE = "OBSOLETO"
 ROW_RE = re.compile(r"^\|(?!\s*[-:]+\s*\|)(?P<cells>.+)\|\s*$")
@@ -209,6 +244,7 @@ def main() -> int:
     pending = 0
     checked = 0
     obsoletos: list[str] = []
+    declared_paths = {row["path"] for row in rows}
     for row in rows:
         path = REPO_ROOT / row["path"]
         if row["state"] == MISSING_STATE:
@@ -282,6 +318,27 @@ def main() -> int:
             check=False,
         ).stdout.strip()
         print(f"commit de sellado: {sello} ({detras} commits por detras de HEAD)")
+
+    # Y la direccion contraria: todo lo que esta en disco tiene que estar declarado. Solo con el
+    # ledger completo: sobre un ledger parcial -el control positivo usa uno de una sola fila- la
+    # pregunta "que hay en disco sin declarar" no significa nada.
+    sin_fila = (
+        []
+        if args.ledger.resolve() != DEFAULT_LEDGER.resolve()
+        else sorted(
+            ruta
+            for ruta in RAIZ_ARTEFACTOS.rglob("*")
+            if ruta.is_file()
+            and str(ruta.relative_to(REPO_ROOT)) not in declared_paths
+            and not _no_es_artefacto(ruta, declared_paths)
+        )
+    )
+    for huerfano in sin_fila:
+        failures.append(
+            f"{huerfano.relative_to(REPO_ROOT)}: esta en disco bajo la raiz de artefactos del "
+            "articulo y el ledger no lo declara. Un artefacto sin custodia se lee igual de bien "
+            "que uno con custodia"
+        )
 
     print(f"artefactos verificados: {checked}")
     print(f"  de los cuales OBSOLETOS, verificados pero NO citables: {len(obsoletos)}")
