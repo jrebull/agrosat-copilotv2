@@ -112,6 +112,21 @@ De paso, el gate pasó de **dos minutos a 0,7 segundos**: con 1 160 cifras y 433
 patrón por cifra son medio millón de barridos. Un control que se hace pesado acaba fuera de la CI,
 y entonces deja de ser un control. Hay una prueba que lo mantiene por debajo de diez segundos.
 
+### Y la misma lección aplicada donde no hay patrón que valga
+
+La sección 4.6 decía que un miembro del panel «se excluye» y el gate pasaba porque **el nombre
+estaba**. En la sección 4.5 —el contrato del estimando en prosa— no hay forma de entender el
+párrafo con un patrón: comprobar que aparece «La parcela» no dice nada sobre lo que la frase
+afirma.
+
+Así que se hace lo único honesto: **si el texto normativo cambia, el gate se pone en rojo** hasta
+que alguien lo relea contra el contrato y lo vuelva a sellar en el mismo commit. El sello no
+afirma que la prosa sea correcta; afirma que nadie la ha movido desde que se leyó. `make
+preregistro-resellar` hace la fricción un gesto explícito en vez de un hash escrito a mano.
+
+Es fricción deliberada sobre un documento que aún se está editando, y se revierte borrando el
+diccionario `SELLOS`.
+
 ### Lo que se verificó y estaba bien
 
 - Los cuatro gates con fichero normativo **fallan** al mutarles su fuente. Un gate que pasa sobre

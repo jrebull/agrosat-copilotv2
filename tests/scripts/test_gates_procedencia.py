@@ -1296,3 +1296,62 @@ def test_el_gate_de_cuarentena_no_tarda_mas_de_diez_segundos() -> None:
     inicio = time.monotonic()
     assert _correr_obsoletos()[0] == 0
     assert time.monotonic() - inicio < 10.0
+
+
+def test_cambiar_la_prosa_normativa_del_preregistro_rompe_el_gate() -> None:
+    """Comprobar que una FRASE esta presente no dice nada de lo que el parrafo afirma.
+
+    Es la leccion de la seccion 4.6, que decia que un miembro del panel "se excluye" mientras el
+    contrato lo tenia dentro, y el gate pasaba porque el nombre estaba. En la 4.5 no hay forma de
+    entender la prosa con un patron, asi que se hace lo unico honesto: si el texto normativo
+    cambia, el gate se pone en rojo hasta que alguien lo relea y lo vuelva a sellar. El sello no
+    afirma que la prosa sea correcta; afirma que nadie la ha movido desde que se leyo.
+    """
+    gate = REPO_ROOT / "scripts" / "preregistro_check.py"
+
+    def correr() -> tuple[int, str]:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        return proc.returncode, proc.stdout + proc.stderr
+
+    respaldo = PREREGISTRO.read_text(encoding="utf-8")
+    try:
+        PREREGISTRO.write_text(
+            respaldo.replace("La parcela", "La parcela, en efecto,", 1), encoding="utf-8"
+        )
+        codigo, salida = correr()
+        assert codigo == 1, salida
+        assert "la prosa normativa `seccion_4_5` cambio" in salida
+    finally:
+        PREREGISTRO.write_text(respaldo, encoding="utf-8")
+    assert correr()[0] == 0
+
+
+def test_resellar_cierra_el_fallo_y_solo_toca_el_sello() -> None:
+    """``--resellar`` existe para que la friccion sea un gesto explicito, no un hash a mano."""
+    gate = REPO_ROOT / "scripts" / "preregistro_check.py"
+    respaldo_doc = PREREGISTRO.read_text(encoding="utf-8")
+    respaldo_gate = gate.read_text(encoding="utf-8")
+    try:
+        PREREGISTRO.write_text(
+            respaldo_doc.replace("La parcela", "La parcela, en efecto,", 1), encoding="utf-8"
+        )
+        sellado = subprocess.run(
+            [sys.executable, str(gate), "--resellar"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert sellado.returncode == 0, sellado.stdout
+        assert "resellado `seccion_4_5`" in sellado.stdout
+        despues = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        assert despues.returncode == 0, despues.stdout
+        # El resellado toca el sello y nada mas: las decisiones del contrato siguen intactas.
+        assert "EXIGIDO: dict[str, Any] = {" in gate.read_text(encoding="utf-8")
+    finally:
+        PREREGISTRO.write_text(respaldo_doc, encoding="utf-8")
+        gate.write_text(respaldo_gate, encoding="utf-8")
