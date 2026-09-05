@@ -1154,3 +1154,145 @@ def test_los_guiones_piden_en_ejecucion_exactamente_el_panel_congelado(modulo: s
     from ml.eval.paper_micai_arbitration import miembros_del_panel
 
     assert importlib.import_module(modulo).ALL_MEMBERS == miembros_del_panel()
+
+
+# ------------------------------------------------------------------------------------------
+# El alcance del gate de cuarentena: era `docs/paper/**/*.md` y el manuscrito es `.tex`.
+# ------------------------------------------------------------------------------------------
+
+
+def _correr_obsoletos() -> tuple[int, str]:
+    """Correr el gate de cuarentena sobre el repositorio entero."""
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "paper_obsoletos_check.py")],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+def _con_fichero(ruta: Path, contenido: str) -> tuple[int, str]:
+    """Crear un fichero, correr el gate y borrarlo siempre."""
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    ruta.write_text(contenido, encoding="utf-8")
+    try:
+        return _correr_obsoletos()
+    finally:
+        ruta.unlink()
+
+
+@pytest.mark.parametrize(
+    ("etiqueta", "relativa", "ingles"),
+    [
+        ("el manuscrito, que es .tex y en ingles", "paper/micai2027/_prueba.tex", True),
+        ("el manuscrito, que es .tex y en espanol", "paper/micai2027/_prueba.tex", False),
+        ("un ADR, que vive en docs/decisions", "docs/decisions/_prueba.md", False),
+        ("el plan, que vive en context/", "context/_prueba.md", False),
+        ("un documento en la raiz", "_prueba.md", False),
+        ("docs/ fuera de docs/paper", "docs/_prueba.md", False),
+    ],
+)
+def test_el_gate_de_cuarentena_alcanza_donde_estaba_ciego(
+    etiqueta: str, relativa: str, ingles: bool
+) -> None:
+    """El alcance era ``docs/paper/**/*.md``, y el manuscrito es ``.tex``.
+
+    Seis superficies quedaban fuera, incluida la unica que de verdad importa: el fichero donde se
+    escribe el articulo. Un control que protege el manuscrito y no sabe leer su formato no protege
+    nada.
+    """
+    cifra = _una_cifra_vigilada()
+    escrita = cifra.replace(",", ".") if ingles else cifra
+    codigo, salida = _con_fichero(REPO_ROOT / relativa, f"El resultado fue {escrita}.\n")
+    assert codigo == 1, f"{etiqueta}: {salida}"
+    assert "reproduce" in salida
+    assert _correr_obsoletos()[0] == 0
+
+
+def test_una_cifra_dentro_de_otra_mas_larga_no_acusa_a_nadie() -> None:
+    """``0,0342`` estaba dentro de ``arXiv:2310.03425``, y el gate lo contaba como cita.
+
+    Buscar la subcadena acusa a quien no cita nada. Con la frontera puesta, dos ficheros de
+    entregables del curso dejaron de aparecer.
+    """
+    cifra = _una_cifra_vigilada()
+    decimales = cifra.split(",")[1]
+    codigo, salida = _con_fichero(
+        REPO_ROOT / "docs" / "_prueba.md", f"Vease arXiv:2310.{decimales}25 y nada mas.\n"
+    )
+    assert codigo == 0, salida
+
+
+def test_la_forma_inglesa_en_prosa_nuestra_no_acusa() -> None:
+    """En ``.md`` solo cuenta la coma decimal, y es una decision con motivo.
+
+    Admitir el punto en prosa llenaba el control de coincidencias con metricas de otras historias
+    -``0,4094`` sale en catorce documentos de US-022 y US-023- sin anadir ni una cita real. En
+    ``.tex`` si valen las dos, porque el manuscrito de envio se escribe en ingles.
+    """
+    cifra = _una_cifra_vigilada()
+    codigo, salida = _con_fichero(
+        REPO_ROOT / "docs" / "_prueba.md", f"El resultado fue {cifra.replace(',', '.')}.\n"
+    )
+    assert codigo == 0, salida
+
+
+def test_editar_una_fuente_del_manuscrito_retirado_rompe_el_gate() -> None:
+    """La exencion del manuscrito retirado promete que no se toca, y esto lo verifica.
+
+    Si se edita, deja de estar retirado y sus cifras vuelven a ser afirmaciones vigentes.
+    """
+    fuente = REPO_ROOT / "paper" / "micai" / "sections_es" / "04-resultados.tex"
+    respaldo = fuente.read_text(encoding="utf-8")
+    try:
+        fuente.write_text(respaldo + "\n% retoque\n", encoding="utf-8")
+        codigo, salida = _correr_obsoletos()
+        assert codigo == 1, salida
+        assert "es fuente del manuscrito retirado y su MD5 cambio" in salida
+    finally:
+        fuente.write_text(respaldo, encoding="utf-8")
+    assert _correr_obsoletos()[0] == 0
+
+
+def test_una_colision_declarada_no_tapa_una_cita_nueva() -> None:
+    """Las colisiones se declaran POR CIFRA, no por fichero.
+
+    Un documento cuyo numero coincide por casualidad con uno obsoleto no puede quedar libre de
+    vigilancia para siempre: la exencion cubre esa cifra y ninguna otra.
+    """
+    from scripts.paper_obsoletos_check import COLISIONES
+
+    fichero = REPO_ROOT / "docs" / "us-resolved" / "us-018.md"
+    declaradas = set(COLISIONES["docs/us-resolved/us-018.md"])
+    otra = next(c for c in sorted(_cifras_vigiladas_del_repo()) if c not in declaradas)
+    respaldo = fichero.read_text(encoding="utf-8")
+    try:
+        fichero.write_text(f"{respaldo}\n\nY ademas {otra}.\n", encoding="utf-8")
+        codigo, salida = _correr_obsoletos()
+        assert codigo == 1, salida
+        assert "us-018.md" in salida
+    finally:
+        fichero.write_text(respaldo, encoding="utf-8")
+    assert _correr_obsoletos()[0] == 0
+
+
+def _cifras_vigiladas_del_repo() -> dict[str, str]:
+    """Las cifras vigiladas del ledger vigente."""
+    from scripts.paper_obsoletos_check import cifras_vigiladas
+
+    return cifras_vigiladas(LEDGER)[0]
+
+
+def test_el_gate_de_cuarentena_no_tarda_mas_de_diez_segundos() -> None:
+    """Un control que se hace pesado acaba fuera de la CI, y entonces no es un control.
+
+    Con 1 160 cifras y 433 documentos, un patron por cifra son medio millon de barridos: dos
+    minutos. Una sola alternacion lo deja por debajo del segundo.
+    """
+    import time
+
+    inicio = time.monotonic()
+    assert _correr_obsoletos()[0] == 0
+    assert time.monotonic() - inicio < 10.0

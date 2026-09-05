@@ -75,6 +75,43 @@ dio por bueno un fichero producido por un bug —comparaba el re-volcado con el 
 salían del mismo defecto—. Ahora tiene ocho, incluidas las tres del acoplamiento `n_timesteps` que
 son la razón de que exista.
 
+### El hallazgo mayor de la ronda: el gate de cuarentena no sabía leer el manuscrito
+
+`paper-obsoletos-check` existe para impedir que una cifra invalidada llegue al artículo. Su
+alcance era **`docs/paper/**/*.md`**. El manuscrito es **`.tex`**.
+
+Seis superficies quedaban fuera, y se comprobó una por una plantando la cifra y viendo pasar el
+gate: los `.tex` del manuscrito, los ADR de `docs/decisions`, el plan de `context/`, el resto de
+`docs/`, la raíz del repositorio y los cuadernos. **Un control que protege el manuscrito y no sabe
+leer su formato no protege nada.**
+
+Y había una segunda ceguera dentro de la primera: solo buscaba la **forma española** de la cifra.
+El manuscrito de envío se escribe en inglés y su tabla de resultados usa punto decimal, así que
+`sections/04-results.tex` —36 cifras de artefactos obsoletos— era invisible incluso si el `.tex`
+hubiera estado en el alcance.
+
+Lo que cambió, con su prueba en negativo cada uno:
+
+- **Alcance**: `docs/**`, `paper/**`, `context/**` y la raíz, en `.md` y `.tex`. De ~50 documentos
+  vigilados a **433**. `--docs` sigue existiendo, porque quitarlo habría dejado al control sin su
+  propia prueba.
+- **Las dos formas decimales en `.tex`**, solo la española en prosa: admitir el punto en los `.md`
+  añadía treinta y cinco ficheros de coincidencias y ni una cita real.
+- **Coincidencia con frontera.** Buscar la subcadena acusaba a quien no citaba nada: `0,0342`
+  estaba dentro de `arXiv:2310.03425`. Dos entregables del curso dejaron de aparecer.
+- **El manuscrito retirado**, con sus fuentes selladas por MD5 como el archivo ajeno: editarlas
+  para ponerles una marca sería falsificar el documento cuyo estado ya está declarado, y si se
+  editan, dejan de estar retiradas y sus cifras vuelven a ser afirmaciones vigentes.
+- **Colisiones declaradas por cifra y no por fichero**, verificadas leyendo su contexto una a una:
+  seis documentos cuyos números coinciden por casualidad con uno obsoleto. Declarar el fichero
+  entero lo habría dejado sin vigilancia para siempre.
+- **Y ADR-013 citaba una cifra obsoleta sin marca.** Es el único hallazgo real del ensanche, y
+  llevaba ahí desde el 2 de septiembre.
+
+De paso, el gate pasó de **dos minutos a 0,7 segundos**: con 1 160 cifras y 433 documentos, un
+patrón por cifra son medio millón de barridos. Un control que se hace pesado acaba fuera de la CI,
+y entonces deja de ser un control. Hay una prueba que lo mantiene por debajo de diez segundos.
+
 ### Lo que se verificó y estaba bien
 
 - Los cuatro gates con fichero normativo **fallan** al mutarles su fuente. Un gate que pasa sobre

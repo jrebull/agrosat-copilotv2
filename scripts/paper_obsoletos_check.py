@@ -67,6 +67,7 @@ CONSUMIDORES: tuple[str, ...] = (
     "docs/paper/auditoria-revisores-2026-09-03.md",
     "docs/paper/revision-arthur-2026-09-03.md",
     "paper/micai/ESTADO.md",
+    "docs/decisions/ADR-013-angulo-micai.md",
 )
 
 #: Documentos que hablan DE la obsolescencia y no citan cifras como vigentes.
@@ -94,6 +95,50 @@ ARCHIVO_AJENO: dict[str, str] = {
     ),
 }
 
+
+#: Fuentes del MANUSCRITO RETIRADO. Se publica retirado, su estado lo declara
+#: `paper/micai/ESTADO.md` -que si lleva la marca- y el cuaderno publico, y sus fuentes estan
+#: selladas en el ledger: editarlas para anadir una marca de cuarentena seria falsificar el
+#: documento cuyo estado ya esta declarado. Como la exencion del archivo ajeno, es una LISTA
+#: CERRADA con sello, no un prefijo: eximir la carpeta haria invisible cualquier fichero nuevo.
+MANUSCRITO_RETIRADO: dict[str, str] = {
+    "paper/micai/sections/03-method.tex": "00b5c188e3e95db69b66c9cbafc25ad9",
+    "paper/micai/sections/04-results.tex": "518eeff83b1763b9f2e1a62f1b00f21f",
+    "paper/micai/sections_es/03-metodo.tex": "fd574d37a4dee846a482309b3713ab35",
+    "paper/micai/sections_es/04-resultados.tex": "4339cc5bce6e5d96b0a3df6f299805d1",
+}
+
+#: COLISIONES: cifras que un documento calculo por su cuenta y que coinciden con una de un
+#: artefacto obsoleto. No son citas: son numeros distintos que se escriben igual. Cada entrada
+#: nombra el fichero Y las cifras concretas, para que una colision declarada no tape una cita
+#: nueva en el mismo documento. Verificadas una a una leyendo su contexto.
+COLISIONES: dict[str, tuple[str, ...]] = {
+    # Metricas de los baselines de US-070 y US-023, de otra linea de trabajo y varios meses antes.
+    "paper/tables/us-070/fm_comparison.tex": ("0,4106", "0,5634", "0,6529", "0,6571"),
+    "paper/tables/us-070/farslip_band_ablation.tex": ("0,5547",),
+    "paper/tables/us-023-preview/baseline_v2_comparison.tex": ("0,4094", "0,7257"),
+    # Perdidas de la ablacion por bandas de FarSLIP, que no son estimadores de cobertura.
+    "paper/tables/farslip-method/band_ablation.tex": ("0,0181",),
+    "paper/tables/farslip-method/cardinality_sweep.tex": ("0,5547",),
+    # F1-macro del baseline de 185 caracteristicas, que coincide con un valor de la frontera.
+    "docs/us-resolved/us-018.md": ("0,5394",),
+}
+
+#: Donde se busca. `docs/paper` era todo el alcance, y por ahi se colaban el manuscrito -que es
+#: `.tex`-, los ADR de `docs/decisions`, el plan de `context/` y el resto de `docs/`.
+#:
+#: Los CUADERNOS quedan fuera a proposito y conviene decirlo antes de que lo encuentre nadie: son
+#: entregables del curso con sus propios numeros calculados, y con 1 160 cifras vigiladas la tasa
+#: de coincidencia los llena de falsos positivos -treinta y cinco ficheros, ni una cita real-. La
+#: frontera del control es la copia literal en prosa nuestra y en el manuscrito, no el cuaderno.
+_AMBITO: tuple[tuple[str, str], ...] = (
+    ("docs", "**/*.md"),
+    ("docs", "**/*.tex"),
+    ("paper", "**/*.md"),
+    ("paper", "**/*.tex"),
+    ("context", "**/*.md"),
+    (".", "*.md"),
+)
 
 #: Decimales minimos para que una cifra se considere distintiva de su artefacto. Con menos, un
 #: 0,90 o un 0,25 aparecen por todas partes y el control se llena de falsos positivos.
@@ -168,6 +213,64 @@ def cifras_distintivas(
     return salida
 
 
+def buscador(cifras: list[str], *, ambas_formas: bool) -> re.Pattern[str]:
+    """Un solo patron que encuentra cualquiera de las cifras, escrita entera.
+
+    Dos cosas a la vez. La primera, **la frontera**: buscar la subcadena acusaba a quien no citaba
+    nada -``0,0342`` estaba dentro de ``arXiv:2310.03425``-, asi que se exige que no haya digito ni
+    separador decimal pegado por delante ni digito por detras. La segunda, **una sola pasada**: con
+    1 160 cifras y 433 documentos, un patron por cifra son medio millon de barridos y el gate
+    tardaba dos minutos; asi tarda un segundo, y un control que se hace pesado acaba fuera de la CI.
+
+    Args:
+        cifras: Cifras en la forma espanola del proyecto.
+        ambas_formas: Admitir tambien la coma como punto. El manuscrito de envio se escribe en
+            ingles y su tabla de resultados usa punto decimal; en prosa nuestra, admitirlo llenaba
+            el control de coincidencias con metricas de otras historias sin anadir una cita real.
+
+    Returns:
+        El patron compilado, con la cifra en el grupo ``cifra``.
+    """
+    cuerpos = [
+        re.escape(c).replace(",", "[.,]") if ambas_formas else re.escape(c)
+        for c in sorted(cifras, key=len, reverse=True)
+    ]
+    alternativa = "|".join(cuerpos) if cuerpos else r"(?!)"
+    return re.compile(rf"(?<![\d.,])(?P<cifra>{alternativa})(?!\d)")
+
+
+def cifras_copiadas(texto: str, patron: re.Pattern[str]) -> set[str]:
+    """Cifras del patron que aparecen en el texto, normalizadas a la forma espanola.
+
+    Args:
+        texto: Contenido del documento.
+        patron: Buscador de :func:`buscador`.
+
+    Returns:
+        Las cifras encontradas, siempre con coma decimal.
+    """
+    return {m.group("cifra").replace(".", ",") for m in patron.finditer(texto)}
+
+
+def _ambito(docs: Path | None, extra: list[Path] | None) -> list[tuple[Path, str]]:
+    """Raices y patrones a vigilar, con las de la linea de ordenes si se dan.
+
+    ``--docs`` y ``--extra`` existen para poder probar el gate en negativo sobre un directorio
+    temporal, y quitarlos al ensanchar el alcance habria dejado al control sin su propia prueba.
+
+    Args:
+        docs: Raiz unica a vigilar, o ``None`` para el ambito por defecto.
+        extra: Raices adicionales.
+
+    Returns:
+        Pares ``(raiz, patron glob)``.
+    """
+    if docs is None and not extra:
+        return [(REPO_ROOT / raiz, patron) for raiz, patron in _AMBITO]
+    raices = [*([docs] if docs is not None else []), *(extra or [])]
+    return [(raiz, patron) for raiz in raices for patron in ("**/*.md", "**/*.tex")]
+
+
 def rutas_por_estado(ledger: Path, estado: str) -> list[str]:
     """Artefact paths whose ledger row carries a given state.
 
@@ -237,8 +340,11 @@ def main() -> int:
     parser.add_argument(
         "--docs",
         type=Path,
-        default=REPO_ROOT / "docs" / "paper",
-        help="Raiz de documentos a vigilar. Existe para poder probar el gate en negativo.",
+        default=None,
+        help=(
+            "Raiz UNICA a vigilar, en vez del ambito por defecto. Existe para poder probar el "
+            "gate en negativo sobre un directorio temporal."
+        ),
     )
     parser.add_argument(
         "--extra",
@@ -291,27 +397,56 @@ def main() -> int:
     print(f"cifras distintivas vigiladas: {len(origen)}")
     print(f"  descontadas por aparecer tambien en artefactos vigentes: {descontadas}")
 
+    # Las fuentes del manuscrito retirado se comprueban por sello, igual que el archivo ajeno: la
+    # exencion promete que no se tocan, y esto lo verifica en vez de confiarlo.
+    for relativo, sello in MANUSCRITO_RETIRADO.items():
+        fichero = REPO_ROOT / relativo
+        if not fichero.exists():
+            fallos.append(f"{relativo}: declarado como manuscrito retirado y no esta en disco")
+            continue
+        digest = hashlib.md5(fichero.read_bytes()).hexdigest()  # noqa: S324 - sello de custodia
+        if digest != sello:
+            fallos.append(
+                f"{relativo}: es fuente del manuscrito retirado y su MD5 cambio ({digest} frente "
+                f"a {sello}). El manuscrito retirado no se edita; si se edito, deja de estar "
+                "retirado y sus cifras vuelven a ser afirmaciones vigentes"
+            )
+
     # Cualquier documento que nombre una ruta obsoleta, o reproduzca una de sus cifras, sin estar
-    # declarado ni exento.
+    # declarado ni exento. El alcance NO es solo `docs/paper`: el manuscrito es `.tex`, los ADR
+    # viven en `docs/decisions` y el plan en `context/`, y todos ellos quedaban fuera.
     declarados = set(CONSUMIDORES) | set(EXENTOS)
-    raices = [args.docs, *(args.extra or [REPO_ROOT / "paper"])]
-    for ruta in sorted({x for raiz in raices for x in raiz.rglob("*.md")}):
+    buscador_tex = buscador(list(origen), ambas_formas=True)
+    buscador_prosa = buscador(list(origen), ambas_formas=False)
+    vigilados = sorted(
+        {
+            x
+            for raiz, patron in _ambito(args.docs, args.extra)
+            for x in raiz.glob(patron)
+            if raiz.exists()
+        }
+    )
+    print(f"documentos vigilados: {len(vigilados)}")
+    for ruta in vigilados:
         absoluta = ruta.resolve()
         relativo = (
             str(absoluta.relative_to(REPO_ROOT))
             if absoluta.is_relative_to(REPO_ROOT)
             else str(absoluta)
         )
-        if relativo in declarados or relativo in ARCHIVO_AJENO:
+        if relativo in declarados or relativo in ARCHIVO_AJENO or relativo in MANUSCRITO_RETIRADO:
             continue
-        texto = ruta.read_text(encoding="utf-8")
+        texto = ruta.read_text(encoding="utf-8", errors="replace")
         citadas = [x for x in obsoletas if x in texto]
         if citadas:
             fallos.append(
                 f"{relativo}: nombra {len(citadas)} artefacto(s) OBSOLETO y no esta declarado "
                 f"como consumidor ni exento (p. ej. {citadas[0]})"
             )
-        copiadas = sorted({c for c in origen if c in texto})
+        # En `.tex` valen las dos formas decimales: el manuscrito de envio se escribe en ingles.
+        patron = buscador_tex if ruta.suffix == ".tex" else buscador_prosa
+        colisiones = set(COLISIONES.get(relativo, ()))
+        copiadas = sorted((cifras_copiadas(texto, patron) & set(origen)) - colisiones)
         if copiadas:
             fallos.append(
                 f"{relativo}: reproduce {len(copiadas)} cifra(s) de artefactos OBSOLETO sin "
@@ -326,7 +461,7 @@ def main() -> int:
             texto = pagina.read_text(encoding="utf-8")
             if MARCA_HTML in texto:
                 continue
-            copiadas = sorted({c for c in origen if c in texto})
+            copiadas = sorted(cifras_copiadas(texto, buscador_prosa) & set(origen))
             if copiadas:
                 fallos.append(
                     f"{pagina.name}: reproduce {len(copiadas)} cifra(s) de artefactos OBSOLETO "
