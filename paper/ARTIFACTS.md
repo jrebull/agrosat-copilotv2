@@ -4,7 +4,7 @@ Cada cifra impresa en el artículo debe re-derivarse desde un archivo de esta ta
 Lo que no aparece aquí no se imprime. El gate `make paper-artifacts-check` recalcula
 el MD5 de cada fila sellada y falla si algo cambió sin registrarse.
 
-**Sellado el**: 2026-09-04 · **Commit de sellado**: `cfc07f2`
+**Sellado el**: 2026-09-04 · **Commit de sellado**: `2371eff`
 > El gate comprueba que ese commit exista y este en la historia de HEAD, e imprime cuantos
 > commits ha quedado atras. No se exige que sea HEAD: el commit que actualiza el ledger no
 > puede conocer su propio sha.
@@ -133,6 +133,7 @@ del diseño y siguen vigentes.
 | Equidad: cobertura por clase bajo cada mecanismo | `reports/paper_micai/equidad/cobertura_por_clase.csv` | `a254affe1425a0e5a55622e9c09bf601` | 1115 | `9e6fc19` | OBSOLETO | Quien paga la abstencion, medido. Responde a la objecion de que citabamos a Jones et al. al reves. |
 | Equidad: correlaciones y clases sin cobertura | `reports/paper_micai/equidad/equidad.json` | `1ddb39e59fd5990ab3ffd2e342620df1` | 1303 | `9e6fc19` | OBSOLETO | Spearman entre soporte y cobertura por mecanismo y banco, con su p. |
 | Fase 6: manuscrito MICAI, fuente principal | `paper/micai/main.tex` | `b603d1ba9600aa537cfc8710a2c236ce` | 4388 | `6fa433d` | SELLADO | Clase llncs con `\newif\ifanon`; anonimo por defecto, A4 real, `hidelinks`. |
+| Trabajo relacionado verificado en fuente primaria | `docs/paper/trabajo-relacionado-verificado.md` | `51a8015d81154d4cbae6ab02c053b378` | 12964 | `2371eff` | SELLADO | NORMATIVO: fija, referencia por referencia, que afirmacion sostiene, cual es su limite metodologico, y la redaccion PERMITIDA y PROHIBIDA. Dieciseis claves, todas en refs-candidates.bib. Incluye el alcance de la busqueda con sus sesgos —entre ellos el que hizo que el precedente mas cercano no apareciera por vocabulario—, la formula de novedad limitada sin declarar exhaustividad, y el parrafo de primera pagina rotulado como borrador no integrado. |
 | Catalogo verificado de referencias del manuscrito NUEVO | `paper/micai2027/refs-candidates.bib` | `080602404bac5be8476fd777e863584d` | 23868 | `cfc07f2` | SELLADO | 57 entradas: las 44 de la matriz verificada mas Ha 1997, Mortier 2021 y Chzhen 2021, que US-141 exige y no estaban. **Fila INDEPENDIENTE de la del bib historico**: `paper/micai/refs.bib` sigue inmutable y ligado al PDF retirado. Se llama «candidates» porque sin manuscrito nuevo no hay citas nuevas; el `refs.bib` final se generara solo con las claves citadas, y las 26 citas del manuscrito retirado NO se atribuyen a este contexto. Autores sin truncar, identificador localizable en las 57. |
 | Fase 6: bibliografia derivada de la matriz verificada | `paper/micai/refs.bib` | `1452703945c24b628ba6adba2c9d7a86` | 20165 | `b072850` | SELLADO | 54 entradas. Se generan desde la matriz resuelta por API mas un fichero de correcciones verificadas a mano, cada una con su motivo: una de ellas corregia un DOI que resolvia a un dataset distinto del articulo. |
 | Fase 6: PDF de envio, version anonima | `paper/micai/main.pdf` | `85261661509cbf7f4deea318b890c3d7` | 633726 | sin seguimiento en git (`*.pdf` global) | SELLADO | 15 paginas A4, cero errores, cero overfull, gate de identidad en verde. `make micai-pdf` lo reconstruye byte a byte desde las fuentes versionadas, asi que el sello vale aunque el binario no viaje. |
