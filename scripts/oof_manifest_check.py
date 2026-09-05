@@ -125,9 +125,20 @@ def main() -> int:
         return 2
     inventario = json.loads(inventario_path.read_text(encoding="utf-8"))
     declarados: dict[str, dict[str, object]] = inventario["ficheros"]
-    en_disco = {p.name for p in args.oof.glob("*.parquet")}
+    # Se busca en TODO el arbol, no solo en la raiz. El flujo de re-volcado trabaja en directorios
+    # temporales antes de promover, y uno olvidado bajo `oof/` era invisible para este gate
+    # mientras cualquier consumidor que recorriera el arbol podia leerlo.
+    todos = [p for p in args.oof.rglob("*.parquet") if "__pycache__" not in p.parts]
+    en_subdirectorio = [p for p in todos if p.parent != args.oof]
+    en_disco = {p.name for p in todos if p.parent == args.oof}
 
     fallos: list[str] = []
+    for extraviado in sorted(en_subdirectorio):
+        fallos.append(
+            f"{extraviado.relative_to(args.oof)}: hay un parquet en un subdirectorio de `oof/`. "
+            "El inventario se indexa por NOMBRE, asi que un fichero ahi no se puede declarar sin "
+            "ambiguedad; o se promueve a la raiz y se declara, o se saca de aqui"
+        )
     for nombre in sorted(en_disco - set(declarados)):
         fallos.append(f"{nombre}: esta en disco y el inventario no lo declara")
 

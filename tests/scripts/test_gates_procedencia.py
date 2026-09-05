@@ -1355,3 +1355,25 @@ def test_resellar_cierra_el_fallo_y_solo_toca_el_sello() -> None:
     finally:
         PREREGISTRO.write_text(respaldo_doc, encoding="utf-8")
         gate.write_text(respaldo_gate, encoding="utf-8")
+
+
+def test_un_parquet_en_un_subdirectorio_de_oof_no_queda_invisible(tmp_path: Path) -> None:
+    """El gate miraba solo la raiz de ``oof/``, y el flujo de re-volcado usa directorios temporales.
+
+    Un temporal olvidado ahi era invisible para el inventario mientras cualquier consumidor que
+    recorriera el arbol podia leerlo. Es la misma forma del defecto que ya paso una vez: un parquet
+    huerfano -de otra configuracion, de otra pasada- se lee igual de bien que uno legitimo.
+    """
+    copia = _copia_oof(tmp_path, con_parquet=False)
+    escondido = copia / "tmp-redump"
+    escondido.mkdir()
+    (escondido / "oof_parcel_unet_fold5.parquet").write_bytes(b"PAR1")
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "oof_manifest_check.py"), "--oof", str(copia)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 1, proc.stdout
+    assert "hay un parquet en un subdirectorio" in proc.stdout
