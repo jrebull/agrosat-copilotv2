@@ -345,6 +345,7 @@ def ledger_state(relative_path: str, ledger: Path | None = None) -> str | None:
     if not destino.exists():
         return None
     minimo_celdas = 6
+    encontrados: list[str] = []
     for linea in destino.read_text(encoding="utf-8").splitlines():
         if not linea.startswith("|"):
             continue
@@ -353,8 +354,15 @@ def ledger_state(relative_path: str, ledger: Path | None = None) -> str | None:
             continue
         path_cell = re.search(r"`([^`]+)`", celdas[1])
         if path_cell is not None and path_cell.group(1) == relative_path:
-            return celdas[5].strip()
-    return None
+            encontrados.append(celdas[5].strip())
+    if len(encontrados) > 1:
+        # Devolver el primero seria contestar con seguridad a una pregunta ambigua. Con dos filas
+        # el artefacto tiene dos estados, y quien pregunte se queda con el que salga antes.
+        raise RuntimeError(
+            f"{relative_path}: tiene {len(encontrados)} filas en el ledger, con estados "
+            f"{encontrados}. Una ruta con dos filas no tiene estado, tiene dos"
+        )
+    return encontrados[0] if encontrados else None
 
 
 def require_current_inputs(paths: tuple[str, ...], ledger: Path | None = None) -> None:

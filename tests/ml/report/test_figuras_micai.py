@@ -373,3 +373,17 @@ def test_el_banco_se_llama_pastis_y_no_pastis_r() -> None:
     for idioma, textos in TEXTOS.items():
         assert "PASTIS-R" not in textos["primario"], f"{idioma}: {textos['primario']}"
         assert "PASTIS" in textos["primario"]
+
+
+def test_una_ruta_con_dos_filas_no_devuelve_un_estado_cualquiera(tmp_path) -> None:
+    """Devolver la primera seria contestar con seguridad a una pregunta ambigua."""
+    from ml.report.figuras_micai import ledger_state
+
+    ledger = tmp_path / "ARTIFACTS.md"
+    ledger.write_text(
+        "| a | `reports/x.svg` | `" + "0" * 32 + "` | 1 | `abc1234` | SELLADO | n |\n"
+        "| b | `reports/x.svg` | `" + "1" * 32 + "` | 1 | `abc1234` | OBSOLETO | n |\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(RuntimeError, match="tiene 2 filas en el ledger"):
+        ledger_state("reports/x.svg", ledger)

@@ -62,8 +62,12 @@ RAICES_ARTEFACTOS: tuple[Path, ...] = (
 #:
 #: - ``raw/``: respuestas crudas de las APIs de la busqueda bibliografica. Son la ENTRADA de
 #:   `search_candidates.csv`, que si esta sellado; sellar cada respuesta seria sellar el ruido.
-#: - ``.png`` y ``.pdf`` que acompanan a un ``.svg`` ya declarado: la misma figura en otro formato.
-#:   El ledger sella un representante por figura, no tres ficheros por figura.
+#: - ``.png`` que acompana a un ``.svg`` ya declarado: es el raster para el cuaderno publico, y
+#:   ningun documento del articulo lo incluye.
+#:
+#:   El ``.pdf`` NO esta exento, aunque tambien sea "la misma figura en otro formato": es el
+#:   fichero que ``\includegraphics`` toma de verdad. Sellar solo el SVG era sellar el
+#:   representante que nadie incluye y dejar sin custodia el que llega al manuscrito.
 #: - Ficheros ocultos: `.gitignore` y companeros, que no son datos.
 def _no_es_artefacto(ruta: Path, declarados: set[str]) -> bool:
     """Si un fichero bajo la raiz de artefactos no necesita fila en el ledger.
@@ -79,7 +83,7 @@ def _no_es_artefacto(ruta: Path, declarados: set[str]) -> bool:
         return True
     if ruta.suffix == ".dvc":
         return True
-    if ruta.suffix in {".png", ".pdf"}:
+    if ruta.suffix == ".png":
         hermana = ruta.with_suffix(".svg")
         return str(hermana.relative_to(REPO_ROOT)) in declarados
     return False
@@ -251,6 +255,20 @@ def main() -> int:
     checked = 0
     obsoletos: list[str] = []
     declared_paths = {row["path"] for row in rows}
+
+    # Una ruta no puede tener dos filas. Con dos, el artefacto tiene dos estados y dos sellos, y
+    # quien lo consulte se queda con el primero que encuentre: `ledger_state` devuelve el primero,
+    # el chequeo dual mira el conjunto y el gate de cuarentena lee otra cosa. No es un fallo que se
+    # manifieste como fallo, sino como respuestas distintas a la misma pregunta.
+    conteo: dict[str, int] = {}
+    for row in rows:
+        conteo[row["path"]] = conteo.get(row["path"], 0) + 1
+    for ruta_repetida, veces in sorted(conteo.items()):
+        if veces > 1:
+            failures.append(
+                f"{ruta_repetida}: tiene {veces} filas en el ledger. Una ruta con dos filas tiene "
+                "dos estados, y cada consumidor se queda con el que encuentre primero"
+            )
     for row in rows:
         path = REPO_ROOT / row["path"]
         if row["state"] == MISSING_STATE:

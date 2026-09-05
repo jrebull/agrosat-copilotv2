@@ -114,3 +114,32 @@ def test_todo_insumo_declarado_tiene_fila_en_el_ledger() -> None:
                 f"{modulo}.{nombre}: {ruta}" for ruta in valor if ledger_state(ruta) is None
             )
     assert not sin_fila, "insumos declarados que el ledger no conoce:\n" + "\n".join(sin_fila)
+
+
+def test_el_pdf_de_una_figura_lleva_el_mismo_estado_que_su_svg() -> None:
+    """El PDF es el fichero que ``\\includegraphics`` toma de verdad.
+
+    Sellar solo el SVG era sellar el representante que nadie incluye y dejar sin custodia el que
+    llega al manuscrito. Y una vez sellados los dos, no pueden discrepar: un PDF SELLADO cuyo SVG
+    esta OBSOLETO seria exactamente la figura impecable de datos que no se pueden citar.
+    """
+    estados = _estados()
+    pares = [
+        (svg, svg[:-4] + ".pdf")
+        for svg in estados
+        if svg.endswith(".svg") and svg[:-4] + ".pdf" in estados
+    ]
+    assert pares, "el ledger no declara ninguna pareja SVG/PDF"
+    discrepan = [
+        f"{pdf}={estados[pdf]} frente a {svg}={estados[svg]}"
+        for svg, pdf in pares
+        if estados[pdf] != estados[svg]
+    ]
+    assert not discrepan, "el PDF y su SVG dicen cosas distintas:\n" + "\n".join(discrepan)
+
+
+def test_el_pdf_que_entra_en_el_manuscrito_esta_sellado() -> None:
+    """La figura del manuscrito se cita por su PDF, y ese es el que tiene que estar sellado."""
+    estados = _estados()
+    for idioma in ("es", "en"):
+        assert estados.get(f"reports/micai2027/figuras/soporte-{idioma}.pdf") == "SELLADO"

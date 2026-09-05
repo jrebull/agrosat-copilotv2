@@ -1447,3 +1447,47 @@ def test_la_raiz_del_manuscrito_nuevo_tambien_esta_bajo_custodia() -> None:
     finally:
         intruso.unlink()
     assert correr()[0] == 0
+
+
+def test_una_ruta_con_dos_filas_en_el_ledger_rompe_el_gate() -> None:
+    """Una ruta con dos filas no tiene estado: tiene dos.
+
+    No es un fallo que se manifieste como fallo, sino como respuestas distintas a la misma
+    pregunta segun quien mire: `ledger_state` devuelve la primera, el chequeo dual mira el
+    conjunto y el gate de cuarentena lee otra cosa.
+    """
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+
+    def correr() -> tuple[int, str]:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        return proc.returncode, proc.stdout + proc.stderr
+
+    respaldo = LEDGER.read_text(encoding="utf-8")
+    marca = "| Manuscrito nuevo: figura del soporte por clase, espanol |"
+    inicio = respaldo.index(marca)
+    fin = respaldo.index("\n", inicio) + 1
+    try:
+        LEDGER.write_text(respaldo[:fin] + respaldo[inicio:fin] + respaldo[fin:], encoding="utf-8")
+        codigo, salida = correr()
+        assert codigo == 1, salida
+        assert "tiene 2 filas en el ledger" in salida
+    finally:
+        LEDGER.write_text(respaldo, encoding="utf-8")
+    assert correr()[0] == 0
+
+
+def test_un_pdf_sin_fila_ya_no_se_exime_por_tener_svg_hermano() -> None:
+    """El ``.png`` es el raster del cuaderno publico; el ``.pdf`` es lo que incluye LaTeX."""
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+    intruso = REPO_ROOT / "reports" / "micai2027" / "figuras" / "_intruso_de_prueba.pdf"
+    intruso.write_bytes(b"%PDF-1.4\n")
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        assert proc.returncode == 1, proc.stdout
+        assert "_intruso_de_prueba.pdf" in proc.stdout
+    finally:
+        intruso.unlink()
