@@ -79,6 +79,24 @@ def main() -> int:
             "factor de sensibilidad y no se declara ganador"
         )
 
+    # 6. Ningun guion mantiene su propia lista de miembros. Una lista escrita dos veces se separa:
+    # al congelar el panel en cinco, fase 2 y fase 3 seguian pidiendo los diez originales.
+    import ast
+
+    for guion in sorted(Path(REPO_ROOT / "scripts").glob("run_paper_micai_*.py")):
+        arbol = ast.parse(guion.read_text(encoding="utf-8"))
+        for nodo in ast.walk(arbol):
+            if not isinstance(nodo, ast.AnnAssign) or not isinstance(nodo.target, ast.Name):
+                continue
+            if nodo.target.id != "ALL_MEMBERS" or not isinstance(nodo.value, ast.Tuple):
+                continue
+            literal = tuple(e.value for e in nodo.value.elts if isinstance(e, ast.Constant))
+            if literal:
+                fallos.append(
+                    f"{guion.name}: mantiene su propia lista de {len(literal)} miembros en vez de "
+                    "leer el panel congelado"
+                )
+
     texto = args.preregistro.read_text(encoding="utf-8")
     seccion = texto[texto.find("### 4.6") :] if "### 4.6" in texto else ""
     if not seccion:

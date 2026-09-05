@@ -1089,3 +1089,32 @@ def test_el_bib_historico_modificado_rompe_el_gate(tmp_path: Path) -> None:
     finally:
         shutil.copy2(respaldo, historico)
     assert _correr_bib_check(CATALOGO)[0] == 0
+
+
+def test_un_guion_con_su_propia_lista_de_miembros_rompe_el_gate(tmp_path: Path) -> None:
+    """A member list written twice drifts apart, and this one did.
+
+    Al congelar el panel en cinco miembros, fase 2 y fase 3 seguian pidiendo los diez originales
+    —cinco ya excluidos o sin verificar—. Al regenerar sus artefactos habrian usado el conjunto
+    equivocado, o habrian reventado, sin que nada relacionara una cosa con la otra.
+    """
+    import shutil
+
+    guion = REPO_ROOT / "scripts" / "run_paper_micai_fase3.py"
+    respaldo = tmp_path / "fase3.py"
+    shutil.copy2(guion, respaldo)
+    try:
+        guion.write_text(
+            guion.read_text(encoding="utf-8").replace(
+                "ALL_MEMBERS: tuple[str, ...] = miembros_del_panel()",
+                'ALL_MEMBERS: tuple[str, ...] = ("unet", "farslip-ft18")',
+                1,
+            ),
+            encoding="utf-8",
+        )
+        codigo, salida = _correr_panel_check(PANEL)
+        assert codigo == 1, salida
+        assert "su propia lista" in salida
+    finally:
+        shutil.copy2(respaldo, guion)
+    assert _correr_panel_check(PANEL)[0] == 0

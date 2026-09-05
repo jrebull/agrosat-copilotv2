@@ -32,6 +32,7 @@ from ml.eval.paper_micai_arbitration import (
     coverage_by_confidence,
     load_member_posteriors,
     mcnemar,
+    miembros_del_panel,
     paired_bootstrap_delta,
     per_class_table,
     pooled_spatial_oof_posteriors,
@@ -57,18 +58,11 @@ CHAMPION_MEMBERS: tuple[str, ...] = (
 )
 
 #: Todos los miembros del universo de Francia, para la tabla de individuales.
-ALL_MEMBERS: tuple[str, ...] = (
-    "anysat",
-    "deeplabv3plus",
-    "farslip-ft18",
-    "farslip-zeroshot",
-    "segformer",
-    "tsvit-pheno",
-    "tsvit-pheno-fullm",
-    "unet",
-    "utae",
-    "xgb-alphaearth",
-)
+#: Los miembros del analisis salen del PANEL CONGELADO, no de una lista escrita aqui.
+#: Estaban los diez originales, y al congelar el panel en cinco este guion seguia pidiendo
+#: los diez: cinco ya excluidos o sin verificar. Al regenerar habria usado el conjunto
+#: equivocado sin que nada relacionara una cosa con la otra.
+ALL_MEMBERS: tuple[str, ...] = miembros_del_panel()
 
 
 def provenance(seed: int, extra: dict[str, Any] | None = None) -> dict[str, Any]:
