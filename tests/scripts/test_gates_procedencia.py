@@ -978,3 +978,89 @@ def test_quedarse_por_debajo_del_minimo_de_familias_rompe_el_gate(tmp_path: Path
     codigo, salida = _correr_panel_check(copia)
     assert codigo == 1, salida
     assert "familias distintas" in salida
+
+
+# --------------------------------------------------------------------------------------
+# US-142: el catalogo de referencias, y los identificadores que no toleran ser numeros.
+# --------------------------------------------------------------------------------------
+
+CATALOGO = REPO_ROOT / "paper" / "micai2027" / "refs-candidates.bib"
+OVERRIDES_CSV = REPO_ROOT / "reports" / "paper_micai" / "fase0" / "related_work_overrides.csv"
+
+
+def _correr_bib_check(catalogo: Path, overrides: Path | None = None) -> tuple[int, str]:
+    """Run the bibliography gate over a given catalogue."""
+    orden = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "paper_bib_check.py"),
+        "--catalogo",
+        str(catalogo),
+    ]
+    if overrides is not None:
+        orden += ["--overrides", str(overrides)]
+    proc = subprocess.run(orden, cwd=REPO_ROOT, capture_output=True, text=True, check=False)
+    return proc.returncode, proc.stdout
+
+
+def test_el_catalogo_vigente_pasa_su_gate() -> None:
+    """Baseline: every entry locatable, no truncated author list."""
+    codigo, salida = _correr_bib_check(CATALOGO)
+    assert codigo == 0, salida
+    assert "sin identificador localizable: 0" in salida
+
+
+def test_las_entradas_sin_citar_se_reportan_pero_no_hacen_fallar() -> None:
+    """There is no new manuscript yet, so every entry is uncited and that is not a defect."""
+    codigo, salida = _correr_bib_check(CATALOGO)
+    assert codigo == 0, salida
+    assert "sin citar (se reporta, no falla)" in salida
+
+
+def test_un_eprint_con_el_cero_final_perdido_rompe_el_gate(tmp_path: Path) -> None:
+    """``2511.10370`` must survive literally; ``2511.1037`` is an eprint that does not exist.
+
+    El defecto no lo tenia el CSV: lo tenia el generador, que leia la columna infiriendo el tipo
+    y convertia el identificador en un float. El cero final desaparecia sin que nada avisara, y
+    leyendo el bib no se ve.
+    """
+    texto = CATALOGO.read_text(encoding="utf-8")
+    assert "2511.10370" in texto, "el catalogo ya no trae el identificador que este test vigila"
+    mutado = texto.replace("2511.10370", "2511.1037", 1)
+    copia = tmp_path / "refs.bib"
+    copia.write_text(mutado, encoding="utf-8")
+    codigo, salida = _correr_bib_check(copia)
+    assert codigo == 1, salida
+    assert "cero final" in salida
+
+
+def test_leer_las_correcciones_como_numeros_produce_una_diferencia_detectable(
+    tmp_path: Path,
+) -> None:
+    """Coercing the literal columns is not cosmetic: it silently changes what gets published.
+
+    Se comprueba en el mecanismo, no en el resultado: se lee el CSV de las dos maneras y se exige
+    que al menos un valor cambie. Si algun dia dejaran de diferir, este test avisaria de que la
+    proteccion sobra o de que se dejo de necesitar.
+    """
+    import polars as pl
+
+    columnas = ("id", "volume", "number", "pages", "url")
+    literal = pl.read_csv(OVERRIDES_CSV, schema_overrides={c: pl.Utf8 for c in columnas})
+    inferido = pl.read_csv(OVERRIDES_CSV)
+    diferencias = [
+        (clave, a, b)
+        for clave, a, b in zip(
+            literal["key"].to_list(),
+            literal["id"].to_list(),
+            [None if v is None else str(v) for v in inferido["id"].to_list()],
+            strict=True,
+        )
+        if a != b
+    ]
+    assert diferencias, (
+        "leer los identificadores como numeros ya no cambia nada: o el esquema del CSV cambio, "
+        "o esta proteccion dejo de hacer falta y hay que decirlo"
+    )
+    assert any(a and b and a.rstrip("0") == b.rstrip("0") and a != b for _, a, b in diferencias), (
+        f"la diferencia esperada es un cero final perdido y no aparece: {diferencias}"
+    )

@@ -18,6 +18,7 @@ Uso:
 
 from __future__ import annotations
 
+import argparse
 import re
 from pathlib import Path
 
@@ -33,6 +34,10 @@ OUT = REPO_ROOT / "paper" / "micai" / "refs.bib"
 
 #: Numero de autores a partir del cual el estilo debe imprimir «et al.».
 MAX_AUTHORS: int = 6
+
+#: Truncar o no la lista de autores. La bibliografia NUEVA no trunca: «and others» deja una
+#: entrada sin autores completos, y un lector no puede comprobar una atribucion que no ve.
+_TRUNCAR: bool = True
 
 #: Palabras que se protegen con llaves aunque no parezcan siglas.
 PROTECTED = (
@@ -89,7 +94,7 @@ def _authors(raw: str) -> str:
         A BibTeX ``and``-joined list, truncated with ``others`` past the limit.
     """
     people = [a.strip() for a in raw.split(";") if a.strip()]
-    if len(people) > MAX_AUTHORS:
+    if _TRUNCAR and len(people) > MAX_AUTHORS:
         return " and ".join(people[:MAX_AUTHORS]) + " and others"
     return " and ".join(people)
 
@@ -103,6 +108,7 @@ EXTRA_FIELDS: tuple[tuple[str, str], ...] = (
     ("pages", "pages"),
     ("publisher", "publisher"),
     ("address", "address"),
+    ("url", "url"),
 )
 
 
@@ -133,7 +139,11 @@ def _entry(row: dict[str, str]) -> str:
             fields.append(f"  {bib_name:<9} = {{{value}}},")
     if doi:
         fields.append(f"  doi       = {{{doi}}},")
-    elif row.get("id_type") == "arxiv" and kind == "misc":
+    # El eprint acompana a la version revisada por pares en vez de sustituirla: manda el venue
+    # oficial, y el arXiv se conserva porque es lo que casi todo el mundo abre. Antes solo se
+    # emitia para entradas `misc`, asi que al ascender una entrada a actas se perdia el unico
+    # identificador que tenia.
+    if row.get("id_type") == "arxiv" and str(row.get("id") or "").strip():
         fields.append(f"  eprint    = {{{row['id']}}},")
         fields.append("  archivePrefix = {arXiv},")
     return f"@{kind}{{{row['key']},\n" + "\n".join(fields) + "\n}"
@@ -155,7 +165,13 @@ def _apply_overrides(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     """
     if not OVERRIDES.exists():
         return rows
-    fixes = {r["key"]: r for r in pl.read_csv(OVERRIDES).to_dicts()}
+    # Los identificadores se leen como TEXTO. Inferir el tipo convierte el arXiv 2511.10370
+    # en el float 2511.1037 y publica un eprint que no existe: el cero final desaparece sin
+    # que nada avise. Lo mismo vale para volumen, numero y paginas.
+    columnas_texto = {c: pl.Utf8 for c in ("id", "id_type", "volume", "number", "pages", "url")}
+    fixes = {
+        r["key"]: r for r in pl.read_csv(OVERRIDES, schema_overrides=columnas_texto).to_dicts()
+    }
     out: list[dict[str, str]] = []
     vistas: set[str] = set()
     for row in rows:
@@ -175,17 +191,34 @@ def _apply_overrides(rows: list[dict[str, str]]) -> list[dict[str, str]]:
 
 def main() -> None:
     """Write the bibliography from every verified row."""
+    global _TRUNCAR
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--salida", type=Path, default=OUT)
+    parser.add_argument(
+        "--sin-truncar-autores",
+        action="store_true",
+        help="No corta la lista de autores con «and others». La bibliografia nueva lo usa.",
+    )
+    args = parser.parse_args()
+    _TRUNCAR = not args.sin_truncar_autores
+
     rows = _apply_overrides(
         pl.read_csv(VERIFIED).filter(pl.col("status") == "OK").sort("key").to_dicts()
     )
-    OUT.parent.mkdir(parents=True, exist_ok=True)
+    args.salida.parent.mkdir(parents=True, exist_ok=True)
     header = (
         "% Generado por scripts/build_paper_micai_bib.py desde\n"
-        "% reports/paper_micai/fase0/related_work_verified.csv.\n"
-        "% NO editar a mano: toda entrada nace de una resolucion por API.\n\n"
+        "% reports/paper_micai/fase0/related_work_verified.csv mas related_work_overrides.csv.\n"
+        "% NO editar a mano: toda entrada nace de una resolucion por API o de una correccion\n"
+        "% verificada, y las correcciones llevan su motivo en el CSV.\n\n"
     )
-    OUT.write_text(header + "\n\n".join(_entry(r) for r in rows) + "\n", encoding="utf-8")
-    logger.info("bib_escrito", entradas=len(rows), out=str(OUT.relative_to(REPO_ROOT)))
+    args.salida.write_text(header + "\n\n".join(_entry(r) for r in rows) + "\n", encoding="utf-8")
+    logger.info(
+        "bib_escrito",
+        entradas=len(rows),
+        out=str(args.salida.resolve().relative_to(REPO_ROOT)),
+        autores_truncados=_TRUNCAR,
+    )
 
 
 if __name__ == "__main__":
