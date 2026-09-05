@@ -52,19 +52,23 @@ INSUMOS_SOPORTE: tuple[str, ...] = (
 #: Rotulos de esta figura, por idioma. El banco es **PASTIS**, no PASTIS-R: el articulo usa el
 #: optico. La correccion se hizo en el manuscrito y en el ledger y NO llego a las figuras, que es
 #: lo primero que mira un revisor.
+#:
+#: Los titulos van en DOS lineas. En una sola, el del panel derecho invadia al izquierdo y se
+#: salia del lienzo -"60 000 par" cortado a media palabra-, y la figura se sello asi porque el
+#: contrato medía ancho, tipografia y canales, y ninguna de las tres cosas ve un texto recortado.
 TEXTOS: dict[str, dict[str, str]] = {
     "es": {
         "eje_y": "parcelas (escala logarítmica)",
-        "primario": "PASTIS · 18 clases · 16 640 parcelas",
-        "replica": "BreizhCrops · 9 clases · 60 000 parcelas",
+        "primario": "PASTIS\n18 clases · 16 640 parcelas",
+        "replica": "BreizhCrops\n9 clases · 60 000 parcelas",
         "umbral": f"{RARA} parcelas",
         "cola": "cola (< 300)",
         "resto": "resto",
     },
     "en": {
         "eje_y": "parcels (log scale)",
-        "primario": "PASTIS · 18 classes · 16,640 parcels",
-        "replica": "BreizhCrops · 9 classes · 60,000 parcels",
+        "primario": "PASTIS\n18 classes · 16,640 parcels",
+        "replica": "BreizhCrops\n9 classes · 60,000 parcels",
         "umbral": f"{RARA} parcels",
         "cola": "tail (< 300)",
         "resto": "rest",

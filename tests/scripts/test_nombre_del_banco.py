@@ -92,10 +92,10 @@ def test_la_prueba_detecta_el_defecto_que_existio() -> None:
     """Prueba en negativo sobre el rotulo real que llevaban las figuras hasta esta noche."""
     fichero = REPO_ROOT / "scripts" / "build_micai2027_figures.py"
     respaldo = fichero.read_text(encoding="utf-8")
-    assert "PASTIS \u00b7 18 clases" in respaldo
+    assert "PASTIS\\n18 clases" in respaldo
     try:
         fichero.write_text(
-            respaldo.replace('"PASTIS \u00b7 18 clases', '"PASTIS-R \u00b7 18 clases', 1),
+            respaldo.replace('"PASTIS\\n18 clases', '"PASTIS-R\\n18 clases', 1),
             encoding="utf-8",
         )
         assert _lineas_sospechosas(), "la prueba no vio el rotulo equivocado"

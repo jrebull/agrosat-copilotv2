@@ -45,6 +45,10 @@ def synthetic_figure() -> Iterator[Figure]:
     axes.set_xlabel(translate_label("coverage", "en"))
     axes.set_ylabel(translate_label("quality", "en"))
     axes.legend()
+    # Como las figuras de verdad. Sin esto, el rotulo del eje X cae FUERA del lienzo y `save_figure`
+    # -que guarda con el lienzo congelado para no cambiar el ancho fisico- lo pierde: la figura
+    # salia sin su etiqueta y estas pruebas afirmaban sobre ella que el contrato fisico se cumplia.
+    figure.tight_layout()
     yield figure
     plt.close(figure)
 
@@ -202,6 +206,8 @@ def test_pdf_and_svg_are_byte_reproducible(tmp_path: Path) -> None:
             linestyle=style.line_style,
         )
         axes.set_xlabel(translate_label("classes", "en"))
+        # Igual que la fixture: sin esto el rotulo del eje X se pierde al congelar el lienzo.
+        figure.tight_layout()
         return figure
 
     outputs: list[dict[str, bytes]] = []
@@ -387,3 +393,89 @@ def test_una_ruta_con_dos_filas_no_devuelve_un_estado_cualquiera(tmp_path) -> No
     )
     with pytest.raises(RuntimeError, match="tiene 2 filas en el ledger"):
         ledger_state("reports/x.svg", ledger)
+
+
+# --------------------------------------------------------------------------------------
+# Texto recortado por el lienzo y titulos superpuestos: dos defectos que el contrato no medía.
+# --------------------------------------------------------------------------------------
+
+
+def _figura_de_dos_paneles(titulos: tuple[str, str]):
+    """Una figura al ancho de LNCS con dos paneles y los titulos que se le pidan."""
+    import matplotlib.pyplot as plt
+
+    from ml.report.figuras_micai import LNCS_TEXT_WIDTH_INCHES, apply_manuscript_style
+
+    apply_manuscript_style()
+    figura, ejes = plt.subplots(1, 2, figsize=(LNCS_TEXT_WIDTH_INCHES, 2.6))
+    for eje, titulo in zip(ejes, titulos, strict=True):
+        eje.bar([0, 1], [1, 2])
+        eje.set_title(titulo, pad=5)
+    figura.tight_layout()
+    return figura
+
+
+def test_un_titulo_que_no_cabe_en_el_lienzo_se_detecta() -> None:
+    """Es el defecto real de la primera figura del manuscrito nuevo, y se sello con el.
+
+    ``save_figure`` guarda con el lienzo congelado -para que el ancho fisico no cambie-, asi que lo
+    que sobresale no ensancha el lienzo: se pierde. «BreizhCrops - 9 clases - 60 000 parcelas» en
+    una sola linea salia cortado a media palabra, y el contrato lo dio por bueno porque medía
+    ancho, tipografia y canales, y ninguna de las tres ve un texto recortado.
+    """
+    import matplotlib.pyplot as plt
+
+    from ml.report.figuras_micai import find_texts_outside_canvas, validate_figure
+
+    figura = _figura_de_dos_paneles(
+        ("PASTIS · 18 clases · 16 640 parcelas", "BreizhCrops · 9 clases · 60 000 parcelas")
+    )
+    try:
+        assert find_texts_outside_canvas(figura)
+        with pytest.raises(ValueError, match="fuera del lienzo"):
+            validate_figure(figura)
+    finally:
+        plt.close(figura)
+
+
+def test_los_titulos_en_dos_lineas_si_caben() -> None:
+    """La reparacion, comprobada: partirlos en dos lineas los mete dentro del lienzo."""
+    import matplotlib.pyplot as plt
+
+    from ml.report.figuras_micai import find_overlapping_titles, find_texts_outside_canvas
+
+    figura = _figura_de_dos_paneles(
+        ("PASTIS\n18 clases · 16 640 parcelas", "BreizhCrops\n9 clases · 60 000 parcelas")
+    )
+    try:
+        assert find_texts_outside_canvas(figura) == []
+        assert find_overlapping_titles(figura) == []
+    finally:
+        plt.close(figura)
+
+
+def test_dos_titulos_que_se_pisan_se_detectan() -> None:
+    """Un titulo largo invade el del panel vecino y las dos cadenas se imprimen encima.
+
+    Es ilegible y no lo detecta ninguna medida de tamano: las dos tipografias son correctas y las
+    dos cadenas caben, cada una por su cuenta.
+    """
+    import matplotlib.pyplot as plt
+
+    from ml.report.figuras_micai import find_overlapping_titles
+
+    figura = _figura_de_dos_paneles(("A" * 40, "B" * 40))
+    try:
+        figura.axes[0].title.set_position((1.6, 1.0))
+        assert find_overlapping_titles(figura)
+    finally:
+        plt.close(figura)
+
+
+def test_la_figura_real_del_manuscrito_pasa_el_contrato_completo(tmp_path) -> None:
+    """Sobre el generador de verdad, con los cinco controles activos."""
+    from scripts.build_micai2027_figures import figura_soporte
+
+    escritos = figura_soporte("es", tmp_path)
+    assert [p.suffix for p in escritos] == [".pdf", ".svg"]
+    assert all(p.exists() and p.stat().st_size > 0 for p in escritos)

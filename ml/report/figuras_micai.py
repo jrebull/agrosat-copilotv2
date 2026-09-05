@@ -19,6 +19,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.backend_bases import RendererBase
 from matplotlib.figure import Figure
 from matplotlib.text import Text
 
@@ -29,8 +30,10 @@ __all__ = [
     "SERIES_STYLES",
     "SeriesStyle",
     "apply_manuscript_style",
+    "find_overlapping_titles",
     "find_series_channel_violations",
     "find_texts_below_minimum",
+    "find_texts_outside_canvas",
     "ledger_state",
     "require_current_inputs",
     "save_figure",
@@ -251,6 +254,109 @@ def find_series_channel_violations(figure: Figure) -> list[str]:
     return violations
 
 
+def _renderer(figure: Figure) -> RendererBase:
+    """Renderer ya dibujado de una figura, que es lo unico que sabe donde cae cada texto.
+
+    Args:
+        figure: Fully constructed figure.
+
+    Returns:
+        The renderer.
+    """
+    figure.canvas.draw()
+    return figure.canvas.get_renderer()  # type: ignore[attr-defined,no-any-return]
+
+
+def _rotulos_de_marca_fuera_de_rango(figure: Figure) -> set[int]:
+    """Ids de los rotulos de marcas que Matplotlib guarda pero NO dibuja.
+
+    El localizador deja marcas fuera del intervalo visible -en un eje de 0,37 a 1,03 conserva la de
+    1,10- y sus ``Text`` siguen con ``visible=True`` aunque nadie los pinte. Sus extents caen lejos
+    del lienzo, asi que sin filtrarlos el control acusaria a toda figura de perder texto que en
+    realidad no existe, y un control ruidoso se acaba desactivando.
+
+    Args:
+        figure: Fully constructed figure.
+
+    Returns:
+        The ids to skip.
+    """
+    fuera: set[int] = set()
+    for axes in figure.axes:
+        for axis in (axes.xaxis, axes.yaxis):
+            bajo, alto = sorted(axis.get_view_interval())
+            for tick in axis.get_major_ticks() + axis.get_minor_ticks():
+                if not bajo <= tick.get_loc() <= alto:
+                    fuera.update({id(tick.label1), id(tick.label2)})
+    return fuera
+
+
+def find_texts_outside_canvas(figure: Figure, *, tolerance_px: float = 1.0) -> list[str]:
+    """Find text that would be clipped by the figure canvas.
+
+    ``save_figure`` guarda con el lienzo congelado -deliberadamente, para que el ancho fisico no
+    cambie-, asi que lo que sobresale NO se recorta el lienzo para acomodarlo: se pierde. Un titulo
+    cortado a media palabra es un defecto que cualquier revisor ve de inmediato y que ningun
+    control medía: se comprobaba el ancho, el tamaño impreso y los canales, y la figura pasaba.
+
+    Args:
+        figure: Fully constructed figure.
+        tolerance_px: Slack in device pixels, para que un rotulo que roza el borde no cuente.
+
+    Returns:
+        Human-readable violations.
+    """
+    renderer = _renderer(figure)
+    lienzo = figure.bbox
+    ignorados = _rotulos_de_marca_fuera_de_rango(figure)
+    fuera: list[str] = []
+    for artist in figure.findobj():
+        if not isinstance(artist, Text) or not artist.get_visible():
+            continue
+        if id(artist) in ignorados:
+            continue
+        contenido = artist.get_text().strip()
+        if not contenido:
+            continue
+        caja = artist.get_window_extent(renderer)
+        if caja.width <= 0 or caja.height <= 0:
+            continue
+        if (
+            caja.x0 < lienzo.x0 - tolerance_px
+            or caja.x1 > lienzo.x1 + tolerance_px
+            or caja.y0 < lienzo.y0 - tolerance_px
+            or caja.y1 > lienzo.y1 + tolerance_px
+        ):
+            fuera.append(f"{contenido!r} se sale del lienzo")
+    return fuera
+
+
+def find_overlapping_titles(figure: Figure) -> list[str]:
+    """Find axes titles that overlap one another.
+
+    Con dos paneles uno al lado del otro, un titulo largo invade el del vecino y las dos cadenas se
+    imprimen una encima de la otra. Es ilegible y no lo detecta ninguna medida de tamaño.
+
+    Args:
+        figure: Fully constructed figure.
+
+    Returns:
+        Human-readable violations.
+    """
+    renderer = _renderer(figure)
+    titulos = [
+        (axes.title.get_text().strip(), axes.title.get_window_extent(renderer))
+        for axes in figure.axes
+        if axes.title.get_visible() and axes.title.get_text().strip()
+    ]
+    choques: list[str] = []
+    for indice, (texto, caja) in enumerate(titulos):
+        for otro_texto, otra_caja in titulos[indice + 1 :]:
+            if caja.overlaps(otra_caja):
+                choques.append(f"{texto!r} se superpone con {otro_texto!r}")
+    return choques
+
+
 def validate_figure(figure: Figure) -> None:
     """Validate the physical and accessibility contract of one figure.
 
@@ -285,6 +391,16 @@ def validate_figure(figure: Figure) -> None:
     if channel_violations:
         detail = "; ".join(channel_violations[:5])
         raise ValueError(f"el color es el único canal de una o más series: {detail}")
+
+    recortados = find_texts_outside_canvas(figure)
+    if recortados:
+        raise ValueError(
+            f"{len(recortados)} texto(s) fuera del lienzo: " + "; ".join(recortados[:5])
+        )
+
+    choques = find_overlapping_titles(figure)
+    if choques:
+        raise ValueError(f"titulos superpuestos: {'; '.join(choques[:5])}")
 
 
 def save_figure(
