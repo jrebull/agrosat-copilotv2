@@ -84,14 +84,22 @@ crash.*.log
 .DS_Store
 Thumbs.db
 
-# ── Engram (local dev-time memory, never commit DB or local cache) ────────────
-.engram/
+# ── Engram (memoria compartida del equipo) ───────────────────────────────────
+# La base SQLite vive fuera del repo (~/.engram/engram.db) y NUNCA se commitea.
+# Lo que SI viaja en cada PR son los chunks exportados por `make memory-sync`
+# (.engram/chunks/*.jsonl.gz + .engram/manifest.json); se importan con
+# `make memory-import`. Ver AGENTS.md, seccion "Memoria compartida del equipo".
 *.engram.db
 *.engram.db-wal
 *.engram.db-shm
 .engram-export/
-# Sí se trackean chunks exportados y revisados:
-!docs/engram/*.engram
+.engram/*.tmp
+# La DB de trabajo que engram puede crear dentro del repo nunca viaja (solo chunks + manifest + config):
+.engram/engram.db
+.engram/engram.db-*
+.engram/*.db
+.engram/*.db-*
+.engram/*.log
 
 # ── Logs ──────────────────────────────────────────────────────────────────────
 *.log
@@ -429,3 +437,6 @@ reports/agent_bench/us049_system_eval.json
 reports/agent_bench/us049_checkpoint_v2.json
 data/transfer/_sh_patch_cache/
 data/reference/eurocrops_v2/*.parquet
+
+# ── Grafo de conocimiento graphify: artefacto reconstruible con `make graph-update` ──
+graphify-out/

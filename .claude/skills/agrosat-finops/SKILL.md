@@ -1,6 +1,6 @@
 ---
 name: agrosat-finops
-description: Audit and optimize cloud costs for AgroSatCopilot (GCP + Azure H100). Target ~$115 USD/month operational + ~$262-602 USD one-time training. Use for budget alerts, scale-to-zero verification, spot price monitoring, and cost reports.
+description: Audit and optimize cloud costs for AgroSatCopilot on GCP (Azure retired). Target while the article runs on CPU: fixed cost = storage only (Cloud Run scale-to-zero, Cloud SQL dev stopped); every variable spend (L4 spot GPU, GEE exports, LLM batches) is budgeted per US in its spec. Use for budget alerts, scale-to-zero verification, GPU rental windows, and cost reports.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -16,18 +16,14 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 | Redis Memorystore | $15 | Basic 1 GB |
 | Pub/Sub + Tasks | $3 | <10 GB |
 | Vertex AI (Gemini 3.1 Pro) | $12 | ~500k tokens/mes |
-| Azure H100 spot operativo | $30 | ~3 h/día activo |
 | Secret Manager + CDN | $3 | |
 | GEE / NVIDIA Earth-2 | $0-5 | research tier |
-| **TOTAL** | **~$115** | |
+| **TOTAL** | **solo almacenamiento mientras el articulo corre en CPU** | |
 
 | Training único | Costo |
 |----------------|-------|
-| Azure H100 spot 80h | $220 |
-| Azure H100 on-demand fallback | $560 |
 | GCP L4 spot ~50h | $14 |
 | GCP storage 200 GB×3m | $12 |
-| Azure Blob checkpoints 150 GB×3m | $9 |
 | **Total training** | **$262-602** |
 
 ## Auditoría Mensual
@@ -48,12 +44,8 @@ bq query --use_legacy_sql=false "
   GROUP BY service.description ORDER BY total_usd DESC
 "
 
-echo "=== Azure costs last 30 days ==="
-az consumption usage list --top 100 --query "[].{date:usageStart, service:meterCategory, cost:pretaxCost}" \
   --output table
 
-# Spot price check H100
-az vm list-skus --location swedencentral --size Standard_NC40ads_H100_v5 \
   --query "[?contains(name, 'Spot')]"
 ```
 
@@ -90,8 +82,6 @@ resource "google_billing_budget" "monthly" {
 ```bash
 make cost-audit               # gcloud + az: costos últimos 30 días
 make scale-to-zero-check      # verifica que Cloud Run min=0
-make azure-h100-status        # verifica si VM está allocated
-make azure-h100-stop          # si está accidentalmente arriba
 ```
 
 ## Checklist Mensual
@@ -99,7 +89,6 @@ make azure-h100-stop          # si está accidentalmente arriba
 - [ ] Cost audit ejecutado
 - [ ] Cloud Run min_instances=0 verificado
 - [ ] Cloud SQL no over-provisioned
-- [ ] Azure H100 deallocated cuando no se usa
 - [ ] DVC remote sin archivos huérfanos (>30 días sin referencia)
 - [ ] MLflow artifact store con cleanup runs >90 días
 - [ ] Budget alerts activos

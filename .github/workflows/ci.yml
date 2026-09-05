@@ -252,6 +252,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Harness de agentes: espejos AGENTS.md/CLAUDE.md, settings, plantillas de sub-agente,
+      # skills, agents, chunks de engram y configuracion del grafo. Stdlib puro, como los
+      # demas gates baratos; si esto se rompe, cada agente lee una guia distinta.
+      - name: harness-check (espejos, skills, agents, chunks)
+        run: python3 scripts/harness_check.py
+
       # Contrato del estimando (US-173). Solo stdlib, asi que no necesita poetry: si
       # necesitara instalacion, la tentacion seria dejarlo fuera del gate barato y ahi es
       # donde los controles se quedan "solo en local".

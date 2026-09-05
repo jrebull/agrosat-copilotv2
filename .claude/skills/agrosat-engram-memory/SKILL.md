@@ -1,216 +1,180 @@
 ---
 name: agrosat-engram-memory
-description: Configure Engram (Gentleman-Programming/engram) as DEV-TIME persistent memory for Claude Code on the AgroSatCopilot project. Local-only Go binary + SQLite + FTS5, cloud is opt-in and disabled here. No integration with runtime ADK agent. Use to persist decisions, sprint context, gotchas and US closures across coding sessions. Never store secrets, credentials, real session_ids or production data.
+description: Memoria persistente de desarrollo del equipo con Engram (Gentleman-Programming/engram) — base SQLite local por maquina, chunks exportados a .engram/ que viajan en cada PR y que el plugin de Claude Code importa solo al arrancar la sesion, proyecto canonico agrosat-copilotv2 fijado en .engram/config.json. Use para persistir decisiones, causas raiz, gotchas y cierres de US entre sesiones y maquinas, para instalar engram en un clon nuevo, y para sincronizar (make memory-sync / memory-import) o reparar el manifest. Nunca guarda secretos, session_ids reales, datos de usuario ni cifras del articulo.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
-# AgroSatCopilot Engram Memory Skill (dev tooling)
+# Engram — memoria compartida del equipo (dev-time)
 
-## Scope and Hard Boundary
+Referencia oficial: [DOCS.md → Git Sync (Chunked)](https://github.com/Gentleman-Programming/engram/blob/main/DOCS.md#git-sync-chunked) y [docs/TEAM-USAGE.md](https://github.com/Gentleman-Programming/engram/blob/main/docs/TEAM-USAGE.md). Lo de aqui es la aplicacion de ese diseno a este repo, no una invencion propia.
 
-Engram is a **developer productivity** tool that persists memory across Claude Code sessions. It is **NOT** part of the production runtime.
+## Frontera dura
 
-| Layer | Memory store | Owner |
-|-------|--------------|-------|
-| Runtime agent (`/chat` SSE, ADK) | PostgreSQL `chat_sessions` + pgvector `rag_documents` with **RLS per `session_id`** | `agrosat-google-adk-agent` + `agrosat-spatial-rag` |
-| Spatial-RAG retrieval | pgvector HNSW + PostGIS ST_DWithin | `agrosat-spatial-rag` |
-| **Dev-time IDE memory** | **Engram (local SQLite, FTS5)** | **this skill** |
+Engram es herramienta de **desarrollo**. No es parte del runtime del sistema ni del articulo.
 
-Engram **MUST NOT** be wired into FastAPI routers, ADK tools, or any production code path. If a future need for cross-session product memory appears, it goes through Postgres+pgvector under RLS, never Engram.
+| Capa | Memoria | Owner |
+|---|---|---|
+| Runtime del agente (`/chat`, ADK) | PostgreSQL `chat_sessions` + pgvector con RLS por `session_id` | `agrosat-google-adk-agent` |
+| Evidencia del articulo | `paper/ARTIFACTS.md` (ledger) + `reports/paper_micai/` | `agrosat-protocolo-articulo` |
+| **Memoria de desarrollo entre sesiones y maquinas** | **Engram: SQLite local + chunks en `.engram/`** | **esta skill** |
 
-## Rules — NON-NEGOTIABLE
+Engram **no se importa** desde FastAPI, ADK, Dagster ni scripts del articulo. Una cifra o un
+contraste nunca se "recuerda": se lee del ledger.
 
-- **Local install only.** Single Go binary (`engram.exe` on Windows). DB at `%USERPROFILE%\.engram\engram.db` (override via `ENGRAM_DATA_DIR`). No external dependencies.
-- **Cloud OFF by default.** Cloud is an opt-in `engram cloud enroll <project>` flow — we **do not enroll** the AgroSatCopilot project. Sync between teammates uses `engram sync` (compressed chunks via private git branch), never the hosted Engram Cloud.
-- **Project scoping is automatic.** Engram detects the current project from the cwd of the MCP subprocess; if ambiguous, it returns a recovery token. Use `mem_current_project` MCP tool at session start to confirm the project context is `agrosat-copilot`.
-- **Never persist**: real `session_id` UUIDs, JWTs, Clerk tokens, HF tokens, GEE service-account JSON, GCP/Azure secret values, customer parcel boundaries, real user emails. Engram entries are **internal team knowledge**, not data.
-- **Reviewable team sync**: only commit `.engram/` chunk exports under `docs/engram/` after redaction. The raw `~/.engram/engram.db` SQLite file is git-ignored and never committed.
-- **Per-laptop only**: do not check the SQLite DB into the repo, ever (already in `.gitignore`).
+## Como viaja la memoria (Git Sync, el mecanismo nativo)
 
-## Install on Windows (current method, v1.15.x — May 2026)
-
-The `install.sh` script no longer exists. **Recommended for this project** (used during bootstrap on 2026-05-11): Go install + Claude Code plugin marketplace.
-
-### Step 1 — install the binary
-
-```powershell
-# Recommended: Go install (puts engram.exe in %USERPROFILE%\go\bin, must be on PATH)
-go install github.com/Gentleman-Programming/engram/cmd/engram@latest
-engram --version
+```
+.engram/
+├── config.json            <- fija project_name = agrosat-copilotv2 (se commitea; primera prioridad de deteccion)
+├── manifest.json          <- indice de chunks (se commitea)
+├── chunks/<id>.jsonl.gz   <- memorias comprimidas, inmutables (se commitean)
+└── engram.db              <- si engram la creara aqui: DB de trabajo, gitignorada
 ```
 
-Alternatives:
-
-```powershell
-# Pre-built zip release (no Go toolchain needed)
-$ver = (gh release view --repo Gentleman-Programming/engram --json tagName -q .tagName).TrimStart("v")
-Invoke-WebRequest -Uri "https://github.com/Gentleman-Programming/engram/releases/download/v$ver/engram_${ver}_windows_amd64.zip" -OutFile "$env:TEMP\engram.zip"
-Expand-Archive -Force "$env:TEMP\engram.zip" -DestinationPath "$env:USERPROFILE\.local\bin"
-```
+- **DB local**: `~/.engram/engram.db` (override `ENGRAM_DATA_DIR`). Contiene todos los proyectos de
+  esa maquina; **jamas al repo**.
+- **Chunks**: `engram sync --project agrosat-copilotv2` exporta las memorias nuevas como un chunk
+  nuevo (los viejos nunca se modifican) y lo registra en `manifest.json`. Se commitean y viajan en
+  cada PR. `engram sync --import` aplica los chunks listados que aun no se importaron; es
+  idempotente (cada chunk se importa una vez, dedup por `sync_id`).
+- **Import automatico**: el plugin de Claude Code lo hace solo en el hook `SessionStart` cuando
+  encuentra `.engram/manifest.json` en el repo. Tras un `git pull`, la siguiente sesion ya ve la
+  memoria del equipo. `make memory-import` es la via manual: otros hosts (Copilot, Codex, terminal)
+  o a mitad de una sesion.
+- **Proyecto canonico**: `agrosat-copilotv2`, fijado en `.engram/config.json` (`project_name`).
+  Es la primera prioridad de deteccion de engram y sobrevive a forks, renombres del remoto y
+  clones sin `origin`; ningun clon puede partir la memoria en dos nombres. El historial del curso
+  (`agrosat-copilot` + `agro_sat_copilot`, 388 observaciones de mayo a septiembre de 2026) se fusiono
+  ahi con `mem_merge_projects` el 4-sep-2026 y viaja en el primer chunk.
+- **Cloud OFF**: no se enrola ningun proyecto en Engram Cloud (`engram cloud status` = no enrolado).
+  La sincronizacion es git.
+- **Nunca `engram sync --all`**: exporta TODOS los proyectos de la laptop (incluidos ajenos) al
+  repo. `make harness-check` falla si un chunk trae memorias de otro proyecto o un token.
 
 ```bash
-# macOS / Linux (Homebrew)
-brew install gentleman-programming/tap/engram
+make memory-status    # chunks locales, remotos y pendientes de importar
+make memory-import    # manual: repara el manifest y aplica los chunks nuevos (el plugin lo hace solo al arrancar)
+make memory-check     # solo verifica el manifest, exit 1 si hay drift
+make memory-sync      # antes de abrir PR: exporta lo nuevo a .engram/ (commitear)
+make memory-setup     # una vez por clon: merge driver para .engram/manifest.json
+engram doctor         # diagnostico de solo lectura si algo no cuadra
 ```
 
-### Step 2 — register with Claude Code via plugin marketplace
+## Protocolo en cada sesion de Claude Code
 
-```powershell
-claude plugin marketplace add Gentleman-Programming/engram
-claude plugin install engram
-```
+1. **Inicio**: el hook del plugin importa los chunks nuevos e inyecta contexto reciente; `mem_search`
+   con las palabras clave de la US o del problema (o `mem_context`).
+2. **Durante**: `mem_save` inmediatamente tras una decision (con su ADR si existe), un bug
+   corregido (con causa raiz), una convencion nueva, un gotcha entre maquinas, o cuando el
+   humano confirma o rechaza una recomendacion. Guarda el **porque**; el que ya esta en git.
+3. **Conflictos**: si `mem_save` devuelve `judgment_required`, resuelve con `mem_judge` por
+   candidato; pregunta al humano solo si la relacion es `supersedes` o `conflicts_with` sobre
+   una decision o arquitectura.
+4. **Cierre**: `mem_session_summary` (objetivo, hallazgos, hecho, siguientes pasos, archivos).
+5. **Antes del PR**: `make memory-sync` y `.engram/` en el commit.
 
-The plugin handles MCP server registration **and** hooks automatically. After install, `claude mcp list` should show:
+## Convenciones de equipo (TEAM-USAGE)
 
-```
-plugin:engram:engram: engram mcp --tools=agent - Connected
-```
+- **`scope: project`** (por defecto) para todo lo que otro coautor o su agente deba encontrar;
+  se escribe en **espanol neutro**, la lengua franca del equipo, con identificadores de codigo en
+  ingles. FTS5 no cruza idiomas: una memoria en ingles no aparece en una busqueda en espanol.
+- **`scope: personal`** NO evita que la memoria viaje: `engram sync` exporta el proyecto entero.
+  Las notas personales van bajo **otro nombre de proyecto** (por ejemplo `arthu`, que ya existe)
+  o fuera de engram. Nunca bajo `agrosat-copilotv2`.
+- Formato de `mem_save`: QUE / POR QUE / DONDE / APRENDIDO, con titulo que se pueda buscar.
 
-### Step 3 — restart Claude Code
+## Que guardar y que no
 
-Updating the `engram` binary on disk does not replace an already-running stdio MCP subprocess. Restart Claude Code after install or after any `engram` binary upgrade.
+**SI**: el porque de una decision de protocolo o de arquitectura · la causa raiz de un bug
+(`dump_oof.py` no pasaba `n_timesteps` y un T=37 recibia T=10) · un gotcha de entorno (MPS no
+sirve para TSViT; `poetry run` crea un venv vacio si nadie hizo `poetry install`) · la leccion de
+una US al cerrarla · punteros a documentos canonicos.
 
-## Project allowlist (`.claude/settings.json`)
+**NO**: nada de `.env*`, Secret Manager ni tokens (`sk-`, `Bearer`, `hf_`, `AIza`) · `session_id`
+reales, correos, matriculas · geometrias de parcelas de usuario · lo que ya esta en codigo o git
+· lo que cambia cada semana (estado del tablero) · **cifras del articulo**: una metrica en engram
+es una cifra sin fila sellada.
 
-The plugin exposes its MCP tools under the namespace `mcp__plugin_engram_engram__*`. Allow only the non-destructive operations we use:
-
-```jsonc
-{
-  "enabledPlugins": {},
-  "permissions": {
-    "allow": [
-      "mcp__plugin_engram_engram__mem_save",
-      "mcp__plugin_engram_engram__mem_update",
-      "mcp__plugin_engram_engram__mem_search",
-      "mcp__plugin_engram_engram__mem_context",
-      "mcp__plugin_engram_engram__mem_timeline",
-      "mcp__plugin_engram_engram__mem_get_observation",
-      "mcp__plugin_engram_engram__mem_session_start",
-      "mcp__plugin_engram_engram__mem_session_end",
-      "mcp__plugin_engram_engram__mem_session_summary",
-      "mcp__plugin_engram_engram__mem_current_project",
-      "mcp__plugin_engram_engram__mem_stats",
-      "mcp__plugin_engram_engram__mem_doctor",
-      "mcp__plugin_engram_engram__mem_suggest_topic_key",
-      "mcp__plugin_engram_engram__mem_save_prompt",
-      "mcp__plugin_engram_engram__mem_capture_passive"
-    ]
-  }
-}
-```
-
-Do **not** add a manual `mcpServers.engram` entry in `.claude/settings.json` when the plugin is installed — it duplicates the MCP subprocess and the manual entry exposes tools under a different namespace (`mcp__engram__*`) that won't match this allowlist. Pick one path (plugin marketplace is the official one) and stick to it.
-
-The allowlist alone does **not** install or enable the plugin. On 2026-09-04 this repository has
-`enabledPlugins: {}`, and `engram` is not on the current macOS `PATH`; therefore no project memory is
-active in that environment. Agents must verify the binary and MCP connection before claiming that a
-memory was read or saved.
-
-We intentionally **do not allow** `mem_delete` or `mem_merge_projects` — destructive operations require explicit per-call approval.
-
-Cloud stays OFF unless someone runs `engram cloud enroll agrosat-copilot`. Do not enroll without team agreement.
-
-## MCP Tools available (19 total, May 2026)
-
-| Category | Tools |
-|----------|-------|
-| Save & Update | `mem_save`, `mem_update`, `mem_delete`, `mem_suggest_topic_key` |
-| Search & Retrieve | `mem_search`, `mem_context`, `mem_timeline`, `mem_get_observation` |
-| Session Lifecycle | `mem_session_start`, `mem_session_end`, `mem_session_summary` |
-| Conflict Surfacing | `mem_judge`, `mem_compare` |
-| Utilities | `mem_save_prompt`, `mem_stats`, `mem_capture_passive`, `mem_merge_projects`, `mem_current_project`, `mem_doctor` |
-
-We **do not** allow `mem_delete` or `mem_merge_projects` by default — destructive operations require explicit per-call approval.
-
-## What to Save (and not save)
-
-### SAVE — internal knowledge that decays slowly
-
-- US closure rationale: *"TSViT trained on V1 window with batch 4 grad-accum 8 = effective 32, BF16, peak 78 GB VRAM"*.
-- Trade-off decisions and **why** (paired with the ADR if one exists).
-- Cross-laptop gotchas: *"GEE export to GCS asia-northeast1 fails silently; use us-central1 mirror"*.
-- Sprint retro insights: *"Sprint 4 underestimated SegFormer-B2 by 2 SP — base future SP on actuals"*.
-- Pointers to canonical docs: *"For Avance 3 rubric see docs/general/Rubricas Integrador.html section 4"*.
-
-### DO NOT SAVE — runtime / sensitive / volatile
-
-- Anything from `.env*`, Secret Manager, Key Vault.
-- Real user session_ids, Clerk JWTs, OAuth refresh tokens.
-- COG/parcel boundaries that are user data.
-- Anything already in code or git history (memory is for **why**, not **what**).
-- Anything that changes weekly (sprint board state — use Linear/GitHub).
-
-## Suggested `mem_save` Pattern (via MCP)
-
-When closing a US the agent should call `mem_save` with this shape:
+## Formato sugerido de `mem_save`
 
 ```json
 {
-  "title": "Gemma 4 26B-MoE LoRA fits 1xH100 NVL 96GB",
-  "type": "architecture",
-  "what": "Gemma 4 26B-MoE LoRA rank 16 BF16 + FlashAttention-2 + grad checkpointing fits 1xH100 NVL 96GB at effective batch 16 (b=2 x ga=8).",
-  "why": "V3 budget is 24h; this config peaks at 82 GB VRAM with 78%/22% util, leaving headroom for serving warm-up.",
-  "where": "ml/train/train_gemma4_lora.py + scripts/azure_h100_train.sh",
-  "learned": "Higher batch size triggers OOM during eval pass; keep eval batch at b=1."
+  "title": "paired_interval exige declarar la unidad y rechaza < 3 clusteres",
+  "type": "decision",
+  "content": "QUE: ml/eval/paper_micai_coverage.py::paired_interval recibe unit= obligatorio. POR QUE: el bootstrap remuestreaba parcelas dentro del bloque (defecto 3 de la auditoria externa, 4-sep-2026); con 5 bloques no hay replicas. DONDE: tests/ml/eval/test_paper_micai_coverage.py falla sobre la version anterior. APRENDIDO: los artefactos de fase3/fase4 quedan OBSOLETO hasta regenerarse (US-124/125)."
 }
 ```
 
-CLI invocation (for ad-hoc terminal use, not through Claude Code):
+Desde la terminal (Copilot, Codex u otra maquina sin MCP):
 
 ```bash
-engram save \
-  "Gemma 4 26B-MoE LoRA fits 1xH100 NVL 96GB" \
-  "Gemma 4 26B-MoE LoRA rank 16 BF16 + FlashAttention-2 + grad checkpointing fits 1xH100 NVL 96GB at effective batch 16 (b=2 x ga=8). Peak VRAM 82 GB. 24h fits in V3 window." \
-  --type architecture --project agrosat-copilot
+engram search "denominador movil" --project agrosat-copilotv2 --limit 5
+engram save "titulo" "contenido" --type decision --project agrosat-copilotv2
 ```
 
-## Search Pattern
-
-From inside Claude Code, prefer the MCP `mem_search` / `mem_context` tools (results land in the model context). From the terminal:
+## Instalacion en un clon nuevo
 
 ```bash
-engram search "h100 vram gemma" --project agrosat-copilot --limit 5
+# 1. Binario (Go) — Windows, macOS y Linux
+go install github.com/Gentleman-Programming/engram/cmd/engram@latest   # o brew install gentleman-programming/tap/engram
+engram --version        # >= 1.20
+
+# 2. Plugin de Claude Code (hooks, scripts, skill) + registro durable del MCP
+claude plugin marketplace add Gentleman-Programming/engram
+claude plugin install engram
+engram setup claude-code          # escribe ~/.claude/mcp/engram.json y ofrece el allowlist de usuario
+# reiniciar Claude Code
+
+# 3. Merge driver del manifest (una vez por clon); la memoria se importa sola al arrancar la sesion
+make memory-setup
 ```
 
-## Team Sync (disabled until a reviewable export policy exists)
+`.claude/settings.json` ya permite las herramientas `mem_*` no destructivas bajo los dos ids que
+Claude Code puede usar (`mcp__plugin_engram_engram__*` y `mcp__engram__*`); `mem_delete` y
+`mem_merge_projects` (perfil `admin`) exigen aprobacion por llamada. No duplicar un
+`mcpServers.engram` manual en el proyecto: `engram setup claude-code` es el unico dueno del registro.
 
-The upstream `engram sync` command writes `.engram/manifest.json` and compressed chunks under
-`.engram/chunks/`. It can export sessions, prompts and every observation in the selected project;
-upstream documents that `scope: personal` is not excluded automatically from project sync.
+## Por que los chunks ya pueden viajar en git
 
-For this repository, `.engram/` is deliberately ignored and must **not** be force-added. There is no
-`make memory-sync` or `make memory-import` target. Until the team approves a redaction workflow and a
-gate that inspects the actual chunk payload, share durable knowledge through reviewed ADRs,
-`docs/us-resolved/` and other ordinary Markdown sources. Cloud enrollment remains prohibited without
-an explicit team decision.
+La objecion que bloqueaba el sync de equipo era real: `engram sync` exporta el proyecto entero
+—sesiones, prompts y observaciones— y upstream documenta que `scope: personal` **no** queda fuera
+automaticamente. Compartir chunks sin poder mirar dentro era pedir una fuga.
 
-## `.gitignore` Additions
+Lo que la desbloquea es el gate que faltaba: `make harness-check` abre cada `.jsonl.gz` y recorre
+las cuatro listas del chunk (`observations`, `prompts`, `sessions`, `mutations`) buscando dos
+cosas, y falla si encuentra cualquiera:
 
-```gitignore
-# Engram — local only
-.engram/
-*.engram.db
-*.engram.db-wal
-*.engram.db-shm
+- una fila cuyo `project` no sea `agrosat-copilotv2` (la firma de un `engram sync --all`);
+- un token con forma de secreto (`sk-`, `hf_`, `AIza`, `ghp_`, `AKIA`, `Bearer`, clave privada).
+
+Por eso las notas personales van bajo **otro nombre de proyecto**, nunca bajo este: el filtro es
+el proyecto, no la etiqueta `scope`. Y por eso `engram sync --all` esta prohibido de plano.
+
+## Reparar `.engram/manifest.json`
+
+El manifest es el indice de chunks; `engram sync --import` **solo importa lo que esta listado**.
+Dos PRs que exportan a la vez chocan en el JSON (los dos anaden al final del array). `make memory-setup`
+registra un merge driver que une las entradas por `id`; si el conflicto llega igual:
+
+```bash
+python scripts/engram_manifest_merge.py          # repara el manifest (union por id, orden por fecha); lo corre make memory-import
+python scripts/engram_manifest_merge.py --check  # solo verifica: cada chunk listado existe y viceversa
 ```
 
-(Already pre-emptively included in the project `.gitignore`.)
+Nunca resolverlo "tomando un lado": se pierde el chunk del otro y su memoria no llega.
 
-## Verification Checklist
+## Checklist de verificacion
 
-- [ ] `engram --version` works on each developer laptop (>= v1.15.10)
-- [ ] The Engram plugin is enabled and `claude mcp list` reports its process as connected
-- [ ] `engram cloud status` shows **not enrolled** for `agrosat-copilot`
-- [ ] `mem_current_project` returns `agrosat-copilot` from inside Claude Code
-- [ ] SQLite DB outside the repo (`%USERPROFILE%\.engram\engram.db`)
-- [ ] No `mem_save` content contains `sk-`, `Bearer`, `clerk_`, real UUIDs, or paths to creds
-- [ ] No `.engram/` chunk is tracked; reviewed shared decisions live in ordinary project docs
-- [ ] `.gitignore` excludes Engram local state
-- [ ] No FastAPI / ADK / TiTiler code imports or shells out to `engram`
+- [ ] `engram --version` >= 1.20 en cada maquina
+- [ ] `claude mcp list` muestra engram conectado
+- [ ] `mem_current_project` devuelve `agrosat-copilotv2` con `project_source: config`
+- [ ] `engram cloud status` = no enrolado
+- [ ] `make memory-status` sin chunks pendientes tras la primera sesion
+- [ ] `.engram/config.json`, `manifest.json` y `chunks/` trackeados; ningun `*.db*` en git
+- [ ] `make harness-check` en verde: chunks solo de `agrosat-copilotv2`, sin tokens
 
-## When NOT to Use This Skill
+## Cuando NO usar esta skill
 
-- Implementing user-facing chat memory → that's `agrosat-google-adk-agent` (ADK session memory) + `agrosat-spatial-rag` (Postgres+pgvector under RLS).
-- Storing model checkpoints or experiment metadata → `agrosat-dvc-mlflow`.
-- Storing dataset versions → DVC remote.
-- Sprint/issue tracking → Linear (`SEC`, `ML`, `MLOPS` teams).
+- Memoria del chat del usuario final → `agrosat-google-adk-agent` + `agrosat-spatial-rag`.
+- Evidencia del articulo, metricas, artefactos → `agrosat-protocolo-articulo` + `agrosat-dvc-mlflow`.
+- Versiones de datasets y pesos → DVC.

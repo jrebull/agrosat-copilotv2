@@ -107,7 +107,7 @@ geoespaciales y responde. El LLM nunca clasifica píxeles.
 | Agente | Google ADK con 9 tools geoespaciales más recuperación Spatial-RAG, patrón perceiver-reasoner |
 | Backend / Frontend | FastAPI + Polars · Nuxt 4 SSR + MapLibre |
 | Datos | PostgreSQL 15 + PostGIS + pgvector · DVC + MLflow + Dagster |
-| Infraestructura | Terraform GCP · Azure H100 NVL 96 GB |
+| Infraestructura | Terraform GCP `dev` (dormido) · Azure H100 retirada (la VM se perdio; el articulo corre en CPU) |
 
 </details>
 
@@ -182,7 +182,8 @@ regenerar tablas y figuras desde `reports/`, editar secciones y auditar citas co
 `scripts/paper_cite_check.py`.
 
 Lo que no: descargar datos y pesos (el remoto DVC `gs://agrosat-dvc-remote` es
-privado), reentrenar modelos (viven en la VM H100 del sponsor) y correr la evaluación
+privado), reentrenar los miembros densos (los checkpoints FarSLIP que solo vivian en la VM H100 del
+sponsor estan perdidos; el resto se reentrena en RTX 4070 o L4 spot) y correr la evaluación
 LLM pendiente.
 
 ```bash
@@ -195,6 +196,21 @@ for s in $(git ls-files 'figures/*/*.svg' | grep -v '_es\.svg$'); do
 done
 pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
 ```
+
+### Harness de agentes
+
+Este repo se trabaja con agentes de código bajo un loop por fases (spec congelado → programación
+con sub-agentes → QA → cierre destilado). Lo que hay que saber antes de la primera sesión:
+
+- [`AGENTS.md`](AGENTS.md) (espejo byte a byte de `CLAUDE.md`) es el orquestador: hechos verificados,
+  documentos normativos, reglas científicas, anti-patrones. Se edita `AGENTS.md`; `make guides-sync`.
+- [`docs/orchestration/prompts-optimizers-fable.md`](docs/orchestration/prompts-optimizers-fable.md):
+  los prompts de cada fase, la ruta corta y el modo nocturno.
+- Grafo de conocimiento (`make graph-update`, `graphify query`) y memoria compartida de engram, que
+  viaja en `.engram/` con cada PR: el plugin de Claude Code la importa solo al arrancar la sesión
+  (`make memory-import` para otros hosts).
+- `make harness-status` dice dónde está el loop; `make harness-check` audita el propio harness.
+- El plan por épicas vive en el repo hermano `agrosat-micai-site` (`make plan-check`).
 
 Para el stack completo con Docker, Poetry y pnpm, sigue el
 [README original](docs/README-upstream-agrosat-copilot.md). El setup verificado en
@@ -214,8 +230,8 @@ macOS Apple Silicon, con sus parches, está en el
 - **Atribuciones.** AlphaEarth (Khanna et al., CC-BY-4.0), FarSLIP (arXiv:2511.14901),
   Be My Eyes (arXiv:2511.19417), PASTIS-R (Garnot et al., ICCV 2021), Sen4AgriNet y
   EuroCropsML (CC-BY-SA-4.0), TSViT, U-TAE, SegFormer, AnySat.
-- Las guías operativas del proyecto original (`CLAUDE.md`, `AGENTS.md` y las de cada
-  carpeta) siguen vigentes para el código.
+- Las guías operativas (`AGENTS.md` / `CLAUDE.md`, raíz y por carpeta) son el harness vigente:
+  se reescribieron el 4-sep-2026 para el artículo MICAI 2027, sin H100.
 
 <br>
 

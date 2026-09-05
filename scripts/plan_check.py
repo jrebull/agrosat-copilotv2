@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -25,7 +26,38 @@ import structlog
 
 logger = structlog.get_logger(__name__)
 
-DEFAULT_PLAN = Path.home() / "Documents" / "agrosat-micai-site" / "plan.html"
+#: Variable que fija explicitamente donde vive `plan.html`.
+PLAN_ENV = "AGROSAT_PLAN_HTML"
+
+#: Donde puede vivir `plan.html` del cuaderno publico (repo hermano `agrosat-micai-site`) cuando
+#: nadie lo fija: el clon hermano junto a este repo, y la ruta historica bajo Documents.
+PLAN_CANDIDATES: tuple[Path, ...] = (
+    Path(__file__).resolve().parents[2] / "agrosat-micai-site" / "plan.html",
+    Path.home() / "Documents" / "agrosat-micai-site" / "plan.html",
+)
+
+
+def _default_plan() -> Path:
+    """Return where the published plan should be read from.
+
+    Una ruta fijada en `AGROSAT_PLAN_HTML` se devuelve exista o no: caer a otro `plan.html`
+    porque la configurada tiene una errata hace que el gate valide un cuaderno que nadie esta
+    usando y lo reporte en verde. Mejor que falle nombrando la ruta que se pidio.
+
+    Returns:
+        Path to `plan.html`; el ultimo candidato cuando ninguno existe, para que el error
+        nombre una ruta.
+    """
+    override = os.environ.get(PLAN_ENV)
+    if override:
+        return Path(override)
+    for candidate in PLAN_CANDIDATES:
+        if candidate.exists():
+            return candidate
+    return PLAN_CANDIDATES[-1]
+
+
+DEFAULT_PLAN = _default_plan()
 
 #: Estados que significan que la historia ya no esta pendiente.
 AVANZADOS: frozenset[str] = frozenset({"ok", "wip"})
@@ -240,6 +272,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, default=DEFAULT_PLAN)
     args = parser.parse_args()
+
+    if not args.plan.exists():
+        fijado = os.environ.get(PLAN_ENV)
+        origen = f"{PLAN_ENV}={fijado}" if fijado else "ruta por defecto"
+        logger.error("plan_inexistente", plan=str(args.plan), origen=origen)
+        return 1
 
     epics = _extract(args.plan)
     stories = _stories(epics)

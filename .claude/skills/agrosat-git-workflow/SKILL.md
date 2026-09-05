@@ -1,113 +1,91 @@
 ---
 name: agrosat-git-workflow
-description: Manage Conventional Commits, branches (feature/E{epic}-US-XXX-{slug}), and PR workflow for AgroSatCopilot. Use when committing, creating branches, opening PRs, or closing User Stories.
+description: Convenciones de ramas (feature/E{epic}-US-XXX-{slug} sobre main), Conventional Commits con scope de epica, PR con plantilla y memoria engram sincronizada, cierre de US por el loop (spec -> bitacora -> us-resolved) y actualizacion del cuaderno. Use al crear ramas, commitear, abrir PR, cerrar una US o cambiar su estado en el plan por epicas.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
-# AgroSatCopilot Git Workflow Skill
+# Git workflow
 
-## Branches
+## Rules — NON-NEGOTIABLE
 
-- `main` — protegido, deploys a prod desde aquí
-- `develop` — integración continua, deploys a staging
-- `feature/E{epic}-US-XXX-{slug}` — una rama por user story
-- `hotfix/XXX` — solo para fixes urgentes en prod
+- Rama por US: `feature/E{epic}-US-XXX-{slug}`; correcciones acotadas: `fix/E{epic}-US-XXX-{slug}`.
+  Base y destino: **`main`** (no existe `develop`; los deploys del sistema estan dormidos).
+- **Conventional Commits** con scope de epica: `feat(E19): ...`, `fix(E18): ...`, `docs(E23): ...`,
+  `chore(harness): ...`. El cuerpo explica **por que**; el diff ya dice que.
+- **Sin trailer `Co-Authored-By`** de asistentes IA ni pies "generado con" en PRs. Autoria real.
+- **Sin emojis** en mensajes de commit.
+- `make check` limpio antes de abrir PR; artefactos grandes por DVC (al repo solo el `.dvc`).
+- `make memory-sync` antes del PR: los chunks nuevos de `.engram/` van en el mismo commit.
+- Nunca `--no-verify`, nunca `--force` sobre `main`, nunca un `dvc push` que sobrescriba un
+  artefacto con fila `SELLADO`.
+- Nunca commitear `graphify-out/`, `*.engram.db*`, `.env.local`, auxiliares LaTeX ni PDFs
+  compilados del manuscrito.
 
-## Conventional Commits con Scope de Epica
-
-```
-feat(E0): add cookiecutter template for monorepo
-fix(E7): handle vLLM 503 in agent fallback
-docs(E1): document AlphaEarth licensing in DATA_LICENSE.md
-test(E5): add TSViT unit tests
-chore(E10): bump Evidently to 0.4.40
-refactor(E8): extract STAC search to service layer
-perf(E6): enable FlashAttention-2 in Gemma 4 training
-```
-
-| Tipo | Cuándo |
-|------|--------|
-| feat | nueva feature |
-| fix | bug fix |
-| docs | documentación |
-| style | formato (no afecta lógica) |
-| refactor | refactor sin cambio de comportamiento |
-| perf | mejora de performance |
-| test | añadir/corregir tests |
-| chore | mantenimiento, deps |
-| ci | pipeline CI/CD |
-
-## Flujo por User Story
-
-Sustituir `E{N}` por el número de épica y `US-XXX` por el ID de la historia
-del plan vigente; `{slug}` describe la US en kebab-case corto.
+## Flujo por US (integrado con el loop)
 
 ```bash
-# Inicio
-git checkout develop && git pull
-git checkout -b feature/E{N}-US-XXX-{slug}
+git checkout main && git pull
+make memory-import                                   # la memoria del equipo, antes de empezar
+git checkout -b feature/E19-US-124-denominador-comun
 
-# Trabajo iterativo
-git add path/to/file.py path/to/config.yaml
-git commit -m "feat(E{N}): scaffold {descripción corta}"
+# F2: spec en docs/us-planning/us-124.md (aprobado -> congelado)
+git commit -m "docs(E19): spec de US-124, denominador comun fijado antes de la entrega"
 
-git add path/to/utils.py
-git commit -m "feat(E{N}): {siguiente paso atómico}"
+# F3-F6: codigo, tests, bitacora docs/us-work/us-124.md
+git add ml/eval/paper_micai_coverage.py tests/ml/eval/test_paper_micai_coverage.py
+git commit -m "feat(E19): macro_over exige el universo del bloque desde entrenamiento"
+dvc add reports/paper_micai/fase3/frontera_v2.parquet && git add reports/paper_micai/fase3/*.dvc
+git commit -m "feat(E19): frontera regenerada con el modulo reparado, pendiente de sellar"
 
-# Push y PR
-git push -u origin feature/E{N}-US-XXX-{slug}
-gh pr create --base develop --title "feat(E{N}): US-XXX {título corto}" \
-  --body "## US-XXX\n\n[Plan vigente](context/RefinamientoPlaneacionAgroSatCopilot_v6.md)..."
-
-# Tras merge a develop
-gh pr merge --squash
-git checkout develop && git pull
-git branch -d feature/E{N}-US-XXX-{slug}
+# F7: cierre
+make check && make test-ml
+make memory-sync && git add .engram/
+git add docs/us-resolved/us-124.md && git rm docs/us-work/us-124.md
+git commit -m "docs(E19): cierra US-124 con su us-resolved y la memoria del equipo"
+git push -u origin feature/E19-US-124-denominador-comun
+gh pr create --base main --title "feat(E19): US-124 denominador comun fijado antes de la entrega"
 ```
 
-## Cierre de US
+La plantilla de PR (`.github/PULL_REQUEST_TEMPLATE.md`) trae el gate previo; se rellena, no se borra.
+
+## Cierre de US (Fase 7 del loop)
+
+1. `docs/us-resolved/us-XXX.md` destilado desde la bitacora; la bitacora se borra.
+2. Cifras del cierre con su fila del ledger; artefactos con `.dvc` y `dvc push`; MLflow con tags.
+3. Estado de la US en el cuaderno: editar `plan.html` del repo hermano `agrosat-micai-site`,
+   `make plan-check` en verde, commit alli (`docs: cierra US-XXX`) y aviso al humano para publicar.
+4. `/graphify . --update` (semantico, unico punto que paga LLM) y `mem_session_summary`.
+5. PR a `main`; squash merge; borrar la rama.
+
+## Tipos de commit
+
+| Tipo | Uso |
+|---|---|
+| `feat` | Funcionalidad, experimento o artefacto nuevo de una US |
+| `fix` | Correccion de bug (con la causa raiz en el cuerpo) |
+| `refactor` | Reestructuracion sin cambio de comportamiento |
+| `docs` | Spec, us-resolved, ADR, preregistro, guias, manuscrito |
+| `test` | Tests |
+| `build` | DVC, artefactos versionados, dependencias |
+| `chore` | Configuracion, CI, harness |
+
+## Quality gates (sin pre-commit)
 
 ```bash
-# 1. PR mergeado a develop
-# 2. Crear docs/us-resolved/us-029.md con resumen
-# 3. Verificar MLflow run + DVC commit + atribución de licencias
-# 4. Marcar US como completada en tracking (notion/asana/...)
+make check             # lint + secrets-scan + i18n-check + guides-check
+make test-ml           # o make test para backend; cobertura por archivo del diff
+make harness-check     # si toco AGENTS.md, skills, agents o docs/orchestration
+make plan-check        # si toco el estado de una US en el cuaderno
 ```
 
-## Hotfix Flow
+CI (`.github/workflows/ci.yml`) corre lint, unit tests, migraciones, gitleaks, gates stdlib del
+articulo y `harness-check` sobre cada PR a `main`; la suite pesada se corre en local.
 
-```bash
-git checkout main
-git checkout -b hotfix/critical-csp-issue
-# fix...
-git commit -m "fix(security): close CSP wildcard"
-git push -u origin hotfix/critical-csp-issue
-gh pr create --base main
-# tras merge: cherry-pick a develop también
-```
+## QA checklist
 
-## Quality Gates (sin pre-commit)
-
-El proyecto NO usa `pre-commit`. Las garantías que antes vivían como hooks ahora se ejecutan vía Makefile (manual antes de PR) y GitHub Actions (CI):
-
-```bash
-make lint              # ruff check + ruff format --check + mypy (backend + ml) + pnpm lint
-make secrets-scan      # gitleaks detect --no-banner --redact
-make i18n-check        # valida claves it/es/en sincronizadas
-make check             # corre los 3 anteriores
-make notebooks-check   # papermill end-to-end opcional - valida que .ipynb sigan ejecutables
-make notebooks-strip   # nbstripout on-demand (NO en quality gates, solo si Isaac lo pide)
-```
-
-Todos estos comandos son obligatorios en CI (`.github/workflows/ci.yml`) sobre cada PR a `develop` y `main`.
-
-## QA Checklist
-
-- [ ] Branch sigue convención
-- [ ] Conventional Commits con scope
-- [ ] Sin emojis
-- [ ] Pre-commit hooks pasan
-- [ ] PR description referencia US-XXX
-- [ ] PR target es develop (no main)
-- [ ] Code review aprobado por 1+ team
-- [ ] CI verde antes de merge
+- [ ] Rama y commits siguen la convencion; sin trailer de IA; sin emojis
+- [ ] PR referencia la US, el spec y el estado de la bitacora
+- [ ] `make check` y la suite en verde; cobertura por archivo >= 70 %
+- [ ] `.engram/` actualizado en el PR
+- [ ] Si cerro la US: `us-resolved` presente, bitacora borrada, cuaderno actualizado
+- [ ] CI verde y review de un coautor antes del merge

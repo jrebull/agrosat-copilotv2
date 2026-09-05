@@ -1,0 +1,33 @@
+# La custodia del articulo es MD5 sobre los bytes del archivo (paper/ARTIFACTS.md), asi que un
+# checkout que convierta LF a CRLF cambia el digest de cada artefacto de texto y deja
+# `make paper-artifacts-check` en rojo sin que nada este roto. Peor: un resellado hecho desde
+# Windows escribiria digests con CRLF y rompería el gate para todos los demas.
+# Con `core.autocrlf=true` en la maquina, esto es lo unico que lo evita.
+* text=auto eol=lf
+
+# Guiones que Windows si necesita con CRLF; ninguno esta sellado en el ledger.
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binarios: sin conversion de ningun tipo.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.gz binary
+*.zip binary
+*.parquet binary
+*.pt binary
+*.pth binary
+*.npy binary
+*.npz binary
+*.tif binary
+*.tiff binary
+*.xlsx binary
+
+# Drivers de merge del harness.
+graphify-out/graph.json merge=graphify
+# Indice de chunks engram: union por id (make memory-setup registra el driver)
+.engram/manifest.json merge=engram-manifest

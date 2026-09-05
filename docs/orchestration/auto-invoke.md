@@ -1,85 +1,87 @@
-# Auto-Invoke Table — AgroSatCopilot
+# Auto-Invoke Table — AgroSatCopilot v2 (MICAI 2027)
 
-> Tabla operativa de qué skill cargar antes de cada acción. Catálogo en [`skills-catalog.md`](skills-catalog.md). Mapa skill→subagente en [`skill-owners.md`](skill-owners.md).
+> Qué skill cargar antes de cada acción. Catálogo en [`skills-catalog.md`](skills-catalog.md). Mapa skill→subagente en [`skill-owners.md`](skill-owners.md). Fases del loop en [`prompts-optimizers-fable.md`](prompts-optimizers-fable.md).
 
-## Backend & Database
+## Reglas previas a todo
 
-| Acción | Skill |
-|--------|-------|
-| Crear/modificar endpoint FastAPI | `agrosat-backend-api` |
-| Crear/modificar service backend | `agrosat-backend-services` |
-| Integrar TiTiler / servir COG | `agrosat-titiler-cog` |
-| Endpoint `/chat` SSE con ADK | `agrosat-backend-api` + `agrosat-google-adk-agent` |
-| Crear migración dbmate | `agrosat-db-migrations` |
-| Crear/modificar modelo SQLModel + PostGIS | `agrosat-db-models` |
-| Agregar índice GIST/BTREE | `agrosat-db-migrations` |
-| Configurar pgstac collection | `agrosat-db-migrations` + `agrosat-backend-api` |
-| Agregar RLS policy por session_id | `agrosat-security` + `agrosat-db-migrations` |
-| Crear Pub/Sub worker async | `agrosat-backend-services` + `agrosat-gcp-services` |
+1. **Antes de escribir o auditar cualquier comparación, intervalo, contraste, artefacto o cifra, cargar `agrosat-protocolo-articulo`.** Es la traducción ejecutable del preregistro, del estimando y del ledger.
+2. **Antes de tocar `paper/micai/` o `docs/paper/`, cargar `agrosat-paper-micai`.**
+3. **Grafo antes que grep** (`graphify query`, AGENTS.md raíz §Grafo) y **memoria al empezar** (`mem_search`, skill `agrosat-engram-memory`).
 
-## Frontend
+## Artículo MICAI 2027
 
 | Acción | Skill |
-|--------|-------|
-| Crear componente Vue/Nuxt | `agrosat-frontend-components` |
-| Crear composable / Pinia store | `agrosat-frontend-composables` |
-| Integrar mapa MapLibre / deck.gl | `agrosat-maplibre-geo` |
-| Dibujar AOI con maplibre-gl-draw | `agrosat-maplibre-geo` |
-| Streaming SSE chat | `agrosat-frontend-composables` |
-| Switch A/B LLM en UI | `agrosat-frontend-components` |
-| i18n it/es/en (3 locales) | `agrosat-frontend-components` |
+|---|---|
+| Definir o revisar un contraste, un intervalo pareado, la multiplicidad o la potencia | `agrosat-protocolo-articulo` |
+| Generar un artefacto en `reports/paper_micai/<fase>/` | `agrosat-protocolo-articulo` + `agrosat-ml-evaluation` |
+| Sellar un artefacto o cambiar su estado en `paper/ARTIFACTS.md` | `agrosat-dvc-mlflow` + `agrosat-protocolo-articulo` |
+| Regenerar los artefactos `OBSOLETO` con el módulo reparado (US-124, US-125) | `agrosat-protocolo-articulo` |
+| Implementar un mecanismo con valores de conjunto (conforme, retroceso jerárquico) | `agrosat-protocolo-articulo` + `agrosat-ml-ensemble` |
+| Elicitar o codificar la tabla de pérdidas y el espacio de costes (US-172, US-175, `decision_cost`) | `agrosat-protocolo-articulo` |
+| Sanidad, provenance e identidad de los miembros heredados (US-119, US-120) | `agrosat-protocolo-articulo` + `agrosat-ml-evaluation` |
+| Escribir una sección, figura o tabla del manuscrito | `agrosat-paper-micai` |
+| Añadir una referencia o regenerar el bib | `agrosat-paper-micai` |
+| Compilar, verificar anonimato, camera-ready, empaquetar | `agrosat-paper-micai` |
+| Editar el preregistro, el estimando o el registro de afirmaciones retiradas | `agrosat-protocolo-articulo` + `agrosat-paper-micai` |
+| Cambiar el estado de una US en el cuaderno (`plan.html`) y validarlo | `agrosat-git-workflow` (`make plan-check`) |
 
-## ML / Modelado
-
-| Acción | Skill |
-|--------|-------|
-| Calcular índice espectral | `agrosat-ml-features` |
-| Entrenar baseline XGBoost + AlphaEarth | `agrosat-ml-baseline` |
-| Implementar U-Net / DeepLab / SegFormer | `agrosat-ml-segmentation` |
-| Implementar U-TAE / TSViT / Swin-UNETR | `agrosat-ml-segmentation` |
-| Fine-tune Gemma 4 26B-MoE LoRA | `agrosat-llm-finetuning` + `agrosat-azure-h100` |
-| Fine-tune Qwen3-VL LoRA | `agrosat-llm-finetuning` + `agrosat-azure-h100` |
-| Serving vLLM Qwen3.5-35B-A3B | `agrosat-llm-finetuning` + `agrosat-azure-h100` |
-| Construir ensamble | `agrosat-ml-ensemble` |
-| Evaluar contra AgroMind / GeoAnalystBench | `agrosat-ml-evaluation` |
-
-## Geoespacial & Agente
+## Datos y features
 
 | Acción | Skill |
-|--------|-------|
-| Descargar AlphaEarth Foundations | `agrosat-gee-alphaearth` + `agrosat-dagster-mlops` |
-| Descargar Sentinel-2 L2A vía CDSE | `agrosat-ml-features` |
-| Crear tool ADK nuevo | `agrosat-google-adk-agent` |
-| Implementar Spatial-RAG híbrido | `agrosat-spatial-rag` |
-| Configurar planner Plan-and-React | `agrosat-google-adk-agent` |
-| Deploy agente a Vertex AI Agent Engine | `agrosat-google-adk-agent` + `agrosat-gcp-services` |
+|---|---|
+| Descargar o agregar AlphaEarth (GEE, ADC) | `agrosat-gee-alphaearth` + `agrosat-dagster-mlops` |
+| Cargar PASTIS-R, BreizhCrops o un banco nuevo; features Polars | `agrosat-ml-features` |
+| Sellar un banco nuevo (ground truth por parcela, soporte por clase, procedencia) | `agrosat-ml-features` + `agrosat-protocolo-articulo` |
+| Split espacial (`build_spatial_kfold`) | `agrosat-ml-features` |
+| Calcular índices espectrales o series temporales | `agrosat-ml-features` |
 
-## MLOps & Infra
+## Modelado (miembros y predictores)
 
 | Acción | Skill |
-|--------|-------|
+|---|---|
+| Reentrenar un miembro denso (TSViT, U-TAE, U-Net, DeepLabv3+, SegFormer, AnySat) en RTX 4070 o L4 spot | `agrosat-ml-segmentation` + `agrosat-dvc-mlflow` |
+| Predictor tabular (XGBoost sobre AlphaEarth) en un banco | `agrosat-ml-baseline` |
+| Ensamble, OOF, arnés `ml/eval/oof/` | `agrosat-ml-ensemble` + `agrosat-protocolo-articulo` |
+| Benchmarks del sistema (AgroMind, GeoAnalystBench) — solo si una US lo pide | `agrosat-ml-evaluation` |
+| Gemma 4 LoRA / serving de LLM | `agrosat-llm-finetuning` (FUTURE: sin hardware, fuera del alcance del artículo) |
+
+## Sistema (mantenimiento)
+
+| Acción | Skill |
+|---|---|
+| Crear/modificar endpoint FastAPI o service | `agrosat-backend-api` / `agrosat-backend-services` |
+| Servir COG con TiTiler | `agrosat-titiler-cog` |
+| Migración dbmate, modelo SQLModel, RLS | `agrosat-db-migrations` / `agrosat-db-models` / `agrosat-security` |
+| Componente Vue, composable, mapa MapLibre, i18n | `agrosat-frontend-components` / `agrosat-frontend-composables` / `agrosat-maplibre-geo` |
+| Tool ADK, planner, Spatial-RAG | `agrosat-google-adk-agent` / `agrosat-spatial-rag` |
+
+## MLOps e infraestructura
+
+| Acción | Skill |
+|---|---|
 | Definir asset Dagster | `agrosat-dagster-mlops` |
-| Versionar dataset con DVC | `agrosat-dvc-mlflow` |
-| Registrar experimento MLflow | `agrosat-dvc-mlflow` |
-| Crear módulo Terraform | `agrosat-terraform` |
-| Configurar servicio GCP | `agrosat-gcp-services` |
-| Encender / apagar VM H100 | `agrosat-azure-h100` |
-| Pipeline drift Evidently | `agrosat-evidently-drift` |
-| Auditar costo cloud | `agrosat-finops` |
-| Crear workflow GitHub Actions | `agrosat-terraform` + `agrosat-gcp-services` |
+| Versionar dataset, OOF o checkpoint con DVC; registrar corrida MLflow | `agrosat-dvc-mlflow` |
+| Crear o probar en negativo un gate (`scripts/*_check.py`, `make *-check`) | `agrosat-dvc-mlflow` + `agrosat-protocolo-articulo` |
+| Terraform GCP `dev` (dormido) | `agrosat-terraform` + `agrosat-gcp-services` |
+| Workflow de GitHub Actions | `agrosat-terraform` + `agrosat-gcp-services` |
+| Alquilar GPU L4 spot (`make train-l4`) o auditar costo | `agrosat-finops` |
+| Drift Evidently (dormido) | `agrosat-evidently-drift` |
 
-## Seguridad & QA
+## Seguridad y QA
 
 | Acción | Skill |
-|--------|-------|
-| Implementar auth Clerk / RBAC | `agrosat-security` |
-| Configurar rate limit, CSP, CORS | `agrosat-security` |
-| Audit logging | `agrosat-security` |
-| Audit OWASP / CIS GCP | `agrosat-security-audit` |
-| Pre-deploy security checklist | `agrosat-security-audit` |
-| Escribir tests pytest / Playwright | `agrosat-testing` |
-| Mockear Vertex AI / vLLM / GEE | `agrosat-testing` |
-| Review de PR | `agrosat-code-review` |
-| Crear commit / branch / PR | `agrosat-git-workflow` |
-| Cerrar User Story | `agrosat-git-workflow` |
-| Persistir decisión entre sesiones Claude Code, solo si el binario y MCP están conectados | `agrosat-engram-memory` (dev opcional) |
+|---|---|
+| Auth, rate limit, CSP, RLS por `session_id` | `agrosat-security` |
+| Audit OWASP / CIS GCP, pre-deploy | `agrosat-security-audit` |
+| Escribir tests (dos suites separadas, fixtures reales) | `agrosat-testing` |
+| Fase 4 — QA del diff de una US | `agrosat-code-review` + `agrosat-testing` (+ `agrosat-protocolo-articulo` si toca cifras) |
+
+## Harness (transversal)
+
+| Acción | Skill o comando |
+|---|---|
+| Saber qué existe y dónde; impacto río abajo | `graphify query` / `graphify affected` (AGENTS.md raíz §Grafo) |
+| Reindexar el grafo tras integrar | `make graph-update` (un solo escritor) |
+| Persistir una decisión, un bug o un gotcha; sincronizar la memoria del equipo | `agrosat-engram-memory` (`make memory-sync` / `memory-import`; comprobar antes que el binario y el MCP responden) |
+| Editar cualquier `AGENTS.md`; auditar el harness | `make guides-sync` + `make harness-check` |
+| Crear rama, commitear, abrir PR, cerrar US | `agrosat-git-workflow` |

@@ -1,0 +1,53 @@
+# Exclusiones del grafo de conocimiento (sintaxis .gitignore).
+# Solo puede excluir mas que .gitignore, nunca re-incluir.
+#
+# Regla: el grafo responde por el CODIGO y por los documentos VIGENTES del articulo
+# MICAI 2027. Lo que sigue son artefactos derogados, historicos o pesados: indexarlos
+# hace que una consulta devuelva el plan v8, el manuscrito retirado o la era H100 como
+# si fueran contexto vigente. Los archivos siguen en el repo como historia; lo que se
+# corta es su entrada al grafo.
+
+# Manuscrito heredado (24 pag., E11) y borrador retirado: informe tecnico interno y
+# archivo, por ADR-014 seccion 5. Sus cifras y citas no son las vigentes.
+paper/main.tex
+paper/main_es.tex
+paper/sections/
+paper/sections_es/
+paper/arxiv/
+paper/PRIMEarxiv.sty
+paper/avance1_eda_report.html
+paper/notebooks/
+
+# Planes del sistema ya cumplidos o derogados (v6/v8, EPIC 1-12). El plan vigente del
+# articulo vive en el cuaderno (agrosat-micai-site/plan.html) y en docs/plan-micai-2027.md.
+context/RefinamientoPlaneacionAgroSatCopilot_v8.md
+context/RefinamientoPlaneacionAgroSatCopilot_v6.md
+context/AgroSatCopilot.md
+context/*.pdf
+
+# Ciclo de vida heredado de las US del sistema (formato handoff/manual-test, sustituido
+# por spec + bitacora). Se conservan como historia.
+docs/us-handoff/
+docs/manual-test/
+docs/product-backlog/
+docs/README-upstream-agrosat-copilot.md
+
+# Entregables del curso (presentacion, documento final): pesados y sin vigencia para el paper.
+docs/presentation/
+docs/final_doc/
+docs/general/
+
+# Notebooks con outputs (101 MB) y salidas generadas: no son fuente de verdad.
+notebooks/
+reports/
+mlflow-artifacts/
+mlruns/
+data/
+datasets/
+checkpoints/
+artifacts/
+memory/
+
+# Memoria compartida (chunks binarios) y salidas del propio grafo.
+.engram/
+graphify-out/
