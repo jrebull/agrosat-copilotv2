@@ -213,12 +213,15 @@ exclusión es **reversible**: es por no saber, no por saber que están mal. Los 
 > previa de sospechosos —«utae, anysat y segformer»— estaba parcialmente equivocada. Se excluye por
 > superar el umbral, nunca por figurar en aquella lista.
 
-**Pendiente de confirmar, y por eso está escrito y no decidido**: `xgb-alphaearth-remat-v1` **no
-está en el panel**. El panel congelado son cinco miembros de segmentación densa y esa es la única
-ruta tabular; pero el criterio de aceptación de US-139 dice que «el panel inferencial usa
-`xgb-alphaearth-remat-v1`», escrito cuando la pregunta era *cuál* de los dos XGBoost usar y no *si*
-el XGBoost entraba. La diferencia cambia qué significa «la reconstrucción del sistema desplegado» en
-el artículo, y eso no lo decide un fichero de configuración.
+**`xgb-alphaearth-remat-v1`, decidido**: entra como **candidato nuevo con procedencia
+verificada**, y **nunca como reproducción del desplegado**. No lo reproduce —acuerdo de argmax
+0,945433, y 0,5474 por debajo de 0,5 de confianza, que es justo la franja sobre la que operan la
+abstención, los conjuntos y el recorte— y llamarlo reproducción sería la afirmación que US-118
+existe para impedir. No está en el panel de segmentación densa, que es de otra ruta. Si se usa, es
+como **factor de sensibilidad**: tampoco de él se declara ganador.
+
+El **XGB histórico permanece `legacy_unverified` y fuera de inferencia**. Se conserva como registro
+de lo que se usó, y como referencia descriptiva con su acuerdo medido.
 
 ## 5. Universos y multiplicidad
 

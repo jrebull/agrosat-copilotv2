@@ -141,8 +141,11 @@ histórico por procedencia, y eso no se revierte solo.
 > umbral**, que sigue vigente; demuestra que la lista previa de sospechosos estaba parcialmente
 > equivocada. Se excluye por superar el umbral, nunca por figurar en aquella lista.
 
-**Sin confirmar**: si `xgb-alphaearth-remat-v1` entra o no. Está escrito y no decidido, porque
-cambia qué significa «la reconstrucción del sistema desplegado» en el artículo.
+**`xgb-alphaearth-remat-v1`, decidido el 4 de septiembre**: entra como **candidato nuevo con
+procedencia verificada**, **nunca como reproducción del desplegado** —no lo reproduce, y el
+desacuerdo está donde el artículo trabaja—. Fuera del panel de segmentación densa, que es otra
+ruta. El **XGB histórico se queda `legacy_unverified` y fuera de inferencia**. De ninguno de los dos
+se declara ganador: el predictor es factor de sensibilidad.
 
 ### 7 bis · El orden de ejecución
 

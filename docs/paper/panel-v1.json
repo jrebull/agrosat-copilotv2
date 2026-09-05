@@ -9,11 +9,31 @@
     "el inventario, que las familias declaradas cumplan el minimo, y que la prosa diga lo mismo."
   ],
   "miembros": [
-    {"nombre": "unet", "familia": "cnn_encoder_decoder", "temporal": false},
-    {"nombre": "deeplabv3plus", "familia": "cnn_atrous", "temporal": false},
-    {"nombre": "segformer", "familia": "transformer_espacial", "temporal": false},
-    {"nombre": "tsvit-pheno", "familia": "transformer_temporal", "temporal": true},
-    {"nombre": "tsvit-pheno-fullm", "familia": "transformer_temporal", "temporal": true}
+    {
+      "nombre": "unet",
+      "familia": "cnn_encoder_decoder",
+      "temporal": false
+    },
+    {
+      "nombre": "deeplabv3plus",
+      "familia": "cnn_atrous",
+      "temporal": false
+    },
+    {
+      "nombre": "segformer",
+      "familia": "transformer_espacial",
+      "temporal": false
+    },
+    {
+      "nombre": "tsvit-pheno",
+      "familia": "transformer_temporal",
+      "temporal": true
+    },
+    {
+      "nombre": "tsvit-pheno-fullm",
+      "familia": "transformer_temporal",
+      "temporal": true
+    }
   ],
   "familias_distintas": 4,
   "minimo_familias_exigido": 3,
@@ -43,27 +63,23 @@
     },
     {
       "nombre": "xgb-alphaearth",
-      "motivo": "Historico, legacy_unverified: la re-materializacion no lo reproduce (argmax 0,9454, y 0,5474 por debajo de 0,5 de confianza). No se usa para inferencia.",
+      "motivo": "Historico, legacy_unverified: la re-materializacion no lo reproduce (argmax 0,9454, y 0,5474 por debajo de 0,5 de confianza). No se usa para inferencia. El historico permanece legacy_unverified y FUERA DE INFERENCIA; existe xgb-alphaearth-remat-v1 como candidato nuevo, que no es su reproduccion.",
       "reversible": false
     }
   ],
-  "pendiente_de_confirmar": {
-    "que": "xgb-alphaearth-remat-v1 NO esta en el panel.",
-    "por_que_se_pregunta": [
-      "El panel congelado son cinco miembros de segmentacion densa, y esta es la unica ruta",
-      "tabular. Pero el criterio de aceptacion de US-139 dice que «el panel inferencial usa",
-      "xgb-alphaearth-remat-v1», que se escribio cuando la pregunta era cual de los dos xgb usar",
-      "y no si el xgb entraba. Las dos cosas no se contradicen a la fuerza —el panel puede ser de",
-      "segmentacion y el xgb entrar como componente del ensamble desplegado— pero la diferencia",
-      "cambia que significa «la reconstruccion del sistema desplegado» en el articulo, y eso no",
-      "lo decide un fichero de configuracion."
-    ],
-    "mientras_tanto": "El gate NO exige que este ni que no este; solo que la decision este escrita."
-  },
   "referencia_descriptiva": {
     "componente_desplegado": "xgb-alphaearth historico",
     "acuerdo_con_la_reconstruccion": 0.945433,
     "divergencia": "concentrada en baja confianza: 0,5474 por debajo de 0,5 frente a 0,9999 por encima de 0,9",
     "uso": "descriptivo, nunca inferencial"
+  },
+  "xgb_alphaearth_remat_v1": {
+    "estado": "CANDIDATO NUEVO con procedencia verificada",
+    "decidido": "2026-09-04",
+    "que_es": "Un predictor nuevo, re-materializado con productor, entradas y semilla registrados. Se trata como candidato por derecho propio.",
+    "que_NO_es": "La reproduccion del componente desplegado. No lo reproduce: acuerdo de argmax 0,945433, y 0,5474 por debajo de 0,5 de confianza, que es la franja sobre la que operan la abstencion, los conjuntos y el recorte. Llamarlo reproduccion seria la afirmacion que US-118 existe para impedir.",
+    "en_el_panel_de_segmentacion": false,
+    "motivo": "El panel congelado son cinco miembros de segmentacion densa y esta es la unica ruta tabular. Entra como candidato, no como miembro de ese panel.",
+    "si_se_usa": "como factor de sensibilidad; no se declara ganador"
   }
 }
