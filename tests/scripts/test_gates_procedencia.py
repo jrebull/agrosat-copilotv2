@@ -74,8 +74,13 @@ def _custody_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
     root = tmp_path / "custody-repo"
     artifact = root / "reports" / "paper_micai" / "fase1" / "base.json"
     artifact.parent.mkdir(parents=True)
-    (root / "reports" / "micai2027" / "figuras").mkdir(parents=True)
+    figura = root / "reports" / "micai2027" / "figuras" / "figura.svg"
+    figura.parent.mkdir(parents=True)
     artifact.write_text('{"resultado": 0.5}\n', encoding="utf-8")
+    # La figura declarada existe para que el `.pdf` y el `.png` hermanos tengan un `.svg` con
+    # fila. Sin ella, un intruso `.pdf` falla por no tener hermano declarado y la prueba de la
+    # exencion pasaria igual con la regla vieja: seria verde sin comprobar nada.
+    figura.write_text("<svg/>\n", encoding="utf-8")
     subprocess.run(["git", "init", "-q"], cwd=root, check=True)
     subprocess.run(["git", "config", "user.name", "Fixture"], cwd=root, check=True)
     subprocess.run(["git", "config", "user.email", "fixture@example.invalid"], cwd=root, check=True)
@@ -89,6 +94,7 @@ def _custody_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
         check=True,
     ).stdout.strip()
     digest = hashlib.md5(artifact.read_bytes()).hexdigest()
+    digest_figura = hashlib.md5(figura.read_bytes()).hexdigest()
     ledger = root / "paper" / "ARTIFACTS.md"
     ledger.parent.mkdir()
     ledger.write_text(
@@ -97,7 +103,9 @@ def _custody_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
         "| Elemento | Ruta | MD5 | Bytes | Git | Estado |\n"
         "|---|---|---|---:|---|---|\n"
         f"| Base | `reports/paper_micai/fase1/base.json` | `{digest}` | "
-        f"{artifact.stat().st_size} | `{artifact_commit}` | SELLADO |\n",
+        f"{artifact.stat().st_size} | `{artifact_commit}` | SELLADO |\n"
+        f"| Figura | `reports/micai2027/figuras/figura.svg` | `{digest_figura}` | "
+        f"{figura.stat().st_size} | `{artifact_commit}` | SELLADO |\n",
         encoding="utf-8",
     )
     subprocess.run(["git", "add", "paper/ARTIFACTS.md"], cwd=root, check=True)
@@ -1508,13 +1516,19 @@ def test_una_ruta_con_dos_filas_en_el_ledger_rompe_el_gate(tmp_path: Path) -> No
 
 
 def test_un_pdf_sin_fila_ya_no_se_exime_por_tener_svg_hermano(tmp_path: Path) -> None:
-    """El ``.png`` es el raster del cuaderno publico; el ``.pdf`` es lo que incluye LaTeX."""
+    """El ``.png`` es el raster del cuaderno publico; el ``.pdf`` es lo que incluye LaTeX.
+
+    El intruso tiene que ser el ``.pdf`` de una figura CON su ``.svg`` declarado. Si no, falla por
+    no tener hermano en el ledger -que es otro motivo- y la prueba pasaria igual con la regla
+    vieja, cuando el ``.pdf`` estaba exento. Comprobado restaurando la exencion: asi la prueba
+    falla, y sin el hermano declarado seguia en verde.
+    """
     root, _, _ = _custody_fixture(tmp_path)
-    intruso = root / "reports" / "micai2027" / "figuras" / "_intruso_de_prueba.pdf"
+    intruso = root / "reports" / "micai2027" / "figuras" / "figura.pdf"
     intruso.write_bytes(b"%PDF-1.4\n")
     try:
         codigo, salida = _run_fixture_artifacts_check(root)
         assert codigo == 1, salida
-        assert "_intruso_de_prueba.pdf" in salida
+        assert "figura.pdf" in salida
     finally:
         intruso.unlink()
