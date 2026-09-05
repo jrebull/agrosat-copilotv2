@@ -10,8 +10,8 @@
    `frontend/AGENTS.md` o `ml/agent/AGENTS.md`; sus `CLAUDE.md` son espejos identicos) y el spec
    `docs/us-planning/us-XXX.md` (§2 Arquitectura y §3 Interfaces). El spec esta congelado: no
    lo edites; si tienes que desviarte, reportalo en tu resumen citando la seccion.
-2. Protocolo graphify del AGENTS.md raiz: `graphify query "[endpoint, componente o tool]"
-   --budget 1200` antes de crear. Eres consumidor — NO ejecutes `make graph-update`.
+2. Si Graphify está disponible, úsalo para orientar el impacto y confirma con `rg`, imports y
+   tests. Eres consumidor: no ejecutes `make graph-update`.
 3. Consulta con Context7 (`--c7`) FastAPI, Pydantic v2, SQLModel, Nuxt 4, Vue 3, MapLibre GL,
    Google ADK.
 
@@ -46,8 +46,8 @@ Agente:
   <=30 lineas: endpoints/componentes/tools creados, decisiones, desviaciones del spec,
   pendientes o conflictos de frontera (esquemas Pydantic vs tipos TypeScript, contrato de las
   tools).
-- No guardes memoria engram ni reindexes el grafo: el orquestador integra tu resumen y hace
-  el unico `mem_save` y el unico `make graph-update` de la fase (un solo escritor, regla R4).
+- No sincronices Engram ni reindexes el grafo: el orquestador integra tu resumen en fuentes
+  revisables y decide si actualiza herramientas locales.
 - El limite NO aplica a advertencias que QA necesita: deprecations, workarounds, fallos
   intermitentes o tracebacks residuales van tras el resumen como "ANEXO TECNICO".
 

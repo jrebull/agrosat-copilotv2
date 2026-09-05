@@ -1,8 +1,8 @@
-"""Audit the agent harness: mirrored guides, settings, templates, skills, agents, memory chunks.
+"""Audit the agent harness: mirrored guides, settings, templates, skills, agents and local tools.
 
 The harness is what an agent loads before touching code: the root and directory guides
 (``AGENTS.md`` / ``CLAUDE.md`` pairs), the skills, the subagent definitions, the subagent prompt
-templates, the shared engram chunks and the graph configuration. A drift there is invisible to
+templates, the Engram boundary and the graph configuration. A drift there is invisible to
 lint and tests but changes what every agent believes, so it gets its own gate.
 
 Every check routes its problems through :class:`Audit` and prints its PASS line only when it
@@ -19,13 +19,13 @@ Only the standard library is used so CI can run it without ``poetry install``.
 from __future__ import annotations
 
 import argparse
-import gzip
 import json
 import os
 import re
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -55,8 +55,8 @@ SKIP_DIRS = frozenset(
 #: Every domain the Fase 3 prompt can dispatch needs its template on disk.
 REQUIRED_TEMPLATES = ("geo-data", "modeling", "paper", "app", "mlops", "tests")
 
-#: Skills that were retired and must not come back under the same name.
-RETIRED_SKILLS = frozenset({"agrosat-azure-h100"})
+#: Skills retired by a ratified decision. Keep this set explicit so routing tests can exercise it.
+RETIRED_SKILLS: frozenset[str] = frozenset()
 
 #: Model ids and hardware the guide declares nonexistent or retired, mapped to what is true
 #: instead. Checked only on the always-loaded surface (skill and agent descriptions, ``make``
@@ -67,27 +67,10 @@ RETIRED_TERMS = {
     "Gemini 3.5 Flash": "el reasoner del sistema es Gemini 2.5 Pro",
     "Gemini 3.1 Pro": "el reasoner del sistema es Gemini 2.5 Pro",
     "AlphaEarth v2.1": "AlphaEarth es SATELLITE_EMBEDDING/V1/ANNUAL, data v1.1",
-    "H100": "no hay H100: el protocolo corre en CPU, RTX 4070 o L4 spot",
 }
 
 #: Guides that legitimately have no ``AGENTS.md`` sibling because they are pointers, not mirrors.
 ORPHAN_CLAUDE_ALLOWED = frozenset({".claude/CLAUDE.md"})
-
-#: Canonical engram project pinned by ``.engram/config.json``; every chunk must belong to it.
-ENGRAM_PROJECT = "agrosat-copilotv2"
-
-#: Token shapes that must never travel inside a memory chunk.
-SECRET_PATTERN = re.compile(
-    r"(sk-[A-Za-z0-9]{16,}|hf_[A-Za-z0-9]{20,}|AIza[0-9A-Za-z_-]{30,}|ghp_[A-Za-z0-9]{30,}"
-    r"|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY|Bearer [A-Za-z0-9._-]{20,})"
-)
-
-#: Arrays a chunk can carry. Scanning only ``observations`` left prompts, sessions and mutations
-#: — where a pasted token or another project's memory lands just as easily — unaudited.
-CHUNK_ARRAYS = ("observations", "prompts", "sessions", "mutations")
-
-#: Fields inside those rows that can carry free text, and therefore a secret.
-CHUNK_TEXT_FIELDS = ("content", "payload", "title", "summary", "directory")
 
 #: Harness documents that must not route to a retired skill.
 ROUTING_DOCS = (
@@ -433,7 +416,7 @@ def check_links(audit: Audit) -> None:
         for target in re.findall(r"\]\(([^)\s]+)\)", text):
             if target.startswith(("http://", "https://", "#", "mailto:")):
                 continue
-            clean = target.split("#", 1)[0]
+            clean = unquote(target.split("#", 1)[0])
             if clean and not (doc.parent / clean).exists():
                 broken.add(clean)
         if broken:
@@ -442,82 +425,36 @@ def check_links(audit: Audit) -> None:
     audit.ok_if_clean(start, f"enlaces relativos resuelven en {checked} documento(s) del harness")
 
 
-def _chunk_rows(chunk: Path) -> list[dict[str, object]]:
-    """Return every row of a gzipped chunk, raising on a malformed one."""
-    rows: list[dict[str, object]] = []
-    with gzip.open(chunk, "rt", encoding="utf-8") as handle:
-        for line in handle:
-            if line.strip():
-                rows.append(json.loads(line))
-    return rows
+def _tracked_engram_files() -> list[str] | None:
+    """Return native Engram files tracked by Git, or ``None`` if Git cannot inspect the tree."""
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", "-z", "--", ".engram"],
+            cwd=ROOT,
+            capture_output=True,
+            timeout=15,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if result.returncode != 0:
+        return None
+    return [item.decode("utf-8") for item in result.stdout.split(b"\0") if item]
 
 
 def check_memory(audit: Audit) -> None:
-    """The shared memory store is complete, project-pinned and free of secrets.
-
-    Every chunk listed in the manifest exists and every chunk on disk is listed; the repo pins
-    its canonical project in ``.engram/config.json``; no chunk carries another project (an
-    ``engram sync --all`` would leak every project of a laptop); and no chunk carries a token.
-    All four arrays of a chunk are scanned: a memory of another project, or a pasted token,
-    lands in ``prompts`` or ``mutations`` as easily as in ``observations``.
-    """
+    """Native Engram state must remain local while ADR-015 is only a proposal."""
     start = audit.mark()
-    engram = ROOT / ".engram"
-    manifest = engram / "manifest.json"
-    if not manifest.exists():
-        audit.warn(".engram/manifest.json ausente (make memory-sync aun no se ha corrido)")
+    tracked = _tracked_engram_files()
+    if tracked is None:
+        audit.fail("git no pudo enumerar el estado nativo de Engram")
         return
-    config = engram / "config.json"
-    try:
-        pinned = json.loads(config.read_text(encoding="utf-8")).get("project_name")
-    except (OSError, ValueError, AttributeError):
-        pinned = None
-    if pinned != ENGRAM_PROJECT:
+    if tracked:
         audit.fail(
-            f".engram/config.json debe fijar project_name={ENGRAM_PROJECT!r} (tiene {pinned!r})"
+            "estado nativo de Engram versionado mientras ADR-015 sigue PROPUESTA: "
+            + ", ".join(tracked[:5])
         )
-    try:
-        listed = {
-            entry["id"] for entry in json.loads(manifest.read_text(encoding="utf-8"))["chunks"]
-        }
-    except (OSError, ValueError, KeyError, TypeError) as exc:
-        audit.fail(f".engram/manifest.json ilegible: {exc} (scripts/engram_manifest_merge.py)")
-        return
-    chunks = sorted((engram / "chunks").glob("*.jsonl.gz"))
-    on_disk = {p.name.split(".", 1)[0] for p in chunks}
-    if listed - on_disk:
-        audit.fail(f"chunks listados sin archivo: {', '.join(sorted(listed - on_disk))}")
-    if on_disk - listed:
-        audit.fail(f"chunks en disco sin listar: {', '.join(sorted(on_disk - listed))}")
-    foreign: set[str] = set()
-    leaks: list[str] = []
-    for chunk in chunks:
-        try:
-            rows = _chunk_rows(chunk)
-        except (OSError, ValueError) as exc:
-            audit.fail(f"{chunk.name}: ilegible ({exc})")
-            continue
-        for row in rows:
-            for array in CHUNK_ARRAYS:
-                for item in row.get(array, []) or []:
-                    if not isinstance(item, dict):
-                        continue
-                    project = item.get("project")
-                    if project is not None and project != ENGRAM_PROJECT:
-                        foreign.add(f"{array}:{project}")
-                    for field in CHUNK_TEXT_FIELDS:
-                        value = item.get(field)
-                        if isinstance(value, str) and SECRET_PATTERN.search(value):
-                            leaks.append(f"{chunk.name}#{array}:{item.get('id')}")
-    if foreign:
-        audit.fail(f"chunks con memorias de otros proyectos: {', '.join(sorted(foreign))}")
-    if leaks:
-        audit.fail(f"posibles secretos en chunks: {', '.join(sorted(set(leaks))[:5])}")
-    audit.ok_if_clean(
-        start,
-        f".engram: {len(listed)} chunk(s) consistentes, solo {ENGRAM_PROJECT}, "
-        f"sin tokens en {'/'.join(CHUNK_ARRAYS)}",
-    )
+    audit.ok_if_clean(start, "Engram local: ningun archivo nativo versionado (ADR-015 PROPUESTA)")
 
 
 def check_graph_config(audit: Audit) -> None:
@@ -531,12 +468,10 @@ def check_graph_config(audit: Audit) -> None:
     if "graphify-out/" not in gitignore:
         audit.fail(".gitignore no excluye graphify-out/")
     ignored_lines = [line.strip() for line in gitignore.splitlines()]
-    if ".engram/" in ignored_lines:
-        audit.fail(".gitignore excluye .engram/ entero: los chunks deben viajar en git")
-    if ".engram/engram.db" not in ignored_lines:
-        audit.fail(".gitignore no excluye .engram/engram.db (la DB de trabajo nunca viaja)")
+    if ".engram/" not in ignored_lines:
+        audit.fail(".gitignore no excluye .engram/ entero mientras ADR-015 sigue PROPUESTA")
     audit.ok_if_clean(
-        start, "grafo configurado (.graphifyignore, graphify-out/ ignorado, .engram/ trackeado)"
+        start, "herramientas locales configuradas (graphify-out/ y .engram/ ignorados)"
     )
 
 

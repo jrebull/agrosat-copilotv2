@@ -33,8 +33,8 @@
   la US), jamas el TOTAL.
 - NO escribas en el spec ni en `docs/us-work/`. Devuelve al orquestador un resumen de
   <=20 lineas: tests agregados, hueco que cierra cada uno, cobertura por archivo de la US.
-- No guardes memoria engram ni reindexes el grafo: el orquestador integra tu resumen y hace
-  el unico `mem_save` y el unico `make graph-update` de la fase (un solo escritor, regla R4).
+- No sincronices Engram ni reindexes el grafo: el orquestador integra tu resumen en fuentes
+  revisables y decide si actualiza herramientas locales.
 - El limite NO aplica a advertencias que QA necesita: deprecations, workarounds, fallos
   intermitentes o tracebacks residuales van tras el resumen como "ANEXO TECNICO".
 

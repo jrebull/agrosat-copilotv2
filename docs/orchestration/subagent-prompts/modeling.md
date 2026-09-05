@@ -12,8 +12,8 @@
 2. Carga `/agrosat-protocolo-articulo` ANTES de escribir cualquier comparacion, intervalo o
    contraste. Para miembros densos, `/agrosat-ml-segmentation`; para tabulares,
    `/agrosat-ml-baseline`; para combinar, `/agrosat-ml-ensemble`.
-3. Protocolo graphify del AGENTS.md raiz: `query` + `affected` antes de crear; grep solo con
-   0 nodos. Eres consumidor del grafo — NO ejecutes `make graph-update`.
+3. Si Graphify está disponible, úsalo para orientar `query` + `affected` y confirma con `rg`,
+   imports y tests. Eres consumidor del grafo: no ejecutes `make graph-update`.
 4. Consulta con Context7 (`--c7`) scikit-learn, XGBoost, SciPy/statsmodels, MAPIE o la libreria
    de conformal que uses.
 
@@ -41,8 +41,9 @@
 - Ninguna afirmacion de transporte entre bancos, ni en un docstring.
 - Split espacial con `build_spatial_kfold`; MLflow con `data_version` + `code_version`;
   checkpoints y OOF con `dvc add`. Polars, no pandas.
-- Hardware: CPU o RTX 4070 / L4 spot. No existe H100; no dependas de un checkpoint que solo
-  vivia en ella (`docs/paper/artefactos-perdidos.md`).
+- Hardware del artículo: CPU, RTX 4070 o L4 spot. La H100 sigue gobernada por ADR-009, pero una US
+  MICAI no depende de ella sin autorización explícita ni de un checkpoint perdido
+  (`docs/paper/artefactos-perdidos.md`).
 - Si una metrica sube mas de lo que el spec anticipa, NO lo celebres: audita regimen,
   denominador y punto de operacion primero y reportalo.
 
@@ -56,8 +57,8 @@
   <=30 lineas: archivos, decisiones, desviaciones del spec, artefactos generados (ruta,
   regimen, unidad, semilla, commit, PENDIENTE DE SELLAR), metricas con intervalo, MLflow run id,
   pendientes o conflictos de frontera (columnas del parquet, claves del JSON que consume paper).
-- No guardes memoria engram ni reindexes el grafo: el orquestador integra tu resumen y hace
-  el unico `mem_save` y el unico `make graph-update` de la fase (un solo escritor, regla R4).
+- No sincronices Engram ni reindexes el grafo: el orquestador integra tu resumen en fuentes
+  revisables y decide si actualiza herramientas locales.
 - El limite NO aplica a advertencias que QA necesita: deprecations, workarounds, fallos
   intermitentes o tracebacks residuales van tras el resumen como "ANEXO TECNICO".
 

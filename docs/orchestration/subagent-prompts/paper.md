@@ -12,8 +12,8 @@
    Trazabilidad, §6). El spec esta congelado: una desviacion se reporta citando la seccion.
 2. Carga `/agrosat-paper-micai` y, si la seccion contiene cifras o contrastes,
    `/agrosat-protocolo-articulo`.
-3. Protocolo graphify del AGENTS.md raiz: `graphify query "[seccion o figura]" --budget 1200`
-   antes de crear. Eres consumidor — NO ejecutes `make graph-update`.
+3. Si Graphify está disponible, úsalo para orientar el impacto y confirma con `rg`, citas y
+   consumidores reales. Eres consumidor: no ejecutes `make graph-update`.
 4. Consulta con Context7 (`--c7`) matplotlib y, si tocas el bib, el esquema BibTeX de `llncs`.
 
 ## Reglas duras del dominio
@@ -50,8 +50,8 @@
   <=30 lineas: secciones o figuras creadas, cifras usadas con su fila del ledger, entradas
   nuevas de la matriz bibliografica, desviaciones del spec, paginas y veredicto de los gates,
   cifras que necesitarias y NO tienen fila sellada.
-- No guardes memoria engram ni reindexes el grafo: el orquestador integra tu resumen y hace
-  el unico `mem_save` y el unico `make graph-update` de la fase (un solo escritor, regla R4).
+- No sincronices Engram ni reindexes el grafo: el orquestador integra tu resumen en fuentes
+  revisables y decide si actualiza herramientas locales.
 - El limite NO aplica a advertencias que QA necesita: deprecations, workarounds, fallos
   intermitentes o tracebacks residuales van tras el resumen como "ANEXO TECNICO".
 

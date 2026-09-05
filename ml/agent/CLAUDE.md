@@ -2,7 +2,7 @@
 
 > Sobreescribe a [`ml/CLAUDE.md`](../CLAUDE.md) y al root cuando trabajes el agente conversacional. NON-NEGOTIABLEs globales (idioma, secrets, session_id, sin emojis) viven en [`../../CLAUDE.md`](../../CLAUDE.md) — no se repiten aquí.
 
-**Rol planeado**: agente Plan-and-React con tools geoespaciales (FunctionTool + Pydantic), Spatial-RAG híbrido PostGIS + pgvector, backend LLM dual (Gemini cloud / Qwen3.5-35B-A3B vLLM), streaming SSE y memoria por `session_id`.
+**Rol planeado**: agente Plan-and-React con tools geoespaciales (FunctionTool + Pydantic), Spatial-RAG híbrido PostGIS + pgvector, backend LLM dual (Gemini 2.5 Pro / Qwen3-30B-A3B-Instruct-2507 GPTQ-Int4 con vLLM), streaming SSE y memoria por `session_id`.
 
 ## Estado
 
@@ -19,7 +19,7 @@ make eval-geoanalyst variant=gemini    # -> ml/agent/eval/eval_geoanalyst.py
 
 ## Stack local (planeado)
 
-- LLM del agente: **Qwen3.5-35B-A3B** (texto, vLLM on-prem H100) y Gemini 3.1 Pro (Vertex AI). NO Qwen3-VL (ese es VLM de fine-tune, otro scope).
+- LLM del agente: **Qwen3-30B-A3B-Instruct-2507 GPTQ-Int4** (texto, vLLM on-prem H100) y Gemini 2.5 Pro (Vertex AI). NO Qwen3-VL (ese es VLM de fine-tune, otro scope).
 - Tool de clasificación de cultivo: **baseline XGBoost + AlphaEarth** (EPIC 4). NO "Gemma 4 + ensamble".
 - Embeddings RAG: e5-mistral-7b sobre pgvector; filtro espacial `ST_DWithin` en PostGIS.
 
@@ -48,6 +48,6 @@ Ninguno todavía. Al crear lógica, ubicarlos en `tests/ml/agent/` (pytest + pyt
 
 - [`agrosat-google-adk-agent`](../../.claude/skills/agrosat-google-adk-agent/SKILL.md) — planner, FunctionTool, routing LLM.
 - [`agrosat-spatial-rag`](../../.claude/skills/agrosat-spatial-rag/SKILL.md) — híbrido PostGIS + pgvector.
-- [`agrosat-llm-finetuning`](../../.claude/skills/agrosat-llm-finetuning/SKILL.md) — backend vLLM Qwen3.5.
+- [`agrosat-llm-finetuning`](../../.claude/skills/agrosat-llm-finetuning/SKILL.md) — backend vLLM Qwen3-30B-A3B-Instruct-2507.
 - [`agrosat-ml-evaluation`](../../.claude/skills/agrosat-ml-evaluation/SKILL.md) — AgroMind, GeoAnalystBench.
 - [`agrosat-testing`](../../.claude/skills/agrosat-testing/SKILL.md) — mocks de tools.

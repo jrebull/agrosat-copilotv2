@@ -31,6 +31,7 @@ clone gets an actionable message instead of a wall of false alarms.
 Usage:
     poetry run python scripts/paper_artifacts_check.py
     poetry run python scripts/paper_artifacts_check.py --ledger paper/ARTIFACTS.md
+    poetry run python scripts/paper_artifacts_check.py --repo-root /tmp/synthetic-repo
 """
 
 from __future__ import annotations
@@ -212,9 +213,20 @@ def _verificar_blob(sha: str, row: dict[str, str], esta_en_git: bool) -> list[st
 
 def main() -> int:
     """Check every ledger row and return a process exit code."""
+    global REPO_ROOT, DEFAULT_LEDGER, RAICES_ARTEFACTOS
+
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER)
+    parser.add_argument("--repo-root", type=Path, default=REPO_ROOT)
+    parser.add_argument("--ledger", type=Path)
     args = parser.parse_args()
+
+    REPO_ROOT = args.repo_root.resolve()
+    DEFAULT_LEDGER = REPO_ROOT / "paper" / "ARTIFACTS.md"
+    RAICES_ARTEFACTOS = (
+        REPO_ROOT / "reports" / "paper_micai",
+        REPO_ROOT / "reports" / "micai2027",
+    )
+    args.ledger = args.ledger.resolve() if args.ledger is not None else DEFAULT_LEDGER
 
     if not args.ledger.exists():
         print(f"ERROR: no existe el ledger {args.ledger}")

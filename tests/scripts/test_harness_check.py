@@ -10,7 +10,6 @@ Los chunks y guias son sinteticos: esto es mecanica del arnes, no evaluacion del
 
 from __future__ import annotations
 
-import gzip
 import importlib.util
 import json
 import sys
@@ -42,29 +41,18 @@ def _lines(audit) -> str:
     return "\n".join(audit.lines)
 
 
-def _write_chunk(engram: Path, chunk_id: str, row: dict[str, object]) -> None:
-    """Escribe un chunk gz y lo lista en el manifest."""
-    chunks = engram / "chunks"
-    chunks.mkdir(parents=True, exist_ok=True)
-    with gzip.open(chunks / f"{chunk_id}.jsonl.gz", "wt", encoding="utf-8") as handle:
-        handle.write(json.dumps(row) + "\n")
-    (engram / "config.json").write_text(
-        json.dumps({"project_name": "agrosat-copilotv2"}), encoding="utf-8"
-    )
-    (engram / "manifest.json").write_text(
-        json.dumps({"version": 1, "chunks": [{"id": chunk_id, "memories": 1}]}), encoding="utf-8"
-    )
-
-
 # --- el PASS no puede convivir con el FAIL del mismo check -----------------------------------
 
 
-def test_routing_no_imprime_pass_cuando_encuentra_skill_retirada(harness, tmp_path) -> None:
+def test_routing_no_imprime_pass_cuando_encuentra_skill_retirada(
+    harness, tmp_path, monkeypatch
+) -> None:
     """Con una tabla que enruta a la skill retirada, no debe quedar ninguna linea PASS."""
     docs = tmp_path / "docs" / "orchestration"
     docs.mkdir(parents=True)
+    monkeypatch.setattr(harness, "RETIRED_SKILLS", frozenset({"agrosat-retired"}))
     for nombre in ("auto-invoke.md", "skill-owners.md", "skills-catalog.md", "commands.md"):
-        (docs / nombre).write_text("usa agrosat-azure-h100 para la VM", encoding="utf-8")
+        (docs / nombre).write_text("usa agrosat-retired", encoding="utf-8")
     audit = _audit(harness)
     harness.check_routing(audit)
     assert audit.failures == 4
@@ -84,16 +72,24 @@ def test_skills_no_imprime_pass_cuando_el_frontmatter_miente(harness, tmp_path) 
     assert "PASS" not in _lines(audit)
 
 
-def test_graph_config_no_imprime_pass_cuando_engram_esta_ignorado(harness, tmp_path) -> None:
-    """Ignorar .engram/ entero parte la memoria del equipo; el check no puede decir PASS."""
+def test_graph_config_fails_when_local_engram_is_not_ignored(harness, tmp_path) -> None:
+    """Native Engram state must not become versionable before ADR-015 is accepted."""
     (tmp_path / ".graphifyignore").write_text("data/\n", encoding="utf-8")
-    (tmp_path / ".gitignore").write_text(
-        "graphify-out/\n.engram/\n.engram/engram.db\n", encoding="utf-8"
-    )
+    (tmp_path / ".gitignore").write_text("graphify-out/\n", encoding="utf-8")
     audit = _audit(harness)
     harness.check_graph_config(audit)
     assert audit.failures == 1
     assert "PASS" not in _lines(audit)
+
+
+def test_graph_config_accepts_local_engram_boundary(harness, tmp_path) -> None:
+    """Ignoring both reconstructed graph output and local memory is the current policy."""
+    (tmp_path / ".graphifyignore").write_text("data/\n", encoding="utf-8")
+    (tmp_path / ".gitignore").write_text("graphify-out/\n.engram/\n", encoding="utf-8")
+    audit = _audit(harness)
+    harness.check_graph_config(audit)
+    assert audit.failures == 0
+    assert "PASS" in _lines(audit)
 
 
 # --- espejos en las dos direcciones ----------------------------------------------------------
@@ -140,47 +136,21 @@ def test_claude_md_puntero_permitido_no_falla(harness, tmp_path, monkeypatch) ->
     assert audit.failures == 0
 
 
-# --- secretos y proyectos ajenos en las cuatro listas del chunk -------------------------------
-
-
-@pytest.mark.parametrize("array", ["observations", "prompts", "sessions", "mutations"])
-def test_token_en_cualquier_lista_del_chunk_se_detecta(harness, tmp_path, array) -> None:
-    """Un token pegado en un prompt guardado viaja igual que uno en una observacion."""
-    campo = "payload" if array == "mutations" else "content"
-    fila = {
-        array: [
-            {
-                "id": "1",
-                "project": "agrosat-copilotv2",
-                campo: "usa sk-abcdefghijklmnop12345 para entrar",
-            }
-        ]
-    }
-    _write_chunk(tmp_path / ".engram", "aaaa1111", fila)
+def test_tracked_native_engram_state_fails(harness, monkeypatch) -> None:
+    """A tracked chunk must fail even if its payload looks harmless."""
+    monkeypatch.setattr(
+        harness, "_tracked_engram_files", lambda: [".engram/chunks/aaaa1111.jsonl.gz"]
+    )
     audit = _audit(harness)
     harness.check_memory(audit)
     assert audit.failures == 1
-    assert "posibles secretos" in _lines(audit)
+    assert "versionado" in _lines(audit)
+    assert "PASS" not in _lines(audit)
 
 
-@pytest.mark.parametrize("array", ["observations", "prompts", "sessions", "mutations"])
-def test_proyecto_ajeno_en_cualquier_lista_se_detecta(harness, tmp_path, array) -> None:
-    """Un `engram sync --all` mete memorias de otros proyectos en cualquiera de las listas."""
-    fila = {array: [{"id": "1", "project": "notas-personales", "content": "algo"}]}
-    _write_chunk(tmp_path / ".engram", "aaaa1111", fila)
-    audit = _audit(harness)
-    harness.check_memory(audit)
-    assert audit.failures == 1
-    assert "otros proyectos" in _lines(audit)
-
-
-def test_chunk_limpio_pasa(harness, tmp_path) -> None:
-    """El gate no puede ser ruido: un chunk correcto pasa en verde."""
-    fila = {
-        "observations": [{"id": "1", "project": "agrosat-copilotv2", "content": "una decision"}],
-        "prompts": [{"id": "2", "project": "agrosat-copilotv2", "content": "un prompt"}],
-    }
-    _write_chunk(tmp_path / ".engram", "aaaa1111", fila)
+def test_absent_tracked_engram_state_passes(harness, monkeypatch) -> None:
+    """Local or absent Engram state is valid because Git sees neither one."""
+    monkeypatch.setattr(harness, "_tracked_engram_files", lambda: [])
     audit = _audit(harness)
     harness.check_memory(audit)
     assert audit.failures == 0
@@ -201,7 +171,7 @@ def test_descripcion_con_id_retirado_falla(harness, tmp_path) -> None:
     (tmp_path / ".claude" / "agents").mkdir(parents=True)
     audit = _audit(harness)
     harness.check_retired_terms(audit)
-    assert audit.failures == 2
+    assert audit.failures == 1
     assert "PASS" not in _lines(audit)
 
 
@@ -232,6 +202,21 @@ def test_enlace_roto_fuera_del_agents_raiz_se_detecta(harness, tmp_path) -> None
     harness.check_links(audit)
     assert audit.failures == 1
     assert "auto-invoke.md" in _lines(audit)
+
+
+def test_percent_encoded_relative_link_resolves(harness, tmp_path, monkeypatch) -> None:
+    """A valid Markdown link with an encoded space must not be reported as missing."""
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    target = docs / "Rubrica Integrador.html"
+    target.write_text("rubrica\n", encoding="utf-8")
+    source = tmp_path / "README.md"
+    source.write_text("[rubrica](docs/Rubrica%20Integrador.html)\n", encoding="utf-8")
+    monkeypatch.setattr(harness, "_link_docs", lambda: [source])
+    audit = _audit(harness)
+    harness.check_links(audit)
+    assert audit.failures == 0
+    assert "PASS" in _lines(audit)
 
 
 def test_permiso_make_comodin_falla(harness, tmp_path) -> None:

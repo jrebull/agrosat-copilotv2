@@ -1,7 +1,7 @@
 # Runbook — MVP conversacional Be My Eyes (EPIC 7/8/9)
 
 Cómo levantar y probar el sistema conversacional implementado la noche del 15-jun.
-Decision de inferencia sincrona del MVP en [ADR-012](../decisions/ADR-012-inferencia-sincrona-mvp.md); no existe un ADR de arquitectura completa del sistema conversacional.
+Arquitectura y evidencia de cierre en [US-046](../us-resolved/us-046.md).
 
 ## Qué se construyó
 

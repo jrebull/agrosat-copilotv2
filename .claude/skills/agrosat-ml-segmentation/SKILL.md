@@ -12,7 +12,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 - TSViT del paper del profesor (`michaeltrs/DeepSatModels`) es obligatorio
 - Métricas: mIoU + F1-macro + pixel accuracy
 - Patches Sentinel-2 con labels PASTIS-R
-- Training en RTX 4070 o L4 spot (`make train-l4`, con tope en el spec); no existe H100
+- Training en L4 dev / H100 final (ventana V2)
 - MLflow run por modelo con tag `architecture`
 - Optuna ajuste fino top-2 con ≥30 trials
 

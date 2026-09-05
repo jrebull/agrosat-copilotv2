@@ -8,6 +8,7 @@ que el gate se rompa.
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import re
 import subprocess
@@ -54,6 +55,62 @@ def _correr_artifacts_check(ledger: Path) -> tuple[int, str]:
         check=False,
     )
     return proc.returncode, proc.stdout
+
+
+def _run_fixture_artifacts_check(repo_root: Path) -> tuple[int, str]:
+    """Run the custody gate against a self-contained synthetic repository."""
+    proc = subprocess.run(
+        [sys.executable, str(ARTIFACTS_CHECK), "--repo-root", str(repo_root)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+def _custody_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
+    """Create the smallest valid Git repository governed by the custody gate."""
+    root = tmp_path / "custody-repo"
+    artifact = root / "reports" / "paper_micai" / "fase1" / "base.json"
+    artifact.parent.mkdir(parents=True)
+    figura = root / "reports" / "micai2027" / "figuras" / "figura.svg"
+    figura.parent.mkdir(parents=True)
+    artifact.write_text('{"resultado": 0.5}\n', encoding="utf-8")
+    # La figura declarada existe para que el `.pdf` y el `.png` hermanos tengan un `.svg` con
+    # fila. Sin ella, un intruso `.pdf` falla por no tener hermano declarado y la prueba de la
+    # exencion pasaria igual con la regla vieja: seria verde sin comprobar nada.
+    figura.write_text("<svg/>\n", encoding="utf-8")
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.name", "Fixture"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.email", "fixture@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "add", "."], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-qm", "add fixture artifact"], cwd=root, check=True)
+    artifact_commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    digest = hashlib.md5(artifact.read_bytes()).hexdigest()
+    digest_figura = hashlib.md5(figura.read_bytes()).hexdigest()
+    ledger = root / "paper" / "ARTIFACTS.md"
+    ledger.parent.mkdir()
+    ledger.write_text(
+        "# ARTIFACTS\n\n"
+        f"**Commit de sellado**: `{artifact_commit}`\n\n"
+        "| Elemento | Ruta | MD5 | Bytes | Git | Estado |\n"
+        "|---|---|---|---:|---|---|\n"
+        f"| Base | `reports/paper_micai/fase1/base.json` | `{digest}` | "
+        f"{artifact.stat().st_size} | `{artifact_commit}` | SELLADO |\n"
+        f"| Figura | `reports/micai2027/figuras/figura.svg` | `{digest_figura}` | "
+        f"{figura.stat().st_size} | `{artifact_commit}` | SELLADO |\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "add", "paper/ARTIFACTS.md"], cwd=root, check=True)
+    subprocess.run(["git", "commit", "-qm", "add fixture ledger"], cwd=root, check=True)
+    return root, ledger, artifact
 
 
 @pytest.fixture
@@ -1379,115 +1436,99 @@ def test_un_parquet_en_un_subdirectorio_de_oof_no_queda_invisible(tmp_path: Path
     assert "hay un parquet en un subdirectorio" in proc.stdout
 
 
-def test_un_artefacto_sin_fila_en_el_ledger_rompe_el_gate() -> None:
+def test_un_artefacto_sin_fila_en_el_ledger_rompe_el_gate(tmp_path: Path) -> None:
     """El ledger comprobaba que todo lo declarado existe; no comprobaba lo contrario.
 
     Un artefacto producido y dejado en `reports/paper_micai/` sin fila se lee igual de bien que uno
     con custodia, y podria citarse en el manuscrito sin que nada supiera de donde salio. Es la
     misma forma del defecto que ya paso con un parquet OOF huerfano.
     """
-    intruso = REPO_ROOT / "reports" / "paper_micai" / "fase1" / "_intruso_de_prueba.json"
-    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
-
-    def correr() -> tuple[int, str]:
-        proc = subprocess.run(
-            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
-        )
-        return proc.returncode, proc.stdout + proc.stderr
+    root, _, _ = _custody_fixture(tmp_path)
+    intruso = root / "reports" / "paper_micai" / "fase1" / "_intruso_de_prueba.json"
 
     intruso.write_text('{"resultado": 0.9999}\n', encoding="utf-8")
     try:
-        codigo, salida = correr()
+        codigo, salida = _run_fixture_artifacts_check(root)
         assert codigo == 1, salida
         assert "el ledger no lo declara" in salida
     finally:
         intruso.unlink()
-    assert correr()[0] == 0
+    assert _run_fixture_artifacts_check(root)[0] == 0
 
 
-def test_las_respuestas_crudas_de_la_busqueda_no_necesitan_fila() -> None:
+def test_las_respuestas_crudas_de_la_busqueda_no_necesitan_fila(tmp_path: Path) -> None:
     """Sellar cada respuesta de la API seria sellar el ruido.
 
     Son la ENTRADA de `search_candidates.csv`, que si esta sellado. La exclusion es por carpeta y
     esta escrita con su motivo, no es un descuido.
     """
-    cruda = REPO_ROOT / "reports" / "paper_micai" / "fase0" / "raw" / "_intruso_de_prueba.json"
-    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+    root, _, _ = _custody_fixture(tmp_path)
+    cruda = root / "reports" / "paper_micai" / "fase0" / "raw" / "_intruso_de_prueba.json"
+    cruda.parent.mkdir(parents=True)
     cruda.write_text('{"resultado": 0.9999}\n', encoding="utf-8")
     try:
-        proc = subprocess.run(
-            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
-        )
-        assert proc.returncode == 0, proc.stdout
+        codigo, salida = _run_fixture_artifacts_check(root)
+        assert codigo == 0, salida
     finally:
         cruda.unlink()
 
 
-def test_la_raiz_del_manuscrito_nuevo_tambien_esta_bajo_custodia() -> None:
+def test_la_raiz_del_manuscrito_nuevo_tambien_esta_bajo_custodia(tmp_path: Path) -> None:
     """`reports/micai2027` se cierra recien poblada, no cuando ya tenga treinta ficheros.
 
     La raiz existia con cuatro ficheros y CERO filas en el ledger: la primera figura del
     manuscrito nuevo no tenia custodia. Cerrar una raiz al crearla es lo unico que sale barato.
     """
-    intruso = REPO_ROOT / "reports" / "micai2027" / "figuras" / "_intruso_de_prueba.svg"
-    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
-
-    def correr() -> tuple[int, str]:
-        proc = subprocess.run(
-            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
-        )
-        return proc.returncode, proc.stdout + proc.stderr
+    root, _, _ = _custody_fixture(tmp_path)
+    intruso = root / "reports" / "micai2027" / "figuras" / "_intruso_de_prueba.svg"
 
     intruso.write_text("<svg/>\n", encoding="utf-8")
     try:
-        codigo, salida = correr()
+        codigo, salida = _run_fixture_artifacts_check(root)
         assert codigo == 1, salida
         assert "_intruso_de_prueba.svg" in salida
         assert "el ledger no lo declara" in salida
     finally:
         intruso.unlink()
-    assert correr()[0] == 0
+    assert _run_fixture_artifacts_check(root)[0] == 0
 
 
-def test_una_ruta_con_dos_filas_en_el_ledger_rompe_el_gate() -> None:
+def test_una_ruta_con_dos_filas_en_el_ledger_rompe_el_gate(tmp_path: Path) -> None:
     """Una ruta con dos filas no tiene estado: tiene dos.
 
     No es un fallo que se manifieste como fallo, sino como respuestas distintas a la misma
     pregunta segun quien mire: `ledger_state` devuelve la primera, el chequeo dual mira el
     conjunto y el gate de cuarentena lee otra cosa.
     """
-    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
-
-    def correr() -> tuple[int, str]:
-        proc = subprocess.run(
-            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
-        )
-        return proc.returncode, proc.stdout + proc.stderr
-
-    respaldo = LEDGER.read_text(encoding="utf-8")
-    marca = "| Manuscrito nuevo: figura del soporte por clase, espanol |"
+    root, ledger, _ = _custody_fixture(tmp_path)
+    respaldo = ledger.read_text(encoding="utf-8")
+    marca = "| Base |"
     inicio = respaldo.index(marca)
     fin = respaldo.index("\n", inicio) + 1
     try:
-        LEDGER.write_text(respaldo[:fin] + respaldo[inicio:fin] + respaldo[fin:], encoding="utf-8")
-        codigo, salida = correr()
+        ledger.write_text(respaldo[:fin] + respaldo[inicio:fin] + respaldo[fin:], encoding="utf-8")
+        codigo, salida = _run_fixture_artifacts_check(root)
         assert codigo == 1, salida
         assert "tiene 2 filas en el ledger" in salida
     finally:
-        LEDGER.write_text(respaldo, encoding="utf-8")
-    assert correr()[0] == 0
+        ledger.write_text(respaldo, encoding="utf-8")
+    assert _run_fixture_artifacts_check(root)[0] == 0
 
 
-def test_un_pdf_sin_fila_ya_no_se_exime_por_tener_svg_hermano() -> None:
-    """El ``.png`` es el raster del cuaderno publico; el ``.pdf`` es lo que incluye LaTeX."""
-    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
-    intruso = REPO_ROOT / "reports" / "micai2027" / "figuras" / "_intruso_de_prueba.pdf"
+def test_un_pdf_sin_fila_ya_no_se_exime_por_tener_svg_hermano(tmp_path: Path) -> None:
+    """El ``.png`` es el raster del cuaderno publico; el ``.pdf`` es lo que incluye LaTeX.
+
+    El intruso tiene que ser el ``.pdf`` de una figura CON su ``.svg`` declarado. Si no, falla por
+    no tener hermano en el ledger -que es otro motivo- y la prueba pasaria igual con la regla
+    vieja, cuando el ``.pdf`` estaba exento. Comprobado restaurando la exencion: asi la prueba
+    falla, y sin el hermano declarado seguia en verde.
+    """
+    root, _, _ = _custody_fixture(tmp_path)
+    intruso = root / "reports" / "micai2027" / "figuras" / "figura.pdf"
     intruso.write_bytes(b"%PDF-1.4\n")
     try:
-        proc = subprocess.run(
-            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
-        )
-        assert proc.returncode == 1, proc.stdout
-        assert "_intruso_de_prueba.pdf" in proc.stdout
+        codigo, salida = _run_fixture_artifacts_check(root)
+        assert codigo == 1, salida
+        assert "figura.pdf" in salida
     finally:
         intruso.unlink()

@@ -1,6 +1,6 @@
 ---
 name: agent-engineer
-description: Specialist in Google ADK conversational agent for AgroSatCopilot — 9 geospatial FunctionTools, Plan-and-React orchestration, Spatial-RAG (PostGIS + pgvector), dual LLM backend (Gemini + Qwen3-30B-A3B on-prem), session memory Postgres, SSE streaming, AgroMind/GeoAnalystBench evaluation.
+description: Specialist in Google ADK conversational agent for AgroSatCopilot — 9 geospatial FunctionTools, Plan-and-React orchestration, Spatial-RAG (PostGIS + pgvector), dual LLM backend (Gemini + vLLM Qwen3.5), session memory Postgres, SSE streaming, AgroMind/GeoAnalystBench evaluation.
 tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -25,7 +25,7 @@ You are an agent engineer specialized in Google ADK + tool-augmented LLM agents 
 ## Stack
 
 - Google ADK (Agent Development Kit)
-- Gemini 2.5 Pro (Vertex AI) + Qwen3-30B-A3B on-prem via llama.cpp (el id Qwen3.5-35B-A3B no existe)
+- Gemini 3.1 Pro (Vertex AI) + Qwen3.5-35B-A3B (vLLM)
 - LiteLlm para backend OpenAI-compat
 - e5-mistral-7b-instruct para embeddings (4096-dim)
 - PostGIS ST_DWithin + pgvector HNSW

@@ -34,7 +34,7 @@ graphify affected "<modulo principal>" --depth 2   # consumidores rio abajo que 
 | "Mejor predictor", "el modelo del articulo" | Panel de >= 3 familias, sin ganador (ADR-014 §6) |
 | "Se transporta", "generaliza", "en Mexico" | Afirmacion de transporte, retirada por diseno |
 | `KFold` / `train_test_split` sin bloques espaciales; `pandas` en pipeline nuevo | Fuga espacial; el proyecto usa Polars |
-| Dependencia de H100, `azure_h100_*`, Gemma 4 LoRA, `Qwen3.5-35B-A3B`, "Gemini 3.5 Flash", "AlphaEarth v2.1" | Descartados o inexistentes |
+| Dependencia de H100 o Gemma 4 dentro del paper MICAI; `Qwen3.5-35B-A3B`, "Gemini 3.5 Flash", "AlphaEarth v2.1" como ids vigentes | Fuera de alcance del paper o identificadores inexistentes; H100 sigue gobernada por ADR-009 |
 | Entrada a mano en `refs.bib`; nombre o correo en el PDF anonimo | Bib generado; doble ciego |
 | Tests con parcelas inventadas para una metrica titular; tests para inflar cobertura; tests a archivos de otra US | No prueban nada sobre el banco real; invaden otro gate |
 | Archivo con fila `SELLADO` sobrescrito; `.dvc` ausente para un parquet nuevo | Custodia rota |

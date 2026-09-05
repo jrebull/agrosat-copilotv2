@@ -1,4 +1,4 @@
-"""Print where the loop stands: branch, graph freshness, pending memory, open user stories.
+"""Print where the loop stands: branch, graph freshness, local memory and open user stories.
 
 Runs as the Claude Code ``SessionStart`` hook (see ``.claude/settings.json``) and as
 ``make harness-status``. It never fails the session: every probe degrades to a short note.
@@ -103,22 +103,14 @@ def graph_state() -> tuple[str, bool]:
 
 
 def memory_line() -> str:
-    """Pending engram chunks, or why they cannot be counted."""
-    manifest = ROOT / ".engram" / "manifest.json"
-    if not manifest.exists():
-        return "memoria: sin chunks en .engram/ (make memory-sync)"
-    state, status = _probe(["engram", "sync", "--status"])
+    """Report local Engram availability without invoking disabled shared synchronization."""
+    state, status = _probe(["engram", "--version"])
     if state == MISSING:
-        return "memoria: engram no disponible en PATH (make memory-import cuando lo instales)"
+        return "memoria: Engram local no instalado (opcional; ADR-015)"
     if state == BROKEN:
-        return f"memoria: engram sync --status fallo ({status[:80]}); estado desconocido"
-    pending = re.search(r"Pending import:\s*(\d+)", status)
-    if pending is None:
-        return "memoria: no pude leer el estado de engram (formato inesperado); revisar a mano"
-    count = int(pending.group(1))
-    if count:
-        return f"memoria: {count} chunk(s) pendientes de importar (make memory-import)"
-    return "memoria: al dia con .engram/"
+        return f"memoria: Engram local no responde ({status[:80]})"
+    version = status.strip().splitlines()[0] if status.strip() else "version desconocida"
+    return f"memoria: Engram local disponible ({version}); sync compartido deshabilitado"
 
 
 def open_stories() -> list[str]:

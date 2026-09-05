@@ -206,9 +206,9 @@ con sub-agentes → QA → cierre destilado). Lo que hay que saber antes de la p
   documentos normativos, reglas científicas, anti-patrones. Se edita `AGENTS.md`; `make guides-sync`.
 - [`docs/orchestration/prompts-optimizers-fable.md`](docs/orchestration/prompts-optimizers-fable.md):
   los prompts de cada fase, la ruta corta y el modo nocturno.
-- Grafo de conocimiento (`make graph-update`, `graphify query`) y memoria compartida de engram, que
-  viaja en `.engram/` con cada PR: el plugin de Claude Code la importa solo al arrancar la sesión
-  (`make memory-import` para otros hosts).
+- Grafo de conocimiento opcional (`make graph-update`, `graphify query`) y Engram como memoria
+  **local** de desarrollo. La memoria compartida está propuesta, no desplegada: véase
+  [`ADR-015`](docs/decisions/ADR-015-engram-memoria-compartida.md).
 - `make harness-status` dice dónde está el loop; `make harness-check` audita el propio harness.
 - El plan por épicas vive en el repo hermano `agrosat-micai-site` (`make plan-check`).
 
@@ -230,8 +230,8 @@ macOS Apple Silicon, con sus parches, está en el
 - **Atribuciones.** AlphaEarth (Khanna et al., CC-BY-4.0), FarSLIP (arXiv:2511.14901),
   Be My Eyes (arXiv:2511.19417), PASTIS-R (Garnot et al., ICCV 2021), Sen4AgriNet y
   EuroCropsML (CC-BY-SA-4.0), TSViT, U-TAE, SegFormer, AnySat.
-- Las guías operativas (`AGENTS.md` / `CLAUDE.md`, raíz y por carpeta) son el harness vigente:
-  se reescribieron el 4-sep-2026 para el artículo MICAI 2027, sin H100.
+- Las guías operativas (`AGENTS.md` / `CLAUDE.md`, raíz y por carpeta) conservan la gobernanza
+  ratificada del producto; el workflow MICAI la complementa y no puede sustituirla.
 
 <br>
 

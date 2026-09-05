@@ -28,7 +28,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep
   resultados a apendice, **nunca de robustez**.
 - Atribuciones obligatorias: AlphaEarth `SATELLITE_EMBEDDING/V1/ANNUAL` v1.1 CC-BY-4.0; PASTIS-R
   (Garnot et al., ICCV 2021); BreizhCrops; Sen4AgriNet y EuroCropsML CC-BY-SA-4.0 (no "permisivos");
-  Gemini 2.5 Pro como reasoner (nunca 3.5 Flash); Qwen3-30B-A3B servido con llama.cpp.
+  Gemini 2.5 Pro como reasoner (nunca 3.5 Flash); Qwen3-30B-A3B servido con vLLM.
 
 ## Reglas de forma (LNCS y estilo)
 
