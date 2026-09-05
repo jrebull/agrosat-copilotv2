@@ -127,6 +127,24 @@ preregistro-resellar` hace la fricción un gesto explícito en vez de un hash es
 Es fricción deliberada sobre un documento que aún se está editando, y se revierte borrando el
 diccionario `SELLOS`.
 
+### El mismo defecto, tres veces, en tres registros distintos
+
+Los tres registros del proyecto comprobaban **que todo lo declarado existe**. Ninguno comprobaba
+**que todo lo que existe está declarado**. Es la asimetría que ya causó un incidente: un parquet
+OOF huérfano —de otra configuración, de otra pasada, de otro `n_timesteps`— se lee igual de bien
+que uno legítimo, y ninguna tabla distingue un fallo de un resultado.
+
+| Registro | Lo que no veía | Cómo quedó |
+|---|---|---|
+| `oof-manifest-check` | Listaba `ml/eval/oof/*.parquet`, solo la raíz. El flujo de re-volcado trabaja **en directorios temporales** y promueve después: uno olvidado bajo `oof/` era invisible | Busca en todo el árbol. Un parquet fuera de la raíz falla por sí mismo: el inventario se indexa por nombre, así que ahí no se puede declarar sin ambigüedad |
+| `paper-artifacts-check` | Verificaba las 95 filas del ledger y nunca miraba el disco. Un artefacto dejado en `reports/paper_micai/` sin fila podía citarse en el manuscrito sin custodia | Comprueba las dos direcciones. Con una política de exclusión escrita: las respuestas crudas de la búsqueda son la **entrada** de un artefacto sellado, y el `.png`/`.pdf` de una figura son la misma figura en otro formato |
+| `paper-obsoletos-check` | Ya contado arriba: no leía `.tex` | — |
+
+Y salió un hallazgo real: **`related_work_overrides.csv` no estaba en el ledger.** Es el fichero
+donde vive cada corrección bibliográfica con su motivo —entre ellas, que `garnot2021pastis`
+introduce PASTIS óptico y **no** PASTIS-R—, y el generador del `.bib` lo superpone sobre lo que
+devolvió la API. Sin fila, el fichero que gobierna la bibliografía no tenía custodia.
+
 ### Lo que se verificó y estaba bien
 
 - Los cuatro gates con fichero normativo **fallan** al mutarles su fuente. Un gate que pasa sobre

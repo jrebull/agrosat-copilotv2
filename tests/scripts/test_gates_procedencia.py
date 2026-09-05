@@ -1377,3 +1377,47 @@ def test_un_parquet_en_un_subdirectorio_de_oof_no_queda_invisible(tmp_path: Path
     )
     assert proc.returncode == 1, proc.stdout
     assert "hay un parquet en un subdirectorio" in proc.stdout
+
+
+def test_un_artefacto_sin_fila_en_el_ledger_rompe_el_gate() -> None:
+    """El ledger comprobaba que todo lo declarado existe; no comprobaba lo contrario.
+
+    Un artefacto producido y dejado en `reports/paper_micai/` sin fila se lee igual de bien que uno
+    con custodia, y podria citarse en el manuscrito sin que nada supiera de donde salio. Es la
+    misma forma del defecto que ya paso con un parquet OOF huerfano.
+    """
+    intruso = REPO_ROOT / "reports" / "paper_micai" / "fase1" / "_intruso_de_prueba.json"
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+
+    def correr() -> tuple[int, str]:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        return proc.returncode, proc.stdout + proc.stderr
+
+    intruso.write_text('{"resultado": 0.9999}\n', encoding="utf-8")
+    try:
+        codigo, salida = correr()
+        assert codigo == 1, salida
+        assert "el ledger no lo declara" in salida
+    finally:
+        intruso.unlink()
+    assert correr()[0] == 0
+
+
+def test_las_respuestas_crudas_de_la_busqueda_no_necesitan_fila() -> None:
+    """Sellar cada respuesta de la API seria sellar el ruido.
+
+    Son la ENTRADA de `search_candidates.csv`, que si esta sellado. La exclusion es por carpeta y
+    esta escrita con su motivo, no es un descuido.
+    """
+    cruda = REPO_ROOT / "reports" / "paper_micai" / "fase0" / "raw" / "_intruso_de_prueba.json"
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+    cruda.write_text('{"resultado": 0.9999}\n', encoding="utf-8")
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        assert proc.returncode == 0, proc.stdout
+    finally:
+        cruda.unlink()
