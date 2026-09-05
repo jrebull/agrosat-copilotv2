@@ -1,6 +1,6 @@
 ---
 name: agrosat-terraform
-description: Define infrastructure as code with Terraform 1.9+ for AgroSatCopilot — GCP primary (Cloud Run, Cloud SQL PostGIS+pgvector, GCS, Pub/Sub, Vertex AI, Artifact Registry, Secret Manager) + Azure H100 secondary. Use when creating modules, workspaces, or backend state.
+description: Define infrastructure as code with Terraform 1.9+ for AgroSatCopilot — GCP primary (Cloud Run, Cloud SQL PostGIS+pgvector, GCS, Pub/Sub, Vertex AI, Artifact Registry, Secret Manager); the Azure module is historical code and is not reactivated. Use when creating modules, workspaces, or backend state.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -129,7 +129,9 @@ terraform {
 }
 ```
 
-## Azure H100 Module
+## Azure H100 Module (historico)
+
+> La VM se perdio el 4-sep-2026 y el modulo no se reactiva (AGENTS.md raiz, Descartados). Se conserva como referencia del codigo que existe en `modules/azure/`.
 
 ```hcl
 # modules/azure/h100_vm/main.tf
@@ -195,6 +197,5 @@ make tf-validate
 - [ ] Secret Manager para credenciales
 - [ ] min_instances=0 en Cloud Run
 - [ ] PITR en Cloud SQL prod
-- [ ] Auto-shutdown VM H100
 - [ ] IAM principle of least privilege
 - [ ] `terraform validate` y `tflint` pass

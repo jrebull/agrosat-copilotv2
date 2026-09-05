@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "chunks": [
+    {
+      "id": "7180e82c",
+      "created_by": "arthu",
+      "created_at": "2026-09-04T21:10:24Z",
+      "sessions": 3,
+      "memories": 389,
+      "prompts": 2
+    },
+    {
+      "id": "6806b5f0",
+      "created_by": "arthu",
+      "created_at": "2026-09-04T21:49:10Z",
+      "sessions": 0,
+      "memories": 2,
+      "prompts": 0
+    },
+    {
+      "id": "97ba46e5",
+      "created_by": "arthu",
+      "created_at": "2026-09-04T21:58:07Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
+    },
+    {
+      "id": "b9658fe1",
+      "created_by": "arthu",
+      "created_at": "2026-09-05T14:50:56Z",
+      "sessions": 0,
+      "memories": 1,
+      "prompts": 0
+    }
+  ]
+}
