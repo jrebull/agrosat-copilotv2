@@ -262,6 +262,13 @@ jobs:
       - name: panel congelado (panel-check)
         run: python3 scripts/panel_check.py
 
+      # Frontera entre lo que corre la CI y lo que se corre en local. No discute el reparto
+      # -es decision del equipo-, impide que se mueva sin escribirlo: dos pruebas de
+      # tests/ml/test_correlations.py estuvieron en rojo meses porque ese fichero no cuelga de
+      # ningun directorio de los que enumera el paso de pruebas.
+      - name: frontera CI / suite local (ci-test-coverage-check)
+        run: python3 scripts/ci_test_coverage_check.py
+
       # Inventario de OOF. Verifica los bytes cuando el parquet esta y el puntero .dvc cuando
       # no: en un checkout limpio solo estan los punteros, y un gate que exigiera los blobs
       # seria rojo aqui para siempre.

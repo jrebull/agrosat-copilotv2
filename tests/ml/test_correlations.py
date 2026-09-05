@@ -89,8 +89,13 @@ def test_compute_indices_subset_ndvi_in_range() -> None:
 
 
 def test_compute_indices_subset_unknown_index_raises() -> None:
-    """Un indice desconocido levanta ValueError claro."""
-    with pytest.raises(ValueError, match="no soportados"):
+    """Un indice desconocido levanta ValueError que nombra el indice culpable.
+
+    La asercion es sobre el nombre del indice, no sobre la redaccion del mensaje: cuando
+    ``c646263`` tradujo los mensajes al ingles esta prueba se quedo en rojo, y como la CI
+    no corre este fichero (ver ``scripts/ci_test_coverage_check.py``) siguio asi meses.
+    """
+    with pytest.raises(ValueError, match="XYZ"):
         compute_indices_subset(_synthetic_bands(), indices=["XYZ"])
 
 
@@ -277,7 +282,7 @@ def test_compute_indices_subset_clip_evi_range_bounds_output() -> None:
 def test_compute_indices_subset_clip_negative_and_mask_are_mutually_exclusive() -> None:
     """Pasar ambos `clip_negative=True` y `mask_invalid_band_range` levanta ValueError."""
     df = _synthetic_bands(n=20)
-    with pytest.raises(ValueError, match="mutuamente excluyentes"):
+    with pytest.raises(ValueError, match="mask_invalid_band_range"):
         compute_indices_subset(
             df,
             indices=["NDVI"],
