@@ -9,8 +9,8 @@
    §3 Interfaces y §6 Falsabilidad). El spec esta congelado: no lo edites; si tienes que
    desviarte, reportalo en tu resumen citando la seccion.
 2. Carga `/agrosat-ml-features` y, si tocas AlphaEarth o GEE, `/agrosat-gee-alphaearth`.
-3. Protocolo graphify del AGENTS.md raiz: `query` + `affected` antes de crear; grep solo con
-   0 nodos. Eres consumidor del grafo — NO ejecutes `make graph-update`.
+3. Si Graphify está disponible, úsalo para orientar `query` + `affected` y confirma con `rg`,
+   imports y tests. Eres consumidor del grafo: no ejecutes `make graph-update`.
 4. Consulta con Context7 (`--c7`) Polars, GeoPandas/Shapely 2.x, earthengine-api, rasterio.
 
 ## Reglas duras del dominio
@@ -42,8 +42,8 @@
   <=30 lineas: archivos creados/extendidos, columnas y tipos del parquet, decisiones,
   desviaciones del spec, falsabilidad (resultado vs umbral), `.dvc` generados, pendientes o
   conflictos de frontera con modeling.
-- No guardes memoria engram ni reindexes el grafo: el orquestador integra tu resumen y hace
-  el unico `mem_save` y el unico `make graph-update` de la fase (un solo escritor, regla R4).
+- No sincronices Engram ni reindexes el grafo: el orquestador integra tu resumen en fuentes
+  revisables y decide si actualiza herramientas locales.
 - El limite NO aplica a advertencias que QA necesita: deprecations, workarounds, fallos
   intermitentes o tracebacks residuales van tras el resumen como "ANEXO TECNICO".
 

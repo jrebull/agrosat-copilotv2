@@ -15,23 +15,22 @@ make i18n-check             # claves it/es/en sincronizadas
 make notebooks-check        # papermill end-to-end (notebooks del curso, historia)
 ```
 
-## Harness: grafo, memoria compartida y guías espejo
+## Harness: grafo, memoria local y guías espejo
 
 ```bash
 make graph-update           # reindexa el grafo de codigo (AST, 0 LLM); GRAPHIFY_FORCE=1 tras borrar codigo
 make graph-check            # falla si graphify-out/graph.json no describe HEAD
 make graph-hooks            # hooks git post-commit / post-checkout de graphify (una vez por clon)
-make memory-sync            # exporta las memorias nuevas de engram a .engram/ (commitear)
-make memory-import          # manual: repara el manifest y aplica los chunks nuevos (el plugin de Claude Code lo hace solo al arrancar)
-make memory-check           # verifica el manifest sin tocarlo (exit 1 si hay drift)
-make memory-status          # chunks locales, remotos y pendientes
-make memory-setup           # merge driver para .engram/manifest.json (una vez por clon)
-make harness-check          # espejos, settings, plantillas, skills, agents, chunks, grafo
-make harness-status         # rama, grafo, memoria pendiente, US en vuelo, espejos, plan
+make harness-check          # espejos, settings, plantillas, skills, frontera Engram y grafo
+make harness-status         # rama, grafo, Engram local, US en vuelo, espejos, plan
 make guides-sync            # AGENTS.md -> CLAUDE.md en todos los pares
 make guides-check           # falla si algun par difiere
 make plan-check             # plan por epicas del cuaderno: dependencias, ciclos, estados, camino critico
 ```
+
+Engram es opcional y local. `engram --version` comprueba su disponibilidad; no existen targets de
+sincronización compartida mientras [ADR-015](../decisions/ADR-015-engram-memoria-compartida.md)
+siga en estado PROPUESTA.
 
 ## Artículo MICAI 2027
 
@@ -75,7 +74,8 @@ make baseline-test / ensembles-test / interpretability-test / learning-curves-te
 make farslip-extract-embeddings        # embeddings FarSLIP desde el student registrado
 ```
 
-Retirados el 4-sep-2026 (sin hardware): `train-h100`, `azure-h100-start`, `azure-h100-stop`, `azure-h100-status`.
+Los targets `train-h100` y `azure-h100-*` pertenecen al plan ratificado por ADR-009. No forman parte
+del camino crítico MICAI y solo se ejecutan cuando una US y el presupuesto los autorizan.
 
 ## Base de datos (dbmate)
 

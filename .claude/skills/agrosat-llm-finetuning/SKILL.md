@@ -1,17 +1,18 @@
 ---
 name: agrosat-llm-finetuning
-description: Fine-tune Gemma 4 26B-MoE and Qwen3-VL-30B-A3B with LoRA rank 16 BF16, serve LLMs with vLLM or llama.cpp. FUTURE (ADR-011, ADR-014): the Azure H100 is gone and this is out of the MICAI 2027 article scope; use only when a US budgets a GPU for it.
+description: Fine-tune Gemma 4 26B-A4B-MoE and Qwen3-VL-30B-A3B with LoRA rank 16 BF16, and serve Qwen3-30B-A3B-Instruct-2507 GPTQ-Int4 with vLLM on Azure H100 NVL 96GB. Gemma 4 remains FUTURE under ADR-011.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # AgroSatCopilot LLM Fine-tuning Skill
 
-> **FUTURE — sin hardware y fuera del alcance del articulo (ADR-011, ADR-014).** La VM Azure
-> H100 del sponsor ya no existe (4-sep-2026); ninguna ventana V1-V6 volvera a abrirse. Esta
-> skill conserva los hechos verificados (id real, QLoRA bloqueado por el layout MoE 3D, via
-> real `target_parameters`, AgroMind eval-only) para cuando exista GPU presupuestada en una US.
-> El reasoner del copiloto es **Gemini 2.5-pro**; el on-prem es Qwen3-30B-A3B servido con
-> llama.cpp (el id `Qwen3.5-35B-A3B` no existe). Ver [ADR-011](../../../docs/decisions/ADR-011-gemma4-lora-future.md).
+> **FUTURE — Gemma 4 LoRA diferido (ADR-011, 15-jun-2026).** El fine-tune de
+> Gemma 4 NO se ejecuta antes de la presentacion (27-jun): la H100 sigue el orden
+> de ADR-009 (FarSLIP -> TSViT -> ensambles -> serving Qwen). Este skill quedo
+> CORREGIDO con los hechos verificados (id real, QLoRA bloqueado por el layout MoE
+> 3D, via real `target_parameters`, AgroMind eval-only). El reasoner del copiloto
+> es **Gemini 2.5-pro** (cloud) + **Qwen vLLM** on-prem (US-047/048); Gemma LoRA es
+> trabajo post-presentacion. Ver [ADR-011](../../../docs/decisions/ADR-011-gemma4-lora-future.md).
 
 ## Rules — NON-NEGOTIABLE
 
@@ -21,7 +22,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep
   ~0.91% params). La via real es **`target_parameters=["mlp.experts.gate_up_proj","mlp.experts.down_proj"]`** (PEFT >= 0.17).
 - **QLoRA BLOQUEADO en Gemma 4 MoE**: `bitsandbytes` no cuantiza el layout 3D fused
   de los expertos. Usar LoRA BF16 (sin cuantizar los expertos), no QLoRA.
-- Validar VRAM ANTES de lanzar (Gemma 4: ~82 GB / 96; Qwen3-VL: ~92 GB / 96; Qwen3.5 serving: ~91 GB / 96)
+- Validar VRAM ANTES de lanzar (Gemma 4: ~82 GB / 96; Qwen3-VL: ~92 GB / 96; Qwen3-30B serving: medir antes de fijar una cifra)
 - Checkpoint cada 30 min a Azure Blob
 - **AgroMind es EVAL-ONLY (28482 QA, sin train split) -> NUNCA fine-tune sobre el (= leakage).**
   AgroMind-IT/ES (500) tambien es eval. El SFT debe ser sintetico PROPIO (trazas de tool calls).

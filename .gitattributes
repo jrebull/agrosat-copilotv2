@@ -27,7 +27,5 @@
 *.tiff binary
 *.xlsx binary
 
-# Drivers de merge del harness.
+# Driver de merge del grafo reconstruible.
 graphify-out/graph.json merge=graphify
-# Indice de chunks engram: union por id (make memory-setup registra el driver)
-.engram/manifest.json merge=engram-manifest

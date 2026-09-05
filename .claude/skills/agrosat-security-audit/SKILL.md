@@ -1,6 +1,6 @@
 ---
 name: agrosat-security-audit
-description: Run OWASP Top 10 (code-level), CIS GCP benchmarks (Prowler-style checklist), pre-deploy security checklist, secret scanning, dependency CVE audits, and cross-session isolation tests for AgroSatCopilot. Use before each deploy to staging/prod and on a weekly schedule. Posture checks are documented (run by humans during reviews) — not yet automated against the live cloud.
+description: Run OWASP Top 10 (code-level), CIS GCP + CIS Azure benchmarks (Prowler-style checklist), pre-deploy security checklist, secret scanning, dependency CVE audits, and cross-session isolation tests for AgroSatCopilot. Use before each deploy to staging/prod and on a weekly schedule. Posture checks are documented (run by humans during reviews) — not yet automated against the live cloud.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 Esta skill cubre **tres capas** de auditoría que se ejecutan secuencialmente antes de cada deploy a `staging` o `prod`:
 
 1. **Código** — OWASP Top 10, gitleaks, pip-audit / pnpm audit, ruff `--select=S`.
-2. **Posture cloud** — checklist CIS GCP (inspirado en Prowler, ejecutado manualmente por ahora; ver §"Roadmap" para automatización opcional).
+2. **Posture cloud** — checklist CIS GCP + CIS Azure (inspirado en Prowler, ejecutado manualmente por ahora; ver §"Roadmap" para automatización opcional).
 3. **Integración** — RLS por `session_id`, cross-session isolation tests, deploy gate.
 
 Complementa (no reemplaza) `agrosat-security` (implementación de controles).
@@ -52,7 +52,7 @@ Cada ítem se revisa manualmente con `gcloud` antes del deploy. Severidades alin
 
 **Score objetivo**: ≥ 80% pass antes de `deploy-prod`.
 
-## CIS Azure Posture Checklist (historico: la suscripcion H100 ya no existe; no se ejecuta)
+## CIS Azure Posture Checklist (subscripción H100)
 
 | ID | Severidad | Check |
 |----|-----------|-------|
@@ -155,6 +155,7 @@ El proyecto **no usa Prowler como dependencia** hoy (curso, presupuesto, complej
 - [ ] Cross-session isolation tests pasan
 - [ ] CSP headers + rate limit verificados en staging
 - [ ] CIS GCP posture checklist firmado para este commit
+- [ ] CIS Azure posture checklist firmado (si se modificó infra H100)
 - [ ] `tfsec` / `checkov` sobre `infrastructure/terraform/`
 - [ ] Workload Identity Federation en CI (no JSON SA en GitHub Secrets)
 - [ ] Findings `critical/high` sin resolver → 0

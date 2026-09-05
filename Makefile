@@ -1,4 +1,4 @@
-.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check paper-artifacts-seal paper-obsoletos-check preregistro-check oof-manifest-check protocolo-check us172-adjuntos micai-pdf micai-anon-check micai-bib micai-pdf-cr micai-pdf-es plan-check paper-bib-check micai2027-bib micai2027-figures preregistro-resellar panel-check ci-test-coverage-check
+.PHONY: help bootstrap bootstrap-gpu bootstrap-gpu-linux verify-structure dev stop test lint format check secrets-scan notebooks-strip notebooks-check i18n-check db-migrate db-rollback db-new db-status db-seed db-test-us015 features-extract-demo features-persist features-fuse-demo features-fuse-italy dagster-materialize-features feature-selection-subset feature-selection-build feature-selection-notebook feature-selection-test feature-fusion-build feature-fusion-notebook avance2-figures avance2-build mlflow-up mlflow-down train-baseline baseline-test ensembles-test baseline-notebook baseline-notebook-check baseline-v2-full s2-raw-parcels interpretability-test learning-curves-test ml-train-image train-l4 train-l4-smoke train-h100 azure-h100-start azure-h100-stop azure-h100-status mlflow-ui dagster-ui dvc-push dvc-pull eda-sentinel2 eda-alphaearth eda-bivariado eda-figures-avance1 eda-figures-paper-methods us073-transfer-figures eda-pastis-subset eda-notebook-avance1 paper-methods-notebook eda-pdf eda-dashboard eda-dashboard-test eval-agromind eval-geoanalyst serve-qwen35 cost-audit deploy-staging deploy-prod tf-init tf-plan tf-apply tf-fmt tf-validate farslip-dataset-build farslip-dataset-check farslip-train farslip-eval-pastis farslip-smoke-eval farslip-extract-embeddings feature-ablation phenology-train phenology-description-test reencuadre-notebook reencuadre-notebook-check reencuadre-notebook-full docs-pdf docs-pdf-clean docs-pdf-docker paper-tables paper-figures paper-pdf paper-pdf-clean paper-pdf-docker paper-cite-check paper-artifacts-check paper-artifacts-seal paper-obsoletos-check preregistro-check oof-manifest-check protocolo-check us172-adjuntos micai-pdf micai-anon-check micai-bib micai-pdf-cr micai-pdf-es plan-check paper-bib-check micai2027-bib micai2027-figures preregistro-resellar panel-check ci-test-coverage-check
 
 help:
 	@echo "AgroSatCopilot — comandos disponibles:"
@@ -332,7 +332,21 @@ train-l4-smoke:  ## US-022b-A AC-5 — smoke job 1 epoca TempCNN sintetica (~10 
 	    --config=$$tmpfile
 	@echo "Sigue el estado en: https://console.cloud.google.com/vertex-ai/training/custom-jobs"
 
-serve-qwen35:  ## HISTORICO: sirve Qwen3-30B-A3B-Instruct-2507 con vLLM; requiere Linux+GPU, no se usa en el articulo
+train-h100:  ## Azure H100 96GB ventana=Vn script=xxx.py
+	@echo "Lanzando $(script) en H100 ventana $(window)"
+	ssh agrosat@$(shell az vm show -d -g agrosat-rg -n agrosat-h100-prod --query publicIps -o tsv) \
+	  "cd ~/agro_sat_copilot && poetry run python ml/train/$(script)"
+
+azure-h100-start:
+	bash scripts/azure_h100_start.sh
+
+azure-h100-stop:
+	bash scripts/azure_h100_stop.sh
+
+azure-h100-status:
+	bash scripts/azure_h100_status.sh
+
+serve-qwen35:  ## Lanza vLLM Qwen3-30B-A3B-Instruct-2507 GPTQ-Int4 en H100
 	bash scripts/serve_qwen35.sh
 
 # === DVC / MLflow / Dagster ===
@@ -608,10 +622,9 @@ micai-pdf-cr:  ## Compila el camera-ready (no anonimo) del manuscrito MICAI, en 
 plan-check:  ## Comprueba el plan por epicas: dependencias, ciclos, estados y camino critico.
 	poetry run python scripts/plan_check.py
 
-# === Harness: grafo de conocimiento, memoria compartida engram, guias espejo ===
-.PHONY: graph-update graph-check graph-hooks memory-sync memory-import memory-check memory-status memory-setup harness-check harness-status guides-sync guides-check
+# === Harness: grafo de conocimiento y guias espejo ===
+.PHONY: graph-update graph-check graph-hooks harness-check harness-status guides-sync guides-check
 HARNESS_PY ?= $(shell command -v python >/dev/null 2>&1 && echo python || echo python3)
-ENGRAM_PROJECT ?= agrosat-copilotv2
 
 graph-update:  ## Reindexa el grafo de codigo (AST, 0 LLM); GRAPHIFY_FORCE=1 tras borrar codigo
 	PYTHONHASHSEED=0 graphify update .
@@ -622,24 +635,7 @@ graph-check:  ## Falla si graphify-out/graph.json no describe HEAD (o no existe)
 graph-hooks:  ## Instala los hooks git de graphify (post-commit, post-checkout) en este clon
 	graphify hook install
 
-memory-sync:  ## Exporta las memorias nuevas del proyecto a .engram/ (commitear); nunca --all
-	engram sync --project $(ENGRAM_PROJECT)
-
-memory-import:  ## Importa los chunks nuevos de .engram/ (manual; el plugin de Claude Code lo hace solo al arrancar)
-	$(HARNESS_PY) scripts/engram_manifest_merge.py
-	engram sync --import
-
-memory-check:  ## Verifica .engram/manifest.json sin tocarlo (exit 1 si hay drift)
-	$(HARNESS_PY) scripts/engram_manifest_merge.py --check
-
-memory-status:  ## Chunks locales, remotos y pendientes de importar
-	engram sync --status
-
-memory-setup:  ## Registra en este clon el merge driver de .engram/manifest.json (union por id)
-	git config merge.engram-manifest.driver "$(HARNESS_PY) scripts/engram_manifest_merge.py --driver %O %A %B"
-	git config merge.engram-manifest.name "union de chunks engram por id"
-
-harness-check:  ## Audita el harness: espejos, settings, plantillas, skills, agents, chunks, grafo
+harness-check:  ## Audita el harness: espejos, settings, plantillas, skills, agents y grafo
 	$(HARNESS_PY) scripts/harness_check.py
 
 harness-status:  ## Que hay en vuelo: rama, grafo, memoria pendiente, US abiertas, espejos, plan

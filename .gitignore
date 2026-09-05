@@ -84,22 +84,15 @@ crash.*.log
 .DS_Store
 Thumbs.db
 
-# ── Engram (memoria compartida del equipo) ───────────────────────────────────
-# La base SQLite vive fuera del repo (~/.engram/engram.db) y NUNCA se commitea.
-# Lo que SI viaja en cada PR son los chunks exportados por `make memory-sync`
-# (.engram/chunks/*.jsonl.gz + .engram/manifest.json); se importan con
-# `make memory-import`. Ver AGENTS.md, seccion "Memoria compartida del equipo".
+# ── Engram (memoria local de desarrollo; ADR-015 estudia compartirla) ─────────
+# Ningún estado nativo de Engram viaja en Git mientras ADR-015 siga PROPUESTA.
+.engram/
 *.engram.db
 *.engram.db-wal
 *.engram.db-shm
 .engram-export/
-.engram/*.tmp
-# La DB de trabajo que engram puede crear dentro del repo nunca viaja (solo chunks + manifest + config):
-.engram/engram.db
-.engram/engram.db-*
-.engram/*.db
-.engram/*.db-*
-.engram/*.log
+# Solo se admitiría un formato revisado y redactado, distinto del volcado nativo.
+!docs/engram/*.engram
 
 # ── Logs ──────────────────────────────────────────────────────────────────────
 *.log

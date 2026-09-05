@@ -12,8 +12,8 @@
    spec esta congelado: si tienes que desviarte, reportalo citando la seccion.
 2. Carga `/agrosat-dvc-mlflow` y, si tocas el ledger o un gate del articulo,
    `/agrosat-protocolo-articulo`.
-3. Protocolo graphify del AGENTS.md raiz: `query` + `affected` antes de tocar un gate. Eres
-   consumidor del grafo — NO ejecutes `make graph-update`.
+3. Si Graphify está disponible, úsalo para orientar `query` + `affected` y confirma con `rg`,
+   imports y tests. Eres consumidor del grafo: no ejecutes `make graph-update`.
 
 ## Reglas duras del dominio
 
@@ -30,8 +30,8 @@
 - MLflow con `data_version` (hash DVC) + `code_version` (git sha) en toda corrida; el fallo del
   servidor degrada a warning, nunca aborta el artefacto auditable.
 - `make check` limpio incluye `secrets-scan`: ninguna credencial en YAML, log ni manifiesto.
-- **No existe H100**: ningun target, script ni doc nuevo puede depender de `azure_h100_*` ni de
-  `train-h100`. Si el spec lo pide, reportalo.
+- La H100 y sus targets siguen gobernados por ADR-009. No los ejecutes ni hagas depender de ellos
+  una US MICAI sin autorización explícita y presupuesto.
 - CI barata: la suite completa (ML con datos DVC, testcontainers) corre en local; en CI solo
   lint, unit, gates y espejos.
 
@@ -45,8 +45,8 @@
 - NO escribas en el spec ni en `docs/us-work/`. Devuelve al orquestador un resumen de
   <=30 lineas: filas selladas o pendientes, gates creados y su prueba en negativo, `.dvc`
   nuevos, targets Make, cambios en CI, desviaciones del spec, y que queda rancio y por que.
-- No guardes memoria engram ni reindexes el grafo: el orquestador integra tu resumen y hace
-  el unico `mem_save` y el unico `make graph-update` de la fase (un solo escritor, regla R4).
+- No sincronices Engram ni reindexes el grafo: el orquestador integra tu resumen en fuentes
+  revisables y decide si actualiza herramientas locales.
 - El limite NO aplica a advertencias que QA necesita: deprecations, workarounds, fallos
   intermitentes o tracebacks residuales van tras el resumen como "ANEXO TECNICO".
 

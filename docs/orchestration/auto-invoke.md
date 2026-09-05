@@ -6,7 +6,9 @@
 
 1. **Antes de escribir o auditar cualquier comparación, intervalo, contraste, artefacto o cifra, cargar `agrosat-protocolo-articulo`.** Es la traducción ejecutable del preregistro, del estimando y del ledger.
 2. **Antes de tocar `paper/micai/` o `docs/paper/`, cargar `agrosat-paper-micai`.**
-3. **Grafo antes que grep** (`graphify query`, AGENTS.md raíz §Grafo) y **memoria al empezar** (`mem_search`, skill `agrosat-engram-memory`).
+3. **Herramientas opcionales no son bloqueos.** Si Graphify está instalado, puede orientar el
+   impacto antes de confirmar con `rg`, imports y tests. Engram puede aportar memoria local, nunca
+   una fuente normativa ni una sincronización implícita (ADR-015).
 
 ## Artículo MICAI 2027
 
@@ -43,7 +45,7 @@
 | Predictor tabular (XGBoost sobre AlphaEarth) en un banco | `agrosat-ml-baseline` |
 | Ensamble, OOF, arnés `ml/eval/oof/` | `agrosat-ml-ensemble` + `agrosat-protocolo-articulo` |
 | Benchmarks del sistema (AgroMind, GeoAnalystBench) — solo si una US lo pide | `agrosat-ml-evaluation` |
-| Gemma 4 LoRA / serving de LLM | `agrosat-llm-finetuning` (FUTURE: sin hardware, fuera del alcance del artículo) |
+| Gemma 4 LoRA / serving de LLM | `agrosat-llm-finetuning` + `agrosat-azure-h100` (FUTURE según ADR-011; fuera del alcance del artículo) |
 
 ## Sistema (mantenimiento)
 
@@ -65,6 +67,7 @@
 | Terraform GCP `dev` (dormido) | `agrosat-terraform` + `agrosat-gcp-services` |
 | Workflow de GitHub Actions | `agrosat-terraform` + `agrosat-gcp-services` |
 | Alquilar GPU L4 spot (`make train-l4`) o auditar costo | `agrosat-finops` |
+| Operar la H100 de Azure cuando una US y el presupuesto lo autoricen | `agrosat-azure-h100` + `agrosat-finops` |
 | Drift Evidently (dormido) | `agrosat-evidently-drift` |
 
 ## Seguridad y QA
@@ -80,8 +83,8 @@
 
 | Acción | Skill o comando |
 |---|---|
-| Saber qué existe y dónde; impacto río abajo | `graphify query` / `graphify affected` (AGENTS.md raíz §Grafo) |
+| Saber qué existe y dónde; impacto río abajo | `rg` / imports / tests; Graphify es apoyo opcional |
 | Reindexar el grafo tras integrar | `make graph-update` (un solo escritor) |
-| Persistir una decisión, un bug o un gotcha; sincronizar la memoria del equipo | `agrosat-engram-memory` (`make memory-sync` / `memory-import`; comprobar antes que el binario y el MCP responden) |
+| Persistir una decisión compartida | ADR, `docs/us-resolved/` o plan; Engram queda local y opcional mientras ADR-015 sea PROPUESTA |
 | Editar cualquier `AGENTS.md`; auditar el harness | `make guides-sync` + `make harness-check` |
 | Crear rama, commitear, abrir PR, cerrar US | `agrosat-git-workflow` |

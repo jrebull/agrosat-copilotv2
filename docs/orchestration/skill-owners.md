@@ -2,7 +2,7 @@
 
 > Qué subagente es dueño de qué skills, y a quién lanza la Fase 3 en cada épica. Auto-invoke en [`auto-invoke.md`](auto-invoke.md). Plantillas por dominio en [`subagent-prompts/`](subagent-prompts/).
 
-## Skills y sus owners (31)
+## Skills y sus owners (32)
 
 | Skill | Owner(s) |
 |---|---|
@@ -14,11 +14,12 @@
 | `agrosat-ml-baseline` | `ml-engineer` |
 | `agrosat-ml-features` | `geo-data-engineer` |
 | `agrosat-gee-alphaearth` | `geo-data-engineer` |
-| `agrosat-llm-finetuning` | `ml-engineer` (FUTURE, sin hardware) |
+| `agrosat-llm-finetuning` | `ml-engineer` (FUTURE, ADR-011) |
 | `agrosat-dvc-mlflow` | `mlops-engineer`, `ml-engineer` |
 | `agrosat-dagster-mlops` | `mlops-engineer`, `geo-data-engineer` |
 | `agrosat-terraform` | `mlops-engineer`, `finops-auditor` |
 | `agrosat-gcp-services` | `mlops-engineer`, `finops-auditor` |
+| `agrosat-azure-h100` | `mlops-engineer`, `ml-engineer`, `finops-auditor` |
 | `agrosat-finops` | `finops-auditor`, `mlops-engineer` |
 | `agrosat-evidently-drift` | `mlops-engineer` (dormido) |
 | `agrosat-backend-api` | `backend-engineer` |
@@ -36,7 +37,7 @@
 | `agrosat-testing` | `qa-reviewer`, todos los ingenieros |
 | `agrosat-code-review` | `qa-reviewer`, `security-reviewer` |
 | `agrosat-git-workflow` | transversal (cualquier sesión) |
-| `agrosat-engram-memory` | transversal (cualquier sesión) |
+| `agrosat-engram-memory` | transversal y local; la sincronización espera ADR-015 |
 
 ## Los 10 subagentes (`.claude/agents/`)
 

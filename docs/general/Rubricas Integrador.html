@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Integrador - Rúbricas Completas</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --accent-color: #2c7a7b;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            border-bottom: 4px solid var(--secondary-color);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            background-color: #edf2f7;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        h3 {
+            color: var(--accent-color);
+            margin-top: 25px;
+        }
+        .phase-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+        }
+        .phase-content {
+            padding: 0 25px 25px 25px;
+        }
+        .meta-info {
+            background-color: #e6fffa;
+            color: #234e52;
+            padding: 10px 15px;
+            border-left: 4px solid var(--accent-color);
+            font-weight: 500;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9em;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+        .pts-col {
+            min-width: 80px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+        .rubric-level {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .excelente { color: #276749; }
+        .bien { color: #975a16; }
+        .insuficiente { color: #9b2c2c; }
+        
+        .specifications, .resources {
+            background-color: #ebf8ff;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 25px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        .resources {
+            background-color: #fffaf0;
+            border-left-color: #dd6b20;
+        }
+        code {
+            background-color: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Proyecto Integrador - Rúbricas y Fases</h1>
+
+    <div class="phase-card">
+        <h2>Conformación de equipos y planteamiento del proyecto</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 18 de ene de 2026 23:59 | Intentos: Ilimitados | Puntaje: 100% [cite: 1]
+            </div>
+            
+            <h3>Objetivo</h3>
+            <ul>
+                <li>1.1 Identificar los requisitos generales, fases y políticas relacionadas con el desarrollo del proyecto integrador. [cite: 1]</li>
+                <li>1.2 Identificar una problemática real y vigente del sector industrial o de instituciones gubernamentales. [cite: 2]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>El propósito de esta actividad es permitirles a ustedes, estudiantes, adquirir experiencia en la formación de equipos de proyecto en el contexto de problemas empresariales reales. [cite: 3] Aprenderán a evaluar propuestas de proyectos, colaborar en equipos interdisciplinarios y seleccionar un proyecto al que se unirán, basándose en la relevancia y el interés personal. [cite: 4] Las siguientes fases serán dirigidas por el profesor(a) titular del curso durante una sesión síncrona: [cite: 5]</p>
+            <ul>
+                <li><strong>Propuesta de proyectos:</strong> Los estudiantes presentarán una breve descripción de la problemática o desafío que sus empresas enfrentan actualmente. [cite: 5] Cada presentación debe incluir una visión general de la situación, los objetivos comerciales, la disponibilidad de datos y la posible relevancia del proyecto. [cite: 6]</li>
+                <li><strong>Evaluación de propuestas:</strong> Los estudiantes que no presenten propuestas de proyectos (escuchas) deberán atender atentamente las presentaciones. [cite: 7] Después de cada presentación, se abrirá un breve período de preguntas y respuestas para aclaración de dudas. [cite: 8]</li>
+                <li><strong>Selección de proyectos:</strong> Después de considerar todas las propuestas, los estudiantes escuchas deberán elegir un proyecto al que deseen unirse. [cite: 9] Los alumnos expositores decidirán a qué escuchas sumarán, limitando el número de miembros a tres para mantener la efectividad del trabajo en equipo. [cite: 10]</li>
+                <li><strong>Formación de equipos:</strong> Cada equipo deberá enrolarse en los grupos definidos en Canvas, a través del menú Personas > Project Groups. [cite: 11] Además, deberán seleccionar un líder o coordinador del equipo que se encargará de la comunicación y la organización. [cite: 12] Los alumnos que no asistan a la sesión, deberán solicitar su enrolamiento al equipo docente. [cite: 13]</li>
+            </ul>
+            <p>Una vez que el equipo ha sido conformado (NO SE ACEPTARÁN ENTREGAS SIN PREVIA ASIGNACIÓN DE EQUIPO), elaborar un documento con los datos generales del proyecto, que incluya: [cite: 14]</p>
+            <ul>
+                <li><strong>Portada:</strong> Con los datos de los miembros del equipo (nombre y matrícula) [cite: 14]</li>
+                <li><strong>Datos generales del proyecto:</strong>
+                    <ol>
+                        <li><strong>Título:</strong> El nombre debe ser descriptivo y reflejar la esencia y el propósito del proyecto, asegurando que esté alineado con los objetivos y metas que se quieren lograr. [cite: 14] Si es relevante, considerar incluir palabras clave. [cite: 15]</li>
+                        <li><strong>Empresa / institución:</strong> Denominación de la entidad, organización u ONG en la que se ha detectado el desafío. [cite: 16]</li>
+                        <li><strong>Sector industrial al que pertenece:</strong> Categorización o clasificación de la entidad según la industria en la que opera. [cite: 17] Esta clasificación es útil para comprender la naturaleza de las operaciones. Utiliza el catálogo de sectores. [cite: 18, 19]</li>
+                        <li><strong>Lugar de aplicación:</strong> Especificar la ubicación geográfica y el área / departamento / división. [cite: 19]</li>
+                        <li><strong>Dominio de aplicación:</strong> Elegir y justificar la opción que describe el principal enfoque del proyecto: Modelos predictivos (Supervisados), Inteligencia de negocios (No supervisados), Sistemas de recomendación, Procesamiento de lenguaje natural, Visión computacional, Movilidad autónoma. [cite: 20, 21]</li>
+                    </ol>
+                </li>
+            </ul>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Modalidad:</strong> En equipo. [cite: 21]</li>
+                    <li><strong>Medio de entrega:</strong> A través del botón “Entregar tarea” de esta actividad. [cite: 22]</li>
+                    <li><strong>Formato:</strong> Archivo en PDF. [cite: 22]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>DatosGenerales.#Equipo</code> [cite: 23]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Equipo de trabajo</strong> [cite: 24]</td>
+                    <td class="pts-col">50 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (50 ptos)</span> Se conforma el equipo para iniciar con las actividades del proyecto y se completa el registro en la plataforma. [cite: 25]</td>
+                    <td><span class="rubric-level bien">Bien (30 ptos)</span> Se conforma el equipo para iniciar con las actividades del proyecto pero no se completa el registro en la plataforma. [cite: 26]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Los alumnos no asisten a la sesión de "Propuesta de proyectos" y no tienen acercamiento ni con estudiantes expositores, ni con el equipo académico. [cite: 27]</td>
+                </tr>
+                <tr>
+                    <td><strong>Título</strong> [cite: 28]</td>
+                    <td class="pts-col">10 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (10 ptos)</span> El título es claro en su descripción y comunica de manera evidente el propósito del proyecto. [cite: 28]</td>
+                    <td><span class="rubric-level bien">Bien (5 ptos)</span> El título presenta áreas de oportunidad en cuanto a la claridad en su descripción y en la forma de comunicar el propósito del proyecto. [cite: 29]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> El título no es claro y no comunica el propósito del proyecto. [cite: 30]</td>
+                </tr>
+                <tr>
+                    <td><strong>Empresa / Organización</strong> [cite: 31]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Se incluye el nombre de la empresa u organización donde se llevará a cabo el proyecto, el sector al que pertenece y el lugar de aplicación (ubicación geográfica, y el área, departamento o división involucradas en la solución). [cite: 31]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Se incluye la mayor parte de los datos solicitados. [cite: 32]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Se incluyen solamente uno a dos de los datos solicitados. [cite: 33]</td>
+                </tr>
+                <tr>
+                    <td><strong>Dominio de aplicación</strong> [cite: 33]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Se selecciona y justifica la elección del dominio, estableciendo una conexión evidente con el proyecto. [cite: 34]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Se selecciona el dominio, pero la justificación presenta áreas de oportunidad para que la conexión con el proyecto resulte evidente. [cite: 35]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se selecciona un dominio, o bien, se selecciona, pero no se justifica. [cite: 36]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 0. Propuesta de proyecto y firma de convenios</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 25 de ene de 2026 23:59 [cite: 37]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>1.3 Describir las fases de la metodología a emplear. [cite: 37]</li>
+                <li>1.4 Definir los objetivos comerciales y traducirlos en objetivos del proyecto. [cite: 38]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Esta fase consiste en definir el alcance del proyecto integrador, considerando los objetivos comerciales, para evaluar con mayor precisión el impacto del proyecto en la empresa/organización. [cite: 39] La propuesta debe contener los siguientes elementos, basándose en la metodología CRISP-ML: [cite: 40]</p>
+            <ol>
+                <li><strong>Antecedentes:</strong> Información y contextos que proporcionan la base del proyecto. Incluyen la descripción de la empresa / organización y del proceso o procesos de negocios que serán impactados. [cite: 40, 41]</li>
+                <li><strong>Entendimiento del negocio:</strong>
+                    <ul>
+                        <li>Formulación del problema: ¿Qué es lo que se intenta resolver? [cite: 41]</li>
+                        <li>Contexto: ¿Por qué es importante resolver este problema? [cite: 42]</li>
+                        <li>Objetivos: ¿Cuál es la meta prevista? [cite: 42]</li>
+                        <li>Preguntas clave: ¿Cuáles son las preguntas clave que deben responderse? [cite: 43]</li>
+                        <li>Involucrados: ¿Quiénes participan: personal / equipos / departamentos? ¿En qué etapa y con qué nivel/tipo? [cite: 43, 44]</li>
+                    </ul>
+                </li>
+                <li><strong>Entendimiento de los datos:</strong>
+                    <ul>
+                        <li>Descripción de los datos: ¿Cuál es el contexto de estos datos? ¿Qué contienen? [cite: 44, 45]</li>
+                        <li>Técnica de ML: Supervisado (Regresión, Clasificación), No-supervisado, Profundo. [cite: 45]</li>
+                        <li>Identificación de las variables: ¿Cuáles son las entradas y la salida? [cite: 45]</li>
+                    </ul>
+                </li>
+                <li><strong>Convenios:</strong> Asegurar el permiso y el acceso a los datos necesarios. Si se solicita un convenio de privacidad, indicarlo al profesor(a). Deberán incluir en el apartado de Anexos el convenio firmado. [cite: 46-48]</li>
+            </ol>
+            
+            <p>Con los elementos anteriores, construyan un documento PDF que contenga: Portada, Índice, Antecedentes, Entendimiento del negocio, Entendimiento de los datos, Bibliografía (estilo APA 7 o IEEE) y Anexos (si aplica). [cite: 49-53] Notas: Es importante que incluyan pies de figuras y tablas. Revisen que la redacción sea clara y no contenga errores ortográficos. [cite: 53, 54]</p>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Modalidad:</strong> En equipo. [cite: 55]</li>
+                    <li><strong>Medio de entrega:</strong> Botón “Entregar tarea”. [cite: 55]</li>
+                    <li><strong>Formato:</strong> Archivo en PDF. [cite: 56]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance0.#Equipo</code> [cite: 56]</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Visengeriyeva, L., et al. (2023). CRISP-ML(Q). The ML Lifecycle Process. MLOps. INNOQ. <a href="https://ml-ops.org/content/crisp-ml">Enlace</a> [cite: 57, 58]</li>
+                    <li>Hernández-Sampieri, R., y Mendoza, C. (2023). Capítulo 3, El planteamiento del problema en la ruta cuantitativa, de Metodología de la investigación. McGraw-Hill. [cite: 60-62]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 1. Análisis exploratorio de datos</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 1 de feb de 2026 23:59 [cite: 65]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>2.1 Elegir las características más relevantes para reducir la dimensionalidad y aumentar la capacidad de generalización del modelo. [cite: 65]</li>
+                <li>2.2 Abordar y corregir los problemas identificados en los datos. [cite: 66]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Realizar un análisis exploratorio de datos (EDA), describir los datos utilizando técnicas estadísticas y de visualización (análisis univariante y bi/multivariante), así como aplicar y justificar operaciones de preprocesamiento, relacionadas con el manejo de valores faltantes, atípicos y alta cardinalidad. [cite: 67] Es importante que incluyan sus conclusiones del EDA, identificando tendencias o relaciones importantes. [cite: 68]</p>
+            <p>Preguntas comunes a abordar a través del EDA: [cite: 69]</p>
+            <ul>
+                <li>¿Hay valores faltantes en el conjunto de datos? ¿Se pueden identificar patrones de ausencia? [cite: 69, 70]</li>
+                <li>¿Cuáles son las estadísticas resumidas del conjunto de datos? [cite: 70]</li>
+                <li>¿Hay valores atípicos en el conjunto de datos? [cite: 71]</li>
+                <li>¿Cuál es la cardinalidad de las variables categóricas? [cite: 71]</li>
+                <li>¿Existen distribuciones sesgadas en el conjunto de datos? ¿Necesitamos aplicar alguna transformación no lineal? [cite: 72]</li>
+                <li>¿Se identifican tendencias temporales? (En caso de que el conjunto incluya una dimensión de tiempo). [cite: 72, 73]</li>
+                <li>¿Hay correlación entre las variables dependientes e independientes? [cite: 73]</li>
+                <li>¿Cómo se distribuyen los datos en función de diferentes categorías? (análisis bivariado) [cite: 74]</li>
+                <li>¿Se deberían normalizar las imágenes para visualizarlas mejor? [cite: 74]</li>
+                <li>¿Hay desequilibrio en las clases de la variable objetivo? [cite: 75]</li>
+            </ul>
+            <p>Deberán contar con un repositorio en GitHub, para compartir los resultados con el equipo docente. [cite: 75]</p>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Modalidad:</strong> En equipo. [cite: 76]</li>
+                    <li><strong>Formato:</strong> Liga del archivo en el repositorio compartido de GitHub del equipo. [cite: 77]</li>
+                    <li><strong>Importante:</strong> La libreta debe ejecutarse de principio a fin de manera SECUENCIAL antes de enviarla. [cite: 78]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance1.#Equipo</code> [cite: 79]</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Visengeriyeva, L., et al. (2023). CRISP-ML(Q). The ML Lifecycle Process. MLOps. INNOQ. <a href="https://ml-ops.org/content/crisp-ml">Enlace</a> [cite: 80, 81]</li>
+                    <li>Kumar Mukhiya, S., y Ahmed, U. (2020). Hands-On Exploratory Data Analysis with Python. Packt Publishing. <a href="https://learning.oreilly.com/library/view/hands-on-exploratory-data/9781789537253/0957090f-fa4d-4145-95dd-6d3782e5c04d.xhtml">Enlace en O'Reilly</a> [cite: 83, 84]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 2. Ingeniería de características</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 8 de feb de 2026 23:59 [cite: 90]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>2.3 Crear nuevas características para mejorar el rendimiento de los modelos. [cite: 90]</li>
+                <li>2.4 Mitigar el riesgo de características sesgadas y acelerar la convergencia de algunos algoritmos. [cite: 91]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>En esta fase (FE - Feature Engineering) se aplicarán operaciones comunes para convertir los datos crudos del mundo real, en un conjunto de variables útiles. [cite: 92] El procesamiento puede incluir: Generación de nuevas características, Discretización o binning, Codificación, Escalamiento, Transformación (logarítmica, exponencial, raíz cuadrada, Box – Cox, Yeo – Johnson). * Todas las decisiones y técnicas empleadas deben ser justificadas. [cite: 93]</p>
+            <p>Además, se utilizarán métodos de filtrado para la selección de características y técnicas de extracción de características. [cite: 94] Ejemplos ilustrativos: Umbral de varianza, Correlación, Chi-cuadrado, ANOVA, Análisis de componentes principales (PCA), Análisis factorial (FA). * Es necesario fundamentar los métodos ejecutados. [cite: 95] Incluir conclusiones de la fase de "Preparación de los datos" en el contexto de la metodología CRISP-ML. [cite: 96]</p>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Modalidad:</strong> En equipo. [cite: 97]</li>
+                    <li><strong>Formato:</strong> Liga del archivo en el repositorio compartido de GitHub del equipo. [cite: 98]</li>
+                    <li><strong>Importante:</strong> La libreta debe ejecutarse de principio a fin de manera SECUENCIAL antes de enviarla. [cite: 99]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance2.#Equipo</code> [cite: 100]</li>
+                </ul>
+            </div>
+            
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Galli, S. (2022). Python Feature Engineering Cookbook. Packt Publishing. <a href="https://learning.oreilly.com/library/view/python-feature-engineering/9781804611302/B18894_03.xhtml">Enlace</a> [cite: 104, 105]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Construcción</strong> [cite: 109]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Se demuestra profundo conocimiento del dominio al crear características. Se codifican variables categóricas empleando técnicas adecuadas. Se justifica cada decisión. [cite: 110, 111]</td>
+                    <td><span class="rubric-level bien">Bien (15 ptos)</span> Se construyen nuevas características, pero no se justifican las decisiones y técnicas empleadas. [cite: 112]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se crea ninguna característica partiendo de las existentes. [cite: 113]</td>
+                </tr>
+                <tr>
+                    <td><strong>Normalización</strong> [cite: 113]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Se escalan las variables y se aplican transformaciones comunes para lograr una distribución normal, si es necesario. Se justifica cada técnica empleada. [cite: 114-116]</td>
+                    <td><span class="rubric-level bien">Bien (15 ptos)</span> Se escalan y/o transforman las variables, pero no se justifican las decisiones y técnicas. [cite: 116]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se aplica ninguna transformación, siendo que éstas sí eran requeridas. [cite: 117]</td>
+                </tr>
+                <tr>
+                    <td><strong>Selección / extracción</strong> [cite: 117]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Se aplican métodos de filtrado y extracción alineados a los resultados obtenidos de las pruebas. [cite: 118]</td>
+                    <td><span class="rubric-level bien">Bien (15 ptos)</span> Se aplican métodos de manera arbitraria, no justificados con las pruebas efectuadas. [cite: 119]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se aplica ninguna técnica de selección / extracción, siendo requeridas. [cite: 120]</td>
+                </tr>
+                <tr>
+                    <td><strong>Conclusiones</strong> [cite: 120]</td>
+                    <td class="pts-col">10 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (10 ptos)</span> Se incluye una conclusión general de la fase en el contexto de la metodología CRISP-ML. [cite: 121]</td>
+                    <td><span class="rubric-level bien">Bien (5 ptos)</span> La conclusión general no está alineada al contexto de la metodología CRISP-ML. [cite: 122]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se incluyen conclusiones. [cite: 122]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 3. Baseline</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: mié 18 de feb de 2026 23:59 [cite: 123]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>3.1 Establecer las medidas de calidad del modelo de aprendizaje automático. [cite: 123]</li>
+                <li>3.2 Proporcionar un marco de referencia para evaluar y mejorar modelos más avanzados. [cite: 124]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Este avance consiste en construir un modelo de referencia que permita evaluar la viabilidad del problema. [cite: 125] Si el baseline tiene un rendimiento similar al azar, podría indicar que el problema es intrínsecamente difícil o que los datos no contienen suficiente información. [cite: 126] Un baseline facilita también la gestión de expectativas dentro del equipo y con los stakeholders. [cite: 128] Preguntas que deberán abordar: [cite: 129]</p>
+            <ul>
+                <li>¿Qué algoritmo se puede utilizar como baseline para predecir las variables objetivo? [cite: 129]</li>
+                <li>¿Se puede determinar la importancia de las características para el modelo generado? Recuerden que incluir características irrelevantes puede afectar negativamente el rendimiento. [cite: 130, 131]</li>
+                <li>¿El modelo está sub/sobreajustando los datos de entrenamiento? [cite: 132]</li>
+                <li>¿Cuál es la métrica adecuada para este problema de negocio? [cite: 132]</li>
+                <li>¿Cuál debería ser el desempeño mínimo a obtener? [cite: 133]</li>
+            </ul>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Formato:</strong> Liga del archivo en el repositorio compartido de GitHub. [cite: 135]</li>
+                    <li><strong>Importante:</strong> Libreta SECUENCIAL. [cite: 136]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance3.#Equipo</code> [cite: 137]</li>
+                </ul>
+            </div>
+            
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Géron, A. (2022). Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow (3rd ed.). O´Reilly Media. <a href="https://learning.oreilly.com/library/view/hands-on-machine-learning/9781098125967/">Enlace</a> [cite: 141, 142]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Algoritmo</strong> [cite: 146]</td>
+                    <td class="pts-col">40 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (40 ptos)</span> Se explica por qué el algoritmo es apropiado para el tipo de problema, considerando cantidad de datos, tipo, interpretabilidad, etc. [cite: 146, 147]</td>
+                    <td><span class="rubric-level bien">Bien (20 ptos)</span> El algoritmo es adecuado, pero no se incluye un análisis que justifique su elección. [cite: 148]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Se utiliza un algoritmo inadecuado para el problema. [cite: 149]</td>
+                </tr>
+                <tr>
+                    <td><strong>Características importantes</strong> [cite: 150]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Se hace un análisis de la relevancia de las características, utilizando métodos de selección/extracción. Se incluye representación visual. [cite: 150]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Sólo se aplica el(los) método(s) sin interpretación de los resultados. [cite: 151]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Aunque el algoritmo lo permite, no se incluye ninguna técnica de selección / extracción. [cite: 152]</td>
+                </tr>
+                <tr>
+                    <td><strong>Sub / sobreajuste</strong> [cite: 153]</td>
+                    <td class="pts-col">10 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (10 ptos)</span> Se comparan diferentes métricas (entrenamiento y prueba) para concluir si hay sub/sobreajuste, utilizando curvas de aprendizaje u otros gráficos. [cite: 153, 154]</td>
+                    <td><span class="rubric-level bien">Bien (5 ptos)</span> Se concluye sobre el sub/sobreajuste, pero no se especifican los signos que lo demuestran. [cite: 155]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se demuestra comprensión adecuada de los signos de sub/sobreajuste. [cite: 156]</td>
+                </tr>
+                <tr>
+                    <td><strong>Métrica</strong> [cite: 157]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> La métrica elegida está alineada con los objetivos del problema, permitiendo interpretación significativa (ej. clases desbalanceadas). [cite: 157, 158]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> La elección de la métrica es genérica, no justificada en el contexto. [cite: 158]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Se selecciona una métrica inapropiada para la evaluación. [cite: 159, 160]</td>
+                </tr>
+                <tr>
+                    <td><strong>Desempeño</strong> [cite: 161]</td>
+                    <td class="pts-col">10 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (10 ptos)</span> Se establece un desempeño mínimo y se verifica si el baseline alcanza un nivel aceptable. [cite: 161]</td>
+                    <td><span class="rubric-level bien">Bien (5 ptos)</span> Se establece el rendimiento como referencia futura, sin analizar el estado actual del problema. [cite: 162]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se realiza análisis del desempeño. [cite: 163]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 4. Modelos alternativos</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 22 de feb de 2026 23:59 [cite: 164]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>3.3 Explorar una gama diversa de técnicas y enfoques para identificar el de mejor desempeño. [cite: 164]</li>
+                <li>3.4 Encontrar la configuración óptima que maximiza el rendimiento del modelo en una tarea específica. [cite: 165]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Construir múltiples modelos (individuales, no ensambles) y evaluar su desempeño. Diferentes algoritmos pueden comportarse de manera óptima en diferentes tipos de datos. [cite: 166, 167] Acciones que deberás abordar: [cite: 172]</p>
+            <ul>
+                <li>Construir al menos 6 modelos diferentes (individuales, no ensambles), utilizando algoritmos variados. [cite: 172]</li>
+                <li>Comparar el rendimiento de los modelos obtenidos. [cite: 173]</li>
+                <li>Seleccionar los dos modelos que proporcionen el mejor rendimiento. [cite: 173]</li>
+                <li>Ajustar los dos mejores modelos. [cite: 174]</li>
+                <li>Elegir el modelo individual final. [cite: 174]</li>
+            </ul>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Formato:</strong> Liga del archivo en GitHub, ejecución SECUENCIAL. [cite: 176, 177]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance4.#Equipo</code> [cite: 178]</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Géron, A. (2022). Hands-On Machine Learning with Scikit-Learn... <a href="https://learning.oreilly.com/library/view/hands-on-machine-learning/9781098125967/">Enlace</a> [cite: 180, 187]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Comparativa</strong> [cite: 193]</td>
+                    <td class="pts-col">60 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (60 ptos)</span> Se construyen al menos 6 modelos (individuales). Se ordenan por la métrica principal, incluyendo al menos otras dos métricas relevantes y tiempos de entrenamiento. [cite: 193, 194]</td>
+                    <td><span class="rubric-level bien">Bien (30 ptos)</span> Se construyen los 6 modelos; sin embargo, no se incluye una tabla comparativa clara. [cite: 195]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Se generan menos de seis modelos y los resultados no se resumen en una tabla. [cite: 196]</td>
+                </tr>
+                <tr>
+                    <td><strong>Ajuste fino</strong> [cite: 197]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Se ajustan los hiperparámetros (tasas de aprendizaje, etc.) para mejorar la capacidad del modelo. El número de iteraciones permite profundidad. [cite: 197, 198]</td>
+                    <td><span class="rubric-level bien">Bien (15 ptos)</span> Aunque se observa mejora, el espacio de búsqueda es muy limitado. [cite: 199]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> El ajuste fino es insatisfactorio, no se observa mejoría en el rendimiento. [cite: 200]</td>
+                </tr>
+                <tr>
+                    <td><strong>Modelo individual</strong> [cite: 201]</td>
+                    <td class="pts-col">10 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (10 ptos)</span> Se presentan argumentos sólidos para la elección del modelo final (trade-offs, interpretabilidad, etc.). [cite: 202, 203]</td>
+                    <td><span class="rubric-level bien">Bien (5 ptos)</span> La justificación sólo se enfoca en la métrica, sin considerar complejidad o contexto de negocio. [cite: 204]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se elige establece cuál de los dos modelos ajustados será considerado. [cite: 205]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 5. Modelo final</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 1 de mar de 2026 23:59 [cite: 206]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>3.5 Mejorar significativamente el rendimiento al aprovechar las fortalezas de diferentes modelos y reducir sus debilidades. [cite: 207]</li>
+                <li>3.6 Evaluar la calidad de las predicciones del modelo en datos no vistos. [cite: 208]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Se busca crear una variedad de modelos de ensamble. Para ello, tomar en cuenta: [cite: 209]</p>
+            <ul>
+                <li>Incluir la optimización de hiperparámetros para los modelos más relevantes. [cite: 210]</li>
+                <li>Utilizar algoritmos que apliquen tanto estrategias de ensamble homogéneas como heterogéneas. [cite: 211]</li>
+                <li>Para las estrategias de stacking y/o blending, se deberán emplear los modelos individuales de mejor rendimiento de la fase anterior. [cite: 212]</li>
+                <li>Sintetizar los resultados en una tabla comparativa ordenados por métrica principal, incorporando otras métricas y tiempos de entrenamiento. [cite: 213-215]</li>
+                <li>Elegir el modelo final alineado con el negocio. Del modelo elegido, generar gráficos (Curva ROC, Matriz de confusión, Precision-Recall, Análisis de residuos, etc.) con su interpretación. [cite: 215-217]</li>
+            </ul>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Formato:</strong> Liga de GitHub, SECUENCIAL. [cite: 219, 220]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance5.#Equipo</code> [cite: 221]</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Singh, A. (2023). Comprehensive Guide to Ensemble Learning. Analytics Vidhya. [cite: 222]</li>
+                    <li>VanderPlas, J. (2022). Python Data Science Handbook. O´Reilly Media. [cite: 224, 225]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Ensambles</strong> [cite: 231]</td>
+                    <td class="pts-col">60 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (60 ptos)</span> Se generan al menos cuatro modelos, cubriendo estrategias homogéneas y heterogéneas. Se utilizan los mejores individuales para stacking/blending. [cite: 231, 232]</td>
+                    <td><span class="rubric-level bien">Bien (30 ptos)</span> Se generan cuatro modelos, pero sólo se cubre una estrategia de ensamble. [cite: 233]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se incluye la cantidad mínima especificada de ensambles. [cite: 234]</td>
+                </tr>
+                <tr>
+                    <td><strong>Selección</strong> [cite: 235]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> La comparativa incluye el modelo individual de mejor rendimiento y los cuatro ensambles. Se presentan argumentos sólidos para la elección final. [cite: 235-237]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> La comparativa incluye los modelos, pero no la cantidad mínima de métricas. Argumentación débil. [cite: 238, 239]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se incluyen la cantidad de modelos ni argumentos para la selección. [cite: 240]</td>
+                </tr>
+                <tr>
+                    <td><strong>Gráficos</strong> [cite: 241]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Se incluyen al menos cuatro gráficos relevantes con interpretación detallada. [cite: 241, 242]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Se incluyen los gráficos recomendados, pero no se proporciona interpretación. [cite: 243]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se incluyen la cantidad mínima especificada de gráficos ni interpretación. [cite: 244]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 6. Conclusiones clave</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 8 de mar de 2026 23:59 [cite: 245]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>4.1 Determinar si el modelo se puede implementar o si es necesario retroceder a fases anteriores. [cite: 246]</li>
+                <li>4.2 Exponer las medidas o decisiones específicas que deben tomarse en respuesta a los resultados. [cite: 247]</li>
+                <li>4.3 Proponer un entorno de producción para garantizar que los modelos sean confiables, escalables y eficientes. [cite: 248]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Se busca fundamentar si es viable implementar el modelo. [cite: 249] Incluir los siguientes cuestionamientos: [cite: 250]</p>
+            <ul>
+                <li>¿El rendimiento del modelo es lo suficientemente bueno para su implementación en producción? [cite: 250]</li>
+                <li>¿Existe margen para mejorar aún más el rendimiento? [cite: 251]</li>
+                <li>¿Cuáles serían las recomendaciones clave para poder implementar la solución? [cite: 251]</li>
+                <li>¿Qué tareas / procedimientos son accionables para los stakeholders? [cite: 252]</li>
+            </ul>
+            <p>Realizar un análisis detallado para determinar la plataforma en la nube más adecuada (AWS, Azure, GCP e IBM Watson). Considerar factores de facilidad, escalabilidad, costos, y justificar la elección. [cite: 253-256]</p>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Formato:</strong> Archivo en PDF. [cite: 257]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance6.#Equipo</code> [cite: 258]</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Korolov, M. (2022). Measuring the business impact of AI. CIO. [cite: 259]</li>
+                    <li>Miller, G. (2022). Stakeholder roles in artificial intelligence projects. [cite: 261]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Análisis del modelo</strong> [cite: 265]</td>
+                    <td class="pts-col">50 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (50 ptos)</span> Se presenta análisis comparando con los criterios de éxito de la Fase 0. Se responden y justifican los cuestionamientos. [cite: 266]</td>
+                    <td><span class="rubric-level bien">Bien (30 ptos)</span> Se analiza el rendimiento, pero no se toma como referencia la meta. Respuestas superficiales. [cite: 267, 268]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Sólo se presentan las métricas. No se justifican las respuestas. [cite: 268, 269]</td>
+                </tr>
+                <tr>
+                    <td><strong>Accionables</strong> [cite: 269]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Las tareas están formuladas de manera específica y clara. Se indica la asignación hacia los stakeholders. [cite: 270]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Se incluyen las tareas, pero no se especifican los actores responsables. [cite: 271]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Tareas ambiguas. No se indica a los stakeholders encargados. [cite: 272]</td>
+                </tr>
+                <tr>
+                    <td><strong>Implementación</strong> [cite: 273]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Análisis de al menos dos proveedores, indicando factores comparativos. Argumentación sólida con referencias. [cite: 273, 274]</td>
+                    <td><span class="rubric-level bien">Bien (15 ptos)</span> Comparación entre dos proveedores, pero falta justificación que respalde la elección final. [cite: 275, 276]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Sólo se incluyen características de un proveedor. [cite: 277]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Avance 7. Resumen ejecutivo</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 15 de mar de 2026 23:59 [cite: 278]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>4.4 Establecer supuestos racionales para presentar cifras sobre los costos/beneficios. [cite: 278]</li>
+                <li>4.5 Enumerar los riesgos o desafíos potenciales de la solución propuesta. [cite: 279]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>El resumen ejecutivo debe concentrarse en las conclusiones esenciales del proyecto destinado a un tomador de decisiones. [cite: 280, 281] Deberá contener: [cite: 283]</p>
+            <ul>
+                <li>Síntesis del problema (Avance 0)</li>
+                <li>Hallazgos importantes del EDA (Avance 1)</li>
+                <li>Modelos generados y elección final (Avance 5)</li>
+                <li>Recomendaciones clave para implementar (Avance 6)</li>
+                <li>Análisis costo – beneficio (sección B)</li>
+                <li>Riesgos y desafíos (sección C)</li>
+            </ul>
+            <p>Preguntas guía sobre costos, beneficios y riesgos: [cite: 284]</p>
+            <ul>
+                <li>Enumerar costos incurridos (adquisición de datos, nube) divididos por fase CRISP-ML, y los esperados para mantenimiento. [cite: 284, 285]</li>
+                <li>Proporcionar interpretación de beneficios potenciales (mejoras operativas, eficiencia, experiencia del cliente). [cite: 286]</li>
+                <li>¿Cuáles son los riesgos o desafíos potenciales? Clasificarlos en las categorías provistas (datos, ataques, confianza, cumplimiento). [cite: 287, 288]</li>
+            </ul>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Formato:</strong> Archivo en PDF. [cite: 289]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Avance7.#Equipo</code> [cite: 290]</li>
+                </ul>
+            </div>
+
+            <div class="resources">
+                <h3>Recursos de apoyo</h3>
+                <ul>
+                    <li>Baccarin, F. (2020). Machine learning that pays the bills. Medium. [cite: 291, 292]</li>
+                    <li>Babic, B., et al. (2021). When Machine Learning Goes Off the Rails. Harvard Business Review. [cite: 293, 294]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Resumen avances previos</strong> [cite: 297]</td>
+                    <td class="pts-col">40 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (40 ptos)</span> Se incluyen todas las secciones indicadas y se entrelazan de manera coherente, guiando lógicamente al lector. [cite: 298]</td>
+                    <td><span class="rubric-level bien">Bien (20 ptos)</span> Se incluyen las secciones, pero han sido transcritas tal cual sin cohesión. [cite: 299]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> El resumen carece de estructura conforme a las pautas y hay omisiones. [cite: 300]</td>
+                </tr>
+                <tr>
+                    <td><strong>Costos</strong> [cite: 301]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> El análisis incluye cifras coherentes de gastos actuales y futuros. Cada costo se vincula a una fase CRISP-ML. [cite: 301, 302]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Se limita a costos incurridos sin análisis de costos futuros. Deficiencias en conexión con la metodología. [cite: 303, 304]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> La presentación carece de precisión y no se vincula con las fases. [cite: 305]</td>
+                </tr>
+                <tr>
+                    <td><strong>Beneficios</strong> [cite: 306]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Se presentan cifras razonables (beneficios cuantificables) y análisis de beneficios intangibles con ejemplos. [cite: 306, 307]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> No se identifican claramente los beneficios tangibles derivados del modelo. [cite: 308]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se proporcionan cifras relevantes ni aspectos cualitativos. [cite: 309]</td>
+                </tr>
+                <tr>
+                    <td><strong>Riesgos</strong> [cite: 309]</td>
+                    <td class="pts-col">20 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (20 ptos)</span> Se identifican de manera completa los riesgos y cada uno es categorizado siguiendo la clasificación. [cite: 310, 311]</td>
+                    <td><span class="rubric-level bien">Bien (10 ptos)</span> Se identifican los riesgos, pero descripciones son parciales y no son categorizados. [cite: 312]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> La comprensión de posibles desafíos es limitada. [cite: 313]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="phase-card">
+        <h2>Presentación de proyectos</h2>
+        <div class="phase-content">
+            <div class="meta-info">
+                Fecha de entrega: dom 22 de mar de 2026 23:59 [cite: 314]
+            </div>
+            
+            <h3>Objetivos</h3>
+            <ul>
+                <li>4.6 Perfeccionar las habilidades de presentación y redacción de informes para captar la atención y el interés de la audiencia. [cite: 314]</li>
+            </ul>
+
+            <h3>Instrucciones</h3>
+            <p>Este escenario simula una experiencia empresarial donde deben captar la atención de la audiencia, destacando aspectos clave. [cite: 315, 316, 318] Tendrán un tiempo de 10 minutos para exponer, seguido de 10 minutos para responder preguntas. [cite: 317, 320] Elaboren una presentación que incluya: [cite: 321]</p>
+            <ul>
+                <li>Problemática [cite: 321]</li>
+                <li>Hallazgos e ideas clave [cite: 321]</li>
+                <li>Solución propuesta [cite: 321]</li>
+                <li>Recomendaciones comerciales fundamentales [cite: 321]</li>
+                <li>Beneficios y resultados esperados [cite: 321]</li>
+                <li>Trabajos futuros [cite: 321]</li>
+            </ul>
+
+            <div class="specifications">
+                <h3>Especificaciones de entrega</h3>
+                <ul>
+                    <li><strong>Formato:</strong> Archivo en PDF. [cite: 322]</li>
+                    <li><strong>Nombre del entregable:</strong> <code>Presentacion.#Equipo</code> [cite: 323]</li>
+                    <li><strong>Nota:</strong> La fecha de presentación se acordará con el profesor. [cite: 323]</li>
+                </ul>
+            </div>
+
+            <h3>Criterios de evaluación (Rúbrica)</h3>
+            <table>
+                <tr>
+                    <th>Criterio</th>
+                    <th class="pts-col">Pts Máx</th>
+                    <th>Excelente</th>
+                    <th>Bien</th>
+                    <th>Insuficiente</th>
+                </tr>
+                <tr>
+                    <td><strong>Calidad de las diapositivas</strong> [cite: 325]</td>
+                    <td class="pts-col">10 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (10 ptos)</span> Estructurada correctamente, flujo adecuado. Incluye gráficos intuitivos y sin errores ortográficos. [cite: 326, 327]</td>
+                    <td><span class="rubric-level bien">Bien (6 ptos)</span> Aceptables, pero representaciones gráficas limitadas. Puede haber errores menores de formato. [cite: 328, 329]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Diapositivas confusas, con errores evidentes. La presentación visual distrae. [cite: 330, 331]</td>
+                </tr>
+                <tr>
+                    <td><strong>Profundidad de análisis</strong> [cite: 331]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Referencia a la metodología y decisiones justificadas. Las preguntas reciben respuestas precisas. [cite: 332-334]</td>
+                    <td><span class="rubric-level bien">Bien (18 ptos)</span> Se menciona la metodología sin enmarcar pasos. Análisis adecuado pero superficial. [cite: 335-338]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Análisis superficial. No se responden de manera acertiva los cuestionamientos. [cite: 339]</td>
+                </tr>
+                <tr>
+                    <td><strong>Comprensión de la solución</strong> [cite: 340]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Se mencionan puntos de rendimiento. Diferenciación articulada de ensambles. Respuestas exactas y acertadas. [cite: 341-343]</td>
+                    <td><span class="rubric-level bien">Bien (18 ptos)</span> Se omite análisis de modelos candidatos. Las respuestas a preguntas carecen de concreción. [cite: 344-346]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> Comprensión limitada, confusiones en conceptos fundamentales. [cite: 347]</td>
+                </tr>
+                <tr>
+                    <td><strong>Contexto del negocio</strong> [cite: 348]</td>
+                    <td class="pts-col">30 pts</td>
+                    <td><span class="rubric-level excelente">Excelente (30 ptos)</span> Se fundamenta la elección de la métrica por objetivos comerciales y se interpretan los beneficios. [cite: 348-350]</td>
+                    <td><span class="rubric-level bien">Bien (18 ptos)</span> Se aborda adecuadamente pero podría ser más detallado. Algunas respuestas están desvinculadas. [cite: 351-353]</td>
+                    <td><span class="rubric-level insuficiente">Insuficiente (0 ptos)</span> No se aborda el contexto de manera efectiva. Falta de conexión con objetivos empresariales. [cite: 354]</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

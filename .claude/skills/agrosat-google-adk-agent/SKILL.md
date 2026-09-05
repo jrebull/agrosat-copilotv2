@@ -1,6 +1,6 @@
 ---
 name: agrosat-google-adk-agent
-description: Build the Google ADK Plan-and-React conversational agent for AgroSatCopilot with 9 geospatial FunctionTools, dual LLM backend (Gemini 2.5 Pro cloud + Qwen3-30B-A3B-Instruct-2507 on-prem via llama.cpp), session memory in Postgres, SSE streaming, and built-in ADK tracing. Use when building or modifying the conversational agent layer (FunctionTools, planner, executor, LLM routing).
+description: Build the Google ADK Plan-and-React conversational agent for AgroSatCopilot with 9 geospatial FunctionTools, dual LLM backend (Gemini 2.5 Pro cloud plus Qwen3-30B-A3B-Instruct-2507 GPTQ-Int4 on-prem), session memory in Postgres, SSE streaming, and built-in ADK tracing. Use when building or modifying the conversational agent layer.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
