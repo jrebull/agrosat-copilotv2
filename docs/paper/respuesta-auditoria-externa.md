@@ -5,7 +5,7 @@ historia de usuario*. Se cierra cuando **el comportamiento cambió** y hay dónd
 historia planificada es un compromiso, no una corrección, y contarla como cierre fue exactamente lo
 que la segunda auditoría desmontó.
 
-Siete rondas hasta hoy, y cada una verificó a la anterior en el código. La segunda encontró dos
+Ocho rondas hasta hoy —siete externas y una propia—, y cada una verificó a la anterior en el código. La segunda encontró dos
 cierres falsos. La tercera, tres cierres parciales contados enteros y un gate burlable moviendo una
 frase de campo. La cuarta encontró **fugas dentro de las reparaciones de la tercera**: un umbral que
 seguía leyendo el bloque de prueba por una rendija más estrecha, un gate de custodia que verificaba
@@ -16,6 +16,79 @@ pero no diccionarios. Lo que sigue es el estado real.
 
 
 
+
+---
+
+## Ronda 8 — auditoría propia, madrugada del 5 de septiembre de 2026
+
+Sin auditor externo. La regla de la página se aplica igual: **ningún hallazgo se cierra con una
+historia, solo con un cambio de comportamiento y un sitio donde comprobarlo.**
+
+Empezó por correr la suite **completa** —2 348 pruebas, 26 minutos—, que es algo que la CI no
+hace. Tres estaban en rojo. Dos lo llevaban desde el 3 de junio.
+
+| # | Hallazgo | Qué cambió de comportamiento |
+|---|---|---|
+| P1 | **Al congelar el panel en cinco miembros, fase 2 y fase 3 seguían pidiendo los diez originales** —`anysat`, `utae`, los dos FarSLIP y el XGB histórico, todos excluidos o `legacy_unverified` | `ALL_MEMBERS` sale de `miembros_del_panel()`, que lee `panel-v1.json`. `panel-check` falla si un guion vuelve a mantener su propia lista, y lo comprueba con AST |
+| P2 | **Dos pruebas rojas desde `c646263`**, que tradujo los mensajes de error al inglés y dejó las aserciones buscando el texto en castellano | Las aserciones miran el dato —que el `ValueError` nombre el índice culpable— y no la redacción. Traducir ya no las rompe; borrar la validación sí |
+| P3 | **El paso de pruebas de la CI enumera DIRECTORIOS**, y los ficheros sueltos de `tests/ml/` no cuelgan de ninguno: por eso P2 sobrevivió tres meses | `ci-test-coverage-check`: cada fichero de prueba o lo corre la CI o está declarado con su motivo. Un árbol nuevo, o uno que dejó de existir, rompe el gate |
+| P4 | **La sección 4.6 decía que `segformer` «se excluye»**, y `segformer` está **dentro** del panel: mejora en fold 5, que es justo el contraejemplo que la nota existe para dejar escrito | La 4.6 se comprueba en tres planos: la tabla **es** el panel; un miembro dentro nombrado junto a una marca de exclusión obliga a decir que sigue dentro; un excluido tiene que aparecer en una **frase** que lo diga |
+| P5 | **La prueba que vigila el `n_timesteps` del volcado dependía de un blob de DVC sin declararlo**: en un checkout sin pesos se iba por el atajo de `checkpoint_absent` y fallaba por la razón equivocada | Apunta a un fichero temporal y exige que el motivo sea `dataset_absent`, que es lo que distingue «el espía trabajó» de «la función no llegó» |
+| P6 | **El banco seguía llamándose PASTIS-R donde se dibuja**: rótulos de figuras, metadatos que fase 2 escribe en sus artefactos, el registro de equidad y cuatro sitios del cuaderno público —que convivían con «PASTIS» en su propio registro de custodia | Corregido en los cinco, y una prueba sobre la **clase**: cualquier superficie vigente que vuelva a nombrarlo así falla. Los documentos históricos quedan fuera a propósito |
+| P7 | **`leyendas.svg` y `cobertura.svg` figuraban SELLADO con insumos OBSOLETO**. `replica.svg`, el mismo caso, sí estaba marcada: el estado se ponía a mano y salió distinto para casos iguales | Cada guion declara de qué datos sale cada figura, y una prueba comprueba que ninguna esté por encima del estado de sus insumos. Son 27 OBSOLETO |
+| P8 | **`set_paper_style` ponía un rcParam global de disposición**, y `tight_layout` —63 sitios en `ml/`— revienta sobre una figura que ya tiene motor. Se veía solo al correr la suite entera | Las siete figuras del módulo piden el motor una por una. Los cuatro cuadernos que llaman al estilo no crean figuras propias, así que no cambia ninguna salida |
+
+### Lo que esta ronda enseña, y no estaba en la lista de siete
+
+**Un fichero que nadie corre no está verde: está sin mirar.** P2 y P3 son el mismo hallazgo visto
+desde dos lados. La suite decía 2 348 pruebas verdes y la CI decía verde, y las dos cosas eran
+ciertas sin que ninguna cubriera el fichero en rojo.
+
+**Un control puede confirmar la presencia de una cadena y no decir nada de lo que la frase
+afirma.** P4: `panel-check` comprobaba que el nombre apareciera en la sección. Aparecía —en una
+frase que decía lo contrario del contrato—.
+
+**Las dos direcciones de una misma comprobación pueden necesitar alcances distintos.** También P4:
+por frase, la exclusión con sujeto implícito dos frases más abajo se escapa; por párrafo, el
+apartado de «quién queda fuera» nombra a varios y basta con que **uno** lleve la marca para dar por
+declarados a todos. Usar el mismo alcance para ambas dejaba un agujero en una de ellas.
+
+**Un estado que se pone a mano sale distinto para casos iguales.** P7: tres figuras derivadas de
+artefactos en cuarentena, una marcada y dos no, sin ninguna razón que las distinguiera.
+
+### La segunda pasada: intentar burlar los gates recién escritos
+
+Un control nuevo no vale por estar escrito. Estos se probaron **atacándolos**, y dos cedieron a la
+primera —los dos escritos esa misma noche—.
+
+| Gate | Cómo se burlaba | Cómo quedó |
+|---|---|---|
+| `panel-check` #6 | Miraba un `AnnAssign` cuyo valor fuera una **tupla literal**. Quitar la anotación de tipo, escribirlo como lista, o pasar por un alias lo burlaban | Resuelve el valor —alias incluidos, en cadena— y exige que acabe en la llamada al lector del panel. Siete variantes probadas, siete fallan. Y una prueba aparte compara el valor **en ejecución** con el panel, que es lo único que ninguna forma sintáctica puede burlar |
+| `ci-test-coverage-check` | Contaba como cobertura cualquier línea con `pytest`. Una invocación neutralizada con `\|\| true`, o un paso con `continue-on-error: true`, corría las pruebas sin poder suspender a nadie **y el gate la daba por cubierta** | Solo cuentan las invocaciones que pueden poner la CI en rojo. Las dos puertas probadas en negativo |
+
+**Reparar el caso en vez de la clase, otra vez, y esta vez en un control mío escrito seis horas
+antes.** Es la razón por la que un gate no se da por bueno hasta haberlo visto fallar en las
+variantes, no solo en el ejemplo que lo motivó.
+
+Y el que le faltaba a todos: **`verificar_redump_oof.py` no tenía ni una prueba**. Es el guion que
+dio por bueno un fichero producido por un bug —comparaba el re-volcado con el anterior y los dos
+salían del mismo defecto—. Ahora tiene ocho, incluidas las tres del acoplamiento `n_timesteps` que
+son la razón de que exista.
+
+### Lo que se verificó y estaba bien
+
+- Los cuatro gates con fichero normativo **fallan** al mutarles su fuente. Un gate que pasa sobre
+  basura no es un gate.
+- Ninguna llamada a `macro_over` o `paired_interval` se quedó sin su parámetro obligatorio,
+  comprobado con AST y no con `grep`, que daba falsos positivos por las llamadas multilínea.
+- `tests/ml/eval` y `tests/ml/analysis` —la superficie que sostiene el artículo— pasan en un
+  `git worktree` limpio **sin los blobs de DVC**: 597 pruebas. Ya corren en la CI, que pasa de 69
+  a 108 ficheros.
+
+### Una corrección de esta misma ronda
+
+El mensaje de `09d6599` dice «dos pruebas rojas desde marzo». `c646263` es del **3 de junio de
+2026**. El commit ya está empujado y no se reescribe la rama por una fecha; queda corregido aquí.
 
 ---
 
@@ -241,7 +314,12 @@ muera con la sesión, y toda corrección se busca en todas sus apariciones antes
 
 ## Veredicto vigente
 
-**No se arranca.** Las cinco rondas coinciden en el mismo único cambio: **US-172, la tabla de
+**No se arranca.** Las rondas externas coinciden en el mismo único cambio: **US-172, la tabla de
 pérdidas por acción, resultado y afectado**, obtenida de usuarios reales y no de nuestra intuición.
 La ronda 5 añadió lo que faltaba: su criterio de aceptación permitía cerrarla declarando cada precio
 como «supuesto del artículo», que es cerrarla sin hacerla. Esa salida está eliminada.
+
+**La ronda 8 no mueve el veredicto**, y conviene decirlo para que no se lea como avance: encontró
+ocho defectos en el aparato —listas duplicadas, pruebas que nadie corría, prosa que contradecía el
+contrato, estados puestos a mano—, ninguno en el camino crítico. Arreglar el andamio no adelanta la
+obra; solo evita que se caiga cuando se suba a ella.

@@ -25,6 +25,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 import sys
@@ -58,6 +59,73 @@ MARCAS_DE_PERMANENCIA: tuple[str, ...] = (
     "sigue en el panel",
     "se mantiene en el panel",
 )
+
+
+#: Nombre de la funcion que lee el panel congelado. Un guion del articulo obtiene sus miembros de
+#: ahi o no los obtiene.
+LECTOR_DEL_PANEL = "miembros_del_panel"
+
+
+def _asignaciones_de_modulo(arbol: ast.Module) -> dict[str, ast.expr]:
+    """Valor asignado a cada nombre en el cuerpo del modulo.
+
+    Args:
+        arbol: Modulo ya parseado.
+
+    Returns:
+        Nombre -> expresion asignada.
+    """
+    asignaciones: dict[str, ast.expr] = {}
+    for nodo in arbol.body:
+        if isinstance(nodo, ast.AnnAssign) and isinstance(nodo.target, ast.Name):
+            if nodo.value is not None:
+                asignaciones[nodo.target.id] = nodo.value
+        elif isinstance(nodo, ast.Assign):
+            for destino in nodo.targets:
+                if isinstance(destino, ast.Name):
+                    asignaciones[destino.id] = nodo.value
+    return asignaciones
+
+
+def _revisar_guion(guion: Path) -> list[str]:
+    """Comprobar que un guion del articulo saca ALL_MEMBERS del panel congelado.
+
+    La primera version de esta comprobacion miraba solo un ``AnnAssign`` cuyo valor fuera una
+    tupla literal, y se le colaban tres variantes triviales: sin anotacion de tipo, como lista, y
+    a traves de un alias. Reparar el caso en vez de la clase es el modo de fallo que estas
+    auditorias repiten, asi que ahora se resuelve el valor -alias incluidos- y se exige que acabe
+    en la llamada al lector del panel.
+
+    Args:
+        guion: Fichero del guion.
+
+    Returns:
+        Fallos encontrados.
+    """
+    arbol = ast.parse(guion.read_text(encoding="utf-8"))
+    asignaciones = _asignaciones_de_modulo(arbol)
+    valor = asignaciones.get("ALL_MEMBERS")
+    if valor is None:
+        return []
+
+    vistos: set[str] = set()
+    while isinstance(valor, ast.Name) and valor.id not in vistos:
+        vistos.add(valor.id)
+        siguiente = asignaciones.get(valor.id)
+        if siguiente is None:
+            break
+        valor = siguiente
+
+    if (
+        isinstance(valor, ast.Call)
+        and isinstance(valor.func, ast.Name)
+        and valor.func.id == LECTOR_DEL_PANEL
+    ):
+        return []
+    return [
+        f"{guion.name}: ALL_MEMBERS no sale de {LECTOR_DEL_PANEL}(); una lista escrita dos veces "
+        "se separa, y ya se separo"
+    ]
 
 
 def _frases(seccion: str) -> list[str]:
@@ -213,21 +281,8 @@ def main() -> int:
 
     # 6. Ningun guion mantiene su propia lista de miembros. Una lista escrita dos veces se separa:
     # al congelar el panel en cinco, fase 2 y fase 3 seguian pidiendo los diez originales.
-    import ast
-
     for guion in sorted(Path(REPO_ROOT / "scripts").glob("run_paper_micai_*.py")):
-        arbol = ast.parse(guion.read_text(encoding="utf-8"))
-        for nodo in ast.walk(arbol):
-            if not isinstance(nodo, ast.AnnAssign) or not isinstance(nodo.target, ast.Name):
-                continue
-            if nodo.target.id != "ALL_MEMBERS" or not isinstance(nodo.value, ast.Tuple):
-                continue
-            literal = tuple(e.value for e in nodo.value.elts if isinstance(e, ast.Constant))
-            if literal:
-                fallos.append(
-                    f"{guion.name}: mantiene su propia lista de {len(literal)} miembros en vez de "
-                    "leer el panel congelado"
-                )
+        fallos.extend(_revisar_guion(guion))
 
     texto = args.preregistro.read_text(encoding="utf-8")
     seccion = texto[texto.find("### 4.6") :] if "### 4.6" in texto else ""

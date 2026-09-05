@@ -139,3 +139,45 @@ def test_la_superficie_del_articulo_la_corre_la_ci(arbol: str) -> None:
     prefijos = prefijos_de_ci(WORKFLOW)
     assert any(arbol == p or arbol.startswith(f"{p}/") for p in prefijos), prefijos
     assert f"{arbol}/*.py" not in SUITE_LOCAL
+
+
+def _con_workflow_mutado(viejo: str, nuevo: str) -> tuple[int, str]:
+    """Correr el gate con una mutacion del workflow, y restaurarlo siempre.
+
+    Args:
+        viejo: Texto a sustituir, que debe existir.
+        nuevo: Texto sustituto.
+
+    Returns:
+        Codigo de salida y salida del gate.
+    """
+    workflow = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+    respaldo = workflow.read_text(encoding="utf-8")
+    assert viejo in respaldo, f"el workflow ya no contiene {viejo[:60]!r}"
+    try:
+        workflow.write_text(respaldo.replace(viejo, nuevo, 1), encoding="utf-8")
+        return _correr()
+    finally:
+        workflow.write_text(respaldo, encoding="utf-8")
+
+
+def test_una_invocacion_neutralizada_no_cuenta_como_cobertura() -> None:
+    """``|| true`` corre las pruebas y no puede suspender a nadie.
+
+    Contarla como cobertura seria el agujero que este gate existe para cerrar, con el agravante de
+    parecer verde: la CI mostraria el paso ejecutado y el gate diria que el arbol esta cubierto.
+    """
+    sufijo = "--ignore=tests/ml/features/test_persist_features.py -p no:cacheprovider"
+    codigo, salida = _con_workflow_mutado(sufijo, f"{sufijo} || true")
+    assert codigo == 1, salida
+    assert "no lo corre ninguna invocacion de la CI" in salida
+    assert _correr()[0] == 0
+
+
+def test_un_paso_con_continue_on_error_no_cuenta_como_cobertura() -> None:
+    """Lo mismo por la otra puerta, la que ni siquiera se ve en la linea de la orden."""
+    paso = "      - name: pytest scripts + ML puro\n"
+    codigo, salida = _con_workflow_mutado(paso, f"{paso}        continue-on-error: true\n")
+    assert codigo == 1, salida
+    assert "no lo corre ninguna invocacion de la CI" in salida
+    assert _correr()[0] == 0

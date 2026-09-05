@@ -49,39 +49,70 @@ SUITE_LOCAL: dict[str, str] = {
 }
 
 
+def _bloques_de_paso(lineas: list[str]) -> list[tuple[str, list[str]]]:
+    """Partir el workflow en pasos, con el ``working-directory`` que arrastra cada uno.
+
+    Args:
+        lineas: Lineas del workflow.
+
+    Returns:
+        Pares ``(working_directory, lineas del paso)``.
+    """
+    bloques: list[list[str]] = []
+    actual: list[str] = []
+    for linea in lineas:
+        if re.match(r"^\s*-\s+name:", linea) and actual:
+            bloques.append(actual)
+            actual = []
+        actual.append(linea)
+    if actual:
+        bloques.append(actual)
+
+    resultado: list[tuple[str, list[str]]] = []
+    for bloque in bloques:
+        trabajo = "."
+        for linea in bloque:
+            directorio = re.match(r"\s*working-directory:\s*(\S+)\s*$", linea)
+            if directorio is not None:
+                trabajo = directorio.group(1)
+        resultado.append((trabajo, bloque))
+    return resultado
+
+
 def invocaciones_pytest(workflow: Path) -> list[tuple[str, list[str]]]:
-    """Directorio de trabajo y rutas de cada invocacion de pytest del workflow.
+    """Directorio de trabajo y rutas de cada invocacion de pytest QUE PUEDE PONER LA CI EN ROJO.
+
+    Una invocacion neutralizada -``|| true``, ``continue-on-error: true``- corre las pruebas y no
+    puede suspender a nadie. Contarla como cobertura seria justo el agujero que este gate existe
+    para cerrar, con el agravante de parecer verde.
 
     Args:
         workflow: Fichero del workflow de CI.
 
     Returns:
-        Pares ``(working_directory, rutas)``, una entrada por invocacion.
+        Pares ``(working_directory, rutas)``, una entrada por invocacion que si bloquea.
     """
-    lineas = workflow.read_text(encoding="utf-8").splitlines()
     invocaciones: list[tuple[str, list[str]]] = []
-    trabajo = "."
-    indice = 0
-    while indice < len(lineas):
-        linea = lineas[indice]
-        if re.match(r"^\s*-\s+name:", linea):
-            trabajo = "."
-        directorio = re.match(r"\s*working-directory:\s*(\S+)\s*$", linea)
-        if directorio is not None:
-            trabajo = directorio.group(1)
-        if "pytest" in linea and not linea.lstrip().startswith("#"):
-            completa = linea
-            while completa.rstrip().endswith("\\") and indice + 1 < len(lineas):
-                indice += 1
-                completa = completa.rstrip().rstrip("\\") + " " + lineas[indice]
-            rutas = [
-                token
-                for token in completa.split()
-                if not token.startswith("-") and "/" in token and not token.endswith(":")
-            ]
-            if rutas:
-                invocaciones.append((trabajo, rutas))
-        indice += 1
+    for trabajo, bloque in _bloques_de_paso(workflow.read_text(encoding="utf-8").splitlines()):
+        if any(re.match(r"\s*continue-on-error:\s*true\s*$", linea) for linea in bloque):
+            continue
+        indice = 0
+        while indice < len(bloque):
+            linea = bloque[indice]
+            if "pytest" in linea and not linea.lstrip().startswith("#"):
+                completa = linea
+                while completa.rstrip().endswith("\\") and indice + 1 < len(bloque):
+                    indice += 1
+                    completa = completa.rstrip().rstrip("\\") + " " + bloque[indice]
+                if "||" not in completa:
+                    rutas = [
+                        token
+                        for token in completa.split()
+                        if not token.startswith("-") and "/" in token and not token.endswith(":")
+                    ]
+                    if rutas:
+                        invocaciones.append((trabajo, rutas))
+            indice += 1
     return invocaciones
 
 

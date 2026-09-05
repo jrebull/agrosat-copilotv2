@@ -78,7 +78,13 @@ def main() -> int:
         digest = hashlib.md5(Path(spec.path).read_bytes()).hexdigest()  # noqa: S324
         print(f"checkpoint: {spec.path}")
         print(f"md5 del checkpoint: {digest}")
-        informe["checkpoint"] = str(Path(spec.path).relative_to(REPO_ROOT))
+        # Un checkpoint puede vivir fuera del repositorio -un volumen montado, un temporal de
+        # pruebas-. Reventar con ValueError al construir el informe seria perder la verificacion
+        # por un detalle de presentacion.
+        ruta = Path(spec.path)
+        informe["checkpoint"] = str(
+            ruta.relative_to(REPO_ROOT) if ruta.is_relative_to(REPO_ROOT) else ruta
+        )
         informe["checkpoint_md5"] = digest
         informe["model_kwargs"] = dict(spec.model_kwargs)
 

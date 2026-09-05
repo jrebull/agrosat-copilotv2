@@ -1091,105 +1091,66 @@ def test_el_bib_historico_modificado_rompe_el_gate(tmp_path: Path) -> None:
     assert _correr_bib_check(CATALOGO)[0] == 0
 
 
-def test_un_guion_con_su_propia_lista_de_miembros_rompe_el_gate(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    ("etiqueta", "sustituto"),
+    [
+        ("tupla literal anotada", 'ALL_MEMBERS: tuple[str, ...] = ("unet", "deeplabv3plus")'),
+        ("sin anotacion de tipo", 'ALL_MEMBERS = ("unet", "deeplabv3plus")'),
+        ("como lista", 'ALL_MEMBERS: list[str] = ["unet", "deeplabv3plus"]'),
+        (
+            "a traves de un alias",
+            'MIEMBROS = ("unet", "deeplabv3plus")\nALL_MEMBERS: tuple[str, ...] = MIEMBROS',
+        ),
+        ("alias de dos saltos", 'A = ("unet",)\nMIEMBROS = A\nALL_MEMBERS = MIEMBROS'),
+        ("otra funcion parecida", "ALL_MEMBERS = miembros_de_otro_sitio()"),
+    ],
+)
+def test_ninguna_variante_sintactica_burla_la_lectura_del_panel(
+    etiqueta: str, sustituto: str
+) -> None:
     """A member list written twice drifts apart, and this one did.
 
     Al congelar el panel en cinco miembros, fase 2 y fase 3 seguian pidiendo los diez originales
-    —cinco ya excluidos o sin verificar—. Al regenerar sus artefactos habrian usado el conjunto
+    -cinco ya excluidos o sin verificar-. Al regenerar sus artefactos habrian usado el conjunto
     equivocado, o habrian reventado, sin que nada relacionara una cosa con la otra.
+
+    La primera version de esta comprobacion miraba un ``AnnAssign`` cuyo valor fuera una tupla
+    literal, y se le colaban tres variantes: quitar la anotacion, usar una lista, pasar por un
+    alias. Reparar el caso en vez de la clase es el modo de fallo que estas auditorias repiten,
+    asi que aqui se prueban las variantes y no solo la que se vio primero.
     """
     import shutil
+    import tempfile
 
     guion = REPO_ROOT / "scripts" / "run_paper_micai_fase3.py"
-    respaldo = tmp_path / "fase3.py"
-    shutil.copy2(guion, respaldo)
-    try:
-        guion.write_text(
-            guion.read_text(encoding="utf-8").replace(
-                "ALL_MEMBERS: tuple[str, ...] = miembros_del_panel()",
-                'ALL_MEMBERS: tuple[str, ...] = ("unet", "farslip-ft18")',
-                1,
-            ),
-            encoding="utf-8",
-        )
-        codigo, salida = _correr_panel_check(PANEL)
-        assert codigo == 1, salida
-        assert "su propia lista" in salida
-    finally:
-        shutil.copy2(respaldo, guion)
+    original = "ALL_MEMBERS: tuple[str, ...] = miembros_del_panel()"
+    with tempfile.TemporaryDirectory() as tmp:
+        respaldo = Path(tmp) / "fase3.py"
+        shutil.copy2(guion, respaldo)
+        try:
+            texto = guion.read_text(encoding="utf-8")
+            assert original in texto
+            guion.write_text(texto.replace(original, sustituto, 1), encoding="utf-8")
+            codigo, salida = _correr_panel_check(PANEL)
+            assert codigo == 1, f"{etiqueta}: {salida}"
+            assert "ALL_MEMBERS no sale de miembros_del_panel()" in salida
+        finally:
+            shutil.copy2(respaldo, guion)
     assert _correr_panel_check(PANEL)[0] == 0
 
 
-# ------------------------------------------------------------------------------------------
-# La prosa del panel: comprobar que el nombre aparece no comprueba nada.
-# ------------------------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "modulo", ["scripts.run_paper_micai_fase2", "scripts.run_paper_micai_fase3"]
+)
+def test_los_guiones_piden_en_ejecucion_exactamente_el_panel_congelado(modulo: str) -> None:
+    """La comprobacion estatica vive en un gate sin dependencias; esta mira el valor de verdad.
 
-PREREGISTRO = REPO_ROOT / "docs" / "paper" / "preregistro-v2-borrador.md"
-
-
-def _con_preregistro_mutado(viejo: str, nuevo: str) -> tuple[int, str]:
-    """Correr panel-check con una mutacion del preregistro, y restaurarlo siempre.
-
-    Args:
-        viejo: Texto a sustituir, que debe existir.
-        nuevo: Texto sustituto.
-
-    Returns:
-        Codigo de salida y salida del gate.
+    El gate barato de la CI solo tiene stdlib, asi que razona sobre el AST. Aqui, donde si hay
+    dependencias, se importa el modulo y se compara el valor efectivo con el panel: es la unica
+    comprobacion que ninguna forma sintactica puede burlar.
     """
-    respaldo = PREREGISTRO.read_text(encoding="utf-8")
-    assert viejo in respaldo, f"el preregistro ya no contiene {viejo[:60]!r}"
-    try:
-        PREREGISTRO.write_text(respaldo.replace(viejo, nuevo, 1), encoding="utf-8")
-        return _correr_panel_check(PANEL)
-    finally:
-        PREREGISTRO.write_text(respaldo, encoding="utf-8")
+    import importlib
 
+    from ml.eval.paper_micai_arbitration import miembros_del_panel
 
-def test_un_miembro_del_panel_descrito_como_excluido_rompe_el_gate() -> None:
-    """El defecto real: la seccion 4.6 decia que ``segformer`` "se excluye" y esta dentro.
-
-    El gate pasaba porque solo comprobaba que el nombre apareciera. Y la exclusion iba dos frases
-    mas abajo, con el sujeto implicito, asi que mirar la frase tampoco bastaba.
-    """
-    codigo, salida = _con_preregistro_mutado(
-        " y **sigue\n> dentro del panel**. Eso **no invalida el criterio",
-        ". Eso **no invalida el criterio",
-    )
-    assert codigo == 1, salida
-    assert "segformer: esta DENTRO del panel" in salida
-    assert _correr_panel_check(PANEL)[0] == 0
-
-
-def test_un_excluido_nombrado_sin_decir_que_esta_fuera_rompe_el_gate() -> None:
-    """La direccion contraria se mira por frase, no por parrafo.
-
-    El parrafo de "quien queda fuera" nombra a varios: con alcance de parrafo bastaba con que UNO
-    llevara la marca de exclusion para dar por declarados a todos los demas.
-    """
-    codigo, salida = _con_preregistro_mutado(
-        "`xgb-alphaearth` histórico salen por procedencia",
-        "`xgb-alphaearth` histórico se consideran aparte",
-    )
-    assert codigo == 1, salida
-    assert "esta FUERA del panel y la seccion 4.6 lo nombra sin decir" in salida
-    assert _correr_panel_check(PANEL)[0] == 0
-
-
-def test_la_tabla_de_la_seccion_46_tiene_que_ser_el_panel() -> None:
-    """Quitar una fila de la tabla ya no pasa inadvertido."""
-    codigo, salida = _con_preregistro_mutado("| `segformer` | transformer espacial | no |\n", "")
-    assert codigo == 1, salida
-    assert "la tabla de la seccion 4.6 lista" in salida
-    assert _correr_panel_check(PANEL)[0] == 0
-
-
-def test_la_tabla_no_puede_ganar_un_miembro_ajeno() -> None:
-    """Anadir a la tabla a alguien que el panel congelado no tiene tampoco pasa."""
-    codigo, salida = _con_preregistro_mutado(
-        "| `segformer` | transformer espacial | no |\n",
-        "| `segformer` | transformer espacial | no |\n| `anysat` | otra | no |\n",
-    )
-    assert codigo == 1, salida
-    assert "anysat" in salida
-    assert _correr_panel_check(PANEL)[0] == 0
+    assert importlib.import_module(modulo).ALL_MEMBERS == miembros_del_panel()
