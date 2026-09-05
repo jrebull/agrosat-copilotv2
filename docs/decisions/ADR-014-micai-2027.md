@@ -137,9 +137,10 @@ el panel por debajo de su propio criterio. El gate lo imprime en cada ejecución
 **sin identificar**, así que su exclusión es **reversible**; los dos FarSLIP y el `xgb-alphaearth`
 histórico por procedencia, y eso no se revierte solo.
 
-> **Precisión que se mantiene**: `segformer` mejora en fold 5. Eso **no invalida el criterio del
-> umbral**, que sigue vigente; demuestra que la lista previa de sospechosos estaba parcialmente
-> equivocada. Se excluye por superar el umbral, nunca por figurar en aquella lista.
+> **Precisión que se mantiene**: `segformer` mejora en fold 5 y **sigue dentro del panel**. Eso
+> **no invalida el criterio del umbral**, que sigue vigente; demuestra que la lista previa de
+> sospechosos estaba parcialmente equivocada. **Un miembro se excluye por superar el umbral**,
+> nunca por figurar en aquella lista.
 
 **`xgb-alphaearth-remat-v1`, decidido el 4 de septiembre**: entra como **candidato nuevo con
 procedencia verificada**, **nunca como reproducción del desplegado** —no lo reproduce, y el

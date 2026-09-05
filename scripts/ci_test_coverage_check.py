@@ -46,11 +46,6 @@ SUITE_LOCAL: dict[str, str] = {
     "tests/ml/train/*.py": "entrenamientos, aun los cortos, con datos en disco",
     "tests/ml/transfer/*.py": "transferencia a Italia sobre checkpoints en disco",
     "tests/ml/tune/*.py": "tuning con datos en disco",
-    # Superficie del articulo. Se corren en local hasta comprobar que pasan en un checkout sin
-    # los blobs de DVC; la comprobacion vive en docs/paper/respuesta-auditoria-externa.md.
-    "tests/ml/analysis/*.py": "superficie del articulo: pendiente de verificar sin blobs DVC",
-    "tests/ml/eval/*.py": "superficie del articulo: pendiente de verificar sin blobs DVC",
-    "tests/ml/eval/oof/*.py": "superficie del articulo: pendiente de verificar sin blobs DVC",
 }
 
 

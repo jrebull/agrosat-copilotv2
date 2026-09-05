@@ -126,10 +126,14 @@ jobs:
         working-directory: backend
         run: poetry run pytest tests/unit -q -p no:cacheprovider
 
+      # tests/ml/eval y tests/ml/analysis sostienen el articulo (frontera, custodia, inventario
+      # OOF). Se comprobo que pasan en un checkout SIN los blobs de DVC —un git worktree limpio,
+      # 597 pruebas— antes de meterlos aqui: el unico fallo era una prueba que dependia de un
+      # checkpoint versionado y ya no depende. Anaden ~2,5 min al job.
       - name: pytest scripts + ML puro
         run: |
           poetry run pytest tests/scripts tests/ml/features tests/ml/utils tests/ml/report \
-            tests/ml/agent tests/ml/models tests/ml/losses \
+            tests/ml/agent tests/ml/models tests/ml/losses tests/ml/eval tests/ml/analysis \
             -q -m "not slow and not integration and not requires_gee" \
             --ignore=tests/ml/features/test_persist_features.py -p no:cacheprovider
 

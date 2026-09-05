@@ -8,6 +8,7 @@ pueda volver en silencio, y cada uno se comprobo fallando sobre la implementacio
 
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -390,7 +391,7 @@ def test_el_delta_es_la_media_de_las_diferencias_pareadas() -> None:
 # --------------------------------------------------------------------------------------
 
 
-def test_el_volcado_pasa_al_dataset_el_n_timesteps_del_checkpoint(monkeypatch) -> None:
+def test_el_volcado_pasa_al_dataset_el_n_timesteps_del_checkpoint(monkeypatch, tmp_path) -> None:
     """The dump must feed the dataset the same T the checkpoint was trained with.
 
     Es el defecto que hundio a Full-M de 0,7883 a 0,2552: el volcado reconstruia el modelo con
@@ -414,7 +415,13 @@ def test_el_volcado_pasa_al_dataset_el_n_timesteps_del_checkpoint(monkeypatch) -
 
     # El volcado importa la clase DENTRO de la funcion, asi que el espia va en su modulo.
     monkeypatch.setattr(pastis_seg_dataset, "PASTISSegmentationDataset", _DatasetEspia)
-    spec = checkpoint_registry.CHECKPOINT_REGISTRY["tsvit-pheno-fullm"]
+
+    # Los pesos son un blob de DVC. Sin el, `_dump_one` se va por el atajo de checkpoint_absent
+    # ANTES de construir el dataset, el espia no llega a anotar nada y la prueba deja de mirar
+    # lo suyo. Un fichero vacio basta: el espia revienta antes de que nadie cargue pesos.
+    pesos = tmp_path / "best.pt"
+    pesos.write_bytes(b"")
+    spec = replace(checkpoint_registry.CHECKPOINT_REGISTRY["tsvit-pheno-fullm"], path=pesos)
     esperado = int(spec.model_kwargs["n_timesteps"])
 
     entrada = modulo._dump_one(
@@ -435,3 +442,7 @@ def test_el_volcado_pasa_al_dataset_el_n_timesteps_del_checkpoint(monkeypatch) -
         f"{esperado}"
     )
     assert entrada["status"] == "missing"
+    # Que el motivo sea dataset_absent y no checkpoint_absent es lo que distingue "el espia
+    # trabajo" de "la funcion se fue por el atajo": con checkpoint_absent la asercion de arriba
+    # se cumpliria por vacio si algun dia se relajara.
+    assert entrada["reason"] == "dataset_absent", entrada

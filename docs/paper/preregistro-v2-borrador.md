@@ -205,13 +205,14 @@ mantiene elegible y **no ordena nada**.
 
 **Quién queda fuera y por qué**, con la distinción que importa: `anysat` y `utae` salen por superar
 el umbral de discrepancia de US-119 —0,3597 y 0,4010— **con la causa sin identificar**, así que su
-exclusión es **reversible**: es por no saber, no por saber que están mal. Los dos FarSLIP y el
+exclusión es **reversible**: es por no saber, no por saber que están mal. `farslip-ft18`, `farslip-zeroshot` y el
 `xgb-alphaearth` histórico salen por procedencia, y eso no se revierte solo.
 
-> **Precisión que se mantiene escrita**: `segformer` **mejora** en fold 5 (−0,0235). Eso **no
-> invalida el criterio del umbral**, que sigue vigente y hace su trabajo; demuestra que la lista
-> previa de sospechosos —«utae, anysat y segformer»— estaba parcialmente equivocada. Se excluye por
-> superar el umbral, nunca por figurar en aquella lista.
+> **Precisión que se mantiene escrita**: `segformer` **mejora** en fold 5 (−0,0235) y **sigue
+> dentro del panel**. Eso **no invalida el criterio del umbral**, que sigue vigente y hace su
+> trabajo; demuestra que la lista previa de sospechosos —«utae, anysat y segformer»— estaba
+> parcialmente equivocada. **Un miembro se excluye por superar el umbral**, nunca por figurar en
+> aquella lista.
 
 **`xgb-alphaearth-remat-v1`, decidido**: entra como **candidato nuevo con procedencia
 verificada**, y **nunca como reproducción del desplegado**. No lo reproduce —acuerdo de argmax

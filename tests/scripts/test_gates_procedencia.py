@@ -1118,3 +1118,78 @@ def test_un_guion_con_su_propia_lista_de_miembros_rompe_el_gate(tmp_path: Path) 
     finally:
         shutil.copy2(respaldo, guion)
     assert _correr_panel_check(PANEL)[0] == 0
+
+
+# ------------------------------------------------------------------------------------------
+# La prosa del panel: comprobar que el nombre aparece no comprueba nada.
+# ------------------------------------------------------------------------------------------
+
+PREREGISTRO = REPO_ROOT / "docs" / "paper" / "preregistro-v2-borrador.md"
+
+
+def _con_preregistro_mutado(viejo: str, nuevo: str) -> tuple[int, str]:
+    """Correr panel-check con una mutacion del preregistro, y restaurarlo siempre.
+
+    Args:
+        viejo: Texto a sustituir, que debe existir.
+        nuevo: Texto sustituto.
+
+    Returns:
+        Codigo de salida y salida del gate.
+    """
+    respaldo = PREREGISTRO.read_text(encoding="utf-8")
+    assert viejo in respaldo, f"el preregistro ya no contiene {viejo[:60]!r}"
+    try:
+        PREREGISTRO.write_text(respaldo.replace(viejo, nuevo, 1), encoding="utf-8")
+        return _correr_panel_check(PANEL)
+    finally:
+        PREREGISTRO.write_text(respaldo, encoding="utf-8")
+
+
+def test_un_miembro_del_panel_descrito_como_excluido_rompe_el_gate() -> None:
+    """El defecto real: la seccion 4.6 decia que ``segformer`` "se excluye" y esta dentro.
+
+    El gate pasaba porque solo comprobaba que el nombre apareciera. Y la exclusion iba dos frases
+    mas abajo, con el sujeto implicito, asi que mirar la frase tampoco bastaba.
+    """
+    codigo, salida = _con_preregistro_mutado(
+        " y **sigue\n> dentro del panel**. Eso **no invalida el criterio",
+        ". Eso **no invalida el criterio",
+    )
+    assert codigo == 1, salida
+    assert "segformer: esta DENTRO del panel" in salida
+    assert _correr_panel_check(PANEL)[0] == 0
+
+
+def test_un_excluido_nombrado_sin_decir_que_esta_fuera_rompe_el_gate() -> None:
+    """La direccion contraria se mira por frase, no por parrafo.
+
+    El parrafo de "quien queda fuera" nombra a varios: con alcance de parrafo bastaba con que UNO
+    llevara la marca de exclusion para dar por declarados a todos los demas.
+    """
+    codigo, salida = _con_preregistro_mutado(
+        "`xgb-alphaearth` histórico salen por procedencia",
+        "`xgb-alphaearth` histórico se consideran aparte",
+    )
+    assert codigo == 1, salida
+    assert "esta FUERA del panel y la seccion 4.6 lo nombra sin decir" in salida
+    assert _correr_panel_check(PANEL)[0] == 0
+
+
+def test_la_tabla_de_la_seccion_46_tiene_que_ser_el_panel() -> None:
+    """Quitar una fila de la tabla ya no pasa inadvertido."""
+    codigo, salida = _con_preregistro_mutado("| `segformer` | transformer espacial | no |\n", "")
+    assert codigo == 1, salida
+    assert "la tabla de la seccion 4.6 lista" in salida
+    assert _correr_panel_check(PANEL)[0] == 0
+
+
+def test_la_tabla_no_puede_ganar_un_miembro_ajeno() -> None:
+    """Anadir a la tabla a alguien que el panel congelado no tiene tampoco pasa."""
+    codigo, salida = _con_preregistro_mutado(
+        "| `segformer` | transformer espacial | no |\n",
+        "| `segformer` | transformer espacial | no |\n| `anysat` | otra | no |\n",
+    )
+    assert codigo == 1, salida
+    assert "anysat" in salida
+    assert _correr_panel_check(PANEL)[0] == 0
