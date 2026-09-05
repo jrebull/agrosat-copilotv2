@@ -906,3 +906,75 @@ def test_model_appended_from_another_run_fails(tmp_path: Path) -> None:
     codigo, salida = _correr_oof_check(oof)
     assert codigo == 1, salida
     assert "code_version de la entrada" in salida
+
+
+# --------------------------------------------------------------------------------------
+# US-139: el panel congelado.
+# --------------------------------------------------------------------------------------
+
+PANEL = REPO_ROOT / "docs" / "paper" / "panel-v1.json"
+
+
+def _correr_panel_check(panel: Path) -> tuple[int, str]:
+    """Run the frozen-panel gate over a given panel file."""
+    proc = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "panel_check.py"), "--panel", str(panel)],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return proc.returncode, proc.stdout
+
+
+def test_el_panel_congelado_es_coherente() -> None:
+    """Baseline: five members, four families, none of them excluded."""
+    codigo, salida = _correr_panel_check(PANEL)
+    assert codigo == 0, salida
+    assert "margen sobre el minimo" in salida
+
+
+def test_meter_en_el_panel_un_miembro_excluido_rompe_el_gate(tmp_path: Path) -> None:
+    """A member the analysis cannot read has no business in the panel.
+
+    La contradiccion solo se descubriria al correr el analisis, y para entonces el panel ya esta
+    congelado: es el orden equivocado para enterarse.
+    """
+    import json
+
+    datos = json.loads(PANEL.read_text(encoding="utf-8"))
+    excluido = datos["fuera_del_panel"][0]["nombre"]
+    datos["miembros"].append({"nombre": excluido, "familia": "colada", "temporal": False})
+    copia = tmp_path / "panel.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    codigo, salida = _correr_panel_check(copia)
+    assert codigo == 1, salida
+    assert excluido in salida
+
+
+def test_declarar_un_campeon_rompe_el_gate(tmp_path: Path) -> None:
+    """The predictor is a sensitivity factor; a champion is the thing the design cannot support."""
+    import json
+
+    datos = json.loads(PANEL.read_text(encoding="utf-8"))
+    datos["campeon_declarado"] = datos["miembros"][0]["nombre"]
+    copia = tmp_path / "panel.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    codigo, salida = _correr_panel_check(copia)
+    assert codigo == 1, salida
+    assert "campeon" in salida
+
+
+def test_quedarse_por_debajo_del_minimo_de_familias_rompe_el_gate(tmp_path: Path) -> None:
+    """The margin is one family; the gate has to notice the day it runs out."""
+    import json
+
+    datos = json.loads(PANEL.read_text(encoding="utf-8"))
+    for miembro in datos["miembros"]:
+        miembro["familia"] = "una_sola"
+    datos["familias_distintas"] = 1
+    copia = tmp_path / "panel.json"
+    copia.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    codigo, salida = _correr_panel_check(copia)
+    assert codigo == 1, salida
+    assert "familias distintas" in salida

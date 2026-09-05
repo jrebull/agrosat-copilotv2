@@ -8,6 +8,7 @@ decisiones por defecto marcadas **[POR DEFECTO]** en cada apartado, y esta líne
 **Sustituye a**: [ADR-013](ADR-013-angulo-micai.md), cuya tesis no sobrevivió a la fase 3.
 **Enmienda 1**, 4 de septiembre de 2026: el §6 pasa de «qué predictor» a «qué regla de selección o panel», porque el valor por defecto anterior contradecía a US-139.
 **Enmienda 2**, 4 de septiembre de 2026: el panel usa `xgb-alphaearth-remat-v1` y no el componente histórico desplegado, que queda como referencia descriptiva.
+**Enmienda 3**, 4 de septiembre de 2026: se congela el panel en cinco miembros (§6 bis) y se fija el orden de ejecución (§7 bis).
 **Enmienda 3**, 4 de septiembre de 2026: US-119 retira `anysat` y `utae` del conjunto elegible
 inferencial mientras no se identifique la causa de su caída; `segformer` se conserva porque la
 premisa de que también caía fue desmentida por el artefacto.
@@ -120,6 +121,40 @@ contradice a US-139, que exige un panel de al menos tres de familias distintas p
 predictores del mismo linaje no son un panel: son una comparación con el mismo sesgo dos veces. El
 error venía de que la pregunta estaba mal formulada —«qué predictor es el del artículo»— y una
 pregunta que presupone un ganador se contesta con un ganador.
+
+### 6 bis · El panel, congelado
+
+**Cinco miembros y cuatro familias**, declarados en [`panel-v1.json`](../paper/panel-v1.json) y en
+§4.6 del preregistro, con `make panel-check` comprobando que ninguno esté excluido, que las familias
+lleguen al mínimo y que la prosa diga lo mismo:
+
+`unet` · `deeplabv3plus` · `segformer` · `tsvit-pheno` · `tsvit-pheno-fullm`
+
+**El margen sobre el mínimo es de una familia.** Dos miembros son de la misma, y perder uno más deja
+el panel por debajo de su propio criterio. El gate lo imprime en cada ejecución.
+
+**Fuera, y la distinción importa**: `anysat` y `utae` por superar el umbral de US-119 con la causa
+**sin identificar**, así que su exclusión es **reversible**; los dos FarSLIP y el `xgb-alphaearth`
+histórico por procedencia, y eso no se revierte solo.
+
+> **Precisión que se mantiene**: `segformer` mejora en fold 5. Eso **no invalida el criterio del
+> umbral**, que sigue vigente; demuestra que la lista previa de sospechosos estaba parcialmente
+> equivocada. Se excluye por superar el umbral, nunca por figurar en aquella lista.
+
+**Sin confirmar**: si `xgb-alphaearth-remat-v1` entra o no. Está escrito y no decidido, porque
+cambia qué significa «la reconstrucción del sistema desplegado» en el artículo.
+
+### 7 bis · El orden de ejecución
+
+1. Congelar el panel *(hecho)*.
+2. **US-172** con pérdidas obtenidas de usuarios reales.
+3. Congelar el preregistro.
+4. Regenerar **una sola vez** los 25 artefactos `OBSOLETO`.
+5. Multiplicidad y análisis final.
+6. Manuscrito.
+
+**Regenerar ahora provocaría otra ronda de artefactos obsoletos**, porque cambiarían de nuevo al
+fijar la pérdida. Por eso se hace una vez y al final de los tres cierres.
 
 ### 7 · Qué NO autoriza este ADR
 

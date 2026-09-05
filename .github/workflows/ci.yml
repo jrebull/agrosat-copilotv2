@@ -258,6 +258,10 @@ jobs:
       - name: protocolo de elicitacion (protocolo-check)
         run: python3 scripts/protocolo_check.py
 
+      # Panel congelado: ningun miembro excluido, familias suficientes, y la prosa de acuerdo.
+      - name: panel congelado (panel-check)
+        run: python3 scripts/panel_check.py
+
       # Inventario de OOF. Verifica los bytes cuando el parquet esta y el puntero .dvc cuando
       # no: en un checkout limpio solo estan los punteros, y un gate que exigiera los blobs
       # seria rojo aqui para siempre.
