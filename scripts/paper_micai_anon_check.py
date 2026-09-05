@@ -75,14 +75,29 @@ def _pdf_text(pdf: Path) -> str:
 def _pdf_metadata(pdf: Path) -> str:
     """Extract the PDF dictionary metadata, which the text layer does not carry.
 
+    Devolver cadena vacia cuando ``pdfinfo`` no esta era el agujero: la mitad del control -el
+    titulo y el autor del diccionario, que ``pdftotext`` no extrae- se saltaba en silencio y el
+    gate seguia diciendo OK. Un control que no puede mirar tiene que decirlo, no aprobar.
+
     Args:
         pdf: Path to the PDF.
 
     Returns:
-        The metadata block, lowercased; empty when ``pdfinfo`` is unavailable.
+        The metadata block, lowercased.
+
+    Raises:
+        RuntimeError: if ``pdfinfo`` is unavailable or fails.
     """
-    result = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, check=False)
-    return result.stdout.lower() if result.returncode == 0 else ""
+    try:
+        result = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, check=False)
+    except FileNotFoundError as exc:
+        raise RuntimeError(
+            "pdfinfo no esta disponible: sin el, la identidad del diccionario del PDF -titulo y "
+            "autor- no se comprueba, y este gate diria OK sin haber mirado"
+        ) from exc
+    if result.returncode != 0:
+        raise RuntimeError(f"pdfinfo fallo sobre {pdf}: {result.stderr.strip()}")
+    return result.stdout.lower()
 
 
 def _hits(haystack: str) -> list[str]:
