@@ -1421,3 +1421,29 @@ def test_las_respuestas_crudas_de_la_busqueda_no_necesitan_fila() -> None:
         assert proc.returncode == 0, proc.stdout
     finally:
         cruda.unlink()
+
+
+def test_la_raiz_del_manuscrito_nuevo_tambien_esta_bajo_custodia() -> None:
+    """`reports/micai2027` se cierra recien poblada, no cuando ya tenga treinta ficheros.
+
+    La raiz existia con cuatro ficheros y CERO filas en el ledger: la primera figura del
+    manuscrito nuevo no tenia custodia. Cerrar una raiz al crearla es lo unico que sale barato.
+    """
+    intruso = REPO_ROOT / "reports" / "micai2027" / "figuras" / "_intruso_de_prueba.svg"
+    gate = REPO_ROOT / "scripts" / "paper_artifacts_check.py"
+
+    def correr() -> tuple[int, str]:
+        proc = subprocess.run(
+            [sys.executable, str(gate)], cwd=REPO_ROOT, capture_output=True, text=True, check=False
+        )
+        return proc.returncode, proc.stdout + proc.stderr
+
+    intruso.write_text("<svg/>\n", encoding="utf-8")
+    try:
+        codigo, salida = correr()
+        assert codigo == 1, salida
+        assert "_intruso_de_prueba.svg" in salida
+        assert "el ledger no lo declara" in salida
+    finally:
+        intruso.unlink()
+    assert correr()[0] == 0

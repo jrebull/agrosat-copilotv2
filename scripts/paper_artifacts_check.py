@@ -45,11 +45,17 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_LEDGER = REPO_ROOT / "paper" / "ARTIFACTS.md"
 
-#: Raiz de los artefactos del articulo. El ledger comprobaba que todo lo declarado existe; no
+#: Raices de los artefactos del articulo. El ledger comprobaba que todo lo declarado existe; no
 #: comprobaba lo contrario. Un artefacto producido y dejado aqui sin fila se lee igual de bien que
 #: uno con custodia, y podria citarse en el manuscrito sin que nada supiera de donde salio. Es la
 #: misma forma del defecto que ya paso con un parquet OOF huerfano.
-RAIZ_ARTEFACTOS = REPO_ROOT / "reports" / "paper_micai"
+#:
+#: `reports/micai2027` es la raiz del manuscrito NUEVO y entra aqui recien poblada: cerrar una
+#: raiz cuando se crea, y no cuando ya tiene treinta ficheros, es lo unico que sale barato.
+RAICES_ARTEFACTOS: tuple[Path, ...] = (
+    REPO_ROOT / "reports" / "paper_micai",
+    REPO_ROOT / "reports" / "micai2027",
+)
 
 
 #: Lo que vive bajo esa raiz sin ser un artefacto, con su motivo.
@@ -327,7 +333,9 @@ def main() -> int:
         if args.ledger.resolve() != DEFAULT_LEDGER.resolve()
         else sorted(
             ruta
-            for ruta in RAIZ_ARTEFACTOS.rglob("*")
+            for raiz in RAICES_ARTEFACTOS
+            if raiz.exists()
+            for ruta in raiz.rglob("*")
             if ruta.is_file()
             and str(ruta.relative_to(REPO_ROOT)) not in declared_paths
             and not _no_es_artefacto(ruta, declared_paths)

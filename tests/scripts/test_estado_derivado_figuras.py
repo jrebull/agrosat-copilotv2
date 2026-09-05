@@ -28,6 +28,9 @@ PRODUCTORES: tuple[str, ...] = (
     "scripts.build_paper_micai_fase4_figure",
 )
 
+#: Guiones que declaran de que datos se alimentan, produzcan o no una figura con fila propia.
+CONSUMIDORES: tuple[str, ...] = (*PRODUCTORES, "scripts.build_micai2027_figures")
+
 
 def _estados() -> dict[str, str]:
     """Estado de custodia de cada ruta del ledger.
@@ -85,3 +88,29 @@ def test_toda_figura_declarada_tiene_fila_en_el_ledger() -> None:
     estados = _estados()
     sin_fila = [s for s in _mapas() if s not in estados]
     assert not sin_fila, f"figuras sin fila en el ledger: {sin_fila}"
+
+
+def test_todo_insumo_declarado_tiene_fila_en_el_ledger() -> None:
+    """Una ruta mal escrita ya no es un descuido inocente: es un guion que no puede dibujar.
+
+    Desde que ``require_current_inputs`` exige SELLADO, un insumo que el ledger no conoce bloquea
+    al guion. Eso es lo correcto para un artefacto sin custodia y una molestia absurda para una
+    errata, asi que la errata se caza aqui y no al dibujar.
+    """
+    import importlib
+
+    from ml.report.figuras_micai import ledger_state
+
+    sin_fila: list[str] = []
+    for modulo in CONSUMIDORES:
+        mod = importlib.import_module(modulo)
+        for nombre in dir(mod):
+            if not nombre.startswith("INSUMOS"):
+                continue
+            valor = getattr(mod, nombre)
+            if not isinstance(valor, tuple):
+                continue
+            sin_fila.extend(
+                f"{modulo}.{nombre}: {ruta}" for ruta in valor if ledger_state(ruta) is None
+            )
+    assert not sin_fila, "insumos declarados que el ledger no conoce:\n" + "\n".join(sin_fila)

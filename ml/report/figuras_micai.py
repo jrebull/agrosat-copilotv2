@@ -25,6 +25,7 @@ from matplotlib.text import Text
 __all__ = [
     "LNCS_TEXT_WIDTH_INCHES",
     "MIN_FONT_SIZE_PT",
+    "SEALED_STATE",
     "SERIES_STYLES",
     "SeriesStyle",
     "apply_manuscript_style",
@@ -41,6 +42,9 @@ __all__ = [
 # 72.27 points per inch; PDF and SVG use 72 PostScript points per inch.
 LNCS_TEXT_WIDTH_INCHES: float = 347.12354 / 72.27
 MIN_FONT_SIZE_PT: float = 8.0
+
+#: Unico estado de custodia con el que una figura puede dibujarse.
+SEALED_STATE: str = "SELLADO"
 WIDTH_TOLERANCE_INCHES: float = 1e-4
 
 SUPPORTED_FORMATS: frozenset[str] = frozenset({"pdf", "svg"})
@@ -354,24 +358,58 @@ def ledger_state(relative_path: str, ledger: Path | None = None) -> str | None:
 
 
 def require_current_inputs(paths: tuple[str, ...], ledger: Path | None = None) -> None:
-    """Refuse to draw a figure whose inputs the ledger marks ``OBSOLETO``.
+    """Refuse to draw a figure unless every input is ``SELLADO`` in the custody ledger.
 
     Una figura bien tipografiada de datos invalidos es peor que una figura fea: parece revisada.
     El guion que la produce es el ultimo sitio donde se puede parar, porque despues ya es un PDF
     que alguien pega en una presentacion.
+
+    Antes esta funcion solo rechazaba lo marcado ``OBSOLETO``, y por tanto **dejaba pasar lo que
+    el ledger no conoce en absoluto**: un insumo sin fila no tiene custodia ninguna, que es peor
+    que uno obsoleto, porque del obsoleto al menos se sabe que lo es. Es la misma asimetria que
+    aparecio en los tres registros del proyecto: se comprobaba que lo declarado existe, no que lo
+    que existe este declarado. Aqui la regla es al reves de como estaba: **solo pasa SELLADO**.
 
     Args:
         paths: Input paths, as written in the ledger.
         ledger: Ledger path, for tests.
 
     Raises:
-        RuntimeError: naming every obsolete input and what has to happen first.
+        RuntimeError: naming every input that is not sealed, and what is wrong with each.
     """
-    obsoletos = [r for r in paths if ledger_state(r, ledger) == "OBSOLETO"]
+    obsoletos: list[str] = []
+    sin_fila: list[str] = []
+    otros: list[str] = []
+    for relativa in paths:
+        estado = ledger_state(relativa, ledger)
+        if estado == SEALED_STATE:
+            continue
+        if estado is None:
+            sin_fila.append(relativa)
+        elif estado == "OBSOLETO":
+            obsoletos.append(relativa)
+        else:
+            otros.append(f"{relativa} ({estado})")
+
+    if not (obsoletos or sin_fila or otros):
+        return
+
+    motivos: list[str] = []
     if obsoletos:
-        raise RuntimeError(
-            f"{len(obsoletos)} insumo(s) marcados OBSOLETO en el ledger: "
+        motivos.append(
+            f"{len(obsoletos)} marcado(s) OBSOLETO: "
             + ", ".join(obsoletos)
-            + ". Se regeneran primero (US-124, US-125); dibujarlos ahora produce una figura "
-            "impecable de datos que no se pueden citar."
+            + " -- se regeneran primero (US-124, US-125); dibujarlos ahora produce una figura "
+            "impecable de datos que no se pueden citar"
         )
+    if sin_fila:
+        motivos.append(
+            f"{len(sin_fila)} sin fila en el ledger: "
+            + ", ".join(sin_fila)
+            + " -- un insumo que el registro de custodia no conoce no tiene procedencia ninguna, "
+            "y eso es peor que uno obsoleto: del obsoleto al menos se sabe que lo es. Se declara "
+            "en paper/ARTIFACTS.md con su MD5 antes de dibujar nada con el"
+        )
+    if otros:
+        motivos.append(f"{len(otros)} en un estado que no es {SEALED_STATE}: " + ", ".join(otros))
+    raise RuntimeError("insumos no utilizables. " + ". ".join(motivos) + ".")

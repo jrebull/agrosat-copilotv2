@@ -257,6 +257,67 @@ def test_una_figura_no_se_dibuja_sobre_insumos_obsoletos(tmp_path) -> None:
         require_current_inputs(("reports/a.csv", "reports/b.csv"), ledger)
 
 
+def test_un_insumo_sin_fila_en_el_ledger_tampoco_se_dibuja(tmp_path) -> None:
+    """Antes solo se rechazaba OBSOLETO, y por tanto pasaba lo que el ledger no conoce.
+
+    Un insumo sin fila no tiene procedencia ninguna, que es PEOR que uno obsoleto: del obsoleto al
+    menos se sabe que lo es. Es la misma asimetria que aparecio en los tres registros del proyecto
+    -se comprobaba que lo declarado existe, no que lo que existe este declarado-, y aqui se cierra
+    invirtiendo la regla: solo pasa SELLADO.
+    """
+    from ml.report.figuras_micai import require_current_inputs
+
+    ledger = tmp_path / "ARTIFACTS.md"
+    ledger.write_text(
+        "| y | `reports/b.csv` | `" + "1" * 32 + "` | 1 | `abc1234` | SELLADO | nota |\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(RuntimeError, match="sin fila en el ledger"):
+        require_current_inputs(("reports/sin_declarar.csv",), ledger)
+
+
+def test_un_insumo_en_cualquier_otro_estado_tampoco_se_dibuja(tmp_path) -> None:
+    """``SIN_ARTEFACTO`` no es un permiso, y un estado nuevo no puede colarse por omision.
+
+    Enumerar lo prohibido deja pasar lo que aun no se ha inventado; enumerar lo permitido, no.
+    """
+    from ml.report.figuras_micai import require_current_inputs
+
+    ledger = tmp_path / "ARTIFACTS.md"
+    ledger.write_text(
+        "| x | `reports/pendiente.csv` | - | - | - | SIN_ARTEFACTO | nota |\n"
+        "| z | `reports/inventado.csv` | `"
+        + "2" * 32
+        + "` | 1 | `abc1234` | CASI_BUENO | nota |\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(RuntimeError, match="SIN_ARTEFACTO"):
+        require_current_inputs(("reports/pendiente.csv",), ledger)
+    with pytest.raises(RuntimeError, match="CASI_BUENO"):
+        require_current_inputs(("reports/inventado.csv",), ledger)
+
+
+def test_los_insumos_reales_de_la_figura_del_manuscrito_nuevo_estan_sellados() -> None:
+    """Sobre el ledger de verdad: la figura que si se dibuja lo hace sobre custodia cerrada."""
+    from ml.report.figuras_micai import SEALED_STATE, ledger_state, require_current_inputs
+    from scripts.build_micai2027_figures import INSUMOS_SOPORTE
+
+    for insumo in INSUMOS_SOPORTE:
+        assert ledger_state(insumo) == SEALED_STATE, insumo
+    require_current_inputs(INSUMOS_SOPORTE)
+
+
+def test_las_figuras_del_manuscrito_nuevo_estan_declaradas_en_el_ledger() -> None:
+    """Lo que la figura PRODUCE tambien tiene custodia, no solo lo que consume.
+
+    `reports/micai2027` se cierra recien poblada -cuatro ficheros- y no cuando ya tenga treinta.
+    """
+    from ml.report.figuras_micai import SEALED_STATE, ledger_state
+
+    for idioma in ("es", "en"):
+        assert ledger_state(f"reports/micai2027/figuras/soporte-{idioma}.svg") == SEALED_STATE
+
+
 def test_una_ruta_citada_en_la_nota_de_otra_fila_no_se_confunde_con_su_fila(tmp_path) -> None:
     """The path is read from its cell, not from anywhere in the line.
 
