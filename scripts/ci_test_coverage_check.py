@@ -145,8 +145,11 @@ def ficheros_de_prueba() -> list[str]:
         base = REPO_ROOT / raiz
         if not base.exists():
             continue
+        # `as_posix`, no `str`: en Windows `str` da `tests\scripts\x.py` y ninguna ruta
+        # casa con las de `ci.yml` ni con los patrones de SUITE_LOCAL, asi que el gate marcaba
+        # como no cubierto todo el arbol. Verde en Linux, rojo entero en cualquier clon Windows.
         encontrados.extend(
-            str(p.relative_to(REPO_ROOT))
+            p.relative_to(REPO_ROOT).as_posix()
             for p in sorted(base.rglob("test_*.py"))
             if "__pycache__" not in p.parts
         )
