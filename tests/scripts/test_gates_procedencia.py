@@ -1064,3 +1064,28 @@ def test_leer_las_correcciones_como_numeros_produce_una_diferencia_detectable(
     assert any(a and b and a.rstrip("0") == b.rstrip("0") and a != b for _, a, b in diferencias), (
         f"la diferencia esperada es un cero final perdido y no aparece: {diferencias}"
     )
+
+
+def test_el_bib_historico_modificado_rompe_el_gate(tmp_path: Path) -> None:
+    """The archived bibliography is immutable; the gate has to notice if it moves.
+
+    Y tiene que reconocer la fila POR SU CELDA de ruta: la primera version buscaba la ruta como
+    subcadena en la linea entera, asi que la nota de otra fila —que menciona este fichero para
+    decir que es inmutable— se tomaba por su fila y comparaba su hash con el de otro artefacto.
+    El gate acusaba un cambio que no existia.
+    """
+    import shutil
+
+    historico = REPO_ROOT / "paper" / "micai" / "refs.bib"
+    respaldo = tmp_path / "refs.bib"
+    shutil.copy2(historico, respaldo)
+    try:
+        historico.write_text(
+            historico.read_text(encoding="utf-8") + "\n% una linea de mas\n", encoding="utf-8"
+        )
+        codigo, salida = _correr_bib_check(CATALOGO)
+        assert codigo == 1, salida
+        assert "inmutable" in salida
+    finally:
+        shutil.copy2(respaldo, historico)
+    assert _correr_bib_check(CATALOGO)[0] == 0

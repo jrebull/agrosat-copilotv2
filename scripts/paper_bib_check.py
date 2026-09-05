@@ -66,10 +66,22 @@ def _hash_sellado(ruta_relativa: str) -> str | None:
     if not LEDGER.exists():
         return None
     for linea in LEDGER.read_text(encoding="utf-8").splitlines():
-        if f"`{ruta_relativa}`" in linea:
-            m = re.search(r"`([0-9a-f]{32})`", linea)
-            if m:
-                return m.group(1)
+        if not linea.startswith("|"):
+            continue
+        celdas = linea.strip().strip("|").split("|")
+        # La ruta se busca en SU CELDA, no en cualquier parte de la fila. Buscarla como
+        # subcadena hacia que la nota de otra fila —que menciona este fichero para decir que es
+        # inmutable— se tomara por la fila del fichero, y el gate comparaba su hash con el de
+        # otro artefacto. Lo dijo como si el bib historico hubiera cambiado, y no habia cambiado.
+        min_celdas = 6
+        if len(celdas) < min_celdas:
+            continue
+        ruta = re.search(r"`([^`]+)`", celdas[1])
+        if ruta is None or ruta.group(1) != ruta_relativa:
+            continue
+        m = re.search(r"`([0-9a-f]{32})`", celdas[2])
+        if m:
+            return m.group(1)
     return None
 
 
